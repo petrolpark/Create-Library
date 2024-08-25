@@ -57,7 +57,7 @@ public class Petrolpark {
 
         // JEI compat
         if (CompatMods.JEI.isLoading()) {
-            forgeEventBus.register(ITickableCategory.class);
+            forgeEventBus.register(ITickableCategory.ClientEvents.class);
         };
 
         CompatMods.CURIOS.executeIfInstalled(() -> () -> Curios.init(modEventBus, forgeEventBus));

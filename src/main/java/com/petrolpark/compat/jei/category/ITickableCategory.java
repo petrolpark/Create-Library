@@ -10,10 +10,12 @@ public interface ITickableCategory {
     
     public static final List<ITickableCategory> TICKING_CATEGORIES = new ArrayList<>();
 
-    @SubscribeEvent
-    public static void tickAll(ClientTickEvent event) {
-        if (event.phase != ClientTickEvent.Phase.START) return;
-        TICKING_CATEGORIES.forEach(ITickableCategory::tick);
+    public static class ClientEvents {
+        @SubscribeEvent
+        public static void tickAll(ClientTickEvent event) {
+            if (event.phase != ClientTickEvent.Phase.START) return;
+            TICKING_CATEGORIES.forEach(ITickableCategory::tick);
+        };
     };
 
     void tick();

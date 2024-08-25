@@ -80,7 +80,7 @@ public class PetrolparkJEI implements IModPlugin {
 	};
 
     private <T extends Recipe<?>> PetrolparkCategoryBuilder<T> builder(Class<? extends T> recipeClass) {
-        return new PetrolparkCategoryBuilder<>(Petrolpark.MOD_ID, recipeClass);
+        return new PetrolparkCategoryBuilder<>(Petrolpark.MOD_ID, recipeClass, ALL_CATEGORIES::add);
     };
 
     @Override

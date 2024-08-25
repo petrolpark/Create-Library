@@ -4,30 +4,30 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="petrolpark"
-version="${file.jarVersion}"
+version="1.0.0"
 displayName="Petrolpark's Library"
 #updateJSONURL=""
 displayURL="https://www.modrinth.com/mod/petrolpark"
 logoFile="logo.png"
 #credits=""
 authors="petrolpark"
-description='''Common code for petrolpark's Create add-ons'''
+description='''Common code for petrolpark's Create add-ons.'''
 
-[[dependencies.petrolsparts]]
+[[dependencies.petrolpark]]
     modId="forge"
     mandatory=true
     versionRange="[43,)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.petrolsparts]]
+[[dependencies.petrolpark]]
     modId="minecraft"
     mandatory=true
     versionRange="[1.20.1]"
     ordering="NONE"
     side="BOTH"
     
-[[dependencies.petrolsparts]]
+[[dependencies.petrolpark]]
 	modId="create"
 	mandatory=true
 	versionRange="[0.5.1.e,)"

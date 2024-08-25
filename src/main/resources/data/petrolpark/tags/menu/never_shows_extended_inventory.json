@@ -2,7 +2,6 @@
     "replace": false,
     "values": [
         "minecraft:lectern",
-        "destroy:redstone_programmer",
         {
             "id": "curios:curios_container",
             "required": false

@@ -30,7 +30,6 @@
         "create:crafting_blueprint",
         "create:linked_controller",
         "create:toolbox",
-        "create:schedule",
-        "destroy:custom_explosive"
+        "create:schedule"
     ]
 }

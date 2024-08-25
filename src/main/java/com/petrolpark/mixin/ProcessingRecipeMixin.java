@@ -19,7 +19,8 @@ public class ProcessingRecipeMixin {
     @Inject(
         method = "rollResults(Ljava/util/List;)Ljava/util/List;",
         at = @At("RETURN"),
-        cancellable = true
+        cancellable = true,
+        remap = false
     )
     public void inRollResults(List<ProcessingOutput> rollableResults, CallbackInfoReturnable<List<ItemStack>> cir) {
         List<ItemStack> results = cir.getReturnValue();

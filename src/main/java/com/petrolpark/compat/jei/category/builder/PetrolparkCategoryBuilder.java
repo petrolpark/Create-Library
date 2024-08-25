@@ -38,10 +38,11 @@ import net.minecraft.world.level.ItemLike;
  */
 public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
 
-    private String modid;
     public static IJeiHelpers helpers;
 
-    private Class<? extends T> recipeClass;
+    private final String modid;
+    private final Consumer<CreateRecipeCategory<?>> categoryAdder;
+    private final Class<? extends T> recipeClass;
 
     private IDrawable background;
     private IDrawable icon;
@@ -51,8 +52,9 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
 
     private Predicate<CRecipes> createConfigPredicate;
 
-    public PetrolparkCategoryBuilder(String modid, Class<? extends T> recipeClass) {
+    public PetrolparkCategoryBuilder(String modid, Class<? extends T> recipeClass, Consumer<CreateRecipeCategory<?>> categoryAdder) {
         this.modid = modid;
+        this.categoryAdder = categoryAdder;
         this.recipeClass = recipeClass;
         createConfigPredicate = c -> true;
     };
@@ -229,6 +231,7 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
         );
 
         CreateRecipeCategory<T> category = factory.create(info, helpers);
+        categoryAdder.accept(category);
 
         if (category instanceof ITickableCategory tickableCategory) ITickableCategory.TICKING_CATEGORIES.add(tickableCategory);
 
