@@ -9,6 +9,9 @@ import com.petrolpark.Petrolpark;
 import com.petrolpark.badge.BadgeDuplicationRecipe;
 import com.petrolpark.itemdecay.recipe.DecayingItemCookingRecipeSerializer;
 import com.petrolpark.recipe.advancedprocessing.AdvancedProcessingRecipeSerializer;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FirstTimeLuckyMillingRecipe;
+import com.petrolpark.recipe.manualonly.ManualOnlyShapedRecipe;
+import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.foundation.utility.Lang;
@@ -27,7 +30,9 @@ import net.minecraftforge.registries.RegistryObject;
 
 public enum PetrolparkRecipeTypes implements IRecipeTypeInfo {
 
+    FIRST_TIME_LUCKY_MILLING(FirstTimeLuckyMillingRecipe::new, AllRecipeTypes.MILLING::getType),
     DECAYING_ITEM_COOKING(DecayingItemCookingRecipeSerializer::new),
+    MANUAL_ONLY_CRAFTING_SHAPED(ManualOnlyShapedRecipe.Serializer::new, () -> RecipeType.CRAFTING),
     BADGE_DUPLICATION(() -> BadgeDuplicationRecipe.BADGE_DUPLICATION, () -> RecipeType.CRAFTING);
 
     private final ResourceLocation id;

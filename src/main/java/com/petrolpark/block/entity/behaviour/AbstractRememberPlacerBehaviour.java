@@ -14,8 +14,18 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
+@EventBusSubscriber
 public abstract class AbstractRememberPlacerBehaviour extends BlockEntityBehaviour {
+
+    @SubscribeEvent
+    public static void onPlaceBlock(EntityPlaceEvent event) {
+        // Remember-placer behaviours for non-Petrolpark block entities - as the adding of this behaviour is deferred, simply placing the block won't do.
+        if (event.getEntity() instanceof LivingEntity player) setPlacedBy(player.level(), event.getPos(), player);
+    };
 
     private UUID playerUUID;
 

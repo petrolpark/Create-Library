@@ -13,14 +13,28 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
 import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class ConfigBooleanCondition implements ICondition {
 
     public static final ResourceLocation ID = Petrolpark.asResource("config_boolean");
     public static final Serializer SERIALIZER = new Serializer();
+
+    @SubscribeEvent
+    public static void register(RegisterEvent event) {
+        if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) {
+            // Conditions
+            CraftingHelper.register(SERIALIZER);
+        };
+    };
 
     private final String modId;
     private final ForgeConfigSpec.BooleanValue value;

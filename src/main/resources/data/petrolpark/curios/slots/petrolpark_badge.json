@@ -1,0 +1,4 @@
+{
+    "icon": "petrolpark:slot/empty_badge_slot",
+    "validators": ["petrolpark:badge"]
+  }

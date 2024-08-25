@@ -1,0 +1,26 @@
+{
+    "required": "true",
+    "package": "com.petrolpark.mixin",
+    "compatibilityLevel": "JAVA_17",
+    "refmap": "petrolpark.refmap.json",
+    "mixins": [
+        "accessor.SimpleRenderElementAccessor",
+        "CrushingWheelBlockEntityMixin",
+        "CrushingWheelControllerBlockEntityMixin",
+        "CrushingWheelControllerBlockMixin",
+        "ItemStackMixin",
+        "MillstoneBlockEntityMixin",
+        "OpenEndedPipeMixin",
+        "PonderUIMixin",
+        "ProcessingRecipeMixin",
+        "ServerAdvancementManagerMixin"
+    ],
+    "client": [
+        "CreativeModeInventoryScreenMixin",
+        "PonderUIMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    },
+    "minVersion": "0.8"
+}

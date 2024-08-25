@@ -27,5 +27,9 @@
 
     "item.petrolpark.badge.awarded": "Awarded to %1$s on %2$s",
     "item.petrolpark.badge.unknown": "This isn't a real Badge...",
-    "item.petrolpark.decaying_item.remaining": "Decays in %1$s"
+    "item.petrolpark.decaying_item.remaining": "Decays in %1$s",
+
+    "petrolpark.recipe.biome_specific": "Must be done in:",
+    "petrolpark.recipe.item_decay": "Item Decay",
+    "petrolpark.recipe.manual_crafting": "Manual-Only Crafting"
 }

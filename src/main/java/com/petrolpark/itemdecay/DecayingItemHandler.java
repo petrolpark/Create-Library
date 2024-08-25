@@ -1,8 +1,15 @@
 package com.petrolpark.itemdecay;
 
+import com.petrolpark.Petrolpark;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
 public interface DecayingItemHandler {
     
@@ -23,6 +30,7 @@ public interface DecayingItemHandler {
         };
     };
 
+    @EventBusSubscriber
     public static class ServerDecayingItemHandler implements DecayingItemHandler {
         
         public long gameTime;
@@ -36,6 +44,16 @@ public interface DecayingItemHandler {
         public boolean isClientSide() {
             return false;
         };
+
+        @SubscribeEvent
+        public static void onLoadWorld(LevelEvent.Load event) {
+            LevelAccessor level = event.getLevel();
+            if (!level.isClientSide() && level.getServer().overworld() == level && level instanceof ServerLevel serverLevel) {
+                ServerDecayingItemHandler decayHandler = new ServerDecayingItemHandler();
+                decayHandler.gameTime = serverLevel.getGameTime();
+                Petrolpark.DECAYING_ITEM_HANDLER.set(decayHandler);  
+        };
+	};
 
     };
 

@@ -6,6 +6,7 @@ import com.mojang.logging.LogUtils;
 import com.petrolpark.badge.Badge;
 import com.petrolpark.compat.CompatMods;
 import com.petrolpark.compat.curios.Curios;
+import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.itemdecay.DecayingItemHandler;
 import com.petrolpark.recipe.PetrolparkRecipeTypes;
 import com.petrolpark.registrate.PetrolparkRegistrate;
@@ -53,6 +54,11 @@ public class Petrolpark {
     
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::init);
+
+        // JEI compat
+        if (CompatMods.JEI.isLoading()) {
+            forgeEventBus.register(ITickableCategory.class);
+        };
 
         CompatMods.CURIOS.executeIfInstalled(() -> () -> Curios.init(modEventBus, forgeEventBus));
     };

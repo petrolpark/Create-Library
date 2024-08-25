@@ -23,7 +23,7 @@ public class BadgeAdvancementRewards extends AdvancementRewards {
     @Override
     public void grant(ServerPlayer player) {
         super.grant(player);
-        Optional<Pair<Badge, Date>> optional = player.getCapability(PlayerBadgesCapability.Provider.PLAYER_BADGES).map(pb -> 
+        Optional<Pair<Badge, Date>> optional = player.getCapability(BadgesCapability.Provider.PLAYER_BADGES).map(pb -> 
             pb.getBadges().stream().filter(pair -> pair.getFirst().equals(badge)).findFirst()
         ).get();
         if (optional.isPresent()) {

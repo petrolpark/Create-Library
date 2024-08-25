@@ -18,6 +18,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
@@ -25,7 +26,8 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 
-public class PlayerBadgesCapability {
+@AutoRegisterCapability
+public class BadgesCapability {
 
     private final Set<Pair<Badge, Date>> badges = new HashSet<>();
 
@@ -40,13 +42,13 @@ public class PlayerBadgesCapability {
 
     public static class Provider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-        public static Capability<PlayerBadgesCapability> PLAYER_BADGES = CapabilityManager.get(new CapabilityToken<PlayerBadgesCapability>() {});
+        public static Capability<BadgesCapability> PLAYER_BADGES = CapabilityManager.get(new CapabilityToken<BadgesCapability>() {});
 
-        private PlayerBadgesCapability playerBadges = null;
-        private final LazyOptional<PlayerBadgesCapability> optional = LazyOptional.of(this::createPlayerBadges);
+        private BadgesCapability playerBadges = null;
+        private final LazyOptional<BadgesCapability> optional = LazyOptional.of(this::createPlayerBadges);
 
-        private PlayerBadgesCapability createPlayerBadges() {
-            if (playerBadges == null) playerBadges = new PlayerBadgesCapability();
+        private BadgesCapability createPlayerBadges() {
+            if (playerBadges == null) playerBadges = new BadgesCapability();
             return playerBadges;
         };
 

@@ -1,7 +1,7 @@
-package com.petrolpark.destroy.compat.jei.category;
+package com.petrolpark.compat.jei.category;
 
-import com.petrolpark.destroy.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
-import com.petrolpark.destroy.item.IDecayingItem;
+import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
+import com.petrolpark.itemdecay.IDecayingItem;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -16,7 +16,7 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class DecayingItemCategory extends DestroyRecipeCategory<DecayingItemRecipe> {
+public class DecayingItemCategory extends PetrolparkRecipeCategory<DecayingItemRecipe> {
 
     public DecayingItemCategory(Info<DecayingItemRecipe> info, IJeiHelpers helpers) {
         super(info, helpers);

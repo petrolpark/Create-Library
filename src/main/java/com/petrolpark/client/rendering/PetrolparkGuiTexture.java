@@ -11,6 +11,22 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
 public enum PetrolparkGuiTexture implements IGuiTexture {
+
+    // JEI
+	JEI_POINTING_HAND("jei/widgets", 40, 40, 18, 14),
+    JEI_SHORT_DOWN_ARROW("jei/widgets", 0, 64, 18, 18),
+    JEI_SHORT_RIGHT_ARROW("jei/widgets", 0, 82, 18, 16),
+	JEI_EQUILIBRIUM_ARROW("jei/widgets", 0, 96, 42, 11),
+	JEI_LINE("jei/widgets", 40, 38, 177, 2),
+	JEI_TEXT_BOX_LONG("jei/widgets",169, 19),
+	JEI_TEXT_BOX_SHORT("jei/widgets", 0, 19, 115, 19),
+	JEI_DISTILLATION_TOWER_BOTTOM("jei/widgets", 0, 52, 12, 12),
+	JEI_DISTILLATION_TOWER_MIDDLE("jei/widgets", 0, 40, 20, 12),
+	JEI_DISTILLATION_TOWER_TOP("jei/widgets", 0, 38, 12, 2),
+	JEI_DISTILLATION_TOWER_BRANCH("jei/widgets", 20, 45, 20, 2),
+	JEI_EXPLOSION("jei/widgets", 169, 0, 18, 21),
+    JEI_NERD_EMOJI("jei/widgets", 115, 19, 16, 14),
+    JEI_GLOBE("jei/widgets", 115 + 16, 19, 16, 14),
     
     // Creative Mode Tab
 	CREATIVE_MODE_TAB_BLANK_ROW("creative_inventory", 0, 0, 162, 18),

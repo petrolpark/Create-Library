@@ -11,8 +11,12 @@ import net.minecraftforge.fml.loading.FMLLoader;
 
 public enum CompatMods {
 
+    // Petrolpark Mods
     DESTROY,
     PETROLS_PARTS("petrolsparts"),
+    CHOO_CHOO_TRADE("choochootrade"),
+
+    // Others
     BIG_CANNONS("createbigcannons"),
     CURIOS,
     JEI,
