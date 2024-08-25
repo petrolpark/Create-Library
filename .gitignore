@@ -23,4 +23,6 @@ run
 
 # Files from Forge MDK
 forge*changelog.txt
+
+
 src/main/java/com/petrolpark/badge/BadgeHandler.java

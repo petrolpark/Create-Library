@@ -25,6 +25,8 @@
     "badge.petrolpark.translator": "Cunning Linguist",
     "badge.petrolpark.translator.description": "Make an significant contribution to the localizations of petrolpark mods",
 
+    "curios.identifier.petrolpark_badge": "Badge",
+
     "item.petrolpark.badge.awarded": "Awarded to %1$s on %2$s",
     "item.petrolpark.badge.unknown": "This isn't a real Badge...",
     "item.petrolpark.decaying_item.remaining": "Decays in %1$s",
