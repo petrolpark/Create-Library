@@ -4,6 +4,7 @@
     "compatibilityLevel": "JAVA_17",
     "refmap": "petrolpark.refmap.json",
     "mixins": [
+        "accessor.PonderWorldAccessor",
         "accessor.SimpleRenderElementAccessor",
         "CrushingWheelBlockEntityMixin",
         "CrushingWheelControllerBlockEntityMixin",

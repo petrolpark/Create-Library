@@ -4,7 +4,7 @@ license="All Rights Reserved"
 
 [[mods]]
 modId="petrolpark"
-version="1.0.0"
+version="1.0.1"
 displayName="Petrolpark's Library"
 #updateJSONURL=""
 displayURL="https://www.modrinth.com/mod/petrolpark"
