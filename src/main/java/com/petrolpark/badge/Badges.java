@@ -6,14 +6,11 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.minecraft.world.item.crafting.Ingredient;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
-
-import com.petrolpark.compat.CompatMods;
-import com.petrolpark.registrate.PetrolparkRegistrate;
+import static com.petrolpark.Petrolpark.DESTROY_REGISTRATE;
 
 public class Badges {
 
     private static final Ingredient GOLD_SHEET_INGREDIENT = Ingredient.of(AllTags.forgeItemTag("plates/gold"));
-    private static final PetrolparkRegistrate DESTROY_REGISTRATE = CompatMods.DESTROY.registrate();
 
     public static final RegistryEntry<Badge>
 

@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.badge.Badge;
+import com.petrolpark.badge.Badges;
 import com.petrolpark.compat.CompatMods;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
@@ -21,7 +22,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.RegistryBuilder;
 
-// The value here should match an entry in the META-INF/mods.toml file
 @Mod(Petrolpark.MOD_ID)
 public class Petrolpark {
 
@@ -30,6 +30,7 @@ public class Petrolpark {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final PetrolparkRegistrate REGISTRATE = new PetrolparkRegistrate(MOD_ID);
+    public static final PetrolparkRegistrate DESTROY_REGISTRATE = CompatMods.DESTROY.registrate();
 
     // Registries
     public static final ResourceKey<Registry<Badge>> BADGE_REGISTRY_KEY = REGISTRATE.makeRegistry("badge", RegistryBuilder::new);
@@ -46,7 +47,9 @@ public class Petrolpark {
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
         REGISTRATE.registerEventListeners(modEventBus);
+        DESTROY_REGISTRATE.registerEventListeners(modEventBus);
 
+        Badges.register();
         PetrolparkRecipeTypes.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
