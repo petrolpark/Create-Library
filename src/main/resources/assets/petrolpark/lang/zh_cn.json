@@ -1,0 +1,37 @@
+{
+    "badge.destroy.patreon_1": "爆破夫人",
+    "badge.destroy.patreon_1.description": "在Patreon上成为第一档赞助者",
+    "badge.destroy.patreon_2": "毁灭公爵",
+    "badge.destroy.patreon_2.description": "走完7.77码，在Patreon上成为第二档赞助者",
+    "badge.destroy.patreon_3": "绝灭天神",
+    "badge.destroy.patreon_3.description": "在Patreon上成为最高档赞助者，展现你的究极支持",
+
+    "badge.petrolpark.beta_tester": "Beta测试员",
+    "badge.petrolpark.beta_tester.description": "帮助测试Destroy即将实装的特性",
+    "badge.petrolpark.bestie": "好好先生",
+    "badge.petrolpark.bestie.description": "做一个好人",
+    "badge.petrolpark.competition_winner": "大吉大利，今晚吃鸡",
+    "badge.petrolpark.competition_winner.description": "赢得一次社区活动",
+    "badge.petrolpark.content_creator": "非货币化",
+    "badge.petrolpark.content_creator.description": "以内容创作者的身份免费为Destroy推广",
+    "badge.petrolpark.developer": "开发者",
+    "badge.petrolpark.developer.description": "为Destroy绘制纹理或贡献代码",
+    "badge.petrolpark.early_bird": "早起的鸟儿有虫吃",
+    "badge.petrolpark.early_bird.description": "成为前1000名参与Destroy重大更新的玩家",
+    "badge.petrolpark.nitro": "CH\u2083NO\u2082",
+    "badge.petrolpark.nitro.description": "用Nitro来提升Discord服务器",
+    "badge.petrolpark.suggestion": "好建议",
+    "badge.petrolpark.suggestion.description": "向Destroy提供过一个最终成功落实的点子",
+    "badge.petrolpark.translator": "精妙的语言学家",
+    "badge.petrolpark.translator.description": "为Destroy的本地化做出重大贡献",
+
+    "curios.identifier.petrolpark_badge": "Badge",
+
+    "item.petrolpark.badge.awarded": "将%2$s授予%1$s",
+    "item.petrolpark.badge.unknown": "这不是一个真正的徽章……",
+    "item.petrolpark.decaying_item.remaining": "Decays in %1$s",
+
+    "petrolpark.recipe.biome_specific": "需要在：",
+    "petrolpark.recipe.item_decay": "物品腐烂",
+    "petrolpark.recipe.manual_crafting": "手工制作"
+}
