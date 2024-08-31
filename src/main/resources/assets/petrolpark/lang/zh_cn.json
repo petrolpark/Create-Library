@@ -25,9 +25,9 @@
     "badge.petrolpark.translator": "精妙的语言学家",
     "badge.petrolpark.translator.description": "为Destroy的本地化做出重大贡献",
 
-    "curios.identifier.petrolpark_badge": "Badge",
+    "curios.identifier.petrolpark_badge": "勋章",
 
-    "item.petrolpark.badge.awarded": "将%2$s授予%1$s",
+    "item.petrolpark.badge.awarded": "于%2$s授予%1$s",
     "item.petrolpark.badge.unknown": "这不是一个真正的徽章……",
     "item.petrolpark.decaying_item.remaining": "Decays in %1$s",
 
