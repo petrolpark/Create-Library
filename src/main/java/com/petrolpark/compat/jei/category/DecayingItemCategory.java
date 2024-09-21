@@ -26,13 +26,11 @@ public class DecayingItemCategory extends PetrolparkRecipeCategory<DecayingItemR
     public void setRecipe(IRecipeLayoutBuilder builder, DecayingItemRecipe recipe, IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 2, 2)
             .setBackground(getRenderedSlot(), -1, -1)
-            .addItemStack(recipe.decayingItem)
-            .addTooltipCallback(addFluidTooltip(1));
+            .addItemStack(recipe.decayingItem);
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 2)
             .setBackground(getRenderedSlot(), -1, -1)
-            .addItemStack(recipe.resultItem)
-            .addTooltipCallback(addFluidTooltip(1));
+            .addItemStack(recipe.resultItem);
     };
 
     @Override

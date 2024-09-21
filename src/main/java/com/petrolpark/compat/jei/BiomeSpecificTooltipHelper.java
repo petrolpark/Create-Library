@@ -28,7 +28,7 @@ public class BiomeSpecificTooltipHelper {
         List<ResourceLocation> biomes = getAllBiomes(recipe).map(biome -> registryAccess.registryOrThrow(Registries.BIOME).getKey(biome)).toList();
         return (view, tooltip) -> {
             tooltip.add(Component.translatable("petrolpark.recipe.biome_specific").withStyle(ChatFormatting.WHITE));
-            biomes.forEach(biome -> Component.translatable(biome.toLanguageKey("biome")).withStyle(ChatFormatting.GRAY));
+            biomes.forEach(biome -> tooltip.add(Component.translatable(biome.toLanguageKey("biome")).withStyle(ChatFormatting.GRAY)));
         };
     };
 };

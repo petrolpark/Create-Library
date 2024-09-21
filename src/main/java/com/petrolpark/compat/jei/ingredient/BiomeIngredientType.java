@@ -80,7 +80,7 @@ public class BiomeIngredientType implements IIngredientType<Biome> {
 
         @Override
         public void render(GuiGraphics guiGraphics, Biome ingredient) {
-            globe.draw(guiGraphics);
+            globe.draw(guiGraphics, 0, 1);
         };
 
         @Override
