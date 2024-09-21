@@ -18,7 +18,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.compat.CompatMods;
 import com.simibubi.create.foundation.utility.Pair;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -113,7 +112,7 @@ public class BadgeHandler {
     };
 
     private static boolean isEarlyBirdViable() {
-        return CompatMods.PETROLS_PARTS.isLoaded();
+        return false;
     };
 
     private static String getFormattedUUID(ServerPlayer player) {

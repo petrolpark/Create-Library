@@ -21,7 +21,10 @@ public class ServerAdvancementManagerMixin {
     /**
      * Add Advancements associated with Badges, which aren't defined in datapacks but generated in code.
      */
-    @Inject(method = "apply", at = @At("RETURN"))
+    @Inject(
+        method = "apply",
+        at = @At("RETURN")
+    )
     public void inApply(Map<ResourceLocation, JsonElement> pObject, ResourceManager pResourceManager, ProfilerFiller pProfiler, CallbackInfo ci) {
         ((ServerAdvancementManager)(Object)this).advancements.add(BadgeBuilder.getAdvancements());
     };

@@ -36,27 +36,32 @@ import net.minecraft.world.level.ItemLike;
  * Used to generate JEI Categories for Petrolpark mods.
  * Basically all copied from the {@link com.simibubi.create.compat.jei.CreateJEI.CategoryBuilder Create source code}.
  */
-public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
+public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends PetrolparkCategoryBuilder<R, C>> {
 
     public static IJeiHelpers helpers;
 
-    private final String modid;
-    private final Consumer<CreateRecipeCategory<?>> categoryAdder;
-    private final Class<? extends T> recipeClass;
+    protected final String modid;
+    protected final Consumer<CreateRecipeCategory<?>> categoryAdder;
+    protected final Class<? extends R> recipeClass;
 
-    private IDrawable background;
-    private IDrawable icon;
+    protected IDrawable background;
+    protected IDrawable icon;
 
-    private final List<Consumer<List<T>>> recipeListConsumers = new ArrayList<>();
-    private final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
+    protected final List<Consumer<List<R>>> recipeListConsumers = new ArrayList<>();
+    protected final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
 
-    private Predicate<CRecipes> createConfigPredicate;
+    protected Predicate<CRecipes> createConfigPredicate;
 
-    public PetrolparkCategoryBuilder(String modid, Class<? extends T> recipeClass, Consumer<CreateRecipeCategory<?>> categoryAdder) {
+    public PetrolparkCategoryBuilder(String modid, Class<? extends R> recipeClass, Consumer<CreateRecipeCategory<?>> categoryAdder) {
         this.modid = modid;
         this.categoryAdder = categoryAdder;
         this.recipeClass = recipeClass;
         createConfigPredicate = c -> true;
+    };
+
+    @SuppressWarnings("unchecked")
+    private final C self() {
+        return (C)this;
     };
 
     /**
@@ -64,10 +69,10 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param collection The List of Recipes
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> addRecipes(Supplier<Collection<? extends T>> collection) {
+    public C addRecipes(Supplier<Collection<? extends R>> collection) {
         recipeListConsumers.add(recipes -> recipes.addAll(collection.get()));
         Petrolpark.LOGGER.info("Loaded " + collection.get().size()+ " recipes of type " + recipeClass.getSimpleName()+ ".");
-        return this;
+        return self();
     };
 
     /**
@@ -75,22 +80,22 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param recipeTypeEntry The Recipe Type
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
-        recipeListConsumers.add(recipes -> CreateJEI.<T>consumeTypedRecipes(recipes::add, recipeTypeEntry.getType()));
-        return this;
+    public C addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
+        recipeListConsumers.add(recipes -> CreateJEI.<R>consumeTypedRecipes(recipes::add, recipeTypeEntry.getType()));
+        return self();
     };
 
     /**
      * Adds all Recipes of a given Recipe Type to this Category, given that each recipe matches the given condition.
-     * @param recipeTypeEntry The Recipe Type
+     * @param recipeType The Recipe Type
      * @param pred The Condition a Recipe must match to be added
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> addTypedRecipesIf(Supplier<RecipeType<? extends T>> recipeType, Predicate<Recipe<?>> pred) {
-        recipeListConsumers.add(recipes -> CreateJEI.<T>consumeTypedRecipes(recipe -> {
+    public C addTypedRecipesIf(Supplier<RecipeType<? extends R>> recipeType, Predicate<Recipe<?>> pred) {
+        recipeListConsumers.add(recipes -> CreateJEI.<R>consumeTypedRecipes(recipe -> {
             if (pred.test(recipe)) recipes.add(recipe);
         }, recipeType.get()));
-        return this;
+        return self();
     };
 
     /**
@@ -100,21 +105,21 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param pred Whether to transform and then add a Recipe
      * @return This Category Builder
      */
-    public <R extends Recipe<?>> PetrolparkCategoryBuilder<T> addTypedRecipesIf(Supplier<RecipeType<R>> recipeType, Function<R, ? extends T> recipeTransformer, Predicate<R> pred) {
-        recipeListConsumers.add(recipes -> CreateJEI.<R>consumeTypedRecipes(recipe -> {
+    public <R2 extends Recipe<?>> C addTypedRecipesIf(Supplier<RecipeType<R2>> recipeType, Function<R2, ? extends R> recipeTransformer, Predicate<R2> pred) {
+        recipeListConsumers.add(recipes -> CreateJEI.<R2>consumeTypedRecipes(recipe -> {
             if (pred.test(recipe)) recipes.add(recipeTransformer.apply(recipe));
         }, recipeType.get()));
-        return this;
+        return self();
     };
 
     /**
      * Adds a given collection of Item Stacks as catalysts for all Recipes of this Category.
-     * @param itemSupplier A collection of suppliers of catalyst Item Stacks
+     * @param catalystStackSuppliers A collection of suppliers of catalyst Item Stacks
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> catalysts(Collection<Supplier<ItemStack>> catalystStackSuppliers) {
+    public C catalysts(Collection<Supplier<ItemStack>> catalystStackSuppliers) {
         catalysts.addAll(catalystStackSuppliers);
-        return this;
+        return self();
     };
 
     /**
@@ -123,9 +128,9 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param itemSupplier A Supplier of the catalyst Item
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> catalyst(Supplier<ItemLike> itemSupplier) {
+    public C catalyst(Supplier<ItemLike> itemSupplier) {
         catalysts.add(() -> new ItemStack(itemSupplier.get().asItem()));
-        return this;
+        return self();
     };
 
     /**
@@ -133,7 +138,7 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param item Typically this will be the machine required for this Type of Recipe
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> itemIcon(ItemLike item) {
+    public C itemIcon(ItemLike item) {
         return itemIcon(() -> new ItemStack(item));
     };
 
@@ -142,9 +147,9 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param item Typically this will be the machine required for this Type of Recipe
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> itemIcon(Supplier<ItemStack> item) {
+    public C itemIcon(Supplier<ItemStack> item) {
         this.icon = new ItemIcon(item);
-        return this;  
+        return self();  
     };
 
     /**
@@ -153,7 +158,7 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param smallItem Typically this will be a way to differentiate this use from other uses of the same machine
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> doubleItemIcon(ItemLike bigItem, ItemLike smallItem) {
+    public C doubleItemIcon(ItemLike bigItem, ItemLike smallItem) {
         return doubleItemIcon(() -> new ItemStack(bigItem), () -> new ItemStack(smallItem));
     };
 
@@ -163,9 +168,9 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param smallItem Typically this will be a way to differentiate this use from other uses of the same machine
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> doubleItemIcon(Supplier<ItemStack> bigItem, Supplier<ItemStack> smallItem) {
+    public C doubleItemIcon(Supplier<ItemStack> bigItem, Supplier<ItemStack> smallItem) {
         this.icon = new DoubleItemIcon(bigItem, smallItem);
-        return this;
+        return self();
     };
 
     // /**
@@ -186,18 +191,18 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param height
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> emptyBackground(int width, int height) {
+    public C emptyBackground(int width, int height) {
         this.background = new EmptyBackground(width, height);
-        return this;
+        return self();
     };
 
     /**
      * Only enable this Recipe Category if the given test of Create's config options are true.
      * @return This Category Builder
      */
-    public PetrolparkCategoryBuilder<T> enableIfCreateConfig(Function<CRecipes, ConfigBool> configValue) {
+    public C enableIfCreateConfig(Function<CRecipes, ConfigBool> configValue) {
         createConfigPredicate = c -> configValue.apply(c).get();
-        return this;
+        return self();
     };
 
     /**
@@ -206,12 +211,12 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
      * @param factory Initializer of the Category class
      * @return This Category
      */
-    public CreateRecipeCategory<T> build(String name, PetrolparkRecipeCategory.Factory<T> factory) {
-        Supplier<List<T>> recipesSupplier;
+    public CreateRecipeCategory<R> build(String name, PetrolparkRecipeCategory.Factory<R> factory) {
+        Supplier<List<R>> recipesSupplier;
         if (createConfigPredicate.test(AllConfigs.server().recipes)) {
             recipesSupplier = () -> {
-                List<T> recipes = new ArrayList<>();
-                for (Consumer<List<T>> consumer : recipeListConsumers)
+                List<R> recipes = new ArrayList<>();
+                for (Consumer<List<R>> consumer : recipeListConsumers)
                     consumer.accept(recipes);
                 return recipes;
             };
@@ -219,9 +224,9 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
             recipesSupplier = () -> Collections.emptyList();
         };
 
-        mezz.jei.api.recipe.RecipeType<T> type = new mezz.jei.api.recipe.RecipeType<T>(new ResourceLocation(modid, name), recipeClass);
+        mezz.jei.api.recipe.RecipeType<R> type = new mezz.jei.api.recipe.RecipeType<R>(new ResourceLocation(modid, name), recipeClass);
 
-        Info<T> info = new Info<T>(
+        Info<R> info = new Info<R>(
             type,
             Component.translatable(modid+".recipe."+name),
             background,
@@ -230,7 +235,8 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
             catalysts
         );
 
-        CreateRecipeCategory<T> category = factory.create(info, helpers);
+        CreateRecipeCategory<R> category = factory.create(info, helpers);
+        finalizeBuilding(type, category, recipeClass);
         categoryAdder.accept(category);
 
         if (category instanceof ITickableCategory tickableCategory) ITickableCategory.TICKING_CATEGORIES.add(tickableCategory);
@@ -238,7 +244,5 @@ public class PetrolparkCategoryBuilder<T extends Recipe<?>> {
         return category;
     };
 
-    protected void finalizeBuilding(mezz.jei.api.recipe.RecipeType<T> type, CreateRecipeCategory<T> category, Class<? extends T> trueClass) {
-
-    };
+    protected void finalizeBuilding(mezz.jei.api.recipe.RecipeType<R> type, CreateRecipeCategory<R> category, Class<? extends R> trueClass) {};
 };

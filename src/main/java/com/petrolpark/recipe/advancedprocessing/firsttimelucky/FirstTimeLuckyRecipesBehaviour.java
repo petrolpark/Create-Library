@@ -23,7 +23,7 @@ public class FirstTimeLuckyRecipesBehaviour extends AbstractRememberPlacerBehavi
      * Ensure this Block Entity remembers who placed it for the purposes of ensuring first-time-lucky
      * recipes award all outputs.
      * @param be
-     * @param recipeFilter all recipes which match this filter and implement {@link com.petrolpark.destroy.recipe.IFirstTimeLuckyRecipe IFirstTimeLuckyRecipe}
+     * @param recipeFilter all recipes which match this filter and implement {@link IFirstTimeLuckyRecipe}
      * will be checked - if there is at least one of them we haven't done, we'll remember the player
      */
     public FirstTimeLuckyRecipesBehaviour(SmartBlockEntity be, Predicate<Recipe<?>> recipeFilter) {

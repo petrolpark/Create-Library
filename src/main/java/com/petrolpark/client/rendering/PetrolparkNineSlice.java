@@ -22,7 +22,7 @@ public class PetrolparkNineSlice {
     public final int topRow;
     public final int bottomRow;
 
-    private PetrolparkNineSlice(IGuiTexture tex, int leftColumn, int rightColumn, int topRow, int bottomRow) {
+    public PetrolparkNineSlice(IGuiTexture tex, int leftColumn, int rightColumn, int topRow, int bottomRow) {
         stretch = true;
         this.tex = tex;
         this.leftColumn = leftColumn;

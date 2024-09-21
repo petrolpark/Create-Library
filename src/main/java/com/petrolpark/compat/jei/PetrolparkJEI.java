@@ -1,6 +1,7 @@
 package com.petrolpark.compat.jei;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -9,12 +10,14 @@ import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
+import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
 import com.petrolpark.recipe.manualonly.ManualOnlyShapedRecipe;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
@@ -79,8 +82,13 @@ public class PetrolparkJEI implements IModPlugin {
 		ALL_CATEGORIES.forEach(c -> c.registerCatalysts(registration));
 	};
 
-    private <T extends Recipe<?>> PetrolparkCategoryBuilder<T> builder(Class<? extends T> recipeClass) {
-        return new PetrolparkCategoryBuilder<>(Petrolpark.MOD_ID, recipeClass, ALL_CATEGORIES::add);
+    @Override
+    public void registerIngredients(IModIngredientRegistration registration) {
+        registration.register(BiomeIngredientType.TYPE, Collections.emptySet(), BiomeIngredientType.HELPER, BiomeIngredientType.RENDERER);
+    };
+
+    private <T extends Recipe<?>> CategoryBuilderImpl<T> builder(Class<? extends T> recipeClass) {
+        return new CategoryBuilderImpl<>(recipeClass);
     };
 
     @Override
@@ -88,5 +96,12 @@ public class PetrolparkJEI implements IModPlugin {
         return Petrolpark.asResource("jei");
     };
 
+    private static class CategoryBuilderImpl<R extends Recipe<?>> extends PetrolparkCategoryBuilder<R, CategoryBuilderImpl<R>> {
+
+        public CategoryBuilderImpl(Class<? extends R> recipeClass) {
+            super(Petrolpark.MOD_ID, recipeClass, ALL_CATEGORIES::add);
+        };
+
+    };
 
 };
