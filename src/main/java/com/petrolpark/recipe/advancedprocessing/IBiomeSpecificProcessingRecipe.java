@@ -59,7 +59,7 @@ public interface IBiomeSpecificProcessingRecipe {
         
         @Override
         public Collection<Biome> getBiomes(RegistryAccess registryAccess) {
-            return Collections.singleton(registryAccess.registryOrThrow(Registries.BIOME).get(biomeId));
+            return Collections.singleton(registryAccess.registryOrThrow(Registries.BIOME).getOptional(biomeId).orElseThrow(() -> new IllegalStateException("No biome with ID '"+biomeId.toString()+"'.")));
         };
 
         @Override
