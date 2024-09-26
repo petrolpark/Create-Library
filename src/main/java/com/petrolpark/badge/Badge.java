@@ -1,6 +1,7 @@
 package com.petrolpark.badge;
 
 import java.util.Date;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
@@ -34,22 +35,22 @@ public class Badge {
     protected ResourceLocation id;
     protected ItemEntry<BadgeItem> itemEntry;
 
-    protected Ingredient duplicationIngredient;
+    protected Supplier<Ingredient> duplicationIngredient;
     public SimpleAdvancementTrigger advancementTrigger;
 
     public Badge() {
-        duplicationIngredient = Ingredient.EMPTY;
+        duplicationIngredient = () -> Ingredient.EMPTY;
         advancementTrigger = null;
     };
 
-    public void setDuplicationItem(Ingredient ingredient) {
-        if (duplicationIngredient != Ingredient.EMPTY) throw new UnsupportedOperationException("Cannot modify Badge's duplication Item");
+    public void setDuplicationItem(Supplier<Ingredient> ingredient) {
+        if (duplicationIngredient.get() != Ingredient.EMPTY) throw new UnsupportedOperationException("Cannot modify Badge's duplication Item");
         duplicationIngredient = ingredient;
     };
 
     @Nullable
     public Ingredient getDuplicationIngredient() {
-        return duplicationIngredient; 
+        return duplicationIngredient.get(); 
     };
 
     @Nullable

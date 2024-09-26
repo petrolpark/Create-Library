@@ -3,6 +3,7 @@ package com.petrolpark.registrate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.advancement.SimpleAdvancementTrigger;
@@ -27,7 +28,7 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
     private final NonNullSupplier<T> factory;
 
     protected ItemEntry<BadgeItem> item;
-    protected Ingredient duplicationIngredient;
+    protected Supplier<Ingredient> duplicationIngredient;
 
     public static <T extends Badge, P> BadgeBuilder<T, P> create(PetrolparkRegistrate owner, P parent, String name, BuilderCallback callback, NonNullSupplier<T> factory) {
         return new BadgeBuilder<>(owner, parent, name, callback, factory);
@@ -37,7 +38,7 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
         super(owner, parent, name, callback, Petrolpark.BADGE_REGISTRY_KEY);
         this.factory = factory;
 
-        duplicationIngredient = Ingredient.EMPTY;
+        duplicationIngredient = () -> Ingredient.EMPTY;
         item = getOwner().item("badge/"+getName(), p -> new BadgeItem(p, () -> this.getEntry()))
             .tab(null)
             .properties(p -> p
@@ -47,7 +48,7 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
         CuriosSetup.BADGES.add(item);
     };
 
-    public BadgeBuilder<T, P> duplicationIngredient(Ingredient ingredient) {
+    public BadgeBuilder<T, P> duplicationIngredient(Supplier<Ingredient> ingredient) {
         duplicationIngredient = ingredient;
         return this;
     };

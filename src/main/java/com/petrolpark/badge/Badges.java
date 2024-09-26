@@ -1,16 +1,18 @@
 package com.petrolpark.badge;
 
+import static com.petrolpark.Petrolpark.DESTROY_REGISTRATE;
+import static com.petrolpark.Petrolpark.REGISTRATE;
+
+import java.util.function.Supplier;
+
 import com.simibubi.create.AllTags;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.minecraft.world.item.crafting.Ingredient;
 
-import static com.petrolpark.Petrolpark.REGISTRATE;
-import static com.petrolpark.Petrolpark.DESTROY_REGISTRATE;
-
 public class Badges {
 
-    private static final Ingredient GOLD_SHEET_INGREDIENT = Ingredient.of(AllTags.forgeItemTag("plates/gold"));
+    private static final Supplier<Ingredient> GOLD_SHEET_INGREDIENT = () -> Ingredient.of(AllTags.forgeItemTag("plates/gold"));
 
     public static final RegistryEntry<Badge>
 
