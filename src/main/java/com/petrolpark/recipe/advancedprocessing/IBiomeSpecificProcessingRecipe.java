@@ -88,7 +88,7 @@ public interface IBiomeSpecificProcessingRecipe {
 
         @Override
         public String serialize() {
-            return "#"+tag.toString();
+            return "#"+tag.location();
         };
     };
 };
