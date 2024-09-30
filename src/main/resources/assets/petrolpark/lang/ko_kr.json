@@ -1,0 +1,37 @@
+{
+    "badge.destroy.patreon_1": "철거의 부인",
+    "badge.destroy.patreon_1.description": "Destroy Patreon의 첫 번째 티어에 서약함",
+    "badge.destroy.patreon_2": "황폐의 공작",
+    "badge.destroy.patreon_2.description": "7.77야드를 완주하고 Destroy Patreon의 두 번째 티어에 서약함",
+    "badge.destroy.patreon_3": "파괴의 신",
+    "badge.destroy.patreon_3.description": "Destroy Patreon의 최고 티어에 서약하여 궁극적인 지지를 보여줌",
+
+    "badge.petrolpark.beta_tester": "베타 테스터",
+    "badge.petrolpark.beta_tester.description": "petrolpark 모드의 차기 기능 테스트를 도움",
+    "badge.petrolpark.bestie": "절친",
+    "badge.petrolpark.bestie.description": "절친이 됨",
+    "badge.petrolpark.competition_winner": "이겼닭! 오늘 저녁은 치킨이닭!",
+    "badge.petrolpark.competition_winner.description": "커뮤니티 이벤트에서 우승함",
+    "badge.petrolpark.content_creator": "수익 창출 거부",
+    "badge.petrolpark.content_creator.description": "콘텐츠 크리에이터로서 petrolpark 모드를 다루어 무료 홍보를 제공함",
+    "badge.petrolpark.developer": "개발자",
+    "badge.petrolpark.developer.description": "petrolpark mod의 코드 또는 아트에 기여함",
+    "badge.petrolpark.early_bird": "일찍 일어난 새, 벌레를 잡는 자",
+    "badge.petrolpark.early_bird.description": "petrolpark mod의 주요 업데이트를 가장 먼저 플레이한 1000명의 플레이어 중 하나",
+    "badge.petrolpark.nitro": "CH\u2083NO\u2082",
+    "badge.petrolpark.nitro.description": "Nitro로 Discord 서버를 부스트함",
+    "badge.petrolpark.suggestion": "좋은 제안",
+    "badge.petrolpark.suggestion.description": "petrolpark 모드에 제안한 아이디어가 실제로 구현됨",
+    "badge.petrolpark.translator": "Cunning Linguist",
+    "badge.petrolpark.translator.description": "petrolpark 모드의 현지화에 크게 기여함",
+
+    "curios.identifier.petrolpark_badge": "배지",
+
+    "item.petrolpark.badge.awarded": "%2$s에 %1$s에게 수여됨",
+    "item.petrolpark.badge.unknown": "이건 진짜 배지가 아닙니다...",
+    "item.petrolpark.decaying_item.remaining": "%1$s 후에 부식",
+
+    "petrolpark.recipe.biome_specific": "아래 환경에서만 가능함:",
+    "petrolpark.recipe.item_decay": "아이템 부식",
+    "petrolpark.recipe.manual_crafting": "플레이어가 직접 제작"
+}
