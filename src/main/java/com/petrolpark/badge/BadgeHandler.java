@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -30,9 +31,11 @@ public class BadgeHandler {
 
     public static final String VERSION_UUID = "534319cb-3ba5-4c9f-befa-edb5e9562ba8";
 
-    public static final String GET_BADGES_URL = "https://us-central1.gcp.data.mongodb-api.com/app/destroybadges-qojlw/endpoint/GetBadgesByMinecraftUUID";
+    public static final String GET_BADGES_URL = "\\";
 
     public static final String EARLY_BIRD_URL = "https://us-central1.gcp.data.mongodb-api.com/app/destroybadges-qojlw/endpoint/AddEarlyBirdToMinecraftUUID";
+
+    public static final Duration HTTP_TIMEOUT = Duration.ofSeconds(10);
     
     public static void getAndAddBadges(ServerPlayer player) {
         HttpClient client = HttpClient.newHttpClient();
@@ -43,6 +46,7 @@ public class BadgeHandler {
                 .uri(URI.create(GET_BADGES_URL))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(getBadgesJsonInputString))
+                .timeout(HTTP_TIMEOUT)
                 .build();
 
         CompletableFuture<HttpResponse<InputStream>> responseFuture = client.sendAsync(getBadgesRequest, HttpResponse.BodyHandlers.ofInputStream());
