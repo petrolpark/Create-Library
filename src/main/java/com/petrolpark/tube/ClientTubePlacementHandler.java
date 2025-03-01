@@ -2,7 +2,6 @@ package com.petrolpark.tube;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.function.Supplier;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
@@ -49,6 +48,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 @OnlyIn(Dist.CLIENT)
 @RequiresCreate
 public class ClientTubePlacementHandler {
+
+    public static final int TIMEOUT = 12000;
     
     protected static ItemStack currentStack = ItemStack.EMPTY;
     protected static ITubeBlock tubeBlock = null;
@@ -65,8 +66,9 @@ public class ClientTubePlacementHandler {
 
     @SubscribeEvent
     public static void tick(ClientTickEvent event) {
+        if (start == null) return;
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null || mc.player == null || !(mc.player.getMainHandItem() == currentStack || AllItems.WRENCH.isIn(mc.player.getMainHandItem())) || currentStack.isEmpty() || (start != null && mc.level.getBlockState(start.getPos()).getBlock() != tubeBlock)) {
+        if (mc.level == null || mc.player == null || !(ItemStack.isSameItemSameTags(mc.player.getMainHandItem(), currentStack) || AllItems.WRENCH.isIn(mc.player.getMainHandItem())) || currentStack.isEmpty() || (start != null && mc.level.getBlockState(start.getPos()).getBlock() != tubeBlock)) {
             cancel();
             return;
         };
@@ -128,7 +130,7 @@ public class ClientTubePlacementHandler {
 
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(Component.translatable("petrolpark.tube.title", requiredItemCount, currentStack.getHoverName()));
-        for (Controls control : Controls.values()) if (control.useCondition.get()) tooltip.add(control.translate());
+        for (Controls control : Controls.values()) if (control.canUse()) tooltip.add(control.translate());
 
         int tooltipTextWidth = 0;
         for (Component line : tooltip) tooltipTextWidth = Math.max(tooltipTextWidth, mc.font.width(line));
@@ -170,27 +172,62 @@ public class ClientTubePlacementHandler {
     };
 
     protected static enum Controls {
-        BUILD(() -> spline.getResult().success, () -> {
-            PetrolparkMessages.sendToServer(new BuildTubePacket(tubeBlock, spline));
-            cancel();
-            }, PetrolparkKeys.TUBE_BUILD),
-        GRAB_CONTROL_POINT(() -> targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1, () -> {}, null),
-        MOVE_CONTROL_POINT(() -> draggingSelectedControlPoint, () -> {}, null),
-        DELETE_CONTROL_POINT(() -> targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && !draggingSelectedControlPoint, () -> {spline.removeControlPoint(targetedControlPoint);}, PetrolparkKeys.TUBE_DELETE_CONTROL_POINT),
-        ADD_CONTROL_POINT_AFTER(() -> spline.getControlPoints().size() < TubeSpline.MAX_CONTROL_POINTS && targetedControlPoint >= 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && !draggingSelectedControlPoint, () -> spline.addInterpolatedControlPoint(targetedControlPoint + 1), PetrolparkKeys.TUBE_ADD_CONTROL_POINT_AFTER),
-        ADD_CONTROL_POINT_BEFORE(() -> spline.getControlPoints().size() < TubeSpline.MAX_CONTROL_POINTS && targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size(), () -> spline.addInterpolatedControlPoint(targetedControlPoint), PetrolparkKeys.TUBE_ADD_CONTROL_POINT_BEFORE),
-        CANCEL(() -> true, ClientTubePlacementHandler::cancel, PetrolparkKeys.TUBE_CANCEL)
-        ;
 
-        public final Supplier<Boolean> useCondition;
-        public final Runnable action;
+        BUILD(PetrolparkKeys.TUBE_BUILD) {
+            @Override
+            public boolean canUse() { return spline.getResult().success; };
+            @Override
+            public void use() {
+                PetrolparkMessages.sendToServer(new BuildTubePacket(tubeBlock, spline));
+                cancel();
+            };
+        },
+        GRAB_CONTROL_POINT(null) {
+            @Override
+            public boolean canUse() { return targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1; };
+            @Override
+            public void use() {};
+        },
+        MOVE_CONTROL_POINT(null) {
+            @Override
+            public boolean canUse() { return draggingSelectedControlPoint; };
+            @Override
+            public void use() {};
+        },
+        DELETE_CONTROL_POINT(PetrolparkKeys.TUBE_DELETE_CONTROL_POINT) {
+            @Override
+            public boolean canUse() { return targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && !draggingSelectedControlPoint; };
+            @Override
+            public void use() { spline.removeControlPoint(targetedControlPoint); };
+        },
+        ADD_CONTROL_POINT_AFTER(PetrolparkKeys.TUBE_ADD_CONTROL_POINT_AFTER) {
+            @Override
+            public boolean canUse() { return spline.getControlPoints().size() < TubeSpline.MAX_CONTROL_POINTS && targetedControlPoint >= 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && !draggingSelectedControlPoint; };
+            @Override
+            public void use() { spline.addInterpolatedControlPoint(targetedControlPoint + 1); };
+        },
+        ADD_CONTROL_POINT_BEFORE(PetrolparkKeys.TUBE_ADD_CONTROL_POINT_BEFORE) {
+            @Override
+            public boolean canUse() { return spline.getControlPoints().size() < TubeSpline.MAX_CONTROL_POINTS && targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size(); };
+            @Override
+            public void use() { spline.addInterpolatedControlPoint(targetedControlPoint); };
+        },
+        CANCEL(PetrolparkKeys.TUBE_CANCEL) {
+            @Override
+            public boolean canUse() { return true; };
+            @Override
+            public void use() { cancel(); };
+        };
+
         public final PetrolparkKeys key;
 
-        Controls(Supplier<Boolean> useCondition, Runnable action, PetrolparkKeys key) {
-            this.useCondition = useCondition;
-            this.action = action;
+        Controls(PetrolparkKeys key) {
             this.key = key;
         };
+
+        public abstract boolean canUse();
+
+        public abstract void use();
 
         public Component translate() {
             return Component.translatable("petrolpark.tube.control."+Lang.asId(name()), key == null ? null : key.keybind.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY);
@@ -223,9 +260,9 @@ public class ClientTubePlacementHandler {
         if (spline == null) return;
         if (event.getAction() == InputConstants.RELEASE) {
             Minecraft mc = Minecraft.getInstance();
-            for (Controls control : Controls.values()) if (control.useCondition.get() && control.key != null && event.getKey() == control.key.keybind.getKey().getValue()) {
+            for (Controls control : Controls.values()) if (control.canUse() && control.key != null && event.getKey() == control.key.keybind.getKey().getValue()) {
                 control.key.keybind.consumeClick();
-                control.action.run();
+                control.use();
                 if (spline != null) {
                     controlPointBoxes = new ArrayList<>();
                     revalidateSpline(mc);
@@ -252,10 +289,10 @@ public class ClientTubePlacementHandler {
             ClientTubePlacementHandler.tubeBlock = tubeBlock;
             start = location;
             spline = null;
-            if (manualPlacement) mc.player.displayClientMessage(Component.translatable("petrolpark.tube.connect_another"), true);
+            if (manualPlacement) mc.player.displayClientMessage(Component.translatable("petrolpark.tube.connect_another", stack.getItem().getDescription()), true);
             resetTTL();
         } else if (spline == null) { // If placing the second Block
-            if (stack != currentStack) {
+            if (!ItemStack.isSameItemSameTags(stack, currentStack)) {
                 cancel();
                 return;
             };
@@ -279,7 +316,7 @@ public class ClientTubePlacementHandler {
     };
 
     public static void resetTTL() {
-        ttl = 400;
+        ttl = TIMEOUT;
     };
 
     public static boolean active() {

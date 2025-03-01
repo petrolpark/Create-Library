@@ -18,7 +18,7 @@ public class BigItemStack {
     };
 
     public BigItemStack(ItemStack stack, int count) {
-        this.stack = stack.copyWithCount(count);
+        this.stack = stack.copyWithCount(1);
         this.count = count;
     };
 
