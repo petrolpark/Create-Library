@@ -8,9 +8,9 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 
 public class TeamTypes {
   
-    public static final RegistryEntry<NoTeam.Type> NONE = REGISTRATE.generic("none", PetrolparkRegistries.Keys.TEAM_TYPE, NoTeam.Type::new).register();
-    public static final RegistryEntry<SinglePlayerTeam.Type> SINGLE_PLAYER = REGISTRATE.generic("single_player", PetrolparkRegistries.Keys.TEAM_TYPE, SinglePlayerTeam.Type::new).register();
-    public static final RegistryEntry<ScoreboardTeam.Type> SCOREBOARD = REGISTRATE.generic("scoreboard", PetrolparkRegistries.Keys.TEAM_TYPE, ScoreboardTeam.Type::new).register();
+    public static final RegistryEntry<NoTeam.Type> NONE = REGISTRATE.get().generic("none", PetrolparkRegistries.Keys.TEAM_TYPE, NoTeam.Type::new).register();
+    public static final RegistryEntry<SinglePlayerTeam.Type> SINGLE_PLAYER = REGISTRATE.get().generic("single_player", PetrolparkRegistries.Keys.TEAM_TYPE, SinglePlayerTeam.Type::new).register();
+    public static final RegistryEntry<ScoreboardTeam.Type> SCOREBOARD = REGISTRATE.get().generic("scoreboard", PetrolparkRegistries.Keys.TEAM_TYPE, ScoreboardTeam.Type::new).register();
 
     public static final void register() {};
 };

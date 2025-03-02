@@ -9,7 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 public class PetrolparkMobEffects {
     
-    public static final RegistryEntry<SimpleMobEffect> NUMBNESS = REGISTRATE.simple("numbness", ForgeRegistries.Keys.MOB_EFFECTS, () -> new SimpleMobEffect(MobEffectCategory.HARMFUL, 0x7A2337));
+    public static final RegistryEntry<SimpleMobEffect> NUMBNESS = REGISTRATE.get().simple("numbness", ForgeRegistries.Keys.MOB_EFFECTS, () -> new SimpleMobEffect(MobEffectCategory.HARMFUL, 0x7A2337));
 
     public static final void register() {};
 };

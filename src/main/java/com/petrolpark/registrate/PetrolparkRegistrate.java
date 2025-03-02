@@ -46,7 +46,7 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     };
 
     public <T extends Badge> BadgeBuilder<T, PetrolparkRegistrate> badge(String name, NonNullSupplier<T> factory) {
-		return (BadgeBuilder<T, PetrolparkRegistrate>) entry(name, c -> BadgeBuilder.create(this, this, name, c, factory));
+		return entry(name, c -> BadgeBuilder.create(this, this, name, c, factory));
 	};
 
     public RegistryEntry<LootItemConditionType> lootConditionType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends LootItemCondition> serializer) {

@@ -9,7 +9,7 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 @RequiresCreate
 public class CreateBlockEntityTypes {
 
-    public static final BlockEntityEntry<TubeStructuralBlockEntity> TUBE_STRUCTURE = REGISTRATE.blockEntity("tube_structure", TubeStructuralBlockEntity::new)
+    public static final BlockEntityEntry<TubeStructuralBlockEntity> TUBE_STRUCTURE = REGISTRATE.get().blockEntity("tube_structure", TubeStructuralBlockEntity::new)
         .validBlock(CreateBlocks.TUBE_STRUCTURE)
         .register();
 

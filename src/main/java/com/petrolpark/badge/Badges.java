@@ -16,41 +16,41 @@ public class Badges {
 
     public static final RegistryEntry<Badge>
 
-    BETA_TESTER = REGISTRATE.badge("beta_tester")
+    BETA_TESTER = REGISTRATE.get().badge("beta_tester")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    BESTIE = REGISTRATE.badge("bestie")
+    BESTIE = REGISTRATE.get().badge("bestie")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    COMPETITION_WINNER = REGISTRATE.badge("competition_winner")
+    COMPETITION_WINNER = REGISTRATE.get().badge("competition_winner")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    CONTENT_CREATOR = REGISTRATE.badge("content_creator")
+    CONTENT_CREATOR = REGISTRATE.get().badge("content_creator")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    DEVELOPER = REGISTRATE.badge("developer")
+    DEVELOPER = REGISTRATE.get().badge("developer")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    EARLY_BIRD = REGISTRATE.badge("early_bird")
+    EARLY_BIRD = REGISTRATE.get().badge("early_bird")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    NITRO = REGISTRATE.badge("nitro")
+    NITRO = REGISTRATE.get().badge("nitro")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    SUGGESTION = REGISTRATE.badge("suggestion")
+    SUGGESTION = REGISTRATE.get().badge("suggestion")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    TRANSLATOR = REGISTRATE.badge("translator")
+    TRANSLATOR = REGISTRATE.get().badge("translator")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
 
-    PATREON_1 = DESTROY_REGISTRATE.badge("patreon_1")
+    PATREON_1 = DESTROY_REGISTRATE.get().badge("patreon_1")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    PATREON_2 = DESTROY_REGISTRATE.badge("patreon_2")
+    PATREON_2 = DESTROY_REGISTRATE.get().badge("patreon_2")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register(),
-    PATREON_3 = DESTROY_REGISTRATE.badge("patreon_3")
+    PATREON_3 = DESTROY_REGISTRATE.get().badge("patreon_3")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)
         .register();
 

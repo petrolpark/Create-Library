@@ -18,17 +18,17 @@ import net.minecraft.world.level.storage.loot.providers.number.LootNumberProvide
 
 public class PetrolparkLootNumberProviderTypes {
     
-    public static final RegistryEntry<LootNumberProviderType> MAX = REGISTRATE.lootNumberProviderType("max", new FunctionNumberProvider.Serializer<>(MaxNumberProvider::new));
-    public static final RegistryEntry<LootNumberProviderType> MIN = REGISTRATE.lootNumberProviderType("min", new FunctionNumberProvider.Serializer<>(MinNumberProvider::new));
-    public static final RegistryEntry<LootNumberProviderType> SUM = REGISTRATE.lootNumberProviderType("sum", new FunctionNumberProvider.Serializer<>(SumNumberProvider::new));
-    public static final RegistryEntry<LootNumberProviderType> PRODUCT = REGISTRATE.lootNumberProviderType("product", new FunctionNumberProvider.Serializer<>(ProductNumberProvider::new));
-    public static final RegistryEntry<LootNumberProviderType> SIGMOID = REGISTRATE.lootNumberProviderType("sigmoid", new SigmoidNumberProvider.Serializer());
+    public static final RegistryEntry<LootNumberProviderType> MAX = REGISTRATE.get().lootNumberProviderType("max", new FunctionNumberProvider.Serializer<>(MaxNumberProvider::new));
+    public static final RegistryEntry<LootNumberProviderType> MIN = REGISTRATE.get().lootNumberProviderType("min", new FunctionNumberProvider.Serializer<>(MinNumberProvider::new));
+    public static final RegistryEntry<LootNumberProviderType> SUM = REGISTRATE.get().lootNumberProviderType("sum", new FunctionNumberProvider.Serializer<>(SumNumberProvider::new));
+    public static final RegistryEntry<LootNumberProviderType> PRODUCT = REGISTRATE.get().lootNumberProviderType("product", new FunctionNumberProvider.Serializer<>(ProductNumberProvider::new));
+    public static final RegistryEntry<LootNumberProviderType> SIGMOID = REGISTRATE.get().lootNumberProviderType("sigmoid", new SigmoidNumberProvider.Serializer());
 
-    public static final RegistryEntry<LootNumberProviderType> CUSTOMER_WAIT_TIME = REGISTRATE.lootNumberProviderType("customer_wait_time", new SimpleSerializer<>(CustomerWaitTimeNumberProvider::new));
+    public static final RegistryEntry<LootNumberProviderType> CUSTOMER_WAIT_TIME = REGISTRATE.get().lootNumberProviderType("customer_wait_time", new SimpleSerializer<>(CustomerWaitTimeNumberProvider::new));
 
-    public static final RegistryEntry<LootNumberProviderType> CONTEXT_ENTITY = REGISTRATE.lootNumberProviderType("context_entity_property", new ContextEntityNumberProvider.Serializer());
-    public static final RegistryEntry<LootNumberProviderType> CONTEXT_TEAM = REGISTRATE.lootNumberProviderType("context_team_property", new ContextTeamNumberProvider.Serializer());
-    public static final RegistryEntry<LootNumberProviderType> TOOL = REGISTRATE.lootNumberProviderType("tool_property", new ToolNumberProvider.Serializer());
+    public static final RegistryEntry<LootNumberProviderType> CONTEXT_ENTITY = REGISTRATE.get().lootNumberProviderType("context_entity_property", new ContextEntityNumberProvider.Serializer());
+    public static final RegistryEntry<LootNumberProviderType> CONTEXT_TEAM = REGISTRATE.get().lootNumberProviderType("context_team_property", new ContextTeamNumberProvider.Serializer());
+    public static final RegistryEntry<LootNumberProviderType> TOOL = REGISTRATE.get().lootNumberProviderType("tool_property", new ToolNumberProvider.Serializer());
 
     public static final void register() {};
 };

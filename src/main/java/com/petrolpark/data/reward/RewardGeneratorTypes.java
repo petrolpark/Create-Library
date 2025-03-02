@@ -10,9 +10,9 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 
 public class RewardGeneratorTypes {
     
-    public static final RegistryEntry<RewardGeneratorType> DIRECT = REGISTRATE.rewardGeneratorType("direct", new DirectRewardGenerator.Serializer());
-    public static final RegistryEntry<RewardGeneratorType> COMBINED = REGISTRATE.rewardGeneratorType("combined", new CombinedRewardGenerator.Serializer());
-    public static final RegistryEntry<RewardGeneratorType> LOOT_TABLE = REGISTRATE.rewardGeneratorType("loot_table", new LootTableRewardGenerator.Serializer());
+    public static final RegistryEntry<RewardGeneratorType> DIRECT = REGISTRATE.get().rewardGeneratorType("direct", new DirectRewardGenerator.Serializer());
+    public static final RegistryEntry<RewardGeneratorType> COMBINED = REGISTRATE.get().rewardGeneratorType("combined", new CombinedRewardGenerator.Serializer());
+    public static final RegistryEntry<RewardGeneratorType> LOOT_TABLE = REGISTRATE.get().rewardGeneratorType("loot_table", new LootTableRewardGenerator.Serializer());
 
     public static final void register() {};
 };

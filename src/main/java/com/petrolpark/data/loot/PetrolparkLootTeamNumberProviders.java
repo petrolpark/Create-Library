@@ -10,7 +10,7 @@ public class PetrolparkLootTeamNumberProviders {
 
     public static final RegistryEntry<LootTeamNumberProviderType>
 
-    MEMBERS = REGISTRATE.lootTeamNumberProviderType("members", MembersTeamNumberProvider::new);
+    MEMBERS = REGISTRATE.get().lootTeamNumberProviderType("members", MembersTeamNumberProvider::new);
   
     public static final void register() {};
 };

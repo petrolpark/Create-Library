@@ -1,5 +1,6 @@
 package com.petrolpark;
 
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -47,8 +48,8 @@ public class Petrolpark {
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final PetrolparkRegistrate REGISTRATE = new PetrolparkRegistrate(MOD_ID);
-    public static final PetrolparkRegistrate DESTROY_REGISTRATE = CompatMods.DESTROY.registrate();
+    public static final NonNullSupplier<PetrolparkRegistrate> REGISTRATE = NonNullSupplier.lazy(() -> new PetrolparkRegistrate(MOD_ID));
+    public static final NonNullSupplier<PetrolparkRegistrate> DESTROY_REGISTRATE = NonNullSupplier.lazy(CompatMods.DESTROY::registrate);
 
     public static ResourceLocation asResource(String path) {
         return new ResourceLocation(MOD_ID, path);
@@ -66,8 +67,8 @@ public class Petrolpark {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
 
-        REGISTRATE.registerEventListeners(modEventBus);
-        DESTROY_REGISTRATE.registerEventListeners(modEventBus);
+        REGISTRATE.get().registerEventListeners(modEventBus);
+        DESTROY_REGISTRATE.get().registerEventListeners(modEventBus);
 
         // Config
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, PetrolparkConfig.serverSpec);
@@ -112,6 +113,7 @@ public class Petrolpark {
         });
     };
 
-    public static final ItemEntry<ShopMenuItem> MENU = REGISTRATE.item("menu", ShopMenuItem::new).register();
-
+    public static final NonNullSupplier<ItemEntry<ShopMenuItem>> MENU = NonNullSupplier.lazy(() ->
+            REGISTRATE.get().item("menu", ShopMenuItem::new).register()
+    );
 };

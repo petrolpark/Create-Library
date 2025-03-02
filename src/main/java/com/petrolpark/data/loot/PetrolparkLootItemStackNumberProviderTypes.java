@@ -11,8 +11,8 @@ public class PetrolparkLootItemStackNumberProviderTypes {
     
     public static final RegistryEntry<LootItemStackNumberProviderType>
     
-    COUNT = REGISTRATE.lootItemStackNumberProviderType("count", CountItemStackNumberProvider::new),
-    ENCHANTMENT_LEVEL = REGISTRATE.lootItemStackNumberProviderType("enchantment_level", new EnchantmentLevelNumberProvider.Serializer());
+    COUNT = REGISTRATE.get().lootItemStackNumberProviderType("count", CountItemStackNumberProvider::new),
+    ENCHANTMENT_LEVEL = REGISTRATE.get().lootItemStackNumberProviderType("enchantment_level", new EnchantmentLevelNumberProvider.Serializer());
 
     public static final void register() {};
 

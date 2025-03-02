@@ -11,8 +11,8 @@ public class PetrolparkLootEntityNumberProviderTypes {
     
     public static final RegistryEntry<LootEntityNumberProviderType>
     
-    EQUIPMENT = REGISTRATE.lootEntityNumberProviderType("equipment_property", new EquipmentNumberProvider.Serializer()),
-    EXPERIENCE_LEVEL = REGISTRATE.lootEntityNumberProviderType("experience_level", ExperienceLevelNumberProvider::new);
+    EQUIPMENT = REGISTRATE.get().lootEntityNumberProviderType("equipment_property", new EquipmentNumberProvider.Serializer()),
+    EXPERIENCE_LEVEL = REGISTRATE.get().lootEntityNumberProviderType("experience_level", ExperienceLevelNumberProvider::new);
 
     public static final void register() {};
 };

@@ -9,8 +9,8 @@ public class IngredientModifierTypes {
 
     public static final RegistryEntry<IngredientModifierType>
 
-    PASS = REGISTRATE.ingredientModifierType("pass", new SimpleSerializer<>(PassIngredientModifier::new)),
-    CONTAMINATED = REGISTRATE.ingredientModifierType("contaminated", new ContaminatedIngredientModifier.Serializer());
+    PASS = REGISTRATE.get().ingredientModifierType("pass", new SimpleSerializer<>(PassIngredientModifier::new)),
+    CONTAMINATED = REGISTRATE.get().ingredientModifierType("contaminated", new ContaminatedIngredientModifier.Serializer());
     
     public static final void register() {};
 };

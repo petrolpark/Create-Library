@@ -11,7 +11,7 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 
 public class PetrolparkGlobalLootModifierSerializers {
     
-    public static final RegistryEntry<Codec<? extends IGlobalLootModifier>> CONTAMINATE_GLOBAL_LOOT_MODIFIER_SERIALZIER = REGISTRATE.simple("contaminate", ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, () -> ContaminateGlobalLootModifier.CODEC);
+    public static final RegistryEntry<Codec<? extends IGlobalLootModifier>> CONTAMINATE_GLOBAL_LOOT_MODIFIER_SERIALZIER = REGISTRATE.get().simple("contaminate", ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, () -> ContaminateGlobalLootModifier.CODEC);
 
     public static final void register() {};
 };

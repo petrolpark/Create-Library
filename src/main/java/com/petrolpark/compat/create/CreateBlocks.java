@@ -9,7 +9,7 @@ import net.minecraft.world.level.material.PushReaction;
 
 public class CreateBlocks {
     
-    public static final BlockEntry<TubeStructuralBlock> TUBE_STRUCTURE = REGISTRATE.block("tube", TubeStructuralBlock::new)
+    public static final BlockEntry<TubeStructuralBlock> TUBE_STRUCTURE = REGISTRATE.get().block("tube", TubeStructuralBlock::new)
     .properties(p -> p
         .noCollission()
         .pushReaction(PushReaction.DESTROY)

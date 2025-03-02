@@ -9,7 +9,7 @@ public class TeamDataTypes {
 
     public static final RegistryEntry<ITeamDataType<TeamShopsData>>
 
-    SHOPS = REGISTRATE.teamDataType("shops", TeamShopsData.Type::new);
+    SHOPS = REGISTRATE.get().teamDataType("shops", TeamShopsData.Type::new);
     
     public static final void register() {};
 };
