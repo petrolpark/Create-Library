@@ -5,6 +5,7 @@ import static com.petrolpark.Petrolpark.REGISTRATE;
 import com.petrolpark.data.loot.predicate.ParameterSuppliedLootCondition;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
 public class PetrolparkLootConditionTypes {

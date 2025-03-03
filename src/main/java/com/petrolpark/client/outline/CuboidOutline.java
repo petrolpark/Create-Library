@@ -3,14 +3,14 @@ package com.petrolpark.client.outline;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.mixin.compat.create.accessor.client.OutlineParamsAccessor;
-import com.simibubi.create.foundation.outliner.Outline;
+import net.createmod.catnip.outliner.Outline;
 import com.simibubi.create.foundation.render.RenderTypes;
-import com.simibubi.create.foundation.render.SuperRenderTypeBuffer;
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
 
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -41,7 +41,7 @@ public class CuboidOutline extends Outline {
 
     @Override
     public void render(PoseStack poseStack, SuperRenderTypeBuffer buffer, Vec3 camera, float pt) {
-        VertexConsumer consumer = buffer.getBuffer(RenderTypes.getOutlineSolid());
+        VertexConsumer consumer = buffer.getBuffer(RenderTypes.entitySolidBlockMipped());
 		params.loadColor(colorTemp);
 		Vector4f color = colorTemp;
 		int lightmap = ((OutlineParamsAccessor) params).getLightmap();
@@ -49,7 +49,7 @@ public class CuboidOutline extends Outline {
 
 		diffPosTemp.set(end.x - start.x, end.y - start.y, end.z - start.z);
 		poseStack.pushPose();
-		TransformStack.cast(poseStack)
+		TransformStack.of(poseStack)
 			.translate(start.x - camera.x, start.y - camera.y, start.z - camera.z);
 		maxPosTemp.set(end.x - start.x, end.y - start.y, end.z - start.z);
 		bufferCuboid(poseStack.last(), consumer, minPosTemp, maxPosTemp, color, lightmap, disableLineNormals);

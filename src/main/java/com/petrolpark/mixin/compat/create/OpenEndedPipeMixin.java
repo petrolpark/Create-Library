@@ -14,7 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
-@Mixin(OpenEndedPipe.class)
+@Mixin(value = OpenEndedPipe.class, remap = false)
 public abstract class OpenEndedPipeMixin {
 
     @Shadow
@@ -24,7 +24,7 @@ public abstract class OpenEndedPipeMixin {
     private BlockPos outputPos;
     
     @Inject(
-        method = "Lcom/simibubi/create/content/fluids/OpenEndedPipe;provideFluidToSpace(Lnet/minecraftforge/fluids/FluidStack;Z)Z",
+        method = "provideFluidToSpace(Lnet/minecraftforge/fluids/FluidStack;Z)Z",
         at = @At("HEAD"),
         cancellable = true,
         remap = false

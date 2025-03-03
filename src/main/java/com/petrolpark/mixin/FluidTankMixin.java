@@ -13,14 +13,14 @@ import net.minecraftforge.fluids.IFluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 
-@Mixin(FluidTank.class)
+@Mixin(value = FluidTank.class, remap = false)
 public abstract class FluidTankMixin implements IFluidHandler, IFluidTank {
 
     @Shadow
     public abstract void setFluid(FluidStack stack);
     
     @Inject(
-        method = "Lnet/minecraftforge/fluids/capability/templates/FluidTank;fill(Lnet/minecraftforge/fluids/FluidStack;Lnet/minecraftforge/fluids/capability/IFluidHandler$FluidAction;)I",
+        method = "fill(Lnet/minecraftforge/fluids/FluidStack;Lnet/minecraftforge/fluids/capability/IFluidHandler$FluidAction;)I",
         at = @At("RETURN"),
         cancellable = true,
         remap = false

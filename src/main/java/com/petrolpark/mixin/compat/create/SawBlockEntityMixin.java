@@ -2,9 +2,9 @@ package com.petrolpark.mixin.compat.create;
 
 import java.util.List;
 
-import org.checkerframework.common.aliasing.qual.Unique;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -20,33 +20,33 @@ import com.simibubi.create.content.processing.recipe.ProcessingInventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 
-@Mixin(SawBlockEntity.class)
+@Mixin(value = SawBlockEntity.class, remap = false)
 public class SawBlockEntityMixin {
 
     @Shadow
-    ProcessingInventory inventory;
-    
+    public ProcessingInventory inventory;
+
     @Unique
-    ItemStack lastItemProcessed;
+    ItemStack petrolpark$lastItemProcessed;
 
     @Inject(
-        method = "Lcom/simibubi/create/content/kinetics/saw/SawBlockEntity;applyRecipe()V",
+        method = "applyRecipe()V",
         at = @At("HEAD"),
         remap = false
     )
     public void inApplyRecipeStart(CallbackInfo ci) {
-        lastItemProcessed = inventory.getStackInSlot(0);
+        petrolpark$lastItemProcessed = inventory.getStackInSlot(0);
     };
 
     @Inject(
-        method = "Lcom/simibubi/create/content/kinetics/saw/SawBlockEntity;applyRecipe()V",
+        method = "applyRecipe()V",
         at = @At("RETURN"),
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void inApplyRecipeEnd(CallbackInfo ci, List<? extends Recipe<?>> recipes) {
+    public void inApplyRecipeEnd(CallbackInfo ci, ItemStack input, List<? extends Recipe<?>> recipes) {
         if (recipes.isEmpty()) return;
-        IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
+        IContamination<?, ?> inputContamination = ItemContamination.get(petrolpark$lastItemProcessed);
         for (int slot = 0; slot < inventory.getSlots(); slot++) {
             ItemStack stack = inventory.getStackInSlot(slot);
             IDecayingItem.startDecay(stack);

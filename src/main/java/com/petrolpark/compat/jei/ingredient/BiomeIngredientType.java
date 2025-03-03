@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mezz.jei.api.gui.builder.ITooltipBuilder;
 import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
@@ -86,7 +87,7 @@ public class BiomeIngredientType implements IIngredientType<Biome> {
         @Override
         public void render(GuiGraphics guiGraphics, Biome ingredient) {
             globe.draw(guiGraphics, 0, 1);
-        };
+        }
 
         @Override
         public List<Component> getTooltip(Biome ingredient, TooltipFlag tooltipFlag) {

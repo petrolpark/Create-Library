@@ -1,8 +1,8 @@
 package com.petrolpark.client.ponder.instruction;
 
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.instruction.TickingInstruction;
+import net.createmod.catnip.animation.LerpedFloat.Chaser;
 
 import net.minecraft.util.Mth;
 

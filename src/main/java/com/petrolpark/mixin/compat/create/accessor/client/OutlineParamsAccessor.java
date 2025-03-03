@@ -3,9 +3,9 @@ package com.petrolpark.mixin.compat.create.accessor.client;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import com.simibubi.create.foundation.outliner.Outline.OutlineParams;
+import net.createmod.catnip.outliner.Outline.OutlineParams;
 
-@Mixin(OutlineParams.class)
+@Mixin(value = OutlineParams.class, remap = false)
 public interface OutlineParamsAccessor {
     
     @Accessor("lightmap")
