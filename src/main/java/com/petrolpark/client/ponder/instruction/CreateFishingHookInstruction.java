@@ -3,13 +3,15 @@ package com.petrolpark.client.ponder.instruction;
 import java.util.UUID;
 
 import com.petrolpark.client.ponder.PonderPlayer;
-import com.simibubi.create.foundation.ponder.ElementLink;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.PonderWorld;
-import com.simibubi.create.foundation.ponder.SceneBuilder;
-import com.simibubi.create.foundation.ponder.element.EntityElement;
-import com.simibubi.create.foundation.ponder.instruction.PonderInstruction;
 
+import net.createmod.ponder.api.element.ElementLink;
+import net.createmod.ponder.api.element.EntityElement;
+import net.createmod.ponder.api.level.PonderLevel;
+import net.createmod.ponder.api.scene.SceneBuilder;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.element.ElementLinkImpl;
+import net.createmod.ponder.foundation.element.EntityElementImpl;
+import net.createmod.ponder.foundation.instruction.PonderInstruction;
 import net.minecraft.world.entity.projectile.FishingHook;
 
 public class CreateFishingHookInstruction extends PonderInstruction {
@@ -19,7 +21,7 @@ public class CreateFishingHookInstruction extends PonderInstruction {
 
     protected CreateFishingHookInstruction(ElementLink<EntityElement> playerElementLink) {
         this.playerElementLink = playerElementLink;
-        hookElementLink = new ElementLink<>(EntityElement.class, UUID.randomUUID());
+        hookElementLink = new ElementLinkImpl<>(EntityElement.class, UUID.randomUUID());
     };
 
     public static ElementLink<EntityElement> add(SceneBuilder scene, ElementLink<EntityElement> player) {
@@ -35,11 +37,12 @@ public class CreateFishingHookInstruction extends PonderInstruction {
 
     @Override
     public void tick(PonderScene scene) {
-        scene.resolve(playerElementLink).ifPresent(entity -> {
+        EntityElement element = scene.resolve(playerElementLink);
+        if (element != null) element.ifPresent(entity -> {
             if (!(entity instanceof PonderPlayer player)) return;
-            PonderWorld world = scene.getWorld();
+            PonderLevel world = scene.getWorld();
             FishingHook hook = new FishingHook(player, world, 0, 0);
-            EntityElement handle = new EntityElement(hook);
+            EntityElement handle = new EntityElementImpl(hook);
             scene.addElement(handle);
             scene.linkElement(handle, hookElementLink);
             world.addFreshEntity(hook);

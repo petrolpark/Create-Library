@@ -3,12 +3,11 @@ package com.petrolpark.client.ponder.instruction;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.PonderTag;
-import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
-
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.PonderTag;
+import net.createmod.ponder.foundation.instruction.TickingInstruction;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class HighlightTagInstruction extends TickingInstruction {
 
