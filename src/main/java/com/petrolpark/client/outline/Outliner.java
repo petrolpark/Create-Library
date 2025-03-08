@@ -5,8 +5,8 @@ import java.util.Map;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.mixin.compat.create.accessor.client.OutlineEntryAccessor;
 import com.petrolpark.mixin.compat.create.accessor.client.OutlinerAccessor;
-import net.createmod.catnip.outliner.Outline.OutlineParams;
 
+import net.createmod.catnip.outliner.Outline.OutlineParams;
 import net.minecraft.world.phys.AABB;
 
 @RequiresCreate

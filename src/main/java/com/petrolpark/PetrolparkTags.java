@@ -1,11 +1,12 @@
 package com.petrolpark;
 
-import java.util.Collections;
-
 import com.petrolpark.contamination.Contaminant;
 import com.petrolpark.team.data.ITeamDataType;
 import com.petrolpark.util.Lang;
 
+import net.minecraft.core.Holder;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
@@ -17,34 +18,32 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.IForgeRegistry;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 public class PetrolparkTags {
 
     /**
-     * Copied from {@link com.simibubi.create.AllTags#optionalTag(IForgeRegistry, ResourceLocation) Create source code}.
+     * Copied from {@link com.simibubi.create.AllTags#optionalTag(Registry, ResourceLocation) Create source code}.
      * @return A TagKey
      */
-    public static <T> TagKey<T> optionalTag(IForgeRegistry<T> registry, ResourceLocation id) {
-		return registry.tags().createOptionalTagKey(id, Collections.emptySet());
+    public static <T> TagKey<T> optionalTag(Registry<T> registry, ResourceLocation id) {
+		return TagKey.create(registry.key(), id);
 	};
 
-	public static <T> TagKey<T> forgeTag(IForgeRegistry<T> registry, String path) {
-		return optionalTag(registry, new ResourceLocation("forge", path));
+	public static <T> TagKey<T> commonTag(Registry<T> registry, String path) {
+		return optionalTag(registry, ResourceLocation.fromNamespaceAndPath("c", path));
 	};
 
-	public static TagKey<Block> forgeBlockTag(String path) {
-		return forgeTag(ForgeRegistries.BLOCKS, path);
+	public static TagKey<Block> commonBlockTag(String path) {
+		return commonTag(BuiltInRegistries.BLOCK, path);
 	};
 
-	public static TagKey<Item> forgeItemTag(String path) {
-		return forgeTag(ForgeRegistries.ITEMS, path);
+	public static TagKey<Item> commonItemTag(String path) {
+		return commonTag(BuiltInRegistries.ITEM, path);
 	};
 
-	public static TagKey<Fluid> forgeFluidTag(String path) {
-		return forgeTag(ForgeRegistries.FLUIDS, path);
+	public static TagKey<Fluid> commonFluidTag(String path) {
+		return commonTag(BuiltInRegistries.FLUID, path);
 	};
 
     public enum Items {
@@ -107,7 +106,7 @@ public class PetrolparkTags {
         };
 
         public boolean matches(BlockEntityType<?> blockEntityType) {
-            return ForgeRegistries.BLOCK_ENTITY_TYPES.getHolder(blockEntityType).orElseThrow().is(tag);
+            return PetrolparkRegistries.getHolder(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType).orElseThrow().is(tag);
         };
     };
     
@@ -132,8 +131,12 @@ public class PetrolparkTags {
             }
         };
 
+        public boolean matches(Holder.Reference<MenuType<?>> holder) {
+            return holder.is(tag);
+        };
+
         public boolean matches(MenuType<?> menuType) {
-            return ForgeRegistries.MENU_TYPES.getHolder(menuType).map(h -> h.is(tag)).orElse(false);
+            return PetrolparkRegistries.getHolder(BuiltInRegistries.MENU, menuType).map(this::matches).orElse(false);
         };
     };
 
@@ -154,7 +157,7 @@ public class PetrolparkTags {
         };
 
         public boolean matches(Contaminant contaminant) {
-            return PetrolparkRegistries.getDataRegistry(PetrolparkRegistries.Keys.CONTAMINANT).getHolder(PetrolparkRegistries.getDataRegistry(PetrolparkRegistries.Keys.CONTAMINANT).getId(contaminant)).orElseThrow().is(tag);
+            return PetrolparkRegistries.getHolder(PetrolparkRegistries.Keys.CONTAMINANT, contaminant).orElseThrow().is(tag);
         };
     }
 
@@ -170,7 +173,7 @@ public class PetrolparkTags {
         };
 
         public boolean matches(ITeamDataType<?> teamDataType) {
-            return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.TEAM_DATA_TYPE).getHolder(teamDataType).orElseThrow().is(tag);
+            return PetrolparkRegistries.getHolder(PetrolparkRegistries.Keys.TEAM_DATA_TYPE, teamDataType).orElseThrow().is(tag);
         };
     };
 };

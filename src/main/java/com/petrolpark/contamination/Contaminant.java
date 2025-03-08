@@ -36,7 +36,7 @@ public class Contaminant {
     ));
 
     public static Contaminant get(ResourceLocation resourceLocation) {
-        return PetrolparkRegistries.getDataRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(resourceLocation);
+        return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(resourceLocation);
     };
 
     public static Contaminant getFromIntrinsicTag(TagKey<?> tagKey) {
@@ -51,7 +51,7 @@ public class Contaminant {
         ResourceLocation rl = tagKey.location();
         String[] path = rl.getPath().split("/");
         if (!path[0].equals("contaminant") || !path[2].equals(pathSuffix)) return null;
-        return PetrolparkRegistries.getDataRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(new ResourceLocation(rl.getNamespace(), path[1]));
+        return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(new ResourceLocation(rl.getNamespace(), path[1]));
     };
 
     // Initial fields

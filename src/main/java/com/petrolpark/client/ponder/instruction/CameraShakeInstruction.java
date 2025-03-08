@@ -1,9 +1,5 @@
 package com.petrolpark.client.ponder.instruction;
 
-import net.createmod.ponder.foundation.PonderScene;
-import net.createmod.ponder.foundation.instruction.TickingInstruction;
-import net.createmod.catnip.animation.LerpedFloat.Chaser;
-
 import net.minecraft.util.Mth;
 
 public class CameraShakeInstruction extends TickingInstruction {

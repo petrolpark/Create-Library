@@ -1,17 +1,14 @@
 package com.petrolpark.client.outline;
 
+import javax.annotation.Nonnull;
+
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.petrolpark.RequiresCreate;
-import com.petrolpark.mixin.compat.create.accessor.client.OutlineParamsAccessor;
 import net.createmod.catnip.outliner.Outline;
-import com.simibubi.create.foundation.render.RenderTypes;
+import net.createmod.catnip.render.PonderRenderTypes;
 import net.createmod.catnip.render.SuperRenderTypeBuffer;
-
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
@@ -40,8 +37,8 @@ public class CuboidOutline extends Outline {
 	};
 
     @Override
-    public void render(PoseStack poseStack, SuperRenderTypeBuffer buffer, Vec3 camera, float pt) {
-        VertexConsumer consumer = buffer.getBuffer(RenderTypes.entitySolidBlockMipped());
+    public void render(@Nonnull PoseStack poseStack, @Nonnull SuperRenderTypeBuffer buffer, @Nonnull Vec3 camera, float pt) {
+        VertexConsumer consumer = buffer.getBuffer(PonderRenderTypes.outlineSolid());
 		params.loadColor(colorTemp);
 		Vector4f color = colorTemp;
 		int lightmap = ((OutlineParamsAccessor) params).getLightmap();
