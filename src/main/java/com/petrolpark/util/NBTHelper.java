@@ -166,7 +166,7 @@ public class NBTHelper {
      * @return {@code null} if the ResourceLocation is invalid
      */
     public static <OBJECT> OBJECT readDataRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> dataRegistryKey) {
-        return PetrolparkRegistries.getDataRegistry(dataRegistryKey).get(new ResourceLocation(tag.getString(key)));
+        return PetrolparkRegistries.getRegistry(dataRegistryKey).get(new ResourceLocation(tag.getString(key)));
     };
 
     /**
@@ -178,7 +178,7 @@ public class NBTHelper {
      * @param dataObject
      */
     public static <OBJECT> void writeDataRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> dataRegistryKey, OBJECT dataObject) {
-        ResourceLocation rl = PetrolparkRegistries.getDataRegistry(dataRegistryKey).getKey(dataObject);
+        ResourceLocation rl = PetrolparkRegistries.getRegistry(dataRegistryKey).getKey(dataObject);
         if (rl != null) tag.putString(key, rl.toString());
     };
 };

@@ -1,12 +1,15 @@
 package com.petrolpark.badge;
 
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -20,7 +23,7 @@ public class BadgeDuplicationRecipe extends CustomRecipe {
     };
 
     @Override
-    public boolean matches(CraftingContainer inv, Level level) {
+    public boolean matches(RecipeInput inv, Level level) {
         ItemStack badge = null;
         ItemStack duplicationStack = null;
         for(int slot = 0; slot < inv.getContainerSize(); slot++) {

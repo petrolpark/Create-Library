@@ -1,7 +1,8 @@
 plugins {
+    id "eclipse"
     id 'java-library'
     id 'maven-publish'
-    id 'net.neoforged.moddev' version '1.0.21'
+    id 'net.neoforged.moddev' version '2.0.74'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -48,10 +49,10 @@ neoForge {
         // This run config launches GameTestServer and runs all registered gametests, then exits.
         // By default, the server will crash when no gametests are provided.
         // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            type = "gameTestServer"
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
+        // gameTestServer {
+        //     type = "gameTestServer"
+        //     systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        // }
 
         data {
             data()
@@ -89,6 +90,7 @@ configurations {
 }
 
 repositories {
+    maven { url = 'https://maven.neoforged.net/releases' }
     maven { url = "https://maven.createmod.net" } // Ponder, Flywheel, Create
     maven { url = "https://mvn.devos.one/snapshots" } // Registrate
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // ForgeConfigAPIPort
@@ -112,7 +114,7 @@ dependencies {
     // Registrate (bundled with Petrolpark's Library)
     jarJar(implementation("com.tterrag.registrate:Registrate:${registrate_version}"))
 
-    // Create & dependents
+    // Create & dependencies
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
     implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
@@ -179,9 +181,9 @@ tasks.withType(Copy) {
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
-idea {
-    module {
-        downloadSources = true
-        downloadJavadoc = true
-    }
-}
+// idea {
+//     module {
+//         downloadSources = true
+//         downloadJavadoc = true
+//     }
+// }

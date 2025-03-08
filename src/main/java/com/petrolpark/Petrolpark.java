@@ -2,6 +2,8 @@ package com.petrolpark;
 
 import org.slf4j.Logger;
 
+import java.util.function.Supplier;
+
 import com.mojang.logging.LogUtils;
 import com.petrolpark.badge.Badges;
 import com.petrolpark.compat.CompatMods;
@@ -37,6 +39,7 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(Petrolpark.MOD_ID)
@@ -61,7 +64,7 @@ public class Petrolpark {
     };
 
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
-        IEventBus forgeEventBus = NeoForge.EVENT_BUS;
+        IEventBus neoEventBus = NeoForge.EVENT_BUS;
 
         REGISTRATE.registerEventListeners(modEventBus);
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
@@ -92,21 +95,29 @@ public class Petrolpark {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> PetrolparkClient.clientCtor(modEventBus, forgeEventBus));
 
         // Register ourselves for server and other game events we are interested in
-        forgeEventBus.register(this);
+        neoEventBus.register(this);
     
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::init);
 
         // Compat
-        if (CompatMods.JEI.isLoading()) forgeEventBus.register(ITickableCategory.ClientEvents.class);
-        CompatMods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, forgeEventBus));
-        CompatMods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, forgeEventBus));
+        if (CompatMods.JEI.isLoading()) neoEventBus.register(ITickableCategory.ClientEvents.class);
+        CompatMods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, neoEventBus));
+        CompatMods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, neoEventBus));
     };
 
     private void init(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             PetrolparkMessages.register();
         });
+    };
+
+    public static final <T> T runForDist(Supplier<Supplier<T>> clientSupplier, Supplier<Supplier<T>> serverSupplier) {
+        if (FMLEnvironment.dist == Dist.CLIENT) {
+            return clientSupplier.get().get();
+        } else {
+            return serverSupplier.get().get();
+        }
     };
 
     // Temporary (?)

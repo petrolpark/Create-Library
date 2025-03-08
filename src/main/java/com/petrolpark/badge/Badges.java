@@ -12,7 +12,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 
 public class Badges {
 
-    private static final Supplier<Ingredient> GOLD_SHEET_INGREDIENT = () -> Ingredient.of(PetrolparkTags.forgeItemTag("plates/gold"));
+    private static final Supplier<Ingredient> GOLD_SHEET_INGREDIENT = () -> Ingredient.of(PetrolparkTags.commonItemTag("plates/gold"));
 
     public static final RegistryEntry<Badge>
 

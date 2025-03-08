@@ -2,6 +2,8 @@ package com.petrolpark.tube;
 
 import java.util.function.Consumer;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.create.CreateBlockEntityTypes;
 import com.simibubi.create.foundation.block.IBE;
@@ -15,9 +17,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
+import net.neoforged.api.distmarker.Dist;
 
 @RequiresCreate
 public class TubeStructuralBlock extends Block implements IBE<TubeStructuralBlockEntity> {
@@ -32,14 +34,13 @@ public class TubeStructuralBlock extends Block implements IBE<TubeStructuralBloc
     };
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean pIsMoving) {
+    public void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean pIsMoving) {
         IBE.onRemove(state, level, pos, newState);
         super.onRemove(state, level, pos, newState, pIsMoving);
     };
 
     @Override
-    public RenderShape getRenderShape(BlockState pState) {
+    public RenderShape getRenderShape(@Nonnull BlockState pState) {
         return RenderShape.INVISIBLE;
     };
 
@@ -54,7 +55,7 @@ public class TubeStructuralBlock extends Block implements IBE<TubeStructuralBloc
     };
 
     @OnlyIn(Dist.CLIENT)
-	public void initializeClient(Consumer<IClientBlockExtensions> consumer) {
+	public void initializeClient(@Nonnull Consumer<IClientBlockExtensions> consumer) {
 		consumer.accept(new RenderProperties());
 	};
 
