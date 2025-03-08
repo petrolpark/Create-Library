@@ -1,5 +1,7 @@
 package com.petrolpark.client.rendering.item.decorator;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.Petrolpark;
 import com.petrolpark.item.decay.IDecayingItem;
 
@@ -11,12 +13,12 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.IItemDecorator;
+import net.neoforged.neoforge.client.IItemDecorator;
 
 public class DecayingItemDecorator implements IItemDecorator {
 
     @Override
-    public boolean render(GuiGraphics guiGraphics, Font font, ItemStack stack, int xOffset, int yOffset) {
+    public boolean render(@Nonnull GuiGraphics guiGraphics, @Nonnull Font font, @Nonnull ItemStack stack, int xOffset, int yOffset) {
         if (!Screen.hasShiftDown()) return false;
         CompoundTag tag = stack.getOrCreateTag();
         if (!(stack.getItem() instanceof IDecayingItem item)) return false;

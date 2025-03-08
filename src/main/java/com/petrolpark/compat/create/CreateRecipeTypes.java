@@ -15,12 +15,13 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo {
 
@@ -28,9 +29,9 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
     ;
 
     private final ResourceLocation id;
-    private final RegistryObject<RecipeSerializer<?>> serializerObject;
+    private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> serializerObject;
     @Nullable
-    private final RegistryObject<RecipeType<?>> typeObject;
+    private final DeferredHolder<RecipeType<?>, RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
 
     CreateRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
@@ -76,12 +77,13 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
         return (T) serializerObject.get();
     };
 
+    @Override
     @SuppressWarnings("unchecked")
-    public <T extends RecipeType<?>> T getType() {
-        return (T) type.get();
+    public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType() {
+        return (RecipeType<R>) type.get();
     };
 
-    public <C extends Container, T extends Recipe<C>> Optional<T> find(C inv, Level world) {
+    public <I extends RecipeInput, T extends Recipe<I>> Optional<RecipeHolder<T>> find(I inv, Level world) {
         return world.getRecipeManager()
             .getRecipeFor(getType(), inv, world);
     };

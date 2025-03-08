@@ -4,6 +4,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.instruction.TickingInstruction;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class HighlightTagInstruction extends TickingInstruction {
 

@@ -6,8 +6,8 @@ import com.petrolpark.registrate.PetrolparkRegistrate;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.fml.ModList;
-import net.minecraftforge.fml.loading.FMLLoader;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.loading.FMLLoader;
 
 public enum CompatMods {
 
@@ -55,7 +55,7 @@ public enum CompatMods {
 	};
 
     public ResourceLocation asResource(String path) {
-        return new ResourceLocation(id, path);
+        return ResourceLocation.fromNamespaceAndPath(id, path);
     };
 
     public PetrolparkRegistrate registrate() {

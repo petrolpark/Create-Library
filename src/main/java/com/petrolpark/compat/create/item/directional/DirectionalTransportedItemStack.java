@@ -10,11 +10,12 @@ import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @RequiresCreate
 public class DirectionalTransportedItemStack extends TransportedItemStack {
@@ -39,7 +40,7 @@ public class DirectionalTransportedItemStack extends TransportedItemStack {
     };
 
     public void rotate(Rotation appliedRotation) {
-        rotation = appliedRotation.getRotated(rotation);
+        if (rotation != null) rotation = appliedRotation.getRotated(rotation);
         refreshAngle();
     };
 
@@ -53,12 +54,12 @@ public class DirectionalTransportedItemStack extends TransportedItemStack {
     };
 
     public final int getTargetAngle() {
-        if (rotation == null) return 0;
         switch (rotation) {
             case NONE: return 180;
             case CLOCKWISE_90: return 90;
             case CLOCKWISE_180: return 0;
             case COUNTERCLOCKWISE_90: return 270;
+            case null:
             default: return 0;
         }
     };
@@ -120,8 +121,8 @@ public class DirectionalTransportedItemStack extends TransportedItemStack {
     };
 
     @Override
-	public CompoundTag serializeNBT() {
-		CompoundTag nbt = super.serializeNBT();
+	public CompoundTag serializeNBT(HolderLookup.Provider registries) {
+		CompoundTag nbt = super.serializeNBT(registries);
         if (rotation != null) nbt.putInt("Rotation", rotation.ordinal());
         return nbt;
 	};

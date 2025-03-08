@@ -52,7 +52,7 @@ public class PetrolparkEmitters {
     public static void createFireworkSpark(PonderLevel world, double x, double y, double z, double vx, double vy, double vz, int[] colors, int[] fadeColors, boolean trail, boolean twinkle) {
         FireworkParticles.SparkParticle particle = (FireworkParticles.SparkParticle)((PonderLevelAccessor)world).invokeMakeParticle(ParticleTypes.FIREWORK, x, y, z, vx, vy, vz);
         particle.setTrail(trail);
-        particle.setFlicker(twinkle);
+        particle.setTwinkle(twinkle);
         particle.setColor(colors[RANDOM.nextInt(colors.length)]);
         if (fadeColors.length > 0) particle.setFadeColor(fadeColors[RANDOM.nextInt(fadeColors.length)]);
         world.addParticle(particle);

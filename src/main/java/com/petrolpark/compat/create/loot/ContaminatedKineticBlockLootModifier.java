@@ -1,8 +1,10 @@
 package com.petrolpark.compat.create.loot;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.compat.create.block.entity.behaviour.ContaminationBehaviour;
@@ -15,12 +17,12 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 
 public class ContaminatedKineticBlockLootModifier extends LootModifier {
 
-    public static final Codec<ContaminatedKineticBlockLootModifier> CODEC = RecordCodecBuilder.create(inst -> codecStart(inst).apply(inst, ContaminatedKineticBlockLootModifier::new));
+    public static final MapCodec<ContaminatedKineticBlockLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> codecStart(inst).apply(inst, ContaminatedKineticBlockLootModifier::new));
 
     public ContaminatedKineticBlockLootModifier() {
         this(new LootItemCondition[]{});
@@ -31,12 +33,12 @@ public class ContaminatedKineticBlockLootModifier extends LootModifier {
     };
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC;
     };
 
     @Override
-    protected @NotNull ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> generatedLoot, LootContext context) {
+    protected @NotNull ObjectArrayList<ItemStack> doApply(@Nonnull ObjectArrayList<ItemStack> generatedLoot, @Nonnull LootContext context) {
         BlockEntity be = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
         if (be == null || !(be instanceof KineticBlockEntity kbe && PetrolparkTags.BlockEntityTypes.CONTAMINABLE_KINETIC.matches(kbe))) return generatedLoot;
         ContaminationBehaviour behaviour = kbe.getBehaviour(ContaminationBehaviour.TYPE);

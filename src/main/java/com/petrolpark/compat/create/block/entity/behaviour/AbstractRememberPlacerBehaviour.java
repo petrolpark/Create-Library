@@ -10,13 +10,14 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.event.level.BlockEvent.EntityPlaceEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent;
 
 @RequiresCreate
 public abstract class AbstractRememberPlacerBehaviour extends BlockEntityBehaviour {
@@ -68,14 +69,14 @@ public abstract class AbstractRememberPlacerBehaviour extends BlockEntityBehavio
     };
 
     @Override
-    public void read(CompoundTag nbt, boolean clientPacket) {
-        super.read(nbt, clientPacket);
+    public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(nbt, registries, clientPacket);
         if (nbt.contains("Owner")) playerUUID = nbt.getUUID("Owner");
     };
 
     @Override
-    public void write(CompoundTag nbt, boolean clientPacket) {
-        super.write(nbt, clientPacket);
+    public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(nbt, registries, clientPacket);
         Player player = getPlayer();
         if (!nbt.contains("Owner") && player != null && shouldRememberPlacer(player)) nbt.putUUID("Owner", playerUUID); // Don't record more than once
     };

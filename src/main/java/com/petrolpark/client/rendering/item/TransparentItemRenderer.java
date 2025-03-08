@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -11,7 +12,7 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
-import net.minecraftforge.client.ForgeHooksClient;
+import net.neoforged.neoforge.client.ClientHooks;
 
 public class TransparentItemRenderer {
 
@@ -19,7 +20,7 @@ public class TransparentItemRenderer {
         boolean leftHand = transformType == ItemDisplayContext.FIRST_PERSON_LEFT_HAND || transformType == ItemDisplayContext.THIRD_PERSON_LEFT_HAND;
         poseStack.pushPose();
         poseStack.translate(-0.5f, -0.5f, -0.5f);
-        renderModelLists(ForgeHooksClient.handleCameraTransforms(poseStack, model, transformType, leftHand), color, light, overlay, poseStack, buffer.getBuffer(Sheets.translucentCullBlockSheet()));
+        renderModelLists(ClientHooks.handleCameraTransforms(poseStack, model, transformType, leftHand), color, light, overlay, poseStack, buffer.getBuffer(Sheets.translucentCullBlockSheet()));
         poseStack.popPose();
     };
 

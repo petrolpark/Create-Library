@@ -36,7 +36,7 @@ public class ContaminateCommand {
    };
  
    private static int contaminate(CommandSourceStack source, Collection<? extends Entity> targets, Holder<Contaminant> contaminantHolder) throws CommandSyntaxException {
-      Contaminant contaminant = contaminantHolder.get();
+      Contaminant contaminant = contaminantHolder.value();
       int i = 0;
       for(Entity entity : targets) {
          if (entity instanceof LivingEntity livingEntity) {

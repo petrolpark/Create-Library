@@ -4,7 +4,7 @@ import com.petrolpark.tube.ClientTubePlacementHandler;
 
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.neoforged.bus.api.SubscribeEvent;
 
 public class CreateClientModEvents {
     

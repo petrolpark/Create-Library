@@ -5,6 +5,11 @@ import javax.annotation.Nonnull;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
+import com.petrolpark.RequiresCreate;
+import com.petrolpark.mixin.compat.create.accessor.client.OutlineParamsAccessor;
+
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.createmod.catnip.outliner.Outline;
 import net.createmod.catnip.render.PonderRenderTypes;

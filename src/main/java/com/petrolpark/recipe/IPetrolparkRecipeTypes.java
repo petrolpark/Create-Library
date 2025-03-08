@@ -6,6 +6,7 @@ import com.petrolpark.PetrolparkRecipeTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
@@ -23,7 +24,7 @@ public interface IPetrolparkRecipeTypes {
 
     public <T extends RecipeSerializer<?>> T getSerializer();
 
-    public <T extends RecipeType<?>> T getType();
+    public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType();
 
     public default boolean is(Recipe<?> recipe) {
         return recipe.getType() == this.getType();

@@ -10,12 +10,12 @@ import java.util.stream.Stream;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.contamination.Contaminable.GenericContaminable;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 public class Contaminables {
   
@@ -91,12 +91,12 @@ public class Contaminables {
 
         @Override
         public Set<Contaminant> getIntrinsicContaminants(Fluid object) {
-            return ForgeRegistries.FLUIDS.getDelegateOrThrow(object).tags().map(Contaminant::getFromIntrinsicTag).filter(Objects::nonNull).collect(Collectors.toSet());
+            return BuiltInRegistries.FLUID.getDelegateOrThrow(object).tags().map(Contaminant::getFromIntrinsicTag).filter(Objects::nonNull).collect(Collectors.toSet());
         };
 
         @Override
         public Set<Contaminant> getShownIfAbsentContaminants(Fluid object) {
-            return ForgeRegistries.FLUIDS.getDelegateOrThrow(object).tags().map(Contaminant::getFromShowIfAbsentTag).filter(Objects::nonNull).collect(Collectors.toSet());
+            return BuiltInRegistries.FLUID.getDelegateOrThrow(object).tags().map(Contaminant::getFromShowIfAbsentTag).filter(Objects::nonNull).collect(Collectors.toSet());
         };
         
     };

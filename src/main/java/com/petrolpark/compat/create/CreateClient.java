@@ -5,7 +5,7 @@ import com.petrolpark.compat.create.event.CreateClientEvents;
 import com.petrolpark.compat.create.event.CreateClientModEvents;
 import com.petrolpark.tube.ClientTubePlacementHandler;
 
-import net.minecraftforge.eventbus.api.IEventBus;
+import net.neoforged.bus.api.IEventBus;
 
 public class CreateClient {
 

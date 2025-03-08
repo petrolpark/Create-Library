@@ -4,11 +4,11 @@ import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.create.block.entity.behaviour.AbstractRememberPlacerBehaviour;
 import com.petrolpark.compat.create.event.CreateCommonEvents;
 import com.petrolpark.compat.create.loot.CreateGlobalLootModifierSerializers;
+import com.simibubi.create.foundation.utility.DistExecutor;
 
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 
 @RequiresCreate
 public class Create {
