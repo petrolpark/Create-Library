@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 import net.createmod.catnip.outliner.Outliner;
 import net.createmod.catnip.outliner.Outliner.OutlineEntry;
 
-@Mixin(Outliner.class)
+@Mixin(value = Outliner.class, remap = false)
 public interface OutlinerAccessor {
     
     @Accessor("outlines")

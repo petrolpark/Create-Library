@@ -3,13 +3,13 @@ package com.petrolpark.mixin.compat.create.accessor.client;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-import com.simibubi.create.foundation.ponder.PonderWorld;
+import net.createmod.ponder.api.level.PonderLevel;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.core.particles.ParticleOptions;
 
-@Mixin(PonderWorld.class)
-public interface PonderWorldAccessor {
+@Mixin(PonderLevel.class)
+public interface PonderLevelAccessor {
     
     @Invoker(
         value = "makeParticle",

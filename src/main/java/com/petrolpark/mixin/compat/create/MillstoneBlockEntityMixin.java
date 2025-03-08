@@ -29,20 +29,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 
-@Mixin(MillstoneBlockEntity.class)
+@Mixin(value = MillstoneBlockEntity.class, remap = false)
 public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
 
     @Unique
     ItemStack lastItemProcessed;
 
     @Shadow
-    MillingRecipe lastRecipe;
+    private MillingRecipe lastRecipe;
 
     @Shadow
-    ItemStackHandler inputInv;
+    public ItemStackHandler inputInv;
 
     @Shadow
-    ItemStackHandler outputInv;
+    public ItemStackHandler outputInv;
     
     public MillstoneBlockEntityMixin(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);

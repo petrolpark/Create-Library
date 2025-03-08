@@ -1,6 +1,6 @@
 package com.petrolpark.item.decay;
 
-import com.jozufozu.flywheel.util.AnimationTickHolder;
+import net.createmod.catnip.animation.AnimationTickHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.client.rendering.item.TransparentItemRenderer;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;

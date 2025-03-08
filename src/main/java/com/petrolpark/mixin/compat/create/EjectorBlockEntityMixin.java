@@ -17,11 +17,11 @@ import com.simibubi.create.content.logistics.depot.EjectorBlockEntity;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
 
-@Mixin(EjectorBlockEntity.class)
+@Mixin(value = EjectorBlockEntity.class, remap = false)
 public abstract class EjectorBlockEntityMixin {
     
     @Inject(
-        method = "Lcom/simibubi/create/content/logistics/depot/EjectorBlockEntity;launchItems()V",
+        method = "launchItems()V",
         at = @At(
             value = "INVOKE",
             target = "Lcom/simibubi/create/content/logistics/depot/EjectorBlockEntity;addToLaunchedItems(Lnet/minecraft/world/item/ItemStack;)Z",

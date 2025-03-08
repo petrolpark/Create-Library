@@ -2,7 +2,8 @@ package com.petrolpark.client.ponder.instruction;
 
 import net.createmod.ponder.api.PonderPalette;
 import net.createmod.ponder.foundation.PonderScene;
-import net.createmod.ponder.foundation.instruction.TickingInstruction;
+import net.createmod.ponder.foundation.instruction.TickingInstruction
+
 import net.minecraft.world.phys.AABB;
 
 public class OutlineAABBInstruction extends TickingInstruction {
