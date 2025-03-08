@@ -17,16 +17,17 @@ import com.petrolpark.util.RayHelper.CustomHitResult;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.foundation.gui.RemovedGuiUtils;
-import com.simibubi.create.foundation.gui.Theme;
-import com.simibubi.create.foundation.gui.element.GuiGameElement;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.mixin.accessor.MouseHandlerAccessor;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-import com.simibubi.create.foundation.utility.Color;
-import com.simibubi.create.foundation.utility.Lang;
-import com.simibubi.create.foundation.utility.Pair;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CClient;
 
+import net.createmod.catnip.lang.FontHelper;
+import net.createmod.catnip.lang.Lang;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
@@ -140,9 +141,9 @@ public class ClientTubePlacementHandler {
 		posX = Math.min(posX, width - tooltipTextWidth - 20);
 		posY = Math.min(posY, height - tooltipHeight - 20);
 		boolean useCustom = cfg.overlayCustomColor.get();
-		Color colorBackground = useCustom ? new Color(cfg.overlayBackgroundColor.get()) : Theme.c(Theme.Key.VANILLA_TOOLTIP_BACKGROUND).scaleAlpha(0.75f);
-		Color colorBorderTop = useCustom ? new Color(cfg.overlayBorderColorTop.get()) : Theme.c(Theme.Key.VANILLA_TOOLTIP_BORDER, true).copy();
-		Color colorBorderBot = useCustom ? new Color(cfg.overlayBorderColorBot.get()) : Theme.c(Theme.Key.VANILLA_TOOLTIP_BORDER, false).copy();
+		Color colorBackground = useCustom ? new Color(cfg.overlayBackgroundColor.get()) : new Color(0x3c_101010);
+		Color colorBorderTop = useCustom ? new Color(cfg.overlayBorderColorTop.get()) : new Color(0xff_c9974c);
+		Color colorBorderBot = useCustom ? new Color(cfg.overlayBorderColorBot.get()) : new Color(0xff_f1dd79);
 
         PoseStack ms = graphics.pose();
         ms.pushPose();
@@ -193,7 +194,7 @@ public class ClientTubePlacementHandler {
         };
 
         public Component translate() {
-            return Component.translatable("petrolpark.tube.control."+Lang.asId(name()), key == null ? null : key.keybind.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY);
+            return Component.translatable("petrolpark.tube.control."+ Lang.asId(name()), key == null ? null : key.keybind.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY);
         };
     };
 

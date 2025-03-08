@@ -14,11 +14,11 @@ import com.simibubi.create.content.logistics.depot.DepotBehaviour;
 
 import net.minecraft.world.item.ItemStack;
 
-@Mixin(DepotBehaviour.class)
+@Mixin(value = DepotBehaviour.class, remap = false)
 public abstract class DepotBehaviourMixin {
     
     @Inject(
-        method = "Lcom/simibubi/create/content/logistics/depot/DepotBehaviour;insert(Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;Z)Lnet/minecraft/world/item/ItemStack;",
+        method = "insert(Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;Z)Lnet/minecraft/world/item/ItemStack;",
         at = @At("HEAD"),
         cancellable = true,
         remap = false

@@ -3,7 +3,7 @@ package com.petrolpark.item.decay;
 import java.util.function.Supplier;
 
 import com.petrolpark.RequiresCreate;
-import com.simibubi.create.foundation.config.ConfigBase.ConfigInt;
+import net.createmod.catnip.config.ConfigBase.ConfigInt;
 
 import net.minecraft.world.item.ItemStack;
 

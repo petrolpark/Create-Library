@@ -6,8 +6,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.petrolpark.Petrolpark;
-import com.simibubi.create.foundation.config.ui.ConfigHelper;
 
+import net.createmod.catnip.config.ui.ConfigHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.common.ForgeConfigSpec;

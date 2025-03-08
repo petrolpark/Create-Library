@@ -3,8 +3,8 @@ package com.petrolpark.mixin.compat.create.accessor.client;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import com.simibubi.create.foundation.gui.element.ScreenElement;
-import com.simibubi.create.foundation.gui.element.RenderElement.SimpleRenderElement;
+import net.createmod.catnip.gui.element.ScreenElement;
+import net.createmod.catnip.gui.element.AbstractRenderElement.SimpleRenderElement;
 
 @Mixin(SimpleRenderElement.class)
 public interface SimpleRenderElementAccessor {

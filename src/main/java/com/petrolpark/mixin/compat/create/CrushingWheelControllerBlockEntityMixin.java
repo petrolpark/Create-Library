@@ -30,14 +30,14 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.items.wrapper.RecipeWrapper;
 
-@Mixin(CrushingWheelControllerBlockEntity.class)
+@Mixin(value = CrushingWheelControllerBlockEntity.class, remap = false)
 public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlockEntity {
 
     @Unique
     private ItemStack lastItemProcessed = ItemStack.EMPTY;
 
     @Shadow
-    private ProcessingInventory inventory;
+    public ProcessingInventory inventory;
 
     //TODO get the player in the controller block entity
 
@@ -47,7 +47,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
     };
 
     @Inject(
-        method = "Lcom/simibubi/create/content/kinetics/crusher/CrushingWheelControllerBlockEntity;addBehaviours(Ljava/util/List;)V",
+        method = "addBehaviours(Ljava/util/List;)V",
         at = @At("RETURN"),
         remap = false
     )
@@ -56,7 +56,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
     };
 
     @Inject(
-        method = "Lcom/simibubi/create/content/kinetics/crusher/CrushingWheelControllerBlockEntity;applyRecipe()V",
+        method = "applyRecipe()V",
         at = @At("HEAD"),
         remap = false
     )
@@ -65,7 +65,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
     };
 
     @Inject(
-        method = "Lcom/simibubi/create/content/kinetics/crusher/CrushingWheelControllerBlockEntity;applyRecipe()V",
+        method = "applyRecipe()V",
         at = @At(
             value = "INVOKE",
             target = "Ljava/util/List;size()I",
@@ -75,8 +75,8 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         remap = false
     )
     @SuppressWarnings("unchecked")
-    public void inApplyRecipeMiddle(CallbackInfo ci, Optional<ProcessingRecipe<RecipeWrapper>> recipe, List<ItemStack> list, int rolls, int roll, List<ItemStack> rolledResults, int i) {
-        if (i == 0) {
+    public void inApplyRecipeMiddle(CallbackInfo ci, Optional<ProcessingRecipe<RecipeWrapper>> recipe, List<ItemStack> rolledResults, int rolls, int slot) {
+        if (slot == 0) {
             FirstTimeLuckyRecipesBehaviour behaviour = getBehaviour(FirstTimeLuckyRecipesBehaviour.TYPE);
             if (behaviour != null && recipe.get() instanceof IFirstTimeLuckyRecipe ftlr) {
                 List<ItemStack> results = ftlr.rollLuckyResults(behaviour.getPlayer());
@@ -87,7 +87,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
     };
 
     @Inject(
-        method = "Lcom/simibubi/create/content/kinetics/crusher/CrushingWheelControllerBlockEntity;applyRecipe()V",
+        method = "applyRecipe()V",
         at = @At("RETURN"),
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false

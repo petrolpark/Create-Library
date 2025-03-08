@@ -56,9 +56,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-            arg '-mixin.config=create.mixins.json'
             arg '-mixin.config=petrolpark.mixins.json'
-            arg '-mixin.config=flywheel.mixins.json'
             property 'forge.logging.console.level', 'info'
             mods {
                 petrolpark {
@@ -69,7 +67,6 @@ minecraft {
 
         server {
             workingDirectory project.file('run/server')
-            arg '-mixin.config=create.mixins.json'
             arg '-mixin.config=petrolpark.mixins.json'
             property 'forge.logging.console.level', 'info'
             mods {
@@ -102,6 +99,11 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
+    maven {
+        name = 'createmod maven'
+        url = "https://maven.createmod.net"
+    }
+
     maven { // Create, Flywheel, Registrate, Jade
         name = 'tterag maven'
         url = 'https://www.cursemaven.com'
@@ -156,8 +158,11 @@ dependencies {
     // Create
     implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
 
+    implementation fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
+
     // Flywheel
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+    //implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+    implementation fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
 
     // Registrate
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
@@ -175,7 +180,7 @@ dependencies {
 
     // Jade
     implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
-    
+
     // ANNOTATION PROCESSORS
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"

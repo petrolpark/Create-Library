@@ -18,7 +18,7 @@ import com.simibubi.create.compat.jei.EmptyBackground;
 import com.simibubi.create.compat.jei.ItemIcon;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory.Info;
-import com.simibubi.create.foundation.config.ConfigBase.ConfigBool;
+import net.createmod.catnip.config.ConfigBase.ConfigBool;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;

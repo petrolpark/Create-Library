@@ -23,12 +23,14 @@ import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraftforge.eventbus.api.IEventBus;
+import org.jetbrains.annotations.NotNull;
 
 public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrate> {
 
@@ -37,7 +39,7 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     };
 
     @Override
-	public PetrolparkRegistrate registerEventListeners(IEventBus bus) {
+	public @NotNull PetrolparkRegistrate registerEventListeners(@NotNull IEventBus bus) {
 		return super.registerEventListeners(bus);
 	};
 
