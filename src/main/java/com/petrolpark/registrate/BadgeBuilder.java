@@ -58,7 +58,7 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
     protected @NonnullType T createEntry() {
         T badge = factory.get();
 
-        badge.setId(new ResourceLocation(getOwner().getModid(), getName()));
+        badge.setId(ResourceLocation.fromNamespaceAndPath(getOwner().getModid(), getName()));
 
         SimpleAdvancementTrigger advancementTrigger = new SimpleAdvancementTrigger(Petrolpark.asResource("get_badge_"+getOwner().getModid()+"_"+getName()));
         badge.setAdvancementTrigger(advancementTrigger);
@@ -90,7 +90,7 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
                     .rewards(new BadgeAdvancementRewards(badge))
                     .addCriterion("get_badge", badge.advancementTrigger.instance())
                     .requirements(new String[][]{new String[]{"get_badge"}}); 
-            advancements.put(new ResourceLocation(badge.getId().getNamespace(), "badge/"+badge.getId().getPath()), advancementBuilder);
+            advancements.put(ResourceLocation.fromNamespaceAndPath(badge.getId().getNamespace(), "badge/"+badge.getId().getPath()), advancementBuilder);
         });
         return advancements;
     };

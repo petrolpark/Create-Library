@@ -2,6 +2,8 @@ package com.petrolpark.registrate;
 
 import java.util.function.Supplier;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.badge.Badge;
 import com.petrolpark.data.loot.numberprovider.entity.EntityNumberProvider;
@@ -10,8 +12,8 @@ import com.petrolpark.data.loot.numberprovider.itemstack.ItemStackNumberProvider
 import com.petrolpark.data.loot.numberprovider.itemstack.LootItemStackNumberProviderType;
 import com.petrolpark.data.loot.numberprovider.team.LootTeamNumberProviderType;
 import com.petrolpark.data.loot.numberprovider.team.TeamNumberProvider;
-import com.petrolpark.data.reward.RewardType;
 import com.petrolpark.data.reward.IReward;
+import com.petrolpark.data.reward.RewardType;
 import com.petrolpark.data.reward.generator.IRewardGenerator;
 import com.petrolpark.data.reward.generator.RewardGeneratorType;
 import com.petrolpark.recipe.ingredient.modifier.IngredientModifier;
@@ -23,14 +25,12 @@ import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraftforge.eventbus.api.IEventBus;
-import org.jetbrains.annotations.NotNull;
+import net.neoforged.bus.api.IEventBus;
 
 public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrate> {
 
@@ -99,7 +99,7 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, PetrolparkRegistries.Keys.REWARD_TYPE, () -> new RewardType(serializer));
     };
 
-    public <DATA> RegistryEntry<ITeamDataType<DATA>> teamDataType(String name, NonNullSupplier<ITeamDataType<DATA>> supplier) {
+    public <DATA> RegistryEntry<ITeamDataType<?>, ITeamDataType<DATA>> teamDataType(String name, NonNullSupplier<ITeamDataType<DATA>> supplier) {
         return generic(name, PetrolparkRegistries.Keys.TEAM_DATA_TYPE, supplier).register();
     };
     

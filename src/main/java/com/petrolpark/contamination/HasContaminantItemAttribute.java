@@ -40,14 +40,14 @@ public class HasContaminantItemAttribute implements ItemAttribute {
     public void save(CompoundTag nbt) {
         if(contaminant == null) return;
         NBTHelper.writeRegistryObject(nbt, "Contaminant", PetrolparkRegistries.Keys.CONTAMINANT, contaminant);
-    }
+    };
 
     @Override
     public void load(CompoundTag nbt) {
         if (nbt.contains("Contaminant")) {
             contaminant = NBTHelper.readRegistryObject(nbt, "Contaminant", PetrolparkRegistries.Keys.CONTAMINANT);
-        }
-    }
+        };
+    };
 
     @Override
     public String getTranslationKey() {

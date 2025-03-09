@@ -8,16 +8,14 @@ import java.util.Collections;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.recipe.ingredient.IngredientCodec;
 
 public class ShopOrder {
 
     public static final ShopOrder EMPTY = new ShopOrder(Ingredient.EMPTY, Collections.emptyList());
 
-    @SuppressWarnings("deprecation")
     public static final Codec<ShopOrder> CODEC = RecordCodecBuilder.create(instance ->
         instance.group(
-            IngredientCodec.INSTANCE.fieldOf("ingredient").forGetter(ShopOrder::getRequiredItem),
+            Ingredient.CODEC.fieldOf("ingredient").forGetter(ShopOrder::getRequiredItem),
             Codec.list(ShopOrderModifier.CODEC).fieldOf("orderModifiers").forGetter(ShopOrder::getOrderModifiers)
         ).apply(instance, ShopOrder::new)
     );

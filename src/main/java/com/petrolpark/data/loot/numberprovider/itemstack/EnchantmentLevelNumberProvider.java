@@ -40,7 +40,7 @@ public class EnchantmentLevelNumberProvider implements ItemStackNumberProvider {
 
         @Override
         public EnchantmentLevelNumberProvider deserialize(JsonObject json, JsonDeserializationContext serializationContext) {
-            ResourceLocation resourceLocation = new ResourceLocation(GsonHelper.getAsString(json, "enchantment"));
+            ResourceLocation resourceLocation = ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json, "enchantment"));
             return new EnchantmentLevelNumberProvider(ForgeRegistries.ENCHANTMENTS.getDelegate(resourceLocation).orElseThrow(() -> new JsonSyntaxException("Unknown enchantment '" + resourceLocation + "'")).get());
         };
 

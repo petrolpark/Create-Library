@@ -1,5 +1,6 @@
 package com.petrolpark.recipe.condition;
 
+import com.electronwill.nightconfig.core.ConfigSpec;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
@@ -11,15 +12,16 @@ import net.createmod.catnip.config.ui.ConfigHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
-import net.minecraftforge.common.crafting.CraftingHelper;
-import net.minecraftforge.common.crafting.conditions.ICondition;
 import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
-import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import net.neoforged.neoforge.common.conditions.ICondition;
+import net.neoforged.neoforge.common.conditions.ICondition.IContext;
+import net.neoforged.neoforge.common.crafting.CraftingHelper;
+import net.neoforged.neoforge.registries.RegisterEvent;
 
 @EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class ConfigBooleanCondition implements ICondition {
@@ -36,7 +38,7 @@ public class ConfigBooleanCondition implements ICondition {
     };
 
     private final String modId;
-    private final ForgeConfigSpec.BooleanValue value;
+    private final Neo.BooleanValue value;
 
     public ConfigBooleanCondition(String modId, ForgeConfigSpec.BooleanValue value) {
         this.modId = modId;

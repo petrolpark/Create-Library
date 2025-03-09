@@ -11,7 +11,7 @@ import com.petrolpark.PetrolparkTags;
 import it.unimi.dsi.fastutil.objects.Object2DoubleArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 /**
  * A specific instance of a contaminable object, with the specific Contaminants that object posseses.

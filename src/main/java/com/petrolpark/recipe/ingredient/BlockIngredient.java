@@ -95,7 +95,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
         protected static class Type implements BlockIngredientType<ImpossibleBlockIngredient> {
 
-            public static final ResourceLocation ID = new ResourceLocation("petrolpark", "impossible");
+            public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("petrolpark", "impossible");
 
             @Override
             public ImpossibleBlockIngredient read(FriendlyByteBuf buffer) {
@@ -153,7 +153,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
             @Override
             public ResourceLocation getId() {
-                return new ResourceLocation("petrolpark", "single_block");
+                return ResourceLocation.fromNamespaceAndPath("petrolpark", "single_block");
             };
 
         };
@@ -194,7 +194,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
         protected static class Type implements BlockIngredientType<BlockTagIngredient> {
 
-            public static final ResourceLocation ID = new ResourceLocation("petrolpark", "block_tag");
+            public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("petrolpark", "block_tag");
 
             @Override
             public BlockTagIngredient read(FriendlyByteBuf buffer) {
@@ -268,7 +268,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
     
         protected static class Type extends SetBlockIngredientType<UnionBlockIngredient> {
 
-            public static final ResourceLocation ID = new ResourceLocation("petrolpark", "union");
+            public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("petrolpark", "union");
 
             @Override
             public ResourceLocation getId() {
@@ -312,7 +312,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
         protected static class Type extends SetBlockIngredientType<IntersectionBlockIngredient> {
 
-            public static final ResourceLocation ID = new ResourceLocation("petrolpark", "intersection");
+            public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("petrolpark", "intersection");
 
             @Override
             public ResourceLocation getId() {

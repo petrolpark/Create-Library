@@ -1,5 +1,7 @@
 package com.petrolpark.shop.customer;
 
+import javax.annotation.Nonnull;
+
 import com.mojang.datafixers.util.Pair;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistries;
@@ -7,10 +9,11 @@ import com.petrolpark.shop.Shop;
 import com.petrolpark.shop.offer.ShopOffer;
 import com.petrolpark.util.NBTHelper;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 public abstract class AbstractCustomer implements ICustomer, INBTSerializable<CompoundTag> {
 
@@ -49,7 +52,7 @@ public abstract class AbstractCustomer implements ICustomer, INBTSerializable<Co
     };
 
     @Override
-    public CompoundTag serializeNBT() {
+    public CompoundTag serializeNBT(@Nonnull HolderLookup.Provider provider) {
         CompoundTag tag = new CompoundTag();
         if (getOrderTime() != INFINITE_ORDER_TIME) {
             tag.putInt("OrderTime", orderTime);
@@ -63,7 +66,7 @@ public abstract class AbstractCustomer implements ICustomer, INBTSerializable<Co
     };
 
     @Override
-    public void deserializeNBT(CompoundTag nbt) {
+    public void deserializeNBT(@Nonnull HolderLookup.Provider provider, @Nonnull CompoundTag nbt) {
         orderTime = INFINITE_ORDER_TIME;
         if (nbt.contains("OrderTime", Tag.TAG_INT)) {
             orderTime = nbt.getInt("OrderTime");

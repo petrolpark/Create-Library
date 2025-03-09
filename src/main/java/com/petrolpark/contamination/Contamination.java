@@ -114,7 +114,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     public void readNBT(ListTag contaminationTag) {
-        contaminateAll(contaminationTag.stream().map(Tag::getAsString).map(ResourceLocation::new).map(Contaminant::get));
+        contaminateAll(contaminationTag.stream().map(Tag::getAsString).map(ResourceLocation::parse).map(Contaminant::get));
     };
 
     public ListTag writeNBT() {

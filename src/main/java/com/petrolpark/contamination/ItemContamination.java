@@ -6,7 +6,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 
 public class ItemContamination extends Contamination<Item, ItemStack> {
 
@@ -62,7 +62,7 @@ public class ItemContamination extends Contamination<Item, ItemStack> {
         stack.removeTagKey(TAG_KEY);
         if (!orphanContaminants.isEmpty()) stack.getOrCreateTag().put(TAG_KEY, writeNBT());
         getDuck(stack).onContaminationSaved();
-        MinecraftForge.EVENT_BUS.post(new ItemContaminationSavedEvent(stack, this));
+        NeoForge.EVENT_BUS.post(new ItemContaminationSavedEvent(stack, this));
     };
 
     protected static IItemStackDuck getDuck(ItemStack stack) {

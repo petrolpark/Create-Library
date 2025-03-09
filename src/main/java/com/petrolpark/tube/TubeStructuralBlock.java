@@ -62,7 +62,7 @@ public class TubeStructuralBlock extends Block implements IBE<TubeStructuralBloc
     public static class RenderProperties implements IClientBlockExtensions {
 
         @Override
-        public boolean addDestroyEffects(BlockState state, Level Level, BlockPos pos, ParticleEngine manager) {
+        public boolean addDestroyEffects(@Nonnull BlockState state, @Nonnull Level Level, @Nonnull BlockPos pos, @Nonnull ParticleEngine manager) {
             return true;
         };
     };

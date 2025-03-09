@@ -32,9 +32,9 @@ public interface IBiomeSpecificProcessingRecipe {
 
     public static BiomeValue valueFromString(String string) {
         if (string.startsWith("#")) {
-            return new TagBiomeValue(TagKey.create(Registries.BIOME, new ResourceLocation(string.substring(1))));
+            return new TagBiomeValue(TagKey.create(Registries.BIOME, ResourceLocation.fromNamespaceAndPath(string.substring(1))));
         } else {
-            return (new SingleBiomeValue(new ResourceLocation(string)));
+            return (new SingleBiomeValue(ResourceLocation.fromNamespaceAndPath(string)));
         }
     };
 

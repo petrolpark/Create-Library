@@ -77,12 +77,12 @@ public class RayHelper {
     };
 
     public static double getBlockReach(Entity entity) {
-        if (entity instanceof Player player) return player.getBlockReach();
+        if (entity instanceof Player player) return player.blockInteractionRange();
         return 3d;
     };
 
     public static double getEntityReach(Entity entity) {
-        if (entity instanceof Player player) return player.getEntityReach();
+        if (entity instanceof Player player) return player.entityInteractionRange();
         return 3d;
     };
 

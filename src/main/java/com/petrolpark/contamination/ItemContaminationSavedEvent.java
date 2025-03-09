@@ -1,8 +1,11 @@
 package com.petrolpark.contamination;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
 
+/**
+ * Cancelling has no effect.
+ */
 public class ItemContaminationSavedEvent extends Event {
     
     public final ItemStack stack;
@@ -11,10 +14,5 @@ public class ItemContaminationSavedEvent extends Event {
     public ItemContaminationSavedEvent(ItemStack stack, ItemContamination contamination) {
         this.stack = stack;
         this.contamination = contamination;
-    };
-
-    @Override
-    public boolean isCancelable() {
-        return false;
     };
 };

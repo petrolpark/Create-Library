@@ -7,6 +7,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -36,15 +37,15 @@ public class TubeStructuralBlockEntity extends SmartBlockEntity {
     };
 
     @Override
-    protected void read(CompoundTag tag, boolean clientPacket) {
-        if (tag.contains("ControllerPos", Tag.TAG_COMPOUND)) controllerPos = NbtUtils.readBlockPos(tag.getCompound("ControllerPos")).offset(getBlockPos());
-        super.read(tag, clientPacket);
+    protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
+        if (tag.contains("ControllerPos", Tag.TAG_INT_ARRAY)) controllerPos = NbtUtils.readBlockPos(tag, "ControllerPos").orElse(BlockPos.ZERO).offset(getBlockPos());
+        super.read(tag, registries, clientPacket);
     };
 
     @Override
-    protected void write(CompoundTag tag, boolean clientPacket) {
+    protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
         if (controllerPos != null) tag.put("ControllerPos", NbtUtils.writeBlockPos(controllerPos.subtract(getBlockPos())));
-        super.write(tag, clientPacket);
+        super.write(tag, registries, clientPacket);
     };
     
 };

@@ -72,7 +72,7 @@ public class ContaminatedIngredientModifier implements IngredientModifier {
 
         @Override
         public ContaminatedIngredientModifier deserialize(JsonObject json, JsonDeserializationContext deserializationContext) {
-            return new ContaminatedIngredientModifier(new ResourceLocation(GsonHelper.getAsString(json, "contaminant")));
+            return new ContaminatedIngredientModifier(ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json, "contaminant")));
         };
 
     };

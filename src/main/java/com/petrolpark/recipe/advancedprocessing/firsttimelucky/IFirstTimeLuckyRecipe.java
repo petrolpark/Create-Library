@@ -8,7 +8,6 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.LazyOptional;
 
 @RequiresCreate
 public interface IFirstTimeLuckyRecipe<T extends ProcessingRecipe<?>> {

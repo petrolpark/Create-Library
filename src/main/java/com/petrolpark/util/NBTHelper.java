@@ -115,7 +115,7 @@ public class NBTHelper {
      * @return {@code null} if the ResourceLocation is invalid
      */
     public static <OBJECT> OBJECT readRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> registryKey, RegistryAccess registryAccess) {
-        return registryAccess.registryOrThrow(registryKey).get(new ResourceLocation(tag.getString(key)));
+        return registryAccess.registryOrThrow(registryKey).get(ResourceLocation.parse(tag.getString(key)));
     };
 
     /**
@@ -141,7 +141,7 @@ public class NBTHelper {
      * @return {@code null} if the ResourceLocation is invalid
      */
     public static <OBJECT> OBJECT readRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> registryKey) {
-        return PetrolparkRegistries.getRegistry(registryKey).getValue(new ResourceLocation(tag.getString(key)));
+        return PetrolparkRegistries.getRegistry(registryKey).getValue(ResourceLocation.parse(tag.getString(key)));
     };
 
     /**
@@ -166,7 +166,7 @@ public class NBTHelper {
      * @return {@code null} if the ResourceLocation is invalid
      */
     public static <OBJECT> OBJECT readDataRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> dataRegistryKey) {
-        return PetrolparkRegistries.getRegistry(dataRegistryKey).get(new ResourceLocation(tag.getString(key)));
+        return PetrolparkRegistries.getRegistry(dataRegistryKey).get(ResourceLocation.parse(tag.getString(key)));
     };
 
     /**

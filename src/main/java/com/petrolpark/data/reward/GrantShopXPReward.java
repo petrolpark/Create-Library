@@ -76,7 +76,7 @@ public class GrantShopXPReward implements IReward {
 
         @Override
         public GrantShopXPReward deserialize(JsonObject json, JsonDeserializationContext deserializationContext) {
-            return new GrantShopXPReward(new ResourceLocation(GsonHelper.getAsString(json, "shop")), GsonHelper.getAsObject(json, "amount", deserializationContext, NumberProvider.class));
+            return new GrantShopXPReward(ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json, "shop")), GsonHelper.getAsObject(json, "amount", deserializationContext, NumberProvider.class));
         };
 
     };

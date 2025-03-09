@@ -7,7 +7,7 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 
 public class TeamDataTypes {
 
-    public static final RegistryEntry<ITeamDataType<TeamShopsData>>
+    public static final RegistryEntry<ITeamDataType<?>, ITeamDataType<TeamShopsData>>
 
     SHOPS = REGISTRATE.teamDataType("shops", TeamShopsData.Type::new);
     

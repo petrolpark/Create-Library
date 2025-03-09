@@ -79,7 +79,7 @@ public class ForgeRegistryObjectGSONAdapter<E, T extends SerializerType<E>> impl
             if (s.isEmpty()) {
                t = defaultType.get();
             } else {
-               ResourceLocation resourcelocation = new ResourceLocation(s);
+               ResourceLocation resourcelocation = ResourceLocation.fromNamespaceAndPath(s);
                t = getRegistry().getValue(resourcelocation);
             }
 

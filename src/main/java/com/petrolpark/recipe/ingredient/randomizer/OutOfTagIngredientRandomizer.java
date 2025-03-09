@@ -46,7 +46,7 @@ public class OutOfTagIngredientRandomizer implements IngredientRandomizer {
 
         @Override
         public OutOfTagIngredientRandomizer deserialize(JsonObject json, JsonDeserializationContext serializationContext) {
-            return new OutOfTagIngredientRandomizer(TagKey.create(Registries.ITEM, new ResourceLocation(GsonHelper.getAsString(json, "tag"))));
+            return new OutOfTagIngredientRandomizer(TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json, "tag"))));
         };
 
     };

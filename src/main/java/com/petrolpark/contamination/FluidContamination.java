@@ -7,7 +7,7 @@ import com.petrolpark.util.FluidHelper;
 
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 public class FluidContamination extends Contamination<Fluid, FluidStack> {
 

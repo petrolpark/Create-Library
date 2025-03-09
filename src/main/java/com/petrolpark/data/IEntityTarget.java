@@ -30,7 +30,7 @@ public interface IEntityTarget {
             EntityTarget builtInTarget = EntityTarget.getByName(name);
             return Targets.TARGETS.computeIfAbsent(name, s -> new BuiltIn(builtInTarget));
         } catch (IllegalArgumentException e) {
-            LootContextParam<? extends Entity> param = CUSTOM.get(new ResourceLocation(name));
+            LootContextParam<? extends Entity> param = CUSTOM.get(ResourceLocation.fromNamespaceAndPath(name));
             if (param != null) return Targets.TARGETS.putIfAbsent(name, new Custom(param));
             throw new IllegalArgumentException("Unknown contextual Entity: " + name);
         }

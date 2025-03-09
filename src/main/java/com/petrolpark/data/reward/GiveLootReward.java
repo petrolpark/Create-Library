@@ -66,7 +66,7 @@ public class GiveLootReward extends AbstractGiveEntityItemsReward {
 
         @Override
         public GiveLootReward deserialize(JsonObject json, JsonDeserializationContext serializationContext) {
-            return new GiveLootReward(IEntityTarget.getByName(GsonHelper.getAsString(json, "target")), new ResourceLocation(GsonHelper.getAsString(json, "lootTable")));
+            return new GiveLootReward(IEntityTarget.getByName(GsonHelper.getAsString(json, "target")), ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json, "lootTable")));
         };
 
     };

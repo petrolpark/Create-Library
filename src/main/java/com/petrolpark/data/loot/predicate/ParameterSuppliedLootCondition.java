@@ -36,9 +36,9 @@ public class ParameterSuppliedLootCondition implements LootItemCondition {
             LootContextParams.BLOCK_ENTITY,
             LootContextParams.BLOCK_STATE,
             LootContextParams.DAMAGE_SOURCE,
-            LootContextParams.DIRECT_KILLER_ENTITY,
+            LootContextParams.DIRECT_ATTACKING_ENTITY,
             LootContextParams.EXPLOSION_RADIUS,
-            LootContextParams.KILLER_ENTITY,
+            LootContextParams.ATTACKING_ENTITY,
             LootContextParams.LAST_DAMAGE_PLAYER,
             LootContextParams.ORIGIN,
             LootContextParams.THIS_ENTITY,
@@ -79,7 +79,7 @@ public class ParameterSuppliedLootCondition implements LootItemCondition {
             int i = 0;
             for (JsonElement element : jsonArray) {
                 String name = GsonHelper.convertToString(element, "parameter");
-                LootContextParam<?> param = KNOWN_PARAMS.get(new ResourceLocation(name));
+                LootContextParam<?> param = KNOWN_PARAMS.get(ResourceLocation.fromNamespaceAndPath(name));
                 if (param == null) throw new JsonSyntaxException("Unknown Loot Context Paramater: "+name);
                 params[i] = param;
                 i++;

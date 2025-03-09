@@ -16,9 +16,12 @@ import com.petrolpark.util.NBTHelper;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.utility.DistExecutor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -35,9 +38,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.fml.DistExecutor;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @RequiresCreate
 public class TubeBehaviour extends BlockEntityBehaviour {
@@ -200,8 +202,8 @@ public class TubeBehaviour extends BlockEntityBehaviour {
     };
 
     @Override
-    public void read(CompoundTag nbt, boolean clientPacket) {
-        super.read(nbt, clientPacket);
+    public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(nbt, registries, clientPacket);
 
         boolean hadSpline = spline != null;
 
@@ -210,7 +212,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         middleControlPoints = Collections.emptyList();
         spline = null;
         
-        if (nbt.contains("OtherEndPos", Tag.TAG_COMPOUND)) otherEndPos = getPos().offset(NbtUtils.readBlockPos(nbt.getCompound("OtherEndPos")));
+        if (nbt.contains("OtherEndPos", Tag.TAG_COMPOUND)) otherEndPos = getPos().offset(NbtUtils.readBlockPos(nbt, "OtherEndPos").orElse(BlockPos.ZERO));
         if (nbt.contains("Points", Tag.TAG_LIST)) {
             controller = true;
             initializationTicks = nbt.getInt("InitializationTicks");
@@ -220,8 +222,8 @@ public class TubeBehaviour extends BlockEntityBehaviour {
     };
 
     @Override
-    public void write(CompoundTag nbt, boolean clientPacket) {
-        super.write(nbt, clientPacket);
+    public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(nbt, registries, clientPacket);
         if (otherEndPos != null) nbt.put("OtherEndPos", NbtUtils.writeBlockPos(otherEndPos.subtract(getPos())));
         if (!controller || getSpline() == null) return;
         if (initializationTicks > 0) nbt.putInt("InitializationTicks", initializationTicks);

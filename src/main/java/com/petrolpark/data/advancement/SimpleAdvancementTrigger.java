@@ -11,9 +11,11 @@ import com.google.gson.JsonObject;
 
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.CriterionTrigger.Listener;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.DeserializationContext;
+import net.minecraft.advancements.critereon.CriterionValidator;
+import net.minecraft.advancements.critereon.SimpleCriterionTrigger;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
@@ -68,10 +70,16 @@ public class SimpleAdvancementTrigger implements CriterionTrigger<SimpleAdvancem
 		if (playerListeners != null) playerListeners.forEach(listener -> listener.run(playerAdvancements));
 	};
 
-	public class Instance extends AbstractCriterionTriggerInstance {
+	public class Instance implements CriterionTriggerInstance {
 
 		public Instance() {
 			super(getId(), ContextAwarePredicate.ANY);
+		}
+
+		@Override
+		public void validate(CriterionValidator validator) {
+			// TODO Auto-generated method stub
+			throw new UnsupportedOperationException("Unimplemented method 'validate'");
 		};
 	};
 

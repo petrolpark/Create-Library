@@ -1,12 +1,10 @@
 package com.petrolpark.tube;
 
-//import dev.engine_room.flywheel.core.PartialModel;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.util.MathsHelper;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
-//import com.simibubi.create.foundation.render.CachedBufferer;
 import net.createmod.catnip.render.CachedBuffers;
 
 import net.minecraft.client.renderer.MultiBufferSource;

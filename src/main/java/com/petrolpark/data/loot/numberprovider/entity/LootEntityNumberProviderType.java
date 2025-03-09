@@ -6,9 +6,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 
-import net.minecraft.world.level.storage.loot.Serializer;
-import net.minecraft.world.level.storage.loot.SerializerType;
-
 public class LootEntityNumberProviderType extends SerializerType<EntityNumberProvider> {
 
     public LootEntityNumberProviderType(Serializer<? extends EntityNumberProvider> serializer) {

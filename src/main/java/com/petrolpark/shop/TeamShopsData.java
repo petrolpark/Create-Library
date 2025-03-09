@@ -1,6 +1,9 @@
 package com.petrolpark.shop;
 
 import java.util.Map;
+
+import javax.annotation.Nonnull;
+
 import java.util.HashMap;
 
 import com.petrolpark.PetrolparkRegistries;
@@ -46,7 +49,7 @@ public class TeamShopsData extends HashMap<Shop, TeamShopsData.TeamShop> {
     public static class Type implements ITeamDataType<TeamShopsData> {
 
         @Override
-        public TeamShopsData getBlankInstance() {
+        public @Nonnull TeamShopsData getBlankInstance() {
             return new TeamShopsData();
         };
 
@@ -60,7 +63,7 @@ public class TeamShopsData extends HashMap<Shop, TeamShopsData.TeamShop> {
             Registry<Shop> registry = level.registryAccess().registryOrThrow(PetrolparkRegistries.Keys.SHOP);
             TeamShopsData data = getBlankInstance();
             for (String key : tag.getAllKeys()) {
-                Shop shop = registry.get(new ResourceLocation(key));
+                Shop shop = registry.get(ResourceLocation.parse(key));
                 if (shop != null && tag.contains(key, Tag.TAG_COMPOUND)) {
                     CompoundTag shopTag = tag.getCompound(key);
                     String customName = shopTag.getString("Name");

@@ -16,7 +16,7 @@ public class BadgeAdvancementRewards extends AdvancementRewards {
     private final Badge badge;
 
     public BadgeAdvancementRewards(Badge badge) {
-        super(0, new ResourceLocation[0], new ResourceLocation[0], CommandFunction.CacheableFunction.NONE);
+        super(0, ResourceLocation.fromNamespaceAndPath[0], ResourceLocation.fromNamespaceAndPath[0], CommandFunction.CacheableFunction.NONE);
         this.badge = badge;
     };
 

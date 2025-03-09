@@ -55,7 +55,7 @@ public abstract class AbstractTeam<T extends ITeam<? super T>> implements ITeam<
     public void loadTeamData(Level level, CompoundTag tag) {
         for (String key : tag.getAllKeys()) {
             if (!tag.contains(key, Tag.TAG_COMPOUND)) continue;
-            ITeamDataType<?> dataType = PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.TEAM_DATA_TYPE).getValue(new ResourceLocation(key));
+            ITeamDataType<?> dataType = PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.TEAM_DATA_TYPE).getValue(ResourceLocation.fromNamespaceAndPath(key));
             if (dataType != null) loadTeamData(level, tag.getCompound(key), dataType); else Petrolpark.LOGGER.warn("Unknown Team Data Type: "+key);
         };
     };

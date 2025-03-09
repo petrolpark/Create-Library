@@ -52,7 +52,7 @@ public class LootTableRewardGenerator extends ContextEntityRewardGenerator {
 
         @Override
         public LootTableRewardGenerator deserialize(JsonObject json, JsonDeserializationContext serializationContext) {
-            return new LootTableRewardGenerator(IEntityTarget.getByName(GsonHelper.getAsString(json, "target")), new ResourceLocation(GsonHelper.getAsString(json, "lootTable")));
+            return new LootTableRewardGenerator(IEntityTarget.getByName(GsonHelper.getAsString(json, "target")), ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json, "lootTable")));
         };
 
     };

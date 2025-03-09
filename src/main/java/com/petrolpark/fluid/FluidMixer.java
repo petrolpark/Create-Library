@@ -1,16 +1,15 @@
 package com.petrolpark.fluid;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 import com.petrolpark.contamination.FluidContamination;
 
-import java.util.List;
-import java.util.ArrayList;
-
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler.FluidAction;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
 public class FluidMixer {
 

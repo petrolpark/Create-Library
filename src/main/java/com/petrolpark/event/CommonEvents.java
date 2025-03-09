@@ -9,24 +9,22 @@ import com.petrolpark.badge.BadgesCapability;
 import com.petrolpark.command.ContaminateCommand;
 import com.petrolpark.contamination.Contaminant;
 import com.petrolpark.contamination.ItemContamination;
-import com.petrolpark.item.decay.IDecayingItem;
 import com.petrolpark.item.decay.DecayingItemHandler.ServerDecayingItemHandler;
+import com.petrolpark.item.decay.IDecayingItem;
 import com.petrolpark.shop.customer.EntityCustomer;
 import com.petrolpark.team.SinglePlayerTeam;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraftforge.event.AddReloadListenerEvent;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.TickEvent.LevelTickEvent;
-import net.minecraftforge.event.brewing.PotionBrewEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.brewing.PotionBrewEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 @EventBusSubscriber
 public class CommonEvents {
@@ -91,7 +89,7 @@ public class CommonEvents {
         for (int slot = 0; slot < 3; slot++) {
             ItemStack potion = event.getItem(slot);
             IDecayingItem.startDecay(potion);
-            if (PetrolparkConfig.SERVER.brewingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(Stream.of(event.getItem(3), potion).dropWhile(s -> PetrolparkConfig.SERVER.brewingWaterBottleContaminantsIgnored.get() && PotionUtils.getPotion(s) == Potions.WATER), potion);
+            if (PetrolparkConfig.SERVER.brewingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(Stream.of(event.getItem(3), potion).dropWhile(s -> PetrolparkConfig.SERVER.brewingWaterBottleContaminantsIgnored.get() && PotionUt.getPotion(s) == Potions.WATER), potion);
         };
     };
     

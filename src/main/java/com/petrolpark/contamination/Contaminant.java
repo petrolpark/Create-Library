@@ -5,6 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -51,7 +53,7 @@ public class Contaminant {
         ResourceLocation rl = tagKey.location();
         String[] path = rl.getPath().split("/");
         if (!path[0].equals("contaminant") || !path[2].equals(pathSuffix)) return null;
-        return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(new ResourceLocation(rl.getNamespace(), path[1]));
+        return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), path[1]));
     };
 
     // Initial fields
@@ -147,11 +149,11 @@ public class Contaminant {
         };
 
         @Override
-        public void onResourceManagerReload(ResourceManager resourceManager) {
+        public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
             Registry<Contaminant> registry = registryAccess.registryOrThrow(PetrolparkRegistries.Keys.CONTAMINANT);
             registry.forEach(parent -> {
                 ResourceLocation parentName = registry.getKey(parent);
-                parent.childResourceLocations.forEach(childName -> {
+                if (parentName != null) parent.childResourceLocations.forEach(childName -> {
                     Contaminant child = registry.getOptional(childName).orElseThrow(() -> new JsonSyntaxException(String.format("Error in Contaminant %s: no such child '%s'", parentName.toString(), childName.toString())));
                     child.parents.add(parent);
                     parent.children.add(child);

@@ -224,7 +224,7 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
             recipesSupplier = () -> Collections.emptyList();
         };
 
-        mezz.jei.api.recipe.RecipeType<R> type = new mezz.jei.api.recipe.RecipeType<R>(new ResourceLocation(modid, name), recipeClass);
+        mezz.jei.api.recipe.RecipeType<R> type = new mezz.jei.api.recipe.RecipeType<R>(ResourceLocation.fromNamespaceAndPath(modid, name), recipeClass);
 
         Info<R> info = new Info<R>(
             type,

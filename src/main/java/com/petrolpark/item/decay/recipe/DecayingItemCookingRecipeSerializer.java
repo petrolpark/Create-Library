@@ -26,7 +26,7 @@ public class DecayingItemCookingRecipeSerializer implements RecipeSerializer<IDe
     };
 
     protected <R extends AbstractCookingRecipe> IDecayingItemCookingRecipe<R> fromJsonInternal(ResourceLocation recipeId, JsonObject json) {
-        RecipeSerializer<R> serializer = getWrappedSerializer(new ResourceLocation(GsonHelper.getAsString(json, "serializer")));
+        RecipeSerializer<R> serializer = getWrappedSerializer(ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json, "serializer")));
         return getWrapped(serializer.fromJson(recipeId, json));
     };
 
