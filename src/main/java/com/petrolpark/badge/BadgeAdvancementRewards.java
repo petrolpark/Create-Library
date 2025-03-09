@@ -7,7 +7,7 @@ import com.petrolpark.Petrolpark;
 import com.petrolpark.util.Pair;
 
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.commands.CommandFunction;
+import net.minecraft.commands.functions.CommandFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -16,7 +16,7 @@ public class BadgeAdvancementRewards extends AdvancementRewards {
     private final Badge badge;
 
     public BadgeAdvancementRewards(Badge badge) {
-        super(0, ResourceLocation.fromNamespaceAndPath[0], ResourceLocation.fromNamespaceAndPath[0], CommandFunction.CacheableFunction.NONE);
+        super(0, new ResourceLocation[0], new ResourceLocation[0], CommandFunction.CacheableFunction.NONE);
         this.badge = badge;
     };
 

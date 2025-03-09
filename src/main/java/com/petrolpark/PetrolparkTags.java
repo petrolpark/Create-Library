@@ -156,6 +156,10 @@ public class PetrolparkTags {
             tag = TagKey.create(PetrolparkRegistries.Keys.CONTAMINANT, Petrolpark.asResource(path));
         };
 
+        public boolean matches(Holder<Contaminant> contaminant) {
+            return contaminant.is(tag);
+        };
+
         public boolean matches(Contaminant contaminant) {
             return PetrolparkRegistries.getHolder(PetrolparkRegistries.Keys.CONTAMINANT, contaminant).orElseThrow().is(tag);
         };

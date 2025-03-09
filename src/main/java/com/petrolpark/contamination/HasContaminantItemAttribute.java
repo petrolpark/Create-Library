@@ -3,28 +3,33 @@ package com.petrolpark.contamination;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import org.jetbrains.annotations.NotNull;
+
+import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.create.PetrolparkItemAttributes;
-import com.petrolpark.util.NBTHelper;
-import com.simibubi.create.content.logistics.item.filter.attribute.AllItemAttributeTypes;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
-import com.simibubi.create.content.logistics.item.filter.attribute.attributes.ItemNameAttribute;
-import net.minecraft.nbt.CompoundTag;
+
+import net.createmod.catnip.codecs.stream.CatnipStreamCodecBuilders;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 @RequiresCreate
-public class HasContaminantItemAttribute implements ItemAttribute {
+public record HasContaminantItemAttribute(@Nullable Contaminant contaminant) implements ItemAttribute {
 
-    private @Nullable Contaminant contaminant;
+    public static final MapCodec<HasContaminantItemAttribute> CODEC = PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).byNameCodec()
+		.xmap(HasContaminantItemAttribute::new, HasContaminantItemAttribute::contaminant)
+		.fieldOf("value");
 
-    public HasContaminantItemAttribute(@Nullable Contaminant contaminant) {
-        this.contaminant = contaminant;
-    };
+	public static final StreamCodec<RegistryFriendlyByteBuf, HasContaminantItemAttribute> STREAM_CODEC = CatnipStreamCodecBuilders.nullable(ByteBufCodecs.registry(PetrolparkRegistries.Keys.CONTAMINANT))
+		.map(HasContaminantItemAttribute::new, HasContaminantItemAttribute::contaminant);
 
     @Override
     public boolean appliesTo(ItemStack stack, Level world) {
@@ -34,19 +39,6 @@ public class HasContaminantItemAttribute implements ItemAttribute {
     @Override
     public ItemAttributeType getType() {
         return PetrolparkItemAttributes.HAS_CONTAMINANT;
-    }
-
-    @Override
-    public void save(CompoundTag nbt) {
-        if(contaminant == null) return;
-        NBTHelper.writeRegistryObject(nbt, "Contaminant", PetrolparkRegistries.Keys.CONTAMINANT, contaminant);
-    };
-
-    @Override
-    public void load(CompoundTag nbt) {
-        if (nbt.contains("Contaminant")) {
-            contaminant = NBTHelper.readRegistryObject(nbt, "Contaminant", PetrolparkRegistries.Keys.CONTAMINANT);
-        };
     };
 
     @Override
@@ -63,7 +55,7 @@ public class HasContaminantItemAttribute implements ItemAttribute {
         @Override
         public @NotNull ItemAttribute createAttribute() {
             return new HasContaminantItemAttribute(null);
-        }
+        };
 
         @Override
         public List<ItemAttribute> getAllAttributes(ItemStack stack, Level level) {
@@ -72,6 +64,16 @@ public class HasContaminantItemAttribute implements ItemAttribute {
             IntrinsicContaminants.getShownIfAbsent(contamination).forEach(c -> {list.add(new HasContaminantItemAttribute(c));});
             return list;
         };
-    }
+
+        @Override
+        public MapCodec<? extends ItemAttribute> codec() {
+            return CODEC;
+        };
+
+        @Override
+        public StreamCodec<? super RegistryFriendlyByteBuf, ? extends ItemAttribute> streamCodec() {
+            return STREAM_CODEC;
+        };
+    };
     
 };

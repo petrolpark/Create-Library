@@ -15,10 +15,15 @@ import com.petrolpark.util.GraphHelper;
 import com.petrolpark.util.GraphHelper.CircularReferenceException;
 
 import net.minecraft.Util;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -28,7 +33,7 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class Contaminant {
 
-    public static final Codec<Contaminant> CODEC = ExtraCodecs.catchDecoderException(RecordCodecBuilder.create(instance -> 
+    public static final Codec<Contaminant> DIRECT_CODEC = ExtraCodecs.catchDecoderException(RecordCodecBuilder.create(instance -> 
         instance.group(
             Codec.doubleRange(0d, 1d).fieldOf("preservationProportion").forGetter(Contaminant::getPreservationProportion),
             Codec.intRange(0, 16777215).fieldOf("color").forGetter(Contaminant::getColor),
@@ -36,6 +41,8 @@ public class Contaminant {
             Codec.list(ResourceLocation.CODEC).fieldOf("children").forGetter(c -> c.childResourceLocations)
         ).apply(instance, Contaminant::new)
     ));
+    public static final Codec<Holder<Contaminant>> CODEC = RegistryFixedCodec.create(PetrolparkRegistries.Keys.CONTAMINANT);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Contaminant>> STREAM_CODEC = ByteBufCodecs.holderRegistry(PetrolparkRegistries.Keys.CONTAMINANT);
 
     public static Contaminant get(ResourceLocation resourceLocation) {
         return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(resourceLocation);

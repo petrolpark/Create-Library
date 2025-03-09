@@ -10,7 +10,7 @@ import java.lang.Exception;
 
 public class GraphHelper {
     
-    public static <T> Set<T> getAllDescendants(T parent, Function<T, Collection<T>> childGetter) throws CircularReferenceException {
+    public static <T> Set<T> getAllDescendants(T parent, Function<T, ? extends Collection<? extends T>> childGetter) throws CircularReferenceException {
         Set<T> descendants = new HashSet<>();
         Queue<T> toAdd = new LinkedList<>(childGetter.apply(parent));
         while (!toAdd.isEmpty()) {

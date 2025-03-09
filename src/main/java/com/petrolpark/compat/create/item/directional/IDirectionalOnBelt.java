@@ -2,11 +2,11 @@ package com.petrolpark.compat.create.item.directional;
 
 import javax.annotation.Nullable;
 
+import com.petrolpark.PetrolparkDataComponents;
 import com.petrolpark.RequiresCreate;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
 
@@ -30,12 +30,7 @@ public interface IDirectionalOnBelt {
      */
     @Nullable
     public default Rotation rotationForPlacement(ItemStack stack) {
-        if (stack.getOrCreateTag().contains("RotationWhileFlying", Tag.TAG_INT)) {
-            Rotation rotation = Rotation.values()[stack.getOrCreateTag().getInt("RotationWhileFlying")];
-            stack.removeTagKey("RotationWhileFlying");
-            return rotation;
-        };
-        return Rotation.NONE;
+        return stack.getOrDefault(PetrolparkDataComponents.ROTATION_WHILE_FLYING, Rotation.NONE);
     };
 
     /**
@@ -44,6 +39,6 @@ public interface IDirectionalOnBelt {
      * @param launchDirection
      */
     public default void launch(DirectionalTransportedItemStack stack, Direction launchDirection) {
-        stack.stack.getOrCreateTag().putInt("RotationWhileFlying", stack.getRotation().ordinal());
+        stack.stack.set(PetrolparkDataComponents.ROTATION_WHILE_FLYING, stack.rotation);
     };
 };

@@ -1,10 +1,12 @@
 package com.petrolpark.util;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import com.petrolpark.item.decay.IDecayingItem;
 
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
@@ -17,6 +19,10 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 public class ItemHelper {
+
+    public static <T> Optional<T> getOptional(ItemStack stack, DataComponentType<T> componentType) {
+        return Optional.ofNullable(stack.get(componentType));
+    };
 
     public static boolean equalIgnoringTags(ItemStack stack1, ItemStack stack2, String ...ignoredTagKeys) {
         ItemStack trueStack1 = IDecayingItem.checkDecay(stack1);

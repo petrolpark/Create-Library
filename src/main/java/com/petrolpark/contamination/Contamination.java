@@ -7,10 +7,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.StringTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.RegistryAccess;
 
 public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContamination<OBJECT, OBJECT_STACK> {
 
@@ -55,18 +52,18 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean contaminate(Contaminant contaminant) {
+    public final boolean contaminate(Contaminant contaminant, final RegistryAccess registries) {
         if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
         if (!contaminants.add(contaminant)) return false;
         orphanContaminants.removeAll(contaminant.getChildren());
         orphanContaminants.add(contaminant);
         contaminants.addAll(contaminant.getChildren());
-        save();
+        save(registries);
         return true;
     };
 
     @Override
-    public final boolean contaminateAll(Stream<Contaminant> contaminantsStream) {
+    public final boolean contaminateAll(Stream<Contaminant> contaminantsStream, final RegistryAccess registries) {
         boolean changed = !contaminantsStream
             .dropWhile(IntrinsicContaminants.get(this)::contains) // Don't include intrinsic Contaminants
             .filter(contaminants::add) // Only include Contaminants whose (parents) are not already here
@@ -76,51 +73,41 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
                 contaminants.addAll(contaminant.getChildren());
                 return contaminant;
             }).toList().isEmpty(); // Need to collect in a List to ensure the map is executed for every element
-        if (changed) save();
+        if (changed) save(registries);
         return changed;
     };
 
     @Override
-    public final boolean decontaminate(Contaminant contaminant) {
+    public final boolean decontaminate(Contaminant contaminant, final RegistryAccess registries) {
         if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
         if (!orphanContaminants.remove(contaminant)) return false;
         contaminants.remove(contaminant);
         for (Contaminant child : contaminant.getChildren()) {
             if (Collections.disjoint(contaminants, child.getParents())) contaminants.remove(child);
         };
-        save();
+        save(registries);
         return true;
     };
 
     @Override
-    public final boolean decontaminateOnly(Contaminant contaminant) {
+    public final boolean decontaminateOnly(Contaminant contaminant, final RegistryAccess registries) {
         if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
         if (!orphanContaminants.remove(contaminant)) return false;
         contaminants.remove(contaminant);
         for (Contaminant child : contaminant.getChildren()) {
             if (Collections.disjoint(contaminants, child.getParents())) orphanContaminants.add(child);
         };
-        save();
+        save(registries);
         return true;
     };
 
     @Override
-    public final boolean fullyDecontaminate() {
+    public final boolean fullyDecontaminate(final RegistryAccess registries) {
         if (orphanContaminants.isEmpty()) return false;
         orphanContaminants.clear();
         contaminants.clear();
-        save();
+        save(registries);
         return true;
-    };
-
-    public void readNBT(ListTag contaminationTag) {
-        contaminateAll(contaminationTag.stream().map(Tag::getAsString).map(ResourceLocation::parse).map(Contaminant::get));
-    };
-
-    public ListTag writeNBT() {
-        ListTag tag = new ListTag();
-        orphanContaminants.forEach(c -> tag.add(StringTag.valueOf(c.getLocation().toString())));
-        return tag;
     };
 };
 

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.petrolpark.contamination.FluidContamination;
 
+import net.minecraft.core.RegistryAccess;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
@@ -29,13 +30,13 @@ public class FluidMixer {
      * @param fluidStacks
      * @return An optional containing a new Fluid Stack if the Fluids can be mixed, or an empty optional if they cannot
      */
-    public static Optional<FluidStack> mix(int maxResultAmount, FluidStack ...fluidStacks) {
+    public static Optional<FluidStack> mix(final RegistryAccess registryAccess, int maxResultAmount, FluidStack ...fluidStacks) {
         if (fluidStacks.length <= 1) return Optional.empty();
         IFluidMixer currentMixer = null;
         int currentPriority = 0;
         List<IFluidMixer> afterMixers = new ArrayList<>(MIXERS.size());
         for (IFluidMixer mixer : MIXERS) {
-            int priority = mixer.getMixPriority(fluidStacks);
+            int priority = mixer.getMixPriority(registryAccess, fluidStacks);
             if (priority >= 0) afterMixers.add(mixer);
             if (priority > currentPriority) {
                 currentPriority = priority;
@@ -43,8 +44,8 @@ public class FluidMixer {
             };
         };
         if (currentMixer == null) return Optional.empty();
-        FluidStack result = currentMixer.mix(fluidStacks);
-        for (IFluidMixer mixer : afterMixers) mixer.afterMix(result, fluidStacks);
+        FluidStack result = currentMixer.mix(registryAccess, fluidStacks);
+        for (IFluidMixer mixer : afterMixers) mixer.afterMix(registryAccess, result, fluidStacks);
         return Optional.of(result);
     };
 
@@ -55,7 +56,7 @@ public class FluidMixer {
      * @param addedFluidStack The amount of this will be set to the amount which was actually added, so pass a copy
      * @return A new Fluid Stack
      */
-    public static FluidStack mixIn(FluidStack baseFluidStack, FluidStack addedFluidStack, int maxResultAmount, FluidAction action) {
+    public static FluidStack mixIn(final RegistryAccess registryAccess, FluidStack baseFluidStack, FluidStack addedFluidStack, int maxResultAmount, FluidAction action) {
         if (baseFluidStack.isEmpty()) {
             addedFluidStack.setAmount(Math.min(addedFluidStack.getAmount(), maxResultAmount));
             return addedFluidStack.copy();
@@ -66,7 +67,7 @@ public class FluidMixer {
         int currentPriority = 0;
         List<IFluidMixer> afterMixers = new ArrayList<>(MIXERS.size());
         for (IFluidMixer mixer : MIXERS) {
-            int priority = mixer.getMix2Priority(baseFluidStack, addedFluidStack);
+            int priority = mixer.getMix2Priority(registryAccess, baseFluidStack, addedFluidStack);
             if (priority >= 0) afterMixers.add(mixer);
             if (priority > currentPriority) {
                 currentPriority = priority;
@@ -74,11 +75,11 @@ public class FluidMixer {
             };
         };
         if (currentMixer != null) {
-            addedFluidStack.setAmount(currentMixer.getAmountToMixIn(maxResultAmount, baseFluidStack, addedFluidStack));
-            FluidStack result = currentMixer.mix2(baseFluidStack, addedFluidStack);
+            addedFluidStack.setAmount(currentMixer.getAmountToMixIn(registryAccess, maxResultAmount, baseFluidStack, addedFluidStack));
+            FluidStack result = currentMixer.mix2(registryAccess, baseFluidStack, addedFluidStack);
             if (afterMixers.isEmpty() || action.simulate()) return result;
             FluidStack[] fluidStacks = new FluidStack[]{baseFluidStack, addedFluidStack};
-            for (IFluidMixer mixer : afterMixers) mixer.afterMix(result, fluidStacks);
+            for (IFluidMixer mixer : afterMixers) mixer.afterMix(registryAccess, result, fluidStacks);
             return result; 
         } else {
             addedFluidStack.setAmount(0);
@@ -95,15 +96,15 @@ public class FluidMixer {
          * @param addedFluidStack
          * @return Integer less than or equal to the amount of {@code addedFluid}
          */
-        public default int getAmountToMixIn(int maxResultAmount, FluidStack baseFluidStack, FluidStack addedFluidStack) {
+        public default int getAmountToMixIn(final RegistryAccess registryAccess, int maxResultAmount, FluidStack baseFluidStack, FluidStack addedFluidStack) {
             return Math.min(addedFluidStack.getAmount(), Math.max(0, maxResultAmount - baseFluidStack.getAmount()));
         };
 
         /**
          * Shortcut version of {@link IFluidMixer#getMixPriority(FluidStack...)} for 2 Fluids only.
          */
-        public default int getMix2Priority(FluidStack fluidStack1, FluidStack fluidStack2) {
-            return getMixPriority(fluidStack1, fluidStack2);
+        public default int getMix2Priority(final RegistryAccess registryAccess, FluidStack fluidStack1, FluidStack fluidStack2) {
+            return getMixPriority(registryAccess, fluidStack1, fluidStack2);
         };
   
         /**
@@ -112,14 +113,14 @@ public class FluidMixer {
          * @param fluidStacks Stacks to mix
          * @return Negative number to not use this mixer, {@code 0} to only call {@link IFluidMixer#afterMix(FluidStack, FluidStack...)}, or a positive priority to bid to call {@link IFluidMixer#mix(FluidStack...)}.
          */
-        public int getMixPriority(FluidStack ...fluidStacks);
+        public int getMixPriority(final RegistryAccess registryAccess, FluidStack ...fluidStacks);
 
         /**
          * Shortcut version of {@link IFluidMixer#mix(FluidStack...)} for 2 Fluids only.
          * The amount does not necessarily have to be the sum of amounts of each input Fluid Stack, but if it is not make sure {@link IFluidMixer#getAmountToMixIn(int, FluidStack, FluidStack)} is properly defined.
          */
-        public default FluidStack mix2(FluidStack fluidStack1, FluidStack fluidStack2) {
-            return mix(fluidStack1, fluidStack2);
+        public default FluidStack mix2(final RegistryAccess registryAccess, FluidStack fluidStack1, FluidStack fluidStack2) {
+            return mix(registryAccess, fluidStack1, fluidStack2);
         };
 
         /**
@@ -128,7 +129,7 @@ public class FluidMixer {
          * @param fluidStacks
          * @return A new Fluid Stack instance
          */
-        public FluidStack mix(FluidStack ...fluidStacks);
+        public FluidStack mix(final RegistryAccess registryAccess, FluidStack ...fluidStacks);
 
         /**
          * Called on <i>every</i> {@link IFluidMixer} after the highest-priority {@link IFluidMixer} has {@link IFluidMixer#mix(FluidStack...) mixed} them.
@@ -136,7 +137,7 @@ public class FluidMixer {
          * @param result
          * @param fluidStacks Input Fluid Stacks
          */
-        public void afterMix(FluidStack result, FluidStack ...fluidStacks);
+        public void afterMix(final RegistryAccess registryAccess, FluidStack result, FluidStack ...fluidStacks);
 
     };
 };

@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.contamination.Contaminable.GenericContaminable;
 
@@ -91,12 +92,12 @@ public class Contaminables {
 
         @Override
         public Set<Contaminant> getIntrinsicContaminants(Fluid object) {
-            return BuiltInRegistries.FLUID.getDelegateOrThrow(object).tags().map(Contaminant::getFromIntrinsicTag).filter(Objects::nonNull).collect(Collectors.toSet());
+            return PetrolparkRegistries.getHolder(BuiltInRegistries.FLUID, object).orElseThrow().tags().map(Contaminant::getFromIntrinsicTag).filter(Objects::nonNull).collect(Collectors.toSet());
         };
 
         @Override
         public Set<Contaminant> getShownIfAbsentContaminants(Fluid object) {
-            return BuiltInRegistries.FLUID.getDelegateOrThrow(object).tags().map(Contaminant::getFromShowIfAbsentTag).filter(Objects::nonNull).collect(Collectors.toSet());
+            return PetrolparkRegistries.getHolder(BuiltInRegistries.FLUID, object).orElseThrow().tags().map(Contaminant::getFromShowIfAbsentTag).filter(Objects::nonNull).collect(Collectors.toSet());
         };
         
     };

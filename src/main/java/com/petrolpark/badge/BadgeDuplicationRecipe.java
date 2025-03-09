@@ -1,15 +1,13 @@
 package com.petrolpark.badge;
 
-import net.minecraft.core.HolderLookup.Provider;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
+import javax.annotation.Nonnull;
+
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -18,16 +16,15 @@ public class BadgeDuplicationRecipe extends CustomRecipe {
 
     public static final RecipeSerializer<BadgeDuplicationRecipe> BADGE_DUPLICATION = new SimpleCraftingRecipeSerializer<>(BadgeDuplicationRecipe::new);
 
-    public BadgeDuplicationRecipe(ResourceLocation rl, CraftingBookCategory category) {
-        super(rl, category);
+    public BadgeDuplicationRecipe(CraftingBookCategory category) {
+        super(category);
     };
 
     @Override
-    public boolean matches(RecipeInput inv, Level level) {
+    public boolean matches(@Nonnull CraftingInput inv, @Nonnull Level level) {
         ItemStack badge = null;
         ItemStack duplicationStack = null;
-        for(int slot = 0; slot < inv.getContainerSize(); slot++) {
-            ItemStack stack = inv.getItem(slot);
+        for(ItemStack stack : inv.items()) {
             if (stack.getItem() instanceof BadgeItem && badge == null) {
                 badge = stack;
             } else if (duplicationStack == null) {
@@ -42,9 +39,8 @@ public class BadgeDuplicationRecipe extends CustomRecipe {
     };
 
     @Override
-    public ItemStack assemble(CraftingContainer inv, RegistryAccess registryAccess) {
-        for (int slot = 0; slot < inv.getContainerSize(); slot++) {
-            ItemStack stack = inv.getItem(slot);
+    public ItemStack assemble(@Nonnull CraftingInput inv, @Nonnull HolderLookup.Provider registryAccess) {
+        for (ItemStack stack : inv.items()) {
             if (stack.getItem() instanceof BadgeItem) return stack;
         };
         return ItemStack.EMPTY; // Shouldn't be called

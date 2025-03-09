@@ -63,8 +63,8 @@ public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
     };
 
     @SuppressWarnings("unchecked")
-    public <T extends RecipeType<?>> T getType() {
-        return (T) type.get();
+    public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType() {
+        return (RecipeType<R>) type.get();
     };
 
     PetrolparkRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {

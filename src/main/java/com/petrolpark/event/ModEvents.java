@@ -15,7 +15,7 @@ public class ModEvents {
     
     @SubscribeEvent
     public static void addDatapackRegistries(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(PetrolparkRegistries.Keys.CONTAMINANT, Contaminant.CODEC, Contaminant.CODEC);
+        event.dataPackRegistry(PetrolparkRegistries.Keys.CONTAMINANT, Contaminant.DIRECT_CODEC, Contaminant.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.SHOP, Shop.CODEC, Shop.CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.SHOP_OFFER_GENERATOR, ShopOfferGenerator.CODEC, ShopOfferGenerator.CODEC);
     };

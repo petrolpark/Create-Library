@@ -10,6 +10,7 @@ import com.petrolpark.PetrolparkTags;
 
 import it.unimi.dsi.fastutil.objects.Object2DoubleArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -27,17 +28,18 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * @param outputs
      * @see IContamination#perpetuate(Stream, Stream, Function) If you have a faster way of getting the Contamination
      */
-    public static void perpetuate(Stream<Object> inputs, Stream<Object> outputs) {
-        perpetuate(inputs, outputs, object -> get(object).orElse(null));
+    public static void perpetuate(final RegistryAccess registries, Stream<Object> inputs, Stream<Object> outputs) {
+        perpetuate(registries, inputs, outputs, object -> get(object).orElse(null));
     };
 
     /**
      * @param <OBJECT> Type of the contaminable object
+     * @param registries
      * @param inputs
      * @param outputs
      * @param contaminationGetter
      */
-    public static <OBJECT> void perpetuate(Stream<OBJECT> inputs, Stream<OBJECT> outputs, Function<OBJECT, IContamination<?, ?>> contaminationGetter) {
+    public static <OBJECT> void perpetuate(final RegistryAccess registries, Stream<OBJECT> inputs, Stream<OBJECT> outputs, Function<OBJECT, IContamination<?, ?>> contaminationGetter) {
         Object2DoubleMap<Contaminant> amounts = new Object2DoubleArrayMap<>();
         double totalAmount = inputs.map(contaminationGetter)
             .dropWhile(Objects::isNull)
@@ -52,12 +54,13 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
             contamination.contaminateAll(
                 amounts.object2DoubleEntrySet().stream()
                     .filter(entry -> entry.getKey().isPreserved(entry.getDoubleValue() / totalAmount))
-                    .map(Object2DoubleMap.Entry::getKey)
+                    .map(Object2DoubleMap.Entry::getKey),
+                registries
             )
         );
     };
 
-    public static void perpetuate(Stream<ItemStack> itemInputs, Stream<FluidStack> fluidInputs, double fluidWeight, Stream<ItemStack> itemOutputs, Stream<FluidStack> fluidOutputs) {
+    public static void perpetuates(final RegistryAccess registries, Stream<ItemStack> itemInputs, Stream<FluidStack> fluidInputs, double fluidWeight, Stream<ItemStack> itemOutputs, Stream<FluidStack> fluidOutputs) {
         Object2DoubleMap<Contaminant> amounts = new Object2DoubleArrayMap<>();
         double totalAmount = itemInputs.map(ItemContamination::get)
             .mapToDouble(contamination -> {
@@ -75,10 +78,12 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
         Stream.concat(itemOutputs.map(ItemContamination::get), fluidOutputs.map(FluidContamination::get))
             .forEach(contamination -> 
                 contamination.contaminateAll(
-                amounts.object2DoubleEntrySet().stream()
-                    .filter(entry -> entry.getKey().isPreserved(entry.getDoubleValue() / finalTotalAmount))
-                    .map(Object2DoubleMap.Entry::getKey)
-            ));
+                    amounts.object2DoubleEntrySet().stream()
+                        .filter(entry -> entry.getKey().isPreserved(entry.getDoubleValue() / finalTotalAmount))
+                        .map(Object2DoubleMap.Entry::getKey),
+                    registries
+                )
+            );
     };
 
     public Contaminable<OBJECT, OBJECT_STACK> getContaminable();
@@ -87,7 +92,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
 
     public double getAmount();
 
-    public void save();
+    public void save(final RegistryAccess registries);
 
     public boolean has(Contaminant contaminant);
 
@@ -116,14 +121,14 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
         return IntrinsicContaminants.getShownIfAbsent(this).stream().dropWhile(this::has).dropWhile(PetrolparkTags.Contaminants.HIDDEN::matches);
     };
 
-    public boolean contaminate(Contaminant contaminant);
+    public boolean contaminate(Contaminant contaminant, final RegistryAccess registries);
 
     /**
      * Add several Contaminants, and 
      * @param contaminantsStream
      * @return
      */
-    public boolean contaminateAll(Stream<Contaminant> contaminantsStream);
+    public boolean contaminateAll(Stream<Contaminant> contaminantsStream, final RegistryAccess registries);
 
     /**
      * Remove a Contaminant and any {@link Contaminant#getChildren() children} it has that don't belong to another parent.
@@ -132,7 +137,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * @return Whether this Contamination changed
      * @see IContamination#decontaminateOnly(Contaminant) Don't remove children
      */
-    public boolean decontaminate(Contaminant contaminant);
+    public boolean decontaminate(Contaminant contaminant, final RegistryAccess registries);
 
     /**
      * Remove a Contaminant, but not any of its children.
@@ -141,11 +146,11 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * @return Whether this Contamination changed (the Contaminant was removed)
      * @see IContamination#decontaminate(Contaminant) Remove all children
      */
-    public boolean decontaminateOnly(Contaminant contaminant);
+    public boolean decontaminateOnly(Contaminant contaminant, final RegistryAccess registries);
 
     /**
      * Remove all extrinsic Contaminants.
      * @return Whether this Contamination changed (whether it had any extrinsic Contaminants)
      */
-    public boolean fullyDecontaminate();
+    public boolean fullyDecontaminate(final RegistryAccess registries);
 };

@@ -4,15 +4,24 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.function.Supplier;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.util.ItemHelper;
+
+import io.netty.buffer.ByteBuf;
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -34,38 +43,52 @@ public class BadgeItem extends Item {
 
     public static ItemStack of(Player player, Badge badge, Date date) {
         ItemStack stack = new ItemStack(badge.getItem());
-        CompoundTag tag = stack.getOrCreateTag();
-        tag.putString("Player", player == null ? "unknown" : player.getScoreboardName());
-        tag.putLong("Date", date.getTime());
-        tag.getCompound("display").putString("Name", stack.getDisplayName().toString()); // Always display the name in an item frame
+        stack.set(PetrolparkDataComponents.BADGE_AWARD, new BadgeAward(player.getUUID(), date.getTime()));
         return stack;
     };
 
     @Override
-    public Component getName(ItemStack stack) {
+    public Component getName(@Nonnull ItemStack stack) {
         return badge.get().getName();
     };
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-        CompoundTag tag = stack.getOrCreateTag();
+    public void appendHoverText(@Nonnull ItemStack stack, @Nonnull Item.TooltipContext context, @Nonnull List<Component> tooltipComponents, @Nonnull TooltipFlag isAdvanced) {
         Badge badge = this.badge.get();
-        if (!tag.contains("Date", Tag.TAG_LONG) || !tag.contains("Player", Tag.TAG_STRING)) {
-            tooltipComponents.add(Component.translatable("item.petrolpark.badge.unknown").withStyle(ChatFormatting.GRAY));
-            return;
-        };
-        tooltipComponents.add(badge.getDescription().copy().setStyle(PRIMARY));
-        tooltipComponents.add(Component.translatable("item.petrolpark.badge.awarded", Component.literal(tag.getString("Player")).setStyle(HIGHLIGHT), Component.literal(df.format(new Date(tag.getLong("Date")))).setStyle(HIGHLIGHT)).setStyle(PRIMARY));
+        ItemHelper.getOptional(stack, PetrolparkDataComponents.BADGE_AWARD).ifPresentOrElse(badgeAward -> {
+            tooltipComponents.add(badge.getDescription().copy().setStyle(PRIMARY));
+            Level level = context.level();
+            if (level != null) tooltipComponents.add(Component.translatable("item.petrolpark.badge.awarded", Optional.ofNullable(level.getPlayerByUUID(badgeAward.playerUUID())).map(Player::getDisplayName).map(Component::copy).orElse(Component.literal("unknown")).setStyle(HIGHLIGHT), Component.literal(df.format(new Date(badgeAward.awardDate()))).setStyle(HIGHLIGHT)).setStyle(PRIMARY));
+        }, () -> 
+            tooltipComponents.add(Component.translatable("item.petrolpark.badge.unknown").withStyle(ChatFormatting.GRAY))
+        );
+
     };
 
     @Override
-    public ItemStack getCraftingRemainingItem(ItemStack stack) {
+    public ItemStack getCraftingRemainingItem(@Nonnull ItemStack stack) {
         return stack;
     };
 
     @Override
-    public boolean isFoil(ItemStack pStack) {
+    public boolean isFoil(@Nonnull ItemStack pStack) {
         return true;
+    };
+
+    public static record BadgeAward(UUID playerUUID, long awardDate) {
+
+        public static final Codec<BadgeAward> CODEC = RecordCodecBuilder.create(instance -> 
+            instance.group(
+                UUIDUtil.CODEC.fieldOf("player").forGetter(BadgeAward::playerUUID),
+                Codec.LONG.fieldOf("date").forGetter(BadgeAward::awardDate)
+            ).apply(instance, BadgeAward::new)
+        );
+
+        public static final StreamCodec<ByteBuf, BadgeAward> STREAM_CODEC = StreamCodec.composite(
+            UUIDUtil.STREAM_CODEC, BadgeAward::playerUUID,
+            ByteBufCodecs.VAR_LONG, BadgeAward::awardDate,
+            BadgeAward::new
+        );
     };
     
 };

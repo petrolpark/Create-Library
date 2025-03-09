@@ -2,6 +2,8 @@ package com.petrolpark.contamination;
 
 import java.util.stream.Stream;
 
+import net.minecraft.core.RegistryAccess;
+
 public final class IncontaminableContamination implements IContamination<Object, Object> {
 
     public static final IncontaminableContamination INSTANCE = new IncontaminableContamination();
@@ -24,7 +26,7 @@ public final class IncontaminableContamination implements IContamination<Object,
     };
 
     @Override
-    public void save() {};
+    public void save(final RegistryAccess registries) {};
 
     @Override
     public boolean has(Contaminant contaminant) {
@@ -52,27 +54,27 @@ public final class IncontaminableContamination implements IContamination<Object,
     };
 
     @Override
-    public boolean contaminate(Contaminant contaminant) {
+    public boolean contaminate(Contaminant contaminant, final RegistryAccess registries) {
         return false;
     };
 
     @Override
-    public boolean contaminateAll(Stream<Contaminant> contaminantsStream) {
+    public boolean contaminateAll(Stream<Contaminant> contaminantsStream, final RegistryAccess registries) {
         return false;
     };
 
     @Override
-    public boolean decontaminate(Contaminant contaminant) {
+    public boolean decontaminate(Contaminant contaminant, final RegistryAccess registries) {
         return false;
     };
 
     @Override
-    public boolean decontaminateOnly(Contaminant contaminant) {
+    public boolean decontaminateOnly(Contaminant contaminant, final RegistryAccess registries) {
         return false;
     };
 
     @Override
-    public boolean fullyDecontaminate() {
+    public boolean fullyDecontaminate(final RegistryAccess registries) {
         return false;
     };
     
