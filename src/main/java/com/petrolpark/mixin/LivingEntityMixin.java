@@ -17,10 +17,6 @@ import net.minecraft.world.level.Level;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
-
-    @Shadow
-    public abstract boolean hasEffect(MobEffect effect);
-    
     public LivingEntityMixin(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         throw new AssertionError();
@@ -32,7 +28,7 @@ public abstract class LivingEntityMixin extends Entity {
         cancellable = true
     )
     public void inSetLastHurtByMob(LivingEntity livingEntity, CallbackInfo ci) {
-        if (livingEntity != null && hasEffect(PetrolparkMobEffects.NUMBNESS.get())) ci.cancel();
+        if (livingEntity != null && livingEntity.hasEffect(PetrolparkMobEffects.NUMBNESS.get())) ci.cancel();
     };
 
     @Inject(
@@ -41,6 +37,6 @@ public abstract class LivingEntityMixin extends Entity {
         cancellable = true
     )
     protected void inPlayHurtSound(DamageSource source, CallbackInfo ci) {
-        if (hasEffect(PetrolparkMobEffects.NUMBNESS.get())) ci.cancel();
+        if(source.getEntity() instanceof LivingEntity && ((LivingEntity)source.getEntity()).hasEffect(PetrolparkMobEffects.NUMBNESS.get())) ci.cancel();
     };
 };

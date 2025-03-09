@@ -40,10 +40,11 @@
         "SmithingMenuMixin"
     ],
     "client": [
+        "client.CreativeModeInventoryScreenMixin",
         "compat.create.accessor.client.OutlineEntryAccessor",
         "compat.create.accessor.client.OutlineParamsAccessor",
         "compat.create.accessor.client.OutlinerAccessor",
-        "compat.create.accessor.client.PonderWorldAccessor",
+        "compat.create.accessor.client.PonderLevelAccessor",
         "compat.create.accessor.client.SimpleRenderElementAccessor",
         "compat.create.client.BeltRendererMixin",
         "compat.create.client.DepotRendererMixin",

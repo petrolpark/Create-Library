@@ -3,9 +3,9 @@ package com.petrolpark.mixin.compat.create.accessor.client;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import com.simibubi.create.foundation.outliner.Outliner.OutlineEntry;
+import net.createmod.catnip.outliner.Outliner.OutlineEntry;
 
-@Mixin(OutlineEntry.class)
+@Mixin(value = OutlineEntry.class, remap = false)
 public interface OutlineEntryAccessor {
     
     @Accessor("ticksTillRemoval")

@@ -2,10 +2,10 @@ package com.petrolpark.util;
 
 import java.util.List;
 
-import com.jozufozu.flywheel.util.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.RequiresCreate;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -31,22 +31,22 @@ public class KineticsHelper {
 
 	public static PoseStack rotateToFace(Direction facing) {
 		PoseStack poseStack = new PoseStack();
-		TransformStack.cast(poseStack)
-				.centre()
+		TransformStack.of(poseStack)
+				.center()
 				.rotateToFace(facing)
-				.multiply(com.mojang.math.Axis.XN.rotationDegrees(-90))
-				.unCentre();
+				.rotate(com.mojang.math.Axis.XN.rotationDegrees(-90))
+				.uncenter();
 		return poseStack;
 	};
 
 	public static PoseStack rotateToAxis(Axis axis) {
 		Direction facing = Direction.fromAxisAndDirection(axis, AxisDirection.POSITIVE);
 		PoseStack poseStack = new PoseStack();
-		TransformStack.cast(poseStack)
-				.centre()
+		TransformStack.of(poseStack)
+				.center()
 				.rotateToFace(facing)
-				.multiply(com.mojang.math.Axis.XN.rotationDegrees(-90))
-				.unCentre();
+				.rotate(com.mojang.math.Axis.XN.rotationDegrees(-90))
+				.uncenter();
 		return poseStack;
 	};
 };

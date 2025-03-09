@@ -1,9 +1,5 @@
 package com.petrolpark.client.ponder.instruction;
 
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
-import com.simibubi.create.foundation.utility.animation.LerpedFloat.Chaser;
-
 import net.minecraft.util.Mth;
 
 public class CameraShakeInstruction extends TickingInstruction {

@@ -2,6 +2,8 @@ package com.petrolpark;
 
 import org.slf4j.Logger;
 
+import java.util.function.Supplier;
+
 import com.mojang.logging.LogUtils;
 import com.petrolpark.badge.Badges;
 import com.petrolpark.compat.CompatMods;
@@ -28,15 +30,15 @@ import com.petrolpark.team.data.TeamDataTypes;
 import com.petrolpark.team.scoreboard.ScoreboardTeamManager;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.ModLoadingContext;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
 
 @Mod(Petrolpark.MOD_ID)
 public class Petrolpark {
@@ -49,7 +51,7 @@ public class Petrolpark {
     public static final PetrolparkRegistrate DESTROY_REGISTRATE = CompatMods.DESTROY.registrate();
 
     public static ResourceLocation asResource(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     };
 
     public static final ThreadLocal<DecayingItemHandler> DECAYING_ITEM_HANDLER = ThreadLocal.withInitial(() -> DecayingItemHandler.DUMMY);
@@ -59,10 +61,8 @@ public class Petrolpark {
         PetrolparkItemDisplayContexts.register();
     };
 
-    public Petrolpark() {
-        //ModLoadingContext modLoadingContext = ModLoadingContext.get();
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
+    public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
+        IEventBus neoEventBus = NeoForge.EVENT_BUS;
 
         REGISTRATE.registerEventListeners(modEventBus);
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
@@ -94,15 +94,15 @@ public class Petrolpark {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> PetrolparkClient.clientCtor(modEventBus, forgeEventBus));
 
         // Register ourselves for server and other game events we are interested in
-        forgeEventBus.register(this);
+        neoEventBus.register(this);
     
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::init);
 
         // Compat
-        if (CompatMods.JEI.isLoading()) forgeEventBus.register(ITickableCategory.ClientEvents.class);
-        CompatMods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, forgeEventBus));
-        CompatMods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, forgeEventBus));
+        if (CompatMods.JEI.isLoading()) neoEventBus.register(ITickableCategory.ClientEvents.class);
+        CompatMods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, neoEventBus));
+        CompatMods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, neoEventBus));
     };
 
     private void init(final FMLCommonSetupEvent event) {

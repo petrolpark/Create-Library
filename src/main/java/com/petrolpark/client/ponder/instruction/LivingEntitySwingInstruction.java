@@ -2,10 +2,10 @@ package com.petrolpark.client.ponder.instruction;
 
 import java.util.function.Consumer;
 
-import com.simibubi.create.foundation.ponder.ElementLink;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.element.EntityElement;
-import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
+import net.createmod.ponder.api.element.ElementLink;
+import net.createmod.ponder.api.element.EntityElement;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.instruction.TickingInstruction;
 
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.LivingEntity;
@@ -28,7 +28,8 @@ public class LivingEntitySwingInstruction extends TickingInstruction {
     @Override
     public void tick(PonderScene scene) {
         super.tick(scene);
-        scene.resolve(entityLink).ifPresent(e -> {
+        EntityElement element = scene.resolve(entityLink);
+        if (element != null) element.ifPresent(e -> {
             if (!(e instanceof LivingEntity entity)) return;
             entity.swingingArm = InteractionHand.MAIN_HAND;
             if (remainingTicks == 0) {

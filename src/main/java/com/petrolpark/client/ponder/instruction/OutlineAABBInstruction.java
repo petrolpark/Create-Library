@@ -1,8 +1,8 @@
 package com.petrolpark.client.ponder.instruction;
 
-import com.simibubi.create.foundation.ponder.PonderPalette;
-import com.simibubi.create.foundation.ponder.PonderScene;
-import com.simibubi.create.foundation.ponder.instruction.TickingInstruction;
+import net.createmod.ponder.api.PonderPalette;
+import net.createmod.ponder.foundation.PonderScene;
+import net.createmod.ponder.foundation.instruction.TickingInstruction
 
 import net.minecraft.world.phys.AABB;
 

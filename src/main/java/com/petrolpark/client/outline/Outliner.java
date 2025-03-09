@@ -5,12 +5,12 @@ import java.util.Map;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.mixin.compat.create.accessor.client.OutlineEntryAccessor;
 import com.petrolpark.mixin.compat.create.accessor.client.OutlinerAccessor;
-import com.simibubi.create.foundation.outliner.Outline.OutlineParams;
 
+import net.createmod.catnip.outliner.Outline.OutlineParams;
 import net.minecraft.world.phys.AABB;
 
 @RequiresCreate
-public class Outliner extends com.simibubi.create.foundation.outliner.Outliner {
+public class Outliner extends net.createmod.catnip.outliner.Outliner {
     
     public OutlineParams showBox(Object slot, AABB bb, int ttl) {
 		createBoxIfMissing(slot, bb);

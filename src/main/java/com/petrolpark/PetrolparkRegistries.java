@@ -1,6 +1,7 @@
 package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
+import java.util.Optional;
 
 import com.petrolpark.badge.Badge;
 import com.petrolpark.compat.create.dough.Dough;
@@ -19,22 +20,30 @@ import com.petrolpark.team.ITeam.ITeamType;
 import com.petrolpark.team.data.ITeamDataType;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.registries.ForgeRegistry;
-import net.minecraftforge.registries.RegistryBuilder;
-import net.minecraftforge.registries.RegistryManager;
-import net.minecraftforge.server.ServerLifecycleHooks;
+import net.neoforged.neoforge.registries.RegistryBuilder;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class PetrolparkRegistries {
 
-    public static <OBJECT> ForgeRegistry<OBJECT> getRegistry(ResourceKey<Registry<OBJECT>> key) {
-        return RegistryManager.ACTIVE.getRegistry(key);
+    public static <OBJECT> Registry<OBJECT> getRegistry(ResourceKey<Registry<OBJECT>> key) {
+        return Petrolpark.runForDist(() -> () -> {
+            ClientPacketListener connection = Minecraft.getInstance().getConnection();
+            if (connection == null) return null;
+            return connection.registryAccess();
+        }, () -> () -> ServerLifecycleHooks.getCurrentServer().registryAccess()).registryOrThrow(key);
     };
 
-    public static <OBJECT> Registry<OBJECT> getDataRegistry(ResourceKey<Registry<OBJECT>> key) {
-        return DistExecutor.unsafeRunForDist(() -> () -> Minecraft.getInstance().getConnection().registryAccess(), () -> () -> ServerLifecycleHooks.getCurrentServer().registryAccess()).registryOrThrow(key);
+    public static <OBJECT> Optional<Holder.Reference<OBJECT>> getHolder(ResourceKey<Registry<OBJECT>> registryKey, OBJECT object) {
+        return getHolder(getRegistry(registryKey), object);
+    };
+
+    public static <OBJECT> Optional<Holder.Reference<OBJECT>> getHolder(Registry<OBJECT> registry, OBJECT object) {
+        ResourceKey<OBJECT> key = registry.getResourceKey(object).orElseThrow();
+        return registry.getHolder(key);
     };
     
     public static class Keys {

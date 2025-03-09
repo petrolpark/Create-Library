@@ -1,116 +1,103 @@
-buildscript {
-    repositories {
-        maven { url = 'https://maven.minecraftforge.net' }
-        mavenCentral()
-        jcenter()
-        maven { url = 'https://repo.spongepowered.org/repository/maven-public' } // Mixins
-        maven { url = 'https://maven.parchmentmc.org' } // Parchment
-        maven { url = 'https://api.modrinth.com/maven' } // Modrinth
-    }
-    dependencies {
-        classpath "net.minecraftforge.gradle:ForgeGradle:${forgegradle_version}" // Forge
-        classpath "org.spongepowered:mixingradle:${mixingradle_version}" // Mixins
-        classpath "org.parchmentmc:librarian:${librarian_version}" // Parchment
-        classpath files("libs/openbabel.jar") // OpenBabel
-    }
-}
-
 plugins {
-    id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
-}
-apply plugin: 'net.minecraftforge.gradle'
-apply plugin: 'org.parchmentmc.librarian.forgegradle'
-apply plugin: 'maven-publish'
-apply plugin: 'eclipse'
-apply plugin: 'org.spongepowered.mixin'
-
-jarJar.enable()
-
-sourceSets.main.resources {
-    srcDir 'src/generated/resources'
-    exclude '.cache/'
+    id "eclipse"
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.74'
 }
 
-mixin {
-    add sourceSets.main, "petrolpark.refmap.json"
+tasks.named('wrapper', Wrapper).configure {
+    distributionType = Wrapper.DistributionType.BIN
 }
 
-// Workaround for SpongePowered/MixinGradle#38, copied from Create source code
-afterEvaluate {
-    tasks.configureReobfTaskForReobfJar.mustRunAfter(tasks.compileJava)
-    tasks.configureReobfTaskForReobfJarJar.mustRunAfter(tasks.compileJava)
+version = mod_version
+group = mod_group_id
+
+repositories {
+    mavenLocal()
 }
 
-// Mod Details
-version = "${mod_version}"
-group = 'petrolpark'
-archivesBaseName = "petrolpark-${minecraft_version}"
+base {
+    archivesName = mod_id
+}
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(17) //Set Java version
+// Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    mappings channel: 'parchment', version: "${parchment_version}-${minecraft_version}"
-    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
+neoForge {
+    // Specify the version of NeoForge to use.
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    accessTransformers {
+        files('src/main/resources/META-INF/accesstransformer.cfg')
+    }
 
     runs {
         client {
-            workingDirectory project.file('run')
-            arg '-mixin.config=create.mixins.json'
-            arg '-mixin.config=petrolpark.mixins.json'
-            arg '-mixin.config=flywheel.mixins.json'
-            property 'forge.logging.console.level', 'info'
-            mods {
-                petrolpark {
-                    source sourceSets.main
-                }
-            }
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
         server {
-            workingDirectory project.file('run/server')
-            arg '-mixin.config=create.mixins.json'
-            arg '-mixin.config=petrolpark.mixins.json'
-            property 'forge.logging.console.level', 'info'
-            mods {
-                petrolpark {
-                    source sourceSets.main
-                }
-            }
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
 
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        // gameTestServer {
+        //     type = "gameTestServer"
+        //     systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        // }
+
         data {
-            workingDirectory project.file('run')
-            property 'forge.logging.markers', 'REGISTRIES,REGISTRYDUMP'
-            property 'forge.logging.console.level', 'debug'
-            args '--mod', 'petrolpark', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources')
-            mods {
-                petrolpark {
-                    source sourceSets.main
-                }
-            }
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        // applies to all the run configs above
+        configureEach {
+            jvmArguments = ["-XX:+IgnoreUnrecognizedVMOptions", "-XX:+AllowEnhancedClassRedefinition"]
+
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            systemProperty 'mixin.debug.verbose', 'true'
+            systemProperty 'mixin.debug.export', 'true'
+
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
         }
     }
 }
 
-repositories {
-    maven { // JEI
-        name = "Progwml6 maven"
-        url = "https://dvs1.progwml6.com/files/maven/"
-    }
-    maven { // JEI fallback
-        name = "ModMaven"
-        url = "https://modmaven.dev"
-    }
-    maven { // Create, Flywheel, Registrate, Jade
-        name = 'tterag maven'
-        url = 'https://www.cursemaven.com'
-    }
-    maven {
-        // Curios
-        url = "https://maven.theillusivec4.top/"
-    }
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
 
+// Sets up a dependency configuration called 'localRuntime'.
+// This configuration should be used instead of 'runtimeOnly' to declare
+// a dependency that will be present for runtime testing but that is
+// "optional", meaning it will not be pulled by dependents of this mod.
+configurations {
+    runtimeClasspath.extendsFrom localRuntime
+}
+
+repositories {
+    maven { url = 'https://maven.neoforged.net/releases' }
+    maven { url = "https://maven.createmod.net" } // Ponder, Flywheel, Create
+    maven { url = "https://mvn.devos.one/snapshots" } // Registrate
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // ForgeConfigAPIPort
+    maven { url = "https://maven.blamejared.com" } // JEI
+    maven { url = "https://maven.theillusivec4.top/" } // Curios
     exclusiveContent { // Destroy and Petrol's Parts
         forRepository {
             maven {
@@ -118,121 +105,76 @@ repositories {
                 url = "https://api.modrinth.com/maven"
             }
         }
-        forRepositories(fg.repository)
         filter {
             includeGroup "maven.modrinth"
         }
     }
 }
 
-configurations {
-	// Create the library configuration, where our non-mod libraries will be added to
-	library
-	// Any dependency in the library configuration will also be added to the implementation configuration
-	implementation.extendsFrom library
-}
-
-// Configure all runs with the following
-minecraft.runs.all {
-	// Set the minecraft_classpath token to the paths of all jars in the library configuration
-	// This is added with the actual Minecraft classpath to get the real classpath information later on
-	lazyToken('minecraft_classpath') {
-		configurations.library.copyRecursive().resolve().collect { it.absolutePath }.join(File.pathSeparator)
-	}
-}
-
 dependencies {
 
-    // HARD DEPENDENCIES
+    // Registrate (bundled with Petrolpark's Library)
+    jarJar(implementation("com.tterrag.registrate:Registrate:${registrate_version}"))
 
-    // Minecraft
-    minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
-
-    // Bundled dependencies
-    jarJar("com.tterrag.registrate:Registrate:${registrate_version}") {
-        jarJar.ranged(it, '[MC1.19.3-1.1.10,)')
-    }
-    
-    // Create
-    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-
-    // Flywheel
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-
-    // Registrate
-    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
-
-    // OPTIONAL DEPENDENCIES
+    // Create & dependencies
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
+    implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
 
     // JEI
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
-    compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}")
-    implementation fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}")
+    implementation("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
 
     // Curios
-    compileOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}:api")
-    runtimeOnly fg.deobf("top.theillusivec4.curios:curios-forge:${curios_version}+${minecraft_version}")
+    compileOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}:api")
+    runtimeOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}")
 
     // Jade
     implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
-    
-    // ANNOTATION PROCESSORS
 
-    annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
 }
 
-jar {
-    manifest {
-        attributes([
-                "Specification-Title"     : "petrolpark",
-                "Specification-Vendor"    : "petrolpark",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
-                "Implementation-Title"    : project.name,
-                "Implementation-Version"  : project.jar.archiveVersion,
-                "Implementation-Vendor"   : "petrolpark",
-                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs"            : 'petrolpark.mixins.json'
-        ])
-    }
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            neo_version_range      : neo_version_range,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
 }
+// Include the output of "generateModMetadata" as an input directory for the build
+// this works with both building through Gradle and the IDE.
+sourceSets.main.resources.srcDir generateModMetadata
+// To avoid having to run "generateModMetadata" manually, make it run on every project reload
+neoForge.ideSyncTask generateModMetadata
 
-task jarJarRelease {
-    group = 'jarjar'
-    doLast {
-        tasks.jarJar {
-            archiveClassifier = ''
-        }
-    }
-    finalizedBy tasks.jarJar
-}
-
-java {
-    withSourcesJar()
-    withJavadocJar()
-}
-
-// Example configuration to allow publishing using the maven-publish plugin
-// This is the preferred method to reobfuscate your jar file
-// jar.finalizedBy('reobfJar')
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
 publish.dependsOn('reobfJar')
 
+// Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
-        mavenJava(MavenPublication) {
-            artifactId = archivesBaseName
-            
+        register('mavenJava', MavenPublication) {
             from components.java
-            fg.component(it)
         }
-        
     }
     repositories {
         maven {  
             url "file://${project.projectDir}/../petrolpark_local_maven"
         }
     }
-
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -242,3 +184,11 @@ tasks.withType(JavaCompile).configureEach {
 tasks.withType(Copy) {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+// idea {
+//     module {
+//         downloadSources = true
+//         downloadJavadoc = true
+//     }
+// }

@@ -1,6 +1,6 @@
 package com.petrolpark.client.rendering;
 
-import com.simibubi.create.foundation.gui.element.ScreenElement;
+import net.createmod.catnip.gui.element.ScreenElement;
 
 import net.minecraft.resources.ResourceLocation;
 

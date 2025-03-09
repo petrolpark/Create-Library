@@ -5,10 +5,10 @@ import java.util.Map;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Accessor;
 
-import com.simibubi.create.foundation.outliner.Outliner;
-import com.simibubi.create.foundation.outliner.Outliner.OutlineEntry;
+import net.createmod.catnip.outliner.Outliner;
+import net.createmod.catnip.outliner.Outliner.OutlineEntry;
 
-@Mixin(Outliner.class)
+@Mixin(value = Outliner.class, remap = false)
 public interface OutlinerAccessor {
     
     @Accessor("outlines")
