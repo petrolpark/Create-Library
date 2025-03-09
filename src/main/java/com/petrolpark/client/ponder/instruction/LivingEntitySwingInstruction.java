@@ -28,8 +28,7 @@ public class LivingEntitySwingInstruction extends TickingInstruction {
     @Override
     public void tick(PonderScene scene) {
         super.tick(scene);
-        EntityElement element = scene.resolve(entityLink);
-        if (element != null) element.ifPresent(e -> {
+        scene.resolve(entityLink).ifPresent(e -> {
             if (!(e instanceof LivingEntity entity)) return;
             entity.swingingArm = InteractionHand.MAIN_HAND;
             if (remainingTicks == 0) {

@@ -13,13 +13,12 @@ import com.petrolpark.recipe.manualonly.ManualOnlyShapedRecipe;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Container;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.registries.DeferredHolder;
+import net.minecraftforge.registries.RegistryObject;
 
 public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
 
@@ -30,9 +29,9 @@ public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
     ;
 
     private final ResourceLocation id;
-    private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> serializerObject;
+    private final RegistryObject<RecipeSerializer<?>> serializerObject;
     @Nullable
-    private final DeferredHolder<RecipeType<?>, RecipeType<?>> typeObject;
+    private final RegistryObject<RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
 
     PetrolparkRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier) {
@@ -75,8 +74,9 @@ public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
         type = typeObject;
     };
 
-    public <I extends RecipeInput, R extends Recipe<I>> Optional<RecipeHolder<R>> find(I craftingInput, Level world) {
-        return world.getRecipeManager().getRecipeFor(getType(), craftingInput, world);
+    public <C extends Container, T extends Recipe<C>> Optional<T> find(C inv, Level world) {
+        return world.getRecipeManager()
+            .getRecipeFor(getType(), inv, world);
     };
 
     public static final void register() {};

@@ -1,7 +1,7 @@
 package com.petrolpark.tube;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.function.Supplier;
 
 import com.mojang.blaze3d.platform.InputConstants;
@@ -12,14 +12,21 @@ import com.petrolpark.client.key.PetrolparkKeys;
 import com.petrolpark.compat.create.CreateClient;
 import com.petrolpark.network.PetrolparkMessages;
 import com.petrolpark.util.BlockFace;
-import com.petrolpark.util.Lang;
-import com.petrolpark.util.Pair;
 import com.petrolpark.util.RayHelper;
 import com.petrolpark.util.RayHelper.CustomHitResult;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.foundation.gui.RemovedGuiUtils;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.gui.element.GuiGameElement;
+import com.simibubi.create.foundation.mixin.accessor.MouseHandlerAccessor;
+import com.simibubi.create.infrastructure.config.AllConfigs;
+import com.simibubi.create.infrastructure.config.CClient;
 
+import net.createmod.catnip.lang.FontHelper;
+import net.createmod.catnip.lang.Lang;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -32,13 +39,13 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.client.event.ClientTickEvent;
-import net.neoforged.neoforge.client.event.InputEvent;
+import net.minecraftforge.event.TickEvent.ClientTickEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 @OnlyIn(Dist.CLIENT)
 @RequiresCreate

@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 
-import javax.annotation.Nonnull;
-
 import com.google.common.collect.ImmutableList;
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
 
@@ -36,7 +34,7 @@ public class CustomTab extends CreativeModeTab {
     };
 
     @Override
-    public void buildContents(@Nonnull ItemDisplayParameters parameters) {
+    public void buildContents(ItemDisplayParameters parameters) {
         List<ItemStack> items = new ArrayList<>(entries.size());
         displayItemsSearchTab = new HashSet<>(entries.size());
         for (ITabEntry entry : entries) {
@@ -44,6 +42,7 @@ public class CustomTab extends CreativeModeTab {
             displayItemsSearchTab.addAll(entry.getItemsToAddToSearch(parameters));
         };
         displayItems = items;
+        rebuildSearchTree();
     };
 
     public static class Builder extends CreativeModeTab.Builder {
@@ -68,7 +67,7 @@ public class CustomTab extends CreativeModeTab {
          */
         @Override
         @Deprecated
-        public Builder displayItems(@Nonnull DisplayItemsGenerator displayItemsGenerator) {
+        public Builder displayItems(DisplayItemsGenerator displayItemsGenerator) {
             return this;
         };
 

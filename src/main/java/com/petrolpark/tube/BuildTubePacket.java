@@ -10,6 +10,9 @@ import com.petrolpark.util.NetworkHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
+import net.minecraftforge.items.wrapper.InvWrapper;
+import net.minecraftforge.network.NetworkEvent.Context;
+import net.minecraftforge.registries.ForgeRegistries;
 
 @RequiresCreate
 public class BuildTubePacket extends C2SPacket {

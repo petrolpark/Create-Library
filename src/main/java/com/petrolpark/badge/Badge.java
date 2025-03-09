@@ -12,7 +12,6 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,12 +21,13 @@ import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistry;
 
 public class Badge {
 
-    public static final Registry<Badge> badgeRegistry() {
+    public static final ForgeRegistry<Badge> badgeRegistry() {
         return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.BADGE);
     };
 
@@ -62,6 +62,7 @@ public class Badge {
         ItemStack stack = BadgeItem.of(minecraft.player, this, new Date(System.currentTimeMillis()));
 
         return new ShapelessRecipe(
+            new ResourceLocation(getId().getNamespace(), "badge_duplication_"+ getId().getPath()),
             getId().getNamespace() + "badge_duplication",
             CraftingBookCategory.MISC,
             stack,
@@ -113,12 +114,12 @@ public class Badge {
 
     @Nullable
     public static Badge getBadge(String namespace, String name) {
-        return getBadge(ResourceLocation.fromNamespaceAndPath(namespace, name));
+        return getBadge(new ResourceLocation(namespace, name));
     };
     
     @Nullable
     public static Badge getBadge(ResourceLocation id) {
-        return badgeRegistry().get(id);
+        return badgeRegistry().getValue(id);
     };
 
 };

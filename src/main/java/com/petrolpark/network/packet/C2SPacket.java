@@ -3,6 +3,7 @@ package com.petrolpark.network.packet;
 import java.util.function.Supplier;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraftforge.network.NetworkEvent;
 
 public abstract class C2SPacket {
     

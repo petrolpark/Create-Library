@@ -2,12 +2,12 @@ package com.petrolpark;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.common.ModConfigSpec;
-import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
-import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.BooleanValue;
+import net.minecraftforge.common.ForgeConfigSpec.DoubleValue;
+import net.minecraftforge.fml.common.Mod;
 
-@EventBusSubscriber(modid = Petrolpark.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Petrolpark.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class PetrolparkConfig {
 
     public static class Server {
@@ -29,7 +29,7 @@ public class PetrolparkConfig {
         public final BooleanValue createCuttingRecipesPropagateContaminants;
         public final BooleanValue createOtherRecipesPropagateContaminants;
 
-        public Server(ModConfigSpec.Builder builder) {
+        public Server(ForgeConfigSpec.Builder builder) {
             builder.comment("Pquality world-specific Configs")
                    .push("server");
 
@@ -117,10 +117,10 @@ public class PetrolparkConfig {
         };
     };
 
-    protected static final ModConfigSpec serverSpec;
+    protected static final ForgeConfigSpec serverSpec;
     public static final Server SERVER;
     static {
-        final Pair<Server, ModConfigSpec> specPair = new ModConfigSpec.Builder().configure(Server::new);
+        final Pair<Server, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Server::new);
         serverSpec = specPair.getRight();
         SERVER = specPair.getLeft();
     };
