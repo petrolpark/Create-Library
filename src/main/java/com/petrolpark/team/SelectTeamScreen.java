@@ -7,7 +7,10 @@ import com.petrolpark.team.packet.BindTeamPacket;
 
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
+@OnlyIn(Dist.CLIENT)
 public class SelectTeamScreen extends Screen {
 
     public final BindTeamPacket.Factory packetFactory;

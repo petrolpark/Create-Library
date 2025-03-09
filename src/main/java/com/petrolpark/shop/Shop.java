@@ -22,6 +22,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class Shop {
 
@@ -52,6 +54,7 @@ public class Shop {
         return translationKey;
     };
 
+    @OnlyIn(Dist.CLIENT)
     public Component getName() {
         return Component.translatable(getTranslationKey());
     };
