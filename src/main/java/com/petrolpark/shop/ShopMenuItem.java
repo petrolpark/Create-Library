@@ -23,6 +23,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
 
@@ -63,6 +65,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
         return false;
     };
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         Minecraft mc = Minecraft.getInstance();
@@ -72,6 +75,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
         });
     };
 
+    @OnlyIn(Dist.CLIENT)
     @Override
     public Component getTeamSelectionScreenTitle(Level level, Player player, ItemStack stack) {
         return Component.translatable("item.petrolpark.menu.team_selection", getShop(level, player, stack).map(Shop::getName).orElse(Component.translatable("shop.petrolpark.unknown")));

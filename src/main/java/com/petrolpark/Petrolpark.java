@@ -25,11 +25,9 @@ import com.petrolpark.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.recipe.ingredient.modifier.IngredientModifierTypes;
 import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizerTypes;
 import com.petrolpark.registrate.PetrolparkRegistrate;
-import com.petrolpark.shop.ShopMenuItem;
 import com.petrolpark.team.TeamTypes;
 import com.petrolpark.team.data.TeamDataTypes;
 import com.petrolpark.team.scoreboard.ScoreboardTeamManager;
-import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -76,6 +74,7 @@ public class Petrolpark {
         PetrolparkRegistries.register();
         Badges.register();
         IPetrolparkRecipeTypes.register(modEventBus);
+        PetrolparkItems.register();
         PetrolparkMobEffects.register();
         TeamTypes.register();
         TeamDataTypes.register();
@@ -119,8 +118,5 @@ public class Petrolpark {
             return serverSupplier.get().get();
         }
     };
-
-    // Temporary (?)
-    public static final ItemEntry<ShopMenuItem> MENU = REGISTRATE.item("menu", ShopMenuItem::new).register();
 
 };

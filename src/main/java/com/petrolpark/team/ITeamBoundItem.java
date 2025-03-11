@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.DistExecutor;
 
@@ -22,6 +23,7 @@ public interface ITeamBoundItem<I extends Item> {
 
     public boolean isTeamRebindable(Level level, Player player, ItemStack stack);
 
+    @OnlyIn(Dist.CLIENT)
     public Component getTeamSelectionScreenTitle(Level level, Player player, ItemStack stack);
 
     public default InteractionResult trySelectTeam(ItemStack stack, Player player, Level level) {
@@ -30,12 +32,13 @@ public interface ITeamBoundItem<I extends Item> {
         MinecraftForge.EVENT_BUS.post(event);
         if (event.getTeamsUnmodifiable().size() == 1) {
             bind(event.getTeamsUnmodifiable().get(0), stack, player); // Don't open screen if only one Team is available
-        } else {
+        } else if (level.isClientSide()) {
             DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> openScreen(getTeamSelectionScreenTitle(level, player, stack), event.getTeamsUnmodifiable()));
         };
         return InteractionResult.SUCCESS;
     };
 
+    @OnlyIn(Dist.CLIENT)
     public static void openScreen(Component title, List<ITeam<?>> teams) {
         ScreenHelper.openScreen(new SelectTeamScreen(title, teams, BindTeamItemPacket::new));
     };
