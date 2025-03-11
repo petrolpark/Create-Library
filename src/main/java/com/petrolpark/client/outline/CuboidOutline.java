@@ -3,15 +3,15 @@ package com.petrolpark.client.outline;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-import dev.engine_room.flywheel.lib.transform.TransformStack;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.mixin.compat.create.accessor.client.OutlineParamsAccessor;
-import net.createmod.catnip.outliner.Outline;
 import com.simibubi.create.foundation.render.RenderTypes;
-import net.createmod.catnip.render.SuperRenderTypeBuffer;
 
+import dev.engine_room.flywheel.lib.transform.TransformStack;
+import net.createmod.catnip.outliner.Outline;
+import net.createmod.catnip.render.SuperRenderTypeBuffer;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
