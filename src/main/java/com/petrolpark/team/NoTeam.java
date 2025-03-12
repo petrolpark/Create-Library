@@ -30,7 +30,17 @@ public final class NoTeam implements ITeam<NoTeam> {
     };
 
     @Override
+    public int memberCount() {
+        return 0;
+    };
+
+    @Override
     public Stream<String> streamMemberUsernames(Level level) {
+        return Stream.empty();
+    };
+
+    @Override
+    public Stream<Player> streamMembers(Level level) {
         return Stream.empty();
     };
 

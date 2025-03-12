@@ -33,6 +33,11 @@ public class ScoreboardTeam extends AbstractTeam<ScoreboardTeam> {
     };
 
     @Override
+    public int memberCount() {
+        return team.getPlayers().size();
+    };
+
+    @Override
     public Stream<String> streamMemberUsernames(Level level) {
         return team.getPlayers().stream();
     };

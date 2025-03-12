@@ -52,7 +52,7 @@ public class GiveItemReward extends AbstractGiveEntityItemsReward {
 
         @Override
         public void serialize(JsonObject json, GiveItemReward value, JsonSerializationContext serializationContext) {
-            json.addProperty("target", value.target.name());
+            json.addProperty("target", value.target.getSerializedName());
             ItemStack.CODEC.encodeStart(JsonOps.INSTANCE, value.stack)
                 .resultOrPartial(err -> {throw new IllegalStateException(err);})
                 .ifPresent(element -> json.add("item", element));

@@ -6,7 +6,7 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 
 public class RewardTypes {
 
-    public static final RegistryEntry<RewardType>
+    public static final RegistryEntry<RewardType, RewardType>
     
     GIVE_ITEM = REGISTRATE.rewardType("give_item", new GiveItemReward.Serializer()),
     GIVE_LOOT = REGISTRATE.rewardType("give_loot", new GiveLootReward.Serializer()),

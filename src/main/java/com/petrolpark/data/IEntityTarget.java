@@ -1,27 +1,29 @@
 package com.petrolpark.data;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import java.util.HashMap;
+import com.mojang.serialization.Codec;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContext.EntityTarget;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
-public interface IEntityTarget {
+public interface IEntityTarget extends StringRepresentable {
     
     public static final Map<ResourceLocation, LootContextParam<? extends Entity>> CUSTOM = new HashMap<>();
+
+    public static final Codec<IEntityTarget> CODEC = Codec.stringResolver(IEntityTarget::getSerializedName, IEntityTarget::getByName);
 
     public static void register(LootContextParam<? extends Entity> lootContextParam) {
         CUSTOM.put(lootContextParam.getName(), lootContextParam);
     };
 
     public Entity get(LootContext context);
-
-    public String name();
 
     public LootContextParam<? extends Entity> getReferencedParam();
 
@@ -30,7 +32,7 @@ public interface IEntityTarget {
             EntityTarget builtInTarget = EntityTarget.getByName(name);
             return Targets.TARGETS.computeIfAbsent(name, s -> new BuiltIn(builtInTarget));
         } catch (IllegalArgumentException e) {
-            LootContextParam<? extends Entity> param = CUSTOM.get(ResourceLocation.fromNamespaceAndPath(name));
+            LootContextParam<? extends Entity> param = CUSTOM.get(ResourceLocation.parse(name));
             if (param != null) return Targets.TARGETS.putIfAbsent(name, new Custom(param));
             throw new IllegalArgumentException("Unknown contextual Entity: " + name);
         }
@@ -41,7 +43,7 @@ public interface IEntityTarget {
 
         static {
             register(LootContextParams.THIS_ENTITY);
-            register(LootContextParams.KILLER_ENTITY);
+            register(LootContextParams.ATTACKING_ENTITY);
             register(LootContextParams.LAST_DAMAGE_PLAYER);
         };
     };
@@ -60,7 +62,7 @@ public interface IEntityTarget {
         };
 
         @Override
-        public String name() {
+        public String getSerializedName() {
             return target.getName();
         };
 
@@ -85,7 +87,7 @@ public interface IEntityTarget {
         };
 
         @Override
-        public String name() {
+        public String getSerializedName() {
             return param.getName().toString();
         };
 

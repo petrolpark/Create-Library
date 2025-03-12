@@ -20,9 +20,9 @@ import net.minecraftforge.common.capabilities.AutoRegisterCapability;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 @AutoRegisterCapability
 public class SinglePlayerTeam extends AbstractTeam<SinglePlayerTeam> implements ICapabilityProvider, INBTSerializable<CompoundTag> {
@@ -46,8 +46,18 @@ public class SinglePlayerTeam extends AbstractTeam<SinglePlayerTeam> implements 
     };
 
     @Override
+    public int memberCount() {
+        return 1;
+    };
+
+    @Override
     public Stream<String> streamMemberUsernames(Level level) {
         return Stream.of(player.getGameProfile().getName());
+    };
+
+    @Override
+    public Stream<Player> streamMembers(Level level) {
+        return Stream.of(player);
     };
 
     @Override

@@ -2,6 +2,7 @@ package com.petrolpark.data.loot;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
+import com.mojang.serialization.MapCodec;
 import com.petrolpark.data.loot.numberprovider.ContextEntityNumberProvider;
 import com.petrolpark.data.loot.numberprovider.ContextTeamNumberProvider;
 import com.petrolpark.data.loot.numberprovider.CustomerWaitTimeNumberProvider;
@@ -18,17 +19,19 @@ import net.minecraft.world.level.storage.loot.providers.number.LootNumberProvide
 
 public class PetrolparkLootNumberProviderTypes {
     
-    public static final RegistryEntry<LootNumberProviderType> MAX = REGISTRATE.lootNumberProviderType("max", new FunctionNumberProvider.Serializer<>(MaxNumberProvider::new));
-    public static final RegistryEntry<LootNumberProviderType> MIN = REGISTRATE.lootNumberProviderType("min", new FunctionNumberProvider.Serializer<>(MinNumberProvider::new));
-    public static final RegistryEntry<LootNumberProviderType> SUM = REGISTRATE.lootNumberProviderType("sum", new FunctionNumberProvider.Serializer<>(SumNumberProvider::new));
-    public static final RegistryEntry<LootNumberProviderType> PRODUCT = REGISTRATE.lootNumberProviderType("product", new FunctionNumberProvider.Serializer<>(ProductNumberProvider::new));
-    public static final RegistryEntry<LootNumberProviderType> SIGMOID = REGISTRATE.lootNumberProviderType("sigmoid", new SigmoidNumberProvider.Serializer());
+    public static final RegistryEntry<LootNumberProviderType, LootNumberProviderType>
+    
+    MAX = REGISTRATE.lootNumberProviderType("max", FunctionNumberProvider.codec(MaxNumberProvider::new)),
+    MIN = REGISTRATE.lootNumberProviderType("min", FunctionNumberProvider.codec(MinNumberProvider::new)),
+    SUM = REGISTRATE.lootNumberProviderType("sum", FunctionNumberProvider.codec(SumNumberProvider::new)),
+    PRODUCT = REGISTRATE.lootNumberProviderType("product", FunctionNumberProvider.codec(ProductNumberProvider::new)),
+    SIGMOID = REGISTRATE.lootNumberProviderType("sigmoid", SigmoidNumberProvider.CODEC),
 
-    public static final RegistryEntry<LootNumberProviderType> CUSTOMER_WAIT_TIME = REGISTRATE.lootNumberProviderType("customer_wait_time", new SimpleSerializer<>(CustomerWaitTimeNumberProvider::new));
+    CUSTOMER_WAIT_TIME = REGISTRATE.lootNumberProviderType("customer_wait_time", MapCodec.unit(CustomerWaitTimeNumberProvider::new)),
 
-    public static final RegistryEntry<LootNumberProviderType> CONTEXT_ENTITY = REGISTRATE.lootNumberProviderType("context_entity_property", new ContextEntityNumberProvider.Serializer());
-    public static final RegistryEntry<LootNumberProviderType> CONTEXT_TEAM = REGISTRATE.lootNumberProviderType("context_team_property", new ContextTeamNumberProvider.Serializer());
-    public static final RegistryEntry<LootNumberProviderType> TOOL = REGISTRATE.lootNumberProviderType("tool_property", new ToolNumberProvider.Serializer());
+    CONTEXT_ENTITY = REGISTRATE.lootNumberProviderType("context_entity_property", ContextEntityNumberProvider.CODEC),
+    CONTEXT_TEAM = REGISTRATE.lootNumberProviderType("context_team_property", ContextTeamNumberProvider.CODEC),
+    TOOL = REGISTRATE.lootNumberProviderType("tool_property", ToolNumberProvider.CODEC);
 
     public static final void register() {};
 };

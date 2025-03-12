@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mezz.jei.api.gui.builder.ITooltipBuilder;
-import org.jetbrains.annotations.Nullable;
+import javax.annotation.Nonnull;
 
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
 import com.petrolpark.compat.jei.JEITextureDrawable;
@@ -17,6 +16,7 @@ import mezz.jei.api.ingredients.subtypes.UidContext;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -38,7 +38,12 @@ public class BiomeIngredientType implements IIngredientType<Biome> {
     public static class Helper implements IIngredientHelper<Biome> {
 
         private final Minecraft mc = Minecraft.getInstance();
+        @SuppressWarnings("null")
         private final RegistryAccess registryAccess = mc.level.registryAccess();
+
+        public Registry<Biome> getRegistry() {
+            return registryAccess.registryOrThrow(Registries.BIOME);
+        };
 
         @Override
         public IIngredientType<Biome> getIngredientType() {
@@ -46,35 +51,35 @@ public class BiomeIngredientType implements IIngredientType<Biome> {
         };
 
         @Override
-        public String getDisplayName(Biome ingredient) {
+        public String getDisplayName(@Nonnull Biome ingredient) {
             return getDisplayNameComponent(ingredient).getString();
         };
 
-        public Component getDisplayNameComponent(Biome ingredient) {
+        public Component getDisplayNameComponent(@Nonnull Biome ingredient) {
             ResourceLocation rl = getResourceLocation(ingredient);
             if (rl == null) return Component.translatable("biome.petrolpark.unknown");
             return Component.translatable(getResourceLocation(ingredient).toLanguageKey("biome"));
         };
 
         @Override
-        public String getUniqueId(Biome ingredient, UidContext context) {
+        public String getUniqueId(@Nonnull Biome ingredient, @Nonnull UidContext context) {
             ResourceLocation rl = getResourceLocation(ingredient);
             if (rl == null) return "Unknown Biome";
             return rl.toString();
         };
 
         @Override
-        public ResourceLocation getResourceLocation(Biome ingredient) {
+        public ResourceLocation getResourceLocation(@Nonnull Biome ingredient) {
             return registryAccess.registryOrThrow(Registries.BIOME).getKey(ingredient);
         };
 
         @Override
-        public Biome copyIngredient(Biome ingredient) {
+        public Biome copyIngredient(@Nonnull Biome ingredient) {
             return ingredient;
         };
 
         @Override
-        public String getErrorInfo(@Nullable Biome ingredient) {
+        public String getErrorInfo(@Nonnull Biome ingredient) {
             return "";
         };
 
@@ -85,12 +90,12 @@ public class BiomeIngredientType implements IIngredientType<Biome> {
         private final JEITextureDrawable globe = JEITextureDrawable.of(PetrolparkGuiTexture.JEI_GLOBE);
 
         @Override
-        public void render(GuiGraphics guiGraphics, Biome ingredient) {
+        public void render(@Nonnull GuiGraphics guiGraphics, @Nonnull Biome ingredient) {
             globe.draw(guiGraphics, 0, 1);
         }
 
         @Override
-        public List<Component> getTooltip(Biome ingredient, TooltipFlag tooltipFlag) {
+        public List<Component> getTooltip(@Nonnull Biome ingredient, @Nonnull TooltipFlag tooltipFlag) {
             ResourceLocation rl = HELPER.getResourceLocation(ingredient);
             if (rl == null) return Collections.emptyList();
             List<Component> tooltip = new ArrayList<>(tooltipFlag.isAdvanced() ? 2 : 1);

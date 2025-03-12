@@ -1,5 +1,7 @@
 package com.petrolpark.compat.jei.category;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
 import com.petrolpark.item.decay.IDecayingItem;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
@@ -14,7 +16,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class DecayingItemCategory extends PetrolparkRecipeCategory<DecayingItemRecipe> {
 
@@ -23,7 +24,7 @@ public class DecayingItemCategory extends PetrolparkRecipeCategory<DecayingItemR
     };
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, DecayingItemRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull DecayingItemRecipe recipe, @Nonnull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 2, 2)
             .setBackground(getRenderedSlot(), -1, -1)
             .addItemStack(recipe.decayingItem);
@@ -34,7 +35,7 @@ public class DecayingItemCategory extends PetrolparkRecipeCategory<DecayingItemR
     };
 
     @Override
-    public void draw(DecayingItemRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(@Nonnull DecayingItemRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         AllGuiTextures.JEI_LONG_ARROW.render(guiGraphics, 27, 6);
     };
 
@@ -44,7 +45,7 @@ public class DecayingItemCategory extends PetrolparkRecipeCategory<DecayingItemR
         public final ItemStack resultItem;
 
         public DecayingItemRecipe(ItemStack decayingItem) {
-            super(ForgeRegistries.ITEMS.getKey(decayingItem.getItem()).withPath(path -> path + "_decay"), "", CraftingBookCategory.MISC, ItemStack.EMPTY, NonNullList.create());
+            super("", CraftingBookCategory.MISC, ItemStack.EMPTY, NonNullList.create());
             this.decayingItem = decayingItem;
             this.resultItem = ((IDecayingItem)decayingItem.getItem()).getDecayProduct(decayingItem);
         };

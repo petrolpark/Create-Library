@@ -60,7 +60,7 @@ public class GiveLootReward extends AbstractGiveEntityItemsReward {
 
         @Override
         public void serialize(JsonObject json, GiveLootReward value, JsonSerializationContext serializationContext) {
-            json.addProperty("target", value.target.name());
+            json.addProperty("target", value.target.getSerializedName());
             json.addProperty("lootTable", value.lootTableRL.toString());
         };
 

@@ -46,7 +46,7 @@ public class LootTableRewardGenerator extends ContextEntityRewardGenerator {
 
         @Override
         public void serialize(JsonObject json, LootTableRewardGenerator value, JsonSerializationContext serializationContext) {
-            json.addProperty("target", value.target.name());
+            json.addProperty("target", value.target.getSerializedName());
             json.addProperty("lootTable", value.lootTableRL.toString());
         };
 

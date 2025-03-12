@@ -1,32 +1,28 @@
-package com.petrolpark.data.reward;
+package com.petrolpark.data.reward.entity;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public interface IReward extends LootContextUser {
+public interface IEntityReward extends LootContextUser {
 
-    public static final Codec<IReward> CODEC = null; //TODO
-
-    public void reward(LootContext context, float multiplier);
+    public static final Codec<IEntityReward> CODEC = null; //TODO
+    
+    public void reward(Entity entity, LootContext context, float multiplier);
 
     @OnlyIn(Dist.CLIENT)
     public void render(GuiGraphics graphics);
 
     @OnlyIn(Dist.CLIENT)
     public Component getName();
-    
-    public RewardType getType();
 
     static class TypedCodec {
-        private static final Codec<IReward> TYPED_CODEC = PetrolparkRegistries.REWARD_TYPES
-            .byNameCodec()
-            .dispatch(IReward::getType, RewardType::codec);
+
     };
 };

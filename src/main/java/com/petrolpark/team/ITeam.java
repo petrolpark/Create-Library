@@ -14,10 +14,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public interface ITeam<T extends ITeam<? super T>> {
 
@@ -44,8 +45,21 @@ public interface ITeam<T extends ITeam<? super T>> {
     };
 
     public boolean isMember(Player player);
+
+    public int memberCount();
     
     public Stream<String> streamMemberUsernames(Level level);
+
+    /**
+     * Use {@link ITeam#streamMemberUsernames(Level)} unless having the Player itself is vital.
+     * @param level
+     * @return Stream of Players in this Team.
+     */
+    public default Stream<Player> streamMembers(Level level) {
+        MinecraftServer server = level.getServer();
+        if (server == null) return Stream.empty();
+        return streamMemberUsernames(level).map(server.getPlayerList()::getPlayerByName);
+    };
 
     /**
      * If called, it is assumed that {@link ITeam#isMember(Player)} has already passed.

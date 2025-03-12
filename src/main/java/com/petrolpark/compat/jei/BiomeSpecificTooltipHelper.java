@@ -8,6 +8,7 @@ import com.petrolpark.recipe.advancedprocessing.IBiomeSpecificProcessingRecipe;
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -18,13 +19,17 @@ public class BiomeSpecificTooltipHelper {
 
     public static Stream<Biome> getAllBiomes(IBiomeSpecificProcessingRecipe recipe) {
         Minecraft minecraft = Minecraft.getInstance();
-        RegistryAccess registryAccess = minecraft.level.registryAccess();
+        ClientLevel level = minecraft.level;
+        if (level == null) return Stream.empty();
+        RegistryAccess registryAccess = level.registryAccess();
         return recipe.getAllowedBiomes().stream().flatMap(bv -> bv.getBiomes(registryAccess).stream());
     };
     
     public static IRecipeSlotRichTooltipCallback getAllowedBiomeList(IBiomeSpecificProcessingRecipe recipe) {
         Minecraft minecraft = Minecraft.getInstance();
-        RegistryAccess registryAccess = minecraft.level.registryAccess();
+        ClientLevel level = minecraft.level;
+        if (level == null) return (view, tooltip) -> {};
+        RegistryAccess registryAccess = level.registryAccess();
         List<ResourceLocation> biomes = getAllBiomes(recipe).map(biome -> registryAccess.registryOrThrow(Registries.BIOME).getKey(biome)).toList();
         return (view, tooltip) -> {
             tooltip.add(Component.translatable("petrolpark.recipe.biome_specific").withStyle(ChatFormatting.WHITE));

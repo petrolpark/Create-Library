@@ -55,7 +55,7 @@ public class UnlockTradeReward extends ContextEntityReward {
 
         @Override
         public void serialize(JsonObject json, UnlockTradeReward value, JsonSerializationContext serializationContext) {
-            json.addProperty("target", value.target.name());
+            json.addProperty("target", value.target.getSerializedName());
             CompoundTag.CODEC.encodeStart(JsonOps.INSTANCE, value.trade.createTag())
                 .resultOrPartial(err -> {throw new IllegalStateException(err);})
                 .ifPresent(element -> json.add("trade", element));

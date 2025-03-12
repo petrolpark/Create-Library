@@ -1,6 +1,9 @@
 package com.petrolpark.data.loot.numberprovider;
 
 import java.util.Set;
+
+import javax.annotation.Nonnull;
+
 import java.util.Collections;
 
 import com.petrolpark.data.loot.PetrolparkLootContextParams;
@@ -15,7 +18,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 public class CustomerWaitTimeNumberProvider implements NumberProvider {
 
     @Override
-    public float getFloat(LootContext context) {
+    public float getFloat(@Nonnull LootContext context) {
         ICustomer customer = context.getParam(PetrolparkLootContextParams.CUSTOMER);
         if (customer == null) return 1f;
         if (customer.getOrderTime() == ICustomer.INFINITE_ORDER_TIME) return 1f;

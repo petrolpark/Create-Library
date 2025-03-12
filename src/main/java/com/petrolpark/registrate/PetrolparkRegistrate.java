@@ -2,8 +2,12 @@ package com.petrolpark.registrate;
 
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.badge.Badge;
 import com.petrolpark.data.loot.numberprovider.entity.EntityNumberProvider;
@@ -31,6 +35,8 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
 public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrate> {
 
@@ -39,7 +45,7 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     };
 
     @Override
-	public @NotNull PetrolparkRegistrate registerEventListeners(@NotNull IEventBus bus) {
+	public @Nonnull PetrolparkRegistrate registerEventListeners(@Nonnull IEventBus bus) {
 		return super.registerEventListeners(bus);
 	};
 
@@ -51,32 +57,28 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 		return (BadgeBuilder<T, PetrolparkRegistrate>) entry(name, c -> BadgeBuilder.create(this, this, name, c, factory));
 	};
 
-    public RegistryEntry<LootItemConditionType> lootConditionType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends LootItemCondition> serializer) {
-        return simple(name, Registries.LOOT_CONDITION_TYPE, () -> new LootItemConditionType(serializer));
+    public RegistryEntry<LootItemConditionType, LootItemConditionType> lootConditionType(String name, MapCodec<? extends LootItemCondition> codec) {
+        return simple(name, Registries.LOOT_CONDITION_TYPE, () -> new LootItemConditionType(codec));
     };
 
-    public RegistryEntry<LootNumberProviderType> lootNumberProviderType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends NumberProvider> serializer) {
-        return simple(name, Registries.LOOT_NUMBER_PROVIDER_TYPE, () -> new LootNumberProviderType(serializer));
+    public RegistryEntry<LootNumberProviderType, LootNumberProviderType> lootNumberProviderType(String name, MapCodec<? extends NumberProvider> codec) {
+        return simple(name, Registries.LOOT_NUMBER_PROVIDER_TYPE, () -> new LootNumberProviderType(codec));
     };
 
-    public RegistryEntry<LootItemStackNumberProviderType> lootItemStackNumberProviderType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends ItemStackNumberProvider> serializer) {
-        return simple(name, PetrolparkRegistries.Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE, () -> new LootItemStackNumberProviderType(serializer));
+    public <GLM extends IGlobalLootModifier, CODEC extends MapCodec<GLM>> RegistryEntry<MapCodec<? extends IGlobalLootModifier>, CODEC> globalLootModifierSerializer(String name, CODEC codec) {
+        return simple(name, NeoForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, () -> codec);
+    };
+
+    public RegistryEntry<LootItemStackNumberProviderType, LootItemStackNumberProviderType> lootItemStackNumberProviderType(String name, MapCodec<? extends ItemStackNumberProvider> codec) {
+        return simple(name, PetrolparkRegistries.Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE, () -> new LootItemStackNumberProviderType(codec));
     };
     
     public RegistryEntry<LootItemStackNumberProviderType> lootItemStackNumberProviderType(String name, Supplier<? extends ItemStackNumberProvider> simpleFactory) {
         return simple(name, PetrolparkRegistries.Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE, () -> new LootItemStackNumberProviderType(simpleFactory));
     };
-
-    public RegistryEntry<LootEntityNumberProviderType> lootEntityNumberProviderType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends EntityNumberProvider> serializer) {
-        return simple(name, PetrolparkRegistries.Keys.LOOT_ENTITY_NUMBER_PROVIDER_TYPE, () -> new LootEntityNumberProviderType(serializer));
-    };
     
-    public RegistryEntry<LootEntityNumberProviderType> lootEntityNumberProviderType(String name, Supplier<? extends EntityNumberProvider> simpleFactory) {
-        return simple(name, PetrolparkRegistries.Keys.LOOT_ENTITY_NUMBER_PROVIDER_TYPE, () -> new LootEntityNumberProviderType(simpleFactory));
-    };
-
-    public RegistryEntry<LootTeamNumberProviderType> lootTeamNumberProviderType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends TeamNumberProvider> serializer) {
-        return simple(name, PetrolparkRegistries.Keys.LOOT_TEAM_NUMBER_PROVIDER_TYPE, () -> new LootTeamNumberProviderType(serializer));
+    public RegistryEntry<LootEntityNumberProviderType, LootEntityNumberProviderType> lootEntityNumberProviderType(String name, MapCodec<? extends EntityNumberProvider> codec) {
+        return simple(name, PetrolparkRegistries.Keys.LOOT_ENTITY_NUMBER_PROVIDER_TYPE, () -> new LootEntityNumberProviderType(codec));
     };
     
     public RegistryEntry<LootTeamNumberProviderType> lootTeamNumberProviderType(String name, Supplier<? extends TeamNumberProvider> simpleFactory) {

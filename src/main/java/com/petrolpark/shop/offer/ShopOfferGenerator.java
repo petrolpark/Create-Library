@@ -19,7 +19,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 public class ShopOfferGenerator implements LootContextUser {
 
-    public static final Codec<ShopOfferGenerator> CODEC = RecordCodecBuilder.create(instance -> 
+    public static final Codec<ShopOfferGenerator> DIRECT_CODEC = RecordCodecBuilder.create(instance -> 
         instance.group(
             GsonSerializableCodecs.NUMBER_PROVIDER.optionalFieldOf("time", ConstantValue.exactly(-1)).forGetter(ShopOfferGenerator::getTimeGenerator),
             IRewardGenerator.CODEC.fieldOf("reward").forGetter(ShopOfferGenerator::getRewardGenerator),

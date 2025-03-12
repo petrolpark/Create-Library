@@ -1,33 +1,33 @@
 package com.petrolpark.data.loot.predicate;
 
-import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.data.loot.PetrolparkLootConditionTypes;
 
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 
-public class ParameterSuppliedLootCondition implements LootItemCondition {
+public record ParameterSuppliedLootCondition(List<LootContextParam<Object>> params) implements LootItemCondition {
 
-    protected static final Map<ResourceLocation, LootContextParam<?>> KNOWN_PARAMS = new HashMap<>();
+    protected static final Map<ResourceLocation, LootContextParam<Object>> KNOWN_PARAMS = new HashMap<>();
+
+    public static final MapCodec<ParameterSuppliedLootCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        ResourceLocation.CODEC.xmap(KNOWN_PARAMS::get, LootContextParam::getName).listOf().fieldOf("parameters").forGetter(ParameterSuppliedLootCondition::params)
+    ).apply(instance, ParameterSuppliedLootCondition::new));
 
     public static final void makeKnown(LootContextParam<?> ...params) {
         for (LootContextParam<?> param : params) makeKnown(param);
     };
 
-    public static final void makeKnown(LootContextParam<?> param) {
+    public static final void makeKnown(LootContextParam<Object> param) {
         KNOWN_PARAMS.put(param.getName(), param);  
     };
 
@@ -46,10 +46,8 @@ public class ParameterSuppliedLootCondition implements LootItemCondition {
         );
     };
 
-    public final LootContextParam<?>[] params;
-
-    public ParameterSuppliedLootCondition(LootContextParam<?>[] params) {
-        this.params = params;
+    public static final LootContextParam<?> byName(String name) {
+        return KNOWN_PARAMS.get(ResourceLocation.parse(name));
     };
 
     @Override
@@ -61,32 +59,6 @@ public class ParameterSuppliedLootCondition implements LootItemCondition {
     @Override
     public LootItemConditionType getType() {
         return PetrolparkLootConditionTypes.PARAMETERS_SUPPLIED.get();
-    };
-
-    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<ParameterSuppliedLootCondition> {
-
-        @Override
-        public void serialize(JsonObject json, ParameterSuppliedLootCondition value, JsonSerializationContext serializationContext) {
-            JsonArray jsonArray = new JsonArray(value.params.length);
-            for (LootContextParam<?> param : value.params) jsonArray.add(param.getName().toString());
-            json.add("parameters", jsonArray);
-        };
-
-        @Override
-        public ParameterSuppliedLootCondition deserialize(JsonObject json, JsonDeserializationContext serializationContext) {
-            JsonArray jsonArray = GsonHelper.getAsJsonArray(json, "parameters");
-            LootContextParam<?>[] params = new LootContextParam[jsonArray.size()];
-            int i = 0;
-            for (JsonElement element : jsonArray) {
-                String name = GsonHelper.convertToString(element, "parameter");
-                LootContextParam<?> param = KNOWN_PARAMS.get(ResourceLocation.fromNamespaceAndPath(name));
-                if (param == null) throw new JsonSyntaxException("Unknown Loot Context Paramater: "+name);
-                params[i] = param;
-                i++;
-            };
-            return new ParameterSuppliedLootCondition(params);
-        };
-
     };
     
 };

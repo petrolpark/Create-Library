@@ -27,7 +27,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 public class Shop {
 
-    public static final Codec<Shop> CODEC = RecordCodecBuilder.create(instance -> 
+    public static final Codec<Shop> DIRECT_CODEC = RecordCodecBuilder.create(instance -> 
         instance.group(
             Codec.STRING.fieldOf("name").forGetter(Shop::getTranslationKey),
             Codec.list(OfferGeneratorEntry.CODEC).fieldOf("offerGenerators").forGetter(Shop::getOfferGeneratorEntries),
@@ -94,7 +94,7 @@ public class Shop {
 
         public static final Codec<OfferGeneratorEntry> CODEC = RecordCodecBuilder.create(instance -> 
             instance.group(
-                ShopOfferGenerator.CODEC.fieldOf("generator").forGetter(OfferGeneratorEntry::generator),
+                ShopOfferGenerator.DIRECT_CODEC.fieldOf("generator").forGetter(OfferGeneratorEntry::generator),
                 GsonSerializableCodecs.NUMBER_PROVIDER.fieldOf("weight").forGetter(OfferGeneratorEntry::weight)
             ).apply(instance, OfferGeneratorEntry::new)
         );

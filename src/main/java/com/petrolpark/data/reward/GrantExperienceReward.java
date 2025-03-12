@@ -47,7 +47,7 @@ public class GrantExperienceReward extends ContextEntityReward {
 
         @Override
         public void serialize(JsonObject json, GrantExperienceReward value, JsonSerializationContext serializationContext) {
-            json.addProperty("target", value.target.name());
+            json.addProperty("target", value.target.getSerializedName());
             json.add("amount", serializationContext.serialize(value.amount, NumberProvider.class));
         };
 

@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
@@ -22,11 +24,11 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.NbtUtils;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -54,7 +56,7 @@ public class PetrolparkJEI implements IModPlugin {
                 () -> {
                     Minecraft mc = Minecraft.getInstance();
                     ItemStack head = new ItemStack(Items.PLAYER_HEAD);
-                    head.getOrCreateTag().put("SkullOwner", NbtUtils.writeGameProfile(new CompoundTag(), mc.player.getGameProfile()));
+                    if (mc.player != null) head.set(DataComponents.PROFILE, new ResolvableProfile(mc.player.getGameProfile()));
                     return head;
                 }
             )
@@ -69,25 +71,25 @@ public class PetrolparkJEI implements IModPlugin {
     };
 
     @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
+    public void registerCategories(@Nonnull IRecipeCategoryRegistration registration) {
         loadCategories();
         PetrolparkCategoryBuilder.helpers = registration.getJeiHelpers();
         registration.addRecipeCategories(ALL_CATEGORIES.toArray(IRecipeCategory[]::new));
     };
 
     @Override
-	public void registerRecipes(IRecipeRegistration registration) {
+	public void registerRecipes(@Nonnull IRecipeRegistration registration) {
         ALL_CATEGORIES.forEach(c -> c.registerRecipes(registration));
 	};
 
     @Override
-	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+	public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registration) {
 		ALL_CATEGORIES.forEach(c -> c.registerCatalysts(registration));
 	};
 
     @Override
-    public void registerIngredients(IModIngredientRegistration registration) {
-        registration.register(BiomeIngredientType.TYPE, Collections.emptySet(), BiomeIngredientType.HELPER, BiomeIngredientType.RENDERER);
+    public void registerIngredients(@Nonnull IModIngredientRegistration registration) {
+        registration.register(BiomeIngredientType.TYPE, Collections.emptySet(), BiomeIngredientType.HELPER, BiomeIngredientType.RENDERER, BiomeIngredientType.HELPER.getRegistry().byNameCodec());
     };
 
     private <T extends Recipe<?>> CategoryBuilderImpl<T> builder(Class<? extends T> recipeClass) {

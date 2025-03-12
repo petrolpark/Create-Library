@@ -2,34 +2,31 @@ package com.petrolpark.data.loot.numberprovider;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.collect.Sets;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.petrolpark.data.loot.PetrolparkGson;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.data.loot.PetrolparkLootContextParams;
 import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
 import com.petrolpark.data.loot.numberprovider.team.TeamNumberProvider;
 import com.petrolpark.team.ITeam;
 
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public class ContextTeamNumberProvider implements NumberProvider {
+public record ContextTeamNumberProvider(TeamNumberProvider value) implements NumberProvider {
 
-    protected final TeamNumberProvider teamNumberProvider;
-
-    public ContextTeamNumberProvider(TeamNumberProvider teamNumberProvider) {
-        this.teamNumberProvider = teamNumberProvider;
-    };
+    public static final MapCodec<ContextTeamNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        TeamNumberProvider.CODEC.fieldOf("value").forGetter(ContextTeamNumberProvider::value)
+    ).apply(instance, ContextTeamNumberProvider::new));
 
     @Override
-    public float getFloat(LootContext context) {
+    public float getFloat(@Nonnull LootContext context) {
         ITeam<?> team = context.getParam(PetrolparkLootContextParams.TEAM);
-        if (team != null) return teamNumberProvider.getFloat(team, context);
+        if (team != null) return value.getFloat(team, context);
         return 0f;
     };
 
@@ -40,21 +37,7 @@ public class ContextTeamNumberProvider implements NumberProvider {
 
     @Override
     public Set<LootContextParam<?>> getReferencedContextParams() {
-        return Sets.union(Set.of(PetrolparkLootContextParams.TEAM), teamNumberProvider.getReferencedContextParams());
-    };
-
-    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<ContextTeamNumberProvider> {
-
-        @Override
-        public void serialize(JsonObject json, ContextTeamNumberProvider value, JsonSerializationContext serializationContext) {
-            json.add("value", PetrolparkGson.get().toJsonTree(value.teamNumberProvider));
-        };
-
-        @Override
-        public ContextTeamNumberProvider deserialize(JsonObject json, JsonDeserializationContext serializationContext) {
-            return new ContextTeamNumberProvider(PetrolparkGson.get().fromJson(GsonHelper.getAsJsonObject(json, "value"), TeamNumberProvider.class));
-        };
-        
+        return Sets.union(Set.of(PetrolparkLootContextParams.TEAM), value.getReferencedContextParams());
     };
     
 };

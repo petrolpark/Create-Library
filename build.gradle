@@ -130,7 +130,7 @@ dependencies {
     runtimeOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}")
 
     // Jade
-    implementation fg.deobf("curse.maven:jade-324717:${jade_id}")
+    implementation("maven.modrinth:jade:15.10.0+neoforge")
 
 }
 

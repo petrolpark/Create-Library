@@ -33,7 +33,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
@@ -62,13 +61,12 @@ public class Petrolpark {
     };
 
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
-        IEventBus neoEventBus = NeoForge.EVENT_BUS;
 
         REGISTRATE.registerEventListeners(modEventBus);
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
 
         // Config
-        ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, PetrolparkConfig.serverSpec);
+        modContainer.registerConfig(ModConfig.Type.SERVER, PetrolparkConfig.serverSpec);
 
         // Registration
         PetrolparkRegistries.register();
@@ -90,19 +88,16 @@ public class Petrolpark {
         IngredientModifierTypes.register();
         IngredientRandomizerTypes.register();
 
-        // Client
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> PetrolparkClient.clientCtor(modEventBus, forgeEventBus));
-
         // Register ourselves for server and other game events we are interested in
-        neoEventBus.register(this);
+        NeoForge.EVENT_BUS.register(this);
     
         // Register the commonSetup method for modloading
         modEventBus.addListener(this::init);
 
         // Compat
-        if (CompatMods.JEI.isLoading()) neoEventBus.register(ITickableCategory.ClientEvents.class);
-        CompatMods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, neoEventBus));
-        CompatMods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, neoEventBus));
+        if (CompatMods.JEI.isLoading()) NeoForge.EVENT_BUS.register(ITickableCategory.ClientEvents.class);
+        CompatMods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, NeoForge.EVENT_BUS));
+        CompatMods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, NeoForge.EVENT_BUS));
     };
 
     private void init(final FMLCommonSetupEvent event) {

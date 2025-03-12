@@ -2,36 +2,32 @@ package com.petrolpark.data.loot.numberprovider;
 
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.collect.Sets;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.data.IEntityTarget;
-import com.petrolpark.data.loot.PetrolparkGson;
 import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
 import com.petrolpark.data.loot.numberprovider.entity.EntityNumberProvider;
 
-import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public class ContextEntityNumberProvider implements NumberProvider {
+public record ContextEntityNumberProvider(IEntityTarget target, EntityNumberProvider value) implements NumberProvider {
 
-    public final IEntityTarget target;
-    public final EntityNumberProvider entityNumberProvider;
-
-    public ContextEntityNumberProvider(IEntityTarget target, EntityNumberProvider value) {
-        this.target = target;
-        this.entityNumberProvider = value;
-    };
+    public static final MapCodec<ContextEntityNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        IEntityTarget.CODEC.fieldOf("target").forGetter(ContextEntityNumberProvider::target),
+        EntityNumberProvider.CODEC.fieldOf("value").forGetter(ContextEntityNumberProvider::value)
+    ).apply(instance, ContextEntityNumberProvider::new));
 
     @Override
-    public float getFloat(LootContext context) {
+    public float getFloat(@Nonnull LootContext context) {
         Entity entity = target.get(context);
-        if (entity != null) return entityNumberProvider.getFloat(entity, context);
+        if (entity != null) return value.getFloat(entity, context);
         return 0f;
     };
 
@@ -42,24 +38,7 @@ public class ContextEntityNumberProvider implements NumberProvider {
 
     @Override
     public Set<LootContextParam<?>> getReferencedContextParams() {
-        return Sets.union(entityNumberProvider.getReferencedContextParams(), Set.of(target.getReferencedParam()));
-    };
-
-    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<ContextEntityNumberProvider> {
-
-        @Override
-        public void serialize(JsonObject json, ContextEntityNumberProvider value, JsonSerializationContext serializationContext) {
-            json.addProperty("target", value.target.name());
-            json.add("value", PetrolparkGson.get().toJsonTree(value.entityNumberProvider));
-        };
-
-        @Override
-        public ContextEntityNumberProvider deserialize(JsonObject json, JsonDeserializationContext deserializationContext) {
-            IEntityTarget entityTarget = IEntityTarget.getByName(GsonHelper.getAsString(json, "target"));
-            EntityNumberProvider entityNumberProvider = PetrolparkGson.get().fromJson(GsonHelper.getAsJsonObject(json, "value"), EntityNumberProvider.class);
-            return new ContextEntityNumberProvider(entityTarget, entityNumberProvider);
-        };
-
+        return Sets.union(value.getReferencedContextParams(), Set.of(target.getReferencedParam()));
     };
     
 };

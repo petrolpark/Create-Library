@@ -1,5 +1,6 @@
 package com.petrolpark.data.loot.numberprovider;
 
+import java.util.List;
 import java.util.stream.DoubleStream;
 
 import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
@@ -10,7 +11,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 public class MinNumberProvider extends FunctionNumberProvider {
 
-    public MinNumberProvider(NumberProvider[] children) {
+    public MinNumberProvider(List<NumberProvider> children) {
         super(children);
     };
 

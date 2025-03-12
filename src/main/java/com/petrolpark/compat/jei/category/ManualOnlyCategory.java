@@ -1,5 +1,7 @@
 package com.petrolpark.compat.jei.category;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
 import com.petrolpark.recipe.manualonly.ManualOnlyShapedRecipe;
 
@@ -19,13 +21,13 @@ public class ManualOnlyCategory extends PetrolparkRecipeCategory<CraftingRecipe>
     };
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, CraftingRecipe craftingRecipe, IFocusGroup focuses) {
+    public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull CraftingRecipe craftingRecipe, @Nonnull IFocusGroup focuses) {
         if (!(craftingRecipe instanceof ManualOnlyShapedRecipe recipe)) return;
         int gridSize = recipe.getWidth() <= 2 && recipe.getHeight() <= 2 ? 2 : 3;
         for (int i = 0; i < (gridSize == 2 ? 4 : 9); i++) {
             int x = i % gridSize;
             int y = i / gridSize;
-            Ingredient ingredient = (x >= recipe.getRecipeWidth() || y >= recipe.getRecipeHeight()) ? Ingredient.EMPTY : recipe.getIngredients().get(y * recipe.getWidth() + x);
+            Ingredient ingredient = (x >= recipe.getWidth() || y >= recipe.getHeight()) ? Ingredient.EMPTY : recipe.getIngredients().get(y * recipe.getWidth() + x);
             builder.addSlot(RecipeIngredientRole.INPUT, (gridSize == 2 ? 10 : 1) + x * 19, (gridSize == 2 ? 10 : 1) + y * 19)
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addIngredients(ingredient);
@@ -36,7 +38,7 @@ public class ManualOnlyCategory extends PetrolparkRecipeCategory<CraftingRecipe>
     };
 
     @Override
-    public void draw(CraftingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(@Nonnull CraftingRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics guiGraphics, double mouseX, double mouseY) {
         PetrolparkGuiTexture.JEI_POINTING_HAND.render(guiGraphics, 70, 21);
     };
     
