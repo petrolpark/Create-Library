@@ -2,46 +2,31 @@ package com.petrolpark.team;
 
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
-
-import com.petrolpark.Petrolpark;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.team.data.ITeamDataType;
 import com.petrolpark.util.Lang;
-import com.petrolpark.util.NBTHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.common.MutableDataComponentHolder;
 
-public interface ITeam<T extends ITeam<? super T>> {
+public interface ITeam extends MutableDataComponentHolder {
 
-    public static ITeam<?> read(CompoundTag tag, Level level) {
-        ITeamType<?> type = NBTHelper.readRegistryObject(tag, "Type", PetrolparkRegistries.Keys.TEAM_TYPE);
-        if (type == null) {
-            Petrolpark.LOGGER.warn("Unknown Team Type: "+tag.getString("Type"));
-            return NoTeam.INSTANCE;
-        };
-        return type.read(tag, level);
-    };
-
-    public static <T extends ITeam<? super T>> CompoundTag write(T team) {
-        CompoundTag tag = new CompoundTag();
-        NBTHelper.writeRegistryObject(tag, "Type", PetrolparkRegistries.Keys.TEAM_TYPE, team.getType());
-        team.getType().write(team, tag);
-        return tag;
-    };
-
-    public ITeamType<T> getType();
+    public ITeam.Provider getProvider();
 
     public default boolean isNone() {
-        return getType() == TeamTypes.NONE;
+        return getProvider().getProviderType() == PetrolparkTeamProviderTypes.NONE.get();
     };
 
     public boolean isMember(Player player);
@@ -70,16 +55,6 @@ public interface ITeam<T extends ITeam<? super T>> {
 
     public Component getName(Level level);
 
-    /**
-     * Returns the Team Data associated with the given {@link ITeamDataType}.
-     * Implementations must not return {@code null} for missing Data, but a {@link ITeamDataType#getBlankInstance() blank instance}.
-     * @param <DATA> Class of the Team Data
-     * @param dataType
-     * @return Non-{@code null} instance of the Team Data
-     */
-    @Nonnull
-    public <DATA> DATA getTeamData(ITeamDataType<? super DATA> dataType);
-
     public void setChanged(Level level, ITeamDataType<?> dataType);
 
     /**
@@ -95,10 +70,26 @@ public interface ITeam<T extends ITeam<? super T>> {
         return Lang.shortList(streamMemberUsernames(mc.level).map(Component::literal).toList(), maxTextWidth, mc.font);
     };
 
-    public static interface ITeamType<T extends ITeam<? super T>> {
+    public static interface Provider {
 
-        public T read(CompoundTag tag, Level level);
+        /**
+         * Use {@link ITeam.Provider#CODEC} instead.
+         */
+        static Codec<Provider> TYPED_CODEC = PetrolparkRegistries.TEAM_PROVIDER_TYPES
+            .byNameCodec()
+            .dispatch(ITeam.Provider::getProviderType, ITeam.ProviderType::codec);
 
-        public void write(T team, CompoundTag tag);
+        public static final Codec<ITeam.Provider> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, Codec.unit(NoTeam.INSTANCE)));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, ITeam.Provider> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.TEAM_PROVIDER_TYPE)
+            .dispatch(ITeam.Provider::getProviderType, ITeam.ProviderType::streamCodec);
+
+        public ITeam provideTeam(Level level);
+
+        public ITeam.ProviderType getProviderType();
+    };
+
+    public static record ProviderType(MapCodec<? extends ITeam.Provider> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends ITeam.Provider> streamCodec) {
+
     };
 };

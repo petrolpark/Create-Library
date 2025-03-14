@@ -11,7 +11,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.network.NetworkEvent.Context;
 
 public class ScoreboardTeamDataChangedPacket extends S2CPacket {
 

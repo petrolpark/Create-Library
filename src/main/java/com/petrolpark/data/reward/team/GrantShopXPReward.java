@@ -33,7 +33,7 @@ public class GrantShopXPReward implements IReward {
 
     @Override
     public void reward(LootContext context, float multiplier) {
-        ITeam<?> team = context.getParam(PetrolparkLootContextParams.TEAM);
+        ITeam team = context.getParam(PetrolparkLootContextParams.TEAM);
         if (team != null) {
             Shop shop = context.getLevel().registryAccess().registryOrThrow(PetrolparkRegistries.Keys.SHOP).get(shopRL);
             if (shop == null) Petrolpark.LOGGER.warn("Unknown Shop: "+shopRL);

@@ -1,25 +1,36 @@
 package com.petrolpark.team;
 
-import java.util.Map;
+import javax.annotation.Nonnull;
 
-import java.util.stream.Stream;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.function.Predicate;
-
-import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.team.data.ITeamDataType;
-
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.PatchedDataComponentMap;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.Level;
 
-import java.util.HashMap;
-
-public abstract class AbstractTeam<T extends ITeam<? super T>> implements ITeam<T> {
+public abstract class AbstractTeam implements ITeam {
     
-    protected final Map<ITeamDataType<?>, Object> data = new HashMap<>();
+    protected final PatchedDataComponentMap components;
+
+    protected AbstractTeam(DataComponentPatch components) {
+        this.components = PatchedDataComponentMap.fromPatch(DataComponentMap.EMPTY, components);
+    };
+
+    protected AbstractTeam(PatchedDataComponentMap components) {
+        this.components = components;
+    };
+
+    public DataComponentPatch getDataComponentPatch() {
+        return components.asPatch();
+    };
+
+    @Nullable
+    public Tag writeDataComponentsTag() {
+        return DataComponentPatch.CODEC.encodeStart(NbtOps.INSTANCE, getDataComponentPatch()).getOrThrow();
+    };
 
     @Override
     public final boolean isNone() {
@@ -27,54 +38,27 @@ public abstract class AbstractTeam<T extends ITeam<? super T>> implements ITeam<
     };
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <DATA> DATA getTeamData(ITeamDataType<? super DATA> dataType) {
-        return (DATA)data.computeIfAbsent(dataType, ITeamDataType::getBlankInstance);
+    public <T> @Nullable T set(@Nonnull DataComponentType<? super T> componentType, @Nonnull T value) {
+        return components.set(componentType, value);
     };
 
-    public Stream<ITeamDataType<?>> streamNonBlankTeamData() {
-        return data.keySet().stream().dropWhile(this::isBlank);
+    @Override
+    public <T> @Nullable T remove(@Nonnull DataComponentType<? extends T> componentType) {
+        return components.remove(componentType);
     };
 
-    public <DT> boolean isBlank(ITeamDataType<DT> dataType) {
-        return dataType.isBlank(getTeamData(dataType));
+    @Override
+    public void applyComponents(@Nonnull DataComponentPatch patch) {
+        components.applyPatch(patch);
     };
 
-    public CompoundTag saveTeamData(Level level) {
-        CompoundTag tag = new CompoundTag();
-        for (ITeamDataType<?> dataType : data.keySet()) saveTeamData(level, dataType, tag);
-        return tag;
+    @Override
+    public void applyComponents(@Nonnull DataComponentMap components) {
+        this.components.setAll(components);
     };
 
-    protected <DT> void saveTeamData(Level level, ITeamDataType<DT> dataType, CompoundTag tag) {
-        DT data = getTeamData(dataType);
-        if (dataType.isBlank(data)) return;
-        tag.put(PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.TEAM_DATA_TYPE).getKey(dataType).toString(), dataType.save(level, data));
+    @Override
+    public DataComponentMap getComponents() {
+        return components;
     };
-
-    public void loadTeamData(Level level, CompoundTag tag) {
-        for (String key : tag.getAllKeys()) {
-            if (!tag.contains(key, Tag.TAG_COMPOUND)) continue;
-            ITeamDataType<?> dataType = PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.TEAM_DATA_TYPE).getValue(ResourceLocation.fromNamespaceAndPath(key));
-            if (dataType != null) loadTeamData(level, tag.getCompound(key), dataType); else Petrolpark.LOGGER.warn("Unknown Team Data Type: "+key);
-        };
-    };
-
-    public <DT> void loadTeamData(Level level, CompoundTag dataTag, ITeamDataType<DT> dataType) {
-        data.put(dataType, dataType.load(level, dataTag));
-    };
-
-    public void copyTeamData(Level level, AbstractTeam<?> other) {
-        copyTeamData(level, other, td -> true);
-    };
-
-    public void copyTeamData(Level level, AbstractTeam<?> other, Predicate<ITeamDataType<?>> exclude) {
-        data.clear();
-        for (ITeamDataType<?> dataType : other.data.keySet()) {
-            if (exclude.test(dataType)) continue;
-            data.put(dataType, other.getTeamData(dataType));
-            setChanged(level, dataType);
-        };
-    };
-
 };

@@ -14,7 +14,7 @@ public class PetrolparkLootContextParams {
     public static final LootContextParam<ICustomer> CUSTOMER = create("customer");
     public static final LootContextParam<Entity> CUSTOMER_ENTITY = createEntity("customer_entity");
 
-    public static final LootContextParam<ITeam<?>> TEAM = create("team");
+    public static final LootContextParam<ITeam> TEAM = create("team");
 
     private static <E extends Entity> LootContextParam<E> createEntity(String id) {
         LootContextParam<E> param = create(id);

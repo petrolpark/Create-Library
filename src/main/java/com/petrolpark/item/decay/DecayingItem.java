@@ -10,8 +10,6 @@ import com.petrolpark.PetrolparkDataComponents;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraft.world.entity.player.Player;
@@ -32,12 +30,12 @@ public abstract class DecayingItem extends Item implements IDecayingItem {
     };
 
     @Override
-    public void appendHoverText(ItemStack stack, Level pLevel, List<Component> tooltip, TooltipFlag pIsAdvanced) {
-        super.appendHoverText(stack, pLevel, tooltip, pIsAdvanced);
-        CompoundTag tag = stack.getOrCreateTag();
+    public void appendHoverText(@Nonnull ItemStack stack, @Nonnull Item.TooltipContext context, @Nonnull List<Component> tooltip, @Nonnull TooltipFlag pIsAdvanced) {
+        super.appendHoverText(stack, context, tooltip, pIsAdvanced);
+        Long creationTime = stack.get(PetrolparkDataComponents.DECAYING_ITEM_CREATION_TIME);
         long displayedSecondsRemaining;
-        if (tag.contains("CreationTime", Tag.TAG_LONG)) {
-            long ticksRemaining = IDecayingItem.getRemainingTime(this, stack, tag);
+        if (creationTime != null) {
+            long ticksRemaining = IDecayingItem.getRemainingTime(this, stack, creationTime);
             displayedSecondsRemaining = ticksRemaining / 20;
         } else {
             displayedSecondsRemaining = getLifetime(stack) / 20;

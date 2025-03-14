@@ -23,7 +23,7 @@ public record ContextTeamNumberProvider(TeamNumberProvider value) implements Num
     
     @Override
     public float getFloat(@Nonnull LootContext context) {
-        ITeam<?> team = context.getParam(PetrolparkLootContextParams.TEAM);
+        ITeam team = context.getParam(PetrolparkLootContextParams.TEAM);
         if (team != null) return value.getFloat(team, context);
         return 0f;
     };

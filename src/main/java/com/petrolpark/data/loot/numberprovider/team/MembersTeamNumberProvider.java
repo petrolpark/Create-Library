@@ -8,7 +8,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 public class MembersTeamNumberProvider implements TeamNumberProvider {
 
     @Override
-    public float getFloat(ITeam<?> team, LootContext context) {
+    public float getFloat(ITeam team, LootContext context) {
         return team.streamMemberUsernames(context.getLevel()).count();
     };
 

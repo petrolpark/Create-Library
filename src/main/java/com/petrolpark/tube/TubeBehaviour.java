@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
 
+import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.create.CreateBlockEntityTypes;
 import com.petrolpark.compat.create.CreateBlocks;
@@ -16,12 +17,10 @@ import com.petrolpark.util.NBTHelper;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.DistExecutor;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -146,9 +145,10 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         for (Vec3 point : spline.getPoints()) level.sendParticles(data, point.x, point.y, point.z, 1, 0, 0, 0, 0);
     };
 
+    @SuppressWarnings("null")
     public void playSound(boolean destroy) {
         BlockState state = blockEntity.getBlockState();
-        SoundType soundType = state.getSoundType();
+        SoundType soundType = state.getSoundType(getWorld(), getPos(), null);
         getWorld().playSound(null, getPos(), destroy ? soundType.getBreakSound() : soundType.getPlaceSound(), SoundSource.BLOCKS, soundType.getVolume(), soundType.getPitch());
     };
 
@@ -161,7 +161,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         if (oldSpline == null) return false;
         ItemStack stackForConstruction = getRequiredStack().getSingleItemStack();
         disconnect(stack -> {if (!player.getAbilities().instabuild) stack.getAsStacks().forEach(player.getInventory()::placeItemBackInInventory);});
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> reconnectClient(oldSpline, stackForConstruction));
+        Petrolpark.unsafeRunClient(() -> () -> reconnectClient(oldSpline, stackForConstruction));
         return true;
     };
 

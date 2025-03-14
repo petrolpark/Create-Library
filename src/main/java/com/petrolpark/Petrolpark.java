@@ -1,8 +1,8 @@
 package com.petrolpark;
 
-import org.slf4j.Logger;
-
 import java.util.function.Supplier;
+
+import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.badge.Badges;
@@ -10,9 +10,6 @@ import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
-import com.petrolpark.data.loot.PetrolparkLootEntityNumberProviderTypes;
-import com.petrolpark.data.loot.PetrolparkLootItemStackNumberProviderTypes;
-import com.petrolpark.data.loot.PetrolparkLootTeamNumberProviders;
 import com.petrolpark.data.reward.PetrolparkRewardGeneratorTypes;
 import com.petrolpark.data.reward.PetrolparkRewardTypes;
 import com.petrolpark.item.decay.DecayingItemHandler;
@@ -22,7 +19,7 @@ import com.petrolpark.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.recipe.ingredient.modifier.IngredientModifierTypes;
 import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizerTypes;
 import com.petrolpark.registrate.PetrolparkRegistrate;
-import com.petrolpark.team.TeamTypes;
+import com.petrolpark.team.PetrolparkTeamProviderTypes;
 import com.petrolpark.team.data.TeamDataTypes;
 import com.petrolpark.team.scoreboard.ScoreboardTeamManager;
 
@@ -67,18 +64,17 @@ public class Petrolpark {
 
         // Registration
         PetrolparkRegistries.register();
+        PetrolparkDataComponents.register(modEventBus);
+        PetrolparkAttachmentTypes.register(modEventBus);
         Badges.register();
         IPetrolparkRecipeTypes.register(modEventBus);
         PetrolparkItems.register();
         PetrolparkMobEffects.register();
-        TeamTypes.register();
+        PetrolparkTeamProviderTypes.register();
         TeamDataTypes.register();
         // Registration - loot
         PetrolparkLootConditionTypes.register();
         PetrolparkNumberProviderTypes.register();
-        PetrolparkLootItemStackNumberProviderTypes.register();
-        PetrolparkLootEntityNumberProviderTypes.register();
-        PetrolparkLootTeamNumberProviders.register();
         PetrolparkGlobalLootModifierSerializers.register();
         PetrolparkRewardGeneratorTypes.register();
         PetrolparkRewardTypes.register();
@@ -109,6 +105,23 @@ public class Petrolpark {
         } else {
             return serverSupplier.get().get();
         }
+    };
+
+    public static final <T> T unsafeCallClient(Supplier<Supplier<T>> supplier) {
+        try {
+            if (FMLEnvironment.dist == Dist.CLIENT) supplier.get().get();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        };
+        return null;
+    };
+
+    public static final void unsafeRunClient(Supplier<Runnable> supplier) {
+        try {
+            if (FMLEnvironment.dist == Dist.CLIENT) supplier.get().run();
+        } catch (Exception e) {
+            throw new RuntimeException();
+        };
     };
 
 };

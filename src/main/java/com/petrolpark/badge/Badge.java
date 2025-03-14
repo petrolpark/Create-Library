@@ -12,7 +12,6 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.Registry;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;

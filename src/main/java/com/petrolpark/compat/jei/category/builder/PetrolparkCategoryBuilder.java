@@ -29,6 +29,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.ItemLike;
 
@@ -212,7 +213,7 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
      * @return This Category
      */
     public CreateRecipeCategory<R> build(String name, PetrolparkRecipeCategory.Factory<R> factory) {
-        Supplier<List<R>> recipesSupplier;
+        Supplier<List<RecipeHolder<R>>> recipesSupplier;
         if (createConfigPredicate.test(AllConfigs.server().recipes)) {
             recipesSupplier = () -> {
                 List<R> recipes = new ArrayList<>();

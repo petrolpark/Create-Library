@@ -2,21 +2,37 @@ package com.petrolpark.team;
 
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
+
+import org.jetbrains.annotations.Nullable;
+
 import com.petrolpark.team.data.ITeamDataType;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 
-public final class NoTeam implements ITeam<NoTeam> {
+public final class NoTeam implements ITeam, ITeam.Provider {
 
     public static final NoTeam INSTANCE = new NoTeam();
 
     @Override
-    public ITeamType<NoTeam> getType() {
-        return TeamTypes.NONE.get();
+    public ITeam.Provider getProvider() {
+        return this;
+    };
+
+    @Override
+    public ProviderType getProviderType() {
+        return PetrolparkTeamProviderTypes.NONE.get();
+    };
+
+    @Override
+    public ITeam provideTeam(Level level) {
+        return this;
     };
 
     @Override
@@ -55,12 +71,6 @@ public final class NoTeam implements ITeam<NoTeam> {
     };
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <DATA> DATA getTeamData(ITeamDataType<? super DATA> dataType) {
-        return (DATA)dataType.getBlankInstance();
-    };
-
-    @Override
     public void setChanged(Level level, ITeamDataType<?> dataType) {};
 
     @Override
@@ -73,16 +83,29 @@ public final class NoTeam implements ITeam<NoTeam> {
         return Component.translatable("petrolpark.generic.list.none");
     };
 
-    public static class Type implements ITeamType<NoTeam> {
+    @Override
+    public <T> @Nullable T set(@Nonnull DataComponentType<? super T> componentType, @Nonnull T value) {
+        return null;
+    };
 
-        @Override
-        public NoTeam read(CompoundTag tag, Level level) {
-            return INSTANCE;
-        };
+    @Override
+    public <T> @Nullable T remove(@Nonnull DataComponentType<? extends T> componentType) {
+        return null;
+    };
 
-        @Override
-        public void write(NoTeam team, CompoundTag tag) {};
+    @Override
+    public void applyComponents(@Nonnull DataComponentPatch patch) {
+        //NOOP
+    };
 
+    @Override
+    public void applyComponents(@Nonnull DataComponentMap components) {
+        //NOOP
+    };
+
+    @Override
+    public DataComponentMap getComponents() {
+        return DataComponentMap.EMPTY;
     };
     
 };

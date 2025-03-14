@@ -38,7 +38,7 @@ public record MembersTeamReward(IEntityReward reward, Either<NumberProvider, Num
     public static final Codec<MembersTeamReward> INLINE_CODEC = IEntityReward.CODEC.xmap(entityReward -> new MembersTeamReward(entityReward, Either.right(ConstantValue.exactly(1f)), false), MembersTeamReward::reward);
 
     @Override
-    public void reward(ITeam<?> team, LootContext context, float multiplier) {
+    public void reward(ITeam team, LootContext context, float multiplier) {
         int count = who.map(absoluteCount -> 
                 Mth.clamp(absoluteCount.getInt(context), 0, team.memberCount()),
             proportion -> 

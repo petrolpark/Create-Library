@@ -15,11 +15,11 @@ public class SelectTeamScreen extends Screen {
 
     public final BindTeamPacket.Factory packetFactory;
 
-    protected final List<ITeam<?>> selectableTeams;
+    protected final List<ITeam> selectableTeams;
 
-    protected ITeam<?> selectedTeam = null;
+    protected ITeam selectedTeam = null;
 
-    public SelectTeamScreen(Component title, List<ITeam<?>> selectableTeams, BindTeamPacket.Factory packetFactory) {
+    public SelectTeamScreen(Component title, List<ITeam> selectableTeams, BindTeamPacket.Factory packetFactory) {
         super(title);
         this.selectableTeams = selectableTeams;
         this.packetFactory = packetFactory;

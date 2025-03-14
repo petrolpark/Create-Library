@@ -66,7 +66,7 @@ public class BadgeHandler {
                         ));
                     };
                 };
-                player.getCapability(BadgesCapability.Provider.PLAYER_BADGES).ifPresent(playerBadges -> {
+                player.getCapability(PlayerBadges.Provider.PLAYER_BADGES).ifPresent(playerBadges -> {
                     playerBadges.setBadges(badges);
                     // Award Advancements for Badges
                     playerBadges.getBadges().forEach(pair ->

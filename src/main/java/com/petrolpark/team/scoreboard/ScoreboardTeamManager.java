@@ -4,11 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.network.PetrolparkMessages;
+import com.petrolpark.team.ITeam;
 import com.petrolpark.team.data.ITeamDataType;
+import com.petrolpark.team.scoreboard.ScoreboardTeamManager.ScoreboardTeamSavedData;
+import com.simibubi.create.foundation.utility.DistExecutor;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
@@ -18,21 +26,16 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.scores.PlayerTeam;
 import net.minecraft.world.scores.Scoreboard;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
+import net.neoforged.api.distmarker.Dist;
 
 public class ScoreboardTeamManager {
 
     protected final Map<PlayerTeam, ScoreboardTeam> teams = new HashMap<>();
-
-    protected Scoreboard scoreboard;
     
     protected ScoreboardTeamSavedData savedData;
 
-    public Optional<ScoreboardTeam> get(String teamName) {
-        if (scoreboard == null) DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> this::findScoreboardClient);
-        if (scoreboard == null) return Optional.empty();
-        PlayerTeam team = scoreboard.getPlayerTeam(teamName);
+    public Optional<ITeam> get(Level level, String teamName) {
+        PlayerTeam team = level.getScoreboard().getPlayerTeam(teamName);
         if (team == null) return Optional.empty();
         return Optional.of(teams.computeIfAbsent(team, ScoreboardTeam::new));
     };
@@ -43,7 +46,7 @@ public class ScoreboardTeamManager {
     };
 
     public void setData(Level level, String teamName, ITeamDataType<?> dataType, CompoundTag dataTag) {
-        get(teamName).ifPresent(team -> team.loadTeamData(level, dataTag, dataType));
+        get(level, teamName).ifPresent(team -> team.loadTeamData(level, dataTag, dataType));
     };
 
     public void playerLogin(Player player) {
@@ -61,36 +64,23 @@ public class ScoreboardTeamManager {
 		MinecraftServer server = level.getServer();
 		if (server == null || server.overworld() != level) return;
         teams.clear();
-        scoreboard = null;
 		savedData = null;
 		loadSavedData(server);
 	};
 
 	private void loadSavedData(MinecraftServer server) {
 		if (savedData != null) return;
-        scoreboard = server.getScoreboard();
 		savedData = server.overworld()
             .getDataStorage()
-            .computeIfAbsent(tag -> load(server.overworld(), tag), () -> new ScoreboardTeamSavedData(server.overworld()), "petrolpark_teams");
+            .computeIfAbsent(new SavedData.Factory<>(ScoreboardTeamSavedData::new, (tag, registries) -> load(server.overworld(), tag)), "petrolpark_teams");
 	};
-
-    private void findScoreboardClient() {
-        Minecraft mc = Minecraft.getInstance();
-        scoreboard = mc.level.getScoreboard();
-    };
 
     public class ScoreboardTeamSavedData extends SavedData {
 
-        protected final Level overworld;
-
-        public ScoreboardTeamSavedData(Level overworld) {
-            this.overworld = overworld;
-        };
-
         @Override
-        public CompoundTag save(CompoundTag tag) {
+        public CompoundTag save(@Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider registries) {
             for (ScoreboardTeam team : teams.values()) {
-                tag.put(team.team.getName(), team.saveTeamData(overworld));
+                tag.put(team.team.getName(), team.writeDataComponentsTag());
             };
             return tag;
         };
@@ -98,11 +88,11 @@ public class ScoreboardTeamManager {
     };
 
     protected ScoreboardTeamSavedData load(Level overworld, CompoundTag tag) {
-        ScoreboardTeamSavedData savedData = new ScoreboardTeamSavedData(overworld);
+        ScoreboardTeamSavedData savedData = new ScoreboardTeamSavedData();
 
         for (String key : tag.getAllKeys()) {
             if (!tag.contains(key, Tag.TAG_COMPOUND)) continue;
-            get(key).ifPresent(team -> team.loadTeamData(overworld, tag.getCompound(key)));
+            get(overworld, key).ifPresent(team -> team.applyComponents(DataComponentPatch.CODEC.parse(NbtOps.INSTANCE, tag.get(key)).getOrThrow()));
         };
 
         return savedData;

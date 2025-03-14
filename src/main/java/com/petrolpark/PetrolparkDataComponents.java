@@ -9,6 +9,7 @@ import com.mojang.serialization.Codec;
 import com.petrolpark.badge.BadgeItem;
 import com.petrolpark.badge.BadgeItem.BadgeAward;
 import com.petrolpark.contamination.Contaminant;
+import com.petrolpark.team.ITeam;
 import com.petrolpark.util.NetworkHelper;
 
 import net.minecraft.core.Holder;
@@ -26,6 +27,11 @@ public class PetrolparkDataComponents {
     public static final DataComponentType<BadgeItem.BadgeAward> BADGE_AWARD = register(
         "badge_award",
         builder -> builder.persistent(BadgeAward.CODEC).networkSynchronized(BadgeAward.STREAM_CODEC)
+    );
+
+    public static final DataComponentType<ITeam.Provider> TEAM_PROVIDER = register(
+        "team",
+        builder -> builder.persistent(ITeam.Provider.CODEC).networkSynchronized(ITeam.Provider.STREAM_CODEC)
     );
 
     public static final DataComponentType<List<Holder<Contaminant>>> ORPHAN_CONTAMINANTS = register(

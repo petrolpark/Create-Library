@@ -1,6 +1,7 @@
 package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
+
 import java.util.Optional;
 
 import org.jetbrains.annotations.ApiStatus.Internal;
@@ -20,7 +21,7 @@ import com.petrolpark.recipe.ingredient.modifier.IngredientModifierType;
 import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.shop.Shop;
 import com.petrolpark.shop.offer.ShopOfferGenerator;
-import com.petrolpark.team.ITeam.ITeamType;
+import com.petrolpark.team.ITeam;
 import com.petrolpark.team.data.ITeamDataType;
 
 import net.minecraft.client.Minecraft;
@@ -53,7 +54,9 @@ public class PetrolparkRegistries {
         return registry.getHolder(key);
     };
 
+    // Core
     public static final Registry<Badge> BADGES = simple(Keys.BADGE);
+    public static final Registry<ITeam.ProviderType> TEAM_PROVIDER_TYPES = simple(Keys.TEAM_PROVIDER_TYPE);
 
     // Loot/Data
     public static final Registry<LootItemStackNumberProviderType> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE);
@@ -90,7 +93,7 @@ public class PetrolparkRegistries {
     public static class Keys {
         // Core
         public static final ResourceKey<Registry<Contaminant>> CONTAMINANT = REGISTRATE.makeDatapackRegistry("contaminant", Contaminant.DIRECT_CODEC, Contaminant.DIRECT_CODEC);
-        public static final ResourceKey<Registry<ITeamType<?>>> TEAM_TYPE = REGISTRATE.makeRegistry("team_type", RegistryBuilder::new); 
+        public static final ResourceKey<Registry<ITeam.ProviderType>> TEAM_PROVIDER_TYPE = REGISTRATE.makeRegistry("team_provider_type", RegistryBuilder::new); 
         public static final ResourceKey<Registry<ITeamDataType<?>>> TEAM_DATA_TYPE = REGISTRATE.makeRegistry("team_data_type", RegistryBuilder::new);
         public static final ResourceKey<Registry<Badge>> BADGE = REGISTRATE.makeRegistry("badge", RegistryBuilder::new);
 

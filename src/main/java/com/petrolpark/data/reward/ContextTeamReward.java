@@ -34,7 +34,7 @@ public record ContextTeamReward(ITeamReward reward) implements IReward {
 
     @Override
     public void reward(LootContext context, float multiplier) {
-        ITeam<?> team = context.getParam(PetrolparkLootContextParams.TEAM);
+        ITeam team = context.getParam(PetrolparkLootContextParams.TEAM);
         if (team != null) reward.reward(team, context, multiplier);
     };
 

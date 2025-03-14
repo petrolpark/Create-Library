@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.PetrolparkTags;
-import com.petrolpark.badge.BadgesCapability;
+import com.petrolpark.badge.PlayerBadges;
 import com.petrolpark.command.ContaminateHeldItemCommand;
 import com.petrolpark.contamination.Contaminant;
 import com.petrolpark.contamination.ItemContamination;
@@ -49,34 +49,6 @@ public class CommonEvents {
     @SubscribeEvent
     public static void addReloadListeners(AddReloadListenerEvent event) {
         event.addListener(new Contaminant.ReloadListener(event.getRegistryAccess()));
-    };
-
-    @SubscribeEvent
-    public static void onAttachCapabilitiesEntity(AttachCapabilitiesEvent<Entity> event) {
-        Entity entity = event.getObject();
-        if (entity instanceof final Player player) {
-            // Add Badge Capability
-            if (!player.getCapability(BadgesCapability.Provider.PLAYER_BADGES).isPresent()) event.addCapability(Petrolpark.asResource("badges"), new BadgesCapability.Provider());
-            // Add Team Capability
-            if (!player.getCapability(SinglePlayerTeam.CAPABILITY).isPresent()) event.addCapability(Petrolpark.asResource("team"), new SinglePlayerTeam(player));
-        } else {
-            // Add Shop Customer capability
-            if (!entity.getCapability(EntityCustomer.CAPABILITY).isPresent()) event.addCapability(Petrolpark.asResource("customer"), new EntityCustomer(entity));
-        };
-    };
-
-    @SubscribeEvent
-    public static void onPlayerCloned(PlayerEvent.Clone event) {
-        if (event.isWasDeath()) {
-            // Copy Badge data
-            event.getOriginal().getCapability(BadgesCapability.Provider.PLAYER_BADGES).ifPresent(oldStore -> {
-                event.getEntity().getCapability(BadgesCapability.Provider.PLAYER_BADGES).ifPresent(newStore -> newStore.setBadges(oldStore.getBadges()));
-            });
-            // Copy (some) Team Data
-            event.getOriginal().getCapability(SinglePlayerTeam.CAPABILITY).ifPresent(oldCap -> {
-                event.getEntity().getCapability(SinglePlayerTeam.CAPABILITY).ifPresent(newCap -> newCap.copyTeamData(event.getEntity().level(), oldCap, PetrolparkTags.TeamDataTypes.LOST_ON_PLAYER_DEATH::matches));
-            });
-        };
     };
 
     // GAMEPLAY

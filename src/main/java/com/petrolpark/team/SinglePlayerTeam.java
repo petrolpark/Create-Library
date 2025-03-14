@@ -3,41 +3,53 @@ package com.petrolpark.team;
 import java.util.UUID;
 import java.util.stream.Stream;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nullable;
 
+import com.mojang.serialization.MapCodec;
+import com.petrolpark.PetrolparkAttachmentTypes;
 import com.petrolpark.team.data.ITeamDataType;
+import com.petrolpark.util.NetworkHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.PlayerFaceRenderer;
-import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.UUIDUtil;
+import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.capabilities.AutoRegisterCapability;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
-import net.neoforged.neoforge.capabilities.ICapabilityProvider;
-import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 
-@AutoRegisterCapability
-public class SinglePlayerTeam extends AbstractTeam<SinglePlayerTeam> implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-
-    public static final Capability<SinglePlayerTeam> CAPABILITY = CapabilityManager.get(new CapabilityToken<SinglePlayerTeam>() {});
+public class SinglePlayerTeam extends AbstractTeam {
 
     public final Player player;
 
-    public SinglePlayerTeam(Player player) {
+    public static ITeam.Provider provider(Player player) {
+        return new Provider(player.getUUID());
+    };
+
+    public static final SinglePlayerTeam create(IAttachmentHolder attachmentHolder) {
+        if (attachmentHolder instanceof Player player) {
+            return new SinglePlayerTeam(player, DataComponentPatch.EMPTY);
+        } else throw new IllegalStateException(attachmentHolder.toString() + " is not a Player");
+    };
+
+    public SinglePlayerTeam(Player player, DataComponentPatch components) {
+        super(components);
         this.player = player;
     };
 
     @Override
-    public ITeamType<SinglePlayerTeam> getType() {
-        return TeamTypes.SINGLE_PLAYER.get();
+    public ITeam.Provider getProvider() {
+        return provider(player);
     };
 
     @Override
@@ -79,7 +91,7 @@ public class SinglePlayerTeam extends AbstractTeam<SinglePlayerTeam> implements 
     public void renderIcon(GuiGraphics graphics) {
         Minecraft mc = Minecraft.getInstance();
         if (player == null) return;
-        PlayerFaceRenderer.draw(graphics, mc.getSkinManager().getInsecureSkinLocation(player.getGameProfile()), 0, 0, 16);
+        PlayerFaceRenderer.draw(graphics, mc.getSkinManager().getInsecureSkin(player.getGameProfile()), 0, 0, 16);
     };
 
     @Override
@@ -89,37 +101,54 @@ public class SinglePlayerTeam extends AbstractTeam<SinglePlayerTeam> implements 
 
     // CAPABILITY
 
-    @Override
-    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CAPABILITY) return LazyOptional.of(() -> this).cast();
-        return LazyOptional.empty();
-    };
+    // @Override
+    // public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
+    //     if (cap == CAPABILITY) return LazyOptional.of(() -> this).cast();
+    //     return LazyOptional.empty();
+    // };
 
-    @Override
-    public CompoundTag serializeNBT() {
-        return saveTeamData(player.level());
-    };
+    // @Override
+    // public CompoundTag serializeNBT() {
+    //     return saveTeamData(player.level());
+    // };
 
-    @Override
-    public void deserializeNBT(CompoundTag nbt) {
-        loadTeamData(player.level(), nbt);
-    };
+    // @Override
+    // public void deserializeNBT(CompoundTag nbt) {
+    //     loadTeamData(player.level(), nbt);
+    // };
 
     // TYPE
 
-    public static class Type implements ITeamType<SinglePlayerTeam> {
+    public static record Provider(UUID playerUUID) implements ITeam.Provider {
+
+        public static final MapCodec<Provider> CODEC = NetworkHelper.singleFieldMapCodec(UUIDUtil.CODEC, "player", Provider::playerUUID, Provider::new);
+        public static final StreamCodec<FriendlyByteBuf, Provider> STREAM_CODEC = StreamCodec.composite(UUIDUtil.STREAM_CODEC, Provider::playerUUID, Provider::new);
 
         @Override
-        public SinglePlayerTeam read(CompoundTag tag, Level level) {
-            UUID uuid = tag.getUUID("Player");
-            Player player = level.getPlayerByUUID(uuid);
-            if (player != null) return player.getCapability(CAPABILITY).resolve().get();
-            return null;
+        public ITeam provideTeam(Level level) {
+            Player player = level.getPlayerByUUID(playerUUID);
+            if (player != null) return player.getData(PetrolparkAttachmentTypes.SINGLE_PLAYER_TEAM_COMPONENTS.get());
+            return NoTeam.INSTANCE;
         };
 
         @Override
-        public void write(SinglePlayerTeam team, CompoundTag tag) {
-            tag.putUUID("Player", team.player.getUUID());
+        public ProviderType getProviderType() {
+            return PetrolparkTeamProviderTypes.SINGLE_PLAYER.get();
+        };
+
+    };
+
+    public static final IAttachmentSerializer<Tag, SinglePlayerTeam> ATTACHMENT_SERIALIZER = new IAttachmentSerializer<Tag, SinglePlayerTeam>() {
+
+        @Override
+        public SinglePlayerTeam read(@Nonnull IAttachmentHolder holder, @Nonnull Tag tag, @Nonnull HolderLookup.Provider provider) {
+            if (!(holder instanceof Player player)) throw new IllegalArgumentException(holder.toString() + " is not a Player");
+            return new SinglePlayerTeam(player, DataComponentPatch.CODEC.parse(NbtOps.INSTANCE, tag).getOrThrow());
+        };
+
+        @Override
+        public @Nullable Tag write(@Nonnull SinglePlayerTeam attachment, @Nonnull HolderLookup.Provider provider) {
+            return attachment.writeDataComponentsTag();
         };
 
     };

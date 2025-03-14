@@ -20,7 +20,7 @@ public interface TeamNumberProvider extends LootContextUser {
         () -> Codec.withAlternative(TYPED_CODEC, Codec.unit(MembersTeamNumberProvider::new)) //TODO inline
     );
     
-    public float getFloat(ITeam<?> team, LootContext context);
+    public float getFloat(ITeam team, LootContext context);
 
     public LootTeamNumberProviderType getType();
 };

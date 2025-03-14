@@ -41,7 +41,7 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
 
         duplicationIngredient = () -> Ingredient.EMPTY;
         item = getOwner().item("badge/"+getName(), p -> new BadgeItem(p, () -> this.getEntry()))
-            .tab(null)
+            //.tab(null)
             .properties(p -> p
                 .stacksTo(1)
             ).register();

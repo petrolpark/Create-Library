@@ -14,7 +14,11 @@ public abstract class ComponentHolderContamination<OBJECT, OBJECT_STACK extends 
 
     protected ComponentHolderContamination(OBJECT_STACK stack) {
         super(stack);
-        orphanContaminants.addAll(stack.getOrDefault(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, new ArrayList<Holder<Contaminant>>()).stream().map(Holder::value).toList());
+        orphanContaminants.addAll(stack.getOrDefault(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, new ArrayList<Holder<Contaminant>>()).stream()
+            .map(Holder::value)
+            .filter(IntrinsicContaminants.get(this)::contains)
+            .toList()
+        );
         for (Contaminant contaminant : orphanContaminants) {
             contaminants.add(contaminant);
             contaminants.addAll(contaminant.getChildren());

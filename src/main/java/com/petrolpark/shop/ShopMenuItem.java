@@ -1,14 +1,14 @@
 package com.petrolpark.shop;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.shop.customer.EntityCustomer;
 import com.petrolpark.team.ITeam;
 import com.petrolpark.team.ITeamBoundItem;
 import com.petrolpark.team.data.TeamDataTypes;
 import com.petrolpark.util.NBTHelper;
-
-import java.util.List;
-import java.util.Optional;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -23,8 +23,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
 
@@ -70,7 +70,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
     public void appendHoverText(ItemStack stack, Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
         Minecraft mc = Minecraft.getInstance();
         getShop(level, mc.player, stack).ifPresent(shop -> {
-            ITeam<?> team = ITeamBoundItem.getTeam(stack, level);
+            ITeam team = ITeamBoundItem.getTeam(stack, level);
             if (!team.isNone()) tooltipComponents.add(team.getTeamData(TeamDataTypes.SHOPS.get()).getName(shop).copy().withStyle(ChatFormatting.GRAY));
         });
     };

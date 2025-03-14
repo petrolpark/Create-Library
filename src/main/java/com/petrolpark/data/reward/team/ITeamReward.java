@@ -18,5 +18,5 @@ public interface ITeamReward extends ITypedReward<TeamRewardType> {
 
     public static final Codec<ITeamReward> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, MembersTeamReward.INLINE_CODEC));
     
-    public void reward(ITeam<?> team, LootContext context, float multiplier);
+    public void reward(ITeam team, LootContext context, float multiplier);
 };
