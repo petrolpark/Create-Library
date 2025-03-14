@@ -43,7 +43,7 @@ public class ContaminatedKineticBlockLootModifier extends LootModifier {
         if (be == null || !(be instanceof KineticBlockEntity kbe && PetrolparkTags.BlockEntityTypes.CONTAMINABLE_KINETIC.matches(kbe))) return generatedLoot;
         ContaminationBehaviour behaviour = kbe.getBehaviour(ContaminationBehaviour.TYPE);
         if (behaviour == null) return generatedLoot;
-        generatedLoot.stream().filter(stack -> stack.getItem() == kbe.getBlockState().getBlock().asItem()).map(ItemContamination::get).forEach(c -> c.contaminateAll(behaviour.getContamination().streamAllContaminants()));
+        generatedLoot.stream().filter(stack -> stack.getItem() == kbe.getBlockState().getBlock().asItem()).map(ItemContamination::get).forEach(c -> c.contaminateAll(behaviour.getContamination().streamAllContaminants(), context.getLevel().registryAccess()));
         return generatedLoot;
     };
     

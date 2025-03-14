@@ -1,12 +1,7 @@
 package com.petrolpark.data.reward.generator;
 
-import net.minecraft.world.level.storage.loot.Serializer;
-import net.minecraft.world.level.storage.loot.SerializerType;
+import com.mojang.serialization.MapCodec;
 
-public class RewardGeneratorType extends SerializerType<IRewardGenerator> {
-
-    public RewardGeneratorType(Serializer<? extends IRewardGenerator> serializer) {
-        super(serializer);
-    };
+public record RewardGeneratorType(MapCodec<? extends IRewardGenerator> codec) {
     
 };

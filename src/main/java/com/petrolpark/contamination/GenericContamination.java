@@ -1,5 +1,6 @@
 package com.petrolpark.contamination;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.ListTag;
 
 /**
@@ -46,7 +47,7 @@ public class GenericContamination extends Contamination<Object, Object> {
      */
     @Override
     @Deprecated
-    public final void save() {
+    public final void save(RegistryAccess registries) {
         onSave.run();
     };
     

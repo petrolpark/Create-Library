@@ -7,8 +7,8 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.data.IEntityTarget;
-import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
 import com.petrolpark.data.loot.numberprovider.entity.EntityNumberProvider;
 
 import net.minecraft.world.entity.Entity;
@@ -33,7 +33,7 @@ public record ContextEntityNumberProvider(IEntityTarget target, EntityNumberProv
 
     @Override
     public LootNumberProviderType getType() {
-        return PetrolparkLootNumberProviderTypes.CONTEXT_ENTITY.get();
+        return PetrolparkNumberProviderTypes.CONTEXT_ENTITY.get();
     };
 
     @Override

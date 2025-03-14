@@ -18,8 +18,12 @@ import com.petrolpark.data.loot.numberprovider.team.LootTeamNumberProviderType;
 import com.petrolpark.data.loot.numberprovider.team.TeamNumberProvider;
 import com.petrolpark.data.reward.IReward;
 import com.petrolpark.data.reward.RewardType;
+import com.petrolpark.data.reward.entity.EntityRewardType;
+import com.petrolpark.data.reward.entity.IEntityReward;
 import com.petrolpark.data.reward.generator.IRewardGenerator;
 import com.petrolpark.data.reward.generator.RewardGeneratorType;
+import com.petrolpark.data.reward.team.ITeamReward;
+import com.petrolpark.data.reward.team.TeamRewardType;
 import com.petrolpark.recipe.ingredient.modifier.IngredientModifier;
 import com.petrolpark.recipe.ingredient.modifier.IngredientModifierType;
 import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizer;
@@ -43,11 +47,6 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     public PetrolparkRegistrate(String modid) {
         super(modid);
     };
-
-    @Override
-	public @Nonnull PetrolparkRegistrate registerEventListeners(@Nonnull IEventBus bus) {
-		return super.registerEventListeners(bus);
-	};
 
     public BadgeBuilder<Badge, PetrolparkRegistrate> badge(String name) {
         return badge(name, Badge::new);  
@@ -73,32 +72,36 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, PetrolparkRegistries.Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE, () -> new LootItemStackNumberProviderType(codec));
     };
     
-    public RegistryEntry<LootItemStackNumberProviderType> lootItemStackNumberProviderType(String name, Supplier<? extends ItemStackNumberProvider> simpleFactory) {
-        return simple(name, PetrolparkRegistries.Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE, () -> new LootItemStackNumberProviderType(simpleFactory));
-    };
-    
     public RegistryEntry<LootEntityNumberProviderType, LootEntityNumberProviderType> lootEntityNumberProviderType(String name, MapCodec<? extends EntityNumberProvider> codec) {
         return simple(name, PetrolparkRegistries.Keys.LOOT_ENTITY_NUMBER_PROVIDER_TYPE, () -> new LootEntityNumberProviderType(codec));
     };
     
-    public RegistryEntry<LootTeamNumberProviderType> lootTeamNumberProviderType(String name, Supplier<? extends TeamNumberProvider> simpleFactory) {
-        return simple(name, PetrolparkRegistries.Keys.LOOT_TEAM_NUMBER_PROVIDER_TYPE, () -> new LootTeamNumberProviderType(simpleFactory));
+    public RegistryEntry<LootTeamNumberProviderType, LootTeamNumberProviderType> lootTeamNumberProviderType(String name, MapCodec<? extends TeamNumberProvider> codec) {
+        return simple(name, PetrolparkRegistries.Keys.LOOT_TEAM_NUMBER_PROVIDER_TYPE, () -> new LootTeamNumberProviderType(codec));
     };
 
-    public RegistryEntry<IngredientRandomizerType> ingredientRandomizerType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends IngredientRandomizer> serializer) {
+    public RegistryEntry<IngredientRandomizerType, IngredientRandomizerType> ingredientRandomizerType(String name, MapCodec<? extends IngredientRandomizer> serializer) {
         return simple(name, PetrolparkRegistries.Keys.INGREDIENT_RANDOMIZER_TYPE, () -> new IngredientRandomizerType(serializer));
     };
 
-    public RegistryEntry<IngredientModifierType> ingredientModifierType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends IngredientModifier> serializer) {
+    public RegistryEntry<IngredientModifierType, IngredientModifierType> ingredientModifierType(String name, MapCodec<? extends IngredientModifier> serializer) {
         return simple(name, PetrolparkRegistries.Keys.INGREDIENT_MODIFIER_TYPE, () -> new IngredientModifierType(serializer));
     };
 
-    public RegistryEntry<RewardGeneratorType> rewardGeneratorType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends IRewardGenerator> serializer) {
-        return simple(name, PetrolparkRegistries.Keys.REWARD_GENERATOR_TYPE, () -> new RewardGeneratorType(serializer));
+    public RegistryEntry<RewardGeneratorType, RewardGeneratorType> rewardGeneratorType(String name, MapCodec<? extends IRewardGenerator> codec) {
+        return simple(name, PetrolparkRegistries.Keys.REWARD_GENERATOR_TYPE, () -> new RewardGeneratorType(codec));
     };
 
-    public RegistryEntry<RewardType> rewardType(String name, net.minecraft.world.level.storage.loot.Serializer<? extends IReward> serializer) {
-        return simple(name, PetrolparkRegistries.Keys.REWARD_TYPE, () -> new RewardType(serializer));
+    public RegistryEntry<RewardType, RewardType> rewardType(String name, MapCodec<? extends IReward> codec) {
+        return simple(name, PetrolparkRegistries.Keys.REWARD_TYPE, () -> new RewardType(codec));
+    };
+
+    public RegistryEntry<EntityRewardType, EntityRewardType> entityRewardType(String name, MapCodec<? extends IEntityReward> codec) {
+        return simple(name, PetrolparkRegistries.Keys.ENTITY_REWARD_TYPE, () -> new EntityRewardType(codec));
+    };
+
+    public RegistryEntry<TeamRewardType, TeamRewardType> teamRewardType(String name, MapCodec<? extends ITeamReward> codec) {
+        return simple(name, PetrolparkRegistries.Keys.TEAM_REWARD_TYPE, () -> new TeamRewardType(codec));
     };
 
     public <DATA> RegistryEntry<ITeamDataType<?>, ITeamDataType<DATA>> teamDataType(String name, NonNullSupplier<ITeamDataType<DATA>> supplier) {

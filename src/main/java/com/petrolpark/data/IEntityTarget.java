@@ -19,6 +19,8 @@ public interface IEntityTarget extends StringRepresentable {
 
     public static final Codec<IEntityTarget> CODEC = Codec.stringResolver(IEntityTarget::getSerializedName, IEntityTarget::getByName);
 
+    public static final IEntityTarget CONTEXT_THIS = Targets.TARGETS.computeIfAbsent(EntityTarget.THIS.name(), s -> new BuiltIn(EntityTarget.THIS));
+
     public static void register(LootContextParam<? extends Entity> lootContextParam) {
         CUSTOM.put(lootContextParam.getName(), lootContextParam);
     };

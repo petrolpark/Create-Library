@@ -27,10 +27,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class Badge {
 
-    public static final Registry<Badge> badgeRegistry() {
-        return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.BADGE);
-    };
-
     protected ResourceLocation id;
     protected ItemEntry<BadgeItem> itemEntry;
 
@@ -118,7 +114,7 @@ public class Badge {
     
     @Nullable
     public static Badge getBadge(ResourceLocation id) {
-        return badgeRegistry().get(id);
+        return PetrolparkRegistries.BADGES.get(id);
     };
 
 };

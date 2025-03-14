@@ -1,6 +1,6 @@
 package com.petrolpark.shop.customer;
 
-import com.petrolpark.data.loot.PetrolparkLootContextParams;
+import com.petrolpark.PetrolparkLootContextParams;
 import com.petrolpark.shop.Shop;
 import com.petrolpark.shop.offer.ShopOffer;
 

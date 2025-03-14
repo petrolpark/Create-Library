@@ -9,18 +9,16 @@ import net.minecraft.world.level.storage.loot.LootContextUser;
 
 public interface EntityNumberProvider extends LootContextUser {
 
-    public static final Codec<EntityNumberProvider> CODEC = Codec.lazyInitialized(
-        () -> TypedCodec.TYPED_CODEC //TODO add default value and inline serializer
-    );
+    /**
+     * Use {@link EntityNumberProvider#CODEC} instead.
+     */
+    static final Codec<EntityNumberProvider> TYPED_CODEC = PetrolparkRegistries.LOOT_ENTITY_NUMBER_PROVIDER_TYPES
+        .byNameCodec()
+        .dispatch(EntityNumberProvider::getType, LootEntityNumberProviderType::codec);
+
+    public static final Codec<EntityNumberProvider> CODEC = Codec.lazyInitialized(() -> TYPED_CODEC); //TODO add default/inline
 
     public float getFloat(Entity entity, LootContext lootContext);
 
     public LootEntityNumberProviderType getType();
-
-    public static class TypedCodec {
-
-        private static final Codec<EntityNumberProvider> TYPED_CODEC = PetrolparkRegistries.LOOT_ENTITY_NUMBER_PROVIDER_TYPES
-            .byNameCodec()
-            .dispatch(EntityNumberProvider::getType, LootEntityNumberProviderType::codec);
-    };
 };

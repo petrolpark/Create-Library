@@ -3,13 +3,15 @@ package com.petrolpark.item.decay;
 import com.petrolpark.Petrolpark;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.level.LevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.level.LevelEvent;
 
 public interface DecayingItemHandler {
     
@@ -48,7 +50,8 @@ public interface DecayingItemHandler {
         @SubscribeEvent
         public static void onLoadWorld(LevelEvent.Load event) {
             LevelAccessor level = event.getLevel();
-            if (!level.isClientSide() && level.getServer().overworld() == level && level instanceof ServerLevel serverLevel) {
+            MinecraftServer server = level.getServer();
+            if (!level.isClientSide() && server != null && server.overworld() == level && level instanceof ServerLevel serverLevel) {
                 ServerDecayingItemHandler decayHandler = new ServerDecayingItemHandler();
                 decayHandler.gameTime = serverLevel.getGameTime();
                 Petrolpark.DECAYING_ITEM_HANDLER.set(decayHandler);  
@@ -64,7 +67,9 @@ public interface DecayingItemHandler {
 
         @Override
         public long getGameTime() {
-            return minecraft.level.getGameTime();
+            ClientLevel level = minecraft.level;
+            if (level == null) return 0l;
+            return level.getGameTime();
         };
 
         @Override

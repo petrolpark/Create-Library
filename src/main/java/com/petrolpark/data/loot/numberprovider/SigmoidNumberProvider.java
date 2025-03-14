@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
+import com.petrolpark.PetrolparkNumberProviderTypes;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
@@ -32,7 +32,7 @@ public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider m
 
     @Override
     public LootNumberProviderType getType() {
-        return PetrolparkLootNumberProviderTypes.SIGMOID.get();
+        return PetrolparkNumberProviderTypes.SIGMOID.get();
     };
 
     @Override

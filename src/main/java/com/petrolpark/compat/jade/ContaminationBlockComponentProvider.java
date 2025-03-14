@@ -2,7 +2,7 @@ package com.petrolpark.compat.jade;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.CompatMods;
+import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.block.entity.behaviour.ContaminationBehaviour;
 import com.petrolpark.contamination.Contaminant;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -24,7 +24,7 @@ public class ContaminationBlockComponentProvider implements IBlockComponentProvi
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor blockAccessor, IPluginConfig pluginConfig) {
-        if (CompatMods.CREATE.isLoaded()) appendCreateTooltip(tooltip, blockAccessor);
+        if (Mods.CREATE.isLoaded()) appendCreateTooltip(tooltip, blockAccessor);
     };
 
     @RequiresCreate

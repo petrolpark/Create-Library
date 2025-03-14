@@ -1,60 +1,46 @@
 package com.petrolpark.data.reward.generator;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSerializationContext;
-import com.petrolpark.Petrolpark;
+import com.mojang.datafixers.util.Either;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.data.IEntityTarget;
-import com.petrolpark.data.reward.GiveItemReward;
+import com.petrolpark.data.loot.ILootTableAccessor;
+import com.petrolpark.data.reward.ContextEntityReward;
 import com.petrolpark.data.reward.IReward;
-import com.petrolpark.data.reward.RewardGeneratorTypes;
+import com.petrolpark.data.reward.PetrolparkRewardGeneratorTypes;
+import com.petrolpark.data.reward.entity.GiveItemEntityReward;
 
-import java.util.ArrayList;
-
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootDataManager;
 import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
+import net.neoforged.neoforge.common.conditions.ConditionalOps;
 
-public class LootTableRewardGenerator extends ContextEntityRewardGenerator {
+public record LootTableRewardGenerator(IEntityTarget target, List<LootItemFunction> lateFunctions, Either<ResourceKey<LootTable>, LootTable> lootTable) implements IContextEntityRewardGenerator, ILootTableAccessor {
 
-    public final ResourceLocation lootTableRL;
-
-    public LootTableRewardGenerator(IEntityTarget target, ResourceLocation rl) {
-        super(target);
-        this.lootTableRL = rl;
-    };
+    public static final MapCodec<LootTableRewardGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
+        instance.group(
+            IEntityTarget.CODEC.fieldOf("target").forGetter(LootTableRewardGenerator::target),
+            ConditionalOps.decodeListWithElementConditions(LootItemFunctions.ROOT_CODEC).optionalFieldOf("lateFunctions", Collections.emptyList()).forGetter(LootTableRewardGenerator::lateFunctions)
+        ).and(ILootTableAccessor.lootTableField(instance).t1())
+        .apply(instance, LootTableRewardGenerator::new)
+    );
 
     @Override
     public List<IReward> generate(LootContext context) {
         List<IReward> rewards = new ArrayList<>();
-        LootTable table = context.getResolver().getLootTable(lootTableRL);
-        if (table.equals(LootTable.EMPTY) && lootTableRL.equals(LootDataManager.EMPTY_LOOT_TABLE_KEY.location())) Petrolpark.LOGGER.warn("Unknown Loot Table in Reward Generator: "+lootTableRL);
-        table.getRandomItems(context, stack -> rewards.add(new GiveItemReward(target, stack)));
+        getLootTable(context).getRandomItems(context, stack -> rewards.add(new ContextEntityReward(target, new GiveItemEntityReward(stack, lateFunctions))));
         return rewards;
     };
 
     @Override
     public RewardGeneratorType getType() {
-        return RewardGeneratorTypes.LOOT_TABLE.get();
-    };
-
-    public static class Serializer implements net.minecraft.world.level.storage.loot.Serializer<LootTableRewardGenerator> {
-
-        @Override
-        public void serialize(JsonObject json, LootTableRewardGenerator value, JsonSerializationContext serializationContext) {
-            json.addProperty("target", value.target.getSerializedName());
-            json.addProperty("lootTable", value.lootTableRL.toString());
-        };
-
-        @Override
-        public LootTableRewardGenerator deserialize(JsonObject json, JsonDeserializationContext serializationContext) {
-            return new LootTableRewardGenerator(IEntityTarget.getByName(GsonHelper.getAsString(json, "target")), ResourceLocation.fromNamespaceAndPath(GsonHelper.getAsString(json, "lootTable")));
-        };
-
+        return PetrolparkRewardGeneratorTypes.LOOT_TABLE.get();
     };
     
 };

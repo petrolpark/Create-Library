@@ -3,7 +3,10 @@ package com.petrolpark.item.decay;
 import java.util.List;
 import java.util.function.Consumer;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.Petrolpark;
+import com.petrolpark.PetrolparkDataComponents;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
 import net.minecraft.ChatFormatting;
@@ -18,9 +21,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
 public abstract class DecayingItem extends Item implements IDecayingItem {
 
@@ -44,23 +47,22 @@ public abstract class DecayingItem extends Item implements IDecayingItem {
     };
 
     @Override
-    public void onCraftedBy(ItemStack stack, Level pLevel, Player pPlayer) {
+    public void onCraftedBy(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull Player player) {
         IDecayingItem.startDecay(stack, 0);
     };
 
     @Override
-    public boolean overrideOtherStackedOnMe(ItemStack stack, ItemStack other, Slot slot, ClickAction action, Player player, SlotAccess access) {
+    public boolean overrideOtherStackedOnMe(@Nonnull ItemStack stack, @Nonnull ItemStack other, @Nonnull Slot slot, @Nonnull ClickAction action, @Nonnull Player player, @Nonnull SlotAccess access) {
         ItemStack trueStack = IDecayingItem.checkDecay(stack);
         ItemStack otherTrueStack = IDecayingItem.checkDecay(other);
-        if (stack == trueStack && other == otherTrueStack && stack.is(other.getItem()) && stack.hasTag() && other.hasTag() && areDecayTimesCombineable(stack, other)) {
-            CompoundTag tag = stack.getOrCreateTag();
-            CompoundTag otherTag = other.getOrCreateTag();
-            if (tag.contains("CreationTime", Tag.TAG_LONG) && otherTag.contains("CreationTime", Tag.TAG_LONG)) {
+        if (stack == trueStack && other == otherTrueStack && areDecayTimesCombineable(stack, other)) {
+            Long creationTime = stack.get(PetrolparkDataComponents.DECAYING_ITEM_CREATION_TIME);
+            Long otherCreationTime = other.get(PetrolparkDataComponents.DECAYING_ITEM_CREATION_TIME);
+            if (creationTime != null && otherCreationTime != null) {
                 int transferred = action == ClickAction.PRIMARY ? Math.min(stack.getMaxStackSize() - stack.getCount(), other.getCount()) : 1;
-                long totalTime = (stack.getCount() * IDecayingItem.getRemainingTime(this, stack, tag)) + (transferred * IDecayingItem.getRemainingTime(this, other, otherTag));
-                
+                long totalTime = (stack.getCount() * IDecayingItem.getRemainingTime(this, stack, creationTime)) + (transferred * IDecayingItem.getRemainingTime(this, other, otherCreationTime));
                 stack.grow(transferred);
-                tag.putLong("CreationTime", Petrolpark.DECAYING_ITEM_HANDLER.get().getGameTime() + (totalTime / stack.getCount()) - getLifetime(stack));
+                stack.set(PetrolparkDataComponents.DECAYING_ITEM_CREATION_TIME, Petrolpark.DECAYING_ITEM_HANDLER.get().getGameTime() + (totalTime / stack.getCount()) - getLifetime(stack));
                 other.shrink(transferred);
                 return true;
             };
@@ -70,7 +72,7 @@ public abstract class DecayingItem extends Item implements IDecayingItem {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
+    public void initializeClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
         consumer.accept(SimpleCustomRenderer.create(this, new DecayingItemRenderer()));
     };
     

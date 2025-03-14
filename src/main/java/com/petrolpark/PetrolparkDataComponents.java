@@ -15,6 +15,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponentType.Builder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.world.level.block.Rotation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -30,6 +31,11 @@ public class PetrolparkDataComponents {
     public static final DataComponentType<List<Holder<Contaminant>>> ORPHAN_CONTAMINANTS = register(
         "contamination", 
         builder -> builder.persistent(Codec.list(Contaminant.CODEC)).networkSynchronized(NetworkHelper.listStreamCodec(Contaminant.STREAM_CODEC))
+    );
+
+    public static final DataComponentType<Long> DECAYING_ITEM_CREATION_TIME = register(
+        "creation_time",
+        builder -> builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG)
     );
 
     public static final DataComponentType<Rotation> ROTATION_WHILE_FLYING = register(

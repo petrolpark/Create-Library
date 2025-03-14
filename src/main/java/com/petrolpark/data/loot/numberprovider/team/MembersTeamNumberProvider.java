@@ -1,6 +1,6 @@
 package com.petrolpark.data.loot.numberprovider.team;
 
-import com.petrolpark.data.loot.PetrolparkLootTeamNumberProviders;
+import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.team.ITeam;
 
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -14,7 +14,7 @@ public class MembersTeamNumberProvider implements TeamNumberProvider {
 
     @Override
     public LootTeamNumberProviderType getType() {
-        return PetrolparkLootTeamNumberProviders.MEMBERS.get();
+        return PetrolparkNumberProviderTypes.MEMBER_COUNT.get();
     };
     
 };

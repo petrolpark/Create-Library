@@ -1,10 +1,8 @@
 package com.petrolpark.item.decay;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.contamination.ItemContamination;
+import com.petrolpark.PetrolparkDataComponents;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 
 public interface IDecayingItem {
@@ -32,13 +30,13 @@ public interface IDecayingItem {
     public static ItemStack checkDecay(ItemStack stack) {
         if (stack.isEmpty()) return stack;
         if (stack.getItem() instanceof IDecayingItem item) {
-            CompoundTag tag = stack.getOrCreateTag();
-            if (tag.contains("CreationTime", Tag.TAG_LONG)) {
-                long timeDead = -getRemainingTime(item, stack, tag);
+            Long creationTime = stack.get(PetrolparkDataComponents.DECAYING_ITEM_CREATION_TIME);
+            if (creationTime != null) {
+                long timeDead = -getRemainingTime(item, stack, creationTime);
                 if (timeDead >= 0) {
                     ItemStack product = item.getDecayProduct(stack);
                     product.setCount(stack.getCount());
-                    ItemContamination.get(product).contaminateAll(ItemContamination.get(stack).streamAllContaminants());
+                    product.set(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, stack.get(PetrolparkDataComponents.ORPHAN_CONTAMINANTS)); // Propagate Contaminants
                     startDecay(product, timeDead);
                     return checkDecay(product);
                 };
@@ -47,8 +45,8 @@ public interface IDecayingItem {
         return stack;
     };
 
-    public static long getRemainingTime(IDecayingItem decayingItem, ItemStack decayingItemStack, CompoundTag decayingItemTag) {
-        return decayingItem.getLifetime(decayingItemStack) + decayingItemTag.getLong("CreationTime") - Petrolpark.DECAYING_ITEM_HANDLER.get().getGameTime();
+    public static long getRemainingTime(IDecayingItem decayingItem, ItemStack decayingItemStack, long creationTime) {
+        return decayingItem.getLifetime(decayingItemStack) + creationTime - Petrolpark.DECAYING_ITEM_HANDLER.get().getGameTime();
     };
 
     public static void startDecay(ItemStack stack) {
@@ -57,17 +55,17 @@ public interface IDecayingItem {
 
     public static void startDecay(ItemStack stack, long timeElapsed) {
         if (stack.getItem() instanceof IDecayingItem) {
-            CompoundTag tag = stack.getOrCreateTag();
-            if (!tag.contains("CreationTime", Tag.TAG_LONG)) tag.putLong("CreationTime", Petrolpark.DECAYING_ITEM_HANDLER.get().getGameTime() - timeElapsed);
+            if (!stack.has(PetrolparkDataComponents.DECAYING_ITEM_CREATION_TIME)) stack.set(PetrolparkDataComponents.DECAYING_ITEM_CREATION_TIME, Petrolpark.DECAYING_ITEM_HANDLER.get().getGameTime() - timeElapsed);
         };
     };
 
     public static void extendLifetime(ItemStack decayingItemStack, int additionalLifetime) {
         if (decayingItemStack.getItem() instanceof IDecayingItem item) {
-            CompoundTag tag = decayingItemStack.getOrCreateTag();
-            long remainingTime = getRemainingTime(item, decayingItemStack, tag);
+            Long creationTime = decayingItemStack.get(PetrolparkDataComponents.DECAYING_ITEM_CREATION_TIME);
+            if (creationTime == null) return; // No lifetime to extend
+            long remainingTime = getRemainingTime(item, decayingItemStack, creationTime);
             long newLifetime = Math.max(0, additionalLifetime + remainingTime);
-            tag.putLong("CreationTime", Petrolpark.DECAYING_ITEM_HANDLER.get().getGameTime() + newLifetime - item.getLifetime(decayingItemStack));
+            decayingItemStack.set(PetrolparkDataComponents.DECAYING_ITEM_CREATION_TIME, Petrolpark.DECAYING_ITEM_HANDLER.get().getGameTime() + newLifetime - item.getLifetime(decayingItemStack));
         };
         
     };

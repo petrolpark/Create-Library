@@ -1,17 +1,13 @@
 package com.petrolpark.contamination;
 
-import java.util.ArrayList;
 import java.util.stream.Stream;
 
-import com.petrolpark.PetrolparkDataComponents;
-
-import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
 
-public class ItemContamination extends Contamination<Item, ItemStack> {
+public class ItemContamination extends ComponentHolderContamination<Item, ItemStack> {
 
     public static final String TAG_KEY = "Contamination";
 
@@ -38,11 +34,6 @@ public class ItemContamination extends Contamination<Item, ItemStack> {
 
     protected ItemContamination(ItemStack stack) {
         super(stack);
-        orphanContaminants.addAll(stack.getOrDefault(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, new ArrayList<Holder<Contaminant>>()).stream().map(Holder::value).toList());
-        for (Contaminant contaminant : orphanContaminants) {
-            contaminants.add(contaminant);
-            contaminants.addAll(contaminant.getChildren());
-        };
     };
 
     @Override
@@ -62,8 +53,7 @@ public class ItemContamination extends Contamination<Item, ItemStack> {
 
     @Override
     public void save(final RegistryAccess registries) {
-        stack.set(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, toHolderList(registries));
-        getDuck(stack).onContaminationSaved();
+        super.save(registries);
         NeoForge.EVENT_BUS.post(new ItemContaminationSavedEvent(stack, this));
     };
 

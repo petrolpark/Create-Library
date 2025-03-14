@@ -2,9 +2,15 @@ package com.petrolpark.util;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.netty.buffer.ByteBuf;
 
@@ -18,6 +24,19 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.phys.Vec3;
 
 public class NetworkHelper {
+
+    public static <OBJECT, FIELD> MapCodec<OBJECT> singleFieldMapCodec(Codec<FIELD> fieldCodec, String fieldName, Function<OBJECT, FIELD> getter, Function<FIELD, OBJECT> constructor) {
+        return RecordCodecBuilder.mapCodec(instance -> instance.group(
+            fieldCodec.fieldOf(fieldName).forGetter(getter)
+        ).apply(instance, constructor));
+    };
+
+    public static <OBJECT> Codec<List<OBJECT>> listOrSingle(Codec<OBJECT> codec) {
+        return Codec.withAlternative(codec.listOf(), codec.flatComapMap(Collections::singletonList, list -> {
+            if (list.isEmpty()) return DataResult.error(() -> "No "+codec.toString()+" in list");
+            return DataResult.success(list.get(0));
+        }));
+    };
 
     public static <T extends ByteBuf, S extends Enum<S>> StreamCodec<T, S> enumStreamCodec(Class<S> clazz) {
         return new StreamCodec<>() {

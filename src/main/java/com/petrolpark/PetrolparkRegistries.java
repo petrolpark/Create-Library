@@ -13,7 +13,9 @@ import com.petrolpark.data.loot.numberprovider.entity.LootEntityNumberProviderTy
 import com.petrolpark.data.loot.numberprovider.itemstack.LootItemStackNumberProviderType;
 import com.petrolpark.data.loot.numberprovider.team.LootTeamNumberProviderType;
 import com.petrolpark.data.reward.RewardType;
+import com.petrolpark.data.reward.entity.EntityRewardType;
 import com.petrolpark.data.reward.generator.RewardGeneratorType;
+import com.petrolpark.data.reward.team.TeamRewardType;
 import com.petrolpark.recipe.ingredient.modifier.IngredientModifierType;
 import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.shop.Shop;
@@ -51,6 +53,8 @@ public class PetrolparkRegistries {
         return registry.getHolder(key);
     };
 
+    public static final Registry<Badge> BADGES = simple(Keys.BADGE);
+
     // Loot/Data
     public static final Registry<LootItemStackNumberProviderType> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE);
     public static final Registry<LootEntityNumberProviderType> LOOT_ENTITY_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_ENTITY_NUMBER_PROVIDER_TYPE);
@@ -59,6 +63,8 @@ public class PetrolparkRegistries {
     // Rewards
     public static final Registry<RewardGeneratorType> REWARD_GENERATOR_TYPES = simple(Keys.REWARD_GENERATOR_TYPE);
     public static final Registry<RewardType> REWARD_TYPES = simple(Keys.REWARD_TYPE);
+    public static final Registry<EntityRewardType> ENTITY_REWARD_TYPES = simple(Keys.ENTITY_REWARD_TYPE);
+    public static final Registry<TeamRewardType> TEAM_REWARD_TYPES = simple(Keys.TEAM_REWARD_TYPE);
 
     private static <T> Registry<T> simple(ResourceKey<Registry<T>> key) {
         return register(key, false);
@@ -98,6 +104,8 @@ public class PetrolparkRegistries {
         // Rewards
         public static final ResourceKey<Registry<RewardGeneratorType>> REWARD_GENERATOR_TYPE = REGISTRATE.makeRegistry("reward_generator_type", RegistryBuilder::new);
         public static final ResourceKey<Registry<RewardType>> REWARD_TYPE = REGISTRATE.makeRegistry("reward_type", RegistryBuilder::new);
+        public static final ResourceKey<Registry<EntityRewardType>> ENTITY_REWARD_TYPE = REGISTRATE.makeRegistry("entity_reward_type", RegistryBuilder::new);
+        public static final ResourceKey<Registry<TeamRewardType>> TEAM_REWARD_TYPE = REGISTRATE.makeRegistry("team_reward_type", RegistryBuilder::new);
 
         // Shops
         public static final ResourceKey<Registry<Shop>> SHOP = REGISTRATE.makeDatapackRegistry("shop", Shop.DIRECT_CODEC, Shop.DIRECT_CODEC);

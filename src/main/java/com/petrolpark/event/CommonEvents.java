@@ -6,7 +6,7 @@ import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.badge.BadgesCapability;
-import com.petrolpark.command.ContaminateCommand;
+import com.petrolpark.command.ContaminateHeldItemCommand;
 import com.petrolpark.contamination.Contaminant;
 import com.petrolpark.contamination.ItemContamination;
 import com.petrolpark.item.decay.DecayingItemHandler.ServerDecayingItemHandler;
@@ -14,6 +14,7 @@ import com.petrolpark.item.decay.IDecayingItem;
 import com.petrolpark.shop.customer.EntityCustomer;
 import com.petrolpark.team.SinglePlayerTeam;
 
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -33,15 +34,15 @@ public class CommonEvents {
     
     @SubscribeEvent
     public static void registerCommands(RegisterCommandsEvent event) {
-        ContaminateCommand.register(event.getDispatcher(), event.getBuildContext());
+        ContaminateHeldItemCommand.register(event.getDispatcher(), event.getBuildContext());
     };
 
     @SubscribeEvent
-    public static void onTickLevel(LevelTickEvent event) {
+    public static void onTickLevel(LevelTickEvent.Post event) {
         // Decaying Items
-        if (event.phase == LevelTickEvent.Phase.END) {
-            if (!event.level.isClientSide() && event.level.getServer().overworld() == event.level) ((ServerDecayingItemHandler)Petrolpark.DECAYING_ITEM_HANDLER.get()).gameTime++;
-        };
+        if (event.getLevel().isClientSide()) return;
+        MinecraftServer server = event.getLevel().getServer();
+        if (server != null && server.overworld() == event.getLevel()) ((ServerDecayingItemHandler)Petrolpark.DECAYING_ITEM_HANDLER.get()).gameTime++;
         
     };
 
@@ -89,7 +90,7 @@ public class CommonEvents {
         for (int slot = 0; slot < 3; slot++) {
             ItemStack potion = event.getItem(slot);
             IDecayingItem.startDecay(potion);
-            if (PetrolparkConfig.SERVER.brewingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(Stream.of(event.getItem(3), potion).dropWhile(s -> PetrolparkConfig.SERVER.brewingWaterBottleContaminantsIgnored.get() && PotionUt.getPotion(s) == Potions.WATER), potion);
+            if (PetrolparkConfig.SERVER.brewingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(Stream.of(event.getItem(3), potion).dropWhile(s -> PetrolparkConfig.SERVER.brewingWaterBottleContaminantsIgnored.get() && PotionUtil.getPotion(s) == Potions.WATER), potion);
         };
     };
     

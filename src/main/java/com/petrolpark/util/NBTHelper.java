@@ -141,7 +141,7 @@ public class NBTHelper {
      * @return {@code null} if the ResourceLocation is invalid
      */
     public static <OBJECT> OBJECT readRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> registryKey) {
-        return PetrolparkRegistries.getRegistry(registryKey).getValue(ResourceLocation.parse(tag.getString(key)));
+        return PetrolparkRegistries.getRegistry(registryKey).get(ResourceLocation.parse(tag.getString(key)));
     };
 
     /**

@@ -6,11 +6,11 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.data.loot.PetrolparkLootContextParams;
-import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
+import com.petrolpark.PetrolparkLootContextParams;
+import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.data.loot.numberprovider.team.TeamNumberProvider;
 import com.petrolpark.team.ITeam;
+import com.petrolpark.util.NetworkHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
@@ -19,10 +19,8 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 public record ContextTeamNumberProvider(TeamNumberProvider value) implements NumberProvider {
 
-    public static final MapCodec<ContextTeamNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        TeamNumberProvider.CODEC.fieldOf("value").forGetter(ContextTeamNumberProvider::value)
-    ).apply(instance, ContextTeamNumberProvider::new));
-
+    public static final MapCodec<ContextTeamNumberProvider> CODEC = NetworkHelper.singleFieldMapCodec(TeamNumberProvider.CODEC, "value", ContextTeamNumberProvider::value, ContextTeamNumberProvider::new);
+    
     @Override
     public float getFloat(@Nonnull LootContext context) {
         ITeam<?> team = context.getParam(PetrolparkLootContextParams.TEAM);
@@ -32,7 +30,7 @@ public record ContextTeamNumberProvider(TeamNumberProvider value) implements Num
 
     @Override
     public LootNumberProviderType getType() {
-        return PetrolparkLootNumberProviderTypes.CONTEXT_TEAM.get();
+        return PetrolparkNumberProviderTypes.CONTEXT_TEAM.get();
     };
 
     @Override

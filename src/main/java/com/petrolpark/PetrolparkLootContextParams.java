@@ -1,6 +1,5 @@
-package com.petrolpark.data.loot;
+package com.petrolpark;
 
-import com.petrolpark.Petrolpark;
 import com.petrolpark.data.IEntityTarget;
 import com.petrolpark.shop.Shop;
 import com.petrolpark.shop.customer.ICustomer;

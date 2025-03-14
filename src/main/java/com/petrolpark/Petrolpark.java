@@ -6,18 +6,15 @@ import java.util.function.Supplier;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.badge.Badges;
-import com.petrolpark.compat.CompatMods;
+import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
-import com.petrolpark.data.loot.PetrolparkGlobalLootModifierSerializers;
-import com.petrolpark.data.loot.PetrolparkLootConditionTypes;
 import com.petrolpark.data.loot.PetrolparkLootEntityNumberProviderTypes;
 import com.petrolpark.data.loot.PetrolparkLootItemStackNumberProviderTypes;
-import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
 import com.petrolpark.data.loot.PetrolparkLootTeamNumberProviders;
-import com.petrolpark.data.reward.RewardGeneratorTypes;
-import com.petrolpark.data.reward.RewardTypes;
+import com.petrolpark.data.reward.PetrolparkRewardGeneratorTypes;
+import com.petrolpark.data.reward.PetrolparkRewardTypes;
 import com.petrolpark.item.decay.DecayingItemHandler;
 import com.petrolpark.mobeffects.PetrolparkMobEffects;
 import com.petrolpark.network.PetrolparkMessages;
@@ -47,7 +44,7 @@ public class Petrolpark {
     public static final Logger LOGGER = LogUtils.getLogger();
 
     public static final PetrolparkRegistrate REGISTRATE = new PetrolparkRegistrate(MOD_ID);
-    public static final PetrolparkRegistrate DESTROY_REGISTRATE = CompatMods.DESTROY.registrate();
+    public static final PetrolparkRegistrate DESTROY_REGISTRATE = Mods.DESTROY.registrate();
 
     public static ResourceLocation asResource(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
@@ -78,13 +75,13 @@ public class Petrolpark {
         TeamDataTypes.register();
         // Registration - loot
         PetrolparkLootConditionTypes.register();
-        PetrolparkLootNumberProviderTypes.register();
+        PetrolparkNumberProviderTypes.register();
         PetrolparkLootItemStackNumberProviderTypes.register();
         PetrolparkLootEntityNumberProviderTypes.register();
         PetrolparkLootTeamNumberProviders.register();
         PetrolparkGlobalLootModifierSerializers.register();
-        RewardGeneratorTypes.register();
-        RewardTypes.register();
+        PetrolparkRewardGeneratorTypes.register();
+        PetrolparkRewardTypes.register();
         IngredientModifierTypes.register();
         IngredientRandomizerTypes.register();
 
@@ -95,9 +92,9 @@ public class Petrolpark {
         modEventBus.addListener(this::init);
 
         // Compat
-        if (CompatMods.JEI.isLoading()) NeoForge.EVENT_BUS.register(ITickableCategory.ClientEvents.class);
-        CompatMods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, NeoForge.EVENT_BUS));
-        CompatMods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, NeoForge.EVENT_BUS));
+        if (Mods.JEI.isLoading()) NeoForge.EVENT_BUS.register(ITickableCategory.ClientEvents.class);
+        Mods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, NeoForge.EVENT_BUS));
+        Mods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, NeoForge.EVENT_BUS));
     };
 
     private void init(final FMLCommonSetupEvent event) {

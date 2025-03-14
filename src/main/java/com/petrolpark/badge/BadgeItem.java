@@ -89,6 +89,17 @@ public class BadgeItem extends Item {
             ByteBufCodecs.VAR_LONG, BadgeAward::awardDate,
             BadgeAward::new
         );
+
+        @Override
+        public final boolean equals(Object obj) {
+            if (this == obj) return true;
+            return obj instanceof BadgeAward award && playerUUID.equals(award.playerUUID) && awardDate == award.awardDate;
+        };
+
+        @Override
+        public final int hashCode() {
+            return playerUUID.hashCode() ^ (int)awardDate;
+        };
     };
     
 };

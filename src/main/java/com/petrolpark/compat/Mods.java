@@ -9,13 +9,12 @@ import net.minecraft.resources.ResourceLocation;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 
-public enum CompatMods {
+public enum Mods {
 
     CREATE,
 
     // Petrolpark Mods
     ACADEMY,
-    CHOO_CHOO_TRADE("choochootrade"),
     CREATE_BISTRO("createbistro"),
     DESTROY,
     PETROLS_PARTS("petrolsparts"),
@@ -30,11 +29,11 @@ public enum CompatMods {
     public final String id;
     private PetrolparkRegistrate registrate;
 
-    private CompatMods() {
+    private Mods() {
         id = Lang.asId(name());
     };
 
-    private CompatMods(String id) {
+    private Mods(String id) {
         this.id = id;
     };
 

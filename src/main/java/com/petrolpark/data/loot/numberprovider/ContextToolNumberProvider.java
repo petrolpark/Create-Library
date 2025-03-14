@@ -6,9 +6,9 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
+import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
+import com.petrolpark.util.NetworkHelper;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -17,11 +17,9 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public record ToolNumberProvider(ItemStackNumberProvider value) implements NumberProvider {
+public record ContextToolNumberProvider(ItemStackNumberProvider value) implements NumberProvider {
 
-    public static final MapCodec<ToolNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ItemStackNumberProvider.CODEC.fieldOf("value").forGetter(ToolNumberProvider::value)
-    ).apply(instance, ToolNumberProvider::new));
+    public static final MapCodec<ContextToolNumberProvider> CODEC = NetworkHelper.singleFieldMapCodec(ItemStackNumberProvider.CODEC, "value", ContextToolNumberProvider::value, ContextToolNumberProvider::new);
 
     @Override
     public float getFloat(@Nonnull LootContext lootContext) {
@@ -37,7 +35,7 @@ public record ToolNumberProvider(ItemStackNumberProvider value) implements Numbe
 
     @Override
     public LootNumberProviderType getType() {
-        return PetrolparkLootNumberProviderTypes.TOOL.get();
+        return PetrolparkNumberProviderTypes.CONTEXT_TOOL.get();
     };
     
 };

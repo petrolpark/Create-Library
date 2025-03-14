@@ -1,6 +1,6 @@
 package com.petrolpark.data.loot.numberprovider.entity;
 
-import com.petrolpark.data.loot.PetrolparkLootEntityNumberProviderTypes;
+import com.petrolpark.PetrolparkNumberProviderTypes;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +16,7 @@ public class ExperienceLevelNumberProvider implements EntityNumberProvider {
 
     @Override
     public LootEntityNumberProviderType getType() {
-        return PetrolparkLootEntityNumberProviderTypes.EXPERIENCE_LEVEL.get();
+        return PetrolparkNumberProviderTypes.EXPERIENCE_LEVEL.get();
     };
     
 };

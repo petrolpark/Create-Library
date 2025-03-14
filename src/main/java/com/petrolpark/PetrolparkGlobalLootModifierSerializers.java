@@ -1,4 +1,4 @@
-package com.petrolpark.data.loot;
+package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 

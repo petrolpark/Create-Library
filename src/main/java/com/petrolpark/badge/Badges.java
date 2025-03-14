@@ -14,7 +14,7 @@ public class Badges {
 
     private static final Supplier<Ingredient> GOLD_SHEET_INGREDIENT = () -> Ingredient.of(PetrolparkTags.commonItemTag("plates/gold"));
 
-    public static final RegistryEntry<Badge>
+    public static final RegistryEntry<Badge, Badge>
 
     BETA_TESTER = REGISTRATE.badge("beta_tester")
         .duplicationIngredient(GOLD_SHEET_INGREDIENT)

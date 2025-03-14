@@ -3,7 +3,7 @@ package com.petrolpark.data.loot.numberprovider;
 import java.util.List;
 import java.util.stream.DoubleStream;
 
-import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
+import com.petrolpark.PetrolparkNumberProviderTypes;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
@@ -22,7 +22,7 @@ public class MaxNumberProvider extends FunctionNumberProvider {
 
     @Override
     public LootNumberProviderType getType() {
-        return PetrolparkLootNumberProviderTypes.MAX.get();
+        return PetrolparkNumberProviderTypes.MAX.get();
     };
     
 };

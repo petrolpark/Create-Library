@@ -1,32 +1,27 @@
 package com.petrolpark.data.reward;
 
+import java.util.List;
+
 import com.mojang.serialization.Codec;
 import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.util.NetworkHelper;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootContextUser;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
-public interface IReward extends LootContextUser {
+public interface IReward extends ITypedReward<RewardType> {
 
-    public static final Codec<IReward> CODEC = null; //TODO
+    /**
+     * Use {@link IReward#CODEC} instead.
+     */
+    public static final Codec<IReward> TYPED_CODEC = PetrolparkRegistries.REWARD_TYPES
+        .byNameCodec()
+        .dispatch(IReward::getType, RewardType::codec);
+
+    public static final Codec<IReward> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, ContextEntityReward.INLINE_CODEC)); //TODO add default
+
+    public static final Codec<List<IReward>> LIST_CODEC = NetworkHelper.listOrSingle(CODEC);
 
     public void reward(LootContext context, float multiplier);
-
-    @OnlyIn(Dist.CLIENT)
-    public void render(GuiGraphics graphics);
-
-    @OnlyIn(Dist.CLIENT)
-    public Component getName();
     
     public RewardType getType();
-
-    static class TypedCodec {
-        private static final Codec<IReward> TYPED_CODEC = PetrolparkRegistries.REWARD_TYPES
-            .byNameCodec()
-            .dispatch(IReward::getType, RewardType::codec);
-    };
 };

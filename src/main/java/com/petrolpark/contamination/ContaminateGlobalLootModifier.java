@@ -58,7 +58,7 @@ public class ContaminateGlobalLootModifier extends LootModifier {
         if (chance <= 0f) return generatedLoot;
         for (ItemStack stack : generatedLoot) {
             if (context.getRandom().nextFloat() > chance) continue;
-            ItemContamination.get(stack).contaminate(getContaminant());
+            ItemContamination.get(stack).contaminate(getContaminant(), context.getLevel().registryAccess());
         };
         return generatedLoot;
     };

@@ -1,4 +1,4 @@
-package com.petrolpark.data.reward;
+package com.petrolpark.data.reward.team;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +8,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.data.loot.PetrolparkLootContextParams;
+import com.petrolpark.data.reward.PetrolparkRewardTypes;
 import com.petrolpark.data.reward.entity.IEntityReward;
 import com.petrolpark.team.ITeam;
 
@@ -17,24 +17,28 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
-public record TeamMembersRewardType(IEntityReward reward, Either<NumberProvider, NumberProvider> who, boolean random) implements IReward {
+/**
+ * Rewards a proportion of members of a {@link ITeam} with an {@link IEntityReward}.
+ */
+public record MembersTeamReward(IEntityReward reward, Either<NumberProvider, NumberProvider> who, boolean random) implements ITeamReward {
 
-    public static final MapCodec<TeamMembersRewardType> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        IEntityReward.CODEC.fieldOf("reward").forGetter(TeamMembersRewardType::reward),
+    public static final MapCodec<MembersTeamReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        IEntityReward.CODEC.fieldOf("reward").forGetter(MembersTeamReward::reward),
         Codec.mapEither(
             NumberProviders.CODEC.fieldOf("count"),
-            NumberProviders.CODEC.fieldOf("proportion")
-        ).forGetter(TeamMembersRewardType::who),
-        Codec.BOOL.optionalFieldOf("random", false).forGetter(TeamMembersRewardType::random)
-    ).apply(instance, TeamMembersRewardType::new));
+            NumberProviders.CODEC.optionalFieldOf("proportion", ConstantValue.exactly(1f))
+        ).forGetter(MembersTeamReward::who),
+        Codec.BOOL.optionalFieldOf("random", false).forGetter(MembersTeamReward::random)
+    ).apply(instance, MembersTeamReward::new));
+
+    public static final Codec<MembersTeamReward> INLINE_CODEC = IEntityReward.CODEC.xmap(entityReward -> new MembersTeamReward(entityReward, Either.right(ConstantValue.exactly(1f)), false), MembersTeamReward::reward);
 
     @Override
-    public void reward(LootContext context, float multiplier) {
-        ITeam<?> team = context.getParamOrNull(PetrolparkLootContextParams.TEAM);
-        if (team == null) return;
+    public void reward(ITeam<?> team, LootContext context, float multiplier) {
         int count = who.map(absoluteCount -> 
                 Mth.clamp(absoluteCount.getInt(context), 0, team.memberCount()),
             proportion -> 
@@ -58,9 +62,8 @@ public record TeamMembersRewardType(IEntityReward reward, Either<NumberProvider,
     };
 
     @Override
-    public RewardType getType() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getType'");
+    public TeamRewardType getType() {
+        return PetrolparkRewardTypes.MEMBERS.get();
     };
     
 };

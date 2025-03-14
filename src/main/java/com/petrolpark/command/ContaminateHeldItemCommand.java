@@ -21,7 +21,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 
-public class ContaminateCommand {
+public class ContaminateHeldItemCommand {
     
    private static final DynamicCommandExceptionType ERROR_NOT_LIVING_ENTITY = new DynamicCommandExceptionType(name -> Component.translatable("commands.petrolpark.contaminate.failed.entity", name));
    private static final DynamicCommandExceptionType ERROR_NO_ITEM = new DynamicCommandExceptionType(name -> Component.translatable("commands.petrolpark.contaminate.failed.itemless", name));
@@ -43,7 +43,7 @@ public class ContaminateCommand {
             ItemStack itemStack = livingEntity.getMainHandItem();
             if (!itemStack.isEmpty()) {
                try {
-                  if (ItemContamination.get(itemStack).contaminate(contaminant)) i++;
+                  if (ItemContamination.get(itemStack).contaminate(contaminant, source.registryAccess())) i++;
                } catch (Throwable e) {};
                
             } else if (targets.size() == 1) {

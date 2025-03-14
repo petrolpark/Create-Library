@@ -1,8 +1,8 @@
 package com.petrolpark.data.loot.numberprovider.itemstack;
 
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.data.loot.PetrolparkLootItemStackNumberProviderTypes;
+import com.petrolpark.PetrolparkNumberProviderTypes;
+import com.petrolpark.util.NetworkHelper;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
@@ -11,9 +11,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 
 public record EnchantmentLevelNumberProvider(Holder<Enchantment> enchantment) implements ItemStackNumberProvider {
 
-    public static final MapCodec<EnchantmentLevelNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Enchantment.CODEC.fieldOf("enchantment").forGetter(EnchantmentLevelNumberProvider::enchantment)
-    ).apply(instance, EnchantmentLevelNumberProvider::new));
+    public static final MapCodec<EnchantmentLevelNumberProvider> CODEC = NetworkHelper.singleFieldMapCodec(Enchantment.CODEC, "enchantment", EnchantmentLevelNumberProvider::enchantment, EnchantmentLevelNumberProvider::new);
 
     @Override
     public float getFloat(ItemStack stack, LootContext lootContext) {
@@ -22,7 +20,7 @@ public record EnchantmentLevelNumberProvider(Holder<Enchantment> enchantment) im
 
     @Override
     public LootItemStackNumberProviderType getType() {
-        return PetrolparkLootItemStackNumberProviderTypes.ENCHANTMENT_LEVEL.get();
+        return PetrolparkNumberProviderTypes.ENCHANTMENT_LEVEL.get();
     };
     
 };

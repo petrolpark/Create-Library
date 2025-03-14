@@ -1,28 +1,22 @@
 package com.petrolpark.data.reward.entity;
 
 import com.mojang.serialization.Codec;
+import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.data.reward.ITypedReward;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.LootContextUser;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 
-public interface IEntityReward extends LootContextUser {
+public interface IEntityReward extends ITypedReward<EntityRewardType> {
 
-    public static final Codec<IEntityReward> CODEC = null; //TODO
+    /**
+     * Use {@link IEntityReward#CODEC} instead.
+     */
+    static final Codec<IEntityReward> TYPED_CODEC = PetrolparkRegistries.ENTITY_REWARD_TYPES
+        .byNameCodec()
+        .dispatch(IEntityReward::getType, EntityRewardType::codec);
+
+    public static final Codec<IEntityReward> CODEC = Codec.lazyInitialized(() -> TYPED_CODEC); //TODO inline/default
     
     public void reward(Entity entity, LootContext context, float multiplier);
-
-    @OnlyIn(Dist.CLIENT)
-    public void render(GuiGraphics graphics);
-
-    @OnlyIn(Dist.CLIENT)
-    public Component getName();
-
-    static class TypedCodec {
-
-    };
 };

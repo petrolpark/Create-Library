@@ -6,8 +6,8 @@ import javax.annotation.Nonnull;
 
 import java.util.Collections;
 
-import com.petrolpark.data.loot.PetrolparkLootContextParams;
-import com.petrolpark.data.loot.PetrolparkLootNumberProviderTypes;
+import com.petrolpark.PetrolparkLootContextParams;
+import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.shop.customer.ICustomer;
 
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -27,7 +27,7 @@ public class CustomerWaitTimeNumberProvider implements NumberProvider {
 
     @Override
     public LootNumberProviderType getType() {
-        return PetrolparkLootNumberProviderTypes.CUSTOMER_WAIT_TIME.get();
+        return PetrolparkNumberProviderTypes.CUSTOMER_WAIT_TIME.get();
     };
 
     @Override

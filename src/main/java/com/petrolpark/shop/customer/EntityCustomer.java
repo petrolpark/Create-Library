@@ -3,7 +3,7 @@ package com.petrolpark.shop.customer;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import com.petrolpark.data.loot.PetrolparkLootContextParams;
+import com.petrolpark.PetrolparkLootContextParams;
 
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

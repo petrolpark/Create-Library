@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.data.loot.PetrolparkLootConditionTypes;
+import com.petrolpark.PetrolparkLootConditionTypes;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
