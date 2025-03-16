@@ -1,14 +1,23 @@
 package com.petrolpark.team.packet;
 
+import com.petrolpark.PetrolparkPackets;
 import com.petrolpark.team.ITeam;
 import com.petrolpark.team.ITeamBoundBlockEntity;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.createmod.catnip.codecs.stream.CatnipStreamCodecs;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraftforge.network.NetworkEvent.Context;
 
 public class BindTeamBlockPacket extends BindTeamPacket {
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, BindTeamBlockPacket> STREAM_CODEC = StreamCodec.composite(
+        ITeam.Provider.STREAM_CODEC, BindTeamBlockPacket::getTeamProvider,
+        CatnipStreamCodecs.BLOCK_HIT_RESULT, BindTeamBlockPacket::getHit,
+        BindTeamBlockPacket::new
+    );
 
     public final BlockHitResult hit;
 
@@ -16,26 +25,24 @@ public class BindTeamBlockPacket extends BindTeamPacket {
         return new Factory(hit);
     };
 
-    public <T extends ITeam<? super T>> BindTeamBlockPacket(T team, BlockHitResult hit) {
-        super(team);
+    public BindTeamBlockPacket(ITeam.Provider teamProvider, BlockHitResult hit) {
+        super(teamProvider);
         this.hit = hit;
     };
 
-    public BindTeamBlockPacket(FriendlyByteBuf buffer) {
-        super(buffer);
-        hit = buffer.readBlockHitResult();
-    };
-    
-    @Override
-    public void toBytes(FriendlyByteBuf buffer) {
-        super.toBytes(buffer);
-        buffer.writeBlockHitResult(hit);
+    public BlockHitResult getHit() {
+        return hit;
     };
 
     @Override
-    public <T extends ITeam<? super T>> void handle(T team, Context context) {
-        BlockEntity be = context.getSender().level().getBlockEntity(hit.getBlockPos());
-        if (be instanceof ITeamBoundBlockEntity tbbe) tbbe.bind(team, context.getSender(), hit);
+    public void handle(ITeam.Provider teamProvider, ServerPlayer player) {
+        BlockEntity be = player.level().getBlockEntity(hit.getBlockPos());
+        if (be instanceof ITeamBoundBlockEntity tbbe) tbbe.bind(teamProvider, player, hit);
+    };
+
+    @Override
+    public PacketTypeProvider getTypeProvider() {
+        return PetrolparkPackets.BIND_TEAM_BLOCK;
     };
 
     private static class Factory implements BindTeamPacket.Factory {
@@ -47,8 +54,8 @@ public class BindTeamBlockPacket extends BindTeamPacket {
         };
 
         @Override
-        public <T extends ITeam<? super T>> BindTeamPacket create(T team) {
-            return new BindTeamBlockPacket(team, hit);
+        public BindTeamPacket create(ITeam.Provider teamProvider) {
+            return new BindTeamBlockPacket(teamProvider, hit);
         };
     };
     

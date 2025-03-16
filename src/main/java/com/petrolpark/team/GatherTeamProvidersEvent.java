@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 import com.petrolpark.team.scoreboard.ScoreboardTeam;
 
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.PlayerTeam;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
@@ -29,6 +30,10 @@ public class GatherTeamProvidersEvent extends PlayerEvent {
 
     public List<ITeam.Provider> getTeamProvidersUnmodifiable() {
         return ImmutableList.copyOf(teamProviders);
+    };
+
+    public List<ITeam> getTeamsUnmodifiable(Level level) {
+        return teamProviders.stream().map(provider -> provider.provideTeam(level)).toList();
     };
 
     public boolean add(ITeam.Provider teamProvider) {

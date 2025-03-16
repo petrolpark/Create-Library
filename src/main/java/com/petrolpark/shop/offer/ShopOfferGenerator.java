@@ -7,7 +7,6 @@ import java.util.Collections;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.data.reward.generator.IRewardGenerator;
-import com.petrolpark.network.GsonSerializableCodecs;
 import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.shop.Shop;
 import com.petrolpark.shop.offer.order.ShopOrder;
@@ -16,12 +15,13 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public class ShopOfferGenerator implements LootContextUser {
 
     public static final Codec<ShopOfferGenerator> DIRECT_CODEC = RecordCodecBuilder.create(instance -> 
         instance.group(
-            GsonSerializableCodecs.NUMBER_PROVIDER.optionalFieldOf("time", ConstantValue.exactly(-1)).forGetter(ShopOfferGenerator::getTimeGenerator),
+            NumberProviders.CODEC.optionalFieldOf("time", ConstantValue.exactly(-1)).forGetter(ShopOfferGenerator::getTimeGenerator),
             IRewardGenerator.CODEC.fieldOf("reward").forGetter(ShopOfferGenerator::getRewardGenerator),
             IngredientRandomizer.CODEC.fieldOf("order").forGetter(ShopOfferGenerator::getOrderRandomizer),
             Codec.list(ShopOrderModifierEntry.CODEC).optionalFieldOf("orderModifiers", Collections.emptyList()).forGetter(ShopOfferGenerator::getOrderModifiers)

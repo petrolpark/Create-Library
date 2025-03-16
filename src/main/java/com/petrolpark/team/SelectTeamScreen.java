@@ -2,13 +2,13 @@ package com.petrolpark.team;
 
 import java.util.List;
 
-import com.petrolpark.network.PetrolparkMessages;
 import com.petrolpark.team.packet.BindTeamPacket;
 
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 @OnlyIn(Dist.CLIENT)
 public class SelectTeamScreen extends Screen {
@@ -26,13 +26,12 @@ public class SelectTeamScreen extends Screen {
         if (!selectableTeams.isEmpty()) selectedTeam = selectableTeams.get(0);
     };
 
-    @SuppressWarnings("unchecked")
-    public <T extends ITeam<? super T>> T getSelectedTeam() {
-        return (T)selectedTeam;
+    public ITeam getSelectedTeam() {
+        return selectedTeam;
     };
 
     public void sendTeamSelection() {
-        if (getSelectedTeam() != null) PetrolparkMessages.sendToServer(packetFactory.create(getSelectedTeam()));
+        if (getSelectedTeam() != null) CatnipServices.NETWORK.sendToServer(packetFactory.create(getSelectedTeam().getProvider()));
     };
 
     @Override

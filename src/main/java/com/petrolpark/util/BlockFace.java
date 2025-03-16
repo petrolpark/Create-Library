@@ -1,10 +1,18 @@
 package com.petrolpark.util;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.phys.Vec3;
 
 public class BlockFace extends Pair<BlockPos, Direction> {
+
+    public static final StreamCodec<ByteBuf, BlockFace> STREAM_CODEC = StreamCodec.composite(
+	    BlockPos.STREAM_CODEC, BlockFace::getPos,
+	    Direction.STREAM_CODEC, BlockFace::getFace,
+	    BlockFace::of
+	);
 
     public static BlockFace of(BlockPos pos, Direction face) {
         return new BlockFace(pos, face);

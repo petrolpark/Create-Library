@@ -8,7 +8,6 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.network.GsonSerializableCodecs;
 import com.petrolpark.shop.offer.ShopOffer;
 import com.petrolpark.shop.offer.ShopOfferGenerator;
 import com.petrolpark.shop.offer.ShopOrderModifierEntry;
@@ -22,8 +21,9 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class Shop {
 
@@ -95,7 +95,7 @@ public class Shop {
         public static final Codec<OfferGeneratorEntry> CODEC = RecordCodecBuilder.create(instance -> 
             instance.group(
                 ShopOfferGenerator.DIRECT_CODEC.fieldOf("generator").forGetter(OfferGeneratorEntry::generator),
-                GsonSerializableCodecs.NUMBER_PROVIDER.fieldOf("weight").forGetter(OfferGeneratorEntry::weight)
+                NumberProviders.CODEC.fieldOf("weight").forGetter(OfferGeneratorEntry::weight)
             ).apply(instance, OfferGeneratorEntry::new)
         );
 

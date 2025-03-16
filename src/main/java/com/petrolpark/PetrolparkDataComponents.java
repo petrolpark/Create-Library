@@ -9,6 +9,8 @@ import com.mojang.serialization.Codec;
 import com.petrolpark.badge.BadgeItem;
 import com.petrolpark.badge.BadgeItem.BadgeAward;
 import com.petrolpark.contamination.Contaminant;
+import com.petrolpark.shop.Shop;
+import com.petrolpark.shop.ShopsData;
 import com.petrolpark.team.ITeam;
 import com.petrolpark.util.NetworkHelper;
 
@@ -17,6 +19,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponentType.Builder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Rotation;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
@@ -42,6 +45,15 @@ public class PetrolparkDataComponents {
     public static final DataComponentType<Long> DECAYING_ITEM_CREATION_TIME = register(
         "creation_time",
         builder -> builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG)
+    );
+
+    public static final DataComponentType<Shop> SHOP = register(
+        "shop",
+        builder -> builder.persistent(PetrolparkRegistries.SHOP.byNameCodec()).networkSynchronized(ByteBufCodecs.registry(PetrolparkRegistries.Keys.SHOP))
+    );
+
+    public static final DataComponentType<ShopsData> SHOPS = register(
+        "shops", builder -> builder.persistent(ShopsData.CODEC)
     );
 
     public static final DataComponentType<Rotation> ROTATION_WHILE_FLYING = register(

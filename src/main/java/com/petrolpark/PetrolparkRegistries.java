@@ -69,6 +69,10 @@ public class PetrolparkRegistries {
     public static final Registry<EntityRewardType> ENTITY_REWARD_TYPES = simple(Keys.ENTITY_REWARD_TYPE);
     public static final Registry<TeamRewardType> TEAM_REWARD_TYPES = simple(Keys.TEAM_REWARD_TYPE);
 
+    // Shops
+    public static final Registry<Shop> SHOP = simple(Keys.SHOP);
+    public static final Registry<ShopOfferGenerator> SHOP_OFFER_GENERATOR = simple(Keys.SHOP_OFFER_GENERATOR);
+
     private static <T> Registry<T> simple(ResourceKey<Registry<T>> key) {
         return register(key, false);
     };

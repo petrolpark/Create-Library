@@ -5,7 +5,6 @@ import java.util.ArrayList;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.network.GsonSerializableCodecs;
 import com.petrolpark.recipe.ingredient.modifier.IngredientModifier;
 import com.petrolpark.recipe.ingredient.modifier.PassIngredientModifier;
 
@@ -15,14 +14,15 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContextUser;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public class ShopOrderModifier implements LootContextUser {
 
     public static final Codec<ShopOrderModifier> CODEC = RecordCodecBuilder.create(instance -> 
         instance.group(
             IngredientModifier.CODEC.optionalFieldOf("requirement", PassIngredientModifier.INSTANCE).forGetter(ShopOrderModifier::getIngredientModifier),
-            GsonSerializableCodecs.NUMBER_PROVIDER.fieldOf("success").forGetter(ShopOrderModifier::getSuccessMultiplier),
-            GsonSerializableCodecs.NUMBER_PROVIDER.optionalFieldOf("failure", ConstantValue.exactly(0f)).forGetter(ShopOrderModifier::getFailureNumberProvider)
+            NumberProviders.CODEC.fieldOf("success").forGetter(ShopOrderModifier::getSuccessMultiplier),
+            NumberProviders.CODEC.optionalFieldOf("failure", ConstantValue.exactly(0f)).forGetter(ShopOrderModifier::getFailureNumberProvider)
         ).apply(instance, ShopOrderModifier::new)
     );
     

@@ -3,6 +3,8 @@ package com.petrolpark.shop;
 import java.util.List;
 import java.util.Optional;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.shop.customer.EntityCustomer;
 import com.petrolpark.team.ITeam;
@@ -40,7 +42,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
     };
 
     @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
         if (getShop(level, player, stack).isPresent()) {
             InteractionResult result = trySelectTeam(stack, player, level);
@@ -50,7 +52,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
     };
 
     @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity entity, InteractionHand hand) {
+    public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
         return getShop(player.level(), player, stack)
             .filter(shop -> shop.canServe(entity))
             .map(shop -> {
@@ -67,7 +69,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+    public void appendHoverText(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull List<Component> tooltipComponents, @Nonnull TooltipFlag isAdvanced) {
         Minecraft mc = Minecraft.getInstance();
         getShop(level, mc.player, stack).ifPresent(shop -> {
             ITeam team = ITeamBoundItem.getTeam(stack, level);

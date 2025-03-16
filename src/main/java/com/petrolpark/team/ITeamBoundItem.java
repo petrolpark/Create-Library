@@ -6,9 +6,7 @@ import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkDataComponents;
 import com.petrolpark.team.packet.BindTeamItemPacket;
 import com.petrolpark.util.ScreenHelper;
-import com.simibubi.create.foundation.utility.DistExecutor;
 
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
@@ -35,7 +33,7 @@ public interface ITeamBoundItem<I extends Item> {
         if (event.getTeamProvidersUnmodifiable().size() == 1) {
             bind(event.getTeamProvidersUnmodifiable().get(0), stack, player); // Don't open screen if only one Team is available
         } else if (level.isClientSide()) {
-            Petrolpark.unsafeRunClient(() -> () -> openScreen(getTeamSelectionScreenTitle(level, player, stack), event.getTeamProvidersUnmodifiable()));
+            Petrolpark.unsafeRunClient(() -> () -> openScreen(getTeamSelectionScreenTitle(level, player, stack), event.getTeamsUnmodifiable(level)));
         };
         return InteractionResult.SUCCESS;
     };
@@ -49,7 +47,6 @@ public interface ITeamBoundItem<I extends Item> {
         return stack.getOrDefault(PetrolparkDataComponents.TEAM_PROVIDER, NoTeam.INSTANCE).provideTeam(level);
     };
     
-    @SuppressWarnings("unchecked")
     public default void bind(ITeam.Provider teamProvider, ItemStack stack, Player player) {
         if (stack.getItem() != this) return;
         if (!isTeamRebindable(player.level(), player, stack) && stack.has(PetrolparkDataComponents.TEAM_PROVIDER)) return;

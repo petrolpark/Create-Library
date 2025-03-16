@@ -1,49 +1,34 @@
 package com.petrolpark.team.packet;
 
-import java.util.function.Supplier;
-
-import com.petrolpark.network.packet.C2SPacket;
 import com.petrolpark.team.ITeam;
+import com.petrolpark.team.ITeam.Provider;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.createmod.catnip.net.base.ServerboundPacketPayload;
+import net.minecraft.server.level.ServerPlayer;
 
-public abstract class BindTeamPacket extends C2SPacket {
+public abstract class BindTeamPacket implements ServerboundPacketPayload {
 
-    public final CompoundTag teamTag;
+    public final ITeam.Provider teamProvider;
 
-    public BindTeamPacket(FriendlyByteBuf buffer) {
-        teamTag = buffer.readNbt();
+    public BindTeamPacket(Provider teamProvider) {
+        this.teamProvider = teamProvider;
     };
 
-    public <T extends ITeam<? super T>> BindTeamPacket(T team) {
-        this.teamTag = ITeam.write(team);
+    public ITeam.Provider getTeamProvider() {
+        return teamProvider;
     };
+
+    public abstract void handle(ITeam.Provider teamProvider, ServerPlayer player);
 
     @Override
-    public void toBytes(FriendlyByteBuf buffer) {
-        buffer.writeNbt(teamTag);
-    };
-
-    public abstract <T extends ITeam<? super T>> void handle(T team, NetworkEvent.Context context);
-
-    @Override
-    public final boolean handle(Supplier<NetworkEvent.Context> supplier) {
-        NetworkEvent.Context context = supplier.get();
-        context.enqueueWork(() -> handle(context));
-        return true;
-    };
-
-    @SuppressWarnings("unchecked")
-    private final <T extends ITeam<? super T>> void handle(NetworkEvent.Context context) {
-        T team = (T)ITeam.read(teamTag, context.getSender().level());
-        if (team.isMember(context.getSender())) handle(team, context);
+    public final void handle(ServerPlayer player) {
+        ITeam team = teamProvider.provideTeam(player.level());
+        if (team.isMember(player)) handle(teamProvider, player);
     };
 
     @FunctionalInterface
     public static interface Factory {
-        public <T extends ITeam<? super T>> BindTeamPacket create(T team);
+        public BindTeamPacket create(ITeam.Provider teamProvider);
     };
     
 };

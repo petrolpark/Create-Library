@@ -1,22 +1,36 @@
 package com.petrolpark.tube;
 
-import java.util.function.Supplier;
-
+import com.petrolpark.PetrolparkPackets;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.network.packet.C2SPacket;
 import com.petrolpark.util.ItemHelper;
-import com.petrolpark.util.NetworkHelper;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.createmod.catnip.net.base.ServerboundPacketPayload;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
+import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 @RequiresCreate
-public class BuildTubePacket extends C2SPacket {
+public class BuildTubePacket implements ServerboundPacketPayload {
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, BuildTubePacket> STREAM_CODEC = StreamCodec.composite(
+        ByteBufCodecs.registry(Registries.BLOCK), BuildTubePacket::getBlock,
+        TubeSpline.Provider.STREAM_CODEC, BuildTubePacket::getSplineProvider,
+        BuildTubePacket::new
+    );
 
     public final Block block;
     public final ITubeBlock tubeBlock;
     public final TubeSpline spline;
+
+    public BuildTubePacket(Block block, TubeSpline.Provider splineProvider) {
+        this.block = block;
+        if (block instanceof ITubeBlock tubeBlock) this.tubeBlock = tubeBlock; else throw new IllegalArgumentException(block.toString()+" is not a Tube Block");
+        this.spline = splineProvider.provide(tubeBlock.getTubeMaxAngle(), tubeBlock.getTubeSegmentLength(), tubeBlock.getTubeSegmentRadius());
+    };
 
     public BuildTubePacket(ITubeBlock tubeBlock, TubeSpline spline) {
         this.tubeBlock = tubeBlock;
@@ -24,44 +38,27 @@ public class BuildTubePacket extends C2SPacket {
         this.spline = spline;
     };
 
-    public BuildTubePacket(FriendlyByteBuf buffer) {
-        block = buffer.readRegistryIdUnsafe(ForgeRegistries.BLOCKS);
-        double segmentLength, segmentRadius, maxAngle;
-        if (block instanceof ITubeBlock tubeBlock) {
-            this.tubeBlock = tubeBlock;
-            segmentLength = tubeBlock.getTubeSegmentLength();
-            segmentRadius = tubeBlock.getTubeSegmentRadius();
-            maxAngle = tubeBlock.getTubeMaxAngle();
-        } else {
-            this.tubeBlock = null;
-            segmentLength = 1d;
-            segmentRadius = 1d;
-            maxAngle = 0d;
+    public Block getBlock() {
+        return block;
+    };
+
+    public TubeSpline.Provider getSplineProvider() {
+        return spline.getProvider();
+    };
+
+    @Override
+    public void handle(ServerPlayer player) {
+        if (tubeBlock == null) return;
+        spline.validate(player.level(), player, block.asItem(), tubeBlock);
+        if (spline.getResult().success) {
+            if (!player.getAbilities().instabuild) ItemHelper.removeItems(new InvWrapper(player.getInventory()), s -> s.is(block.asItem()), tubeBlock.getItemsForTubeLength(spline.getLength())); // Remove required Items
+            tubeBlock.connectTube(player.level(), spline);
         };
-        spline = new TubeSpline(NetworkHelper.readBlockFace(buffer), NetworkHelper.readBlockFace(buffer), NetworkHelper.readList(buffer, NetworkHelper::readVec3), maxAngle, segmentLength, segmentRadius);
-    };
+    }
 
     @Override
-    public void toBytes(FriendlyByteBuf buffer) {
-        buffer.writeRegistryIdUnsafe(ForgeRegistries.BLOCKS, block);
-        NetworkHelper.writeBlockFace(buffer, spline.start);
-        NetworkHelper.writeBlockFace(buffer, spline.end);
-        NetworkHelper.writeList(buffer, spline.getMiddleControlPoints(), NetworkHelper::writeVec3);
-    };
-
-    @Override
-    public boolean handle(Supplier<Context> supplier) {
-        Context context = supplier.get();
-        ServerPlayer player = context.getSender();
-        context.enqueueWork(() -> {
-            if (tubeBlock == null) return;
-            spline.validate(player.level(), player, block.asItem(), tubeBlock);
-            if (spline.getResult().success) {
-                if (!player.getAbilities().instabuild) ItemHelper.removeItems(new InvWrapper(player.getInventory()), s -> s.is(block.asItem()), tubeBlock.getItemsForTubeLength(spline.getLength())); // Remove required Items
-                tubeBlock.connectTube(player.level(), spline);
-            };
-        });
-        return true;
+    public PacketTypeProvider getTypeProvider() {
+        return PetrolparkPackets.BUILD_TUBE;
     };
     
 };

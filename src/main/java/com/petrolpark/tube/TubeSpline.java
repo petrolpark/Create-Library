@@ -12,10 +12,14 @@ import com.petrolpark.util.BlockFace;
 import com.petrolpark.util.ClampedCubicSpline;
 import com.petrolpark.util.MathsHelper;
 
+import io.netty.buffer.ByteBuf;
+import net.createmod.catnip.codecs.stream.CatnipStreamCodecs;
 import net.createmod.catnip.lang.Lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -99,6 +103,10 @@ public class TubeSpline extends ClampedCubicSpline {
         return super.getOccupiedVolume().inflate(segmentRadius);
     };
 
+    public TubeSpline.Provider getProvider() {
+        return new Provider(start, end, getMiddleControlPoints());
+    };
+
     public TubePlacementResult getResult() {
         return result;
     };
@@ -176,6 +184,20 @@ public class TubeSpline extends ClampedCubicSpline {
 
         public Component translate(ItemStack stack) {
             return Component.translatable("petrolpark.tube.result."+ Lang.asId(name()), stack.getHoverName()).withStyle(success ? ChatFormatting.GREEN : ChatFormatting.RED);
+        };
+    };
+
+    public static record Provider(BlockFace start, BlockFace end, List<Vec3> middleControlPoints) {
+
+        public static final StreamCodec<ByteBuf, TubeSpline.Provider> STREAM_CODEC = StreamCodec.composite(
+            BlockFace.STREAM_CODEC, TubeSpline.Provider::start,
+            BlockFace.STREAM_CODEC, TubeSpline.Provider::end,
+            CatnipStreamCodecs.VEC3.apply(ByteBufCodecs.list()), TubeSpline.Provider::middleControlPoints,
+            TubeSpline.Provider::new
+        );
+
+        public TubeSpline provide(double maxAngle, double segmentLength, double segmentRadius) {
+            return new TubeSpline(start, end, middleControlPoints, maxAngle, segmentLength, segmentRadius);
         };
     };
     

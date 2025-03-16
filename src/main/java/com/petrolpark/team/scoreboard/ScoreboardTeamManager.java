@@ -6,15 +6,13 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.network.PetrolparkMessages;
 import com.petrolpark.team.ITeam;
-import com.petrolpark.team.data.ITeamDataType;
-import com.petrolpark.team.scoreboard.ScoreboardTeamManager.ScoreboardTeamSavedData;
-import com.simibubi.create.foundation.utility.DistExecutor;
 
-import net.minecraft.client.Minecraft;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -25,8 +23,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.scores.PlayerTeam;
-import net.minecraft.world.scores.Scoreboard;
-import net.neoforged.api.distmarker.Dist;
 
 public class ScoreboardTeamManager {
 
@@ -40,20 +36,21 @@ public class ScoreboardTeamManager {
         return Optional.of(teams.computeIfAbsent(team, ScoreboardTeam::new));
     };
 
-    public void dataChanged(Level level, ScoreboardTeam team, ITeamDataType<?> dataType) {
-        DistExecutor.unsafeRunWhenOn(Dist.DEDICATED_SERVER, () -> () -> PetrolparkMessages.sendToAllClients(new ScoreboardTeamDataChangedPacket(level, team, dataType)));
+    public <T> void dataChanged(Level level, ScoreboardTeam team, DataComponentType<T> componentType) {
+        T component = team.get(componentType);
+        if (component != null) CatnipServices.PLATFORM.executeOnServerOnly(() -> () -> CatnipServices.NETWORK.sendToAllClients(new ScoreboardTeamComponentChangedPacket(team.team.getName(), new TypedDataComponent<>(componentType, component))));
         if (savedData != null) savedData.setDirty();
     };
 
-    public void setData(Level level, String teamName, ITeamDataType<?> dataType, CompoundTag dataTag) {
-        get(level, teamName).ifPresent(team -> team.loadTeamData(level, dataTag, dataType));
+    public <T> void setData(Level level, String teamName, TypedDataComponent<T> component) {
+        get(level, teamName).ifPresent(team -> team.set(component.type(), component.value()));
     };
 
     public void playerLogin(Player player) {
 		if (player instanceof ServerPlayer serverPlayer) {
 			loadSavedData(serverPlayer.getServer());
 			for (ScoreboardTeam team : teams.values()) {
-                team.streamNonBlankTeamData().forEach(dt -> PetrolparkMessages.sendToClient(new ScoreboardTeamDataChangedPacket(serverPlayer.level(), team, dt), serverPlayer));
+                team.getComponents().forEach(dt -> CatnipServices.NETWORK.sendToClient(serverPlayer, new ScoreboardTeamComponentChangedPacket(team.team.getName(), dt)));
             };
 		}
 	};

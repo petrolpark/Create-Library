@@ -1,26 +1,34 @@
 package com.petrolpark.team.packet;
 
+import com.petrolpark.PetrolparkPackets;
 import com.petrolpark.team.ITeam;
 import com.petrolpark.team.ITeamBoundItem;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
 public class BindTeamItemPacket extends BindTeamPacket {
 
-    @SuppressWarnings("unchecked")
-    public BindTeamItemPacket(ITeam.Provider team) {
-        super((T)team);
-    };
+    public static final StreamCodec<RegistryFriendlyByteBuf, BindTeamItemPacket> STREAM_CODEC = StreamCodec.composite(
+        ITeam.Provider.STREAM_CODEC, BindTeamItemPacket::getTeamProvider,
+        BindTeamItemPacket::new
+    );
 
-    public BindTeamItemPacket(FriendlyByteBuf buffer) {
-        super(buffer);
+    public BindTeamItemPacket(ITeam.Provider teamProvider) {
+        super(teamProvider);
     };
 
     @Override
-    public void handle(ITeam team, Context context) {
-        ItemStack heldStack = context.getSender().getMainHandItem();
-        if (heldStack.getItem() instanceof ITeamBoundItem<?> bindableItem) bindableItem.bind(team, heldStack, context.getSender());
+    public void handle(ITeam.Provider teamProvider, ServerPlayer player) {
+        ItemStack heldStack = player.getMainHandItem();
+        if (heldStack.getItem() instanceof ITeamBoundItem<?> bindableItem) bindableItem.bind(teamProvider, heldStack, player);
+    };
+
+    @Override
+    public PacketTypeProvider getTypeProvider() {
+        return PetrolparkPackets.BIND_TEAM_ITEM;
     };
     
 };

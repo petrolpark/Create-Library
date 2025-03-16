@@ -10,7 +10,7 @@ import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.data.reward.IReward;
 import com.petrolpark.data.reward.RewardType;
 import com.petrolpark.shop.Shop;
-import com.petrolpark.shop.TeamShopsData;
+import com.petrolpark.shop.ShopsData;
 import com.petrolpark.team.ITeam;
 import com.petrolpark.team.data.TeamDataTypes;
 
@@ -37,7 +37,7 @@ public class GrantShopXPReward implements IReward {
         if (team != null) {
             Shop shop = context.getLevel().registryAccess().registryOrThrow(PetrolparkRegistries.Keys.SHOP).get(shopRL);
             if (shop == null) Petrolpark.LOGGER.warn("Unknown Shop: "+shopRL);
-            ((TeamShopsData)team.getTeamData(TeamDataTypes.SHOPS.get())).grantXP(shop, amount.getInt(context));
+            ((ShopsData)team.getTeamData(TeamDataTypes.SHOPS.get())).grantXP(shop, amount.getInt(context));
         };
     };
 

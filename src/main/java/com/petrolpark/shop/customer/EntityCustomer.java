@@ -1,25 +1,20 @@
 package com.petrolpark.shop.customer;
 
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.PetrolparkLootContextParams;
 
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraftforge.common.capabilities.AutoRegisterCapability;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityManager;
-import net.minecraftforge.common.capabilities.CapabilityToken;
-import net.minecraftforge.common.util.LazyOptional;
-import net.neoforged.neoforge.capabilities.ICapabilityProvider;
+import net.neoforged.neoforge.attachment.IAttachmentHolder;
+import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 
-@AutoRegisterCapability
-public class EntityCustomer extends AbstractCustomer implements ICapabilityProvider {
-
-    public static final Capability<EntityCustomer> CAPABILITY = CapabilityManager.get(new CapabilityToken<>(){});
+public class EntityCustomer extends AbstractCustomer {
 
     public final Entity entity;
 
@@ -37,10 +32,21 @@ public class EntityCustomer extends AbstractCustomer implements ICapabilityProvi
         builder.withParameter(PetrolparkLootContextParams.CUSTOMER_ENTITY, entity);
     };
 
-    @Override
-    public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == CAPABILITY) return LazyOptional.of(() -> this).cast();
-        return LazyOptional.empty();
-    };
+    public static final IAttachmentSerializer<CompoundTag, EntityCustomer> SERIALIZER = new IAttachmentSerializer<CompoundTag, EntityCustomer>() {
+
+        @Override
+        public EntityCustomer read(@Nonnull IAttachmentHolder holder, @Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider provider) {
+            if (!(holder instanceof Entity entity)) throw new IllegalArgumentException("Non-entities cannot be Entity Customers");
+            EntityCustomer customer = new EntityCustomer(entity);
+            customer.deserializeNBT(provider, tag);
+            return customer;
+        };
+
+        @Override
+        public @Nullable CompoundTag write(@Nonnull EntityCustomer attachment, @Nonnull HolderLookup.Provider provider) {
+            return attachment.serializeNBT(provider);
+        };
+        
+    }; 
     
 };

@@ -5,5 +5,5 @@ import net.minecraft.world.phys.BlockHitResult;
 
 public interface ITeamBoundBlockEntity {
   
-    public void bind(ITeam team, Player player, BlockHitResult hit);
+    public void bind(ITeam.Provider team, Player player, BlockHitResult hit);
 };
