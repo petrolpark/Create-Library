@@ -11,8 +11,6 @@ import com.petrolpark.team.ITeam;
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.component.TypedDataComponent;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -33,24 +31,23 @@ public class ScoreboardTeamManager {
     public Optional<ITeam> get(Level level, String teamName) {
         PlayerTeam team = level.getScoreboard().getPlayerTeam(teamName);
         if (team == null) return Optional.empty();
-        return Optional.of(teams.computeIfAbsent(team, ScoreboardTeam::new));
+        return Optional.of(teams.computeIfAbsent(team, t -> new ScoreboardTeam(level, t)));
     };
 
-    public <T> void dataChanged(Level level, ScoreboardTeam team, DataComponentType<T> componentType) {
-        T component = team.get(componentType);
-        if (component != null) CatnipServices.PLATFORM.executeOnServerOnly(() -> () -> CatnipServices.NETWORK.sendToAllClients(new ScoreboardTeamComponentChangedPacket(team.team.getName(), new TypedDataComponent<>(componentType, component))));
+    public <T> void dataComponentChanged(Level level, ScoreboardTeam team, @Nonnull DataComponentPatch patch) {
+        CatnipServices.PLATFORM.executeOnServerOnly(() -> () -> CatnipServices.NETWORK.sendToAllClients(new ScoreboardTeamComponentChangedPacket(team.team.getName(), patch)));
         if (savedData != null) savedData.setDirty();
     };
 
-    public <T> void setData(Level level, String teamName, TypedDataComponent<T> component) {
-        get(level, teamName).ifPresent(team -> team.set(component.type(), component.value()));
+    public <T> void applyPatch(Level level, String teamName, DataComponentPatch patch) {
+        get(level, teamName).ifPresent(team -> team.applyComponents(patch));
     };
 
     public void playerLogin(Player player) {
 		if (player instanceof ServerPlayer serverPlayer) {
 			loadSavedData(serverPlayer.getServer());
 			for (ScoreboardTeam team : teams.values()) {
-                team.getComponents().forEach(dt -> CatnipServices.NETWORK.sendToClient(serverPlayer, new ScoreboardTeamComponentChangedPacket(team.team.getName(), dt)));
+                CatnipServices.NETWORK.sendToClient(serverPlayer, new ScoreboardTeamComponentChangedPacket(team.team.getName(), team.getDataComponentPatch()));
             };
 		}
 	};

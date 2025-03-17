@@ -44,13 +44,13 @@ public class ContaminationBehaviour extends BlockEntityBehaviour {
     @Override
     public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(nbt, registries, clientPacket);
-        contamination.readNBT(nbt.getList("Contamination", Tag.TAG_STRING));
+        contamination.readNBT(nbt.getList("Contamination", Tag.TAG_STRING), registries);
     };
 
     @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(nbt, registries, clientPacket);
-        nbt.put("Contamination", contamination.writeNBT());
+        nbt.put("Contamination", contamination.writeNBT(registries));
     };
 
     @Override

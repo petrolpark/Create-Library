@@ -1,15 +1,15 @@
 package com.petrolpark.compat.create.dough;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.Rotation;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.util.NBTHelper;
 
-import java.util.ArrayList;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Rotation;
 
 public class DoughBall {
 
@@ -40,7 +40,8 @@ public class DoughBall {
 
     public static DoughBall get(ItemStack stack) {
         if (!(stack.getItem() instanceof DoughBallItem)) return null;
-        return new DoughBall(stack.getOrCreateTagElement("Dough"));
+        // return new DoughBall(stack.get(PetrolparkDataComponents.DOUGH));
+        return null; //TODO
     };
 
     public boolean hasBeenCut() {

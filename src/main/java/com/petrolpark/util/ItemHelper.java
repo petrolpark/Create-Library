@@ -24,12 +24,12 @@ public class ItemHelper {
         return Optional.ofNullable(stack.get(componentType));
     };
 
-    public static boolean equalIgnoringTags(ItemStack stack1, ItemStack stack2, String ...ignoredTagKeys) {
+    public static boolean equalIgnoringComponents(ItemStack stack1, ItemStack stack2, DataComponentType<?> ...ignoredComponentTypes) {
         ItemStack trueStack1 = IDecayingItem.checkDecay(stack1);
         ItemStack trueStack2 = IDecayingItem.checkDecay(stack2);
         if (!trueStack1.is(trueStack2.getItem())) return false;
         if (trueStack1.isEmpty()) return trueStack2.isEmpty();
-        return NBTHelper.equalIgnoring(trueStack1.getTag(), trueStack2.getTag(), ignoredTagKeys) && trueStack1.areCapsCompatible(trueStack2);
+        return DataComponentHelper.equalIgnoring(trueStack1.getComponents(), trueStack2.getComponents(), ignoredComponentTypes);
     };
 
     public static void pop(Level level, Vec3 position, ItemStack stack) {

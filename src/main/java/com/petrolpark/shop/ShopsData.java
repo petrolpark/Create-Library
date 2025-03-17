@@ -7,39 +7,46 @@ import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkRegistries;
 
+import net.minecraft.core.Holder;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public class ShopsData extends HashMap<Shop, ShopsData.TeamShop> {
+public class ShopsData extends HashMap<Holder<Shop>, ShopsData.TeamShop> {
 
-    public static final Codec<ShopsData> CODEC = Codec.unboundedMap(PetrolparkRegistries.SHOP.byNameCodec(), TeamShop.CODEC).xmap(ShopsData::fromMap, Function.identity());
+    public static final Codec<ShopsData> CODEC = Codec.unboundedMap(Shop.CODEC, TeamShop.CODEC).xmap(ShopsData::fromMap, Function.identity());
+    public static final StreamCodec<RegistryFriendlyByteBuf, ShopsData> STREAM_CODEC = ByteBufCodecs.map(ShopsData::new, Shop.STREAM_CODEC, TeamShop.STREAM_CODEC);
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, ShopsData> STREAM_CODEC = StreamCodec.composite(
-        , null, null
-    );
-
-    public static ShopsData fromMap(Map<Shop, ShopsData.TeamShop> map) {
-        ShopsData teamShops = new ShopsData();
+    public static ShopsData fromMap(Map<Holder<Shop>, ShopsData.TeamShop> map) {
+        ShopsData teamShops = new ShopsData(map.size());
         teamShops.putAll(map);
         return teamShops;
     };
 
-    public TeamShop getOrCreate(Shop shop) {
+    public ShopsData() {
+        this(0);
+    };
+
+    public ShopsData(int size) {
+        super(size);
+    };
+
+    public TeamShop getOrCreate(Holder<Shop> shop) {
         return computeIfAbsent(shop, s -> defaultEntry());
     };
 
-    public void grantXP(Shop shop, int amount) {
+    public void grantXP(Holder<Shop> shop, int amount) {
         getOrCreate(shop).xp += amount;
     };
 
     @OnlyIn(Dist.CLIENT)
-    public Component getName(Shop shop) {
-        return getOrCreate(shop).getCustomName().map(Component::literal).orElse(shop.getName().copy());
+    public Component getName(Holder<Shop> shop) {
+        return getOrCreate(shop).getCustomName().map(Component::literal).orElse(shop.value().getName().copy());
     };
 
     protected TeamShop defaultEntry() {
@@ -52,6 +59,12 @@ public class ShopsData extends HashMap<Shop, ShopsData.TeamShop> {
             Codec.INT.fieldOf("xp").forGetter(TeamShop::getXp),
             Codec.STRING.optionalFieldOf("customName").forGetter(TeamShop::getCustomName)
         ).apply(instance, TeamShop::new));
+
+        public static final StreamCodec<FriendlyByteBuf, TeamShop> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.INT, TeamShop::getXp,
+            ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), TeamShop::getCustomName,
+            TeamShop::new
+        );
 
         public int xp;
         public Optional<String> customName;

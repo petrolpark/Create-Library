@@ -1,12 +1,16 @@
-package com.petrolpark.data.reward;
+package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
+import com.petrolpark.data.reward.ContextEntityReward;
+import com.petrolpark.data.reward.ContextTeamReward;
+import com.petrolpark.data.reward.RewardType;
 import com.petrolpark.data.reward.entity.EntityRewardType;
 import com.petrolpark.data.reward.entity.GiveItemEntityReward;
 import com.petrolpark.data.reward.entity.GiveLootEntityReward;
 import com.petrolpark.data.reward.entity.GrantExperienceEntityReward;
 import com.petrolpark.data.reward.entity.UnlockTradeEntityReward;
+import com.petrolpark.data.reward.team.GrantShopXPTeamReward;
 import com.petrolpark.data.reward.team.MembersTeamReward;
 import com.petrolpark.data.reward.team.TeamRewardType;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -27,8 +31,8 @@ public class PetrolparkRewardTypes {
 
     public static final RegistryEntry<TeamRewardType, TeamRewardType>
 
-    MEMBERS = REGISTRATE.teamRewardType("null", MembersTeamReward.CODEC);
-    //GRANT_SHOP_XP = REGISTRATE.rewardType("grant_shop_xp", new GrantShopXPReward.Serializer());
+    MEMBERS = REGISTRATE.teamRewardType("null", MembersTeamReward.CODEC),
+    GRANT_SHOP_XP = REGISTRATE.teamRewardType("grant_shop_xp", GrantShopXPTeamReward.CODEC);
   
     public static final void register() {};
 };

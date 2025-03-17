@@ -8,7 +8,7 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.data.reward.PetrolparkRewardTypes;
+import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.data.reward.entity.IEntityReward;
 import com.petrolpark.team.ITeam;
 
@@ -45,7 +45,7 @@ public record MembersTeamReward(IEntityReward reward, Either<NumberProvider, Num
                 (int)((Mth.clamp(proportion.getFloat(context), 0f, 1f) * team.memberCount()))
         );
         if (count == 0) return;
-        List<Player> members = team.streamMembers(context.getLevel()).collect(Collectors.toList());
+        List<Player> members = team.streamMembers().collect(Collectors.toList());
         if (count < team.memberCount() && random) Collections.shuffle(members);
         for (int i = 0; i < count && i < members.size(); i++) reward.reward(members.get(i), context, multiplier);
     };

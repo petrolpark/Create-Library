@@ -8,7 +8,7 @@ import javax.annotation.Nonnull;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
-import com.petrolpark.util.NetworkHelper;
+import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -19,7 +19,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 public record ContextToolNumberProvider(ItemStackNumberProvider value) implements NumberProvider {
 
-    public static final MapCodec<ContextToolNumberProvider> CODEC = NetworkHelper.singleFieldMapCodec(ItemStackNumberProvider.CODEC, "value", ContextToolNumberProvider::value, ContextToolNumberProvider::new);
+    public static final MapCodec<ContextToolNumberProvider> CODEC = CodecHelper.singleFieldMap(ItemStackNumberProvider.CODEC, "value", ContextToolNumberProvider::value, ContextToolNumberProvider::new);
 
     @Override
     public float getFloat(@Nonnull LootContext lootContext) {

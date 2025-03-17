@@ -5,7 +5,6 @@ import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.team.data.ITeamDataType;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.client.Minecraft;
@@ -14,7 +13,6 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
@@ -33,18 +31,15 @@ public interface ITeam extends MutableDataComponentHolder {
 
     public int memberCount();
     
-    public Stream<String> streamMemberUsernames(Level level);
+    public Stream<String> streamMemberUsernames();
 
     /**
      * Use {@link ITeam#streamMemberUsernames(Level)} unless having the Player itself is vital.
      * @param level
      * @return Stream of Players in this Team.
      */
-    public default Stream<Player> streamMembers(Level level) {
-        MinecraftServer server = level.getServer();
-        if (server == null) return Stream.empty();
-        return streamMemberUsernames(level).map(server.getPlayerList()::getPlayerByName);
-    };
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    public Stream<Player> streamMembers();
 
     /**
      * If called, it is assumed that {@link ITeam#isMember(Player)} has already passed.
@@ -53,9 +48,7 @@ public interface ITeam extends MutableDataComponentHolder {
      */
     public boolean isAdmin(Player player);
 
-    public Component getName(Level level);
-
-    public void setChanged(Level level, ITeamDataType<?> dataType);
+    public Component getName();
 
     /**
      * Render an icon for this {@link ITeam}. The icon should occupy {@code (0, 0) -> (16, 16)} of the given PoseStack.
@@ -67,7 +60,7 @@ public interface ITeam extends MutableDataComponentHolder {
     @OnlyIn(Dist.CLIENT)
     public default Component getRenderedMemberList(int maxTextWidth) {
         Minecraft mc = Minecraft.getInstance();
-        return Lang.shortList(streamMemberUsernames(mc.level).map(Component::literal).toList(), maxTextWidth, mc.font);
+        return Lang.shortList(streamMemberUsernames().map(Component::literal).toList(), maxTextWidth, mc.font);
     };
 
     public static interface Provider {

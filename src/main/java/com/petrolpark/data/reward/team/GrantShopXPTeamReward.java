@@ -4,41 +4,33 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
-import com.petrolpark.Petrolpark;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.PetrolparkDataComponents;
 import com.petrolpark.PetrolparkLootContextParams;
-import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.data.reward.IReward;
-import com.petrolpark.data.reward.RewardType;
+import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.shop.Shop;
 import com.petrolpark.shop.ShopsData;
 import com.petrolpark.team.ITeam;
-import com.petrolpark.team.data.TeamDataTypes;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
-public class GrantShopXPReward implements IReward {
+public record GrantShopXPTeamReward(Holder<Shop> shop, NumberProvider amount) implements ITeamReward {
 
-    public final ResourceLocation shopRL;
-    public final NumberProvider amount;
-
-    public GrantShopXPReward(ResourceLocation shopRL, NumberProvider amount) {
-        this.shopRL = shopRL;
-        this.amount = amount;
-    };
+    public static final MapCodec<GrantShopXPTeamReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Shop.CODEC.fieldOf("shop").forGetter(GrantShopXPTeamReward::shop),
+        NumberProviders.CODEC.fieldOf("amount").forGetter(GrantShopXPTeamReward::amount)
+    ).apply(instance, GrantShopXPTeamReward::new));
 
     @Override
-    public void reward(LootContext context, float multiplier) {
-        ITeam team = context.getParam(PetrolparkLootContextParams.TEAM);
-        if (team != null) {
-            Shop shop = context.getLevel().registryAccess().registryOrThrow(PetrolparkRegistries.Keys.SHOP).get(shopRL);
-            if (shop == null) Petrolpark.LOGGER.warn("Unknown Shop: "+shopRL);
-            ((ShopsData)team.getTeamData(TeamDataTypes.SHOPS.get())).grantXP(shop, amount.getInt(context));
-        };
+    public void reward(ITeam team, LootContext context, float multiplier) {
+        team.getOrDefault(PetrolparkDataComponents.SHOPS_DATA, new ShopsData()).grantXP(shop, amount.getInt(context));
     };
 
     @Override
@@ -54,9 +46,8 @@ public class GrantShopXPReward implements IReward {
     };
 
     @Override
-    public RewardType getType() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getType'");
+    public TeamRewardType getType() {
+        return PetrolparkRewardTypes.GRANT_SHOP_XP.get();
     };
 
     @Override

@@ -7,7 +7,7 @@ import java.util.stream.DoubleStream;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.util.NetworkHelper;
+import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 public abstract class FunctionNumberProvider implements NumberProvider {
 
     public static final <PROVIDER extends FunctionNumberProvider> MapCodec<PROVIDER> codec(Function<List<NumberProvider>, PROVIDER> constructor) {
-        return NetworkHelper.singleFieldMapCodec(NumberProviders.CODEC.listOf(), "values", FunctionNumberProvider::getChildren, constructor);
+        return CodecHelper.singleFieldMap(NumberProviders.CODEC.listOf(), "values", FunctionNumberProvider::getChildren, constructor);
     };
 
     protected final List<NumberProvider> children;

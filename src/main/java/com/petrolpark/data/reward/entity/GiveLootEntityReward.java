@@ -7,8 +7,8 @@ import java.util.stream.Stream;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.data.loot.ILootTableAccessor;
-import com.petrolpark.data.reward.PetrolparkRewardTypes;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

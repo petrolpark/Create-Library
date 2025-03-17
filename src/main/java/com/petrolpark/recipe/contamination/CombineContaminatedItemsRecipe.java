@@ -36,7 +36,7 @@ public class CombineContaminatedItemsRecipe extends CustomRecipe implements IHan
             if (firstStack.isEmpty()) {
                 firstStack = stack;
             } else {
-                if (!ItemHelper.equalIgnoringTags(stack, firstStack, ItemContamination.TAG_KEY)) return false;
+                if (!ItemHelper.equalIgnoringComponents(stack, firstStack, ItemContamination.TAG_KEY)) return false;
                 atLeastTwo = true;
             };
         };

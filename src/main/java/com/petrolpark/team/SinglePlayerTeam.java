@@ -9,8 +9,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkAttachmentTypes;
-import com.petrolpark.team.data.ITeamDataType;
-import com.petrolpark.util.NetworkHelper;
+import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -25,6 +24,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 
@@ -63,12 +64,13 @@ public class SinglePlayerTeam extends AbstractTeam {
     };
 
     @Override
-    public Stream<String> streamMemberUsernames(Level level) {
+    public Stream<String> streamMemberUsernames() {
         return Stream.of(player.getGameProfile().getName());
     };
 
     @Override
-    public Stream<Player> streamMembers(Level level) {
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    public Stream<Player> streamMembers() {
         return Stream.of(player);
     };
 
@@ -78,13 +80,13 @@ public class SinglePlayerTeam extends AbstractTeam {
     };
 
     @Override
-    public Component getName(Level level) {
+    public Component getName() {
         return player.getDisplayName();
     };
 
     @Override
-    public void setChanged(Level level, ITeamDataType<?> dataType) {
-        // Doesn't need to be changed, capabilities are always saved
+    public void setChanged(DataComponentPatch patch) {
+        //TODO
     };
 
     @Override
@@ -99,29 +101,9 @@ public class SinglePlayerTeam extends AbstractTeam {
         return player.getDisplayName();
     };
 
-    // CAPABILITY
-
-    // @Override
-    // public <T> @NotNull LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-    //     if (cap == CAPABILITY) return LazyOptional.of(() -> this).cast();
-    //     return LazyOptional.empty();
-    // };
-
-    // @Override
-    // public CompoundTag serializeNBT() {
-    //     return saveTeamData(player.level());
-    // };
-
-    // @Override
-    // public void deserializeNBT(CompoundTag nbt) {
-    //     loadTeamData(player.level(), nbt);
-    // };
-
-    // TYPE
-
     public static record Provider(UUID playerUUID) implements ITeam.Provider {
 
-        public static final MapCodec<Provider> CODEC = NetworkHelper.singleFieldMapCodec(UUIDUtil.CODEC, "player", Provider::playerUUID, Provider::new);
+        public static final MapCodec<Provider> CODEC = CodecHelper.singleFieldMap(UUIDUtil.CODEC, "player", Provider::playerUUID, Provider::new);
         public static final StreamCodec<FriendlyByteBuf, Provider> STREAM_CODEC = StreamCodec.composite(UUIDUtil.STREAM_CODEC, Provider::playerUUID, Provider::new);
 
         @Override

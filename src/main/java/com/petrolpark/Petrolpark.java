@@ -10,17 +10,13 @@ import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
-import com.petrolpark.data.reward.PetrolparkRewardGeneratorTypes;
-import com.petrolpark.data.reward.PetrolparkRewardTypes;
 import com.petrolpark.item.decay.DecayingItemHandler;
 import com.petrolpark.mobeffects.PetrolparkMobEffects;
-import com.petrolpark.network.PetrolparkMessages;
 import com.petrolpark.recipe.IPetrolparkRecipeTypes;
-import com.petrolpark.recipe.ingredient.modifier.IngredientModifierTypes;
-import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizerTypes;
+import com.petrolpark.recipe.ingredient.modifier.PetrolparkIngredientModifierTypes;
+import com.petrolpark.recipe.ingredient.randomizer.PetrolparkIngredientRandomizerTypes;
 import com.petrolpark.registrate.PetrolparkRegistrate;
 import com.petrolpark.team.PetrolparkTeamProviderTypes;
-import com.petrolpark.team.data.TeamDataTypes;
 import com.petrolpark.team.scoreboard.ScoreboardTeamManager;
 
 import net.minecraft.resources.ResourceLocation;
@@ -71,15 +67,14 @@ public class Petrolpark {
         PetrolparkItems.register();
         PetrolparkMobEffects.register();
         PetrolparkTeamProviderTypes.register();
-        TeamDataTypes.register();
         // Registration - loot
         PetrolparkLootConditionTypes.register();
         PetrolparkNumberProviderTypes.register();
         PetrolparkGlobalLootModifierSerializers.register();
         PetrolparkRewardGeneratorTypes.register();
         PetrolparkRewardTypes.register();
-        IngredientModifierTypes.register();
-        IngredientRandomizerTypes.register();
+        PetrolparkIngredientModifierTypes.register();
+        PetrolparkIngredientRandomizerTypes.register();
 
         // Register ourselves for server and other game events we are interested in
         NeoForge.EVENT_BUS.register(this);
@@ -95,7 +90,7 @@ public class Petrolpark {
 
     private void init(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
-            PetrolparkMessages.register();
+
         });
     };
 

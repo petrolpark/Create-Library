@@ -16,7 +16,7 @@ import com.petrolpark.data.loot.numberprovider.entity.EquipmentNumberProvider;
 import com.petrolpark.data.loot.numberprovider.entity.ExperienceLevelNumberProvider;
 import com.petrolpark.data.loot.numberprovider.entity.LootEntityNumberProviderType;
 import com.petrolpark.data.loot.numberprovider.itemstack.CountItemStackNumberProvider;
-import com.petrolpark.data.loot.numberprovider.itemstack.EnchantmentLevelNumberProvider;
+import com.petrolpark.data.loot.numberprovider.itemstack.EnchantmentLevelItemStackNumberProvider;
 import com.petrolpark.data.loot.numberprovider.itemstack.LootItemStackNumberProviderType;
 import com.petrolpark.data.loot.numberprovider.team.LootTeamNumberProviderType;
 import com.petrolpark.data.loot.numberprovider.team.MembersTeamNumberProvider;
@@ -51,7 +51,7 @@ public class PetrolparkNumberProviderTypes {
     public static final RegistryEntry<LootItemStackNumberProviderType, LootItemStackNumberProviderType>
     
     COUNT = REGISTRATE.lootItemStackNumberProviderType("count", MapCodec.unit(CountItemStackNumberProvider::new)),
-    ENCHANTMENT_LEVEL = REGISTRATE.lootItemStackNumberProviderType("enchantment_level", EnchantmentLevelNumberProvider.CODEC);
+    ENCHANTMENT_LEVEL = REGISTRATE.lootItemStackNumberProviderType("enchantment_level", EnchantmentLevelItemStackNumberProvider.CODEC);
 
 
     public static final RegistryEntry<LootTeamNumberProviderType, LootTeamNumberProviderType>

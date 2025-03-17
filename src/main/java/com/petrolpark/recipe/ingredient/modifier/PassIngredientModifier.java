@@ -26,7 +26,7 @@ public class PassIngredientModifier implements IngredientModifier {
 
     @Override
     public IngredientModifierType getType() {
-        return IngredientModifierTypes.PASS.get();
+        return PetrolparkIngredientModifierTypes.PASS.get();
     };
     
 };

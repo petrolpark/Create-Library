@@ -2,7 +2,7 @@ package com.petrolpark.contamination;
 
 import java.util.stream.Stream;
 
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.NeoForge;
@@ -20,15 +20,15 @@ public class ItemContamination extends ComponentHolderContamination<Item, ItemSt
         return getDuck(stack).getContamination();
     };
 
-    public static final void perpetuateSingle(final RegistryAccess registries, Stream<ItemStack> inputs, ItemStack output) {
+    public static final void perpetuateSingle(final HolderLookup.Provider registries, Stream<ItemStack> inputs, ItemStack output) {
         perpetuate(registries, inputs.map(stack -> stack.copyWithCount(1)), Stream.of(output));
     };
 
-    public static final void perpetuateSingle(final RegistryAccess registries, Stream<ItemStack> inputs, Stream<ItemStack> outputs) {
+    public static final void perpetuateSingle(final HolderLookup.Provider registries, Stream<ItemStack> inputs, Stream<ItemStack> outputs) {
         perpetuate(registries, inputs.map(stack -> stack.copyWithCount(1)), outputs);
     };
 
-    public static final void perpetuate(final RegistryAccess registries, Stream<ItemStack> inputs, Stream<ItemStack> outputs) {
+    public static final void perpetuate(final HolderLookup.Provider registries, Stream<ItemStack> inputs, Stream<ItemStack> outputs) {
         IContamination.perpetuate(registries, inputs.dropWhile(ItemStack::isEmpty), outputs, ItemContamination::get);
     };
 
@@ -52,7 +52,7 @@ public class ItemContamination extends ComponentHolderContamination<Item, ItemSt
     };
 
     @Override
-    public void save(final RegistryAccess registries) {
+    public void save(final HolderLookup.Provider registries) {
         super.save(registries);
         NeoForge.EVENT_BUS.post(new ItemContaminationSavedEvent(stack, this));
     };

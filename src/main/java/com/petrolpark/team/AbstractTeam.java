@@ -3,6 +3,7 @@ package com.petrolpark.team;
 import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.include.com.google.common.base.Objects;
 
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -37,28 +38,38 @@ public abstract class AbstractTeam implements ITeam {
         return false;
     };
 
+    public abstract void setChanged(DataComponentPatch patch);
+
     @Override
-    public <T> @Nullable T set(@Nonnull DataComponentType<? super T> componentType, @Nonnull T value) {
-        return components.set(componentType, value);
+    public final <T> @Nullable T set(@Nonnull DataComponentType<? super T> componentType, @Nonnull T value) {
+        T oldValue = components.set(componentType, value);
+        if (!Objects.equal(oldValue, value)) setChanged(DataComponentPatch.builder().set(componentType, value).build());
+        return oldValue;
     };
 
     @Override
-    public <T> @Nullable T remove(@Nonnull DataComponentType<? extends T> componentType) {
-        return components.remove(componentType);
+    public final <T> @Nullable T remove(@Nonnull DataComponentType<? extends T> componentType) {
+        T oldValue = components.remove(componentType);
+        if (!Objects.equal(oldValue, null)) setChanged(DataComponentPatch.builder().remove(componentType).build());
+        return oldValue;
     };
 
     @Override
-    public void applyComponents(@Nonnull DataComponentPatch patch) {
+    public final void applyComponents(@Nonnull DataComponentPatch patch) {
         components.applyPatch(patch);
+        setChanged(patch);
     };
 
     @Override
-    public void applyComponents(@Nonnull DataComponentMap components) {
+    public final void applyComponents(@Nonnull DataComponentMap components) {
         this.components.setAll(components);
+        DataComponentPatch.Builder builder = DataComponentPatch.builder();
+        components.forEach(builder::set);
+        setChanged(builder.build());
     };
 
     @Override
-    public DataComponentMap getComponents() {
+    public final DataComponentMap getComponents() {
         return components;
     };
 };

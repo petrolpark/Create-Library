@@ -2,7 +2,6 @@ package com.petrolpark.tube;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
@@ -10,7 +9,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.client.key.PetrolparkKeys;
 import com.petrolpark.compat.create.CreateClient;
-import com.petrolpark.network.PetrolparkMessages;
 import com.petrolpark.util.BlockFace;
 import com.petrolpark.util.Lang;
 import com.petrolpark.util.Pair;
@@ -19,12 +17,22 @@ import com.petrolpark.util.RayHelper.CustomHitResult;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.foundation.gui.RemovedGuiUtils;
+import com.simibubi.create.foundation.mixin.accessor.MouseHandlerAccessor;
+import com.simibubi.create.infrastructure.config.AllConfigs;
+import com.simibubi.create.infrastructure.config.CClient;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.gui.element.GuiGameElement;
+import net.createmod.catnip.platform.CatnipServices;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.LayeredDraw;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -32,8 +40,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -60,18 +66,29 @@ public class ClientTubePlacementHandler {
     @SubscribeEvent
     public static void tick(ClientTickEvent event) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null || mc.player == null || !(mc.player.getMainHandItem() == currentStack || AllItems.WRENCH.isIn(mc.player.getMainHandItem())) || currentStack.isEmpty() || (start != null && mc.level.getBlockState(start.getPos()).getBlock() != tubeBlock)) {
+        ClientLevel level = mc.level;
+        LocalPlayer player = mc.player;
+
+        if (level == null ||
+            player == null ||
+            !(player.getMainHandItem() == currentStack || AllItems.WRENCH.isIn(player.getMainHandItem())) ||
+            currentStack.isEmpty() ||
+            (start != null && level.getBlockState(start.getPos()).getBlock() != tubeBlock
+        )) {
             cancel();
             return;
         };
+
         if (ttl > 0) {
             ttl--;
         } else {
             cancel();
         };
+
         if (!active()) return;
+
         // Check end blocks are still present
-        if (mc.level.getBlockState(end.getPos()).getBlock() != tubeBlock) {
+        if (level.getBlockState(end.getPos()).getBlock() != tubeBlock) {
             cancel();
             return;
         };
@@ -108,12 +125,12 @@ public class ClientTubePlacementHandler {
         };
 
         // Show message
-        mc.player.displayClientMessage(spline.result.translate(currentStack), true);
+        player.displayClientMessage(spline.result.translate(currentStack), true);
     };
 
-    public static final IGuiOverlay OVERLAY = ClientTubePlacementHandler::renderOverlay;
+    public static final LayeredDraw.Layer OVERLAY = ClientTubePlacementHandler::renderOverlay;
 
-    public static void renderOverlay(ForgeGui gui, GuiGraphics graphics, float partialTicks, int width, int height) {
+    public static void renderOverlay(GuiGraphics graphics, DeltaTracker deltaTracker) {
         if (spline == null) return;
         Minecraft mc = Minecraft.getInstance();
 
@@ -122,17 +139,17 @@ public class ClientTubePlacementHandler {
 
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(Component.translatable("petrolpark.tube.title", requiredItemCount, currentStack.getHoverName()));
-        for (Controls control : Controls.values()) if (control.useCondition.get()) tooltip.add(control.translate());
+        for (Controls control : Controls.values()) if (control.canUse()) tooltip.add(control.translate());
 
         int tooltipTextWidth = 0;
         for (Component line : tooltip) tooltipTextWidth = Math.max(tooltipTextWidth, mc.font.width(line));
         int tooltipHeight = tooltip.size() * 10;
 
         CClient cfg = AllConfigs.client();
-		int posX = width / 2 + cfg.overlayOffsetX.get();
-		int posY = height / 2 + cfg.overlayOffsetY.get();
-		posX = Math.min(posX, width - tooltipTextWidth - 20);
-		posY = Math.min(posY, height - tooltipHeight - 20);
+		int posX = graphics.guiWidth() / 2 + cfg.overlayOffsetX.get();
+		int posY = graphics.guiHeight() / 2 + cfg.overlayOffsetY.get();
+		posX = Math.min(posX, graphics.guiWidth() - tooltipTextWidth - 20);
+		posY = Math.min(posY, graphics.guiHeight() - tooltipHeight - 20);
 		boolean useCustom = cfg.overlayCustomColor.get();
 		Color colorBackground = useCustom ? new Color(cfg.overlayBackgroundColor.get()) : new Color(0x3c_101010);
 		Color colorBorderTop = useCustom ? new Color(cfg.overlayBorderColorTop.get()) : new Color(0xff_c9974c);
@@ -145,7 +162,7 @@ public class ClientTubePlacementHandler {
 			.render(graphics);
 
         if (!Mods.MODERNUI.isLoaded()) { // Default tooltip rendering when modernUI is not loaded
-			RemovedGuiUtils.drawHoveringText(graphics, tooltip, posX, posY, width, height, -1, colorBackground.getRGB(), colorBorderTop.getRGB(), colorBorderBot.getRGB(), mc.font);
+			RemovedGuiUtils.drawHoveringText(graphics, tooltip, posX, posY, graphics.guiWidth(), graphics.guiHeight(), -1, colorBackground.getRGB(), colorBorderTop.getRGB(), colorBorderBot.getRGB(), mc.font);
             ms.translate(0f, 0f, 100f);
 		} else { // Special handling for modernUI - copied from Create source code
             MouseHandler mouseHandler = mc.mouseHandler;
@@ -155,7 +172,7 @@ public class ClientTubePlacementHandler {
             double cursorY = mouseHandler.ypos();
             ((MouseHandlerAccessor)mouseHandler).create$setXPos(Math.round(cursorX / guiScale) * guiScale);
             ((MouseHandlerAccessor)mouseHandler).create$setYPos(Math.round(cursorY / guiScale) * guiScale);
-            RemovedGuiUtils.drawHoveringText(graphics, tooltip, posX, posY, width, height, -1, colorBackground.getRGB(), colorBorderTop.getRGB(), colorBorderBot.getRGB(), mc.font);
+            RemovedGuiUtils.drawHoveringText(graphics, tooltip, posX, posY, graphics.guiWidth(), graphics.guiHeight(), -1, colorBackground.getRGB(), colorBorderTop.getRGB(), colorBorderBot.getRGB(), mc.font);
             ((MouseHandlerAccessor)mouseHandler).create$setXPos(cursorX);
             ((MouseHandlerAccessor)mouseHandler).create$setYPos(cursorY);
         };
@@ -164,27 +181,41 @@ public class ClientTubePlacementHandler {
     };
 
     protected static enum Controls {
-        BUILD(() -> spline.getResult().success, () -> {
-            PetrolparkMessages.sendToServer(new BuildTubePacket(tubeBlock, spline));
-            cancel();
-            }, PetrolparkKeys.TUBE_BUILD),
-        GRAB_CONTROL_POINT(() -> targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1, () -> {}, null),
-        MOVE_CONTROL_POINT(() -> draggingSelectedControlPoint, () -> {}, null),
-        DELETE_CONTROL_POINT(() -> targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && !draggingSelectedControlPoint, () -> {spline.removeControlPoint(targetedControlPoint);}, PetrolparkKeys.TUBE_DELETE_CONTROL_POINT),
-        ADD_CONTROL_POINT_AFTER(() -> spline.getControlPoints().size() < TubeSpline.MAX_CONTROL_POINTS && targetedControlPoint >= 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && !draggingSelectedControlPoint, () -> spline.addInterpolatedControlPoint(targetedControlPoint + 1), PetrolparkKeys.TUBE_ADD_CONTROL_POINT_AFTER),
-        ADD_CONTROL_POINT_BEFORE(() -> spline.getControlPoints().size() < TubeSpline.MAX_CONTROL_POINTS && targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size(), () -> spline.addInterpolatedControlPoint(targetedControlPoint), PetrolparkKeys.TUBE_ADD_CONTROL_POINT_BEFORE),
-        CANCEL(() -> true, ClientTubePlacementHandler::cancel, PetrolparkKeys.TUBE_CANCEL)
-        ;
+        BUILD(PetrolparkKeys.TUBE_BUILD) {
+            public boolean canUse() { return spline.getResult().success; };
+            public void use() {
+                CatnipServices.NETWORK.sendToServer(new BuildTubePacket(tubeBlock, spline));
+                cancel();
+            };
+        }, GRAB_CONTROL_POINT(null) {
+            public boolean canUse() { return targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1; };
+            public void use() {};
+        }, MOVE_CONTROL_POINT(null) {
+            public boolean canUse() { return draggingSelectedControlPoint; };
+            public void use() {};
+        }, DELETE_CONTROL_POINT(PetrolparkKeys.TUBE_DELETE_CONTROL_POINT) {
+            public boolean canUse() { return targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && !draggingSelectedControlPoint; };
+            public void use() { spline.removeControlPoint(targetedControlPoint); };
+        }, ADD_CONTROL_POINT_AFTER(PetrolparkKeys.TUBE_ADD_CONTROL_POINT_AFTER) {
+            public boolean canUse() { return  spline.getControlPoints().size() < TubeSpline.MAX_CONTROL_POINTS && targetedControlPoint >= 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && !draggingSelectedControlPoint; };
+            public void use() { spline.addInterpolatedControlPoint(targetedControlPoint + 1); };
+        }, ADD_CONTROL_POINT_BEFORE(PetrolparkKeys.TUBE_ADD_CONTROL_POINT_BEFORE) {
+            public boolean canUse() { return spline.getControlPoints().size() < TubeSpline.MAX_CONTROL_POINTS && targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size(); };
+            public void use() { spline.addInterpolatedControlPoint(targetedControlPoint); };
+        }, CANCEL(PetrolparkKeys.TUBE_CANCEL) {
+            public boolean canUse() { return true; };
+            public void use() { cancel(); };
+        };
 
-        public final Supplier<Boolean> useCondition;
-        public final Runnable action;
         public final PetrolparkKeys key;
 
-        Controls(Supplier<Boolean> useCondition, Runnable action, PetrolparkKeys key) {
-            this.useCondition = useCondition;
-            this.action = action;
+        Controls(PetrolparkKeys key) {
             this.key = key;
         };
+
+        public abstract boolean canUse();
+
+        public abstract void use();
 
         public Component translate() {
             return Component.translatable("petrolpark.tube.control."+ Lang.asId(name()), key == null ? null : key.keybind.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY);
@@ -194,10 +225,10 @@ public class ClientTubePlacementHandler {
     @SubscribeEvent
     public static void onUseMouse(InputEvent.MouseButton event) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player != null && spline != null && targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT && draggingSelectedControlPoint == (event.getAction() == InputConstants.RELEASE)) {
+        LocalPlayer player = mc.player;
+        if (player != null && spline != null && targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT && draggingSelectedControlPoint == (event.getAction() == InputConstants.RELEASE)) {
             draggingSelectedControlPoint = !draggingSelectedControlPoint;
-            distanceToSelectedControlPoint = mc.player.getEyePosition().distanceTo(spline.getControlPoints().get(targetedControlPoint));
-            event.setCanceled(true);
+            distanceToSelectedControlPoint = player.getEyePosition().distanceTo(spline.getControlPoints().get(targetedControlPoint));
             resetTTL();
         };
     };
@@ -205,7 +236,7 @@ public class ClientTubePlacementHandler {
     @SubscribeEvent
     public static void onScrollMouse(InputEvent.MouseScrollingEvent event) {
         if (draggingSelectedControlPoint) {
-            distanceToSelectedControlPoint = Mth.clamp(distanceToSelectedControlPoint + event.getScrollDelta() / 8d, Math.min(distanceToSelectedControlPoint, 0.5d), Math.max(distanceToSelectedControlPoint, 6d));
+            distanceToSelectedControlPoint = Mth.clamp(distanceToSelectedControlPoint + event.getScrollDeltaY() / 8d, Math.min(distanceToSelectedControlPoint, 0.5d), Math.max(distanceToSelectedControlPoint, 6d));
             relocateControlPoint();
             event.setCanceled(true);
             resetTTL();
@@ -217,9 +248,9 @@ public class ClientTubePlacementHandler {
         if (spline == null) return;
         if (event.getAction() == InputConstants.RELEASE) {
             Minecraft mc = Minecraft.getInstance();
-            for (Controls control : Controls.values()) if (control.useCondition.get() && control.key != null && event.getKey() == control.key.keybind.getKey().getValue()) {
+            for (Controls control : Controls.values()) if (control.canUse() && control.key != null && event.getKey() == control.key.keybind.getKey().getValue()) {
                 control.key.keybind.consumeClick();
-                control.action.run();
+                control.use();
                 if (spline != null) {
                     controlPointBoxes = new ArrayList<>();
                     revalidateSpline(mc);
@@ -232,21 +263,24 @@ public class ClientTubePlacementHandler {
 
     protected static void relocateControlPoint() {
         Minecraft mc = Minecraft.getInstance();
-        if (spline.moveControlPoint(targetedControlPoint, mc.player.getEyePosition().add(mc.player.getViewVector(AnimationTickHolder.getPartialTicks()).scale(distanceToSelectedControlPoint)))) {
+        ClientLevel level = mc.level;
+        LocalPlayer player = mc.player;
+        if (level != null && player != null && spline.moveControlPoint(targetedControlPoint, player.getEyePosition().add(player.getViewVector(AnimationTickHolder.getPartialTicks()).scale(distanceToSelectedControlPoint)))) {
             controlPointBoxes = new ArrayList<>(); // All control points need to be moved
-            mc.level.playSound(mc.player, mc.player.getOnPos(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 0.25f, 0.1f);
+            level.playSound(player, player.getOnPos(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 0.25f, 0.1f);
             revalidateSpline(mc);
         };
     };
 
     public static void tryConnect(BlockFace location, ItemStack stack, ITubeBlock tubeBlock, boolean manualPlacement) {
         Minecraft mc = Minecraft.getInstance();
+        LocalPlayer player = mc.player;
         if (start == null) { // If placing the first Block
             currentStack = stack;
             ClientTubePlacementHandler.tubeBlock = tubeBlock;
             start = location;
             spline = null;
-            if (manualPlacement) mc.player.displayClientMessage(Component.translatable("petrolpark.tube.connect_another"), true);
+            if (manualPlacement && player != null) player.displayClientMessage(Component.translatable("petrolpark.tube.connect_another"), true);
             resetTTL();
         } else if (spline == null) { // If placing the second Block
             if (stack != currentStack) {

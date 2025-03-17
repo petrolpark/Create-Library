@@ -2,7 +2,7 @@ package com.petrolpark.data.reward.entity;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.data.reward.PetrolparkRewardTypes;
+import com.petrolpark.PetrolparkRewardTypes;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;

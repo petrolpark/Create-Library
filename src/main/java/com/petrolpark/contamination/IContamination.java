@@ -10,7 +10,7 @@ import com.petrolpark.PetrolparkTags;
 
 import it.unimi.dsi.fastutil.objects.Object2DoubleArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -28,7 +28,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * @param outputs
      * @see IContamination#perpetuate(Stream, Stream, Function) If you have a faster way of getting the Contamination
      */
-    public static void perpetuate(final RegistryAccess registries, Stream<Object> inputs, Stream<Object> outputs) {
+    public static void perpetuate(final HolderLookup.Provider registries, Stream<Object> inputs, Stream<Object> outputs) {
         perpetuate(registries, inputs, outputs, object -> get(object).orElse(null));
     };
 
@@ -39,7 +39,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * @param outputs
      * @param contaminationGetter
      */
-    public static <OBJECT> void perpetuate(final RegistryAccess registries, Stream<OBJECT> inputs, Stream<OBJECT> outputs, Function<OBJECT, IContamination<?, ?>> contaminationGetter) {
+    public static <OBJECT> void perpetuate(final HolderLookup.Provider registries, Stream<OBJECT> inputs, Stream<OBJECT> outputs, Function<OBJECT, IContamination<?, ?>> contaminationGetter) {
         Object2DoubleMap<Contaminant> amounts = new Object2DoubleArrayMap<>();
         double totalAmount = inputs.map(contaminationGetter)
             .dropWhile(Objects::isNull)
@@ -60,7 +60,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
         );
     };
 
-    public static void perpetuates(final RegistryAccess registries, Stream<ItemStack> itemInputs, Stream<FluidStack> fluidInputs, double fluidWeight, Stream<ItemStack> itemOutputs, Stream<FluidStack> fluidOutputs) {
+    public static void perpetuates(final HolderLookup.Provider registries, Stream<ItemStack> itemInputs, Stream<FluidStack> fluidInputs, double fluidWeight, Stream<ItemStack> itemOutputs, Stream<FluidStack> fluidOutputs) {
         Object2DoubleMap<Contaminant> amounts = new Object2DoubleArrayMap<>();
         double totalAmount = itemInputs.map(ItemContamination::get)
             .mapToDouble(contamination -> {
@@ -92,7 +92,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
 
     public double getAmount();
 
-    public void save(final RegistryAccess registries);
+    public void save(final HolderLookup.Provider registries);
 
     public boolean has(Contaminant contaminant);
 
@@ -121,14 +121,14 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
         return IntrinsicContaminants.getShownIfAbsent(this).stream().dropWhile(this::has).dropWhile(PetrolparkTags.Contaminants.HIDDEN::matches);
     };
 
-    public boolean contaminate(Contaminant contaminant, final RegistryAccess registries);
+    public boolean contaminate(Contaminant contaminant, final HolderLookup.Provider registries);
 
     /**
      * Add several Contaminants, and 
      * @param contaminantsStream
      * @return
      */
-    public boolean contaminateAll(Stream<Contaminant> contaminantsStream, final RegistryAccess registries);
+    public boolean contaminateAll(Stream<Contaminant> contaminantsStream, final HolderLookup.Provider registries);
 
     /**
      * Remove a Contaminant and any {@link Contaminant#getChildren() children} it has that don't belong to another parent.
@@ -137,7 +137,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * @return Whether this Contamination changed
      * @see IContamination#decontaminateOnly(Contaminant) Don't remove children
      */
-    public boolean decontaminate(Contaminant contaminant, final RegistryAccess registries);
+    public boolean decontaminate(Contaminant contaminant, final HolderLookup.Provider registries);
 
     /**
      * Remove a Contaminant, but not any of its children.
@@ -146,11 +146,11 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * @return Whether this Contamination changed (the Contaminant was removed)
      * @see IContamination#decontaminate(Contaminant) Remove all children
      */
-    public boolean decontaminateOnly(Contaminant contaminant, final RegistryAccess registries);
+    public boolean decontaminateOnly(Contaminant contaminant, final HolderLookup.Provider registries);
 
     /**
      * Remove all extrinsic Contaminants.
      * @return Whether this Contamination changed (whether it had any extrinsic Contaminants)
      */
-    public boolean fullyDecontaminate(final RegistryAccess registries);
+    public boolean fullyDecontaminate(final HolderLookup.Provider registries);
 };

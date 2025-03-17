@@ -18,6 +18,11 @@ public class EntityCustomer extends AbstractCustomer {
 
     public final Entity entity;
 
+    public static final EntityCustomer create(IAttachmentHolder attachmentHolder) {
+        if (attachmentHolder instanceof Entity entity) return new EntityCustomer(entity);
+        throw new IllegalArgumentException(attachmentHolder.toString()+" is not an Entity");
+    };
+
     public EntityCustomer(Entity entity) {
         this.entity = entity;
     };
@@ -32,12 +37,11 @@ public class EntityCustomer extends AbstractCustomer {
         builder.withParameter(PetrolparkLootContextParams.CUSTOMER_ENTITY, entity);
     };
 
-    public static final IAttachmentSerializer<CompoundTag, EntityCustomer> SERIALIZER = new IAttachmentSerializer<CompoundTag, EntityCustomer>() {
+    public static final IAttachmentSerializer<CompoundTag, EntityCustomer> ATTACHMENT_SERIALIZER = new IAttachmentSerializer<CompoundTag, EntityCustomer>() {
 
         @Override
         public EntityCustomer read(@Nonnull IAttachmentHolder holder, @Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider provider) {
-            if (!(holder instanceof Entity entity)) throw new IllegalArgumentException("Non-entities cannot be Entity Customers");
-            EntityCustomer customer = new EntityCustomer(entity);
+            EntityCustomer customer = create(holder);
             customer.deserializeNBT(provider, tag);
             return customer;
         };

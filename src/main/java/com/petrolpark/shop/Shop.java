@@ -8,12 +8,18 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.shop.offer.ShopOffer;
 import com.petrolpark.shop.offer.ShopOfferGenerator;
 import com.petrolpark.shop.offer.ShopOrderModifierEntry;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -35,6 +41,9 @@ public class Shop {
             TagKey.codec(Registries.ENTITY_TYPE).optionalFieldOf("customerEntityTypes").forGetter(Shop::getCustomerEntityTypes)
         ).apply(instance, Shop::new)
     );
+
+    public static final Codec<Holder<Shop>> CODEC = RegistryFileCodec.create(PetrolparkRegistries.Keys.SHOP, DIRECT_CODEC);
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Shop>> STREAM_CODEC = ByteBufCodecs.holderRegistry(PetrolparkRegistries.Keys.SHOP);
     
     protected final String translationKey;
     public final List<OfferGeneratorEntry> offerGeneratorEntries;

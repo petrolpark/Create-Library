@@ -1,7 +1,6 @@
 package com.petrolpark;
 
 import com.petrolpark.contamination.Contaminant;
-import com.petrolpark.team.data.ITeamDataType;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.core.Holder;
@@ -162,22 +161,6 @@ public class PetrolparkTags {
 
         public boolean matches(Contaminant contaminant) {
             return PetrolparkRegistries.getHolder(PetrolparkRegistries.Keys.CONTAMINANT, contaminant).orElseThrow().is(tag);
-        };
-    }
-
-    public enum TeamDataTypes {
-
-        LOST_ON_PLAYER_DEATH,
-        ;
-
-        public final TagKey<ITeamDataType<?>> tag;
-
-        TeamDataTypes() {
-            tag = TagKey.create(PetrolparkRegistries.Keys.TEAM_DATA_TYPE, Petrolpark.asResource(Lang.asId(name())));
-        };
-
-        public boolean matches(ITeamDataType<?> teamDataType) {
-            return PetrolparkRegistries.getHolder(PetrolparkRegistries.Keys.TEAM_DATA_TYPE, teamDataType).orElseThrow().is(tag);
         };
     };
 };

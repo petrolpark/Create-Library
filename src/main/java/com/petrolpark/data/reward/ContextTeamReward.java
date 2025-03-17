@@ -5,9 +5,10 @@ import java.util.Set;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkLootContextParams;
+import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.data.reward.team.ITeamReward;
 import com.petrolpark.team.ITeam;
-import com.petrolpark.util.NetworkHelper;
+import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -18,7 +19,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public record ContextTeamReward(ITeamReward reward) implements IReward {
 
-    public static final MapCodec<ContextTeamReward> CODEC = NetworkHelper.singleFieldMapCodec(ITeamReward.CODEC, "reward", ContextTeamReward::reward, ContextTeamReward::new);
+    public static final MapCodec<ContextTeamReward> CODEC = CodecHelper.singleFieldMap(ITeamReward.CODEC, "reward", ContextTeamReward::reward, ContextTeamReward::new);
 
     @OnlyIn(Dist.CLIENT)
     @Override

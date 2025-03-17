@@ -5,16 +5,16 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.PetrolparkRewardGeneratorTypes;
 import com.petrolpark.data.reward.IReward;
-import com.petrolpark.data.reward.PetrolparkRewardGeneratorTypes;
-import com.petrolpark.util.NetworkHelper;
+import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 
 public record CombinedRewardGenerator(List<IRewardGenerator> values) implements IRewardGenerator {
 
-    public static final MapCodec<CombinedRewardGenerator> CODEC = NetworkHelper.singleFieldMapCodec(IRewardGenerator.CODEC.listOf(), "values", CombinedRewardGenerator::values, CombinedRewardGenerator::new);
+    public static final MapCodec<CombinedRewardGenerator> CODEC = CodecHelper.singleFieldMap(IRewardGenerator.CODEC.listOf(), "values", CombinedRewardGenerator::values, CombinedRewardGenerator::new);
 
     @Override
     public List<IReward> generate(LootContext context) {

@@ -10,7 +10,7 @@ import com.petrolpark.PetrolparkLootContextParams;
 import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.data.loot.numberprovider.team.TeamNumberProvider;
 import com.petrolpark.team.ITeam;
-import com.petrolpark.util.NetworkHelper;
+import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
@@ -19,7 +19,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
 public record ContextTeamNumberProvider(TeamNumberProvider value) implements NumberProvider {
 
-    public static final MapCodec<ContextTeamNumberProvider> CODEC = NetworkHelper.singleFieldMapCodec(TeamNumberProvider.CODEC, "value", ContextTeamNumberProvider::value, ContextTeamNumberProvider::new);
+    public static final MapCodec<ContextTeamNumberProvider> CODEC = CodecHelper.singleFieldMap(TeamNumberProvider.CODEC, "value", ContextTeamNumberProvider::value, ContextTeamNumberProvider::new);
     
     @Override
     public float getFloat(@Nonnull LootContext context) {

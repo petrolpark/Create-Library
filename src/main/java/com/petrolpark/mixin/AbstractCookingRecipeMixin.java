@@ -8,10 +8,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.contamination.ItemContamination;
 
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.Container;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 
 @Mixin(AbstractCookingRecipe.class)
 public class AbstractCookingRecipeMixin {
@@ -21,7 +21,7 @@ public class AbstractCookingRecipeMixin {
         at = @At("RETURN"),
         cancellable = true
     )
-    public void inAssemble(Container container, RegistryAccess registryAccess, CallbackInfoReturnable<ItemStack> cir) {
-        if (PetrolparkConfig.SERVER.cookingPropagatesContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(ItemContamination.get(container.getItem(0)).streamAllContaminants());
+    public void inAssemble(SingleRecipeInput input, HolderLookup.Provider registries, CallbackInfoReturnable<ItemStack> cir) {
+        if (PetrolparkConfig.SERVER.cookingPropagatesContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(ItemContamination.get(input.item()).streamAllContaminants(), registries);
     };
 };

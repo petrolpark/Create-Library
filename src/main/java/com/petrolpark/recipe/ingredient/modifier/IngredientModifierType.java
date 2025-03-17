@@ -1,12 +1,7 @@
 package com.petrolpark.recipe.ingredient.modifier;
 
-import net.minecraft.world.level.storage.loot.Serializer;
-import net.minecraft.world.level.storage.loot.SerializerType;
+import com.mojang.serialization.MapCodec;
 
-public class IngredientModifierType extends SerializerType<IngredientModifier> {
-
-    public IngredientModifierType(Serializer<? extends IngredientModifier> serializer) {
-        super(serializer);
-    };
+public record IngredientModifierType(MapCodec<? extends IngredientModifier> codec) {
     
 };

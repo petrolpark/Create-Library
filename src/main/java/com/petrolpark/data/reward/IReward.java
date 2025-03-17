@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.mojang.serialization.Codec;
 import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.util.NetworkHelper;
+import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 
@@ -19,7 +19,7 @@ public interface IReward extends ITypedReward<RewardType> {
 
     public static final Codec<IReward> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, ContextEntityReward.INLINE_CODEC)); //TODO add default
 
-    public static final Codec<List<IReward>> LIST_CODEC = NetworkHelper.listOrSingle(CODEC);
+    public static final Codec<List<IReward>> LIST_CODEC = CodecHelper.listOrSingle(CODEC);
 
     public void reward(LootContext context, float multiplier);
     

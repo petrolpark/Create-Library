@@ -1,8 +1,8 @@
 package com.petrolpark.data.reward.entity;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.data.reward.PetrolparkRewardTypes;
-import com.petrolpark.util.NetworkHelper;
+import com.petrolpark.PetrolparkRewardTypes;
+import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public record GrantExperienceEntityReward(NumberProvider amount) implements IEntityReward {
 
-    public static final MapCodec<GrantExperienceEntityReward> CODEC = NetworkHelper.singleFieldMapCodec(NumberProviders.CODEC, "amount", GrantExperienceEntityReward::amount, GrantExperienceEntityReward::new);
+    public static final MapCodec<GrantExperienceEntityReward> CODEC = CodecHelper.singleFieldMap(NumberProviders.CODEC, "amount", GrantExperienceEntityReward::amount, GrantExperienceEntityReward::new);
 
     @Override
     public void reward(Entity entity, LootContext context, float multiplier) {

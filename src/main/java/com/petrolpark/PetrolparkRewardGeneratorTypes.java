@@ -1,4 +1,4 @@
-package com.petrolpark.data.reward;
+package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 

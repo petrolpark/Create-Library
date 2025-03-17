@@ -2,9 +2,9 @@ package com.petrolpark.tube;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.Petrolpark;
 import com.petrolpark.util.BlockFace;
 
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.item.BlockItem;
@@ -24,7 +24,7 @@ public class TubeBlockItem extends BlockItem {
     public InteractionResult place(@Nonnull BlockPlaceContext context) {
         InteractionResult result = super.place(context);
         if (context.getLevel().isClientSide() && result == InteractionResult.SUCCESS) {
-            Petrolpark.unsafeRunClient(() -> () -> {
+            CatnipServices.PLATFORM.executeOnClientOnly(() -> () -> {
                 ClientTubePlacementHandler.tryConnect(BlockFace.of(context.getClickedPos(), getConnectingFace(context)), context.getItemInHand(), tubeBlock, true);
             });
         };

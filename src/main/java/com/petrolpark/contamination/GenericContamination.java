@@ -1,7 +1,9 @@
 package com.petrolpark.contamination;
 
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 
 /**
  * A {@link Contamination} not tied to any specific object. When these are used, the developer will have to manage loading and saving them themselves.
@@ -19,9 +21,13 @@ public class GenericContamination extends Contamination<Object, Object> {
         this.onSave = onSave;
     };
 
-    public GenericContamination(ListTag tag) {
-        this();
-        if (tag != null) readNBT(tag);
+    public void readNBT(Tag tag, HolderLookup.Provider registries) {
+        orphanContaminants.clear();
+        ORPHAN_HOLDER_LIST_CODEC.parse(NbtOps.INSTANCE, tag).ifSuccess(ls -> ls.stream().map(Holder::value).map(orphanContaminants::add));
+    };
+
+    public Tag writeNBT(HolderLookup.Provider registries) {
+        return ORPHAN_HOLDER_LIST_CODEC.encodeStart(NbtOps.INSTANCE, getOrphanHolderList(registries)).getOrThrow();
     };
 
     @Override
@@ -47,7 +53,7 @@ public class GenericContamination extends Contamination<Object, Object> {
      */
     @Override
     @Deprecated
-    public final void save(RegistryAccess registries) {
+    public final void save(final HolderLookup.Provider registries) {
         onSave.run();
     };
     

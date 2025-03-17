@@ -1,12 +1,7 @@
 package com.petrolpark.recipe.ingredient.randomizer;
 
-import net.minecraft.world.level.storage.loot.Serializer;
-import net.minecraft.world.level.storage.loot.SerializerType;
+import com.mojang.serialization.MapCodec;
 
-public class IngredientRandomizerType extends SerializerType<IngredientRandomizer> {
-
-    public IngredientRandomizerType(Serializer<? extends IngredientRandomizer> serializer) {
-        super(serializer);
-    };
+public record IngredientRandomizerType(MapCodec<? extends IngredientRandomizer> codec) {
     
 };

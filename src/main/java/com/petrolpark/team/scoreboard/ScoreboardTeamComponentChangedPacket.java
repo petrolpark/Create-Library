@@ -5,16 +5,16 @@ import com.petrolpark.PetrolparkPackets;
 
 import net.createmod.catnip.net.base.ClientboundPacketPayload;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public record ScoreboardTeamComponentChangedPacket(String teamName, TypedDataComponent<?> component) implements ClientboundPacketPayload {
+public record ScoreboardTeamComponentChangedPacket(String teamName, DataComponentPatch patch) implements ClientboundPacketPayload {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ScoreboardTeamComponentChangedPacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.STRING_UTF8, ScoreboardTeamComponentChangedPacket::teamName,
-        TypedDataComponent.STREAM_CODEC, ScoreboardTeamComponentChangedPacket::component,
+        DataComponentPatch.STREAM_CODEC, ScoreboardTeamComponentChangedPacket::patch,
         ScoreboardTeamComponentChangedPacket::new
     );
 
@@ -25,7 +25,7 @@ public record ScoreboardTeamComponentChangedPacket(String teamName, TypedDataCom
 
     @Override
     public void handle(LocalPlayer player) {
-        Petrolpark.SCOREBOARD_TEAMS.setData(player.level(), teamName, component);
+        Petrolpark.SCOREBOARD_TEAMS.applyPatch(player.level(), teamName, patch);
     };
     
 };

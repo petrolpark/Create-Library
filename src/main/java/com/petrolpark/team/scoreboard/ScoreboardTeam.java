@@ -9,8 +9,7 @@ import com.petrolpark.team.AbstractTeam;
 import com.petrolpark.team.ITeam;
 import com.petrolpark.team.NoTeam;
 import com.petrolpark.team.PetrolparkTeamProviderTypes;
-import com.petrolpark.team.data.ITeamDataType;
-import com.petrolpark.util.NetworkHelper;
+import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponentPatch;
@@ -18,24 +17,29 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.PlayerTeam;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public class ScoreboardTeam extends AbstractTeam {
 
+    public final Level level;
     public final PlayerTeam team;
 
     public static final ITeam.Provider provider(PlayerTeam team) {
         return new ScoreboardTeam.Provider(team.getName());
     };
 
-    public ScoreboardTeam(PlayerTeam team) {
-        this(team, DataComponentPatch.EMPTY);
+    public ScoreboardTeam(Level level, PlayerTeam team) {
+        this(level, team, DataComponentPatch.EMPTY);
     };
 
-    protected ScoreboardTeam(PlayerTeam team, DataComponentPatch components) {
+    protected ScoreboardTeam(Level level, PlayerTeam team, DataComponentPatch components) {
         super(components);
+        this.level = level;
         this.team = team;
     };
 
@@ -55,8 +59,16 @@ public class ScoreboardTeam extends AbstractTeam {
     };
 
     @Override
-    public Stream<String> streamMemberUsernames(Level level) {
+    public Stream<String> streamMemberUsernames() {
         return team.getPlayers().stream();
+    };
+
+    @Override
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    public Stream<Player> streamMembers() {
+        MinecraftServer server = level.getServer();
+        if (server != null) return streamMemberUsernames().map(server.getPlayerList()::getPlayerByName);
+        return Stream.empty();
     };
 
     @Override
@@ -65,13 +77,13 @@ public class ScoreboardTeam extends AbstractTeam {
     };
 
     @Override
-    public Component getName(Level level) {
+    public Component getName() {
         return team.getDisplayName();
     };
 
     @Override
-    public void setChanged(Level level, ITeamDataType<?> dataType) {
-        Petrolpark.SCOREBOARD_TEAMS.dataChanged(level, this, dataType);
+    public void setChanged(DataComponentPatch patch) {
+        Petrolpark.SCOREBOARD_TEAMS.dataComponentChanged(level, this, patch);
     };
 
     @Override
@@ -81,7 +93,7 @@ public class ScoreboardTeam extends AbstractTeam {
 
     public static record Provider(String teamName) implements ITeam.Provider {
 
-        public static final MapCodec<Provider> CODEC = NetworkHelper.singleFieldMapCodec(Codec.STRING, "team", Provider::teamName, Provider::new);
+        public static final MapCodec<Provider> CODEC = CodecHelper.singleFieldMap(Codec.STRING, "team", Provider::teamName, Provider::new);
         public static final StreamCodec<FriendlyByteBuf, Provider> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.STRING_UTF8, Provider::teamName, Provider::new);
 
         @Override

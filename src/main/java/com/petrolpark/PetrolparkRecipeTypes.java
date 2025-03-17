@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import com.petrolpark.badge.BadgeDuplicationRecipe;
-import com.petrolpark.item.decay.recipe.DecayingItemCookingRecipeSerializer;
+import com.petrolpark.item.decay.DecayingItemCookingRecipe;
 import com.petrolpark.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.recipe.contamination.CombineContaminatedItemsRecipe;
 import com.petrolpark.recipe.manualonly.ManualOnlyShapedRecipe;
@@ -23,7 +23,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
 
-    DECAYING_ITEM_COOKING(DecayingItemCookingRecipeSerializer::new),
+    DECAYING_ITEM_COOKING(() -> DecayingItemCookingRecipe.SERIALIZER, () -> null, false), //TODO remove null
     MANUAL_ONLY_CRAFTING_SHAPED(ManualOnlyShapedRecipe.Serializer::new, () -> RecipeType.CRAFTING),
     CONTAMINATED_ITEM_COMBINATION(() -> CombineContaminatedItemsRecipe.SERIALIZER, () -> RecipeType.CRAFTING),
     BADGE_DUPLICATION(() -> BadgeDuplicationRecipe.BADGE_DUPLICATION, () -> RecipeType.CRAFTING),

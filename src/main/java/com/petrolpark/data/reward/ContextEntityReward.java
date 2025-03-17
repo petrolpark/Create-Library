@@ -5,6 +5,7 @@ import java.util.Set;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.data.IEntityTarget;
 import com.petrolpark.data.reward.entity.IEntityReward;
 

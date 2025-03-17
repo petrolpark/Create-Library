@@ -9,7 +9,9 @@ import java.util.stream.Stream;
 
 import com.petrolpark.PetrolparkRegistries;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
@@ -18,7 +20,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public interface BlockIngredient<T extends BlockIngredient<T>> {
 
@@ -148,7 +149,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
             @Override
             public SingleBlockIngredient read(FriendlyByteBuf buffer) {
-                return new SingleBlockIngredient(ForgeRegistries.BLOCKS.getValue(buffer.readResourceLocation()));
+                return new SingleBlockIngredient(BuiltInRegistries.BLOCK.get(buffer.readResourceLocation()));
             };
 
             @Override
@@ -181,9 +182,12 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
         @Override
         public NonNullList<ItemStack> getDisplayedItemStacks() {
-            return NonNullList.of(ItemStack.EMPTY, ForgeRegistries.BLOCKS.tags().getTag(tag).stream()
-                .map(block -> new ItemStack(block.asItem()))
-                .toArray(i -> new ItemStack[i])
+            return NonNullList.of(ItemStack.EMPTY, BuiltInRegistries.BLOCK.getTag(tag)
+                .map(set -> set.stream()
+                    .map(Holder::value)
+                    .map(ItemStack::new)
+                    .toArray(i -> new ItemStack[i])
+                ).orElse(new ItemStack[0])
             );
         };
 

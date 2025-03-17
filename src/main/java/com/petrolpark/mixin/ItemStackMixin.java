@@ -36,7 +36,7 @@ public class ItemStackMixin implements IItemStackDuck {
         cancellable = true
     )
     private static void inIsSameItemSameTags(ItemStack stack, ItemStack otherStack, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(ItemHelper.equalIgnoringTags(stack, otherStack));
+        cir.setReturnValue(ItemHelper.equalIgnoringComponents(stack, otherStack));
     }
 
     @Override

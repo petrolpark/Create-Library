@@ -5,16 +5,13 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.shop.customer.EntityCustomer;
+import com.petrolpark.PetrolparkAttachmentTypes;
+import com.petrolpark.PetrolparkDataComponents;
 import com.petrolpark.team.ITeam;
 import com.petrolpark.team.ITeamBoundItem;
-import com.petrolpark.team.data.TeamDataTypes;
-import com.petrolpark.util.NBTHelper;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -36,15 +33,10 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
         super(properties);
     };
 
-    public Optional<Shop> getShop(Level level, Player player, ItemStack stack) {
-        if (!stack.hasTag() || !stack.getTag().contains(SHOP_TAG_KEY, Tag.TAG_STRING)) return Optional.empty();
-        return Optional.ofNullable(NBTHelper.readRegistryObject(stack.getTag(), SHOP_TAG_KEY, PetrolparkRegistries.Keys.SHOP, level));
-    };
-
     @Override
     public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (getShop(level, player, stack).isPresent()) {
+        if (stack.get(PetrolparkDataComponents.SHOP) != null) {
             InteractionResult result = trySelectTeam(stack, player, level);
             if (result != InteractionResult.PASS) return new InteractionResultHolder<>(result, stack);
         };
@@ -53,10 +45,11 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
 
     @Override
     public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
-        return getShop(player.level(), player, stack)
+        return Optional.ofNullable(stack.get(PetrolparkDataComponents.SHOP))
+            .map(Holder::value)
             .filter(shop -> shop.canServe(entity))
             .map(shop -> {
-                entity.getCapability(EntityCustomer.CAPABILITY);
+                entity.getData(PetrolparkAttachmentTypes.ENTITY_CUSTOMER);
                 //TODO
                 return InteractionResult.SUCCESS;
             }).orElse(super.interactLivingEntity(stack, player, entity, hand));
@@ -69,18 +62,17 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public void appendHoverText(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull List<Component> tooltipComponents, @Nonnull TooltipFlag isAdvanced) {
-        Minecraft mc = Minecraft.getInstance();
-        getShop(level, mc.player, stack).ifPresent(shop -> {
-            ITeam team = ITeamBoundItem.getTeam(stack, level);
-            if (!team.isNone()) tooltipComponents.add(team.getTeamData(TeamDataTypes.SHOPS.get()).getName(shop).copy().withStyle(ChatFormatting.GRAY));
+    public void appendHoverText(@Nonnull ItemStack stack, @Nonnull TooltipContext context, @Nonnull List<Component> tooltipComponents, @Nonnull TooltipFlag isAdvanced) {
+        Optional.ofNullable(stack.get(PetrolparkDataComponents.SHOP)).ifPresent(shop -> {
+            ITeam team = ITeamBoundItem.getTeam(stack, context.level());
+            if (!team.isNone()) Optional.ofNullable(team.get(PetrolparkDataComponents.SHOPS_DATA)).ifPresent(shops ->  tooltipComponents.add(shops.getName(shop).copy().withStyle(ChatFormatting.GRAY)));
         });
     };
 
     @OnlyIn(Dist.CLIENT)
     @Override
     public Component getTeamSelectionScreenTitle(Level level, Player player, ItemStack stack) {
-        return Component.translatable("item.petrolpark.menu.team_selection", getShop(level, player, stack).map(Shop::getName).orElse(Component.translatable("shop.petrolpark.unknown")));
+        return Component.translatable("item.petrolpark.menu.team_selection", Optional.ofNullable(stack.get(PetrolparkDataComponents.SHOP)).map(Holder::value).map(Shop::getName).orElse(Component.translatable("shop.petrolpark.unknown")));
     };
     
 };

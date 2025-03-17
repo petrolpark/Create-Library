@@ -2,14 +2,26 @@ package com.petrolpark.contamination;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
-import net.minecraft.core.RegistryAccess;
+import com.mojang.serialization.Codec;
+import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.util.CodecHelper;
+
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContamination<OBJECT, OBJECT_STACK> {
+
+    public static final Codec<List<Holder<Contaminant>>> ORPHAN_HOLDER_LIST_CODEC = Codec.list(Contaminant.CODEC);
+    public static final StreamCodec<RegistryFriendlyByteBuf, List<Holder<Contaminant>>> ORPHAN_HOLDER_LIST_STREAM_CODEC = CodecHelper.listStream(Contaminant.STREAM_CODEC);
 
     protected final OBJECT_STACK stack;
     
@@ -52,7 +64,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean contaminate(Contaminant contaminant, final RegistryAccess registries) {
+    public final boolean contaminate(Contaminant contaminant, final HolderLookup.Provider registries) {
         if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
         if (!contaminants.add(contaminant)) return false;
         orphanContaminants.removeAll(contaminant.getChildren());
@@ -63,7 +75,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean contaminateAll(Stream<Contaminant> contaminantsStream, final RegistryAccess registries) {
+    public final boolean contaminateAll(Stream<Contaminant> contaminantsStream, final HolderLookup.Provider registries) {
         boolean changed = !contaminantsStream
             .dropWhile(IntrinsicContaminants.get(this)::contains) // Don't include intrinsic Contaminants
             .filter(contaminants::add) // Only include Contaminants whose (parents) are not already here
@@ -78,7 +90,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean decontaminate(Contaminant contaminant, final RegistryAccess registries) {
+    public final boolean decontaminate(Contaminant contaminant, final HolderLookup.Provider registries) {
         if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
         if (!orphanContaminants.remove(contaminant)) return false;
         contaminants.remove(contaminant);
@@ -90,7 +102,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean decontaminateOnly(Contaminant contaminant, final RegistryAccess registries) {
+    public final boolean decontaminateOnly(Contaminant contaminant, final HolderLookup.Provider registries) {
         if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
         if (!orphanContaminants.remove(contaminant)) return false;
         contaminants.remove(contaminant);
@@ -102,12 +114,21 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean fullyDecontaminate(final RegistryAccess registries) {
+    public final boolean fullyDecontaminate(final HolderLookup.Provider registries) {
         if (orphanContaminants.isEmpty()) return false;
         orphanContaminants.clear();
         contaminants.clear();
         save(registries);
         return true;
+    };
+
+    protected List<Holder<Contaminant>> getOrphanHolderList(final HolderLookup.Provider registries) {
+        return orphanContaminants.stream()
+            .map(PetrolparkRegistries.holderGetOrThrow(registries, PetrolparkRegistries.Keys.CONTAMINANT))
+            .dropWhile(Optional::isEmpty)
+            .map(Optional::get)
+            .map(h -> (Holder<Contaminant>)h)
+            .toList();
     };
 };
 

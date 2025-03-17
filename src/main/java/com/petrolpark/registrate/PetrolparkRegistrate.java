@@ -29,7 +29,6 @@ import com.petrolpark.recipe.ingredient.modifier.IngredientModifierType;
 import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.team.ITeam;
-import com.petrolpark.team.data.ITeamDataType;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
@@ -115,10 +114,6 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     public RegistryEntry<TeamRewardType, TeamRewardType> teamRewardType(String name, MapCodec<? extends ITeamReward> codec) {
         return simple(name, PetrolparkRegistries.Keys.TEAM_REWARD_TYPE, () -> new TeamRewardType(codec));
-    };
-
-    public <DATA> RegistryEntry<ITeamDataType<?>, ITeamDataType<DATA>> teamDataType(String name, NonNullSupplier<ITeamDataType<DATA>> supplier) {
-        return generic(name, PetrolparkRegistries.Keys.TEAM_DATA_TYPE, supplier).register();
     };
     
 };

@@ -6,8 +6,6 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.petrolpark.team.data.ITeamDataType;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
@@ -15,6 +13,8 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public final class NoTeam implements ITeam, ITeam.Provider {
 
@@ -51,12 +51,13 @@ public final class NoTeam implements ITeam, ITeam.Provider {
     };
 
     @Override
-    public Stream<String> streamMemberUsernames(Level level) {
+    public Stream<String> streamMemberUsernames() {
         return Stream.empty();
     };
 
     @Override
-    public Stream<Player> streamMembers(Level level) {
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    public Stream<Player> streamMembers() {
         return Stream.empty();
     };
 
@@ -66,12 +67,9 @@ public final class NoTeam implements ITeam, ITeam.Provider {
     };
 
     @Override
-    public Component getName(Level level) {
+    public Component getName() {
         return Component.translatable("team.petrolpark.team.none");
     };
-
-    @Override
-    public void setChanged(Level level, ITeamDataType<?> dataType) {};
 
     @Override
     public void renderIcon(GuiGraphics graphics) {

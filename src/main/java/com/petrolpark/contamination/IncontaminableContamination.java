@@ -2,7 +2,7 @@ package com.petrolpark.contamination;
 
 import java.util.stream.Stream;
 
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 
 public final class IncontaminableContamination implements IContamination<Object, Object> {
 
@@ -26,7 +26,7 @@ public final class IncontaminableContamination implements IContamination<Object,
     };
 
     @Override
-    public void save(final RegistryAccess registries) {};
+    public void save(final HolderLookup.Provider registries) {};
 
     @Override
     public boolean has(Contaminant contaminant) {
@@ -54,27 +54,27 @@ public final class IncontaminableContamination implements IContamination<Object,
     };
 
     @Override
-    public boolean contaminate(Contaminant contaminant, final RegistryAccess registries) {
+    public boolean contaminate(Contaminant contaminant, final HolderLookup.Provider registries) {
         return false;
     };
 
     @Override
-    public boolean contaminateAll(Stream<Contaminant> contaminantsStream, final RegistryAccess registries) {
+    public boolean contaminateAll(Stream<Contaminant> contaminantsStream, final HolderLookup.Provider registries) {
         return false;
     };
 
     @Override
-    public boolean decontaminate(Contaminant contaminant, final RegistryAccess registries) {
+    public boolean decontaminate(Contaminant contaminant, final HolderLookup.Provider registries) {
         return false;
     };
 
     @Override
-    public boolean decontaminateOnly(Contaminant contaminant, final RegistryAccess registries) {
+    public boolean decontaminateOnly(Contaminant contaminant, final HolderLookup.Provider registries) {
         return false;
     };
 
     @Override
-    public boolean fullyDecontaminate(final RegistryAccess registries) {
+    public boolean fullyDecontaminate(final HolderLookup.Provider registries) {
         return false;
     };
     

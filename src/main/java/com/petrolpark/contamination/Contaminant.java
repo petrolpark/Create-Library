@@ -1,9 +1,9 @@
 package com.petrolpark.contamination;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nonnull;
 
@@ -16,8 +16,10 @@ import com.petrolpark.util.GraphHelper.CircularReferenceException;
 
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.RegistryCodecs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
@@ -38,7 +40,7 @@ public class Contaminant {
             Codec.doubleRange(0d, 1d).fieldOf("preservationProportion").forGetter(Contaminant::getPreservationProportion),
             Codec.intRange(0, 16777215).fieldOf("color").forGetter(Contaminant::getColor),
             Codec.intRange(0, 16777215).fieldOf("absentColor").forGetter(Contaminant::getAbsentColor),
-            Codec.list(ResourceLocation.CODEC).fieldOf("children").forGetter(c -> c.childResourceLocations)
+            RegistryCodecs.homogeneousList(PetrolparkRegistries.Keys.CONTAMINANT).optionalFieldOf("children", HolderSet.direct()).forGetter(Contaminant::getDirectChildrenHolders)
         ).apply(instance, Contaminant::new)
     ));
     public static final Codec<Holder<Contaminant>> CODEC = RegistryFixedCodec.create(PetrolparkRegistries.Keys.CONTAMINANT);
@@ -67,11 +69,11 @@ public class Contaminant {
     public final double preservationProportion;
     public final int color;
     public final int absentColor;
-    private final List<ResourceLocation> childResourceLocations;
+    protected final HolderSet<Contaminant> directChildrenHolders;
 
     // Internal fields
-    protected Set<Contaminant> children = new HashSet<>();
-    protected Set<Contaminant> parents = new HashSet<>();
+    protected final List<Holder<Contaminant>> childrenHolders;
+    protected final List<Contaminant> parents = new ArrayList<>();
 
     // Publicly accessible fields
     protected ResourceLocation rl;
@@ -80,11 +82,14 @@ public class Contaminant {
     protected Set<Contaminant> childrenView = null;
     protected Set<Contaminant> parentsView = null;
 
-    public Contaminant(double preservationProportion, int color, int absentColor, List<ResourceLocation> childResourceLocations) {
+    public Contaminant(double preservationProportion, int color, int absentColor, HolderSet<Contaminant> directChildrenHolders) {
         this.preservationProportion = preservationProportion;
         this.color = color;
         this.absentColor = absentColor;
-        this.childResourceLocations = childResourceLocations;
+        this.directChildrenHolders = directChildrenHolders;
+
+        childrenHolders = new ArrayList<>(directChildrenHolders.size());
+        directChildrenHolders.forEach(childrenHolders::add);
     };
 
     public double getPreservationProportion() {
@@ -104,11 +109,15 @@ public class Contaminant {
         return absentColor;
     };
 
+    protected HolderSet<Contaminant> getDirectChildrenHolders() {
+        return directChildrenHolders;
+    };
+
     /**
      * All Contaminants (not just direct children) which any Contamination automatically has if they have this Contaminant.
      */
     public Set<Contaminant> getChildren() {
-        if (childrenView == null) childrenView = Collections.unmodifiableSet(children);
+        if (childrenView == null) childrenView = childrenHolders.stream().map(Holder::value).collect(Collectors.toUnmodifiableSet());
         return childrenView;
     };
 
@@ -116,7 +125,7 @@ public class Contaminant {
      * Any Contaminants (not just direct parents) which, if a Contamination has, will also belong to that Contamination.
      */
     public Set<Contaminant> getParents() {
-        if (parentsView == null) parentsView = Collections.unmodifiableSet(parents);
+        if (parentsView == null) parentsView = parents.stream().collect(Collectors.toUnmodifiableSet());
         return parentsView;
     };
 
@@ -159,22 +168,19 @@ public class Contaminant {
         public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
             Registry<Contaminant> registry = registryAccess.registryOrThrow(PetrolparkRegistries.Keys.CONTAMINANT);
             registry.forEach(parent -> {
-                ResourceLocation parentName = registry.getKey(parent);
-                if (parentName != null) parent.childResourceLocations.forEach(childName -> {
-                    Contaminant child = registry.getOptional(childName).orElseThrow(() -> new JsonSyntaxException(String.format("Error in Contaminant %s: no such child '%s'", parentName.toString(), childName.toString())));
-                    child.parents.add(parent);
-                    parent.children.add(child);
-                });
+                parent.directChildrenHolders.forEach(childHolder -> 
+                    childHolder.value().parents.add(parent)
+                );
             });
-            registry.forEach(parent -> {
-                ResourceLocation parentName = registry.getKey(parent);
+            registry.asLookup().listElements().forEach(parentHolder -> {
+                Contaminant parent = parentHolder.value();
                 try {
-                    for (Contaminant descendant : GraphHelper.getAllDescendants(parent, c -> c.children)) {
-                        parent.children.add(descendant);
-                        descendant.parents.add(parent);
+                    for (Holder<Contaminant> descendantHolder : GraphHelper.getAllDescendants((Holder<Contaminant>)parentHolder, h -> h.value().directChildrenHolders)) {
+                        parent.childrenHolders.add(descendantHolder);
+                        descendantHolder.value().parents.add(parent);
                     };
                 } catch (CircularReferenceException e) {
-                    throw new JsonSyntaxException(String.format("Contaminant %s is its own descendant. Replace the circular reference with a single Contaminant", parentName));
+                    throw new JsonSyntaxException(String.format("Contaminant %s is its own descendant. Replace the circular reference with a single Contaminant", parentHolder.getKey().location().toString()));
                 };
             });
             IntrinsicContaminants.clear();

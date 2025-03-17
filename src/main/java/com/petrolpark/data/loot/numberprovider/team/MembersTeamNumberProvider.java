@@ -9,7 +9,7 @@ public class MembersTeamNumberProvider implements TeamNumberProvider {
 
     @Override
     public float getFloat(ITeam team, LootContext context) {
-        return team.streamMemberUsernames(context.getLevel()).count();
+        return team.streamMemberUsernames().count();
     };
 
     @Override

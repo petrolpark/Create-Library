@@ -1,13 +1,11 @@
 package com.petrolpark.contamination;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 import com.petrolpark.PetrolparkDataComponents;
-import com.petrolpark.PetrolparkRegistries;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
 
 public abstract class ComponentHolderContamination<OBJECT, OBJECT_STACK extends MutableDataComponentHolder> extends Contamination<OBJECT, OBJECT_STACK> {
@@ -26,10 +24,8 @@ public abstract class ComponentHolderContamination<OBJECT, OBJECT_STACK extends 
     };
 
     @Override
-    public void save(RegistryAccess registries) {
-        stack.set(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, registries.registry(PetrolparkRegistries.Keys.CONTAMINANT).map(registry -> 
-            orphanContaminants.stream().map(registry::wrapAsHolder).toList()
-        ).orElse(Collections.emptyList()));
+    public void save(final HolderLookup.Provider registries) {
+        stack.set(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, getOrphanHolderList(registries));
     };
     
 };
