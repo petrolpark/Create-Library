@@ -13,8 +13,8 @@ import com.petrolpark.contamination.Contaminant;
 import com.petrolpark.contamination.GenericContamination;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
@@ -37,8 +37,8 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
     };
 
     @Override
-    public void contaminateAll(Stream<Contaminant> contaminants) {
-        contamination.contaminateAll(contaminants);
+    public void contaminateAll(HolderLookup.Provider registries, Stream<Contaminant> contaminants) {
+        contamination.contaminateAll(registries, contaminants);
     };
 
     @Inject(
@@ -53,16 +53,16 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
         method = "loadFromTag",
         at = @At("HEAD")
     )
-    public void inLoadFromTag(CompoundTag tag, CallbackInfo ci) {
-        contamination = new GenericContamination(tag.getList("Contamination", Tag.TAG_STRING));
+    public void inLoadFromTag(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
+        contamination = new GenericContamination().readNBT(tag.get("Contamination"), levelRegistry);
     };
 
     @Inject(
         method = "saveAdditional",
         at = @At("HEAD")
     )
-    public void inSaveAdditional(CompoundTag tag, CallbackInfo ci) {
-        tag.put("Contamination", contamination.writeNBT());
+    public void inSaveAdditional(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
+        tag.put("Contamination", contamination.writeNBT(levelRegistry));
     };
     
 };

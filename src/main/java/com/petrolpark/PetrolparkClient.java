@@ -1,5 +1,8 @@
 package com.petrolpark;
 
+import com.petrolpark.compat.Mods;
+import com.petrolpark.compat.create.CreateClient;
+import com.petrolpark.compat.curios.CuriosClient;
 import com.petrolpark.item.decay.DecayingItemHandler.ClientDecayingItemHandler;
 
 import net.neoforged.api.distmarker.Dist;
@@ -13,6 +16,9 @@ public class PetrolparkClient {
 
     public PetrolparkClient(IEventBus modEventBus) {
 		clientCtor(modEventBus, NeoForge.EVENT_BUS);
+
+        Mods.CREATE.executeIfInstalled(() -> () -> CreateClient.clientCtor(modEventBus, modEventBus));;
+        Mods.CURIOS.executeIfInstalled(() -> () -> CuriosClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
 	};
 
     public void clientCtor(IEventBus modEventBus, IEventBus neoEventBus) {

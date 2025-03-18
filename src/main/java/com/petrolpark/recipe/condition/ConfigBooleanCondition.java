@@ -1,84 +1,51 @@
 package com.petrolpark.recipe.condition;
 
-import com.electronwill.nightconfig.core.ConfigSpec;
-import com.google.common.base.Joiner;
+import java.util.Optional;
+
+import javax.annotation.Nonnull;
+
 import com.google.common.base.Splitter;
 import com.google.common.collect.ImmutableList;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import com.petrolpark.Petrolpark;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.createmod.catnip.config.ui.ConfigHelper;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.common.crafting.conditions.IConditionSerializer;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.config.ModConfig;
+import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 import net.neoforged.neoforge.common.conditions.ICondition;
-import net.neoforged.neoforge.common.conditions.ICondition.IContext;
-import net.neoforged.neoforge.common.crafting.CraftingHelper;
-import net.neoforged.neoforge.registries.RegisterEvent;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
-public class ConfigBooleanCondition implements ICondition {
+public record ConfigBooleanCondition(String modid, String path) implements ICondition {
 
-    public static final ResourceLocation ID = Petrolpark.asResource("config_boolean");
-    public static final Serializer SERIALIZER = new Serializer();
+    //public static final ResourceLocation ID = Petrolpark.asResource("config_boolean");
 
-    @SubscribeEvent
-    public static void register(RegisterEvent event) {
-        if (event.getRegistryKey().equals(ForgeRegistries.Keys.RECIPE_SERIALIZERS)) {
-            // Conditions
-            CraftingHelper.register(SERIALIZER);
-        };
-    };
+    public static final MapCodec<ConfigBooleanCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Codec.STRING.fieldOf("mod").forGetter(ConfigBooleanCondition::modid),
+        Codec.STRING.fieldOf("value").forGetter(ConfigBooleanCondition::path)
+    ).apply(instance, ConfigBooleanCondition::new)).validate(ConfigBooleanCondition::validate);
 
-    private final String modId;
-    private final Neo.BooleanValue value;
-
-    public ConfigBooleanCondition(String modId, ForgeConfigSpec.BooleanValue value) {
-        this.modId = modId;
-        this.value = value;
+    @Override
+    public boolean test(@Nonnull IContext context) {
+        return getConfigValue().map(BooleanValue::get).orElse(false);
     };
 
     @Override
-    public ResourceLocation getID() {
-        return ID;
+    public MapCodec<? extends ICondition> codec() {
+        return CODEC;
     };
 
-    @Override
-    public boolean test(IContext context) {
-        return value != null && value.get();
+    public Optional<BooleanValue> getConfigValue() {
+        try {
+            ConfigValue<?> configValue = ConfigHelper.findModConfigSpecFor(ModConfig.Type.COMMON, modid).getValues().get(ImmutableList.copyOf(Splitter.on(".").split(path)));
+            if (configValue instanceof BooleanValue booleanValue) return Optional.of(booleanValue);
+        } catch (NullPointerException | ClassCastException e) {};
+        return Optional.empty();
     };
 
-    public static class Serializer implements IConditionSerializer<ConfigBooleanCondition> {
-
-        @Override
-        public void write(JsonObject json, ConfigBooleanCondition value) {
-            json.addProperty("value", Joiner.on(".").join(value.value.getPath().iterator()));
-            json.addProperty("mod", value.modId);
-        };
-
-        @Override
-        public ConfigBooleanCondition read(JsonObject json) {
-            if (!json.has("value")) throw new JsonSyntaxException("Must specify a config boolean");
-            if (!json.has("mod")) throw new JsonSyntaxException("Must specify a mod ID");
-            String path = GsonHelper.getAsString(json, "value");
-            String modId = GsonHelper.getAsString(json, "mod");
-            ConfigValue<?> configValue = ConfigHelper.findForgeConfigSpecFor(ModConfig.Type.COMMON, modId).getValues().get(ImmutableList.copyOf(Splitter.on(".").split(path)));
-            if (!(configValue instanceof ForgeConfigSpec.BooleanValue booleanValue)) throw new JsonSyntaxException("The config must be a boolean type.");
-            return new ConfigBooleanCondition(modId, booleanValue);
-        };
-
-        @Override
-        public ResourceLocation getID() {
-            return ID;
-        };
-
+    protected DataResult<ConfigBooleanCondition> validate() {
+        if (getConfigValue().isPresent()) return DataResult.success(this);
+        return DataResult.error(() -> "The config must be a boolean type");
     };
-    
 };

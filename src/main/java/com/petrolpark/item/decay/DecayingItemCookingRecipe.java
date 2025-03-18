@@ -7,24 +7,20 @@ import javax.annotation.Nonnull;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.Petrolpark;
+import com.petrolpark.recipe.contamination.IHandleContaminationMyselfRecipe;
 import com.petrolpark.util.CodecHelper;
 
 import io.netty.handler.codec.DecoderException;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.HolderLookup.Provider;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.CookingBookCategory;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 
-public class DecayingItemCookingRecipe extends AbstractCookingRecipe {
+public class DecayingItemCookingRecipe extends AbstractCookingRecipe implements IHandleContaminationMyselfRecipe<SingleRecipeInput> {
 
     public static final MapCodec<DecayingItemCookingRecipe> CODEC = CodecHelper.singleFieldMap(
         Recipe.CODEC.comapFlatMap(r -> r instanceof AbstractCookingRecipe cr ? DataResult.success(cr) : DataResult.error(() -> "Not a cooking recipe"), Function.identity()),
@@ -54,7 +50,16 @@ public class DecayingItemCookingRecipe extends AbstractCookingRecipe {
     protected final AbstractCookingRecipe wrappedRecipe;
 
     public DecayingItemCookingRecipe(AbstractCookingRecipe wrappedRecipe) {
-        super(wrappedRecipe.getType(), wrappedRecipe.getGroup(), wrappedRecipe.category(), wrappedRecipe.getIngredients().get(0), wrappedRecipe.result, wrappedRecipe.getExperience(), wrappedRecipe.getCookingTime());
+        super(
+            wrappedRecipe.getType(),
+            wrappedRecipe.getGroup(),
+            wrappedRecipe.category(),
+            wrappedRecipe.getIngredients().get(0),
+            wrappedRecipe.result,
+            wrappedRecipe.getExperience(),
+            wrappedRecipe.getCookingTime()
+        );
+        this.wrappedRecipe = wrappedRecipe;
     };
 
     public AbstractCookingRecipe getWrappedRecipe() {

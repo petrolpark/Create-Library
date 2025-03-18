@@ -52,15 +52,15 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
             .dropWhile(Objects::isNull)
             .forEach(contamination -> 
             contamination.contaminateAll(
+                registries,
                 amounts.object2DoubleEntrySet().stream()
                     .filter(entry -> entry.getKey().isPreserved(entry.getDoubleValue() / totalAmount))
-                    .map(Object2DoubleMap.Entry::getKey),
-                registries
+                    .map(Object2DoubleMap.Entry::getKey)
             )
         );
     };
 
-    public static void perpetuates(final HolderLookup.Provider registries, Stream<ItemStack> itemInputs, Stream<FluidStack> fluidInputs, double fluidWeight, Stream<ItemStack> itemOutputs, Stream<FluidStack> fluidOutputs) {
+    public static void perpetuate(final HolderLookup.Provider registries, Stream<ItemStack> itemInputs, Stream<FluidStack> fluidInputs, double fluidWeight, Stream<ItemStack> itemOutputs, Stream<FluidStack> fluidOutputs) {
         Object2DoubleMap<Contaminant> amounts = new Object2DoubleArrayMap<>();
         double totalAmount = itemInputs.map(ItemContamination::get)
             .mapToDouble(contamination -> {
@@ -78,10 +78,10 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
         Stream.concat(itemOutputs.map(ItemContamination::get), fluidOutputs.map(FluidContamination::get))
             .forEach(contamination -> 
                 contamination.contaminateAll(
+                    registries,
                     amounts.object2DoubleEntrySet().stream()
                         .filter(entry -> entry.getKey().isPreserved(entry.getDoubleValue() / finalTotalAmount))
-                        .map(Object2DoubleMap.Entry::getKey),
-                    registries
+                        .map(Object2DoubleMap.Entry::getKey)
                 )
             );
     };
@@ -121,14 +121,14 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
         return IntrinsicContaminants.getShownIfAbsent(this).stream().dropWhile(this::has).dropWhile(PetrolparkTags.Contaminants.HIDDEN::matches);
     };
 
-    public boolean contaminate(Contaminant contaminant, final HolderLookup.Provider registries);
+    public boolean contaminate(final HolderLookup.Provider registries, Contaminant contaminant);
 
     /**
      * Add several Contaminants, and 
      * @param contaminantsStream
      * @return
      */
-    public boolean contaminateAll(Stream<Contaminant> contaminantsStream, final HolderLookup.Provider registries);
+    public boolean contaminateAll(final HolderLookup.Provider registries, Stream<Contaminant> contaminantsStream);
 
     /**
      * Remove a Contaminant and any {@link Contaminant#getChildren() children} it has that don't belong to another parent.
@@ -137,7 +137,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * @return Whether this Contamination changed
      * @see IContamination#decontaminateOnly(Contaminant) Don't remove children
      */
-    public boolean decontaminate(Contaminant contaminant, final HolderLookup.Provider registries);
+    public boolean decontaminate(final HolderLookup.Provider registries, Contaminant contaminant);
 
     /**
      * Remove a Contaminant, but not any of its children.
@@ -146,7 +146,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * @return Whether this Contamination changed (the Contaminant was removed)
      * @see IContamination#decontaminate(Contaminant) Remove all children
      */
-    public boolean decontaminateOnly(Contaminant contaminant, final HolderLookup.Provider registries);
+    public boolean decontaminateOnly(final HolderLookup.Provider registries, Contaminant contaminant);
 
     /**
      * Remove all extrinsic Contaminants.

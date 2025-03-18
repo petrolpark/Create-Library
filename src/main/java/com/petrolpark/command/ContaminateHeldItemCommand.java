@@ -43,7 +43,7 @@ public class ContaminateHeldItemCommand {
             ItemStack itemStack = livingEntity.getMainHandItem();
             if (!itemStack.isEmpty()) {
                try {
-                  if (ItemContamination.get(itemStack).contaminate(contaminant, source.registryAccess())) i++;
+                  if (ItemContamination.get(itemStack).contaminate(source.registryAccess(), contaminant)) i++;
                } catch (Throwable e) {};
                
             } else if (targets.size() == 1) {

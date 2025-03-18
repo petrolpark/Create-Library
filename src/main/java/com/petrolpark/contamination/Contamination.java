@@ -64,7 +64,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean contaminate(Contaminant contaminant, final HolderLookup.Provider registries) {
+    public final boolean contaminate(final HolderLookup.Provider registries, Contaminant contaminant) {
         if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
         if (!contaminants.add(contaminant)) return false;
         orphanContaminants.removeAll(contaminant.getChildren());
@@ -75,7 +75,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean contaminateAll(Stream<Contaminant> contaminantsStream, final HolderLookup.Provider registries) {
+    public final boolean contaminateAll(final HolderLookup.Provider registries, Stream<Contaminant> contaminantsStream) {
         boolean changed = !contaminantsStream
             .dropWhile(IntrinsicContaminants.get(this)::contains) // Don't include intrinsic Contaminants
             .filter(contaminants::add) // Only include Contaminants whose (parents) are not already here
@@ -90,7 +90,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean decontaminate(Contaminant contaminant, final HolderLookup.Provider registries) {
+    public final boolean decontaminate(final HolderLookup.Provider registries, Contaminant contaminant) {
         if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
         if (!orphanContaminants.remove(contaminant)) return false;
         contaminants.remove(contaminant);
@@ -102,7 +102,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final boolean decontaminateOnly(Contaminant contaminant, final HolderLookup.Provider registries) {
+    public final boolean decontaminateOnly(final HolderLookup.Provider registries, Contaminant contaminant) {
         if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
         if (!orphanContaminants.remove(contaminant)) return false;
         contaminants.remove(contaminant);

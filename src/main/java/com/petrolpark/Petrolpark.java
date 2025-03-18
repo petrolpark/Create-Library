@@ -21,6 +21,7 @@ import com.petrolpark.team.scoreboard.ScoreboardTeamManager;
 
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -46,10 +47,6 @@ public class Petrolpark {
     public static final ThreadLocal<DecayingItemHandler> DECAYING_ITEM_HANDLER = ThreadLocal.withInitial(() -> DecayingItemHandler.DUMMY);
     public static final ScoreboardTeamManager SCOREBOARD_TEAMS = new ScoreboardTeamManager();
 
-    static {
-        PetrolparkItemDisplayContexts.register();
-    };
-
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
 
         REGISTRATE.registerEventListeners(modEventBus);
@@ -67,7 +64,9 @@ public class Petrolpark {
         PetrolparkItems.register();
         PetrolparkMobEffects.register();
         PetrolparkTeamProviderTypes.register();
-        // Registration - loot
+        // Registration - data/loot
+        PetrolparkDataLoadingConditions.register();
+        PetrolparkCriteriaTriggers.register();
         PetrolparkLootConditionTypes.register();
         PetrolparkNumberProviderTypes.register();
         PetrolparkGlobalLootModifierSerializers.register();
@@ -76,11 +75,10 @@ public class Petrolpark {
         PetrolparkIngredientModifierTypes.register();
         PetrolparkIngredientRandomizerTypes.register();
 
-        // Register ourselves for server and other game events we are interested in
         NeoForge.EVENT_BUS.register(this);
     
-        // Register the commonSetup method for modloading
         modEventBus.addListener(this::init);
+        modEventBus.addListener(EventPriority.LOWEST, PetrolparkDatagen::gatherData);
 
         // Compat
         if (Mods.JEI.isLoading()) NeoForge.EVENT_BUS.register(ITickableCategory.ClientEvents.class);

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.petrolpark.recipe.advancedprocessing.firsttimelucky.IFirstTimeLuckyRecipe;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.IFTLProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
@@ -23,7 +23,7 @@ public class RecipeHelper {
     public static List<ItemStack> rollResults(ProcessingRecipe<?> recipe, Player player, int multiplier) {
         List<ItemStack> results = new ArrayList<>();
         if (recipe == null) return results;
-        if (recipe instanceof IFirstTimeLuckyRecipe luckyRecipe && player != null && multiplier > 0) {
+        if (recipe instanceof IFTLProcessingRecipe luckyRecipe && player != null && multiplier > 0) {
             results.addAll(luckyRecipe.rollLuckyResults(player));
             multiplier--;
         };

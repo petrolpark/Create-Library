@@ -25,6 +25,6 @@ public class SandPaperPolishingRecipeMixin {
     )
     private static void inApplyPolish(Level world, Vec3 position, ItemStack stack, ItemStack sandPaperStack, CallbackInfoReturnable<ItemStack> cir) {
         IDecayingItem.startDecay(cir.getReturnValue());
-        if (PetrolparkConfig.SERVER.createSandingRecipesPropagateContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(ItemContamination.get(stack).streamAllContaminants());
+        if (PetrolparkConfig.SERVER.createSandingRecipesPropagateContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(world.registryAccess(), ItemContamination.get(stack).streamAllContaminants());
     };
 };

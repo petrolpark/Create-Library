@@ -5,8 +5,8 @@ import java.util.stream.Stream;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.At.Shift;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -21,9 +21,10 @@ import com.simibubi.create.foundation.fluid.FluidIngredient;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.items.IItemHandler;
+import net.minecraft.world.level.Level;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.items.IItemHandler;
 
 @Mixin(BasinRecipe.class)
 public class BasinRecipeMixin {
@@ -61,7 +62,8 @@ public class BasinRecipeMixin {
                     fluidInputs[tank] = stack;
                 };
 
-                IContamination.perpetuate(Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfig.SERVER.createFluidContaminantWeight.get(), recipeOutputItems.stream(), recipeOutputFluids.stream());
+                Level level = basin.getLevel();
+                if (level != null) IContamination.perpetuate(level.registryAccess(), Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfig.SERVER.createFluidContaminantWeight.get(), recipeOutputItems.stream(), recipeOutputFluids.stream());
             };
         };
     };

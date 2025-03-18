@@ -13,8 +13,8 @@ import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.contamination.IContamination;
 import com.petrolpark.contamination.ItemContamination;
 import com.petrolpark.item.decay.IDecayingItem;
-import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FirstTimeLuckyRecipesBehaviour;
-import com.petrolpark.recipe.advancedprocessing.firsttimelucky.IFirstTimeLuckyRecipe;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FTLRecipesBehaviour;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.IFTLProcessingRecipe;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
@@ -24,10 +24,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.ItemHandlerHelper;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.items.ItemStackHandler;
 
 @Mixin(value = MillstoneBlockEntity.class, remap = false)
 public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
@@ -55,7 +56,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
         remap = false
     )
     public void inAddBehaviours(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
-        behaviours.add(new FirstTimeLuckyRecipesBehaviour(this, r -> r.getType() == AllRecipeTypes.MILLING.getType()));
+        behaviours.add(new FTLRecipesBehaviour(this, rh -> rh.value().getType() == AllRecipeTypes.MILLING.getType()));
     };
 
     /**
@@ -84,10 +85,10 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
     )
     @SuppressWarnings("unchecked")
     public void inProcessEnd(CallbackInfo ci) {
-        FirstTimeLuckyRecipesBehaviour behaviour = getBehaviour(FirstTimeLuckyRecipesBehaviour.TYPE);
+        FTLRecipesBehaviour behaviour = getBehaviour(FTLRecipesBehaviour.TYPE);
         List<ItemStack> results;
 
-        if (behaviour != null && lastRecipe instanceof IFirstTimeLuckyRecipe ftlr) {
+        if (behaviour != null && lastRecipe instanceof IFTLProcessingRecipe ftlr) {
             results = ftlr.rollLuckyResults(behaviour.getPlayer());
         } else {
             results = lastRecipe.rollResults();
@@ -95,7 +96,8 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
 
         if (PetrolparkConfig.SERVER.createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
             IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
-            results.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
+            Level level = getLevel();
+            if (level != null) results.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(level.registryAccess(), inputContamination.streamAllContaminants()));
         };
 
         results.forEach(stack -> {

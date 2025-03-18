@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.recipe.advancedprocessing.AdvancedProcessingRecipeSerializer;
-import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FirstTimeLuckyMillingRecipe;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FTLMillingRecipe;
 import com.petrolpark.util.Lang;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
@@ -25,7 +25,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo {
 
-    FIRST_TIME_LUCKY_MILLING(FirstTimeLuckyMillingRecipe::new, AllRecipeTypes.MILLING::getType),
+    FIRST_TIME_LUCKY_MILLING(FTLMillingRecipe::new, AllRecipeTypes.MILLING::getType),
     ;
 
     private final ResourceLocation id;

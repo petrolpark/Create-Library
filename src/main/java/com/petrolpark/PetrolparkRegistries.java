@@ -40,17 +40,24 @@ import net.neoforged.neoforge.server.ServerLifecycleHooks;
 public class PetrolparkRegistries {
 
     /**
+     * <b>Only call during gameplay, not during world loading or before.</b>
+     */
+    public static final RegistryAccess registryAccess() {
+        return Petrolpark.runForDist(() -> () -> {
+            ClientPacketListener connection = Minecraft.getInstance().getConnection();
+            if (connection == null) return null;
+            return connection.registryAccess();
+        }, () -> () -> ServerLifecycleHooks.getCurrentServer().registryAccess());
+    };
+
+    /**
      * Fetch the (Datapack) Registry with the given key.
      * <b>Only call during gameplay, not during world loading or before.</b>
      * @param <OBJECT> Type of objects in the Registry
      * @param key
      */
     public static <OBJECT> Registry<OBJECT> getRegistry(ResourceKey<Registry<OBJECT>> key) {
-        return Petrolpark.runForDist(() -> () -> {
-            ClientPacketListener connection = Minecraft.getInstance().getConnection();
-            if (connection == null) return null;
-            return connection.registryAccess();
-        }, () -> () -> ServerLifecycleHooks.getCurrentServer().registryAccess()).registryOrThrow(key);
+        return registryAccess().registryOrThrow(key);
     };
 
     /**

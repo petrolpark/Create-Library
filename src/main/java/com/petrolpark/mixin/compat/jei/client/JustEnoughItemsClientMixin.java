@@ -11,13 +11,11 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import com.petrolpark.compat.jei.PetrolparkJEI;
 
 import mezz.jei.api.IModPlugin;
-import mezz.jei.common.config.IServerConfig;
-import mezz.jei.common.network.ClientPacketRouter;
-import mezz.jei.forge.JustEnoughItemsClient;
-import mezz.jei.forge.events.PermanentEventSubscriptions;
-import mezz.jei.forge.network.ConnectionToServer;
-import mezz.jei.forge.network.NetworkHandler;
+import mezz.jei.common.network.IConnectionToServer;
 import mezz.jei.gui.config.InternalKeyMappings;
+import mezz.jei.neoforge.JustEnoughItemsClient;
+import mezz.jei.neoforge.events.PermanentEventSubscriptions;
+import mezz.jei.neoforge.network.NetworkHandler;
 
 @Mixin(JustEnoughItemsClient.class)
 public class JustEnoughItemsClientMixin {
@@ -27,7 +25,14 @@ public class JustEnoughItemsClientMixin {
         at = @At("RETURN"),
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    public void inInit(NetworkHandler networkHandler, PermanentEventSubscriptions subscriptions, IServerConfig serverConfig, CallbackInfo ci, ConnectionToServer serverConnection, InternalKeyMappings keyMappings, ClientPacketRouter packetRouter, List<IModPlugin> plugins) {
+    public void inInit(
+        NetworkHandler networkHandler,
+        PermanentEventSubscriptions subscriptions,
+        CallbackInfo ci,
+        InternalKeyMappings keyMappings,
+        IConnectionToServer serverConnection,
+        List<IModPlugin> plugins
+    ) {
         plugins.add(new PetrolparkJEI());
     };
 };

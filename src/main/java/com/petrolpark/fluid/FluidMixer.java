@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import com.petrolpark.contamination.FluidContamination;
-
 import net.minecraft.core.RegistryAccess;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
@@ -21,7 +19,7 @@ public class FluidMixer {
     };
 
     static {
-        register(FluidContamination.MIXER); // Default Mixer which replicates vanilla behaviour
+        //register(FluidContamination.MIXER); // Default Mixer which replicates vanilla behaviour
     };
 
     /**

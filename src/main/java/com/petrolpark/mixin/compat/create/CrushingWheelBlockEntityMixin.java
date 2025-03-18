@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FirstTimeLuckyRecipesBehaviour;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FTLRecipesBehaviour;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelBlockEntity;
@@ -31,6 +31,6 @@ public abstract class CrushingWheelBlockEntityMixin extends KineticBlockEntity {
         remap = false
     )
     public void inAddBehaviours(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
-        behaviours.add(new FirstTimeLuckyRecipesBehaviour(this, r -> r instanceof AbstractCrushingRecipe));
+        behaviours.add(new FTLRecipesBehaviour(this, rh -> rh.value() instanceof AbstractCrushingRecipe));
     };
 };

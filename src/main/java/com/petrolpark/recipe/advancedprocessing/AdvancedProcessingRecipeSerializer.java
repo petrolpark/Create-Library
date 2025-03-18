@@ -6,20 +6,24 @@ import java.util.Set;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import com.mojang.serialization.Codec;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.recipe.advancedprocessing.IBiomeSpecificProcessingRecipe.BiomeValue;
-import com.petrolpark.recipe.advancedprocessing.firsttimelucky.IFirstTimeLuckyRecipe;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.IFTLProcessingRecipe;
+import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.ProcessingRecipeFactory;
 
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 
 @RequiresCreate
 public class AdvancedProcessingRecipeSerializer<T extends ProcessingRecipe<?>> extends ProcessingRecipeSerializer<T> {
+
+    public final Codec<T> CODEC = AllRecipeTypes.CODEC.dispatchMap(ProcessingRecipe::getRecipeType, AllRecipeTypes::processingCodec)
 
     public AdvancedProcessingRecipeSerializer(ProcessingRecipeFactory<T> factory) {
         super(factory);
@@ -40,7 +44,7 @@ public class AdvancedProcessingRecipeSerializer<T extends ProcessingRecipe<?>> e
         };
 
         // Lucky first time
-        if (recipe instanceof IFirstTimeLuckyRecipe luckyRecipe) {
+        if (recipe instanceof IFTLProcessingRecipe luckyRecipe) {
             json.addProperty("lucky_first_time", luckyRecipe.shouldBeLuckyFirstTime());
         };
     };
@@ -65,7 +69,7 @@ public class AdvancedProcessingRecipeSerializer<T extends ProcessingRecipe<?>> e
 
         // Lucky first time
         if (json.has("lucky_first_time")) {
-            if (recipe instanceof IFirstTimeLuckyRecipe luckyRecipe) {
+            if (recipe instanceof IFTLProcessingRecipe luckyRecipe) {
                 boolean isLucky = false;
                 try {
                     isLucky = json.get("lucky_first_time").getAsBoolean();
@@ -85,7 +89,7 @@ public class AdvancedProcessingRecipeSerializer<T extends ProcessingRecipe<?>> e
     };
 
     @Override
-    protected void writeToBuffer(FriendlyByteBuf buffer, T recipe) {
+    protected void writeToBuffer(RegistryFriendlyByteBuf buffer, T recipe) {
         super.writeToBuffer(buffer, recipe);
 
         // Biome
@@ -96,7 +100,7 @@ public class AdvancedProcessingRecipeSerializer<T extends ProcessingRecipe<?>> e
         };
 
         // Lucky first time
-        if (recipe instanceof IFirstTimeLuckyRecipe luckyRecipe) {
+        if (recipe instanceof IFTLProcessingRecipe luckyRecipe) {
             buffer.writeBoolean(luckyRecipe.shouldBeLuckyFirstTime());
         };
     };
@@ -116,7 +120,7 @@ public class AdvancedProcessingRecipeSerializer<T extends ProcessingRecipe<?>> e
         };
 
         // Lucky first time
-        if (recipe instanceof IFirstTimeLuckyRecipe luckyRecipe) {
+        if (recipe instanceof IFTLProcessingRecipe luckyRecipe) {
             luckyRecipe.setLuckyFirstTime(buffer.readBoolean());
         };
 

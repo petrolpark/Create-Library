@@ -8,9 +8,9 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder.Pro
  * Milling recipes which guarantee all chance outputs the first time they are done.
  */
 @RequiresCreate
-public class FirstTimeLuckyMillingRecipe extends MillingRecipe implements IFirstTimeLuckyRecipe<MillingRecipe> {
+public class FTLMillingRecipe extends MillingRecipe implements IFTLProcessingRecipe<MillingRecipe> {
 
-    public FirstTimeLuckyMillingRecipe(ProcessingRecipeParams params) {
+    public FTLMillingRecipe(ProcessingRecipeParams params) {
         super(params);
     };
 

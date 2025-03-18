@@ -6,7 +6,6 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.data.advancement.SimpleAdvancementTrigger;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.Util;
@@ -14,27 +13,24 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public class Badge {
+public class Badge implements ItemLike {
 
     protected ResourceLocation id;
     protected ItemEntry<BadgeItem> itemEntry;
 
     protected Supplier<Ingredient> duplicationIngredient;
-    public SimpleAdvancementTrigger advancementTrigger;
 
     public Badge() {
         duplicationIngredient = () -> Ingredient.EMPTY;
-        advancementTrigger = null;
     };
 
     public void setDuplicationItem(Supplier<Ingredient> ingredient) {
@@ -64,17 +60,6 @@ public class Badge {
         );
     };
 
-    public void setAdvancementTrigger(SimpleAdvancementTrigger trigger) {
-        if (advancementTrigger != null) throw new UnsupportedOperationException("Cannot reset Badge advancement trigger");
-        advancementTrigger = trigger;
-    };
-
-    public void grantAdvancement(Player player) {
-        if (advancementTrigger != null && player instanceof ServerPlayer serverPlayer) {
-            advancementTrigger.trigger(serverPlayer);
-        };
-    };
-
     public void setId(ResourceLocation id) {
         if (this.id != null) throw new UnsupportedOperationException("Cannot change a Badge's ID");
         this.id = id;
@@ -97,7 +82,8 @@ public class Badge {
         return id;
     };
 
-    public BadgeItem getItem() {
+    @Override
+    public BadgeItem asItem() {
         return itemEntry.get();
     };
 

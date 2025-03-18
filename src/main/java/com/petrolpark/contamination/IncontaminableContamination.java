@@ -54,22 +54,22 @@ public final class IncontaminableContamination implements IContamination<Object,
     };
 
     @Override
-    public boolean contaminate(Contaminant contaminant, final HolderLookup.Provider registries) {
+    public boolean contaminate(final HolderLookup.Provider registries, Contaminant contaminant) {
         return false;
     };
 
     @Override
-    public boolean contaminateAll(Stream<Contaminant> contaminantsStream, final HolderLookup.Provider registries) {
+    public boolean contaminateAll(final HolderLookup.Provider registries, Stream<Contaminant> contaminantsStream) {
         return false;
     };
 
     @Override
-    public boolean decontaminate(Contaminant contaminant, final HolderLookup.Provider registries) {
+    public boolean decontaminate(final HolderLookup.Provider registries, Contaminant contaminant) {
         return false;
     };
 
     @Override
-    public boolean decontaminateOnly(Contaminant contaminant, final HolderLookup.Provider registries) {
+    public boolean decontaminateOnly(final HolderLookup.Provider registries, Contaminant contaminant) {
         return false;
     };
 

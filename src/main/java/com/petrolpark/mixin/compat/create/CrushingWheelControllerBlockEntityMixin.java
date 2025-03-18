@@ -15,8 +15,8 @@ import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.contamination.IContamination;
 import com.petrolpark.contamination.ItemContamination;
 import com.petrolpark.item.decay.IDecayingItem;
-import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FirstTimeLuckyRecipesBehaviour;
-import com.petrolpark.recipe.advancedprocessing.firsttimelucky.IFirstTimeLuckyRecipe;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FTLRecipesBehaviour;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.IFTLProcessingRecipe;
 import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelControllerBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
@@ -26,9 +26,11 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.items.wrapper.RecipeWrapper;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
 @Mixin(value = CrushingWheelControllerBlockEntity.class, remap = false)
 public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlockEntity {
@@ -52,7 +54,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         remap = false
     )
     public void inAddBehaviours(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
-        behaviours.add(new FirstTimeLuckyRecipesBehaviour(this, r -> r instanceof AbstractCrushingRecipe));
+        behaviours.add(new FTLRecipesBehaviour(this, rh -> rh.value() instanceof AbstractCrushingRecipe));
     };
 
     @Inject(
@@ -75,10 +77,10 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         remap = false
     )
     @SuppressWarnings("unchecked")
-    public void inApplyRecipeMiddle(CallbackInfo ci, Optional<ProcessingRecipe<RecipeWrapper>> recipe, List<ItemStack> rolledResults, int rolls, int slot) {
+    public void inApplyRecipeMiddle(CallbackInfo ci, Optional<RecipeHolder<ProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> rolledResults, int rolls, int slot) {
         if (slot == 0) {
-            FirstTimeLuckyRecipesBehaviour behaviour = getBehaviour(FirstTimeLuckyRecipesBehaviour.TYPE);
-            if (behaviour != null && recipe.get() instanceof IFirstTimeLuckyRecipe ftlr) {
+            FTLRecipesBehaviour behaviour = getBehaviour(FTLRecipesBehaviour.TYPE);
+            if (behaviour != null && recipe.get().value() instanceof IFTLProcessingRecipe ftlr) {
                 List<ItemStack> results = ftlr.rollLuckyResults(behaviour.getPlayer());
                 rolledResults.clear();
                 rolledResults.addAll(results);
@@ -92,11 +94,12 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void inApplyRecipeEnd(CallbackInfo ci, Optional<ProcessingRecipe<RecipeWrapper>> recipe, List<ItemStack> list) {
+    public void inApplyRecipeEnd(CallbackInfo ci, Optional<RecipeHolder<ProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> list) {
         list.forEach(IDecayingItem::startDecay);
         if (PetrolparkConfig.SERVER.createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
             IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
-            list.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
+            Level level = getLevel();
+            if (level != null) list.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(level.registryAccess(), inputContamination.streamAllContaminants()));
         };
     };
     

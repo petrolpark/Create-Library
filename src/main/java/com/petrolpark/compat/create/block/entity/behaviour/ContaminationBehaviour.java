@@ -38,7 +38,7 @@ public class ContaminationBehaviour extends BlockEntityBehaviour {
     };
 
     public void setFromItem(ItemStack stack) {
-        contamination.contaminateAll(ItemContamination.get(stack).streamAllContaminants(), getWorld().registryAccess());
+        contamination.contaminateAll(getWorld().registryAccess(), ItemContamination.get(stack).streamAllContaminants());
     };
 
     @Override

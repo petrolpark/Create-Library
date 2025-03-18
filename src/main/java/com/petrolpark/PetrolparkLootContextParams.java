@@ -1,5 +1,6 @@
 package com.petrolpark;
 
+import com.petrolpark.badge.Badge;
 import com.petrolpark.data.IEntityTarget;
 import com.petrolpark.shop.Shop;
 import com.petrolpark.shop.customer.ICustomer;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 
 public class PetrolparkLootContextParams {
 
+    public static final LootContextParam<Badge> BADGE = create("badge");
     public static final LootContextParam<Shop> SHOP = create("shop");
     public static final LootContextParam<ICustomer> CUSTOMER = create("customer");
     public static final LootContextParam<Entity> CUSTOMER_ENTITY = createEntity("customer_entity");

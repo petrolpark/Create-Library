@@ -4,27 +4,23 @@ import java.util.stream.Stream;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkConfig;
-import com.petrolpark.PetrolparkTags;
-import com.petrolpark.badge.PlayerBadges;
+import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.command.ContaminateHeldItemCommand;
 import com.petrolpark.contamination.Contaminant;
 import com.petrolpark.contamination.ItemContamination;
 import com.petrolpark.item.decay.DecayingItemHandler.ServerDecayingItemHandler;
 import com.petrolpark.item.decay.IDecayingItem;
-import com.petrolpark.shop.customer.EntityCustomer;
-import com.petrolpark.team.SinglePlayerTeam;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.PotionBrewEvent;
-import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.tick.LevelTickEvent;
 
 @EventBusSubscriber
@@ -62,7 +58,16 @@ public class CommonEvents {
         for (int slot = 0; slot < 3; slot++) {
             ItemStack potion = event.getItem(slot);
             IDecayingItem.startDecay(potion);
-            if (PetrolparkConfig.SERVER.brewingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(Stream.of(event.getItem(3), potion).dropWhile(s -> PetrolparkConfig.SERVER.brewingWaterBottleContaminantsIgnored.get() && PotionUtil.getPotion(s) == Potions.WATER), potion);
+            if (PetrolparkConfig.SERVER.brewingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(
+                PetrolparkRegistries.registryAccess(),
+                Stream.of(event.getItem(3), potion)
+                .dropWhile(s -> 
+                    PetrolparkConfig.SERVER.brewingWaterBottleContaminantsIgnored.get()
+                    && s.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).potion()
+                        .map(Potions.WATER::equals)
+                        .orElse(false)
+                ), potion
+            );
         };
     };
     

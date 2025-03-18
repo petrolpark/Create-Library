@@ -57,7 +57,7 @@ public class PetrolparkDataComponents {
         "shops_data", builder -> builder.persistent(ShopsData.CODEC)
     );
 
-    // Create
+    // Create //TODO move
 
     public static final DataComponentType<Rotation> ROTATION_WHILE_FLYING = register(
         "rotation_while_flying",

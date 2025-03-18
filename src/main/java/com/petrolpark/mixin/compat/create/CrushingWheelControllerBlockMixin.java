@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.petrolpark.compat.create.block.entity.behaviour.AbstractRememberPlacerBehaviour;
-import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FirstTimeLuckyRecipesBehaviour;
+import com.petrolpark.recipe.advancedprocessing.firsttimelucky.FTLRecipesBehaviour;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelBlockEntity;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelControllerBlock;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelControllerBlockEntity;
@@ -32,7 +32,7 @@ public class CrushingWheelControllerBlockMixin {
         remap = false
     )
     private static void inUpdateSpeed(BlockState state, LevelAccessor level, BlockPos pos, CrushingWheelControllerBlockEntity be, CallbackInfo ci, Direction var4[], int var5, int var6, Direction d, BlockState neighbour, BlockEntity adjBE, CrushingWheelBlockEntity cwbe) {
-        FirstTimeLuckyRecipesBehaviour behaviour = cwbe.getBehaviour(FirstTimeLuckyRecipesBehaviour.TYPE);
+        FTLRecipesBehaviour behaviour = cwbe.getBehaviour(FTLRecipesBehaviour.TYPE);
         if (behaviour != null) AbstractRememberPlacerBehaviour.setPlacedBy(be, behaviour.getPlayer());
     };
 };

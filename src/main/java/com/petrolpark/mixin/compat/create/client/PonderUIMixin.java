@@ -33,10 +33,11 @@ public class PonderUIMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
+    @SuppressWarnings("rawtypes")
     public void inRenderPonderTags(PoseStack ms, int mouseX, int mouseY, boolean highlightAll, List _list, float fade, float partialTicks, GuiGraphics graphics, double guiScale, int height, CallbackInfo ci, PonderTag _tag, LerpedFloat chase, PonderButton button) {
         if (button.getRenderElement() instanceof AbstractRenderElement.SimpleRenderElement element) {
             if (((SimpleRenderElementAccessor)element).getRenderable() instanceof PonderTag tag) {
-                if (HighlightTagInstruction.highlightedTags.contains(tag)) chase.updateChaseTarget(1);    
+                if (HighlightTagInstruction.highlightedTags.contains(tag.getId())) chase.updateChaseTarget(1);    
             };
         };
     };

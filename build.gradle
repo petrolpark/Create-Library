@@ -116,7 +116,7 @@ dependencies {
     // Registrate (bundled with Petrolpark's Library)
     jarJar(implementation("com.tterrag.registrate:Registrate:${registrate_version}"))
     // Catnip
-    jarJar(implementation("net.createmod.catnip:Catnip-NeoForge-${minecraft_version}:${catnip_version}"))
+    jarJar(implementation("net.createmod.catnip:Catnip-Common-${minecraft_version}:${catnip_version}"))
 
     // Create & dependencies
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }

@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.BufferBuilder;
+import com.mojang.blaze3d.vertex.BufferUploader;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.Tesselator;
 import com.mojang.blaze3d.vertex.VertexFormat;
@@ -99,16 +100,15 @@ public class PetrolparkNineSlice {
      */
     private static void drawTexturedQuad(Matrix4f m, int r, int g, int b, int alpha, int left, int right, int top, int bot, int z, float u1, float u2, float v1, float v2) {
 		Tesselator tesselator = Tesselator.getInstance();
-		BufferBuilder bufferbuilder = tesselator.getBuilder();
+		BufferBuilder bufferbuilder = tesselator.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_TEX_COLOR);
 		RenderSystem.enableBlend();
 		RenderSystem.defaultBlendFunc();
-		RenderSystem.setShader(GameRenderer::getPositionColorTexShader);
-		bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR_TEX);
-		bufferbuilder.vertex(m, (float) left , (float) bot, (float) z).color(r, g, b, alpha).uv(u1, v2).endVertex();
-		bufferbuilder.vertex(m, (float) right, (float) bot, (float) z).color(r, g, b, alpha).uv(u2, v2).endVertex();
-		bufferbuilder.vertex(m, (float) right, (float) top, (float) z).color(r, g, b, alpha).uv(u2, v1).endVertex();
-		bufferbuilder.vertex(m, (float) left , (float) top, (float) z).color(r, g, b, alpha).uv(u1, v1).endVertex();
-		tesselator.end();
+		RenderSystem.setShader(GameRenderer::getPositionTexColorShader);
+		bufferbuilder.addVertex(m, (float) left , (float) bot, (float) z).setColor(r, g, b, alpha).setUv(u1, v2);
+		bufferbuilder.addVertex(m, (float) right, (float) bot, (float) z).setColor(r, g, b, alpha).setUv(u2, v2);
+		bufferbuilder.addVertex(m, (float) right, (float) top, (float) z).setColor(r, g, b, alpha).setUv(u2, v1);
+		bufferbuilder.addVertex(m, (float) left , (float) top, (float) z).setColor(r, g, b, alpha).setUv(u1, v1);
+		BufferUploader.drawWithShader(bufferbuilder.buildOrThrow());
 		RenderSystem.disableBlend();
 	};
 };

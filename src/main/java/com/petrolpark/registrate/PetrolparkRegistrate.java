@@ -1,12 +1,5 @@
 package com.petrolpark.registrate;
 
-import java.util.function.Supplier;
-
-import javax.annotation.Nonnull;
-
-import org.jetbrains.annotations.NotNull;
-
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.badge.Badge;
@@ -33,6 +26,7 @@ import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -42,7 +36,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
-import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.conditions.ICondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
@@ -60,8 +54,16 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 		return (BadgeBuilder<T, PetrolparkRegistrate>) entry(name, c -> BadgeBuilder.create(this, this, name, c, factory));
 	};
 
+    public <C extends ICondition> RegistryEntry<MapCodec<? extends ICondition>, MapCodec<C>> dataLoadingCondition(String name, MapCodec<C> codec) {
+        return simple(name, NeoForgeRegistries.Keys.CONDITION_CODECS, () -> codec);
+    };
+
     public RegistryEntry<ITeam.ProviderType, ITeam.ProviderType> teamProviderType(String name, MapCodec<? extends ITeam.Provider> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends ITeam.Provider> streamCodec) {
         return simple(name, PetrolparkRegistries.Keys.TEAM_PROVIDER_TYPE, () -> new ITeam.ProviderType(codec, streamCodec));
+    };
+
+    public <C extends CriterionTrigger<?>> RegistryEntry<CriterionTrigger<?>, C> criterionTrigger(String name, NonNullSupplier<C> triggerFactory) {
+        return simple(name, Registries.TRIGGER_TYPE, triggerFactory);
     };
 
     public RegistryEntry<LootItemConditionType, LootItemConditionType> lootConditionType(String name, MapCodec<? extends LootItemCondition> codec) {

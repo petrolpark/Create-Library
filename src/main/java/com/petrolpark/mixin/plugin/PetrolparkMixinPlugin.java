@@ -11,7 +11,7 @@ import org.objectweb.asm.tree.ClassNode;
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin;
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
-import com.petrolpark.compat.Mods;
+import net.neoforged.fml.loading.FMLLoader;
 
 public class PetrolparkMixinPlugin implements IMixinConfigPlugin {
 
@@ -30,19 +30,19 @@ public class PetrolparkMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
-        requireMultipleMods("client.JustEnoughItemsClientMixin", Mods.JEI, Mods.CREATE);
+        requireMultipleMods("client.JustEnoughItemsClientMixin", "jei", "create");
     };
 
     /**
      * Tells Mixin to only apply a Mixin if a given Mod is present.
      * @param mixinClassName Fully-qualified class name. <strong>Don't use {@code SomeMixin.getClass().getSimpleName()} for this</strong>,
      * as this calls the class, which will crash as it can't find the class into which its mixing
-     * @param requiredMods Mods upon which this Mixin depends
+     * @param requiredModIds Mods upon which this Mixin depends
      */
-    protected void requireMultipleMods(String mixinClassName, Mods ...requiredMods) {
-        String className = getMixinPackage()+".compat."+requiredMods[0]+"."+mixinClassName;
+    protected void requireMultipleMods(String mixinClassName, String ...requiredModIds) {
+        String className = getMixinPackage()+".compat."+requiredModIds[0]+"."+mixinClassName;
         shouldLoad.put(className, () -> {
-            for (Mods mod : requiredMods) if (!mod.isLoading()) return false;
+            for (String modId : requiredModIds) if (FMLLoader.getLoadingModList().getModFileById(modId) == null) return false;
             return true;
         });
     };
@@ -51,7 +51,7 @@ public class PetrolparkMixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         // Compat mixins
         String[] mixinPath = mixinClassName.split(".");
-        if (mixinPath.length >= getMixinPackagePathLength() && mixinPath[getMixinPackagePathLength()].equals("compat")) return Mods.isLoading(mixinPath[getMixinPackagePathLength() + 1]);
+        if (mixinPath.length >= getMixinPackagePathLength() && mixinPath[getMixinPackagePathLength()].equals("compat")) return FMLLoader.getLoadingModList().getModFileById(mixinPath[getMixinPackagePathLength() + 1]) != null;
 
         // Custom predicates
         Supplier<Boolean> predicate = shouldLoad.get(mixinClassName);

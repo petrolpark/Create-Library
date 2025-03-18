@@ -34,7 +34,7 @@ public class ManualOnlyCategory extends PetrolparkRecipeCategory<CraftingRecipe>
         };
         builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
             .setBackground(getRenderedSlot(), -1, -1)
-            .addItemStack(recipe.getExampleResult());
+            .addItemStack(recipe.getExampleResult(getRegistryAccess()));
     };
 
     @Override

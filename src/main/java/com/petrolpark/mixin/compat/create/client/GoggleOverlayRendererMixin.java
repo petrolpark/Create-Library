@@ -8,19 +8,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.petrolpark.tube.ClientTubePlacementHandler;
 import com.simibubi.create.content.equipment.goggles.GoggleOverlayRenderer;
 
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
 
 @Mixin(GoggleOverlayRenderer.class)
 public class GoggleOverlayRendererMixin {
     
     @Inject(
-        method = "Lcom/simibubi/create/content/equipment/goggles/GoggleOverlayRenderer;renderOverlay(Lnet/minecraftforge/client/gui/overlay/ForgeGui;Lnet/minecraft/client/gui/GuiGraphics;FII)V",
+        method = "Lcom/simibubi/create/content/equipment/goggles/GoggleOverlayRenderer;renderOverlay(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/client/DeltaTracker;)V",
         at = @At("HEAD"),
         remap = false,
         cancellable = true
     )
-    private static void inRenderOverlay(ForgeGui gui, GuiGraphics graphics, float partialTicks, int width, int height, CallbackInfo ci) {
+    private static void inRenderOverlay(GuiGraphics graphics, DeltaTracker deltaTracker, CallbackInfo ci) {
         if (ClientTubePlacementHandler.active()) ci.cancel();
     };
 };

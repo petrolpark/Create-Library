@@ -10,6 +10,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.compat.jei.category.PetrolparkRecipeCategory;
 import com.simibubi.create.compat.jei.CreateJEI;
@@ -37,6 +38,7 @@ import net.minecraft.world.level.ItemLike;
  * Used to generate JEI Categories for Petrolpark mods.
  * Basically all copied from the {@link com.simibubi.create.compat.jei.CreateJEI.CategoryBuilder Create source code}.
  */
+@RequiresCreate
 public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends PetrolparkCategoryBuilder<R, C>> {
 
     public static IJeiHelpers helpers;
@@ -48,7 +50,7 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
     protected IDrawable background;
     protected IDrawable icon;
 
-    protected final List<Consumer<List<R>>> recipeListConsumers = new ArrayList<>();
+    protected final List<Consumer<List<RecipeHolder<R>>>> recipeListConsumers = new ArrayList<>();
     protected final List<Supplier<? extends ItemStack>> catalysts = new ArrayList<>();
 
     protected Predicate<CRecipes> createConfigPredicate;
@@ -70,7 +72,7 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
      * @param collection The List of Recipes
      * @return This Category Builder
      */
-    public C addRecipes(Supplier<Collection<? extends R>> collection) {
+    public C addRecipes(Supplier<Collection<? extends RecipeHolder<R>>> collection) {
         recipeListConsumers.add(recipes -> recipes.addAll(collection.get()));
         Petrolpark.LOGGER.info("Loaded " + collection.get().size()+ " recipes of type " + recipeClass.getSimpleName()+ ".");
         return self();
@@ -81,8 +83,11 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
      * @param recipeTypeEntry The Recipe Type
      * @return This Category Builder
      */
+    @SuppressWarnings("unchecked")
     public C addTypedRecipes(IRecipeTypeInfo recipeTypeEntry) {
-        recipeListConsumers.add(recipes -> CreateJEI.<R>consumeTypedRecipes(recipes::add, recipeTypeEntry.getType()));
+        recipeListConsumers.add(recipes -> CreateJEI.<R>consumeTypedRecipes(recipe -> {
+            if (recipeClass.isInstance(recipe.value())) recipes.add((RecipeHolder<R>) recipe);
+        }, recipeTypeEntry.getType()));
         return self();
     };
 
@@ -92,8 +97,8 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
      * @param pred The Condition a Recipe must match to be added
      * @return This Category Builder
      */
-    public C addTypedRecipesIf(Supplier<RecipeType<? extends R>> recipeType, Predicate<Recipe<?>> pred) {
-        recipeListConsumers.add(recipes -> CreateJEI.<R>consumeTypedRecipes(recipe -> {
+    public C addTypedRecipesIf(Supplier<RecipeType<? extends R>> recipeType, Predicate<RecipeHolder<R>> pred) {
+        recipeListConsumers.add(recipes -> consumeTypedRecipesTyped(recipe -> {
             if (pred.test(recipe)) recipes.add(recipe);
         }, recipeType.get()));
         return self();
@@ -106,7 +111,7 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
      * @param pred Whether to transform and then add a Recipe
      * @return This Category Builder
      */
-    public <R2 extends Recipe<?>> C addTypedRecipesIf(Supplier<RecipeType<R2>> recipeType, Function<R2, ? extends R> recipeTransformer, Predicate<R2> pred) {
+    public <R2 extends Recipe<?>> C addTypedRecipesIf(Supplier<RecipeType<R2>> recipeType, Function<RecipeHolder<?>, RecipeHolder<R>> recipeTransformer, Predicate<RecipeHolder<?>> pred) {
         recipeListConsumers.add(recipes -> CreateJEI.<R2>consumeTypedRecipes(recipe -> {
             if (pred.test(recipe)) recipes.add(recipeTransformer.apply(recipe));
         }, recipeType.get()));
@@ -206,6 +211,26 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
         return self();
     };
 
+    // @SuppressWarnings("unchecked")
+    // private void consumeAllRecipesOfType(Consumer<RecipeHolder<R>> consumer) {
+    //     CreateJEI.consumeAllRecipes(recipeHolder -> {
+    //         if (recipeClass.isInstance(recipeHolder.value())) {
+    //             //noinspection unchecked - this is checked by the if statement
+    //             consumer.accept((RecipeHolder<R>) recipeHolder);
+    //         };
+    //     });
+    // };
+
+    @SuppressWarnings("unchecked")
+    private void consumeTypedRecipesTyped(Consumer<RecipeHolder<R>> consumer, RecipeType<?> type) {
+        CreateJEI.consumeTypedRecipes(recipeHolder -> {
+            if (recipeClass.isInstance(recipeHolder.value())) {
+                //noinspection unchecked - this is checked by the if statement
+                consumer.accept((RecipeHolder<R>) recipeHolder);
+            }
+        }, type);
+    };
+
     /**
      * Builds this Category.
      * @param name The Resource Location (e.g. for use in language file)
@@ -216,8 +241,8 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
         Supplier<List<RecipeHolder<R>>> recipesSupplier;
         if (createConfigPredicate.test(AllConfigs.server().recipes)) {
             recipesSupplier = () -> {
-                List<R> recipes = new ArrayList<>();
-                for (Consumer<List<R>> consumer : recipeListConsumers)
+                List<RecipeHolder<R>> recipes = new ArrayList<>();
+                for (Consumer<List<RecipeHolder<R>>> consumer : recipeListConsumers)
                     consumer.accept(recipes);
                 return recipes;
             };

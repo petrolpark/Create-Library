@@ -9,6 +9,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.Holder;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -21,8 +22,7 @@ public class BiomeSpecificTooltipHelper {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) return Stream.empty();
-        RegistryAccess registryAccess = level.registryAccess();
-        return recipe.getAllowedBiomes().stream().flatMap(bv -> bv.getBiomes(registryAccess).stream());
+        return recipe.getAllowedBiomes().stream().map(Holder::value);
     };
     
     public static IRecipeSlotRichTooltipCallback getAllowedBiomeList(IBiomeSpecificProcessingRecipe recipe) {

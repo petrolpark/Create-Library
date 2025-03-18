@@ -9,8 +9,6 @@ import net.neoforged.neoforge.common.NeoForge;
 
 public class ItemContamination extends ComponentHolderContamination<Item, ItemStack> {
 
-    public static final String TAG_KEY = "Contamination";
-
     public static IContamination<?, ?> create(ItemStack stack) {
         if (!Contaminables.ITEM.isContaminableStack(stack)) return IncontaminableContamination.INSTANCE;
         return new ItemContamination(stack);

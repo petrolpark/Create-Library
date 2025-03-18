@@ -17,11 +17,11 @@ import net.minecraft.world.item.crafting.SingleRecipeInput;
 public class AbstractCookingRecipeMixin {
   
     @Inject(
-        method = "Lnet/minecraft/world/item/crafting/AbstractCookingRecipe;assemble(Lnet/minecraft/world/Container;Lnet/minecraft/core/RegistryAccess;)Lnet/minecraft/world/item/ItemStack;",
+        method = "Lnet/minecraft/world/item/crafting/AbstractCookingRecipe;assemble(Lnet/minecraft/world/item/crafting/SingleRecipeInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;",
         at = @At("RETURN"),
         cancellable = true
     )
     public void inAssemble(SingleRecipeInput input, HolderLookup.Provider registries, CallbackInfoReturnable<ItemStack> cir) {
-        if (PetrolparkConfig.SERVER.cookingPropagatesContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(ItemContamination.get(input.item()).streamAllContaminants(), registries);
+        if (PetrolparkConfig.SERVER.cookingPropagatesContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(registries, ItemContamination.get(input.item()).streamAllContaminants());
     };
 };

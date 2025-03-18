@@ -23,12 +23,12 @@ public record ContaminatedIngredientModifier(Holder<Contaminant> contaminant) im
 
     @Override
     public void modifyExamples(List<ItemStack> exampleStacks, Level level) {
-        exampleStacks.stream().map(ItemContamination::get).map(c -> c.contaminate(contaminant.value(), level.registryAccess()));
+        exampleStacks.stream().map(ItemContamination::get).map(c -> c.contaminate(level.registryAccess(), contaminant.value()));
     };
 
     @Override
     public void modifyCounterExamples(List<ItemStack> counterExampleStacks, Level level) {
-        counterExampleStacks.stream().map(ItemContamination::get).forEach(co -> co.decontaminateOnly(contaminant.value(), level.registryAccess()));
+        counterExampleStacks.stream().map(ItemContamination::get).forEach(co -> co.decontaminateOnly(level.registryAccess(), contaminant.value()));
     };
 
     @Override

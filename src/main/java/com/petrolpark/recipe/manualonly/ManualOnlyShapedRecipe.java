@@ -1,31 +1,34 @@
 package com.petrolpark.recipe.manualonly;
 
+import java.util.function.Function;
+
 import javax.annotation.Nonnull;
 
-import org.jetbrains.annotations.Nullable;
-
-import com.google.gson.JsonObject;
+import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.PetrolparkTags.MenuTypes;
 import com.petrolpark.recipe.ContainerCraftingInput;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.NonNullList;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.inventory.InventoryMenu;
-import net.minecraft.world.inventory.TransientCraftingContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 
 public class ManualOnlyShapedRecipe extends ShapedRecipe {
+
+    public static final MapCodec<ManualOnlyShapedRecipe> CODEC = ShapedRecipe.Serializer.CODEC.xmap(ManualOnlyShapedRecipe::new, Function.identity());
+    public static final StreamCodec<RegistryFriendlyByteBuf, ManualOnlyShapedRecipe> STREAM_CODEC = ShapedRecipe.Serializer.STREAM_CODEC.map(ManualOnlyShapedRecipe::new, Function.identity());
+
+    public ManualOnlyShapedRecipe(ShapedRecipe recipe) {
+        this(recipe.getGroup(), recipe.category(), recipe.pattern, recipe.result, recipe.showNotification());
+    };
 
     public ManualOnlyShapedRecipe(String group, CraftingBookCategory category, ShapedRecipePattern pattern, ItemStack result, boolean showNotification) {
         super(group, category, pattern, result, showNotification);
@@ -54,32 +57,17 @@ public class ManualOnlyShapedRecipe extends ShapedRecipe {
         return getResultItem(registries);
     };
 
-    public static class Serializer implements RecipeSerializer<ManualOnlyShapedRecipe> {
+    public static RecipeSerializer<ManualOnlyShapedRecipe> SERIALIZER = new RecipeSerializer<ManualOnlyShapedRecipe>() {
 
-        private final ShapedRecipe.Serializer parent;
-
-        public Serializer() {
-            parent = new ShapedRecipe.Serializer();
+        @Override
+        public MapCodec<ManualOnlyShapedRecipe> codec() {
+            return CODEC;
         };
 
         @Override
-        public ManualOnlyShapedRecipe fromJson(ResourceLocation recipeId, JsonObject serializedRecipe) {
-            ShapedRecipe recipe = parent.fromJson(recipeId, serializedRecipe);
-            return new ManualOnlyShapedRecipe(recipeId, recipe.getGroup(), recipe.category(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getResultItem(null));
+        public StreamCodec<RegistryFriendlyByteBuf, ManualOnlyShapedRecipe> streamCodec() {
+            return STREAM_CODEC;
         };
-
-        @Override
-        public @Nullable ManualOnlyShapedRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
-            ShapedRecipe recipe = parent.fromNetwork(recipeId, buffer);
-            return new ManualOnlyShapedRecipe(recipeId, recipe.getGroup(), recipe.category(), recipe.getWidth(), recipe.getHeight(), recipe.getIngredients(), recipe.getResultItem(null));
-        };
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buffer, ManualOnlyShapedRecipe recipe) {
-            parent.toNetwork(buffer, recipe);
-        };
-
-
+        
     };
-    
 };

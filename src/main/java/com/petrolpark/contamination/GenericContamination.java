@@ -21,9 +21,10 @@ public class GenericContamination extends Contamination<Object, Object> {
         this.onSave = onSave;
     };
 
-    public void readNBT(Tag tag, HolderLookup.Provider registries) {
+    public GenericContamination readNBT(Tag tag, HolderLookup.Provider registries) {
         orphanContaminants.clear();
         ORPHAN_HOLDER_LIST_CODEC.parse(NbtOps.INSTANCE, tag).ifSuccess(ls -> ls.stream().map(Holder::value).map(orphanContaminants::add));
+        return this;
     };
 
     public Tag writeNBT(HolderLookup.Provider registries) {

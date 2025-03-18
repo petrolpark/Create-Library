@@ -31,6 +31,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
 
@@ -42,6 +43,8 @@ public class PetrolparkJEI implements IModPlugin {
 
     private static final List<CreateRecipeCategory<?>> ALL_CATEGORIES = new ArrayList<>(2);
 
+    int itemDecayRecipeCount = 0;
+
     @SuppressWarnings("unused")
     private void loadCategories() {
         ALL_CATEGORIES.clear();
@@ -49,7 +52,7 @@ public class PetrolparkJEI implements IModPlugin {
         CreateRecipeCategory<?>
 
         manual_crafting = builder(CraftingRecipe.class)
-            .addTypedRecipesIf(() -> RecipeType.CRAFTING, r -> r instanceof ManualOnlyShapedRecipe)
+            .addTypedRecipesIf(() -> RecipeType.CRAFTING, rh -> rh.value() instanceof ManualOnlyShapedRecipe)
             .catalyst(() -> Blocks.CRAFTING_TABLE)
             .doubleItemIcon(
                 () -> new ItemStack(Items.CRAFTING_TABLE),
@@ -64,8 +67,13 @@ public class PetrolparkJEI implements IModPlugin {
             .build("manual_crafting", ManualOnlyCategory::new),
 
         item_decay = builder(DecayingItemRecipe.class)
-            .addRecipes(() -> JEISetup.DECAYING_ITEMS.stream().map(Supplier::get).map(DecayingItemRecipe::new).toList())
-            .itemIcon(Items.ROTTEN_FLESH)
+            .addRecipes(JEISetup.DECAYING_ITEMS
+                .stream()
+                .map(Supplier::get)
+                .map(DecayingItemRecipe::new)
+                .map(r -> new RecipeHolder<DecayingItemRecipe>(Petrolpark.asResource("decay_"+itemDecayRecipeCount++), r))
+                ::toList
+            ).itemIcon(Items.ROTTEN_FLESH)
             .emptyBackground(125, 20)
             .build("item_decay", DecayingItemCategory::new);
     };

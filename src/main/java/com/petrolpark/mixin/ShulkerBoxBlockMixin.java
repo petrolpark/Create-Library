@@ -46,7 +46,7 @@ public abstract class ShulkerBoxBlockMixin extends BaseEntityBlock {
         BlockEntity be = pParams.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (be instanceof ShulkerBoxBlockEntity shulkerBox) {
             GenericContamination contamination = ((IShulkerBoxBlockEntityDuck)shulkerBox).getContamination();
-            drops.stream().filter(s -> s.getItem() instanceof BlockItem b && b.getBlock() == this).map(ItemContamination::get).forEach(contam -> contam.contaminateAll(contamination.streamOrphanExtrinsicContaminants()));
+            drops.stream().filter(s -> s.getItem() instanceof BlockItem b && b.getBlock() == this).map(ItemContamination::get).forEach(contam -> contam.contaminateAll(pParams.getLevel().registryAccess(), contamination.streamOrphanExtrinsicContaminants()));
             cir.setReturnValue(drops);
         };
     };
@@ -58,7 +58,7 @@ public abstract class ShulkerBoxBlockMixin extends BaseEntityBlock {
     public void inSetPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack, CallbackInfo ci) {
         level.getBlockEntity(pos, BlockEntityType.SHULKER_BOX)
             .map(IShulkerBoxBlockEntityDuck.class::cast)
-            .ifPresent(duck -> duck.contaminateAll(ItemContamination.get(stack).streamOrphanExtrinsicContaminants()));
+            .ifPresent(duck -> duck.contaminateAll(level.registryAccess(), ItemContamination.get(stack).streamOrphanExtrinsicContaminants()));
     };
     
 };

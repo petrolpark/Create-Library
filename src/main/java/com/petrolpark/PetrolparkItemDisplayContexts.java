@@ -6,7 +6,5 @@ public class PetrolparkItemDisplayContexts {
     
     public static final ItemDisplayContext
     
-    BELT = ItemDisplayContext.create("belt", Petrolpark.asResource("belt"), ItemDisplayContext.FIXED);
-    
-    public static final void register() {};
+    BELT = ItemDisplayContext.valueOf("BELT");
 };

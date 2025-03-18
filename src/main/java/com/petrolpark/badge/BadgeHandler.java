@@ -9,17 +9,18 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.petrolpark.Petrolpark;
+import com.petrolpark.PetrolparkAttachmentTypes;
+import com.petrolpark.PetrolparkCriteriaTriggers;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.util.Pair;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -52,26 +53,20 @@ public class BadgeHandler {
             try (
                 BufferedReader reader = new BufferedReader(new InputStreamReader(response.body()));
             ) {
-                List<Pair<Badge, Date>> badges = new ArrayList<>();
+                Map<Badge, Date> badges = new HashMap<>();
                 JsonObject json = JsonParser.parseReader(reader).getAsJsonObject();
                 for (JsonElement element : json.getAsJsonArray("badges")) {
                     JsonObject badgeObject = element.getAsJsonObject();
                     String date = badgeObject.get("date").getAsString();
                     date = date.substring(0, date.length() - 1);
                     Badge badge = Badge.getBadge(badgeObject.get("namespace").getAsString(), badgeObject.get("id").getAsString());
-                    if (badge != null) {
-                        badges.add(Pair.of(
-                            badge,
-                            Date.from(LocalDateTime.parse(date).toInstant(ZoneOffset.UTC))
-                        ));
-                    };
+                    if (badge != null) badges.put(badge,  Date.from(LocalDateTime.parse(date).toInstant(ZoneOffset.UTC)));
                 };
-                player.getCapability(PlayerBadges.Provider.PLAYER_BADGES).ifPresent(playerBadges -> {
-                    playerBadges.setBadges(badges);
-                    // Award Advancements for Badges
-                    playerBadges.getBadges().forEach(pair ->
-                        pair.getFirst().grantAdvancement(player));
-                });
+                PlayerBadges playerBadges = player.getData(PetrolparkAttachmentTypes.BADGES);
+                playerBadges.badges().putAll(badges);
+                
+                // Award Advancements for Badges
+                playerBadges.forEach(badge -> PetrolparkCriteriaTriggers.RECEIVE_BADGE.get().trigger(player, badge));
             } catch (Exception e) {};
         });
 

@@ -14,14 +14,24 @@ import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.contamination.IContamination;
 import com.petrolpark.contamination.ItemContamination;
 import com.petrolpark.item.decay.IDecayingItem;
+import com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(value = SawBlockEntity.class, remap = false)
-public class SawBlockEntityMixin {
+public abstract class SawBlockEntityMixin extends BlockBreakingKineticBlockEntity {
+
+    public SawBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        super(type, pos, state);
+        throw new AssertionError();
+    };
 
     @Shadow
     public ProcessingInventory inventory;
@@ -50,7 +60,8 @@ public class SawBlockEntityMixin {
         for (int slot = 0; slot < inventory.getSlots(); slot++) {
             ItemStack stack = inventory.getStackInSlot(slot);
             IDecayingItem.startDecay(stack);
-            if (PetrolparkConfig.SERVER.createCuttingRecipesPropagateContaminants.get()) ItemContamination.get(stack).contaminateAll(inputContamination.streamAllContaminants());
+            Level level = getLevel();
+            if (level != null && PetrolparkConfig.SERVER.createCuttingRecipesPropagateContaminants.get()) ItemContamination.get(stack).contaminateAll(level.registryAccess(), inputContamination.streamAllContaminants());
         };
     };
 };

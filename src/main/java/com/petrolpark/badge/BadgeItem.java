@@ -42,7 +42,7 @@ public class BadgeItem extends Item {
     };
 
     public static ItemStack of(Player player, Badge badge, Date date) {
-        ItemStack stack = new ItemStack(badge.getItem());
+        ItemStack stack = new ItemStack(badge.asItem());
         stack.set(PetrolparkDataComponents.BADGE_AWARD, new BadgeAward(player.getUUID(), date.getTime()));
         return stack;
     };

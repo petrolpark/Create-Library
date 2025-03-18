@@ -30,7 +30,7 @@ public class RecipeApplierMixin {
     private static void inApplyRecipeOn(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir, List<ItemStack> stacks) {
         if (PetrolparkConfig.SERVER.createOtherRecipesPropagateContaminants.get()) {
             IContamination<?, ?> inputContamination = ItemContamination.get(stackIn);
-            stacks.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
+            stacks.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(level.registryAccess(), inputContamination.streamAllContaminants()));
         };
         stacks.forEach(IDecayingItem::startDecay);
     };

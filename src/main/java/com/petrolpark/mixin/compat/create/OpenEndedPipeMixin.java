@@ -12,7 +12,7 @@ import com.simibubi.create.infrastructure.config.AllConfigs;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 @Mixin(value = OpenEndedPipe.class, remap = false)
 public abstract class OpenEndedPipeMixin {

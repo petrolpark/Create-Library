@@ -8,28 +8,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.contamination.ItemContamination;
 import com.petrolpark.item.decay.IDecayingItem;
-import com.petrolpark.recipe.contamination.IHandleContaminationMyself;
+import com.petrolpark.recipe.contamination.IHandleContaminationMyselfRecipe;
 
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
 @Mixin(ShapedRecipe.class)
-public abstract class ShapedRecipeMixin implements IHandleContaminationMyself<CraftingContainer> {
+public abstract class ShapedRecipeMixin implements IHandleContaminationMyselfRecipe<CraftingInput> {
 
     @Inject(
-        method = "Lnet/minecraft/world/item/crafting/ShapedRecipe;assemble(Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/core/RegistryAccess;)Lnet/minecraft/world/item/ItemStack;",
+        method = "Lnet/minecraft/world/item/crafting/ShapedRecipe;assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;",
         at = @At("RETURN"),
         cancellable = true
     )
-    public void inAssemble(CraftingContainer container, RegistryAccess access, CallbackInfoReturnable<ItemStack> cir) {
+    public void inAssemble(CraftingInput input, HolderLookup.Provider registries, CallbackInfoReturnable<ItemStack> cir) {
         IDecayingItem.startDecay(cir.getReturnValue());
-        if (PetrolparkConfig.SERVER.shapedCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(container.getItems().stream(), cir.getReturnValue());
+        if (PetrolparkConfig.SERVER.shapedCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(registries, input.items().stream(), cir.getReturnValue());
     };
 
     @Override
-    public boolean contaminationHandled(CraftingContainer container, RegistryAccess registryAccess) {
+    public boolean isContaminationHandled(CraftingInput container, HolderLookup.Provider registries) {
         return PetrolparkConfig.SERVER.shapedCraftingPropagatesContaminants.get();
     };
     

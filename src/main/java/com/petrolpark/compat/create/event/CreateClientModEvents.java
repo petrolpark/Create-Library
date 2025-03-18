@@ -1,5 +1,6 @@
 package com.petrolpark.compat.create.event;
 
+import com.petrolpark.Petrolpark;
 import com.petrolpark.tube.ClientTubePlacementHandler;
 
 import net.neoforged.bus.api.SubscribeEvent;
@@ -10,6 +11,6 @@ public class CreateClientModEvents {
     
     @SubscribeEvent
     public static void registerGuiOverlays(RegisterGuiLayersEvent event) {
-        event.registerAbove(VanillaGuiLayers.HOTBAR, "tube_info", ClientTubePlacementHandler.OVERLAY);
+        event.registerAbove(VanillaGuiLayers.HOTBAR, Petrolpark.asResource("tube_info"), ClientTubePlacementHandler.OVERLAY);
     };
 };

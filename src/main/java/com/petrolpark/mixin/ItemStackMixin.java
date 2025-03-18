@@ -30,12 +30,18 @@ public class ItemStackMixin implements IItemStackDuck {
         cir.setReturnValue(IDecayingItem.checkDecay(cir.getReturnValue()));
     };
 
+    /**
+     * Replace Items with their Decaying forms.
+     * @param stack
+     * @param otherStack
+     * @param cir
+     */
     @Inject(
-        method = "isSameItemSameTags",
+        method = "isSameItemSameComponents",
         at = @At("HEAD"),
         cancellable = true
     )
-    private static void inIsSameItemSameTags(ItemStack stack, ItemStack otherStack, CallbackInfoReturnable<Boolean> cir) {
+    private static void inIsSameItemSameComponents(ItemStack stack, ItemStack otherStack, CallbackInfoReturnable<Boolean> cir) {
         cir.setReturnValue(ItemHelper.equalIgnoringComponents(stack, otherStack));
     }
 
