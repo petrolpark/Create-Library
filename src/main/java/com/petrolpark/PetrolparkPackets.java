@@ -3,7 +3,6 @@ package com.petrolpark;
 import com.petrolpark.team.packet.BindTeamBlockPacket;
 import com.petrolpark.team.packet.BindTeamItemPacket;
 import com.petrolpark.team.scoreboard.ScoreboardTeamComponentChangedPacket;
-import com.petrolpark.tube.BuildTubePacket;
 
 import net.createmod.catnip.net.base.BasePacketPayload;
 import net.createmod.catnip.net.base.CatnipPacketRegistry;
@@ -16,8 +15,6 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider {
     BIND_TEAM_ITEM(BindTeamItemPacket.class, BindTeamItemPacket.STREAM_CODEC),
     BIND_TEAM_BLOCK(BindTeamBlockPacket.class, BindTeamBlockPacket.STREAM_CODEC),
     SCOREBOARD_TEAM_COMPONENT_CHANGED(ScoreboardTeamComponentChangedPacket.class, ScoreboardTeamComponentChangedPacket.STREAM_CODEC),
-
-    BUILD_TUBE(BuildTubePacket.class, BuildTubePacket.STREAM_CODEC) //TODO move to create compat
     ;
 
     private final CatnipPacketRegistry.PacketType<?> type;

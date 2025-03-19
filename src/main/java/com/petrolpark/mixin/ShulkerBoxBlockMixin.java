@@ -2,12 +2,12 @@ package com.petrolpark.mixin;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.petrolpark.block.entity.IShulkerBoxBlockEntityDuck;
@@ -51,11 +51,7 @@ public abstract class ShulkerBoxBlockMixin extends BaseEntityBlock {
         };
     };
 
-    @Inject(
-        method = "setPlacedBy",
-        at = @At("HEAD")
-    )
-    public void inSetPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack, CallbackInfo ci) {
+    public void setPlacedBy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         level.getBlockEntity(pos, BlockEntityType.SHULKER_BOX)
             .map(IShulkerBoxBlockEntityDuck.class::cast)
             .ifPresent(duck -> duck.contaminateAll(level.registryAccess(), ItemContamination.get(stack).streamOrphanExtrinsicContaminants()));

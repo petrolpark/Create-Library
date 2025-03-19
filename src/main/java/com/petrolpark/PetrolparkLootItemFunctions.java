@@ -11,4 +11,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 public class PetrolparkLootItemFunctions {
     
     public static final RegistryEntry<LootItemFunctionType<?>, LootItemFunctionType<BadgeAwardLootItemFunction>> BADGE_AWARD = REGISTRATE.lootItemFunctionType("badge_award", MapCodec.unit(BadgeAwardLootItemFunction::new));
+
+    public static final void register() {};
 };

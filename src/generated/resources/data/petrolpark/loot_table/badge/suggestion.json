@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:advancement_reward",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "petrolpark:badge_award"
+            }
+          ],
+          "name": "petrolpark:badge/suggestion"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "petrolpark:badge/suggestion"
+}

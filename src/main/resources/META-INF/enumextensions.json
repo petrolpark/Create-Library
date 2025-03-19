@@ -2,9 +2,9 @@
     "entries": [
         {
             "enum": "net/minecraft/world/item/ItemDisplayContext",
-            "name": "BELT",
+            "name": "PETROLPARK_BELT",
             "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
-            "parameters": [ -1, "petrolpark:belt", "fixed" ]
+            "parameters": [ -1, "petrolpark:belt", "FIXED" ]
         }
     ]
 }

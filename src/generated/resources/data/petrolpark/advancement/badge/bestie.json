@@ -1,0 +1,36 @@
+{
+  "parent": "petrolpark:badge_root",
+  "criteria": {
+    "receive": {
+      "conditions": {
+        "badge": "petrolpark:bestie"
+      },
+      "trigger": "petrolpark:receive_badge"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "badge.petrolpark.bestie.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "petrolpark:badge/bestie"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "badge.petrolpark.bestie"
+    }
+  },
+  "requirements": [
+    [
+      "receive"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "petrolpark:badge/bestie"
+    ]
+  }
+}

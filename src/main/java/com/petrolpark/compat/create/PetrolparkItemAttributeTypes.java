@@ -9,10 +9,10 @@ import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute
 import net.minecraft.core.Registry;
 
 @RequiresCreate
-public class PetrolparkItemAttributes {
+public class PetrolparkItemAttributeTypes {
     
     public static final ItemAttributeType HAS_CONTAMINANT =
             Registry.register(CreateBuiltInRegistries.ITEM_ATTRIBUTE_TYPE, Petrolpark.asResource("has_contaminant"), new HasContaminantItemAttribute.Type());
 
-    public static void register() {};
+    public static final void init() {};
 };

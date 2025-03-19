@@ -9,6 +9,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContextUser;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public interface IngredientModifier extends LootContextUser {
 
@@ -27,6 +29,7 @@ public interface IngredientModifier extends LootContextUser {
 
     public void modifyCounterExamples(List<ItemStack> counterExampleStacks, Level level);
 
+    @OnlyIn(Dist.CLIENT)
     public void addToDescription(List<Component> description, Level level);
 
     public IngredientModifierType getType();

@@ -1,0 +1,36 @@
+{
+  "parent": "petrolpark:badge_root",
+  "criteria": {
+    "receive": {
+      "conditions": {
+        "badge": "destroy:patreon_2"
+      },
+      "trigger": "petrolpark:receive_badge"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "badge.destroy.patreon_2.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "destroy:badge/patreon_2"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "badge.destroy.patreon_2"
+    }
+  },
+  "requirements": [
+    [
+      "receive"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "petrolpark:badge/patreon_2"
+    ]
+  }
+}

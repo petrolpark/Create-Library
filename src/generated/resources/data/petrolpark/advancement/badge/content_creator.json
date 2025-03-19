@@ -1,0 +1,36 @@
+{
+  "parent": "petrolpark:badge_root",
+  "criteria": {
+    "receive": {
+      "conditions": {
+        "badge": "petrolpark:content_creator"
+      },
+      "trigger": "petrolpark:receive_badge"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "badge.petrolpark.content_creator.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "petrolpark:badge/content_creator"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "badge.petrolpark.content_creator"
+    }
+  },
+  "requirements": [
+    [
+      "receive"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "petrolpark:badge/content_creator"
+    ]
+  }
+}

@@ -64,9 +64,7 @@ public class BadgeHandler {
                 };
                 PlayerBadges playerBadges = player.getData(PetrolparkAttachmentTypes.BADGES);
                 playerBadges.badges().putAll(badges);
-                
-                // Award Advancements for Badges
-                playerBadges.forEach(badge -> PetrolparkCriteriaTriggers.RECEIVE_BADGE.get().trigger(player, badge));
+                badges.keySet().forEach(badge -> PetrolparkCriteriaTriggers.RECEIVE_BADGE.get().trigger(player, badge));
             } catch (Exception e) {};
         });
 

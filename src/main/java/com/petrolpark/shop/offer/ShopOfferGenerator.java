@@ -10,6 +10,7 @@ import com.petrolpark.data.reward.generator.IRewardGenerator;
 import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.shop.Shop;
 import com.petrolpark.shop.offer.order.ShopOrder;
+import com.petrolpark.shop.offer.order.ShopOrderModifierEntry;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
@@ -19,14 +20,14 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public class ShopOfferGenerator implements LootContextUser {
 
-    public static final Codec<ShopOfferGenerator> DIRECT_CODEC = RecordCodecBuilder.create(instance -> 
+    public static final Codec<ShopOfferGenerator> DIRECT_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance -> 
         instance.group(
             NumberProviders.CODEC.optionalFieldOf("time", ConstantValue.exactly(-1)).forGetter(ShopOfferGenerator::getTimeGenerator),
             IRewardGenerator.CODEC.fieldOf("reward").forGetter(ShopOfferGenerator::getRewardGenerator),
             IngredientRandomizer.CODEC.fieldOf("order").forGetter(ShopOfferGenerator::getOrderRandomizer),
             Codec.list(ShopOrderModifierEntry.CODEC).optionalFieldOf("orderModifiers", Collections.emptyList()).forGetter(ShopOfferGenerator::getOrderModifiers)
         ).apply(instance, ShopOfferGenerator::new)
-    );
+    ));
 
     public final NumberProvider timeGenerator;
     public final IRewardGenerator rewardGenerator;

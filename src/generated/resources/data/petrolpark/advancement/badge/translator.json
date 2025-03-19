@@ -1,0 +1,36 @@
+{
+  "parent": "petrolpark:badge_root",
+  "criteria": {
+    "receive": {
+      "conditions": {
+        "badge": "petrolpark:translator"
+      },
+      "trigger": "petrolpark:receive_badge"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "badge.petrolpark.translator.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "petrolpark:badge/translator"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "badge.petrolpark.translator"
+    }
+  },
+  "requirements": [
+    [
+      "receive"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "petrolpark:badge/translator"
+    ]
+  }
+}

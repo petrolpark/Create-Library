@@ -1,0 +1,36 @@
+{
+  "parent": "petrolpark:badge_root",
+  "criteria": {
+    "receive": {
+      "conditions": {
+        "badge": "petrolpark:early_bird"
+      },
+      "trigger": "petrolpark:receive_badge"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "badge.petrolpark.early_bird.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "petrolpark:badge/early_bird"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "badge.petrolpark.early_bird"
+    }
+  },
+  "requirements": [
+    [
+      "receive"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "petrolpark:badge/early_bird"
+    ]
+  }
+}

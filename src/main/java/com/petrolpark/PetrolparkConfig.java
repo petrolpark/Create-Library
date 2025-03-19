@@ -2,12 +2,10 @@ package com.petrolpark;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.BooleanValue;
 import net.neoforged.neoforge.common.ModConfigSpec.DoubleValue;
 
-@EventBusSubscriber(modid = Petrolpark.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class PetrolparkConfig {
 
     public static class Server {

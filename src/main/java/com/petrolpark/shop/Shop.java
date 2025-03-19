@@ -11,7 +11,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.shop.offer.ShopOffer;
 import com.petrolpark.shop.offer.ShopOfferGenerator;
-import com.petrolpark.shop.offer.ShopOrderModifierEntry;
+import com.petrolpark.shop.offer.order.ShopOrderModifierEntry;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
@@ -33,14 +33,14 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class Shop {
 
-    public static final Codec<Shop> DIRECT_CODEC = RecordCodecBuilder.create(instance -> 
+    public static final Codec<Shop> DIRECT_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance -> 
         instance.group(
             Codec.STRING.fieldOf("name").forGetter(Shop::getTranslationKey),
             Codec.list(OfferGeneratorEntry.CODEC).fieldOf("offerGenerators").forGetter(Shop::getOfferGeneratorEntries),
             Codec.list(ShopOrderModifierEntry.CODEC).optionalFieldOf("globalOrderModifiers", Collections.emptyList()).forGetter(Shop::getGlobalOrderModifierEntries),
             TagKey.codec(Registries.ENTITY_TYPE).optionalFieldOf("customerEntityTypes").forGetter(Shop::getCustomerEntityTypes)
         ).apply(instance, Shop::new)
-    );
+    ));
 
     public static final Codec<Holder<Shop>> CODEC = RegistryFileCodec.create(PetrolparkRegistries.Keys.SHOP, DIRECT_CODEC);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Shop>> STREAM_CODEC = ByteBufCodecs.holderRegistry(PetrolparkRegistries.Keys.SHOP);

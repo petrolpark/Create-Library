@@ -29,8 +29,7 @@ public class BuiltInRegistriesMixin {
     )
 	private static <T extends Registry<?>> void wrapValidate(Registry<T> instance, Consumer<T> consumer, Operation<Void> original) {
 		Consumer<T> callback = (t) -> {
-			if (!t.key().location().getNamespace().equals(Petrolpark.MOD_ID))
-				consumer.accept(t);
+			if (!t.key().location().getNamespace().equals(Petrolpark.MOD_ID)) consumer.accept(t);
 		};
 
 		original.call(instance, callback);

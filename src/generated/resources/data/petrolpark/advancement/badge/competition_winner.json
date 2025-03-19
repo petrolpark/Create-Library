@@ -1,0 +1,36 @@
+{
+  "parent": "petrolpark:badge_root",
+  "criteria": {
+    "receive": {
+      "conditions": {
+        "badge": "petrolpark:competition_winner"
+      },
+      "trigger": "petrolpark:receive_badge"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "badge.petrolpark.competition_winner.description"
+    },
+    "hidden": true,
+    "icon": {
+      "count": 1,
+      "id": "petrolpark:badge/competition_winner"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "badge.petrolpark.competition_winner"
+    }
+  },
+  "requirements": [
+    [
+      "receive"
+    ]
+  ],
+  "rewards": {
+    "loot": [
+      "petrolpark:badge/competition_winner"
+    ]
+  }
+}

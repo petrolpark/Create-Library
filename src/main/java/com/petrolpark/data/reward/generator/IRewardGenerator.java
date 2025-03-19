@@ -14,7 +14,7 @@ public interface IRewardGenerator extends LootContextUser {
     /**
      * Use {@link IRewardGenerator#CODEC} instead.
      */
-    public static final Codec<IRewardGenerator> TYPED_CODEC = PetrolparkRegistries.REWARD_GENERATOR_TYPES
+    static final Codec<IRewardGenerator> TYPED_CODEC = PetrolparkRegistries.REWARD_GENERATOR_TYPES
         .byNameCodec()
         .dispatch(IRewardGenerator::getType, RewardGeneratorType::codec);
 

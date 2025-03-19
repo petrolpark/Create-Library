@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.PetrolparkItemAttributes;
+import com.petrolpark.compat.create.PetrolparkItemAttributeTypes;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
 
@@ -37,7 +37,7 @@ public record HasContaminantItemAttribute(Holder<Contaminant> contaminant) imple
 
     @Override
     public ItemAttributeType getType() {
-        return PetrolparkItemAttributes.HAS_CONTAMINANT;
+        return PetrolparkItemAttributeTypes.HAS_CONTAMINANT;
     };
 
     @Override

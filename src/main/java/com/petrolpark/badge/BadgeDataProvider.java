@@ -35,9 +35,11 @@ public class BadgeDataProvider implements AdvancementGenerator, LootTableSubProv
      * Advancements
      */
     @Override
+    @SuppressWarnings("null")
     public void generate(@Nonnull HolderLookup.Provider registries, @Nonnull Consumer<AdvancementHolder> saver, @Nonnull ExistingFileHelper existingFileHelper) {
         PetrolparkRegistries.BADGES.forEach(badge -> 
             saver.accept(new Advancement.Builder()
+                .parent(new AdvancementHolder(Petrolpark.asResource("badge_root"), null))
                 .display(
                     badge,
                     badge.getName(),
@@ -73,7 +75,7 @@ public class BadgeDataProvider implements AdvancementGenerator, LootTableSubProv
     };
 
     private ResourceKey<LootTable> lootTableId(Badge badge) {
-        return ResourceKey.create(Registries.LOOT_TABLE, Petrolpark.asResource("badge/"+badge.getId()));
+        return ResourceKey.create(Registries.LOOT_TABLE, Petrolpark.asResource("badge/"+badge.getId().getPath()));
     };
     
 };

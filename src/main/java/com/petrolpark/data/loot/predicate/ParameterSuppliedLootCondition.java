@@ -1,5 +1,6 @@
 package com.petrolpark.data.loot.predicate;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,8 +24,9 @@ public record ParameterSuppliedLootCondition(List<LootContextParam<Object>> para
         ResourceLocation.CODEC.xmap(KNOWN_PARAMS::get, LootContextParam::getName).listOf().fieldOf("parameters").forGetter(ParameterSuppliedLootCondition::params)
     ).apply(instance, ParameterSuppliedLootCondition::new));
 
-    public static final void makeKnown(LootContextParam<?> ...params) {
-        for (LootContextParam<?> param : params) makeKnown(param);
+    @SuppressWarnings("unchecked")
+    public static final void makeKnown(Collection<LootContextParam<? extends Object>> params) {
+        for (LootContextParam<? extends Object> param : params) makeKnown((LootContextParam<Object>) param);
     };
 
     public static final void makeKnown(LootContextParam<Object> param) {
@@ -32,7 +34,7 @@ public record ParameterSuppliedLootCondition(List<LootContextParam<Object>> para
     };
 
     static {
-        makeKnown(
+        makeKnown(List.of(
             LootContextParams.BLOCK_ENTITY,
             LootContextParams.BLOCK_STATE,
             LootContextParams.DAMAGE_SOURCE,
@@ -43,7 +45,7 @@ public record ParameterSuppliedLootCondition(List<LootContextParam<Object>> para
             LootContextParams.ORIGIN,
             LootContextParams.THIS_ENTITY,
             LootContextParams.TOOL
-        );
+        ));
     };
 
     public static final LootContextParam<?> byName(String name) {

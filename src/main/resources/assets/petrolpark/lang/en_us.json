@@ -57,7 +57,6 @@
     "item.petrolpark.badge.awarded": "Awarded to %1$s on %2$s",
     "item.petrolpark.badge.unknown": "This isn't a real Badge...",
     "item.petrolpark.decaying_item.remaining": "Decays in %1$s",
-    "item.petrolpark.menu": "Menu",
     "item.petrolpark.menu.team_selection": "Select a Team for this %1$s",
 
     "petrolpark.generic.list.and": "%1$s and %2$s",

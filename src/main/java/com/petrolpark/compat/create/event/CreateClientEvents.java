@@ -17,7 +17,7 @@ import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 public class CreateClientEvents {
     
     @SubscribeEvent
-    public static void onTick(ClientTickEvent event) {
+    public static void onTick(ClientTickEvent.Pre event) {
         if (!ClientEvents.isGameActive()) return;
         CreateClient.OUTLINER.tickOutlines();
     };

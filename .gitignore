@@ -25,5 +25,5 @@ run
 forge*changelog.txt
 
 
-src/main/java/com/petrolpark/badge/BadgeHandler.java
 mcmodsrepo
+src/generated/resources/.cache/

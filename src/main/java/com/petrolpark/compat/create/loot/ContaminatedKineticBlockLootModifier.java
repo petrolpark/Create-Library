@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkTags;
+import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.create.block.entity.behaviour.ContaminationBehaviour;
 import com.petrolpark.contamination.ItemContamination;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 
+@RequiresCreate
 public class ContaminatedKineticBlockLootModifier extends LootModifier {
 
     public static final MapCodec<ContaminatedKineticBlockLootModifier> CODEC = RecordCodecBuilder.mapCodec(inst -> codecStart(inst).apply(inst, ContaminatedKineticBlockLootModifier::new));

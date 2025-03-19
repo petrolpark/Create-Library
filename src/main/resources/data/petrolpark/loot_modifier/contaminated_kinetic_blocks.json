@@ -1,4 +1,9 @@
 {
-    "type": "petrolpark:contaminated_kinetic_blocks",
-    "conditions": []
+    "neoforge:conditions": [
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "create"
+        }
+    ],
+    "type": "petrolpark:contaminated_kinetic_blocks"
 }

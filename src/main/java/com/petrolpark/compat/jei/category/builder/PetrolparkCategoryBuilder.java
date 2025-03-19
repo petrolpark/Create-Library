@@ -9,7 +9,6 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.compat.jei.category.PetrolparkRecipeCategory;
@@ -19,13 +18,13 @@ import com.simibubi.create.compat.jei.EmptyBackground;
 import com.simibubi.create.compat.jei.ItemIcon;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory.Info;
-import net.createmod.catnip.config.ConfigBase.ConfigBool;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CRecipes;
 
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IJeiHelpers;
+import net.createmod.catnip.config.ConfigBase.ConfigBool;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -74,7 +73,6 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
      */
     public C addRecipes(Supplier<Collection<? extends RecipeHolder<R>>> collection) {
         recipeListConsumers.add(recipes -> recipes.addAll(collection.get()));
-        Petrolpark.LOGGER.info("Loaded " + collection.get().size()+ " recipes of type " + recipeClass.getSimpleName()+ ".");
         return self();
     };
 

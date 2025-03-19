@@ -1,7 +1,7 @@
 package com.petrolpark.tube;
 
-import com.petrolpark.PetrolparkPackets;
 import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.create.CreatePackets;
 import com.petrolpark.util.ItemHelper;
 
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
@@ -58,7 +58,7 @@ public class BuildTubePacket implements ServerboundPacketPayload {
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return PetrolparkPackets.BUILD_TUBE;
+        return CreatePackets.BUILD_TUBE;
     };
     
 };

@@ -22,6 +22,7 @@ import net.minecraft.world.inventory.SmithingMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.SmithingRecipe;
+import net.minecraft.world.item.crafting.SmithingRecipeInput;
 import net.minecraft.world.level.Level;
 
 @Mixin(SmithingMenu.class)
@@ -44,7 +45,7 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    public void inCreateResult(CallbackInfo ci, List<SmithingRecipe> list, RecipeHolder<SmithingRecipe> recipeHolder, ItemStack result) {
+    public void inCreateResult(CallbackInfo ci, SmithingRecipeInput smithingrecipeinput, List<SmithingRecipe> list, RecipeHolder<SmithingRecipe> recipeHolder, ItemStack result) {
         if (PetrolparkConfig.SERVER.smithingPropagatesContaminants.get()) {
             ItemContamination.perpetuateSingle(level.registryAccess(), Stream.of(inputSlots.getItem(1), inputSlots.getItem(2)), result);
         };

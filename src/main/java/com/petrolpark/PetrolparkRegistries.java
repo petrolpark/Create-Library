@@ -88,6 +88,7 @@ public class PetrolparkRegistries {
 
     // Core
     public static final Registry<Badge> BADGES = simple(Keys.BADGE);
+    public static final Registry<Contaminant> CONTAMINANTS = simple(Keys.CONTAMINANT);
     public static final Registry<ITeam.ProviderType> TEAM_PROVIDER_TYPES = simple(Keys.TEAM_PROVIDER_TYPE);
 
     // Loot/Data
@@ -156,7 +157,8 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<Dough>> DOUGH = REGISTRATE.makeRegistry("dough", RegistryBuilder::new); // Data
         public static final ResourceKey<Registry<DoughCut>> DOUGH_CUT = REGISTRATE.makeRegistry("dough_cut", RegistryBuilder::new); // Data
 
+        public static final void register() {};
     };
 
-    public static final void register() {};
+    
 };

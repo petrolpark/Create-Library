@@ -6,5 +6,5 @@ public class PetrolparkItemDisplayContexts {
     
     public static final ItemDisplayContext
     
-    BELT = ItemDisplayContext.valueOf("BELT");
+    BELT = ItemDisplayContext.valueOf("PETROLPARK_BELT");
 };

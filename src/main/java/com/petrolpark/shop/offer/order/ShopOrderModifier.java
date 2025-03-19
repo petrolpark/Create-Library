@@ -18,13 +18,13 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public class ShopOrderModifier implements LootContextUser {
 
-    public static final Codec<ShopOrderModifier> CODEC = RecordCodecBuilder.create(instance -> 
+    public static final Codec<ShopOrderModifier> CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance -> 
         instance.group(
             IngredientModifier.CODEC.optionalFieldOf("requirement", PassIngredientModifier.INSTANCE).forGetter(ShopOrderModifier::getIngredientModifier),
             NumberProviders.CODEC.fieldOf("success").forGetter(ShopOrderModifier::getSuccessMultiplier),
             NumberProviders.CODEC.optionalFieldOf("failure", ConstantValue.exactly(0f)).forGetter(ShopOrderModifier::getFailureNumberProvider)
         ).apply(instance, ShopOrderModifier::new)
-    );
+    ));
     
     public final IngredientModifier ingredientModifier;
     public final NumberProvider successMultiplier;

@@ -64,7 +64,7 @@ public class ClientTubePlacementHandler {
     protected static boolean canAfford = true;
 
     @SubscribeEvent
-    public static void tick(ClientTickEvent event) {
+    public static void tick(ClientTickEvent.Pre event) {
         Minecraft mc = Minecraft.getInstance();
         ClientLevel level = mc.level;
         LocalPlayer player = mc.player;
@@ -223,7 +223,7 @@ public class ClientTubePlacementHandler {
     };
 
     @SubscribeEvent
-    public static void onUseMouse(InputEvent.MouseButton event) {
+    public static void onUseMouse(InputEvent.MouseButton.Pre event) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (player != null && spline != null && targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT && draggingSelectedControlPoint == (event.getAction() == InputConstants.RELEASE)) {

@@ -17,12 +17,12 @@ public class PetrolparkClient {
     public PetrolparkClient(IEventBus modEventBus) {
 		clientCtor(modEventBus, NeoForge.EVENT_BUS);
 
-        Mods.CREATE.executeIfInstalled(() -> () -> CreateClient.clientCtor(modEventBus, modEventBus));;
+        Mods.CREATE.executeIfInstalled(() -> () -> CreateClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
         Mods.CURIOS.executeIfInstalled(() -> () -> CuriosClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
 	};
 
     public void clientCtor(IEventBus modEventBus, IEventBus neoEventBus) {
-        neoEventBus.addListener(PetrolparkClient::clientInit);
+        modEventBus.addListener(PetrolparkClient::clientInit);
     };
     
     public static void clientInit(final FMLClientSetupEvent event) {

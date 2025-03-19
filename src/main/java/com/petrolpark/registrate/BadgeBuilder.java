@@ -9,6 +9,7 @@ import com.petrolpark.badge.BadgeItem;
 import com.petrolpark.compat.curios.CuriosSetup;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
+import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonnullType;
@@ -37,7 +38,9 @@ public class BadgeBuilder<T extends Badge, P> extends AbstractBuilder<Badge, T, 
             //.tab(null)
             .properties(p -> p
                 .stacksTo(1)
-            ).register();
+            ).setData(ProviderType.LANG, (c, p) -> {})
+            .setData(ProviderType.ITEM_MODEL, (c, p) -> {})
+            .register();
 
         CuriosSetup.BADGES.add(item);
     };

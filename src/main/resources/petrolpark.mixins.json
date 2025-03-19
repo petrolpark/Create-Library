@@ -1,7 +1,7 @@
 {
     "required": "true",
     "package": "com.petrolpark.mixin",
-    "compatibilityLevel": "JAVA_17",
+    "compatibilityLevel": "JAVA_21",
     "refmap": "petrolpark.refmap.json",
     "plugin": "com.petrolpark.mixin.plugin.PetrolparkMixinPlugin",
     "mixins": [
@@ -27,11 +27,11 @@
         "compat.create.TransportedItemStackMixin",
         "AbstractContainerMenuMixin",
         "AbstractCookingRecipeMixin",
+        "BuiltInRegistriesMixin",
         "CraftingMenuMixin",
         "FluidTankMixin",
         "ItemStackMixin",
         "LivingEntityMixin",
-        "ServerAdvancementManagerMixin",
         "ShapedRecipeMixin",
         "ShapelessRecipeMixin",
         "ShulkerBoxBlockMixin",

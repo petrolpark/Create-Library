@@ -56,7 +56,8 @@ public class Petrolpark {
         modContainer.registerConfig(ModConfig.Type.SERVER, PetrolparkConfig.serverSpec);
 
         // Registration
-        PetrolparkRegistries.register();
+        PetrolparkRegistries.Keys.register();
+        PetrolparkPackets.register();
         PetrolparkDataComponents.register(modEventBus);
         PetrolparkAttachmentTypes.register(modEventBus);
         Badges.register();
@@ -64,18 +65,18 @@ public class Petrolpark {
         PetrolparkItems.register();
         PetrolparkMobEffects.register();
         PetrolparkTeamProviderTypes.register();
+
         // Registration - data/loot
         PetrolparkDataLoadingConditions.register();
         PetrolparkCriteriaTriggers.register();
         PetrolparkLootConditionTypes.register();
+        PetrolparkLootItemFunctions.register();
         PetrolparkNumberProviderTypes.register();
         PetrolparkGlobalLootModifierSerializers.register();
         PetrolparkRewardGeneratorTypes.register();
         PetrolparkRewardTypes.register();
         PetrolparkIngredientModifierTypes.register();
         PetrolparkIngredientRandomizerTypes.register();
-
-        NeoForge.EVENT_BUS.register(this);
     
         modEventBus.addListener(this::init);
         modEventBus.addListener(EventPriority.LOWEST, PetrolparkDatagen::gatherData);
