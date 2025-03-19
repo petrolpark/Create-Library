@@ -19,8 +19,6 @@ import net.neoforged.neoforge.common.conditions.ICondition;
 
 public record ConfigBooleanCondition(String modid, String path) implements ICondition {
 
-    //public static final ResourceLocation ID = Petrolpark.asResource("config_boolean");
-
     public static final MapCodec<ConfigBooleanCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Codec.STRING.fieldOf("mod").forGetter(ConfigBooleanCondition::modid),
         Codec.STRING.fieldOf("value").forGetter(ConfigBooleanCondition::path)

@@ -13,8 +13,6 @@ import net.minecraft.world.item.ItemStack;
 
 @RequiresCreate
 public interface IFTLProcessingRecipe<T extends ProcessingRecipe<?>> {
-
-    public final <R extends ProcessingRecipe<?> & IFTLProcessingRecipe<R>> Codec<R> = 
     
     /**
      * Give a way for {@link IFTLProcessingRecipe} to convert to the proper class for this Recipe.

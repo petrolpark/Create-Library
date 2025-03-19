@@ -29,13 +29,13 @@ file="META-INF/accesstransformer.cfg"
 [[dependencies.${mod_id}]]
 	modId="create"
 	mandatory=false
-	versionRange="${create_version_range}"
+	versionRange="[6.0.1,7.0.0)"
 	ordering="AFTER"
 	side="BOTH"
 
 [[dependencies.${mod_id}]]
     modId="jei"
     mandatory=false
-    versionRange="${jei_version_range}"
+    versionRange="[19.21.0.247,)"
     ordering="AFTER"
     side="CLIENT"
