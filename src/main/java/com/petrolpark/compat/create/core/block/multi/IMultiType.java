@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create.block.multi;
+package com.petrolpark.compat.create.core.block.multi;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 

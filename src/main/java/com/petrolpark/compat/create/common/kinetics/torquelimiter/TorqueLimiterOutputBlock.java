@@ -3,6 +3,8 @@ package com.petrolpark.compat.create.common.kinetics.torquelimiter;
 import java.util.Optional;
 
 import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.simibubi.create.api.contraption.BlockMovementChecks;
+import com.simibubi.create.api.contraption.BlockMovementChecks.CheckResult;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -17,6 +19,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 public class TorqueLimiterOutputBlock extends DirectionalKineticBlock implements IBE<TorqueLimiterOutputBlockEntity> {
+
+    static {
+        BlockMovementChecks.registerAttachedCheck(TorqueLimiterOutputBlock::isInputAttached);
+    };
 
     public TorqueLimiterOutputBlock(Properties properties) {
         super(properties);
@@ -49,6 +55,11 @@ public class TorqueLimiterOutputBlock extends DirectionalKineticBlock implements
     @Override
     public BlockEntityType<? extends TorqueLimiterOutputBlockEntity> getBlockEntityType() {
         return CreateBlockEntityTypes.TORQUE_LIMITER_OUTPUT.get();
+    };
+
+    public static CheckResult isInputAttached(BlockState state, Level world, BlockPos pos, Direction direction) {
+        if (state.getBlock() instanceof TorqueLimiterOutputBlock && state.getValue(FACING).getOpposite() == direction && getInput(world, pos, state).isPresent()) return CheckResult.SUCCESS;
+        return CheckResult.PASS;
     };
     
 };

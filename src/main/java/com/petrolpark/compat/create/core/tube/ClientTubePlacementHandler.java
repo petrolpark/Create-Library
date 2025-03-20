@@ -285,7 +285,7 @@ public class ClientTubePlacementHandler {
             if (manualPlacement && player != null) player.displayClientMessage(Component.translatable("petrolpark.tube.connect_another"), true);
             resetTTL();
         } else if (spline == null) { // If placing the second Block
-            if (!ItemStack.isSameItemSameTags(stack, currentStack)) {
+            if (!ItemStack.isSameItemSameComponents(stack, currentStack)) {
                 cancel();
                 return;
             };

@@ -18,6 +18,8 @@ public class Create {
         CreateBlocks.register();
         CreateGlobalLootModifierSerializers.register();
 
+        PetrolparkMovementChecks.register();
+
         // Event Bus Subscribers
         modEventBus.addListener(Create::onRegister);
         forgeEventBus.register(AbstractRememberPlacerBehaviour.class);

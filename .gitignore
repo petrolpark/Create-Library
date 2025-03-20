@@ -27,3 +27,4 @@ forge*changelog.txt
 
 mcmodsrepo
 src/generated/resources/.cache/
+.vscode

@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create.block.multi;
+package com.petrolpark.compat.create.core.block.multi;
 
 import java.util.Optional;
 
@@ -9,7 +9,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.common.util.INBTSerializable;
 
 public interface IMulti<M extends IMulti<? super M>> extends INBTSerializable<CompoundTag> {
     

@@ -1,29 +1,25 @@
-package com.petrolpark.compat.create.block.multi;
+package com.petrolpark.compat.create.core.block.multi;
 
 import java.util.Optional;
 import java.util.function.Predicate;
 
-import com.simibubi.create.content.contraptions.BlockMovementChecks.AllChecks;
-import com.simibubi.create.content.contraptions.BlockMovementChecks.CheckResult;
+import com.simibubi.create.api.contraption.BlockMovementChecks.AttachedCheck;
+import com.simibubi.create.api.contraption.BlockMovementChecks.CheckResult;
+import com.simibubi.create.api.contraption.BlockMovementChecks.MovementAllowedCheck;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.utility.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class MultiMovementChecks implements AllChecks {
+public class MultiMovementChecks implements MovementAllowedCheck, AttachedCheck {
 
     @SuppressWarnings("unchecked")
     protected static final <M extends IMulti<? super M>> Optional<MultiBehaviour<M>> getMultiBehaviour(Level world, BlockPos pos) {
         if (world.getBlockEntity(pos) instanceof SmartBlockEntity sbe) return sbe.getAllBehaviours().stream().map(b -> (MultiBehaviour<M>)b).findAny();
         return Optional.empty();
-    };
-
-    @Override
-    public CheckResult isMovementNecessary(BlockState state, Level world, BlockPos pos) {
-        return CheckResult.PASS;
     };
 
     @Override
@@ -37,18 +33,8 @@ public class MultiMovementChecks implements AllChecks {
     };
 
     @Override
-    public CheckResult isBrittle(BlockState state) {
-        return CheckResult.PASS;
-    };
-
-    @Override
     public CheckResult isBlockAttachedTowards(BlockState state, Level world, BlockPos pos, Direction direction) {
         return isAttachedMulti(state, world, pos, direction, false);
-    };
-
-    @Override
-    public CheckResult isNotSupportive(BlockState state, Direction direction) {
-        return CheckResult.PASS;
     };
 
     protected static <M extends IMulti<? super M>> CheckResult isAttachedMulti(BlockState state, Level level, BlockPos pos, Direction attached, boolean cornersOnly) {

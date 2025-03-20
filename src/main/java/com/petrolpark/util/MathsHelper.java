@@ -9,6 +9,26 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 public class MathsHelper {
+
+    public static final int floorLog(int x, int base) {
+        int result = 0;
+        while (x >= base) {
+            x /= base;
+            result++;
+        };
+        return result;
+    };
+
+    public static int exponentiate(int base, int exponent) {
+        int result = 1;
+        while (exponent > 0) {
+            if ((exponent & 1) == 1) result *= base;
+            base *= base;
+            exponent >>= 1;
+        };
+        return result;
+    }
+
     /**
      * The directional angle in degrees between two vectors, between 0 and 360.
      * @param vec1

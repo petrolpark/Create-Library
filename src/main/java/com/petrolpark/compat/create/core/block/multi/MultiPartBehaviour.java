@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create.block.multi;
+package com.petrolpark.compat.create.core.block.multi;
 
 import java.util.Optional;
 
@@ -8,6 +8,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
@@ -46,15 +47,15 @@ public abstract class MultiPartBehaviour<M extends IMulti<? super M>> extends Mu
     public static final String CONTROLLER_POS_TAG_KEY = "ControllerPos";
 
     @Override
-    public void read(CompoundTag nbt, boolean clientPacket) {
-        super.read(nbt, clientPacket);
-        if (nbt.contains(CONTROLLER_POS_TAG_KEY, Tag.TAG_COMPOUND)) relativeControllerPos = Optional.of(NbtUtils.readBlockPos(nbt.getCompound(CONTROLLER_POS_TAG_KEY)));
+    public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(nbt, registries, clientPacket);
+        if (nbt.contains(CONTROLLER_POS_TAG_KEY, Tag.TAG_COMPOUND)) relativeControllerPos = NbtUtils.readBlockPos(nbt, CONTROLLER_POS_TAG_KEY);
         if (getOptionalMulti().isEmpty()) relativeControllerPos = Optional.empty(); // Remove reference if there is no Multi Controller where there should be
     };
 
     @Override
-    public void write(CompoundTag nbt, boolean clientPacket) {
-        super.write(nbt, clientPacket);
+    public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(nbt, registries, clientPacket);
         relativeControllerPos.map(NbtUtils::writeBlockPos).ifPresent(NBTHelper.writeAt(nbt, CONTROLLER_POS_TAG_KEY));
     };
     
