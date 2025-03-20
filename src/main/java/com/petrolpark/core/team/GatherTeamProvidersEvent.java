@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeam;
+import com.petrolpark.core.team.singleplayer.SinglePlayerTeam;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;

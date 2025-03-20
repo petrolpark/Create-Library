@@ -9,6 +9,7 @@ public enum SharedFeatures {
     CENTRIFUGE,
     EXTRUSION,
     AGEING_BARREL,
+    TORQUE_LIMITER,
 
     // Items/Fluids
     MESH,
@@ -24,19 +25,19 @@ public enum SharedFeatures {
     private final SharedFeatures[] dependencies;
     
     private final SortedSet<Mods> users = new TreeSet<>(Mods::compareTo);
-    private boolean activated = false;
+    private boolean enabled = false;
 
     SharedFeatures(SharedFeatures... dependencies) {
         this.dependencies = dependencies;
     };
 
-    public boolean activated() {
-        return activated;
+    public boolean enabled() {
+        return enabled;
     };
 
-    public void require(Mods mod) {
-        activated = true;
+    public void enable(Mods mod) {
+        enabled = true;
         users.add(mod);
-        for (SharedFeatures feature : dependencies) feature.require(mod);
+        for (SharedFeatures feature : dependencies) feature.enable(mod);
     };
 };

@@ -54,6 +54,7 @@ public class ItemContamination extends ComponentHolderContamination<Item, ItemSt
     @Override
     public void save(final HolderLookup.Provider registries) {
         super.save(registries);
+        getDuck(stack).onContaminationSaved();
         NeoForge.EVENT_BUS.post(new ItemContaminationSavedEvent(stack, this));
     };
 

@@ -6,19 +6,21 @@ import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
-public record GrantExperienceEntityReward(NumberProvider amount) implements IEntityReward {
+/**
+ * Give a Player some XP.
+ */
+public record GrantExperiencePlayerReward(NumberProvider amount) implements IPlayerReward {
 
-    public static final MapCodec<GrantExperienceEntityReward> CODEC = CodecHelper.singleFieldMap(NumberProviders.CODEC, "amount", GrantExperienceEntityReward::amount, GrantExperienceEntityReward::new);
+    public static final MapCodec<GrantExperiencePlayerReward> CODEC = CodecHelper.singleFieldMap(NumberProviders.CODEC, "amount", GrantExperiencePlayerReward::amount, GrantExperiencePlayerReward::new);
 
     @Override
-    public void reward(Entity entity, LootContext context, float multiplier) {
-        if (entity instanceof Player player) player.giveExperiencePoints(amount.getInt(context));
+    public void rewardPlayer(Player player, LootContext context, float multiplier) {
+        player.giveExperiencePoints(amount.getInt(context));
     };
 
     @Override

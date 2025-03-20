@@ -1,10 +1,10 @@
 package com.petrolpark.util;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import com.petrolpark.PetrolparkRegistries;
@@ -141,7 +141,7 @@ public class NBTHelper {
      * @return {@code null} if the ResourceLocation is invalid
      */
     public static <OBJECT> OBJECT readRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> registryKey) {
-        return PetrolparkRegistries.getRegistry(registryKey).get(ResourceLocation.parse(tag.getString(key)));
+        return PetrolparkRegistries.getRegistry(registryKey).orElseThrow(NBTHelper::registryNotLoadedException).get(ResourceLocation.parse(tag.getString(key)));
     };
 
     /**
@@ -153,7 +153,7 @@ public class NBTHelper {
      * @param object
      */
     public static <OBJECT> void writeRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> registryKey, OBJECT object) {
-        ResourceLocation rl = PetrolparkRegistries.getRegistry(registryKey).getKey(object);
+        ResourceLocation rl = PetrolparkRegistries.getRegistry(registryKey).orElseThrow(NBTHelper::registryNotLoadedException).getKey(object);
         if (rl != null) tag.putString(key, rl.toString());
     };
 
@@ -166,7 +166,7 @@ public class NBTHelper {
      * @return {@code null} if the ResourceLocation is invalid
      */
     public static <OBJECT> OBJECT readDataRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> dataRegistryKey) {
-        return PetrolparkRegistries.getRegistry(dataRegistryKey).get(ResourceLocation.parse(tag.getString(key)));
+        return PetrolparkRegistries.getRegistry(dataRegistryKey).orElseThrow(NBTHelper::registryNotLoadedException).get(ResourceLocation.parse(tag.getString(key)));
     };
 
     /**
@@ -178,7 +178,11 @@ public class NBTHelper {
      * @param dataObject
      */
     public static <OBJECT> void writeDataRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> dataRegistryKey, OBJECT dataObject) {
-        ResourceLocation rl = PetrolparkRegistries.getRegistry(dataRegistryKey).getKey(dataObject);
+        ResourceLocation rl = PetrolparkRegistries.getRegistry(dataRegistryKey).orElseThrow(NBTHelper::registryNotLoadedException).getKey(dataObject);
         if (rl != null) tag.putString(key, rl.toString());
+    };
+
+    public static IllegalStateException registryNotLoadedException() {
+        return new IllegalStateException("Registries have not been loaded yet");
     };
 };

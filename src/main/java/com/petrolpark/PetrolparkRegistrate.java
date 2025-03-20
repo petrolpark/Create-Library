@@ -26,6 +26,7 @@ import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.team.ITeam;
 import com.tterrag.registrate.AbstractRegistrate;
+import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
 import com.tterrag.registrate.builders.Builder;
@@ -41,7 +42,9 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
@@ -147,8 +150,8 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
         @Override
         public <R, T extends R> RegistryEntry<R, T> accept(@Nonnull String name, @Nonnull ResourceKey<? extends Registry<R>> type, @Nonnull Builder<R, T, ?, ?> builder, @Nonnull NonNullSupplier<? extends T> factory, @Nonnull NonNullFunction<DeferredHolder<R, T>, ? extends RegistryEntry<R, T>> entryFactory) {
-            if (feature.activated()) return PetrolparkRegistrate.super.accept(name, type, builder, factory, entryFactory);
-            return new RegistryEntry<R, T>(PetrolparkRegistrate.this, RegistryEntry.create(type, ResourceLocation.fromNamespaceAndPath(getModid(), name))); // Empty entry
+            if (feature.enabled()) return PetrolparkRegistrate.super.accept(name, type, builder, factory, entryFactory);
+            return entryFactory.apply(DeferredHolder.create(type, ResourceLocation.fromNamespaceAndPath(getModid(), name))); // Create entry but do not register it
         };
 
     };
@@ -159,6 +162,10 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     public <T extends BlockEntity> BlockEntityBuilder<T, PetrolparkRegistrate> sharedBlockEntity(SharedFeatures feature, String name, BlockEntityFactory<T> factory) {
         return sharedEntry(feature, name, callback -> BlockEntityBuilder.create(this, this, name, callback, factory));
+    };
+
+    public <T extends Block, P> BlockBuilder<T, PetrolparkRegistrate> sharedBlock(SharedFeatures feature, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
+        return sharedEntry(feature, name, callback -> BlockBuilder.create(this, this, name, callback, factory));
     };
     
 };

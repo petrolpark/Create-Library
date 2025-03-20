@@ -6,7 +6,7 @@ import org.jetbrains.annotations.ApiStatus.Internal;
 
 import com.petrolpark.core.badge.PlayerBadges;
 import com.petrolpark.core.shop.customer.EntityCustomer;
-import com.petrolpark.core.team.SinglePlayerTeam;
+import com.petrolpark.core.team.singleplayer.SinglePlayerTeam;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;

@@ -26,12 +26,12 @@ import net.minecraft.network.chat.Style;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 public class Contaminant {
 
@@ -46,10 +46,6 @@ public class Contaminant {
     public static final Codec<Holder<Contaminant>> CODEC = RegistryFixedCodec.create(PetrolparkRegistries.Keys.CONTAMINANT);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Contaminant>> STREAM_CODEC = ByteBufCodecs.holderRegistry(PetrolparkRegistries.Keys.CONTAMINANT);
 
-    public static Contaminant get(ResourceLocation resourceLocation) {
-        return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(resourceLocation);
-    };
-
     public static Contaminant getFromIntrinsicTag(TagKey<?> tagKey) {
         return getFromTag(tagKey, "intrinsic");
     };
@@ -62,7 +58,9 @@ public class Contaminant {
         ResourceLocation rl = tagKey.location();
         String[] path = rl.getPath().split("/");
         if (!path[0].equals("contaminant") || !path[2].equals(pathSuffix)) return null;
-        return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), path[1]));
+        return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT)
+            .orElseThrow(() -> new IllegalStateException("Registries not loaded yet"))
+            .get(ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), path[1]));
     };
 
     // Initial fields
@@ -130,7 +128,10 @@ public class Contaminant {
     };
 
     public ResourceLocation getLocation() {
-        if (rl == null) rl = ServerLifecycleHooks.getCurrentServer().registryAccess().registryOrThrow(PetrolparkRegistries.Keys.CONTAMINANT).getKey(this);
+        if (rl == null) rl = PetrolparkRegistries.getHolder(PetrolparkRegistries.Keys.CONTAMINANT, this)
+            .map(Holder.Reference::key)
+            .map(ResourceKey::location)
+            .orElseThrow(() -> new IllegalStateException("Contaminant registry is not available yet"));
         return rl;
     };
 

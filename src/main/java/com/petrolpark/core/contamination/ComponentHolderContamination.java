@@ -14,7 +14,7 @@ public abstract class ComponentHolderContamination<OBJECT, OBJECT_STACK extends 
         super(stack);
         orphanContaminants.addAll(stack.getOrDefault(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, new ArrayList<Holder<Contaminant>>()).stream()
             .map(Holder::value)
-            .filter(IntrinsicContaminants.get(this)::contains)
+            .dropWhile(IntrinsicContaminants.get(this)::contains)
             .toList()
         );
         for (Contaminant contaminant : orphanContaminants) {

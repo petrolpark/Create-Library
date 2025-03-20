@@ -61,7 +61,7 @@ public abstract class AbstractCustomer implements ICustomer, INBTSerializable<Co
         if (openOffer != null) ShopOffer.CODEC.encodeStart(NbtOps.INSTANCE, openOffer)
             .resultOrPartial(Petrolpark.LOGGER::warn)
             .ifPresent(t -> tag.put("Offer", t));
-        if (getShop() != null) NBTHelper.writeDataRegistryObject(tag, "Shop", PetrolparkRegistries.Keys.SHOP, getShop());
+        if (getShop() != null) PetrolparkRegistries.getHolder(provider, PetrolparkRegistries.Keys.SHOP, getShop());
         return tag;
     };
 

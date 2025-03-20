@@ -1,4 +1,4 @@
-package com.petrolpark.core.team;
+package com.petrolpark.core.team.singleplayer;
 
 import java.util.UUID;
 import java.util.stream.Stream;
@@ -9,8 +9,13 @@ import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkAttachmentTypes;
+import com.petrolpark.core.team.AbstractTeam;
+import com.petrolpark.core.team.ITeam;
+import com.petrolpark.core.team.NoTeam;
+import com.petrolpark.core.team.PetrolparkTeamProviderTypes;
 import com.petrolpark.util.CodecHelper;
 
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.PlayerFaceRenderer;
@@ -22,6 +27,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
@@ -29,6 +35,9 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 
+/**
+ * The {@link ITeam} consiting of a single Player.
+ */
 public class SinglePlayerTeam extends AbstractTeam {
 
     public final Player player;
@@ -43,7 +52,11 @@ public class SinglePlayerTeam extends AbstractTeam {
         } else throw new IllegalStateException(attachmentHolder.toString() + " is not a Player");
     };
 
-    public SinglePlayerTeam(Player player, DataComponentPatch components) {
+    public static final ITeam get(Player player) {
+        return provider(player).provideTeam(player.level());
+    };
+
+    protected SinglePlayerTeam(Player player, DataComponentPatch components) {
         super(components);
         this.player = player;
     };
@@ -86,7 +99,7 @@ public class SinglePlayerTeam extends AbstractTeam {
 
     @Override
     public void setChanged(DataComponentPatch patch) {
-        //TODO
+        if (player instanceof ServerPlayer serverPlayer) CatnipServices.NETWORK.sendToClient(serverPlayer, new SinglePlayerTeamComponentChangedPacket(patch));
     };
 
     @Override

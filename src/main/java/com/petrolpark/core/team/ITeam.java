@@ -19,6 +19,10 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
 
+/**
+ * A collection of Players acting as one Entity.
+ * Teams are {@link MutableDataComponentHolder}s, but only {@link ITeam#isMember(Player) members} of a Team are guaranteed to have access to those Components on the client side.
+ */
 public interface ITeam extends MutableDataComponentHolder {
 
     public ITeam.Provider getProvider();

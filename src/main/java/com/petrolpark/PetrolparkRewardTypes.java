@@ -8,7 +8,7 @@ import com.petrolpark.core.data.reward.RewardType;
 import com.petrolpark.core.data.reward.entity.EntityRewardType;
 import com.petrolpark.core.data.reward.entity.GiveItemEntityReward;
 import com.petrolpark.core.data.reward.entity.GiveLootEntityReward;
-import com.petrolpark.core.data.reward.entity.GrantExperienceEntityReward;
+import com.petrolpark.core.data.reward.entity.GrantExperiencePlayerReward;
 import com.petrolpark.core.data.reward.entity.UnlockTradeEntityReward;
 import com.petrolpark.core.data.reward.team.GrantShopXPTeamReward;
 import com.petrolpark.core.data.reward.team.MembersTeamReward;
@@ -26,8 +26,9 @@ public class PetrolparkRewardTypes {
 
     GIVE_ITEM = REGISTRATE.entityRewardType("give_item", GiveItemEntityReward.CODEC),
     GIVE_LOOT = REGISTRATE.entityRewardType("give_loot", GiveLootEntityReward.CODEC),
-    GRANT_EXPERIENCE = REGISTRATE.entityRewardType("grant_experience", GrantExperienceEntityReward.CODEC),
-    UNLOCK_TRADE = REGISTRATE.entityRewardType("unlock_trade", UnlockTradeEntityReward.CODEC);
+    GRANT_EXPERIENCE = REGISTRATE.entityRewardType("grant_experience", GrantExperiencePlayerReward.CODEC),
+    UNLOCK_TRADE = REGISTRATE.entityRewardType("unlock_trade", UnlockTradeEntityReward.CODEC),
+    ALL_TEAMS = REGISTRATE.entityRewardType("all_teams", null);
 
     public static final RegistryEntry<TeamRewardType, TeamRewardType>
 

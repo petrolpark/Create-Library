@@ -4,6 +4,7 @@ import static com.petrolpark.Petrolpark.REGISTRATE;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeam;
+import com.petrolpark.core.team.singleplayer.SinglePlayerTeam;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.minecraft.network.codec.StreamCodec;

@@ -56,8 +56,8 @@ public class PetrolparkRegistries {
      * @param <OBJECT> Type of objects in the Registry
      * @param key
      */
-    public static <OBJECT> Registry<OBJECT> getRegistry(ResourceKey<Registry<OBJECT>> key) {
-        return registryAccess().registryOrThrow(key);
+    public static <OBJECT> Optional<Registry<OBJECT>> getRegistry(ResourceKey<Registry<OBJECT>> key) {
+        return registryAccess().registry(key);
     };
 
     /**
@@ -68,7 +68,7 @@ public class PetrolparkRegistries {
      * @see PetrolparkRegistries#getHolder(net.minecraft.core.HolderLookup.Provider, ResourceKey, Object)
      */
     public static <OBJECT> Optional<Holder.Reference<OBJECT>> getHolder(ResourceKey<Registry<OBJECT>> registryKey, OBJECT object) {
-        return getHolder(getRegistry(registryKey), object);
+        return getRegistry(registryKey).flatMap(reg -> getHolder(reg, object));
     };
 
     public static <OBJECT> Optional<Holder.Reference<OBJECT>> getHolder(Registry<OBJECT> registry, OBJECT object) {
@@ -88,7 +88,6 @@ public class PetrolparkRegistries {
 
     // Core
     public static final Registry<Badge> BADGES = simple(Keys.BADGE);
-    public static final Registry<Contaminant> CONTAMINANTS = simple(Keys.CONTAMINANT);
     public static final Registry<ITeam.ProviderType> TEAM_PROVIDER_TYPES = simple(Keys.TEAM_PROVIDER_TYPE);
 
     // Loot/Data
@@ -129,7 +128,7 @@ public class PetrolparkRegistries {
     
     public static class Keys {
         // Core
-        public static final ResourceKey<Registry<Contaminant>> CONTAMINANT = REGISTRATE.makeDatapackRegistry("contaminant", Contaminant.DIRECT_CODEC, Contaminant.DIRECT_CODEC);
+        public static final ResourceKey<Registry<Contaminant>> CONTAMINANT = REGISTRATE.makeRegistry("contaminant", RegistryBuilder::new);
         public static final ResourceKey<Registry<ITeam.ProviderType>> TEAM_PROVIDER_TYPE = REGISTRATE.makeRegistry("team_provider_type", RegistryBuilder::new);
         public static final ResourceKey<Registry<Badge>> BADGE = REGISTRATE.makeRegistry("badge", RegistryBuilder::new);
 
@@ -149,8 +148,8 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<TeamRewardType>> TEAM_REWARD_TYPE = REGISTRATE.makeRegistry("team_reward_type", RegistryBuilder::new);
 
         // Shops
-        public static final ResourceKey<Registry<Shop>> SHOP = REGISTRATE.makeDatapackRegistry("shop", Shop.DIRECT_CODEC, Shop.DIRECT_CODEC);
-        public static final ResourceKey<Registry<ShopOfferGenerator>> SHOP_OFFER_GENERATOR = REGISTRATE.makeDatapackRegistry("shop_offer_generator", ShopOfferGenerator.DIRECT_CODEC, ShopOfferGenerator.DIRECT_CODEC);
+        public static final ResourceKey<Registry<Shop>> SHOP = REGISTRATE.makeRegistry("shop", RegistryBuilder::new);
+        public static final ResourceKey<Registry<ShopOfferGenerator>> SHOP_OFFER_GENERATOR = REGISTRATE.makeRegistry("shop_offer_generator", RegistryBuilder::new);
 
         // Dough
         //TODO move to Create compat directory

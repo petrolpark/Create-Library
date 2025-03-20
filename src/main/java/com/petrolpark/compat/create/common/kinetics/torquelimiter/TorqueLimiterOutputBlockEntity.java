@@ -11,5 +11,17 @@ public class TorqueLimiterOutputBlockEntity extends GeneratingKineticBlockEntity
     public TorqueLimiterOutputBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     };
+
+    @Override
+    public void applyNewSpeed(float prevSpeed, float speed) {
+        // TODO Auto-generated method stub
+        super.applyNewSpeed(prevSpeed, speed);
+    };
+
+    @Override
+    public float getGeneratedSpeed() {
+        // TODO Auto-generated method stub
+        return super.getGeneratedSpeed();
+    };
     
 };

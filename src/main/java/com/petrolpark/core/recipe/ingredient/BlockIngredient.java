@@ -7,12 +7,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.petrolpark.PetrolparkRegistries;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -48,7 +45,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
         static {
             registerType(ImpossibleBlockIngredient.TYPE);
-            registerType(SingleBlockIngredient.TYPE);
+            //registerType(SingleBlockIngredient.TYPE);
             registerType(BlockTagIngredient.TYPE);
             registerType(UnionBlockIngredient.TYPE);
             registerType(IntersectionBlockIngredient.TYPE);
@@ -113,52 +110,52 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
     };
     
-    public static class SingleBlockIngredient implements BlockIngredient<SingleBlockIngredient> {
+    // public static class SingleBlockIngredient implements BlockIngredient<SingleBlockIngredient> {
 
-        public static final Type TYPE = new Type();
+    //     public static final Type TYPE = new Type();
 
-        public final Block block;
+    //     public final Block block;
 
-        public SingleBlockIngredient(Block block) {
-            this.block = block;
-        };
+    //     public SingleBlockIngredient(Block block) {
+    //         this.block = block;
+    //     };
 
-        @Override
-        public BlockIngredientType<SingleBlockIngredient> getType() {
-            return TYPE;
-        };
+    //     @Override
+    //     public BlockIngredientType<SingleBlockIngredient> getType() {
+    //         return TYPE;
+    //     };
 
-        @Override
-        public boolean isValid(BlockState state) {
-            return state.is(block);
-        };
+    //     @Override
+    //     public boolean isValid(BlockState state) {
+    //         return state.is(block);
+    //     };
 
-        @Override
-        public NonNullList<ItemStack> getDisplayedItemStacks() {
-            return NonNullList.of(ItemStack.EMPTY, new ItemStack(block.asItem()));
-        };
+    //     @Override
+    //     public NonNullList<ItemStack> getDisplayedItemStacks() {
+    //         return NonNullList.of(ItemStack.EMPTY, new ItemStack(block.asItem()));
+    //     };
 
-        @Override
-        public void write(FriendlyByteBuf buffer) {
-            ResourceLocation rl = PetrolparkRegistries.getRegistry(Registries.BLOCK).getKey(block);
-            if (rl == null) throw new IllegalArgumentException(String.format("Block %s does not exist", block.getName().getString()));
-            buffer.writeResourceLocation(rl);
-        };
+    //     @Override
+    //     public void write(FriendlyByteBuf buffer) {
+    //         ResourceLocation rl = PetrolparkRegistries.getRegistry(Registries.BLOCK).getKey(block);
+    //         if (rl == null) throw new IllegalArgumentException(String.format("Block %s does not exist", block.getName().getString()));
+    //         buffer.writeResourceLocation(rl);
+    //     };
 
-        protected static class Type implements BlockIngredientType<SingleBlockIngredient> {
+    //     protected static class Type implements BlockIngredientType<SingleBlockIngredient> {
 
-            @Override
-            public SingleBlockIngredient read(FriendlyByteBuf buffer) {
-                return new SingleBlockIngredient(BuiltInRegistries.BLOCK.get(buffer.readResourceLocation()));
-            };
+    //         @Override
+    //         public SingleBlockIngredient read(FriendlyByteBuf buffer) {
+    //             return new SingleBlockIngredient(BuiltInRegistries.BLOCK.get(buffer.readResourceLocation()));
+    //         };
 
-            @Override
-            public ResourceLocation getId() {
-                return ResourceLocation.fromNamespaceAndPath("petrolpark", "single_block");
-            };
+    //         @Override
+    //         public ResourceLocation getId() {
+    //             return ResourceLocation.fromNamespaceAndPath("petrolpark", "single_block");
+    //         };
 
-        };
-    };
+    //     };
+    // };
 
     public static class BlockTagIngredient implements BlockIngredient<BlockTagIngredient> {
 
