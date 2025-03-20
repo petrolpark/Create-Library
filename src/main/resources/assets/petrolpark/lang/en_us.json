@@ -74,7 +74,7 @@
     "petrolpark.recipe.item_decay": "Item Decay",
     "petrolpark.recipe.manual_crafting": "Manual-Only Crafting",
 
-    "petrolpark.tube.connect_another": "Place another %s to connect them",
+    "petrolpark.tube.connect_another": "Place another %1$s to connect them",
     "petrolpark.tube.title": "    Constructing %1$s %2$s",
     "petrolpark.tube.control.build": "    [%1$s] Build",
     "petrolpark.tube.control.grab_control_point": "    [Drag] Move node",

@@ -49,6 +49,8 @@ import net.neoforged.neoforge.client.event.InputEvent;
 @OnlyIn(Dist.CLIENT)
 @RequiresCreate
 public class ClientTubePlacementHandler {
+
+    public static final int TIMEOUT = 12000;
     
     protected static ItemStack currentStack = ItemStack.EMPTY;
     protected static ITubeBlock tubeBlock = null;
@@ -283,7 +285,7 @@ public class ClientTubePlacementHandler {
             if (manualPlacement && player != null) player.displayClientMessage(Component.translatable("petrolpark.tube.connect_another"), true);
             resetTTL();
         } else if (spline == null) { // If placing the second Block
-            if (stack != currentStack) {
+            if (!ItemStack.isSameItemSameTags(stack, currentStack)) {
                 cancel();
                 return;
             };
@@ -307,7 +309,7 @@ public class ClientTubePlacementHandler {
     };
 
     public static void resetTTL() {
-        ttl = 400;
+        ttl = TIMEOUT;
     };
 
     public static boolean active() {
