@@ -5,9 +5,9 @@ import java.util.Optional;
 import java.util.function.Predicate;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.badge.BadgeItem;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.curios.renderer.CuriosRenderers;
+import com.petrolpark.core.badge.BadgeItem;
 import com.simibubi.create.content.equipment.goggles.GogglesItem;
 
 import net.minecraft.world.entity.LivingEntity;

@@ -2,10 +2,10 @@ package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
-import com.petrolpark.data.reward.generator.CombinedRewardGenerator;
-import com.petrolpark.data.reward.generator.DirectRewardGenerator;
-import com.petrolpark.data.reward.generator.LootTableRewardGenerator;
-import com.petrolpark.data.reward.generator.RewardGeneratorType;
+import com.petrolpark.core.data.reward.generator.CombinedRewardGenerator;
+import com.petrolpark.core.data.reward.generator.DirectRewardGenerator;
+import com.petrolpark.core.data.reward.generator.LootTableRewardGenerator;
+import com.petrolpark.core.data.reward.generator.RewardGeneratorType;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 public class PetrolparkRewardGeneratorTypes {

@@ -1,10 +1,10 @@
 package com.petrolpark;
 
-import com.petrolpark.badge.Badge;
-import com.petrolpark.data.IEntityTarget;
-import com.petrolpark.shop.Shop;
-import com.petrolpark.shop.customer.ICustomer;
-import com.petrolpark.team.ITeam;
+import com.petrolpark.core.badge.Badge;
+import com.petrolpark.core.data.IEntityTarget;
+import com.petrolpark.core.shop.Shop;
+import com.petrolpark.core.shop.customer.ICustomer;
+import com.petrolpark.core.team.ITeam;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;

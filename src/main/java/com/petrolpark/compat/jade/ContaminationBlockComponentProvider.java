@@ -3,8 +3,8 @@ package com.petrolpark.compat.jade;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.create.block.entity.behaviour.ContaminationBehaviour;
-import com.petrolpark.contamination.Contaminant;
+import com.petrolpark.compat.create.core.block.entity.behaviour.ContaminationBehaviour;
+import com.petrolpark.core.contamination.Contaminant;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
 import net.minecraft.resources.ResourceLocation;

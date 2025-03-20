@@ -3,7 +3,7 @@ package com.petrolpark;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
-import com.petrolpark.badge.BadgeDataProvider;
+import com.petrolpark.core.badge.BadgeDataProvider;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;

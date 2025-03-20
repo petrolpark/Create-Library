@@ -1,6 +1,6 @@
 package com.petrolpark.util;
 
-import com.petrolpark.fluid.FluidMixer;
+import com.petrolpark.core.fluid.FluidMixer;
 
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.component.DataComponentType;

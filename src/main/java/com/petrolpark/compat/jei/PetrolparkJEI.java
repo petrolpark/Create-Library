@@ -13,8 +13,8 @@ import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecip
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
+import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
 import com.petrolpark.mixin.compat.jei.client.JustEnoughItemsClientMixin;
-import com.petrolpark.recipe.manualonly.ManualOnlyShapedRecipe;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import mezz.jei.api.IModPlugin;

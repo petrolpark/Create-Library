@@ -3,7 +3,7 @@ package com.petrolpark.compat.jei;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.petrolpark.recipe.advancedprocessing.IBiomeSpecificProcessingRecipe;
+import com.petrolpark.compat.create.core.recipe.IBiomeSpecificProcessingRecipe;
 
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import net.minecraft.ChatFormatting;

@@ -6,7 +6,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.recipe.IPetrolparkRecipeTypes;
+import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.util.Lang;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 

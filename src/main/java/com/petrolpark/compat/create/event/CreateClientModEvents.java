@@ -1,7 +1,7 @@
 package com.petrolpark.compat.create.event;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.tube.ClientTubePlacementHandler;
+import com.petrolpark.compat.create.core.tube.ClientTubePlacementHandler;
 
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;

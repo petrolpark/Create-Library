@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkDataComponents;
-import com.petrolpark.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.IDecayingItem;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;

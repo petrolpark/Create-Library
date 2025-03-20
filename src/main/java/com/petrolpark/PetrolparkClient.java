@@ -3,7 +3,7 @@ package com.petrolpark;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.CreateClient;
 import com.petrolpark.compat.curios.CuriosClient;
-import com.petrolpark.item.decay.DecayingItemHandler.ClientDecayingItemHandler;
+import com.petrolpark.core.item.decay.DecayingItemHandler.ClientDecayingItemHandler;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;

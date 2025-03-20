@@ -4,9 +4,9 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-import com.petrolpark.badge.PlayerBadges;
-import com.petrolpark.shop.customer.EntityCustomer;
-import com.petrolpark.team.SinglePlayerTeam;
+import com.petrolpark.core.badge.PlayerBadges;
+import com.petrolpark.core.shop.customer.EntityCustomer;
+import com.petrolpark.core.team.SinglePlayerTeam;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;

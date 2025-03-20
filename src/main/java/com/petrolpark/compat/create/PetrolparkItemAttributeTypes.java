@@ -2,7 +2,7 @@ package com.petrolpark.compat.create;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.contamination.HasContaminantItemAttribute;
+import com.petrolpark.compat.create.core.item.HasContaminantItemAttribute;
 import com.simibubi.create.api.registry.CreateBuiltInRegistries;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
 

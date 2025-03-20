@@ -1,8 +1,8 @@
 package com.petrolpark.compat.jei.category;
 
+import com.petrolpark.compat.create.core.recipe.IBiomeSpecificProcessingRecipe;
 import com.petrolpark.compat.jei.BiomeSpecificTooltipHelper;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
-import com.petrolpark.recipe.advancedprocessing.IBiomeSpecificProcessingRecipe;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;

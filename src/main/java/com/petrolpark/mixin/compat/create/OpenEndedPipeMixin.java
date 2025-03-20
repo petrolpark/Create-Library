@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.petrolpark.fluid.ICustomBlockStateFluid;
+import com.petrolpark.core.fluid.ICustomBlockStateFluid;
 import com.simibubi.create.content.fluids.OpenEndedPipe;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 

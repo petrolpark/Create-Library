@@ -6,10 +6,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.petrolpark.contamination.IContamination;
-import com.petrolpark.contamination.IItemStackDuck;
-import com.petrolpark.contamination.ItemContamination;
-import com.petrolpark.item.decay.IDecayingItem;
+import com.petrolpark.core.contamination.IContamination;
+import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.item.IItemStackDuck;
+import com.petrolpark.core.item.decay.IDecayingItem;
 import com.petrolpark.util.ItemHelper;
 
 import net.minecraft.world.item.ItemStack;

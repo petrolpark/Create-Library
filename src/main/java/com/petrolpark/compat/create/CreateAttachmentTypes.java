@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.recipe.ResourceLocationSet;
+import com.petrolpark.core.data.ResourceLocationSet;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;

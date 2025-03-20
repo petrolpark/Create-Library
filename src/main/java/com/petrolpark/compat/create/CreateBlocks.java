@@ -2,7 +2,7 @@ package com.petrolpark.compat.create;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
-import com.petrolpark.tube.TubeStructuralBlock;
+import com.petrolpark.compat.create.core.tube.TubeStructuralBlock;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.world.level.material.PushReaction;

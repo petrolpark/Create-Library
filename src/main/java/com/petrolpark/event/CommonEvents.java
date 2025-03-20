@@ -5,11 +5,11 @@ import java.util.stream.Stream;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.command.ContaminateHeldItemCommand;
-import com.petrolpark.contamination.Contaminant;
-import com.petrolpark.contamination.ItemContamination;
-import com.petrolpark.item.decay.DecayingItemHandler.ServerDecayingItemHandler;
-import com.petrolpark.item.decay.IDecayingItem;
+import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.contamination.ContaminateHeldItemCommand;
+import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.DecayingItemHandler.ServerDecayingItemHandler;
 
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.MinecraftServer;

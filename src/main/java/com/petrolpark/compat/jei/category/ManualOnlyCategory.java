@@ -3,7 +3,7 @@ package com.petrolpark.compat.jei.category;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
-import com.petrolpark.recipe.manualonly.ManualOnlyShapedRecipe;
+import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;

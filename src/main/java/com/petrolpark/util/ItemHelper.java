@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import com.petrolpark.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.IDecayingItem;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.entity.Entity;

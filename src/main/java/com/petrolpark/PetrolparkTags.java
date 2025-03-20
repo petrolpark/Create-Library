@@ -1,6 +1,6 @@
 package com.petrolpark;
 
-import com.petrolpark.contamination.Contaminant;
+import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.core.Holder;

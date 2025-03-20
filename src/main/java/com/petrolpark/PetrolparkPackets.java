@@ -1,8 +1,8 @@
 package com.petrolpark;
 
-import com.petrolpark.team.packet.BindTeamBlockPacket;
-import com.petrolpark.team.packet.BindTeamItemPacket;
-import com.petrolpark.team.scoreboard.ScoreboardTeamComponentChangedPacket;
+import com.petrolpark.core.team.packet.BindTeamBlockPacket;
+import com.petrolpark.core.team.packet.BindTeamItemPacket;
+import com.petrolpark.core.team.scoreboard.ScoreboardTeamComponentChangedPacket;
 
 import net.createmod.catnip.net.base.BasePacketPayload;
 import net.createmod.catnip.net.base.CatnipPacketRegistry;

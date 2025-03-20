@@ -5,11 +5,11 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.badge.BadgeDuplicationRecipe;
-import com.petrolpark.item.decay.DecayingItemCookingRecipe;
-import com.petrolpark.recipe.IPetrolparkRecipeTypes;
-import com.petrolpark.recipe.contamination.CombineContaminatedItemsRecipe;
-import com.petrolpark.recipe.manualonly.ManualOnlyShapedRecipe;
+import com.petrolpark.core.badge.BadgeDuplicationRecipe;
+import com.petrolpark.core.contamination.recipe.CombineContaminatedItemsRecipe;
+import com.petrolpark.core.item.decay.DecayingItemCookingRecipe;
+import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
+import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.resources.ResourceLocation;

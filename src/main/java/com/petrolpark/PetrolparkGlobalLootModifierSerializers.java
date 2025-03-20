@@ -3,7 +3,7 @@ package com.petrolpark;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.contamination.ContaminateGlobalLootModifier;
+import com.petrolpark.core.contamination.ContaminateGlobalLootModifier;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;

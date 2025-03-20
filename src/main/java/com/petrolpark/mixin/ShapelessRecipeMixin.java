@@ -6,9 +6,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.petrolpark.PetrolparkConfig;
-import com.petrolpark.contamination.ItemContamination;
-import com.petrolpark.item.decay.IDecayingItem;
-import com.petrolpark.recipe.contamination.IHandleContaminationMyselfRecipe;
+import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.contamination.recipe.IHandleContaminationMyselfRecipe;
+import com.petrolpark.core.item.decay.IDecayingItem;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;

@@ -3,7 +3,7 @@ package com.petrolpark.compat.jei.category;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
-import com.petrolpark.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.IDecayingItem;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;

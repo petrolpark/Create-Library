@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.petrolpark.PetrolparkConfig;
-import com.petrolpark.contamination.ItemContamination;
-import com.petrolpark.item.decay.IDecayingItem;
+import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.item.decay.IDecayingItem;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 
 import net.minecraft.world.item.ItemStack;

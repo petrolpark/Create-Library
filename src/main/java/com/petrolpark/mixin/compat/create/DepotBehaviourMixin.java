@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.petrolpark.compat.create.item.directional.DirectionalTransportedItemStack;
-import com.petrolpark.compat.create.item.directional.IDirectionalOnBelt;
+import com.petrolpark.compat.create.core.item.directional.DirectionalTransportedItemStack;
+import com.petrolpark.compat.create.core.item.directional.IDirectionalOnBelt;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.logistics.depot.DepotBehaviour;
 

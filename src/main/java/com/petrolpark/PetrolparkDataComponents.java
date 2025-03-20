@@ -6,14 +6,14 @@ import java.util.function.UnaryOperator;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.badge.BadgeItem;
-import com.petrolpark.badge.BadgeItem.BadgeAward;
-import com.petrolpark.compat.create.dough.Dough;
-import com.petrolpark.contamination.Contaminant;
-import com.petrolpark.contamination.Contamination;
-import com.petrolpark.shop.Shop;
-import com.petrolpark.shop.ShopsData;
-import com.petrolpark.team.ITeam;
+import com.petrolpark.compat.create.core.dough.Dough;
+import com.petrolpark.core.badge.BadgeItem;
+import com.petrolpark.core.badge.BadgeItem.BadgeAward;
+import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.contamination.Contamination;
+import com.petrolpark.core.shop.Shop;
+import com.petrolpark.core.shop.ShopsData;
+import com.petrolpark.core.team.ITeam;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.core.Holder;

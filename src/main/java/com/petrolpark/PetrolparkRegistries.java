@@ -7,22 +7,22 @@ import java.util.function.Function;
 
 import org.jetbrains.annotations.ApiStatus.Internal;
 
-import com.petrolpark.badge.Badge;
-import com.petrolpark.compat.create.dough.Dough;
-import com.petrolpark.compat.create.dough.DoughCut;
-import com.petrolpark.contamination.Contaminant;
-import com.petrolpark.data.loot.numberprovider.entity.LootEntityNumberProviderType;
-import com.petrolpark.data.loot.numberprovider.itemstack.LootItemStackNumberProviderType;
-import com.petrolpark.data.loot.numberprovider.team.LootTeamNumberProviderType;
-import com.petrolpark.data.reward.RewardType;
-import com.petrolpark.data.reward.entity.EntityRewardType;
-import com.petrolpark.data.reward.generator.RewardGeneratorType;
-import com.petrolpark.data.reward.team.TeamRewardType;
-import com.petrolpark.recipe.ingredient.modifier.IngredientModifierType;
-import com.petrolpark.recipe.ingredient.randomizer.IngredientRandomizerType;
-import com.petrolpark.shop.Shop;
-import com.petrolpark.shop.offer.ShopOfferGenerator;
-import com.petrolpark.team.ITeam;
+import com.petrolpark.compat.create.core.dough.Dough;
+import com.petrolpark.compat.create.core.dough.DoughCut;
+import com.petrolpark.core.badge.Badge;
+import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.data.loot.numberprovider.entity.LootEntityNumberProviderType;
+import com.petrolpark.core.data.loot.numberprovider.itemstack.LootItemStackNumberProviderType;
+import com.petrolpark.core.data.loot.numberprovider.team.LootTeamNumberProviderType;
+import com.petrolpark.core.data.reward.RewardType;
+import com.petrolpark.core.data.reward.entity.EntityRewardType;
+import com.petrolpark.core.data.reward.generator.RewardGeneratorType;
+import com.petrolpark.core.data.reward.team.TeamRewardType;
+import com.petrolpark.core.recipe.ingredient.modifier.IngredientModifierType;
+import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
+import com.petrolpark.core.shop.Shop;
+import com.petrolpark.core.shop.offer.ShopOfferGenerator;
+import com.petrolpark.core.team.ITeam;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;

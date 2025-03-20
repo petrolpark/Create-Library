@@ -1,8 +1,8 @@
 package com.petrolpark.event;
 
-import com.petrolpark.contamination.Contaminant;
-import com.petrolpark.contamination.IContamination;
-import com.petrolpark.contamination.ItemContamination;
+import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.contamination.IContamination;
+import com.petrolpark.core.contamination.ItemContamination;
 
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;

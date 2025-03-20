@@ -1,9 +1,8 @@
 package com.petrolpark;
 
-import com.petrolpark.shop.ShopMenuItem;
-
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
+import com.petrolpark.core.shop.ShopMenuItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 public class PetrolparkItems {

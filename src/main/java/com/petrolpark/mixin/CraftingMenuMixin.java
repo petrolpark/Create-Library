@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.petrolpark.PetrolparkConfig;
-import com.petrolpark.contamination.ItemContamination;
-import com.petrolpark.item.decay.IDecayingItem;
-import com.petrolpark.recipe.contamination.IHandleContaminationMyselfRecipe;
+import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.contamination.recipe.IHandleContaminationMyselfRecipe;
+import com.petrolpark.core.item.decay.IDecayingItem;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

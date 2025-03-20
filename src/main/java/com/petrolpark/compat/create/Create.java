@@ -1,8 +1,8 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.block.entity.behaviour.AbstractRememberPlacerBehaviour;
-import com.petrolpark.compat.create.loot.CreateGlobalLootModifierSerializers;
+import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
+import com.petrolpark.compat.create.core.loot.CreateGlobalLootModifierSerializers;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.RegisterEvent;

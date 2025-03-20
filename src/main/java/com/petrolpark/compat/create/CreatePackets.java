@@ -1,7 +1,7 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.tube.BuildTubePacket;
+import com.petrolpark.compat.create.core.tube.BuildTubePacket;
 
 import net.createmod.catnip.net.base.BasePacketPayload;
 import net.createmod.catnip.net.base.CatnipPacketRegistry;

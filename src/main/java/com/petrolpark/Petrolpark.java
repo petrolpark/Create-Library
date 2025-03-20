@@ -5,19 +5,17 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
-import com.petrolpark.badge.Badges;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
-import com.petrolpark.item.decay.DecayingItemHandler;
-import com.petrolpark.mobeffects.PetrolparkMobEffects;
-import com.petrolpark.recipe.IPetrolparkRecipeTypes;
-import com.petrolpark.recipe.ingredient.modifier.PetrolparkIngredientModifierTypes;
-import com.petrolpark.recipe.ingredient.randomizer.PetrolparkIngredientRandomizerTypes;
-import com.petrolpark.registrate.PetrolparkRegistrate;
-import com.petrolpark.team.PetrolparkTeamProviderTypes;
-import com.petrolpark.team.scoreboard.ScoreboardTeamManager;
+import com.petrolpark.core.badge.Badges;
+import com.petrolpark.core.item.decay.DecayingItemHandler;
+import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
+import com.petrolpark.core.recipe.ingredient.modifier.PetrolparkIngredientModifierTypes;
+import com.petrolpark.core.recipe.ingredient.randomizer.PetrolparkIngredientRandomizerTypes;
+import com.petrolpark.core.team.PetrolparkTeamProviderTypes;
+import com.petrolpark.core.team.scoreboard.ScoreboardTeamManager;
 
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;

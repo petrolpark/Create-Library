@@ -2,7 +2,7 @@ package com.petrolpark.compat;
 
 import java.util.function.Supplier;
 
-import com.petrolpark.registrate.PetrolparkRegistrate;
+import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.resources.ResourceLocation;

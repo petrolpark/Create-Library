@@ -2,7 +2,7 @@ package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
-import com.petrolpark.badge.ReceiveBadgeCriterionTrigger;
+import com.petrolpark.core.badge.ReceiveBadgeCriterionTrigger;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.minecraft.advancements.CriterionTrigger;
