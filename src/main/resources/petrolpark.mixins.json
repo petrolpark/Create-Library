@@ -15,6 +15,7 @@
         "compat.create.DepotBehaviourMixin",
         "compat.create.DirectBeltInputBehaviourMixin",
         "compat.create.EjectorBlockEntityMixin",
+        "compat.create.ElevatorPulleyBlockEntityMixin",
         "compat.create.KineticBlockEntityMixin",
         "compat.create.KineticBlockMixin",
         "compat.create.MillstoneBlockEntityMixin",
