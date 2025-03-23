@@ -9,6 +9,8 @@ import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public record ScoreboardTeamComponentChangedPacket(String teamName, DataComponentPatch patch) implements ClientboundPacketPayload {
 
@@ -24,6 +26,7 @@ public record ScoreboardTeamComponentChangedPacket(String teamName, DataComponen
     };
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void handle(LocalPlayer player) {
         Petrolpark.SCOREBOARD_TEAMS.applyPatch(player.level(), teamName, patch);
     };

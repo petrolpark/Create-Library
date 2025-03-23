@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.SharedFeatures;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
@@ -48,8 +47,6 @@ public class Petrolpark {
 
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
 
-        SharedFeatures.TORQUE_LIMITER.enable(Mods.DESTROY);
-
         REGISTRATE.registerEventListeners(modEventBus);
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
 
@@ -57,7 +54,6 @@ public class Petrolpark {
         modContainer.registerConfig(ModConfig.Type.SERVER, PetrolparkConfig.serverSpec);
 
         // Registration
-        PetrolparkRegistries.Keys.register();
         PetrolparkPackets.register();
         PetrolparkDataComponents.register(modEventBus);
         PetrolparkAttachmentTypes.register(modEventBus);

@@ -1,7 +1,5 @@
 package com.petrolpark;
 
-import static com.petrolpark.Petrolpark.REGISTRATE;
-
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -128,35 +126,37 @@ public class PetrolparkRegistries {
     
     public static class Keys {
         // Core
-        public static final ResourceKey<Registry<Contaminant>> CONTAMINANT = REGISTRATE.makeRegistry("contaminant", RegistryBuilder::new);
-        public static final ResourceKey<Registry<ITeam.ProviderType>> TEAM_PROVIDER_TYPE = REGISTRATE.makeRegistry("team_provider_type", RegistryBuilder::new);
-        public static final ResourceKey<Registry<Badge>> BADGE = REGISTRATE.makeRegistry("badge", RegistryBuilder::new);
+        public static final ResourceKey<Registry<Contaminant>> CONTAMINANT = key("contaminant");
+        public static final ResourceKey<Registry<ITeam.ProviderType>> TEAM_PROVIDER_TYPE = key("team_provider_type");
+        public static final ResourceKey<Registry<Badge>> BADGE = key("badge");
 
         // Loot/Data
-        public static final ResourceKey<Registry<LootItemStackNumberProviderType>> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE = REGISTRATE.makeRegistry("loot_item_stack_number_provider_type", RegistryBuilder::new);
-        public static final ResourceKey<Registry<LootEntityNumberProviderType>> LOOT_ENTITY_NUMBER_PROVIDER_TYPE = REGISTRATE.makeRegistry("loot_entity_number_provider_type", RegistryBuilder::new);
-        public static final ResourceKey<Registry<LootTeamNumberProviderType>> LOOT_TEAM_NUMBER_PROVIDER_TYPE = REGISTRATE.makeRegistry("loot_team_number_provider_type", RegistryBuilder::new);
+        public static final ResourceKey<Registry<LootItemStackNumberProviderType>> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE = key("loot_item_stack_number_provider_type");
+        public static final ResourceKey<Registry<LootEntityNumberProviderType>> LOOT_ENTITY_NUMBER_PROVIDER_TYPE = key("loot_entity_number_provider_type");
+        public static final ResourceKey<Registry<LootTeamNumberProviderType>> LOOT_TEAM_NUMBER_PROVIDER_TYPE = key("loot_team_number_provider_type");
         
         // Generated ingredients
-        public static final ResourceKey<Registry<IngredientRandomizerType>> INGREDIENT_RANDOMIZER_TYPE = REGISTRATE.makeRegistry("ingredient_randomizer_type", RegistryBuilder::new);
-        public static final ResourceKey<Registry<IngredientModifierType>> INGREDIENT_MODIFIER_TYPE = REGISTRATE.makeRegistry("ingredient_modifier_type", RegistryBuilder::new);
+        public static final ResourceKey<Registry<IngredientRandomizerType>> INGREDIENT_RANDOMIZER_TYPE = key("ingredient_randomizer_type");
+        public static final ResourceKey<Registry<IngredientModifierType>> INGREDIENT_MODIFIER_TYPE = key("ingredient_modifier_type");
         
         // Rewards
-        public static final ResourceKey<Registry<RewardGeneratorType>> REWARD_GENERATOR_TYPE = REGISTRATE.makeRegistry("reward_generator_type", RegistryBuilder::new);
-        public static final ResourceKey<Registry<RewardType>> REWARD_TYPE = REGISTRATE.makeRegistry("reward_type", RegistryBuilder::new);
-        public static final ResourceKey<Registry<EntityRewardType>> ENTITY_REWARD_TYPE = REGISTRATE.makeRegistry("entity_reward_type", RegistryBuilder::new);
-        public static final ResourceKey<Registry<TeamRewardType>> TEAM_REWARD_TYPE = REGISTRATE.makeRegistry("team_reward_type", RegistryBuilder::new);
+        public static final ResourceKey<Registry<RewardGeneratorType>> REWARD_GENERATOR_TYPE = key("reward_generator_type");
+        public static final ResourceKey<Registry<RewardType>> REWARD_TYPE = key("reward_type");
+        public static final ResourceKey<Registry<EntityRewardType>> ENTITY_REWARD_TYPE = key("entity_reward_type");
+        public static final ResourceKey<Registry<TeamRewardType>> TEAM_REWARD_TYPE = key("team_reward_type");
 
         // Shops
-        public static final ResourceKey<Registry<Shop>> SHOP = REGISTRATE.makeRegistry("shop", RegistryBuilder::new);
-        public static final ResourceKey<Registry<ShopOfferGenerator>> SHOP_OFFER_GENERATOR = REGISTRATE.makeRegistry("shop_offer_generator", RegistryBuilder::new);
+        public static final ResourceKey<Registry<Shop>> SHOP = key("shop");
+        public static final ResourceKey<Registry<ShopOfferGenerator>> SHOP_OFFER_GENERATOR = key("shop_offer_generator");
 
         // Dough
         //TODO move to Create compat directory
-        public static final ResourceKey<Registry<Dough>> DOUGH = REGISTRATE.makeRegistry("dough", RegistryBuilder::new); // Data
-        public static final ResourceKey<Registry<DoughCut>> DOUGH_CUT = REGISTRATE.makeRegistry("dough_cut", RegistryBuilder::new); // Data
+        public static final ResourceKey<Registry<Dough>> DOUGH = key("dough"); // Data
+        public static final ResourceKey<Registry<DoughCut>> DOUGH_CUT = key("dough_cut"); // Data
 
-        public static final void register() {};
+        private static <T> ResourceKey<Registry<T>> key(String name) {
+		    return ResourceKey.createRegistryKey(Petrolpark.asResource(name));
+	    };
     };
 
     

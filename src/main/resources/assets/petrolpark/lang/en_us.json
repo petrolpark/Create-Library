@@ -33,6 +33,8 @@
 
     "biome.petrolpark.unknown": "Unknown Biome",
 
+    "block.petrolpark.tube": "Tube Segment",
+
     "commands.petrolpark.contaminate.failed": "Nothing changed. Targets either have no item in their hands or the contaminant could not be applied",
     "commands.petrolpark.contaminate.failed.entity": "%s is not a valid entity for this command",
     "commands.petrolpark.contaminate.failed.itemless": "%s is not holding any item",
@@ -57,6 +59,7 @@
     "item.petrolpark.badge.awarded": "Awarded to %1$s on %2$s",
     "item.petrolpark.badge.unknown": "This isn't a real Badge...",
     "item.petrolpark.decaying_item.remaining": "Decays in %1$s",
+    "item.petrolpark.menu": "Menu",
     "item.petrolpark.menu.team_selection": "Select a Team for this %1$s",
 
     "petrolpark.generic.list.and": "%1$s and %2$s",

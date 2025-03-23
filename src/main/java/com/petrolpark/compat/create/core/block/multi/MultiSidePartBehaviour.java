@@ -14,7 +14,7 @@ public abstract class MultiSidePartBehaviour<M extends IMulti<? super M>> extend
     /**
      * Called after a {@link StructureTransform} to check if the face of the {@link IMulti} this side Block is on is still valid.
      * @param face
-     * @return {@false} to disassemble the Multi
+     * @return {@code false} to disassemble the Multi
      */
     public abstract boolean isStillValidMultiFace(Direction face);
 

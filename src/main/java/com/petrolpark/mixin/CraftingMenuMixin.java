@@ -32,9 +32,9 @@ public class CraftingMenuMixin {
         method = "Lnet/minecraft/world/inventory/CraftingMenu;slotChangedCraftingGrid(Lnet/minecraft/world/inventory/AbstractContainerMenu;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/world/inventory/ResultContainer;Lnet/minecraft/world/item/crafting/RecipeHolder;)V",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V"
+            target = "setItem(ILnet/minecraft/world/item/ItemStack;)V"
         ),
-        locals = LocalCapture.CAPTURE_FAILSOFT
+        locals = LocalCapture.CAPTURE_FAILEXCEPTION
     )
     @SuppressWarnings("unchecked")
     private static void inSlotChangedCraftingGrid(

@@ -7,6 +7,8 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public record SinglePlayerTeamComponentChangedPacket(DataComponentPatch patch) implements ClientboundPacketPayload {
 
@@ -18,6 +20,7 @@ public record SinglePlayerTeamComponentChangedPacket(DataComponentPatch patch) i
     };
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void handle(LocalPlayer player) {
         SinglePlayerTeam.get(player).applyComponents(patch);
     };

@@ -38,8 +38,7 @@ public interface ITeam extends MutableDataComponentHolder {
     public Stream<String> streamMemberUsernames();
 
     /**
-     * Use {@link ITeam#streamMemberUsernames(Level)} unless having the Player itself is vital.
-     * @param level
+     * Use {@link ITeam#streamMemberUsernames()} unless having the Player itself is vital.
      * @return Stream of Players in this Team.
      */
     @OnlyIn(Dist.DEDICATED_SERVER)

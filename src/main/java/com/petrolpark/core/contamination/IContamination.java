@@ -26,7 +26,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
     /**
      * @param inputs
      * @param outputs
-     * @see IContamination#perpetuate(Stream, Stream, Function) If you have a faster way of getting the Contamination
+     * @see IContamination#perpetuate(HolderLookup.Provider, Stream, Stream, Function) If you have a faster way of getting the Contamination
      */
     public static void perpetuate(final HolderLookup.Provider registries, Stream<Object> inputs, Stream<Object> outputs) {
         perpetuate(registries, inputs, outputs, object -> get(object).orElse(null));
@@ -135,7 +135,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * If the Contaminant has any parents in this Contamination, it will not be removed.
      * @param contaminant
      * @return Whether this Contamination changed
-     * @see IContamination#decontaminateOnly(Contaminant) Don't remove children
+     * @see IContamination#decontaminateOnly(HolderLookup.Provider, Contaminant) Don't remove children
      */
     public boolean decontaminate(final HolderLookup.Provider registries, Contaminant contaminant);
 
@@ -144,7 +144,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * If the Contaminant has any parents in this Contamination, it will not be removed.
      * @param contaminant
      * @return Whether this Contamination changed (the Contaminant was removed)
-     * @see IContamination#decontaminate(Contaminant) Remove all children
+     * @see IContamination#decontaminate(HolderLookup.Provider, Contaminant) Remove all children
      */
     public boolean decontaminateOnly(final HolderLookup.Provider registries, Contaminant contaminant);
 

@@ -17,7 +17,7 @@ repositories {
 }
 
 base {
-    archivesName = mod_id
+    archivesName = "${mod_id}-${minecraft_version}"
 }
 
 // Mojang ships Java 21 to end users starting in 1.20.5, so mods should target Java 21.
@@ -121,13 +121,16 @@ dependencies {
     // Registrate (bundled with Petrolpark's Library)
     jarJar(implementation("com.tterrag.registrate:Registrate:${registrate_version}"))
     // Catnip
-    jarJar(implementation("net.createmod.catnip:Catnip-Common-${minecraft_version}:${catnip_version}"))
+    jarJar(implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}"))
+    //jarJar(implementation("net.createmod.catnip:Catnip-Common-${minecraft_version}:${catnip_version}"))
+    //jarJar(implementation("net.createmod.catnip:Catnip-NeoForge-${minecraft_version}:${catnip_version}"))
+    jarJar(runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"))
 
-    // Create & dependencies
+    // Create & Ponder
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
-    implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
+    //implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
-    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
+    //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
 
     // JEI
     implementation("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
@@ -139,6 +142,12 @@ dependencies {
     // Jade
     implementation("maven.modrinth:jade:15.10.0+neoforge")
 
+}
+
+jar {
+    manifest.attributes([
+        "MixinConfigs": "petrolpark.mixins.json"
+    ])
 }
 
 // This block of code expands all declared replace properties in the specified resource targets.
@@ -170,6 +179,11 @@ neoForge.ideSyncTask generateModMetadata
 
 publish.dependsOn('reobfJar')
 
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
@@ -189,7 +203,7 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 tasks.withType(Copy) {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    duplicatesStrategy = 'inherit'
 }
 
 // IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.

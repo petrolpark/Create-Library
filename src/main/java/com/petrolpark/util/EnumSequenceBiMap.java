@@ -150,7 +150,7 @@ public final class EnumSequenceBiMap<K extends Enum<K>, V> extends NestedSequenc
         if (values.size() == 0 || values.size() > enumValues.length) throw new IllegalArgumentException("Invalid number of values for leaf entry: "+values.size());
         if (values.size() == 1) return new ValueEntry<>(values.get(0));
         if (values.size() == enumValues.length) return new SubMapEntry<K, V>(
-            new EnumSequenceBiMap<>(IntStream.range(0, enumValues.length)
+            new EnumSequenceBiMap<K, V>(IntStream.range(0, enumValues.length)
                 .boxed()
                 .collect(Collectors.toMap(
                     i -> enumValues[i],
@@ -162,7 +162,7 @@ public final class EnumSequenceBiMap<K extends Enum<K>, V> extends NestedSequenc
         Collections.shuffle(randomEnumValues, random);
         randomEnumValues = randomEnumValues.subList(0, values.size()); // Pick n Enum values
         return new SubMapEntry<K, V>(
-            new EnumSequenceBiMap<>(IntStream.range(0, values.size())
+            new EnumSequenceBiMap<K, V>(IntStream.range(0, values.size())
                 .boxed()
                 .collect(Collectors.toMap(
                     randomEnumValues::get,

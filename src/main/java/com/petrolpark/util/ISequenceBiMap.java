@@ -34,7 +34,7 @@ public interface ISequenceBiMap<K, V, S extends Iterable<K>, E extends ISequence
     /**
      * The map of values to the sequences by which those values are indexed.
      * @return Non-{@code null} map
-     * @see {@link ISequenceBiMap#getKeySequence(Object)}
+     * @see ISequenceBiMap#getKeySequence(Object)
      */
     public Map<V, S> getKeySequenceMap();
 

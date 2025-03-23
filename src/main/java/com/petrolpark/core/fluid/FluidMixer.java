@@ -88,7 +88,7 @@ public class FluidMixer {
     public interface IFluidMixer {
 
         /**
-         * Get the maximum amount of {@code addedFluid} which can be mixed in such that the {@link IFluidMixer#mix2(FluidStack, FluidStack) mixing result} amount is no larger than {@code maxResultAmount}.
+         * Get the maximum amount of {@code addedFluid} which can be mixed in such that the {@link IFluidMixer#mix2(RegistryAccess, FluidStack, FluidStack) mixing result} amount is no larger than {@code maxResultAmount}.
          * <b>Do not modify either Fluid Stack.</b>
          * @param baseFluidStack
          * @param addedFluidStack
@@ -99,7 +99,7 @@ public class FluidMixer {
         };
 
         /**
-         * Shortcut version of {@link IFluidMixer#getMixPriority(FluidStack...)} for 2 Fluids only.
+         * Shortcut version of {@link IFluidMixer#getMixPriority(RegistryAccess, FluidStack...)} for 2 Fluids only.
          */
         public default int getMix2Priority(final RegistryAccess registryAccess, FluidStack fluidStack1, FluidStack fluidStack2) {
             return getMixPriority(registryAccess, fluidStack1, fluidStack2);
@@ -109,13 +109,13 @@ public class FluidMixer {
          * Decide whether this {@link IFluidMixer} is applicable to this combination of Fluid Stacks, and if so, what priority this mixer has for mixing them.
          * <b>Do not modify any Fluid Stack.</b>
          * @param fluidStacks Stacks to mix
-         * @return Negative number to not use this mixer, {@code 0} to only call {@link IFluidMixer#afterMix(FluidStack, FluidStack...)}, or a positive priority to bid to call {@link IFluidMixer#mix(FluidStack...)}.
+         * @return Negative number to not use this mixer, {@code 0} to only call {@link IFluidMixer#afterMix(RegistryAccess, FluidStack, FluidStack...)}, or a positive priority to bid to call {@link IFluidMixer#mix(RegistryAccess, FluidStack...)}.
          */
         public int getMixPriority(final RegistryAccess registryAccess, FluidStack ...fluidStacks);
 
         /**
-         * Shortcut version of {@link IFluidMixer#mix(FluidStack...)} for 2 Fluids only.
-         * The amount does not necessarily have to be the sum of amounts of each input Fluid Stack, but if it is not make sure {@link IFluidMixer#getAmountToMixIn(int, FluidStack, FluidStack)} is properly defined.
+         * Shortcut version of {@link IFluidMixer#mix(RegistryAccess, FluidStack...)} for 2 Fluids only.
+         * The amount does not necessarily have to be the sum of amounts of each input Fluid Stack, but if it is not make sure {@link IFluidMixer#getAmountToMixIn(RegistryAccess, int, FluidStack, FluidStack)} is properly defined.
          */
         public default FluidStack mix2(final RegistryAccess registryAccess, FluidStack fluidStack1, FluidStack fluidStack2) {
             return mix(registryAccess, fluidStack1, fluidStack2);
@@ -130,7 +130,7 @@ public class FluidMixer {
         public FluidStack mix(final RegistryAccess registryAccess, FluidStack ...fluidStacks);
 
         /**
-         * Called on <i>every</i> {@link IFluidMixer} after the highest-priority {@link IFluidMixer} has {@link IFluidMixer#mix(FluidStack...) mixed} them.
+         * Called on <i>every</i> {@link IFluidMixer} after the highest-priority {@link IFluidMixer} has {@link IFluidMixer#mix(RegistryAccess, FluidStack...) mixed} them.
          * <b>Do not change the amount of Fluid.</b>
          * @param result
          * @param fluidStacks Input Fluid Stacks
