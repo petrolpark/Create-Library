@@ -17,8 +17,9 @@ buildscript {
 
 plugins {
     id 'com.matthewprenger.cursegradle' version "${cursegradle_version}"
+    id 'net.minecraftforge.gradle' version "6.0.35"
 }
-apply plugin: 'net.minecraftforge.gradle'
+
 apply plugin: 'org.parchmentmc.librarian.forgegradle'
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
@@ -99,12 +100,12 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
-    maven {
+    maven { // Create, Ponder
         name = 'createmod maven'
         url = "https://maven.createmod.net"
     }
 
-    maven { // Create, Flywheel, Registrate, Jade
+    maven { // Registrate, Jade
         name = 'tterag maven'
         url = 'https://www.cursemaven.com'
     }
@@ -145,8 +146,6 @@ minecraft.runs.all {
 
 dependencies {
 
-    // HARD DEPENDENCIES
-
     // Minecraft
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
@@ -155,19 +154,13 @@ dependencies {
         jarJar.ranged(it, '[MC1.19.3-1.1.10,)')
     }
     
-    // Create
-    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-
-    implementation fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}")
-
-    // Flywheel
-    //implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-    implementation fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-
-    // Registrate
-    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
-
-    // OPTIONAL DEPENDENCIES
+    // Create & Dependents
+    implementation(fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false })
+    implementation(fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${ponder_version}"))
+    compileOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-api-${minecraft_version}:${flywheel_version}"))
+    runtimeOnly(fg.deobf("dev.engine-room.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}"))
+    implementation(fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}"))
+    implementation("io.github.llamalad7:mixinextras-forge:${mixin_extras_version}")
 
     // JEI
     compileOnly fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}")
@@ -184,6 +177,7 @@ dependencies {
     // ANNOTATION PROCESSORS
 
     annotationProcessor "org.spongepowered:mixin:${mixin_version}:processor"
+    compileOnly(annotationProcessor("io.github.llamalad7:mixinextras-common:${mixin_extras_version}"))
 }
 
 jar {

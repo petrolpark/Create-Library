@@ -16,7 +16,7 @@ description='''Common code for petrolpark's Create add-ons and other Minecraft m
 [[dependencies.petrolpark]]
     modId="forge"
     mandatory=true
-    versionRange="[43,)"
+    versionRange="[47,)"
     ordering="NONE"
     side="BOTH"
 
@@ -30,7 +30,7 @@ description='''Common code for petrolpark's Create add-ons and other Minecraft m
  [[dependencies.petrolpark]]
 	modId="create"
 	mandatory=false
-	versionRange="[0.5.1.h,)"
+	versionRange="[6.0.4,6.1.0)"
 	ordering="AFTER"
 	side="BOTH"
 
