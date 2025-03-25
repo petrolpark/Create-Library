@@ -280,7 +280,7 @@ public class ClientTubePlacementHandler {
     };
 
     public static void resetTTL() {
-        ttl = 400;
+        ttl = 2400;
     };
 
     public static boolean active() {
