@@ -1,7 +1,7 @@
 package com.petrolpark.tube;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.mojang.blaze3d.platform.InputConstants;
@@ -17,15 +17,13 @@ import com.petrolpark.util.RayHelper.CustomHitResult;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.foundation.gui.RemovedGuiUtils;
-import net.createmod.catnip.animation.AnimationTickHolder;
-import net.createmod.catnip.data.Pair;
-import net.createmod.catnip.gui.UIRenderHelper;
-import net.createmod.catnip.gui.element.GuiGameElement;
 import com.simibubi.create.foundation.mixin.accessor.MouseHandlerAccessor;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CClient;
 
-import net.createmod.catnip.lang.FontHelper;
+import net.createmod.catnip.animation.AnimationTickHolder;
+import net.createmod.catnip.data.Pair;
+import net.createmod.catnip.gui.element.GuiGameElement;
 import net.createmod.catnip.lang.Lang;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
