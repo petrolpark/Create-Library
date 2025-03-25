@@ -1,6 +1,7 @@
 package com.petrolpark.core.item;
 
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Queue;
 
 import org.jetbrains.annotations.NotNull;
@@ -27,17 +28,18 @@ public class QueueItemHandler implements IItemHandler, INBTSerializable<ListTag>
     };
 
     public void skimEmptyStacks() {
-        while (stacks.peek().isEmpty() && !stacks.isEmpty()) stacks.poll();
+        while (stacks.peek() != null && stacks.peek().isEmpty() && !stacks.isEmpty()) stacks.poll();
     };
 
     public ItemStack peekStack() {
         skimEmptyStacks();
-        return stacks.peek();
+        return Optional.ofNullable(stacks.peek()).orElse(ItemStack.EMPTY);
     };
 
     public ItemStack pollStack() {
         skimEmptyStacks();
         ItemStack stack = stacks.poll();
+        if (stack == null) return ItemStack.EMPTY;
         if (!stack.isEmpty()) onContentsChanged();
         return stack;
     };
