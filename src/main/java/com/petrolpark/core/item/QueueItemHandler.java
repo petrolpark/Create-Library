@@ -16,6 +16,11 @@ public class QueueItemHandler implements IItemHandler, INBTSerializable<ListTag>
 
     protected final Queue<ItemStack> stacks = new LinkedList<>();
 
+    public boolean isEmpty() {
+        skimEmptyStacks();
+        return stacks.isEmpty();
+    };
+
     @Override
     public final int getSlots() {
         return 1;
