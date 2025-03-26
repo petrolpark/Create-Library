@@ -2,6 +2,9 @@ package com.petrolpark.compat.create.core.tube;
 
 //import dev.engine_room.flywheel.core.PartialModel;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+
+import java.util.Arrays;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.petrolpark.util.MathsHelper;
@@ -10,7 +13,6 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import net.createmod.catnip.animation.AnimationTickHolder;
 //import com.simibubi.create.foundation.render.CachedBufferer;
 import net.createmod.catnip.render.CachedBuffers;
-import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.Vec3;
@@ -24,18 +26,17 @@ public interface ITubeRenderer<T extends SmartBlockEntity> {
         final PartialModel[] segmentModels = getTubeSegmentModels(be);
         final TubeSpline spline = tube.getSpline();
         final VertexConsumer vc = bufferSource.getBuffer(RenderType.solid());
-        final float[] segmentScales = getSegmentScales(spline.getPoints().size(), partialTicks);
-        if (segmentScales != null && segmentScales.length != spline.getPoints().size()) throw new IllegalStateException("Segment size array must have length equal to number of segments");
+        final float[] segmentScales = new float[spline.getPoints().size()];
+        Arrays.fill(segmentScales, 1f);
+        modifySegmentScales(be, segmentScales, partialTicks);
         for (int i = 0; i < spline.getPoints().size() - 1; i++) {
-            final SuperByteBuffer buffer = CachedBuffers.partial(segmentModels[i % segmentModels.length], be.getBlockState())
+            float scale = segmentScales[i];
+            CachedBuffers.partial(segmentModels[i % segmentModels.length], be.getBlockState())
                 .translateBack(Vec3.atLowerCornerOf(be.getBlockPos()))
-                .translate(spline.getPoints().get(i));
-            if (segmentScales != null) {
-                final float scale = segmentScales[i];
-                buffer.scale(scale, 1f, scale);
-            };
-            buffer.rotateY((float) MathsHelper.azimuth(spline.getTangents().get(i)))
+                .translate(spline.getPoints().get(i))
+                .rotateY((float) MathsHelper.azimuth(spline.getTangents().get(i)))
                 .rotateX((float) MathsHelper.inclination(spline.getTangents().get(i)))
+                .scale(scale, 1f, scale)
                 .light(light)
                 .renderInto(ms, vc);
         };
@@ -50,11 +51,9 @@ public interface ITubeRenderer<T extends SmartBlockEntity> {
 
     /**
      * Get the sizes of the segments for this frame.
-     * @param segments The total number of segments.
-     * @return An array {@code segments} long, or {@code null} if all segments should have the base size.
      */
-    public default float[] getSegmentScales(int segments, float partialTicks) {
-        return null;
+    public default void modifySegmentScales(T be, float[] segmentScales, float partialTicks) {
+
     };
     
 };
