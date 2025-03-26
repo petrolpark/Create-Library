@@ -202,6 +202,12 @@ public class TubeBehaviour extends BlockEntityBehaviour {
     };
 
     @Override
+    public void destroy() {
+        super.destroy();
+        disconnect();
+    };
+
+    @Override
     public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(nbt, registries, clientPacket);
 
