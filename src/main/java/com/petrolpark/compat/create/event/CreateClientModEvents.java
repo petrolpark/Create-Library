@@ -1,6 +1,6 @@
 package com.petrolpark.compat.create.event;
 
-import com.petrolpark.tube.ClientTubePlacementHandler;
+import com.petrolpark.compat.create.core.tube.ClientTubePlacementHandler;
 
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;

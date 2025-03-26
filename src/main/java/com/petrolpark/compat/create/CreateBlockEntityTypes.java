@@ -3,7 +3,7 @@ package com.petrolpark.compat.create;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.tube.TubeStructuralBlockEntity;
+import com.petrolpark.compat.create.core.tube.TubeStructuralBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 @RequiresCreate

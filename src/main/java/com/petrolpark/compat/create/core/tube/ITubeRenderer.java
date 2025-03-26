@@ -1,4 +1,4 @@
-package com.petrolpark.tube;
+package com.petrolpark.compat.create.core.tube;
 
 //import dev.engine_room.flywheel.core.PartialModel;
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;

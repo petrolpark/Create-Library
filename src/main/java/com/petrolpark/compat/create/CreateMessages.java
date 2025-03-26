@@ -1,7 +1,7 @@
 package com.petrolpark.compat.create;
 
+import com.petrolpark.compat.create.core.tube.BuildTubePacket;
 import com.petrolpark.network.PetrolparkMessages;
-import com.petrolpark.tube.BuildTubePacket;
 
 public class CreateMessages {
   

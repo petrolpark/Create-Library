@@ -1,4 +1,4 @@
-package com.petrolpark.tube;
+package com.petrolpark.compat.create.core.tube;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
