@@ -181,7 +181,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         if (oldSpline == null) return false;
         ItemStack stackForConstruction = getRequiredStack().getSingleItemStack();
         disconnect((controller, stack) -> {if (!player.getAbilities().instabuild) stack.getAsStacks().forEach(player.getInventory()::placeItemBackInInventory);});
-        Petrolpark.unsafeRunWhenOn(Dist.CLIENT, () -> () -> reconnectClient(oldSpline, stackForConstruction));
+        Petrolpark.unsafeRunClient(() -> () -> reconnectClient(oldSpline, stackForConstruction));
         return true;
     };
 

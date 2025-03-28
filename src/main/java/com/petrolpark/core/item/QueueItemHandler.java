@@ -4,14 +4,15 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.Queue;
 
+import javax.annotation.Nonnull;
+
 import org.jetbrains.annotations.NotNull;
 
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.ItemHandlerHelper;
+import net.neoforged.neoforge.common.util.INBTSerializable;
+import net.neoforged.neoforge.items.IItemHandler;
 
 public class QueueItemHandler implements IItemHandler, INBTSerializable<ListTag> {
 
@@ -48,7 +49,7 @@ public class QueueItemHandler implements IItemHandler, INBTSerializable<ListTag>
         if (stack.isEmpty() || !isItemValid(stack)) return stack;
         ItemStack toInsert = stack.copy();
         for (ItemStack existing : stacks) {
-            if (ItemHandlerHelper.canItemStacksStack(existing, toInsert)) {
+            if (ItemStack.isSameItemSameComponents(existing, toInsert)) {
                 int added = Math.min(toInsert.getCount(), Math.min(existing.getMaxStackSize(), getStackSizeLimit()) - existing.getCount());
                 existing.grow(added);
                 toInsert.shrink(added);
@@ -69,7 +70,7 @@ public class QueueItemHandler implements IItemHandler, INBTSerializable<ListTag>
     };
 
     @Override
-    public final @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
+    public final @NotNull ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
         if (simulate) return isItemValid(stack) ? ItemStack.EMPTY : stack;
         return add(stack);
     };
@@ -96,7 +97,7 @@ public class QueueItemHandler implements IItemHandler, INBTSerializable<ListTag>
     };
 
     @Override
-    public final boolean isItemValid(int slot, @NotNull ItemStack stack) {
+    public final boolean isItemValid(int slot, @Nonnull ItemStack stack) {
         return isItemValid(stack);
     };
 
@@ -105,22 +106,20 @@ public class QueueItemHandler implements IItemHandler, INBTSerializable<ListTag>
     };
 
     @Override
-    public ListTag serializeNBT() {
+    public ListTag serializeNBT(@Nonnull HolderLookup.Provider registries) {
         ListTag listTag = new ListTag();
         for (ItemStack stack : stacks) {
             if (stack.isEmpty()) continue;
-            CompoundTag itemTag = new CompoundTag();
-            stack.save(itemTag);
-            listTag.add(itemTag);
+            listTag.add(stack.save(registries));
         };
         return listTag;
     };
 
     @Override
-    public void deserializeNBT(ListTag nbt) {
+    public void deserializeNBT(@Nonnull HolderLookup.Provider registries, @Nonnull ListTag nbt) {
         stacks.clear();
         for (int i = 0; i < nbt.size(); i++) {
-            ItemStack stack = ItemStack.of(nbt.getCompound(i));
+            ItemStack stack = ItemStack.parseOptional(registries, nbt.getCompound(i));
             if (!stack.isEmpty()) stacks.add(stack);
         };
         onLoad();
