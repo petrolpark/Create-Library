@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
@@ -64,6 +64,19 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         return controller;
     };
 
+    /**
+     * Get the {@link TubeSpline} for this pair of Tube BEs.
+     * @return Optional containing the Spline if it exists
+     */
+    public Optional<TubeSpline> getSplineOptional() {
+        return isController() ? Optional.ofNullable(getSpline()) : get(getWorld(), otherEndPos).map(TubeBehaviour::getSpline);
+    };
+
+    /**
+     * Get the {@link TubeSpline spline}.
+     * @return The Spline, if it exists and this is the {@link TubeBehaviour#isController() controller}, or {@code null} otherwise
+     * @see TubeBehaviour#getSplineOptional()
+     */
     public TubeSpline getSpline() {
         if (spline == null && controller) {
             if (!(blockEntity.getBlockState().getBlock() instanceof ITubeBlock tubeBlock)) return null;
@@ -100,22 +113,21 @@ public class TubeBehaviour extends BlockEntityBehaviour {
     };
 
     public void disconnect() {
-        disconnect(stack -> {
-            if (getWorld().isClientSide() || !getWorld().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) return;
-            int points = getSpline().getPoints().size();
-            int items = stack.getCount();
-            if (items / points > 0) for (Vec3 point : getSpline().getPoints()) ItemHelper.pop(getWorld(), point, stack.copyStackWithCount(items / points));
-            for (int i = 0; i < items % points; i++) ItemHelper.pop(getWorld(), getSpline().getPoints().get(i), stack.getSingleItemStack());
-        });
+        disconnect(TubeBehaviour::dropItemsAlongSpline);
     };
 
-    public void disconnect(Consumer<BigItemStack> leftoverItemsConsumer) {
+    /**
+     * Remove the Tube connecting the two end Blocks.
+     * @param leftoverItemsConsumer What to do with the Items left over. This accepts the {@link TubeBehaviour#isController() controller} TubeBehaviour, which you should use if you need to access the {@link TubeBehaviour#getSpline() Spline}.
+     * @see TubeBehaviour#disconnect() Default behaviour
+     */
+    public void disconnect(BiConsumer<TubeBehaviour, BigItemStack> leftoverItemsConsumer) {
         if (disconnecting) return;
         disconnecting = true;
         if (controller) {
             tubeBlockEntity.beforeTubeDisconnect();
             // Create Items
-            leftoverItemsConsumer.accept(getRequiredStack());
+            leftoverItemsConsumer.accept(this, getRequiredStack());
             // Disconnect other end
             get(getWorld(), otherEndPos).ifPresent(tube -> {
                 tube.tubeBlockEntity.beforeTubeDisconnect();
@@ -139,6 +151,14 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         };
     };
 
+    public void dropItemsAlongSpline(BigItemStack stack) {
+        if (getWorld().isClientSide() || !getWorld().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) return;
+        int points = getSpline().getPoints().size();
+        int items = stack.getCount();
+        if (items / points > 0) for (Vec3 point : getSpline().getPoints()) ItemHelper.pop(getWorld(), point, stack.copyStackWithCount(items / points));
+        for (int i = 0; i < items % points; i++) ItemHelper.pop(getWorld(), getSpline().getPoints().get(i), stack.getSingleItemStack());
+    };
+
     public void sendDestroyTubeParticles() {
         if (!(getWorld() instanceof ServerLevel level)) return;
         BlockParticleOption data = new BlockParticleOption(ParticleTypes.BLOCK, blockEntity.getBlockState());
@@ -160,8 +180,8 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         TubeSpline oldSpline = getSpline();
         if (oldSpline == null) return false;
         ItemStack stackForConstruction = getRequiredStack().getSingleItemStack();
-        disconnect(stack -> {if (!player.getAbilities().instabuild) stack.getAsStacks().forEach(player.getInventory()::placeItemBackInInventory);});
-        Petrolpark.unsafeRunClient(() -> () -> reconnectClient(oldSpline, stackForConstruction));
+        disconnect((controller, stack) -> {if (!player.getAbilities().instabuild) stack.getAsStacks().forEach(player.getInventory()::placeItemBackInInventory);});
+        Petrolpark.unsafeRunWhenOn(Dist.CLIENT, () -> () -> reconnectClient(oldSpline, stackForConstruction));
         return true;
     };
 
