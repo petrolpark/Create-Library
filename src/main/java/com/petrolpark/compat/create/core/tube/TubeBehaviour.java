@@ -238,7 +238,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         middleControlPoints = Collections.emptyList();
         spline = null;
         
-        if (nbt.contains("OtherEndPos", Tag.TAG_COMPOUND)) otherEndPos = getPos().offset(NbtUtils.readBlockPos(nbt, "OtherEndPos").orElse(BlockPos.ZERO));
+        if (nbt.contains("OtherEndPos")) otherEndPos = getPos().offset(NbtUtils.readBlockPos(nbt, "OtherEndPos").orElse(BlockPos.ZERO));
         if (nbt.contains("Points", Tag.TAG_LIST)) {
             controller = true;
             initializationTicks = nbt.getInt("InitializationTicks");

@@ -120,17 +120,13 @@ dependencies {
 
     // Registrate (bundled with Petrolpark's Library)
     jarJar(implementation("com.tterrag.registrate:Registrate:${registrate_version}"))
-    // Catnip
+    // Ponder/Flywhel
     jarJar(implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}"))
-    //jarJar(implementation("net.createmod.catnip:Catnip-Common-${minecraft_version}:${catnip_version}"))
-    //jarJar(implementation("net.createmod.catnip:Catnip-NeoForge-${minecraft_version}:${catnip_version}"))
     jarJar(runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"))
 
     // Create & Ponder
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
-    //implementation("net.createmod.ponder:Ponder-NeoForge-${minecraft_version}:${ponder_version}")
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
-    //runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
 
     // JEI
     implementation("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
@@ -146,7 +142,7 @@ dependencies {
 
 jar {
     manifest.attributes([
-        "MixinConfigs": "petrolpark.mixins.json"
+        "MixinConfigs": "${mod_id}.mixins.json"
     ])
 }
 
@@ -185,13 +181,18 @@ java {
 // Example configuration to allow publishing using the maven-publish plugin
 publishing {
     publications {
-        register('mavenJava', MavenPublication) {
+        mavenJava(MavenPublication) {
             from components.java
+
+            groupId = mod_id // Not com.petrolpark but just petrolpark
+            artifactId = "${mod_id}-${minecraft_version}" // Your mod's artifact ID
         }
     }
+
     repositories {
-        maven {  
-            url "file://${project.projectDir}/../petrolpark_local_maven"
+        maven {
+            name = 'localMaven'
+            url = uri("../petrolpark_local_maven") // Local repo directory
         }
     }
 }

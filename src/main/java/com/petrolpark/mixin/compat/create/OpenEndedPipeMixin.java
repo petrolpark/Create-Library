@@ -24,7 +24,7 @@ public abstract class OpenEndedPipeMixin {
     private BlockPos outputPos;
     
     @Inject(
-        method = "provideFluidToSpace(Lnet/minecraftforge/fluids/FluidStack;Z)Z",
+        method = "provideFluidToSpace(Lnet/neoforged/neoforge/fluids/FluidStack;Z)Z",
         at = @At("HEAD"),
         cancellable = true,
         remap = false
