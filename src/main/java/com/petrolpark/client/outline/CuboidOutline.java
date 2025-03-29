@@ -43,7 +43,7 @@ public class CuboidOutline extends Outline {
 
     @Override
     public void render(@Nonnull PoseStack poseStack, @Nonnull SuperRenderTypeBuffer buffer, @Nonnull Vec3 camera, float pt) {
-        VertexConsumer consumer = buffer.getBuffer(PonderRenderTypes.solid());
+        VertexConsumer consumer = buffer.getBuffer(PonderRenderTypes.outlineSolid());
 		params.loadColor(colorTemp);
 		Vector4f color = colorTemp;
 		int lightmap = ((OutlineParamsAccessor) params).getLightmap();
