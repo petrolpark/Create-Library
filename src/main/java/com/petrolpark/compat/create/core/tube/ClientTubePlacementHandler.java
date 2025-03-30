@@ -37,6 +37,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -73,7 +74,7 @@ public class ClientTubePlacementHandler {
 
         if (level == null ||
             player == null ||
-            !(player.getMainHandItem() == currentStack || AllItems.WRENCH.isIn(player.getMainHandItem())) ||
+            !(ItemStack.isSameItem(player.getItemInHand(InteractionHand.MAIN_HAND), currentStack) || AllItems.WRENCH.isIn(player.getMainHandItem())) ||
             currentStack.isEmpty() ||
             (start != null && level.getBlockState(start.getPos()).getBlock() != tubeBlock
         )) {

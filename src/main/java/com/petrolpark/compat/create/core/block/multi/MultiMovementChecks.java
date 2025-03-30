@@ -18,7 +18,7 @@ public class MultiMovementChecks implements MovementAllowedCheck, AttachedCheck 
 
     @SuppressWarnings("unchecked")
     protected static final <M extends IMulti<? super M>> Optional<MultiBehaviour<M>> getMultiBehaviour(Level world, BlockPos pos) {
-        if (world.getBlockEntity(pos) instanceof SmartBlockEntity sbe) return sbe.getAllBehaviours().stream().map(b -> (MultiBehaviour<M>)b).findAny();
+        if (world.getBlockEntity(pos) instanceof SmartBlockEntity sbe) return sbe.getAllBehaviours().stream().map(b -> b instanceof MultiBehaviour<?> mb ? (MultiBehaviour<M>)mb : null).findAny();
         return Optional.empty();
     };
 
