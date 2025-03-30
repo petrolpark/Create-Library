@@ -65,7 +65,7 @@ public class ClientTubePlacementHandler {
     @SubscribeEvent
     public static void tick(ClientTickEvent event) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null || mc.player == null || !(mc.player.getMainHandItem() == currentStack || AllItems.WRENCH.isIn(mc.player.getMainHandItem())) || currentStack.isEmpty() || (start != null && mc.level.getBlockState(start.getPos()).getBlock() != tubeBlock)) {
+        if (mc.level == null || mc.player == null || !(ItemStack.isSameItemSameTags(mc.player.getMainHandItem(), currentStack) || AllItems.WRENCH.isIn(mc.player.getMainHandItem())) || currentStack.isEmpty() || (start != null && mc.level.getBlockState(start.getPos()).getBlock() != tubeBlock)) {
             cancel();
             return;
         };
