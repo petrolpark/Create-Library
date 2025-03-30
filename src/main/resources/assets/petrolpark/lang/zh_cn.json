@@ -27,13 +27,15 @@
 
     "biome.petrolpark.unknown": "未知群系",
 
-    "block.petrolpark.tube": "液压管道",
+    "block.petrolpark.tube": "管道",
 
     "commands.petrolpark.contaminate.failed": "什么都没有发生。目标要么是手中空空如也，要么是无法添加污染",
     "commands.petrolpark.contaminate.failed.entity": "%s不是该命令可作用的有效实体",
     "commands.petrolpark.contaminate.failed.itemless": "%s什么都没拿",
     "commands.petrolpark.contaminate.success.multiple": "已将污染%s添加到实体%s上",
     "commands.petrolpark.contaminate.success.single": "已将污染%s添加到%s的物品上",
+
+    "config.jade.plugin_petrolpark.contamination": "污染",
 
     "contaminant.petrolpark.example_child": "示例（子）",
     "contaminant.petrolpark.example_child.absent": "无示例（子）",
@@ -51,6 +53,13 @@
     "item.petrolpark.badge.awarded": "于 %2$s 授予 %1$s",
     "item.petrolpark.badge.unknown": "这不是一个真正的徽章……",
     "item.petrolpark.decaying_item.remaining": "于 %1$s 时变质",
+    "item.petrolpark.menu": "菜单",
+    "item.petrolpark.menu.team_selection": "为%1$s选择一个队伍",
+
+    "petrolpark.generic.list.and": "%1$s and %2$s",
+    "petrolpark.generic.list.and_more": "%1$s and %2$s more",
+    "petrolpark.generic.list.comma": "%1$s, %2$s",
+    "petrolpark.generic.list.none": "None",
 
     "petrolpark.key.tube.build": "确认管道结构",
     "petrolpark.key.tube.delete_control_point": "删除管道节点",
@@ -62,7 +71,7 @@
     "petrolpark.recipe.item_decay": "物品变质",
     "petrolpark.recipe.manual_crafting": "手工制作",
 
-    "petrolpark.tube.connect_another": "放置另一个液压传动器来连接它们",
+    "petrolpark.tube.connect_another": "放置另一个%s来连接它们",
     "petrolpark.tube.title": "    搭建 %1$s %2$s",
     "petrolpark.tube.control.build": "    [%1$s] 搭建",
     "petrolpark.tube.control.grab_control_point": "    [拖动] 移动节点",
@@ -71,7 +80,6 @@
     "petrolpark.tube.control.add_control_point_after": "    [%1$s] 在后方插入节点",
     "petrolpark.tube.control.add_control_point_before": "    [%1$s] 在前方插入节点",
     "petrolpark.tube.control.cancel": "    [%1$s] 取消",
-
     "petrolpark.tube.result.success": "可以搭建",
     "petrolpark.tube.result.blocked": "途中有方块",
     "petrolpark.tube.result.too_sharp": "转角过大",
@@ -82,5 +90,12 @@
     "petrolpark.tube.result.too_poor": "没有足够的%1$s",
     "petrolpark.tube.result.too_many_points": "控制点过多",
     "petrolpark.tube.result.wrong_block": "无法连接到这些方块",
-    "petrolpark.tube.result.wrong_face": "无法连接到该面"
+    "petrolpark.tube.result.wrong_face": "无法连接到该面",
+
+    "reward.petrolpark.xp": "经验值",
+
+    "shop.petrolpark.example": "示例商店",
+    "shop.petrolpark.unknown": "位置商店",
+
+    "team.petrolpark.none": "无队伍"
 }
