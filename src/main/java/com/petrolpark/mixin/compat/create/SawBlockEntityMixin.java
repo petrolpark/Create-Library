@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
@@ -59,9 +59,9 @@ public abstract class SawBlockEntityMixin extends BlockBreakingKineticBlockEntit
         IContamination<?, ?> inputContamination = ItemContamination.get(petrolpark$lastItemProcessed);
         for (int slot = 0; slot < inventory.getSlots(); slot++) {
             ItemStack stack = inventory.getStackInSlot(slot);
-            IDecayingItem.startDecay(stack);
+            ItemDecay.startDecay(stack);
             Level level = getLevel();
-            if (level != null && PetrolparkConfig.SERVER.createCuttingRecipesPropagateContaminants.get()) ItemContamination.get(stack).contaminateAll(level.registryAccess(), inputContamination.streamAllContaminants());
+            if (level != null && PetrolparkConfig.SERVER.createCuttingRecipesPropagateContaminants.get()) ItemContamination.get(stack).contaminateAll(inputContamination.streamAllContaminants());
         };
     };
 };

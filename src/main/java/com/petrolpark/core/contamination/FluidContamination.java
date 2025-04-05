@@ -2,7 +2,6 @@ package com.petrolpark.core.contamination;
 
 import java.util.stream.Stream;
 
-import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -13,12 +12,12 @@ public class FluidContamination extends ComponentHolderContamination<Fluid, Flui
         return IncontaminableContamination.INSTANCE;
     };
 
-    public static void perpetuate(final HolderLookup.Provider registries, Stream<FluidStack> inputs, FluidStack output) {
-        perpetuate(registries, inputs, Stream.of(output));
+    public static void perpetuate(Stream<FluidStack> inputs, FluidStack output) {
+        perpetuate(inputs, Stream.of(output));
     };
 
-    public static void perpetuate(final HolderLookup.Provider registries, Stream<FluidStack> inputs, Stream<FluidStack> outputs) {
-        IContamination.perpetuate(registries, inputs, outputs, FluidContamination::get);
+    public static void perpetuate(Stream<FluidStack> inputs, Stream<FluidStack> outputs) {
+        IContamination.perpetuate(inputs, outputs, FluidContamination::get);
     };
 
     protected FluidContamination(FluidStack stack) {

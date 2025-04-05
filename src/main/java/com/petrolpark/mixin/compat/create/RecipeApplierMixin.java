@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
 
 import net.minecraft.world.item.ItemStack;
@@ -30,8 +30,8 @@ public class RecipeApplierMixin {
     private static void inApplyRecipeOn(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir, List<ItemStack> stacks) {
         if (PetrolparkConfig.SERVER.createOtherRecipesPropagateContaminants.get()) {
             IContamination<?, ?> inputContamination = ItemContamination.get(stackIn);
-            stacks.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(level.registryAccess(), inputContamination.streamAllContaminants()));
+            stacks.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
         };
-        stacks.forEach(IDecayingItem::startDecay);
+        stacks.forEach(ItemDecay::startDecay);
     };
 };

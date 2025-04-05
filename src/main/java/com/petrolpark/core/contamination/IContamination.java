@@ -10,7 +10,7 @@ import com.petrolpark.PetrolparkTags;
 
 import it.unimi.dsi.fastutil.objects.Object2DoubleArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -26,21 +26,20 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
     /**
      * @param inputs
      * @param outputs
-     * @see IContamination#perpetuate(HolderLookup.Provider, Stream, Stream, Function) If you have a faster way of getting the Contamination
+     * @see IContamination#perpetuate(Stream, Stream, Function) If you have a faster way of getting the Contamination
      */
-    public static void perpetuate(final HolderLookup.Provider registries, Stream<Object> inputs, Stream<Object> outputs) {
-        perpetuate(registries, inputs, outputs, object -> get(object).orElse(null));
+    public static void perpetuate(Stream<Object> inputs, Stream<Object> outputs) {
+        perpetuate(inputs, outputs, object -> get(object).orElse(null));
     };
 
     /**
      * @param <OBJECT> Type of the contaminable object
-     * @param registries
      * @param inputs
      * @param outputs
      * @param contaminationGetter
      */
-    public static <OBJECT> void perpetuate(final HolderLookup.Provider registries, Stream<OBJECT> inputs, Stream<OBJECT> outputs, Function<OBJECT, IContamination<?, ?>> contaminationGetter) {
-        Object2DoubleMap<Contaminant> amounts = new Object2DoubleArrayMap<>();
+    public static <OBJECT> void perpetuate(Stream<OBJECT> inputs, Stream<OBJECT> outputs, Function<OBJECT, IContamination<?, ?>> contaminationGetter) {
+        Object2DoubleMap<Holder<Contaminant>> amounts = new Object2DoubleArrayMap<>();
         double totalAmount = inputs.map(contaminationGetter)
             .dropWhile(Objects::isNull)
             .mapToDouble(contamination -> {
@@ -52,16 +51,15 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
             .dropWhile(Objects::isNull)
             .forEach(contamination -> 
             contamination.contaminateAll(
-                registries,
                 amounts.object2DoubleEntrySet().stream()
-                    .filter(entry -> entry.getKey().isPreserved(entry.getDoubleValue() / totalAmount))
+                    .filter(entry -> entry.getKey().value().isPreserved(entry.getDoubleValue() / totalAmount))
                     .map(Object2DoubleMap.Entry::getKey)
             )
         );
     };
 
-    public static void perpetuate(final HolderLookup.Provider registries, Stream<ItemStack> itemInputs, Stream<FluidStack> fluidInputs, double fluidWeight, Stream<ItemStack> itemOutputs, Stream<FluidStack> fluidOutputs) {
-        Object2DoubleMap<Contaminant> amounts = new Object2DoubleArrayMap<>();
+    public static void perpetuate(Stream<ItemStack> itemInputs, Stream<FluidStack> fluidInputs, double fluidWeight, Stream<ItemStack> itemOutputs, Stream<FluidStack> fluidOutputs) {
+        Object2DoubleMap<Holder<Contaminant>> amounts = new Object2DoubleArrayMap<>();
         double totalAmount = itemInputs.map(ItemContamination::get)
             .mapToDouble(contamination -> {
                 double amount = contamination.getAmount();
@@ -78,9 +76,8 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
         Stream.concat(itemOutputs.map(ItemContamination::get), fluidOutputs.map(FluidContamination::get))
             .forEach(contamination -> 
                 contamination.contaminateAll(
-                    registries,
                     amounts.object2DoubleEntrySet().stream()
-                        .filter(entry -> entry.getKey().isPreserved(entry.getDoubleValue() / finalTotalAmount))
+                        .filter(entry -> entry.getKey().value().isPreserved(entry.getDoubleValue() / finalTotalAmount))
                         .map(Object2DoubleMap.Entry::getKey)
                 )
             );
@@ -92,15 +89,15 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
 
     public double getAmount();
 
-    public void save(final HolderLookup.Provider registries);
+    public void save();
 
-    public boolean has(Contaminant contaminant);
+    public boolean has(Holder<Contaminant> contaminantHolder);
 
     public boolean hasAnyContaminant();
 
     public boolean hasAnyExtrinsicContaminant();
 
-    public Stream<Contaminant> streamAllContaminants();
+    public Stream<Holder<Contaminant>> streamAllContaminants();
 
     /**
      * Stream all Contaminants in this Contamination that:<ul>
@@ -109,48 +106,60 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      * Note that this is the minimum set of Contaminants needed to uniquely define a Contamination.
      * @return Distinct Stream of Contaminants 
      */
-    public Stream<Contaminant> streamOrphanExtrinsicContaminants();
+    public Stream<Holder<Contaminant>> streamOrphanExtrinsicContaminants();
 
-    public default Stream<Contaminant> streamShownContaminants() {
-        Set<Contaminant> shownIfAbsent = IntrinsicContaminants.getShownIfAbsent(this);
+    public default Stream<Holder<Contaminant>> streamShownContaminants() {
+        Set<Holder<Contaminant>> shownIfAbsent = IntrinsicContaminants.getShownIfAbsent(this);
         IntrinsicContaminants.get(this); // Do this before the Stream is opened to generate the Intrinsic Contaminants early and avoid a ConcurrentModificationException 
         return streamAllContaminants().dropWhile(PetrolparkTags.Contaminants.HIDDEN::matches).dropWhile(shownIfAbsent::contains);
     };
 
-    public default Stream<Contaminant> streamShownAbsentContaminants() {
-        return IntrinsicContaminants.getShownIfAbsent(this).stream().dropWhile(this::has).dropWhile(PetrolparkTags.Contaminants.HIDDEN::matches);
+    public default Stream<Holder<Contaminant>> streamShownAbsentContaminants() {
+        return streamShownIfAbsentContaminants().dropWhile(this::has).dropWhile(PetrolparkTags.Contaminants.HIDDEN::matches);
     };
 
-    public boolean contaminate(final HolderLookup.Provider registries, Contaminant contaminant);
+    public boolean contaminate(Holder<Contaminant> contaminantHolder);
 
     /**
      * Add several Contaminants, and 
      * @param contaminantsStream
      * @return
      */
-    public boolean contaminateAll(final HolderLookup.Provider registries, Stream<Contaminant> contaminantsStream);
+    public boolean contaminateAll(Stream<Holder<Contaminant>> contaminantsStream);
 
     /**
      * Remove a Contaminant and any {@link Contaminant#getChildren() children} it has that don't belong to another parent.
      * If the Contaminant has any parents in this Contamination, it will not be removed.
-     * @param contaminant
+     * @param contaminantHolder
      * @return Whether this Contamination changed
-     * @see IContamination#decontaminateOnly(HolderLookup.Provider, Contaminant) Don't remove children
+     * @see IContamination#decontaminateOnly(Holder) Don't remove children
      */
-    public boolean decontaminate(final HolderLookup.Provider registries, Contaminant contaminant);
+    public boolean decontaminate(Holder<Contaminant> contaminantHolder);
 
     /**
      * Remove a Contaminant, but not any of its children.
      * If the Contaminant has any parents in this Contamination, it will not be removed.
-     * @param contaminant
+     * @param contaminantHolder
      * @return Whether this Contamination changed (the Contaminant was removed)
-     * @see IContamination#decontaminate(HolderLookup.Provider, Contaminant) Remove all children
+     * @see IContamination#decontaminate(Holder) Remove all children
      */
-    public boolean decontaminateOnly(final HolderLookup.Provider registries, Contaminant contaminant);
+    public boolean decontaminateOnly(Holder<Contaminant> contaminantHolder);
 
     /**
      * Remove all extrinsic Contaminants.
      * @return Whether this Contamination changed (whether it had any extrinsic Contaminants)
      */
-    public boolean fullyDecontaminate(final HolderLookup.Provider registries);
+    public boolean fullyDecontaminate();
+
+    public default boolean isIntrinsic(Holder<Contaminant> contaminantHolder) {
+        return IntrinsicContaminants.get(this).contains(contaminantHolder);
+    };
+
+    default Stream<Holder<Contaminant>> streamIntrinsicContaminants() {
+        return IntrinsicContaminants.get(this).stream();
+    };
+
+    default Stream<Holder<Contaminant>> streamShownIfAbsentContaminants() {
+        return IntrinsicContaminants.getShownIfAbsent(this).stream();
+    };
 };

@@ -24,18 +24,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 @RequiresCreate
-public record HasContaminantItemAttribute(Holder<Contaminant> contaminant) implements ItemAttribute {
+public record HasContaminantItemAttribute(Holder<Contaminant> contaminantHolder) implements ItemAttribute {
 
     public static final MapCodec<HasContaminantItemAttribute> CODEC = Contaminant.CODEC
-		.xmap(HasContaminantItemAttribute::new, HasContaminantItemAttribute::contaminant)
+		.xmap(HasContaminantItemAttribute::new, HasContaminantItemAttribute::contaminantHolder)
 		.fieldOf("value");
 
 	public static final StreamCodec<RegistryFriendlyByteBuf, HasContaminantItemAttribute> STREAM_CODEC = CatnipStreamCodecBuilders.nullable(ByteBufCodecs.holderRegistry(PetrolparkRegistries.Keys.CONTAMINANT))
-		.map(HasContaminantItemAttribute::new, HasContaminantItemAttribute::contaminant);
+		.map(HasContaminantItemAttribute::new, HasContaminantItemAttribute::contaminantHolder);
 
     @Override
     public boolean appliesTo(ItemStack stack, Level world) {
-        return ItemContamination.get(stack).has(contaminant.value());
+        return ItemContamination.get(stack).has(contaminantHolder);
     };
 
     @Override
@@ -50,7 +50,7 @@ public record HasContaminantItemAttribute(Holder<Contaminant> contaminant) imple
 
     @Override
     public Object[] getTranslationParameters() {
-        return new Object[]{contaminant.value().getName()};
+        return new Object[]{Contaminant.getName(contaminantHolder)};
     };
 
     public static class Type implements ItemAttributeType {
@@ -63,7 +63,6 @@ public record HasContaminantItemAttribute(Holder<Contaminant> contaminant) imple
         public List<ItemAttribute> getAllAttributes(ItemStack stack, Level level) {
             IContamination<?, ?> contamination = ItemContamination.get(stack);
             List<ItemAttribute> list = new ArrayList<>(contamination.streamAllContaminants()
-                .map(level.registryAccess().registryOrThrow(PetrolparkRegistries.Keys.CONTAMINANT)::wrapAsHolder)
                 .map(HasContaminantItemAttribute::new)
                 .map(ItemAttribute.class::cast)
                 .toList()

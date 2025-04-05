@@ -17,7 +17,7 @@ public record HasContaminantItemSubPredicate(Holder<Contaminant> contaminant) im
 
     @Override
     public boolean matches(@Nonnull ItemStack stack) {
-        return ItemContamination.get(stack).has(contaminant.value());
+        return ItemContamination.get(stack).has(contaminant);
     };
     
 };

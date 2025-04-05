@@ -13,6 +13,7 @@ import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.GenericContamination;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -37,8 +38,8 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
     };
 
     @Override
-    public void contaminateAll(HolderLookup.Provider registries, Stream<Contaminant> contaminants) {
-        contamination.contaminateAll(registries, contaminants);
+    public void contaminateAll(Stream<Holder<Contaminant>> contaminants) {
+        contamination.contaminateAll(contaminants);
     };
 
     @Inject(

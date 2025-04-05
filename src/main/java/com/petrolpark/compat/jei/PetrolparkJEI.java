@@ -3,7 +3,7 @@ package com.petrolpark.compat.jei;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
@@ -18,6 +18,7 @@ import com.petrolpark.mixin.compat.jei.client.JustEnoughItemsClientMixin;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import mezz.jei.api.IModPlugin;
+import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -46,7 +47,7 @@ public class PetrolparkJEI implements IModPlugin {
     int itemDecayRecipeCount = 0;
 
     @SuppressWarnings("unused")
-    private void loadCategories() {
+    private void loadCategories(IJeiHelpers helpers) {
         ALL_CATEGORIES.clear();
 
         CreateRecipeCategory<?>
@@ -67,10 +68,10 @@ public class PetrolparkJEI implements IModPlugin {
             .build("manual_crafting", ManualOnlyCategory::new),
 
         item_decay = builder(DecayingItemRecipe.class)
-            .addRecipes(JEISetup.DECAYING_ITEMS
-                .stream()
-                .map(Supplier::get)
-                .map(DecayingItemRecipe::new)
+            .addRecipes(helpers.getIngredientManager().getAllItemStacks().stream()
+                .map(DecayingItemCategory::createRecipe)
+                .filter(Optional::isEmpty)
+                .map(Optional::get)
                 .map(r -> new RecipeHolder<DecayingItemRecipe>(Petrolpark.asResource("decay_"+itemDecayRecipeCount++), r))
                 ::toList
             ).itemIcon(Items.ROTTEN_FLESH)
@@ -80,7 +81,7 @@ public class PetrolparkJEI implements IModPlugin {
 
     @Override
     public void registerCategories(@Nonnull IRecipeCategoryRegistration registration) {
-        loadCategories();
+        loadCategories(registration.getJeiHelpers());
         PetrolparkCategoryBuilder.helpers = registration.getJeiHelpers();
         registration.addRecipeCategories(ALL_CATEGORIES.toArray(IRecipeCategory[]::new));
     };

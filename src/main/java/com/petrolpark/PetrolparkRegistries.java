@@ -16,6 +16,7 @@ import com.petrolpark.core.data.reward.RewardType;
 import com.petrolpark.core.data.reward.entity.EntityRewardType;
 import com.petrolpark.core.data.reward.generator.RewardGeneratorType;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
+import com.petrolpark.core.item.decay.product.DecayProductType;
 import com.petrolpark.core.recipe.ingredient.modifier.IngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.shop.Shop;
@@ -85,6 +86,7 @@ public class PetrolparkRegistries {
     };
 
     // Core
+    public static final Registry<DecayProductType> DECAY_PRODUCT_TYPES = simple(Keys.DECAY_PRODUCT_TYPE);
     public static final Registry<Badge> BADGES = simple(Keys.BADGE);
     public static final Registry<ITeam.ProviderType> TEAM_PROVIDER_TYPES = simple(Keys.TEAM_PROVIDER_TYPE);
 
@@ -127,6 +129,7 @@ public class PetrolparkRegistries {
     public static class Keys {
         // Core
         public static final ResourceKey<Registry<Contaminant>> CONTAMINANT = key("contaminant");
+        public static final ResourceKey<Registry<DecayProductType>> DECAY_PRODUCT_TYPE = key("decay_product_type");
         public static final ResourceKey<Registry<ITeam.ProviderType>> TEAM_PROVIDER_TYPE = key("team_provider_type");
         public static final ResourceKey<Registry<Badge>> BADGE = key("badge");
 

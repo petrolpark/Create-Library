@@ -20,6 +20,8 @@ import com.petrolpark.core.data.reward.generator.IRewardGenerator;
 import com.petrolpark.core.data.reward.generator.RewardGeneratorType;
 import com.petrolpark.core.data.reward.team.ITeamReward;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
+import com.petrolpark.core.item.decay.product.DecayProductType;
+import com.petrolpark.core.item.decay.product.IDecayProduct;
 import com.petrolpark.core.recipe.ingredient.modifier.IngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.IngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
@@ -76,6 +78,10 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     public <C extends ICondition> RegistryEntry<MapCodec<? extends ICondition>, MapCodec<C>> dataLoadingCondition(String name, MapCodec<C> codec) {
         return simple(name, NeoForgeRegistries.Keys.CONDITION_CODECS, () -> codec);
+    };
+
+    public RegistryEntry<DecayProductType, DecayProductType> decayProductType(String name, MapCodec<? extends IDecayProduct> codec, StreamCodec<RegistryFriendlyByteBuf, ? extends IDecayProduct> streamCodec) {
+        return simple(name, PetrolparkRegistries.Keys.DECAY_PRODUCT_TYPE, () -> new DecayProductType(codec, streamCodec));
     };
 
     public RegistryEntry<ITeam.ProviderType, ITeam.ProviderType> teamProviderType(String name, MapCodec<? extends ITeam.Provider> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends ITeam.Provider> streamCodec) {

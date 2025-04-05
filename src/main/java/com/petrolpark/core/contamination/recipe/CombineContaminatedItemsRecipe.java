@@ -57,8 +57,8 @@ public class CombineContaminatedItemsRecipe extends CustomRecipe implements IHan
         };
         result = result.copyWithCount(count);
         IContamination<?, ?> contamination = ItemContamination.get(result);
-        contamination.fullyDecontaminate(registries);
-        ItemContamination.perpetuateSingle(registries, input.items().stream(), result);
+        contamination.fullyDecontaminate();
+        ItemContamination.perpetuateSingle(input.items().stream(), result);
         return result;
     };
 

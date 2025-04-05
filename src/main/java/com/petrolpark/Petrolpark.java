@@ -10,7 +10,6 @@ import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.core.badge.Badges;
-import com.petrolpark.core.item.decay.DecayingItemHandler;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.core.recipe.ingredient.modifier.PetrolparkIngredientModifierTypes;
 import com.petrolpark.core.recipe.ingredient.randomizer.PetrolparkIngredientRandomizerTypes;
@@ -42,7 +41,6 @@ public class Petrolpark {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     };
 
-    public static final ThreadLocal<DecayingItemHandler> DECAYING_ITEM_HANDLER = ThreadLocal.withInitial(() -> DecayingItemHandler.DUMMY);
     public static final ScoreboardTeamManager SCOREBOARD_TEAMS = new ScoreboardTeamManager();
 
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {

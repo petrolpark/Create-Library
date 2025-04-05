@@ -1,7 +1,12 @@
 package com.petrolpark.core.contamination;
 
 import java.util.Collections;
+import java.util.Map;
 import java.util.Set;
+
+import net.minecraft.core.Holder;
+import net.minecraft.core.RegistryAccess;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 
 public abstract class Contaminable<OBJECT, OBJECT_STACK> {
 
@@ -11,9 +16,11 @@ public abstract class Contaminable<OBJECT, OBJECT_STACK> {
   
     public abstract IContamination<OBJECT, OBJECT_STACK> getContamination(Object stack);
 
-    public abstract Set<Contaminant> getIntrinsicContaminants(OBJECT object);
+    public abstract Map<OBJECT, Set<Holder<Contaminant>>> getIntrinsicContaminants(RegistryAccess registryAccess);
 
-    public abstract Set<Contaminant> getShownIfAbsentContaminants(OBJECT object);
+    public abstract Map<OBJECT, Set<Holder<Contaminant>>> getShownIfAbsentContaminants(RegistryAccess registryAccess);
+
+    public void onTagsLoaded(TagsUpdatedEvent event) {};
 
     public static class GenericContaminable extends Contaminable<Object,Object> {
 
@@ -30,16 +37,16 @@ public abstract class Contaminable<OBJECT, OBJECT_STACK> {
         @Override
         public IContamination<Object, Object> getContamination(Object stack) {
             return null;
+        }
+
+        @Override
+        public Map<Object, Set<Holder<Contaminant>>> getIntrinsicContaminants(RegistryAccess registryAccess) {
+            return Collections.emptyMap();
         };
 
         @Override
-        public Set<Contaminant> getIntrinsicContaminants(Object object) {
-            return Collections.emptySet();
-        };
-
-        @Override
-        public Set<Contaminant> getShownIfAbsentContaminants(Object object) {
-            return Collections.emptySet();
+        public Map<Object, Set<Holder<Contaminant>>> getShownIfAbsentContaminants(RegistryAccess registryAccess) {
+            return Collections.emptyMap();
         };
 
     };

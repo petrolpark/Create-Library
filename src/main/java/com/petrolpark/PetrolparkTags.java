@@ -158,9 +158,5 @@ public class PetrolparkTags {
         public boolean matches(Holder<Contaminant> contaminant) {
             return contaminant.is(tag);
         };
-
-        public boolean matches(Contaminant contaminant) {
-            return PetrolparkRegistries.getHolder(PetrolparkRegistries.Keys.CONTAMINANT, contaminant).orElseThrow().is(tag);
-        };
     };
 };

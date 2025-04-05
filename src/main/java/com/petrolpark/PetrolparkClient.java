@@ -3,7 +3,6 @@ package com.petrolpark;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.CreateClient;
 import com.petrolpark.compat.curios.CuriosClient;
-import com.petrolpark.core.item.decay.DecayingItemHandler.ClientDecayingItemHandler;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
@@ -27,7 +26,7 @@ public class PetrolparkClient {
     
     public static void clientInit(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> { // Work which must be done on main thread
-            Petrolpark.DECAYING_ITEM_HANDLER.set(new ClientDecayingItemHandler());
+            
         });
     };
 };

@@ -1,6 +1,5 @@
 package com.petrolpark.core.contamination;
 
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
@@ -23,12 +22,12 @@ public class GenericContamination extends Contamination<Object, Object> {
 
     public GenericContamination readNBT(Tag tag, HolderLookup.Provider registries) {
         orphanContaminants.clear();
-        ORPHAN_HOLDER_LIST_CODEC.parse(NbtOps.INSTANCE, tag).ifSuccess(ls -> ls.stream().map(Holder::value).map(orphanContaminants::add));
+        ORPHAN_HOLDER_LIST_CODEC.parse(NbtOps.INSTANCE, tag).ifSuccess(ls -> ls.stream().map(orphanContaminants::add));
         return this;
     };
 
     public Tag writeNBT(HolderLookup.Provider registries) {
-        return ORPHAN_HOLDER_LIST_CODEC.encodeStart(NbtOps.INSTANCE, getOrphanHolderList(registries)).getOrThrow();
+        return ORPHAN_HOLDER_LIST_CODEC.encodeStart(NbtOps.INSTANCE, getOrphanHolderList()).getOrThrow();
     };
 
     @Override
@@ -54,7 +53,7 @@ public class GenericContamination extends Contamination<Object, Object> {
      */
     @Override
     @Deprecated
-    public final void save(final HolderLookup.Provider registries) {
+    public final void save() {
         onSave.run();
     };
     

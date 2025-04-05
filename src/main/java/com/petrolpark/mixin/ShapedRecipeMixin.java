@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.contamination.recipe.IHandleContaminationMyselfRecipe;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
@@ -24,8 +24,8 @@ public abstract class ShapedRecipeMixin implements IHandleContaminationMyselfRec
         cancellable = true
     )
     public void inAssemble(CraftingInput input, HolderLookup.Provider registries, CallbackInfoReturnable<ItemStack> cir) {
-        IDecayingItem.startDecay(cir.getReturnValue());
-        if (PetrolparkConfig.SERVER.shapedCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(registries, input.items().stream(), cir.getReturnValue());
+        ItemDecay.startDecay(cir.getReturnValue());
+        if (PetrolparkConfig.SERVER.shapedCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(input.items().stream(), cir.getReturnValue());
     };
 
     @Override

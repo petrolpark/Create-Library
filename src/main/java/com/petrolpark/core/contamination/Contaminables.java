@@ -2,12 +2,8 @@ package com.petrolpark.core.contamination;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.core.contamination.Contaminable.GenericContaminable;
 
@@ -40,8 +36,8 @@ public class Contaminables {
         };
     }; 
 
-    public static final Contaminable<Item, ItemStack> ITEM = new Contaminable<>() {
-
+    public static final Contaminable<Item, ItemStack> ITEM = new BuiltInRegistryContaminable<>(BuiltInRegistries.ITEM) {
+        
         @Override
         public boolean isContaminable(Item object) {
             return object instanceof BlockItem ? PetrolparkTags.Items.CONTAMINABLE_BLOCKS.matches(object) : !PetrolparkTags.Items.INCONTAMINABLE.matches(object);
@@ -57,22 +53,10 @@ public class Contaminables {
             if (stack instanceof ItemStack itemStack && isContaminableStack(itemStack)) return new ItemContamination(itemStack);
             return null;
         };
-
-        @Override
-        @SuppressWarnings("deprecation")
-        public Set<Contaminant> getIntrinsicContaminants(Item object) {
-            return object.builtInRegistryHolder().tags().map(Contaminant::getFromIntrinsicTag).filter(Objects::nonNull).collect(Collectors.toSet());
-        };
-
-        @Override
-        @SuppressWarnings("deprecation")
-        public Set<Contaminant> getShownIfAbsentContaminants(Item object) {
-            return object.builtInRegistryHolder().tags().map(Contaminant::getFromShowIfAbsentTag).filter(Objects::nonNull).collect(Collectors.toSet());
-        };
         
     };
 
-    public static final Contaminable<Fluid, FluidStack> FLUID = new Contaminable<>() {
+    public static final Contaminable<Fluid, FluidStack> FLUID = new BuiltInRegistryContaminable<>(BuiltInRegistries.FLUID) {
 
         @Override
         public boolean isContaminable(Fluid object) {
@@ -88,16 +72,6 @@ public class Contaminables {
         public FluidContamination getContamination(Object stack) {
             if (stack instanceof FluidStack fluidStack && isContaminableStack(fluidStack)) return new FluidContamination(fluidStack);
             return null;
-        };
-
-        @Override
-        public Set<Contaminant> getIntrinsicContaminants(Fluid object) {
-            return PetrolparkRegistries.getHolder(BuiltInRegistries.FLUID, object).orElseThrow().tags().map(Contaminant::getFromIntrinsicTag).filter(Objects::nonNull).collect(Collectors.toSet());
-        };
-
-        @Override
-        public Set<Contaminant> getShownIfAbsentContaminants(Fluid object) {
-            return PetrolparkRegistries.getHolder(BuiltInRegistries.FLUID, object).orElseThrow().tags().map(Contaminant::getFromShowIfAbsentTag).filter(Objects::nonNull).collect(Collectors.toSet());
         };
         
     };

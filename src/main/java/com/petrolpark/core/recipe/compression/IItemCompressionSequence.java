@@ -66,7 +66,15 @@ public interface IItemCompressionSequence {
 
     public record CompressedBlock(Block block, ItemStack stack) {};
 
-    public static IItemCompressionSequence EMPTY = new ItemCompressionManager.ISharedItemCompressionSequence() {
+    public default boolean isEmpty() {
+        return false;
+    };
+
+    public static final IItemCompressionSequence EMPTY = new EmptyItemCompressionSequence();
+
+    static class EmptyItemCompressionSequence implements IItemCompressionSequence {
+
+        protected EmptyItemCompressionSequence() {};
 
         @Override
         public ItemStack getBaseItem() {
@@ -101,6 +109,11 @@ public interface IItemCompressionSequence {
         @Override
         public Optional<CompressedBlock> getBaseBlock() {
             return Optional.empty();
+        };
+
+        @Override
+        public boolean isEmpty() {
+            return true;
         };
     };
 };

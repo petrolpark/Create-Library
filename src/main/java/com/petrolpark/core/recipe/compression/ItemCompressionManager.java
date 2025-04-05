@@ -1,18 +1,18 @@
 package com.petrolpark.core.recipe.compression;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-import javax.annotation.Nonnull;
+import com.petrolpark.core.recipe.compression.IItemCompressionSequence.EmptyItemCompressionSequence;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -21,11 +21,11 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 import net.neoforged.neoforge.common.util.ItemStackMap;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
 
 @EventBusSubscriber
-public class ItemCompressionManager implements ResourceManagerReloadListener {
+public class ItemCompressionManager {
 
     protected static final Map<ItemStack, IItemCompression> COMPRESSIONS = ItemStackMap.createTypeAndTagMap();
     protected static final Map<ItemStack, IItemCompressionSequence> COMPRESSION_SEQUENCES = ItemStackMap.createTypeAndTagMap();
@@ -38,31 +38,23 @@ public class ItemCompressionManager implements ResourceManagerReloadListener {
         return Optional.ofNullable(COMPRESSION_SEQUENCES.get(stack));
     };
 
-    public final RegistryAccess registryAccess;
-    public final RecipeManager recipeManager;
+    private static final List<Recipe<?>> singleInputRecipes = new ArrayList<>();
 
-    public final List<Recipe<?>> singleInputRecipes = new ArrayList<>();
-
-    public ItemCompressionManager(RegistryAccess registryAccess, RecipeManager recipeManager) {
-        this.registryAccess = registryAccess;
-        this.recipeManager = recipeManager;
-    };
-
-    @Override
-    public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
+    public static void reload(RecipeManager recipeManager) {
         COMPRESSIONS.clear();
         singleInputRecipes.clear(); // Retains memory size from before
         for (CompressionRecipe compression : recipeManager.getRecipes().stream()
             .map(RecipeHolder::value)
             .filter(CraftingRecipe.class::isInstance)
-            .map(this::toCompressionRecipe)
+            .map(r -> toCompressionRecipe(recipeManager.registries, r))
+            .filter(Objects::nonNull)
             .toList()
         ) { // Close the Stream before checking for decompressions
             Iterator<Recipe<?>> iterator = singleInputRecipes.iterator();
             while (iterator.hasNext()) {
                 Recipe<?> recipe = iterator.next();
                 if (recipe.getIngredients().get(0).test(compression.result())) {
-                    ItemStack decompressed = recipe.getResultItem(registryAccess);
+                    ItemStack decompressed = recipe.getResultItem(recipeManager.registries).copy();
                     if (compression.isDecompressedStacks(decompressed)) {
                         ItemStack decompressedSingle = decompressed.copyWithCount(1);
                         if (COMPRESSIONS.putIfAbsent(decompressedSingle, compression.compression()) != null)
@@ -82,7 +74,7 @@ public class ItemCompressionManager implements ResourceManagerReloadListener {
      * @param recipe
      * @return A CompressionRecipe, or {@code null}
      */
-    public CompressionRecipe toCompressionRecipe(Recipe<?> recipe) {
+    public static CompressionRecipe toCompressionRecipe(HolderLookup.Provider registries, Recipe<?> recipe) {
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
         if (ingredients.size() == 0) return null;
         if (ingredients.size() == 1) {
@@ -91,8 +83,14 @@ public class ItemCompressionManager implements ResourceManagerReloadListener {
         };
         Ingredient ingredient = ingredients.get(0);
         int i;
-        for (i = 1; i < ingredients.size(); i++) if (!ingredients.get(0).equals(ingredient)) return null;
-        return new CompressionRecipe(ingredient, i + 1, recipe.getResultItem(registryAccess));
+        for (i = 1; i < ingredients.size(); i++) if (!areIngredientsEqual(ingredients.get(i), ingredient)) return null;
+        return new CompressionRecipe(ingredient, i, recipe.getResultItem(registries).copy());
+    };
+
+    private static boolean areIngredientsEqual(Ingredient ingredient1, Ingredient ingredient2) {
+        if (ingredient1 == ingredient2) return true;
+        if (!Objects.equals(ingredient1.getCustomIngredient(), ingredient2.getCustomIngredient())) return false;
+        return Arrays.equals(ingredient1.getValues(), ingredient2.getValues());
     };
 
     public static record CompressionRecipe(Ingredient ingredient, ItemCompression compression) implements IItemCompression {
@@ -123,21 +121,20 @@ public class ItemCompressionManager implements ResourceManagerReloadListener {
     public static final void rebuildCompressionSequences() {
         COMPRESSION_SEQUENCES.clear();
         COMPRESSIONS.forEach((stack, compression) -> {
-            if (
-                putNewSequence(stack, () -> {
-                    FinishableMapItemCompressionSequence sequence = new FinishableMapItemCompressionSequence(stack);
-                    IItemCompression nextCompression = compression;
-                    while (nextCompression != null) {
-                        if (!sequence.add(nextCompression)) return IItemCompressionSequence.EMPTY; // Remove all circular Compression sequences
-                        nextCompression = COMPRESSIONS.get(nextCompression.result());
-                    };
-                    return sequence.finish();
-                }) instanceof ISharedItemCompressionSequence sics
-            ) {
-                sics.getAllItems().forEach(s -> COMPRESSION_SEQUENCES.putIfAbsent(s, sics));
+            IItemCompressionSequence newSequence = putNewSequence(stack, () -> {
+                FinishableMapItemCompressionSequence sequence = new FinishableMapItemCompressionSequence(stack.copy());
+                IItemCompression nextCompression = compression;
+                while (nextCompression != null) {
+                    if (!sequence.add(nextCompression)) return new EmptySharedItemCompressionSequence(sequence); // Remove all circular Compression sequences
+                    nextCompression = COMPRESSIONS.get(nextCompression.result());
+                };
+                return sequence.finish();
+            });
+            if (newSequence != null) {
+                newSequence.getAllItems().forEach(s -> COMPRESSION_SEQUENCES.merge(s, newSequence, (oldSequence, sequence) -> sequence.size() > oldSequence.size() ? sequence : oldSequence)); // Replace shorter Sequences
             };
         });
-        COMPRESSION_SEQUENCES.replaceAll((stack, sequence) -> sequence == IItemCompressionSequence.EMPTY ? null : sequence);
+        COMPRESSION_SEQUENCES.replaceAll((stack, sequence) -> sequence.isEmpty() ? null : sequence);
     };
 
     /**
@@ -151,13 +148,24 @@ public class ItemCompressionManager implements ResourceManagerReloadListener {
         IItemCompressionSequence sequence = sequenceSupplier.get();
         COMPRESSION_SEQUENCES.put(stack, sequence);
         return sequence;
-        
     };
 
-    public static interface ISharedItemCompressionSequence extends IItemCompressionSequence {};
+    static class EmptySharedItemCompressionSequence extends EmptyItemCompressionSequence {
+
+        protected final List<ItemStack> items;
+
+        public EmptySharedItemCompressionSequence(IItemCompressionSequence sequence) {
+            this.items = sequence.getAllItems();
+        };
+
+        @Override
+        public List<ItemStack> getAllItems() {
+            return items;
+        };
+    };
 
     @SubscribeEvent
-    public static void onAddReloadListener(AddReloadListenerEvent event) {
-        event.addListener(new ItemCompressionManager(event.getRegistryAccess(), event.getServerResources().getRecipeManager()));
+    public static void onRecipeReload(RecipesUpdatedEvent event) {
+        reload(event.getRecipeManager());
     };
 };

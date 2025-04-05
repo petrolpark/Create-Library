@@ -15,12 +15,12 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
-public class DecayingItemRenderer extends CustomRenderedItemModelRenderer {
+public class FlashingDecayingItemRenderer extends CustomRenderedItemModelRenderer {
 
     @Override
     protected void render(ItemStack stack, CustomRenderedItemModel model, PartialItemModelRenderer renderer, ItemDisplayContext transformType, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         Minecraft mc = Minecraft.getInstance();
-        ItemStack trueStack = IDecayingItem.checkDecay(stack);
+        ItemStack trueStack = ItemDecay.checkDecay(stack);
         ItemRenderer itemRenderer = mc.getItemRenderer();
         if (stack == trueStack) {
             itemRenderer.render(trueStack, ItemDisplayContext.NONE, false, ms, buffer, light, overlay, model.getOriginalModel());

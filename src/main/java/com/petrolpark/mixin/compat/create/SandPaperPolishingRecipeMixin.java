@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.core.contamination.ItemContamination;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 
 import net.minecraft.world.item.ItemStack;
@@ -24,7 +24,7 @@ public class SandPaperPolishingRecipeMixin {
         cancellable = true
     )
     private static void inApplyPolish(Level world, Vec3 position, ItemStack stack, ItemStack sandPaperStack, CallbackInfoReturnable<ItemStack> cir) {
-        IDecayingItem.startDecay(cir.getReturnValue());
-        if (PetrolparkConfig.SERVER.createSandingRecipesPropagateContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(world.registryAccess(), ItemContamination.get(stack).streamAllContaminants());
+        ItemDecay.startDecay(cir.getReturnValue());
+        if (PetrolparkConfig.SERVER.createSandingRecipesPropagateContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(ItemContamination.get(stack).streamAllContaminants());
     };
 };

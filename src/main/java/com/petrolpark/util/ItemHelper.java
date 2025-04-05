@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.entity.Entity;
@@ -25,8 +25,8 @@ public class ItemHelper {
     };
 
     public static boolean equalIgnoringComponents(ItemStack stack1, ItemStack stack2, DataComponentType<?> ...ignoredComponentTypes) {
-        ItemStack trueStack1 = IDecayingItem.checkDecay(stack1);
-        ItemStack trueStack2 = IDecayingItem.checkDecay(stack2);
+        ItemStack trueStack1 = ItemDecay.checkDecay(stack1);
+        ItemStack trueStack2 = ItemDecay.checkDecay(stack2);
         if (!trueStack1.is(trueStack2.getItem())) return false;
         if (trueStack1.isEmpty()) return trueStack2.isEmpty();
         return DataComponentHelper.equalIgnoring(trueStack1.getComponents(), trueStack2.getComponents(), ignoredComponentTypes);

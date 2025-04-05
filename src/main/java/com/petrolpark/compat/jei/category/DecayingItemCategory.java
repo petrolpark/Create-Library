@@ -1,9 +1,12 @@
 package com.petrolpark.compat.jei.category;
 
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 
+import com.petrolpark.PetrolparkDataComponents;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.product.NoDecayProduct;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -39,6 +42,11 @@ public class DecayingItemCategory extends PetrolparkRecipeCategory<DecayingItemR
         AllGuiTextures.JEI_LONG_ARROW.render(guiGraphics, 27, 6);
     };
 
+    public static Optional<DecayingItemRecipe> createRecipe(ItemStack decayingItemStack) {
+        if (decayingItemStack.has(PetrolparkDataComponents.DECAY_PRODUCT) && decayingItemStack.has(PetrolparkDataComponents.DECAY_TIME)) return Optional.of(new DecayingItemRecipe(decayingItemStack));
+        return Optional.empty();
+    };
+
     public static class DecayingItemRecipe extends ShapelessRecipe {
 
         public final ItemStack decayingItem;
@@ -47,7 +55,7 @@ public class DecayingItemCategory extends PetrolparkRecipeCategory<DecayingItemR
         public DecayingItemRecipe(ItemStack decayingItem) {
             super("", CraftingBookCategory.MISC, ItemStack.EMPTY, NonNullList.create());
             this.decayingItem = decayingItem;
-            this.resultItem = ((IDecayingItem)decayingItem.getItem()).getDecayProduct(decayingItem);
+            this.resultItem = decayingItem.getOrDefault(PetrolparkDataComponents.DECAY_PRODUCT, NoDecayProduct.INSTANCE).get(decayingItem.copy());
         };
 
     };

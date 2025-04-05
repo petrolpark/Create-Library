@@ -11,6 +11,8 @@ import com.petrolpark.core.badge.BadgeItem;
 import com.petrolpark.core.badge.BadgeItem.BadgeAward;
 import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.Contamination;
+import com.petrolpark.core.item.decay.DecayTime;
+import com.petrolpark.core.item.decay.product.IDecayProduct;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.ShopsData;
 import com.petrolpark.core.team.ITeam;
@@ -43,8 +45,16 @@ public class PetrolparkDataComponents {
         builder -> builder.persistent(Contamination.ORPHAN_HOLDER_LIST_CODEC).networkSynchronized(Contamination.ORPHAN_HOLDER_LIST_STREAM_CODEC)
     );
 
-    public static final DataComponentType<Long> DECAYING_ITEM_CREATION_TIME = register(
-        "creation_time",
+    public static final DataComponentType<IDecayProduct> DECAY_PRODUCT = register(
+        "decay_product",
+        builder -> builder.persistent(IDecayProduct.CODEC).networkSynchronized(IDecayProduct.STREAM_CODEC)
+    );
+    public static final DataComponentType<DecayTime> DECAY_TIME = register(
+        "decay_time",
+        builder -> builder.persistent(DecayTime.CODEC).networkSynchronized(DecayTime.STREAM_CODEC)
+    );
+    public static final DataComponentType<Long> DECAY_START_TIME = register(
+        "decay_start_time",
         builder -> builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG)
     );
 

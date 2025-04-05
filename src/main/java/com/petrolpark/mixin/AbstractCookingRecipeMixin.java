@@ -22,6 +22,6 @@ public class AbstractCookingRecipeMixin {
         cancellable = true
     )
     public void inAssemble(SingleRecipeInput input, HolderLookup.Provider registries, CallbackInfoReturnable<ItemStack> cir) {
-        if (PetrolparkConfig.SERVER.cookingPropagatesContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(registries, ItemContamination.get(input.item()).streamAllContaminants());
+        if (PetrolparkConfig.SERVER.cookingPropagatesContaminants.get()) ItemContamination.get(cir.getReturnValue()).contaminateAll(ItemContamination.get(input.item()).streamAllContaminants());
     };
 };

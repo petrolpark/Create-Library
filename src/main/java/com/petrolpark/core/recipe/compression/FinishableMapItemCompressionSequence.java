@@ -11,7 +11,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.util.ItemStackMap;
 
-public class FinishableMapItemCompressionSequence implements ItemCompressionManager.ISharedItemCompressionSequence {
+public class FinishableMapItemCompressionSequence implements IItemCompressionSequence {
 
     protected boolean finished = false;
     protected final ItemStack baseItem;

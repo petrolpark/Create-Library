@@ -37,7 +37,7 @@ public class MutableCompressionItemHandler extends CompressionItemHandler {
      * @return Optional containing remainder Item Stack if the addition was handled, or empty Optional if it still needs to be
      */
     protected Optional<ItemStack> createNewSequenceAndStore(ItemStack stack, boolean simulate) {
-        if (sequence == IItemCompressionSequence.EMPTY) {
+        if (sequence.isEmpty()) {
             Optional<IItemCompressionSequence> newSequence = ItemCompressionManager.getSequence(stack).map(onNewSequence(simulate));
             if (newSequence.isPresent()) {
                 sequence = newSequence.get();
@@ -53,7 +53,7 @@ public class MutableCompressionItemHandler extends CompressionItemHandler {
 
     /**
      * Allows filtering and any other response to the new {@link IItemCompressionSequence} once it is (going to be) set.
-     * Called when reading this handler from NBT and when setting the new 
+     * Called when reading this handler from NBT and when setting the new {@link IItemCompressionSequence} when an Item is first inserted
      * @param simulate
      * @return Operator on the newly set {@link IItemCompressionSequence}
      */
@@ -71,7 +71,7 @@ public class MutableCompressionItemHandler extends CompressionItemHandler {
     @Override
     public CompoundTag serializeNBT(@Nonnull HolderLookup.Provider provider) {
         CompoundTag tag = super.serializeNBT(provider);
-        if (sequence != IItemCompressionSequence.EMPTY) tag.put("Item", DataComponentUtil.wrapEncodingExceptions(sequence.getBaseItem(), ItemStack.SINGLE_ITEM_CODEC, provider));
+        if (!sequence.isEmpty()) tag.put("Item", DataComponentUtil.wrapEncodingExceptions(sequence.getBaseItem(), ItemStack.SINGLE_ITEM_CODEC, provider));
         return tag;
     };
 

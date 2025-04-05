@@ -34,14 +34,13 @@ public class ContaminateHeldItemCommand {
    };
  
    private static int contaminate(CommandSourceStack source, Collection<? extends Entity> targets, Holder<Contaminant> contaminantHolder) throws CommandSyntaxException {
-      Contaminant contaminant = contaminantHolder.value();
       int i = 0;
       for(Entity entity : targets) {
          if (entity instanceof LivingEntity livingEntity) {
             ItemStack itemStack = livingEntity.getMainHandItem();
             if (!itemStack.isEmpty()) {
                try {
-                  if (ItemContamination.get(itemStack).contaminate(source.registryAccess(), contaminant)) i++;
+                  if (ItemContamination.get(itemStack).contaminate(contaminantHolder)) i++;
                } catch (Throwable e) {};
                
             } else if (targets.size() == 1) {
@@ -57,11 +56,11 @@ public class ContaminateHeldItemCommand {
       } else {
          if (targets.size() == 1) {
             source.sendSuccess(() -> {
-               return Component.translatable("commands.petrolpark.contaminate.success.single", contaminant.getName(), targets.iterator().next().getDisplayName());
+               return Component.translatable("commands.petrolpark.contaminate.success.single", Contaminant.getName(contaminantHolder), targets.iterator().next().getDisplayName());
             }, true);
          } else {
             source.sendSuccess(() -> {
-               return Component.translatable("commands.petrolpark.contaminate.success.multiple", contaminant.getName(), targets.size());
+               return Component.translatable("commands.petrolpark.contaminate.success.multiple", Contaminant.getName(contaminantHolder), targets.size());
             }, true);
          };
 

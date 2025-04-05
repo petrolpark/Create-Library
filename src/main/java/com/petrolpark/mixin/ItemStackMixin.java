@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.IItemStackDuck;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.util.ItemHelper;
 
 import net.minecraft.world.item.ItemStack;
@@ -27,7 +27,7 @@ public class ItemStackMixin implements IItemStackDuck {
         cancellable = true
     )
     public void inCopy(CallbackInfoReturnable<ItemStack> cir) {
-        cir.setReturnValue(IDecayingItem.checkDecay(cir.getReturnValue()));
+        cir.setReturnValue(ItemDecay.checkDecay(cir.getReturnValue()));
     };
 
     /**

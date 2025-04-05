@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.core.contamination.ItemContamination;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerLevelAccess;
@@ -47,8 +47,8 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
     )
     public void inCreateResult(CallbackInfo ci, SmithingRecipeInput smithingrecipeinput, List<SmithingRecipe> list, RecipeHolder<SmithingRecipe> recipeHolder, ItemStack result) {
         if (PetrolparkConfig.SERVER.smithingPropagatesContaminants.get()) {
-            ItemContamination.perpetuateSingle(level.registryAccess(), Stream.of(inputSlots.getItem(1), inputSlots.getItem(2)), result);
+            ItemContamination.perpetuateSingle(Stream.of(inputSlots.getItem(1), inputSlots.getItem(2)), result);
         };
-        IDecayingItem.startDecay(result);
+        ItemDecay.startDecay(result);
     };
 };

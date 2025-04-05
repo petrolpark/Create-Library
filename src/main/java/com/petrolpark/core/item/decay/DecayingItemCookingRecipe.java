@@ -38,13 +38,11 @@ public class DecayingItemCookingRecipe extends AbstractCookingRecipe implements 
     );
 
     public static ItemStack withDecay(ItemStack stack) {
-        if (!Petrolpark.DECAYING_ITEM_HANDLER.get().isClientSide()) {
+        return Petrolpark.runForDist(() -> () -> stack, () -> () -> {
             ItemStack copy = stack.copy();
-            IDecayingItem.startDecay(copy);
+            ItemDecay.startDecay(copy);
             return copy;
-        } else {
-            return stack;
-        }
+        });
     };
 
     protected final AbstractCookingRecipe wrappedRecipe;

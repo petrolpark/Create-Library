@@ -2,7 +2,7 @@ package com.petrolpark.core.contamination;
 
 import java.util.stream.Stream;
 
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Holder;
 
 public final class IncontaminableContamination implements IContamination<Object, Object> {
 
@@ -26,10 +26,10 @@ public final class IncontaminableContamination implements IContamination<Object,
     };
 
     @Override
-    public void save(final HolderLookup.Provider registries) {};
+    public void save() {};
 
     @Override
-    public boolean has(Contaminant contaminant) {
+    public boolean has(Holder<Contaminant> contaminant) {
         return false;
     };
 
@@ -44,37 +44,37 @@ public final class IncontaminableContamination implements IContamination<Object,
     };
 
     @Override
-    public Stream<Contaminant> streamAllContaminants() {
+    public Stream<Holder<Contaminant>> streamAllContaminants() {
         return Stream.empty();
     };
 
     @Override
-    public Stream<Contaminant> streamOrphanExtrinsicContaminants() {
+    public Stream<Holder<Contaminant>> streamOrphanExtrinsicContaminants() {
         return Stream.empty();
     };
 
     @Override
-    public boolean contaminate(final HolderLookup.Provider registries, Contaminant contaminant) {
+    public boolean contaminate(Holder<Contaminant> contaminant) {
         return false;
     };
 
     @Override
-    public boolean contaminateAll(final HolderLookup.Provider registries, Stream<Contaminant> contaminantsStream) {
+    public boolean contaminateAll(Stream<Holder<Contaminant>> contaminantsStream) {
         return false;
     };
 
     @Override
-    public boolean decontaminate(final HolderLookup.Provider registries, Contaminant contaminant) {
+    public boolean decontaminate(Holder<Contaminant> contaminant) {
         return false;
     };
 
     @Override
-    public boolean decontaminateOnly(final HolderLookup.Provider registries, Contaminant contaminant) {
+    public boolean decontaminateOnly(Holder<Contaminant> contaminant) {
         return false;
     };
 
     @Override
-    public boolean fullyDecontaminate(final HolderLookup.Provider registries) {
+    public boolean fullyDecontaminate() {
         return false;
     };
     

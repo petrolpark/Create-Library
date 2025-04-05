@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.contamination.recipe.IHandleContaminationMyselfRecipe;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -23,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 
 @Mixin(CraftingMenu.class)
@@ -32,28 +33,30 @@ public class CraftingMenuMixin {
         method = "Lnet/minecraft/world/inventory/CraftingMenu;slotChangedCraftingGrid(Lnet/minecraft/world/inventory/AbstractContainerMenu;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/world/inventory/ResultContainer;Lnet/minecraft/world/item/crafting/RecipeHolder;)V",
         at = @At(
             value = "INVOKE",
-            target = "setItem(ILnet/minecraft/world/item/ItemStack;)V"
+            target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V",
+            ordinal = 0
         ),
-        locals = LocalCapture.CAPTURE_FAILEXCEPTION
+        locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtype"})
     private static void inSlotChangedCraftingGrid(
         AbstractContainerMenu menu,
         Level level,
         Player player,
         CraftingContainer craftSlots,
         ResultContainer resultSlots,
-        RecipeHolder<CraftingRecipe> recipe,
-        CallbackInfo ci, CraftingInput craftingInput, ServerPlayer serverplayer, ItemStack itemstack, Optional<RecipeHolder<CraftingRecipe>> optional
+        RecipeHolder recipe,
+        CallbackInfo ci, CraftingInput craftinginput, ServerPlayer serverplayer, ItemStack itemstack
     ) {
         if (!itemstack.isEmpty()) {
-            IDecayingItem.startDecay(itemstack);
+            ItemDecay.startDecay(itemstack);
+            Optional<RecipeHolder<CraftingRecipe>> optional = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftinginput, level, recipe); // For mystery reasons this cannot be localcaptured
             if (PetrolparkConfig.SERVER.craftingTablePropagatesContaminants.get() && optional.map(rh -> {
                 if (rh.value() instanceof IHandleContaminationMyselfRecipe contamHandled) {
-                    return !contamHandled.isContaminationHandled(craftingInput, level.registryAccess());
+                    return !contamHandled.isContaminationHandled(craftinginput, level.registryAccess());
                 } else return true;
             }).orElse(true)) {
-                ItemContamination.perpetuateSingle(level.registryAccess(), craftSlots.getItems().stream(), itemstack);
+                ItemContamination.perpetuateSingle(craftSlots.getItems().stream(), itemstack);
             };
         };
     };

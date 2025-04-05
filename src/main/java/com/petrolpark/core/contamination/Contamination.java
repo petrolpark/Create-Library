@@ -3,18 +3,16 @@ package com.petrolpark.core.contamination;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.Petrolpark;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
@@ -28,19 +26,19 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     /**
      * Extrinsic {@link Contaminant}s that do not have a parent (if one exists) in this Contamination.
      */
-    protected final SortedSet<Contaminant> orphanContaminants = new TreeSet<>(Contaminant::compareTo);
+    protected final SortedSet<Holder<Contaminant>> orphanContaminants = new TreeSet<>(Contaminant::compareHolders);
     /**
      * All extrinsic {@link Contaminant}s, whether added themselves or by parental proxy.
      */
-    protected final Set<Contaminant> contaminants = new HashSet<>();
+    protected final Set<Holder<Contaminant>> contaminants = new HashSet<>();
 
     protected Contamination(OBJECT_STACK stack) {
         this.stack = stack;
     };
 
     @Override
-    public final boolean has(Contaminant contaminant) {
-        return IntrinsicContaminants.get(this).contains(contaminant) || contaminants.contains(contaminant);
+    public final boolean has(Holder<Contaminant> contaminant) {
+        return isIntrinsic(contaminant) || contaminants.contains(contaminant);
     };
 
     @Override
@@ -54,80 +52,81 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
     };
 
     @Override
-    public final Stream<Contaminant> streamAllContaminants() {
-        return Stream.concat(IntrinsicContaminants.get(this).stream(), contaminants.stream());
+    public final Stream<Holder<Contaminant>> streamAllContaminants() {
+        return Stream.concat(streamIntrinsicContaminants(), contaminants.stream());
     };
 
     @Override
-    public final Stream<Contaminant> streamOrphanExtrinsicContaminants() {
+    public final Stream<Holder<Contaminant>> streamOrphanExtrinsicContaminants() {
         return orphanContaminants.stream();
     };
 
     @Override
-    public final boolean contaminate(final HolderLookup.Provider registries, Contaminant contaminant) {
-        if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
+    public final boolean contaminate(Holder<Contaminant> contaminant) {
+        if (isIntrinsic(contaminant)) return false;
         if (!contaminants.add(contaminant)) return false;
-        orphanContaminants.removeAll(contaminant.getChildren());
+        orphanContaminants.removeAll(contaminant.value().getChildren());
         orphanContaminants.add(contaminant);
-        contaminants.addAll(contaminant.getChildren());
-        save(registries);
+        Petrolpark.LOGGER.info("hello?");
+        contaminants.addAll(contaminant.value().getChildren());
+        save();
         return true;
     };
 
     @Override
-    public final boolean contaminateAll(final HolderLookup.Provider registries, Stream<Contaminant> contaminantsStream) {
+    public final boolean contaminateAll(Stream<Holder<Contaminant>> contaminantsStream) {
         boolean changed = !contaminantsStream
-            .dropWhile(IntrinsicContaminants.get(this)::contains) // Don't include intrinsic Contaminants
+            .dropWhile(this::isIntrinsic) // Don't include intrinsic Contaminants
             .filter(contaminants::add) // Only include Contaminants whose (parents) are not already here
             .map(contaminant -> {
-                orphanContaminants.removeAll(contaminant.getChildren()); // Children of this Contaminant are no longer orphans
+                orphanContaminants.removeAll(contaminant.value().getChildren()); // Children of this Contaminant are no longer orphans
                 orphanContaminants.add(contaminant); // Add all reminaing Contaminants (they don't have existing parents)
-                contaminants.addAll(contaminant.getChildren());
+                contaminants.addAll(contaminant.value().getChildren());
                 return contaminant;
             }).toList().isEmpty(); // Need to collect in a List to ensure the map is executed for every element
-        if (changed) save(registries);
+        if (changed) save();
         return changed;
     };
 
     @Override
-    public final boolean decontaminate(final HolderLookup.Provider registries, Contaminant contaminant) {
-        if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
+    public final boolean decontaminate(Holder<Contaminant> contaminant) {
+        if (isIntrinsic(contaminant)) return false;
         if (!orphanContaminants.remove(contaminant)) return false;
         contaminants.remove(contaminant);
-        for (Contaminant child : contaminant.getChildren()) {
-            if (Collections.disjoint(contaminants, child.getParents())) contaminants.remove(child);
+        for (Holder<Contaminant> child : contaminant.value().getChildren()) {
+            if (Collections.disjoint(contaminants, child.value().getParents())) contaminants.remove(child);
         };
-        save(registries);
+        save();
         return true;
     };
 
     @Override
-    public final boolean decontaminateOnly(final HolderLookup.Provider registries, Contaminant contaminant) {
-        if (IntrinsicContaminants.get(this).contains(contaminant)) return false;
+    public final boolean decontaminateOnly(Holder<Contaminant> contaminant) {
+        if (isIntrinsic(contaminant)) return false;
         if (!orphanContaminants.remove(contaminant)) return false;
         contaminants.remove(contaminant);
-        for (Contaminant child : contaminant.getChildren()) {
-            if (Collections.disjoint(contaminants, child.getParents())) orphanContaminants.add(child);
+        for (Holder<Contaminant> child : contaminant.value().getChildren()) {
+            if (Collections.disjoint(contaminants, child.value().getParents())) orphanContaminants.add(child);
         };
-        save(registries);
+        save();
         return true;
     };
 
     @Override
-    public final boolean fullyDecontaminate(final HolderLookup.Provider registries) {
+    public final boolean fullyDecontaminate() {
         if (orphanContaminants.isEmpty()) return false;
         orphanContaminants.clear();
         contaminants.clear();
-        save(registries);
+        save();
         return true;
     };
 
-    protected List<Holder<Contaminant>> getOrphanHolderList(final HolderLookup.Provider registries) {
+    protected List<Holder<Contaminant>> getOrphanHolderList() {
         return orphanContaminants.stream()
-            .map(PetrolparkRegistries.holderGetOrThrow(registries, PetrolparkRegistries.Keys.CONTAMINANT))
-            .dropWhile(Optional::isEmpty)
-            .map(Optional::get)
-            .map(h -> (Holder<Contaminant>)h)
+            //.map(PetrolparkRegistries.holderGetOrThrow(registries, PetrolparkRegistries.Keys.CONTAMINANT))
+            //.dropWhile(Optional::isEmpty)
+            //.map(Optional::get)
+            //.map(h -> (Holder<Contaminant>)h)
             .toList();
     };
 };

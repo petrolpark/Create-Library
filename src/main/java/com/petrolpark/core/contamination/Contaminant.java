@@ -1,7 +1,6 @@
 package com.petrolpark.core.contamination;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -46,21 +45,23 @@ public class Contaminant {
     public static final Codec<Holder<Contaminant>> CODEC = RegistryFixedCodec.create(PetrolparkRegistries.Keys.CONTAMINANT);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Contaminant>> STREAM_CODEC = ByteBufCodecs.holderRegistry(PetrolparkRegistries.Keys.CONTAMINANT);
 
-    public static Contaminant getFromIntrinsicTag(TagKey<?> tagKey) {
-        return getFromTag(tagKey, "intrinsic");
+    public static int compareHolders(Holder<Contaminant> holder1, Holder<Contaminant> holder2) {
+        return holder1.unwrapKey().map(ResourceKey::location).flatMap(rl1 -> holder2.unwrapKey().map(ResourceKey::location).map(rl2 -> rl1.compareTo(rl2))).orElse(0);
     };
 
-    public static Contaminant getFromShowIfAbsentTag(TagKey<?> tagKey) {
-        return getFromTag(tagKey, "show_if_absent");
+    public static ResourceKey<Contaminant> getKeyFromInstrinsicTag(TagKey<?> tagKey) {
+        return getKeyFromTag(tagKey, "intrinsic");
     };
 
-    public static Contaminant getFromTag(TagKey<?> tagKey, String pathSuffix) {
+    public static ResourceKey<Contaminant> getKeyFromShownIfAbsentTag(TagKey<?> tagKey) {
+        return getKeyFromTag(tagKey, "show_if_absent");
+    };
+
+    public static ResourceKey<Contaminant> getKeyFromTag(TagKey<?> tagKey, String pathSuffix) {
         ResourceLocation rl = tagKey.location();
         String[] path = rl.getPath().split("/");
         if (!path[0].equals("contaminant") || !path[2].equals(pathSuffix)) return null;
-        return PetrolparkRegistries.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT)
-            .orElseThrow(() -> new IllegalStateException("Registries not loaded yet"))
-            .get(ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), path[1]));
+        return ResourceKey.create(PetrolparkRegistries.Keys.CONTAMINANT, ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), path[1]));
     };
 
     // Initial fields
@@ -70,15 +71,14 @@ public class Contaminant {
     protected final HolderSet<Contaminant> directChildrenHolders;
 
     // Internal fields
-    protected final List<Holder<Contaminant>> childrenHolders;
-    protected final List<Contaminant> parents = new ArrayList<>();
+    protected final Set<Holder<Contaminant>> childrenHolders;
+    protected final Set<Holder<Contaminant>> parentHolders = new HashSet<>();
 
     // Publicly accessible fields
-    protected ResourceLocation rl;
     protected String descriptionId;
     protected String absentDescriptionId;
-    protected Set<Contaminant> childrenView = null;
-    protected Set<Contaminant> parentsView = null;
+    protected Set<Holder<Contaminant>> childrenView = null;
+    protected Set<Holder<Contaminant>> parentsView = null;
 
     public Contaminant(double preservationProportion, int color, int absentColor, HolderSet<Contaminant> directChildrenHolders) {
         this.preservationProportion = preservationProportion;
@@ -86,7 +86,7 @@ public class Contaminant {
         this.absentColor = absentColor;
         this.directChildrenHolders = directChildrenHolders;
 
-        childrenHolders = new ArrayList<>(directChildrenHolders.size());
+        childrenHolders = new HashSet<>(directChildrenHolders.size());
         directChildrenHolders.forEach(childrenHolders::add);
     };
 
@@ -114,47 +114,48 @@ public class Contaminant {
     /**
      * All Contaminants (not just direct children) which any Contamination automatically has if they have this Contaminant.
      */
-    public Set<Contaminant> getChildren() {
-        if (childrenView == null) childrenView = childrenHolders.stream().map(Holder::value).collect(Collectors.toUnmodifiableSet());
+    public Set<Holder<Contaminant>> getChildren() {
+        if (childrenView == null) childrenView = childrenHolders.stream().collect(Collectors.toUnmodifiableSet());
         return childrenView;
     };
 
     /**
      * Any Contaminants (not just direct parents) which, if a Contamination has, will also belong to that Contamination.
      */
-    public Set<Contaminant> getParents() {
-        if (parentsView == null) parentsView = parents.stream().collect(Collectors.toUnmodifiableSet());
+    public Set<Holder<Contaminant>> getParents() {
+        if (parentsView == null) parentsView = parentHolders.stream().collect(Collectors.toUnmodifiableSet());
         return parentsView;
     };
 
-    public ResourceLocation getLocation() {
-        if (rl == null) rl = PetrolparkRegistries.getHolder(PetrolparkRegistries.Keys.CONTAMINANT, this)
-            .map(Holder.Reference::key)
-            .map(ResourceKey::location)
-            .orElseThrow(() -> new IllegalStateException("Contaminant registry is not available yet"));
-        return rl;
+    public static Component getName(Holder<Contaminant> contaminantHolder) {
+        Contaminant contaminant = contaminantHolder.value();
+        if (contaminant.descriptionId == null) contaminant.descriptionId = Util.makeDescriptionId("contaminant", contaminantHolder.getKey().location());
+        return Component.translatable(contaminant.descriptionId);
     };
 
-    public int compareTo(Contaminant contaminant) {
-        return getLocation().compareTo(contaminant.getLocation());
+    public static Component getNameColored(Holder<Contaminant> contaminantHolder) {
+        return getName(contaminantHolder).copy().withStyle(Style.EMPTY.withColor(contaminantHolder.value().color));
     };
 
-    public Component getName() {
-        if (descriptionId == null) descriptionId = Util.makeDescriptionId("contaminant", getLocation());
-        return Component.translatable(descriptionId);
+    public static Component getAbsentName(Holder<Contaminant> contaminantHolder) {
+        Contaminant contaminant = contaminantHolder.value();
+        if (contaminant.absentDescriptionId == null) contaminant.absentDescriptionId = Util.makeDescriptionId("contaminant", contaminantHolder.getKey().location()) + ".absent";
+        return Component.translatable(contaminant.absentDescriptionId);
     };
 
-    public Component getNameColored() {
-        return getName().copy().withStyle(Style.EMPTY.withColor(color));
+    public static Component getAbsentNameColored(Holder<Contaminant> contaminantHolder) {
+        return getAbsentName(contaminantHolder).copy().withStyle(Style.EMPTY.withColor(contaminantHolder.value().absentColor));
     };
 
-    public Component getAbsentName() {
-        if (absentDescriptionId == null) absentDescriptionId = Util.makeDescriptionId("contaminant", getLocation()) + ".absent";
-        return Component.translatable(absentDescriptionId);
-    };
-
-    public Component getAbsentNameColored() {
-        return getAbsentName().copy().withStyle(Style.EMPTY.withColor(absentColor));
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        return (obj instanceof Contaminant contaminant &&
+            contaminant.preservationProportion == preservationProportion &&
+            contaminant.color == color &&
+            contaminant.absentColor == absentColor &&
+            contaminant.directChildrenHolders.equals(directChildrenHolders)
+        );
     };
 
     public static class ReloadListener implements ResourceManagerReloadListener {
@@ -168,17 +169,16 @@ public class Contaminant {
         @Override
         public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
             Registry<Contaminant> registry = registryAccess.registryOrThrow(PetrolparkRegistries.Keys.CONTAMINANT);
-            registry.forEach(parent -> {
-                parent.directChildrenHolders.forEach(childHolder -> 
-                    childHolder.value().parents.add(parent)
+            registry.asLookup().listElements().forEach(parentHolder -> {
+                parentHolder.value().directChildrenHolders.forEach(childHolder -> 
+                    childHolder.value().parentHolders.add(parentHolder)
                 );
             });
             registry.asLookup().listElements().forEach(parentHolder -> {
-                Contaminant parent = parentHolder.value();
                 try {
                     for (Holder<Contaminant> descendantHolder : GraphHelper.getAllDescendants((Holder<Contaminant>)parentHolder, h -> h.value().directChildrenHolders)) {
-                        parent.childrenHolders.add(descendantHolder);
-                        descendantHolder.value().parents.add(parent);
+                        parentHolder.value().childrenHolders.add(descendantHolder);
+                        descendantHolder.value().parentHolders.add(parentHolder);
                     };
                 } catch (CircularReferenceException e) {
                     throw new JsonSyntaxException(String.format("Contaminant %s is its own descendant. Replace the circular reference with a single Contaminant", parentHolder.getKey().location().toString()));

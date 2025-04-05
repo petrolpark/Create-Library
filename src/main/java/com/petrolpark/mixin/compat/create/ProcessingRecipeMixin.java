@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
@@ -24,7 +24,7 @@ public class ProcessingRecipeMixin {
     )
     public void inRollResults(List<ProcessingOutput> rollableResults, CallbackInfoReturnable<List<ItemStack>> cir) {
         List<ItemStack> results = cir.getReturnValue();
-        results.forEach(s -> IDecayingItem.startDecay(s, 0));
+        results.forEach(s -> ItemDecay.startDecay(s, 0));
         cir.setReturnValue(results);
     };
 };

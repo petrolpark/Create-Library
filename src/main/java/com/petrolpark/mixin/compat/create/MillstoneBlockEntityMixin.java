@@ -14,7 +14,7 @@ import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehavio
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
@@ -97,11 +97,11 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
         if (PetrolparkConfig.SERVER.createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
             IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
             Level level = getLevel();
-            if (level != null) results.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(level.registryAccess(), inputContamination.streamAllContaminants()));
+            if (level != null) results.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
         };
 
         results.forEach(stack -> {
-            IDecayingItem.startDecay(stack);
+            ItemDecay.startDecay(stack);
             ItemHandlerHelper.insertItemStacked(outputInv, stack, false);
         });
         award(AllAdvancements.MILLSTONE);

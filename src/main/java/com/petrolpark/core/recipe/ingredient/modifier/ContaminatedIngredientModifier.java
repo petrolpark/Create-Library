@@ -18,17 +18,17 @@ public record ContaminatedIngredientModifier(Holder<Contaminant> contaminant) im
 
     @Override
     public boolean test(ItemStack stack, Level level) {
-        return ItemContamination.get(stack).has(contaminant.value());
+        return ItemContamination.get(stack).has(contaminant);
     };
 
     @Override
     public void modifyExamples(List<ItemStack> exampleStacks, Level level) {
-        exampleStacks.stream().map(ItemContamination::get).map(c -> c.contaminate(level.registryAccess(), contaminant.value()));
+        exampleStacks.stream().map(ItemContamination::get).map(c -> c.contaminate(contaminant));
     };
 
     @Override
     public void modifyCounterExamples(List<ItemStack> counterExampleStacks, Level level) {
-        counterExampleStacks.stream().map(ItemContamination::get).forEach(co -> co.decontaminateOnly(level.registryAccess(), contaminant.value()));
+        counterExampleStacks.stream().map(ItemContamination::get).forEach(co -> co.decontaminateOnly(contaminant));
     };
 
     @Override

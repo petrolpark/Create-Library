@@ -16,7 +16,7 @@ import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehavio
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
-import com.petrolpark.core.item.decay.IDecayingItem;
+import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelControllerBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
@@ -95,11 +95,11 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         remap = false
     )
     public void inApplyRecipeEnd(CallbackInfo ci, Optional<RecipeHolder<ProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> list) {
-        list.forEach(IDecayingItem::startDecay);
+        list.forEach(ItemDecay::startDecay);
         if (PetrolparkConfig.SERVER.createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
             IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
             Level level = getLevel();
-            if (level != null) list.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(level.registryAccess(), inputContamination.streamAllContaminants()));
+            if (level != null) list.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
         };
     };
     
