@@ -6,12 +6,12 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.compat.Mods;
+import com.petrolpark.compat.SharedFeatures;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.core.badge.Badges;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
-import com.petrolpark.core.recipe.ingredient.modifier.PetrolparkIngredientModifierTypes;
 import com.petrolpark.core.recipe.ingredient.randomizer.PetrolparkIngredientRandomizerTypes;
 import com.petrolpark.core.team.PetrolparkTeamProviderTypes;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeamManager;
@@ -43,6 +43,10 @@ public class Petrolpark {
 
     public static final ScoreboardTeamManager SCOREBOARD_TEAMS = new ScoreboardTeamManager();
 
+    static {
+        SharedFeatures.BASIN_LID.enable(Mods.PETROLPARK); // tempT`3Q
+    };
+
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
 
         REGISTRATE.registerEventListeners(modEventBus);
@@ -70,6 +74,9 @@ public class Petrolpark {
         PetrolparkGlobalLootModifierSerializers.register();
         PetrolparkRewardGeneratorTypes.register();
         PetrolparkRewardTypes.register();
+
+        PetrolparkDecayProductTypes.register();
+        PetrolparkIngredientTypes.register();
         PetrolparkIngredientModifierTypes.register();
         PetrolparkIngredientRandomizerTypes.register();
     

@@ -1,45 +1,34 @@
 package com.petrolpark.compat.jei.category;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
-
-import javax.annotation.Nonnull;
 
 import com.petrolpark.PetrolparkDataComponents;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
 import com.petrolpark.core.item.decay.product.NoDecayProduct;
-import com.simibubi.create.foundation.gui.AllGuiTextures;
 
-import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 
-public class DecayingItemCategory extends PetrolparkRecipeCategory<DecayingItemRecipe> {
+public class DecayingItemCategory extends SimpleConversionCategory<DecayingItemRecipe> {
 
     public DecayingItemCategory(Info<DecayingItemRecipe> info, IJeiHelpers helpers) {
         super(info, helpers);
     };
 
     @Override
-    public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull DecayingItemRecipe recipe, @Nonnull IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 2, 2)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addItemStack(recipe.decayingItem);
-
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 2)
-            .setBackground(getRenderedSlot(), -1, -1)
-            .addItemStack(recipe.resultItem);
+    public List<ItemStack> getInputs(DecayingItemRecipe recipe, IFocusGroup focuses) {
+        return Collections.singletonList(recipe.decayingItem);
     };
 
     @Override
-    public void draw(@Nonnull DecayingItemRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        AllGuiTextures.JEI_LONG_ARROW.render(guiGraphics, 27, 6);
+    public List<ItemStack> getOutputs(DecayingItemRecipe recipe, IFocusGroup focuses) {
+        return Collections.singletonList(recipe.resultItem);
     };
 
     public static Optional<DecayingItemRecipe> createRecipe(ItemStack decayingItemStack) {

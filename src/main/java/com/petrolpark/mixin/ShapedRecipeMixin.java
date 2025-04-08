@@ -15,6 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
+/**
+ * Allow Shaped Recipes to propagate the Contaminants of the Ingredients to the result.
+ */
 @Mixin(ShapedRecipe.class)
 public abstract class ShapedRecipeMixin implements IHandleContaminationMyselfRecipe<CraftingInput> {
 

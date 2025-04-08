@@ -6,7 +6,9 @@ import com.petrolpark.core.team.ITeamBoundBlockEntity;
 
 import net.createmod.catnip.codecs.stream.CatnipStreamCodecs;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.BlockHitResult;
@@ -57,6 +59,11 @@ public class BindTeamBlockPacket extends BindTeamPacket {
         public BindTeamPacket create(ITeam.Provider teamProvider) {
             return new BindTeamBlockPacket(teamProvider, hit);
         };
+    };
+
+    @Override
+    public Component getDescription(ServerLevel level) {
+        return translate(teamProvider.provideTeam(level).getName(), hit.getBlockPos().toShortString());
     };
     
 };

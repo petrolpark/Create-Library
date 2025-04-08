@@ -28,7 +28,7 @@ public class DecayingItemDecorator implements IItemDecorator {
         Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
         if (creationTime == null) return false;
         float proportion = 1f + (float)(creationTime - ItemDecay.getGameTime()) / (float)ItemDecay.getLifetimeOrNone(stack);
-        if (proportion <= 0f) return false;
+        proportion = Mth.clamp(proportion, 0f, 1f);
         int color = Mth.hsvToRgb(proportion / 3f, 0.5f + proportion * 0.5f, 0.25f + proportion * 0.75f);
         guiGraphics.fill(RenderType.guiOverlay(), xOffset + 2, yOffset + 3, xOffset + 14, yOffset + 5, 0xFF000000);
         guiGraphics.fill(RenderType.guiOverlay(), xOffset + 2, yOffset + 3, xOffset + 2 + (int)(proportion * 12f), yOffset + 4, color | 0xFF000000);

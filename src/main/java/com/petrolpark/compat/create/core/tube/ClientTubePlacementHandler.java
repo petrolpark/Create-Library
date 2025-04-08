@@ -221,7 +221,7 @@ public class ClientTubePlacementHandler {
         public abstract void use();
 
         public Component translate() {
-            return Component.translatable("petrolpark.tube.control."+ Lang.asId(name()), key == null ? null : key.keybind.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY);
+            return Component.translatable("petrolpark.tube.control."+ Lang.asId(name()), key == null ? "" : key.keybind.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY);
         };
     };
 

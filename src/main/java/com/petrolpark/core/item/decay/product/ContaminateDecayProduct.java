@@ -35,4 +35,10 @@ public record ContaminateDecayProduct(Holder<Contaminant> contaminantHolder, Con
     public DecayProductType getType() {
         return PetrolparkDecayProductTypes.CONTAMINATE.get();
     };
+
+    @Override
+    public final boolean equals(Object other) {
+        if (this == other) return true;
+        return (other instanceof ContaminateDecayProduct cdp && cdp.action() == action() && cdp.contaminantHolder().equals(contaminantHolder()));
+    };
 };

@@ -90,6 +90,15 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
     };
 
     /**
+     * Adds all Recipes of a given Recipe Type to this Category
+     * @param recipeType The Recipe Type
+     * @return This Category Builder
+     */
+    public C addTypedRecipes(Supplier<RecipeType<? extends R>> recipeType) {
+        return addTypedRecipesIf(recipeType, rh -> true);
+    };
+
+    /**
      * Adds all Recipes of a given Recipe Type to this Category, given that each recipe matches the given condition.
      * @param recipeType The Recipe Type
      * @param pred The Condition a Recipe must match to be added

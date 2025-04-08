@@ -1,19 +1,24 @@
 package com.petrolpark.compat;
 
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
+import com.google.common.base.Strings;
 import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.resources.ResourceLocation;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
+import net.neoforged.neoforgespi.language.IModInfo;
 
 public enum Mods {
 
     CREATE,
 
     // Petrolpark Mods
+    PETROLPARK,
     ACADEMY,
     CREATE_BISTRO("createbistro"),
     DESTROY,
@@ -35,6 +40,14 @@ public enum Mods {
 
     private Mods(String id) {
         this.id = id;
+    };
+
+    public String getId() {
+        return id;
+    };
+
+    public String getName() {
+        return ModList.get().getModContainerById(id).map(ModContainer::getModInfo).map(IModInfo::getDisplayName).filter(Predicate.not(Strings::isNullOrEmpty)).orElse("Unknown");
     };
 
     public static boolean isLoading(String modid) {

@@ -2,13 +2,21 @@ package com.petrolpark.compat;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.stream.Stream;
 
-public enum SharedFeatures {
+import org.jetbrains.annotations.ApiStatus;
+
+import com.mojang.serialization.Codec;
+import com.petrolpark.util.Lang;
+
+import net.minecraft.util.StringRepresentable;
+
+public enum SharedFeatures implements StringRepresentable {
     
     // Machines/Gameplay
     CENTRIFUGE,
     EXTRUSION,
-    AGEING_BARREL,
+    BASIN_LID,
     TORQUE_LIMITER,
 
     // Items/Fluids
@@ -21,6 +29,7 @@ public enum SharedFeatures {
     MANDREL(SPRING),
     ;
 
+    public static final Codec<SharedFeatures> CODEC = StringRepresentable.fromEnum(SharedFeatures::values);
 
     private final SharedFeatures[] dependencies;
     
@@ -39,5 +48,19 @@ public enum SharedFeatures {
         enabled = true;
         users.add(mod);
         for (SharedFeatures feature : dependencies) feature.enable(mod);
+    };
+
+    @ApiStatus.Internal
+    public static void enableAll() {
+        for (SharedFeatures feature : values()) feature.enable(Mods.PETROLPARK);
+    };
+
+    @Override
+    public String getSerializedName() {
+        return Lang.asId(name());
+    };
+
+    public Stream<Mods> streamUsers() {
+        return users.stream();
     };
 };

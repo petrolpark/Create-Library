@@ -5,7 +5,9 @@ import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.team.ITeamBoundItem;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
 
@@ -29,6 +31,11 @@ public class BindTeamItemPacket extends BindTeamPacket {
     @Override
     public PacketTypeProvider getTypeProvider() {
         return PetrolparkPackets.BIND_TEAM_ITEM;
+    };
+
+    @Override
+    public Component getDescription(ServerLevel level) {
+        return translate(teamProvider.provideTeam(level).getName());
     };
     
 };

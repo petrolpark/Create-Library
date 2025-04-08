@@ -7,6 +7,7 @@ import java.util.Set;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.TypedDataComponent;
+import net.minecraft.world.item.ItemStack;
 
 public class DataComponentHelper {
     
@@ -24,5 +25,9 @@ public class DataComponentHelper {
             if (!Objects.equals(map2.get(component.type()), component)) return false;
         };
         return true;
+    };
+
+    public static final <T> void revert(ItemStack stack, DataComponentType<T> componentType) {
+        stack.set(componentType, stack.getPrototype().get(componentType));
     };
 };

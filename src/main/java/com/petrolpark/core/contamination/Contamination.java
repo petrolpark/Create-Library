@@ -9,7 +9,6 @@ import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.Petrolpark;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.core.Holder;
@@ -67,7 +66,6 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
         if (!contaminants.add(contaminant)) return false;
         orphanContaminants.removeAll(contaminant.value().getChildren());
         orphanContaminants.add(contaminant);
-        Petrolpark.LOGGER.info("hello?");
         contaminants.addAll(contaminant.value().getChildren());
         save();
         return true;

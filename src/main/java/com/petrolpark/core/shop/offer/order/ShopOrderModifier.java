@@ -50,12 +50,12 @@ public class ShopOrderModifier implements LootContextUser {
 
     public List<Component> getDescription(Level level) {
         List<Component> description = new ArrayList<>();
-        ingredientModifier.addToDescription(description, level);
+        ingredientModifier.addToDescription(description);
         return description;
     };
 
     public NumberProvider getMultiplier(ItemStack stack, Level level) {
-        if (ingredientModifier.test(stack, level)) return successMultiplier; else return failureMultiplier;
+        if (ingredientModifier.test(stack)) return successMultiplier; else return failureMultiplier;
     };
 
 };

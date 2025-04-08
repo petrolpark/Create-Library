@@ -11,5 +11,6 @@ public class PetrolparkJade implements IWailaPlugin {
     @Override
     public void registerClient(IWailaClientRegistration registration) {
         registration.registerBlockComponent(new ContaminationBlockComponentProvider(), Block.class);
+        registration.addItemModNameCallback(new SharedFeatureItemModNameCallback());
     };
 };

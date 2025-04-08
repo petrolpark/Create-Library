@@ -30,5 +30,11 @@ public record ChangeItemDecayProduct(ItemStack stack) implements IDecayProduct {
     public DecayProductType getType() {
         return PetrolparkDecayProductTypes.CHANGE_ITEM.get();
     };
+
+    @Override
+    public final boolean equals(Object other) {
+        if (this == other) return true;
+        return other instanceof ChangeItemDecayProduct cidp && ItemStack.isSameItemSameComponents(cidp.stack(), stack());
+    };
     
 };

@@ -1,12 +1,13 @@
 package com.petrolpark.core.team.packet;
 
+import com.petrolpark.core.actionrecord.packet.recordable.AlwaysEnterRecordablePacketPayload;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.team.ITeam.Provider;
 
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.server.level.ServerPlayer;
 
-public abstract class BindTeamPacket implements ServerboundPacketPayload {
+public abstract class BindTeamPacket implements ServerboundPacketPayload, AlwaysEnterRecordablePacketPayload {
 
     public final ITeam.Provider teamProvider;
 

@@ -1,10 +1,14 @@
 package com.petrolpark.core.item.decay;
 
 import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.core.item.decay.product.IDecayProduct;
 import com.petrolpark.core.item.decay.product.NoDecayProduct;
+import com.petrolpark.util.DataComponentHelper;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -29,20 +33,52 @@ public interface ItemDecay {
         );
     };
 
+    /**
+     * Get the form of the given ItemStack accounting for the current {@link ItemDecay#getGameTime() game time} and any possible {@link IDecayProduct}s the Item has. This is recursive and will give the ItemStack accurate to the original decay start time.
+     * @param stack
+     * @return The "true" ItemStack, accounting for that into which it may have decayed
+     * @see ItemDecay#checkDecay(ItemStack, Consumer)
+     */
     public static ItemStack checkDecay(ItemStack stack) {
+        return checkDecay(stack, s -> s);
+    };
+
+    /**
+     * Get the form of the given ItemStack accounting for the current {@link ItemDecay#getGameTime() game time} and any possible {@link IDecayProduct}s the Item has. This is recursive and will give the ItemStack accurate to the original decay start time.
+     * @param stack
+     * @param newDecay Use this to get a different decay for the product, beyond any decay added by its prototype or the {@link IDecayProduct}
+     * @return The "true" ItemStack, accounting for that into which it may have decayed
+     * @see ItemDecay#checkDecay(ItemStack)
+     */
+    public static ItemStack checkDecay(ItemStack stack, UnaryOperator<ItemStack> newDecay) {
         if (stack.isEmpty()) return stack;
         if (!stack.has(PetrolparkDataComponents.DECAY_TIME) || !stack.has(PetrolparkDataComponents.DECAY_PRODUCT)) return stack;
         Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
         if (creationTime != null) {
             long timeDead = -getRemainingTime(stack, creationTime);
             if (timeDead >= 0) {
-                ItemStack product = stack.getOrDefault(PetrolparkDataComponents.DECAY_PRODUCT, NoDecayProduct.INSTANCE).get(stack.copy());
+                ItemStack copy = copyIgnoringDecay(stack);
+                removeAppliedDecay(copy);
+                ItemStack product = stack.getOrDefault(PetrolparkDataComponents.DECAY_PRODUCT, NoDecayProduct.INSTANCE).get(copy);
                 product.setCount(stack.getCount());
-                product.set(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, stack.get(PetrolparkDataComponents.ORPHAN_CONTAMINANTS)); // Propagate Contaminants
+                product = newDecay.apply(product);
                 startDecay(product, timeDead);
-                return checkDecay(product);
+                return checkDecay(product, newDecay);
             };
         };
+        return stack;
+    };
+
+    static ItemStack copyIgnoringDecay(ItemStack stack) {
+        ItemStack copy = new ItemStack(stack.getItemHolder(), stack.getCount(), stack.getComponentsPatch());
+        copy.setPopTime(stack.getPopTime());
+        return copy;
+    };
+
+    public static ItemStack removeAppliedDecay(ItemStack stack) {
+        stack.remove(PetrolparkDataComponents.DECAY_START_TIME);
+        DataComponentHelper.revert(stack, PetrolparkDataComponents.DECAY_PRODUCT);
+        DataComponentHelper.revert(stack, PetrolparkDataComponents.DECAY_TIME);
         return stack;
     };
 
@@ -51,10 +87,10 @@ public interface ItemDecay {
     };
 
     public static long getRemainingTime(ItemStack decayingItemStack, long creationTime) {
-        return getReminaingTime(decayingItemStack.getOrDefault(PetrolparkDataComponents.DECAY_TIME, DecayTime.NONE).lifetime(), creationTime);
+        return getRemainingTime(decayingItemStack.getOrDefault(PetrolparkDataComponents.DECAY_TIME, DecayTime.NONE).lifetime(), creationTime);
     };
 
-    public static long getReminaingTime(long lifetime, long creationTime) {
+    public static long getRemainingTime(long lifetime, long creationTime) {
         return lifetime + creationTime - getGameTime();
     };
 
@@ -82,7 +118,7 @@ public interface ItemDecay {
             Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
             long displayedSecondsRemaining;
             if (creationTime != null) {
-                long ticksRemaining = ItemDecay.getReminaingTime(decayTime.lifetime(), (long)creationTime);
+                long ticksRemaining = ItemDecay.getRemainingTime(decayTime.lifetime(), (long)creationTime);
                 displayedSecondsRemaining = ticksRemaining / 20;
             } else {
                 displayedSecondsRemaining = decayTime.lifetime() / 20;

@@ -38,7 +38,7 @@ public class CraftingMenuMixin {
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    @SuppressWarnings({"unchecked", "rawtype"})
+    @SuppressWarnings({"unchecked", "rawtypes"})
     private static void inSlotChangedCraftingGrid(
         AbstractContainerMenu menu,
         Level level,

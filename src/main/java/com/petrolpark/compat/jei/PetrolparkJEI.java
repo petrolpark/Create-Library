@@ -8,11 +8,14 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.PetrolparkRecipeTypes;
+import com.petrolpark.compat.jei.category.AgeingCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
+import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
 import com.petrolpark.mixin.compat.jei.client.JustEnoughItemsClientMixin;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
@@ -52,6 +55,13 @@ public class PetrolparkJEI implements IModPlugin {
 
         CreateRecipeCategory<?>
 
+        ageing = builder(AgeingRecipe.class)
+            .addTypedRecipes(PetrolparkRecipeTypes.AGEING::getType)
+            .catalyst(() -> Items.BARREL)
+            .itemIcon(Items.BARREL)
+            .emptyBackground(125, 20)
+            .build("ageing", AgeingCategory::new),
+
         manual_crafting = builder(CraftingRecipe.class)
             .addTypedRecipesIf(() -> RecipeType.CRAFTING, rh -> rh.value() instanceof ManualOnlyShapedRecipe)
             .catalyst(() -> Blocks.CRAFTING_TABLE)
@@ -70,7 +80,7 @@ public class PetrolparkJEI implements IModPlugin {
         item_decay = builder(DecayingItemRecipe.class)
             .addRecipes(helpers.getIngredientManager().getAllItemStacks().stream()
                 .map(DecayingItemCategory::createRecipe)
-                .filter(Optional::isEmpty)
+                .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(r -> new RecipeHolder<DecayingItemRecipe>(Petrolpark.asResource("decay_"+itemDecayRecipeCount++), r))
                 ::toList

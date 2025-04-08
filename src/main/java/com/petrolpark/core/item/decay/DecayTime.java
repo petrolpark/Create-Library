@@ -18,10 +18,16 @@ public record DecayTime(String translationKey, long lifetime) {
         Codec.LONG.fieldOf("time").forGetter(DecayTime::lifetime)
     ).apply(instance, DecayTime::new));
 
+    public static final Codec<DecayTime> INLINE_CODEC = Codec.LONG.xmap(DecayTime::new, DecayTime::lifetime);
+
     public static final StreamCodec<ByteBuf, DecayTime> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.STRING_UTF8, DecayTime::translationKey,
         ByteBufCodecs.VAR_LONG, DecayTime::lifetime,
         DecayTime::new
     );
+
+    public DecayTime(long decayTime) {
+        this(DEFAULT_TRANSLATION_KEY, decayTime);
+    };
     
 };

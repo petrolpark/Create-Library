@@ -6,6 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.IItemStackDuck;
@@ -19,15 +20,13 @@ public class ItemStackMixin implements IItemStackDuck {
 
     @Unique
     private IContamination<?, ?> contamination;
-    
-    // TODO replace with ModifyReturnValue from mixin extras
-    @Inject(
+
+    @ModifyReturnValue(
         method = "copy",
-        at = @At("RETURN"),
-        cancellable = true
+        at = @At("RETURN")
     )
-    public void inCopy(CallbackInfoReturnable<ItemStack> cir) {
-        cir.setReturnValue(ItemDecay.checkDecay(cir.getReturnValue()));
+    public ItemStack modifyCopy(ItemStack itemStack) {
+        return ItemDecay.checkDecay(itemStack);
     };
 
     /**

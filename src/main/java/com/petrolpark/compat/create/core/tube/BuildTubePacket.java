@@ -2,19 +2,22 @@ package com.petrolpark.compat.create.core.tube;
 
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.create.CreatePackets;
+import com.petrolpark.core.actionrecord.packet.recordable.AlwaysEnterRecordablePacketPayload;
 import com.petrolpark.util.ItemHelper;
 
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
 
 @RequiresCreate
-public class BuildTubePacket implements ServerboundPacketPayload {
+public class BuildTubePacket implements ServerboundPacketPayload, AlwaysEnterRecordablePacketPayload {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, BuildTubePacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.registry(Registries.BLOCK), BuildTubePacket::getBlock,
@@ -59,6 +62,11 @@ public class BuildTubePacket implements ServerboundPacketPayload {
     @Override
     public PacketTypeProvider getTypeProvider() {
         return CreatePackets.BUILD_TUBE;
+    };
+
+    @Override
+    public Component getDescription(ServerLevel level) {
+        return translate(spline.start.getPos().toShortString(), spline.end.getPos().toShortString());
     };
     
 };

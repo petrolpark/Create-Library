@@ -6,6 +6,8 @@
     "plugin": "com.petrolpark.mixin.plugin.PetrolparkMixinPlugin",
     "mixins": [
         "compat.create.accessor.DepotBehaviourAccessor",
+        "compat.create.BasinBlockEntityMixin",
+        "compat.create.BasinBlockMixin",
         "compat.create.BasinRecipeMixin",
         "compat.create.BeltInventoryMixin",
         "compat.create.ContraptionMixin",
@@ -28,6 +30,8 @@
         "AbstractContainerMenuMixin",
         "AbstractCookingRecipeMixin",
         "BuiltInRegistriesMixin",
+        "BarrelBlockEntityMixin",
+        "ChestMenuMixin",
         "CraftingMenuMixin",
         "FluidTankMixin",
         "ItemStackMixin",
@@ -51,6 +55,7 @@
         "compat.create.client.GoggleOverlayRendererMixin",
         "compat.create.client.PonderUIMixin",
         "compat.jei.client.JustEnoughItemsClientMixin",
+        "compat.jei.client.ModIdHelperMixin",
         "client.CreativeModeInventoryScreenMixin"
     ],
     "injectors": {

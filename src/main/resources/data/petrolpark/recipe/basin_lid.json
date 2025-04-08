@@ -1,0 +1,32 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "basin_lid"
+        },
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "create"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "P  ",
+        "TTP",
+        "AAA"
+    ],
+    "key": {
+        "A": {
+            "item": "create:andesite_alloy"
+        },
+        "P": {
+            "item": "create:fluid_pipe"
+        },
+        "T": {
+            "item": "create:fluid_tank"
+        }
+    },
+    "result": {
+        "id": "petrolpark:basin_lid"
+    }
+}

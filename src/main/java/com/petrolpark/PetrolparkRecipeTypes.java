@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import com.petrolpark.core.badge.BadgeDuplicationRecipe;
 import com.petrolpark.core.contamination.recipe.CombineContaminatedItemsRecipe;
 import com.petrolpark.core.item.decay.DecayingItemCookingRecipe;
+import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
 import com.petrolpark.util.Lang;
@@ -23,6 +24,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
 
+    AGEING(AgeingRecipe.class, AgeingRecipe.Serializer::new),
     DECAYING_ITEM_COOKING(() -> DecayingItemCookingRecipe.SERIALIZER, () -> null, false), //TODO remove null
     MANUAL_ONLY_CRAFTING_SHAPED(ManualOnlyShapedRecipe.Serializer::new, () -> RecipeType.CRAFTING),
     CONTAMINATED_ITEM_COMBINATION(() -> CombineContaminatedItemsRecipe.SERIALIZER, () -> RecipeType.CRAFTING),
@@ -58,8 +60,8 @@ public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
     };
 
     @SuppressWarnings("unchecked")
-    public <T extends RecipeSerializer<?>> T getSerializer() {
-        return (T) serializerObject.get();
+    public <S extends RecipeSerializer<?>> S getSerializer() {
+        return (S) serializerObject.get();
     };
 
     @SuppressWarnings("unchecked")
@@ -67,7 +69,7 @@ public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
         return (RecipeType<R>) type.get();
     };
 
-    PetrolparkRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
+    <I extends RecipeInput, R extends Recipe<I>> PetrolparkRecipeTypes(Class<R> recipeClass, Supplier<RecipeSerializer<R>> serializerSupplier) {
         String name = Lang.asId(name());
         id = Petrolpark.asResource(name);
         serializerObject = Registers.SERIALIZER_REGISTER.register(name, serializerSupplier);

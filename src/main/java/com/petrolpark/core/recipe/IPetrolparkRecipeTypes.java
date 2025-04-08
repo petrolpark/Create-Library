@@ -22,7 +22,7 @@ public interface IPetrolparkRecipeTypes {
 
     public ResourceLocation getId();
 
-    public <T extends RecipeSerializer<?>> T getSerializer();
+    public <S extends RecipeSerializer<?>> S getSerializer();
 
     public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType();
 

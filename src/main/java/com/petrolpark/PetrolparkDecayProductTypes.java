@@ -18,4 +18,6 @@ public class PetrolparkDecayProductTypes {
     NONE = REGISTRATE.decayProductType("none", MapCodec.unit(NoDecayProduct.INSTANCE), StreamCodec.unit(NoDecayProduct.INSTANCE)),
     CONTAMINATE = REGISTRATE.decayProductType("contaminate", ContaminateDecayProduct.CODEC, ContaminateDecayProduct.STREAM_CODEC),
     CHANGE_ITEM = REGISTRATE.decayProductType("change_item", ChangeItemDecayProduct.CODEC, ChangeItemDecayProduct.STREAM_CODEC);
+
+    public static final void register() {};
 };

@@ -15,6 +15,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 
+/**
+ * Allow Shapeless Recipes to propagate the Contaminants of the Ingredients to the result.
+ */
 @Mixin(ShapelessRecipe.class)
 public abstract class ShapelessRecipeMixin implements IHandleContaminationMyselfRecipe<CraftingInput> {
 
