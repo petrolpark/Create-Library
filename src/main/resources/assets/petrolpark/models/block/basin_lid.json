@@ -3,7 +3,7 @@
 	"render_type": "cutout",
 	"parent": "block/block",
 	"textures": {
-		"particle": "minecraft:copper_block",
+		"particle": "minecraft:block/copper_block",
 		"2": "create:block/pipes",
 		"3": "create:block/pipes_connected",
 		"4": "petrolpark:block/basin_lid",

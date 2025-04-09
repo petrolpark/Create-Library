@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.SharedFeatures;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
@@ -42,10 +41,6 @@ public class Petrolpark {
     };
 
     public static final ScoreboardTeamManager SCOREBOARD_TEAMS = new ScoreboardTeamManager();
-
-    static {
-        SharedFeatures.BASIN_LID.enable(Mods.PETROLPARK); // tempT`3Q
-    };
 
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
 

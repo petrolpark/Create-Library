@@ -1,5 +1,8 @@
 {
   "values": [
-    "petrolpark:basin_lid"
+    {
+      "id": "petrolpark:basin_lid",
+      "required": false
+    }
   ]
 }

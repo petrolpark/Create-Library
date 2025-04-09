@@ -34,6 +34,7 @@ import com.petrolpark.core.recipe.ingredient.modifier.IngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.ItemIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
+import com.petrolpark.core.registrate.SharedBlockBuilder;
 import com.petrolpark.core.team.ITeam;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
@@ -41,6 +42,7 @@ import com.tterrag.registrate.builders.BlockEntityBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
 import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.builders.BuilderCallback;
+import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
@@ -53,6 +55,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -200,7 +203,7 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     
     // Shared features
 
-    protected class SharedFeatureBuilderCallback implements BuilderCallback {
+    public class SharedFeatureBuilderCallback implements BuilderCallback {
 
         protected final SharedFeatures feature;
 
@@ -225,7 +228,11 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     };
 
     public <T extends Block, P> BlockBuilder<T, PetrolparkRegistrate> sharedBlock(SharedFeatures feature, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
-        return sharedEntry(feature, name, callback -> BlockBuilder.create(this, this, name, callback, factory));
+        return sharedEntry(feature, name, callback -> SharedBlockBuilder.create(this, this, feature, name, callback, factory));
+    };
+
+    public <T extends Item, P> ItemBuilder<T, P> sharedItem(P parent, SharedFeatures feature, String name, NonNullFunction<Item.Properties, T> factory) {
+        return sharedEntry(feature, name, callback -> ItemBuilder.create(this, parent, name, callback, factory));
     };
     
 };
