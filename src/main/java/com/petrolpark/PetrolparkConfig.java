@@ -10,6 +10,9 @@ public class PetrolparkConfig {
 
     public static class Server {
 
+        // Processing
+        public final BooleanValue ageingInVanillaBarrels;
+
         // Contaminants
         public final BooleanValue shapedCraftingPropagatesContaminants;
         public final BooleanValue shapelessCraftingPropagatesContaminants;
@@ -30,6 +33,15 @@ public class PetrolparkConfig {
         public Server(ModConfigSpec.Builder builder) {
             builder.comment("Pquality world-specific Configs")
                    .push("server");
+
+            builder.push("processing"); {
+
+                ageingInVanillaBarrels = builder
+                    .comment("Ageing Recipes are possible in Vanilla Barrels (and modded Barrels which extend it)")
+                    .worldRestart()
+                    .define("ageingInVanillaBarrels", true);
+
+            }; builder.pop();
 
             builder.push("contamination"); {
 

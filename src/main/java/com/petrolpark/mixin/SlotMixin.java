@@ -12,7 +12,6 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 
 /**
  * If an Item is removed from a Barrel, it should stop {@link AgeingRecipe ageing}. This mixin is to ensure that happens even when the Item is quick-swapped to a hotbar slot.
@@ -32,7 +31,7 @@ public abstract class SlotMixin {
         method = "Lnet/minecraft/world/inventory/Slot;onTake(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;)V"
     )
     public void wrapOnTake(Player player, ItemStack stack, Operation<Void> operation) {
-        if (container instanceof BarrelBlockEntity || container instanceof AgeingContainerWrapper) AgeingContainerWrapper.withAgeingDecayRemoved(player.level(), stack);
+        if (AgeingContainerWrapper.isAgeingContainer(container)) AgeingContainerWrapper.withAgeingDecayRemoved(player.level(), stack);
         operation.call(player, stack);
     };
 };

@@ -17,7 +17,7 @@ import com.petrolpark.core.data.reward.entity.EntityRewardType;
 import com.petrolpark.core.data.reward.generator.RewardGeneratorType;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
 import com.petrolpark.core.item.decay.product.DecayProductType;
-import com.petrolpark.core.recipe.ingredient.modifier.IngredientModifierType;
+import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.offer.ShopOfferGenerator;
@@ -33,6 +33,8 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.core.WritableRegistry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
@@ -96,8 +98,9 @@ public class PetrolparkRegistries {
     public static final Registry<LootTeamNumberProviderType> LOOT_TEAM_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_TEAM_NUMBER_PROVIDER_TYPE);
 
     // Generated Ingredients
-    public static final Registry<IngredientRandomizerType> INGREDIENT_RANDOMIZER_TYPE = simple(Keys.INGREDIENT_RANDOMIZER_TYPE);
-    public static final Registry<IngredientModifierType> INGREDIENT_MODIFIER_TYPE = simple(Keys.INGREDIENT_MODIFIER_TYPE);
+    public static final Registry<IngredientRandomizerType> INGREDIENT_RANDOMIZER_TYPES = simple(Keys.INGREDIENT_RANDOMIZER_TYPE);
+    public static final Registry<IIngredientModifierType<? super ItemStack>> INGREDIENT_MODIFIER_TYPES = simple(Keys.INGREDIENT_MODIFIER_TYPE);
+    public static final Registry<IIngredientModifierType<? super FluidStack>> FLUID_INGREDIENT_MODIFIER_TYPES = simple(Keys.FLUID_INGREDIENT_MODIFIER_TYPE);
 
     // Rewards
     public static final Registry<RewardGeneratorType> REWARD_GENERATOR_TYPES = simple(Keys.REWARD_GENERATOR_TYPE);
@@ -140,7 +143,8 @@ public class PetrolparkRegistries {
         
         // Generated ingredients
         public static final ResourceKey<Registry<IngredientRandomizerType>> INGREDIENT_RANDOMIZER_TYPE = key("ingredient_randomizer_type");
-        public static final ResourceKey<Registry<IngredientModifierType>> INGREDIENT_MODIFIER_TYPE = key("ingredient_modifier_type");
+        public static final ResourceKey<Registry<IIngredientModifierType<? super ItemStack>>> INGREDIENT_MODIFIER_TYPE = key("ingredient_modifier_type");
+        public static final ResourceKey<Registry<IIngredientModifierType<? super FluidStack>>> FLUID_INGREDIENT_MODIFIER_TYPE = key("fluid_ingredient_modifier_type");
         
         // Rewards
         public static final ResourceKey<Registry<RewardGeneratorType>> REWARD_GENERATOR_TYPE = key("reward_generator_type");

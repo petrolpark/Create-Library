@@ -1,11 +1,12 @@
 package com.petrolpark.core.shop.offer.order;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.core.recipe.ingredient.modifier.IngredientModifier;
+import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
+import com.petrolpark.core.recipe.ingredient.modifier.ItemIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.PassIngredientModifier;
 
 import net.minecraft.network.chat.Component;
@@ -20,23 +21,23 @@ public class ShopOrderModifier implements LootContextUser {
 
     public static final Codec<ShopOrderModifier> CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance -> 
         instance.group(
-            IngredientModifier.CODEC.optionalFieldOf("requirement", PassIngredientModifier.INSTANCE).forGetter(ShopOrderModifier::getIngredientModifier),
+            ItemIngredientModifier.CODEC.optionalFieldOf("requirement", PassIngredientModifier.INSTANCE).forGetter(ShopOrderModifier::getIngredientModifier),
             NumberProviders.CODEC.fieldOf("success").forGetter(ShopOrderModifier::getSuccessMultiplier),
             NumberProviders.CODEC.optionalFieldOf("failure", ConstantValue.exactly(0f)).forGetter(ShopOrderModifier::getFailureNumberProvider)
         ).apply(instance, ShopOrderModifier::new)
     ));
     
-    public final IngredientModifier ingredientModifier;
+    public final IIngredientModifier<? super ItemStack> ingredientModifier;
     public final NumberProvider successMultiplier;
     public final NumberProvider failureMultiplier;
 
-    public ShopOrderModifier(IngredientModifier ingredientModifier, NumberProvider successMultiplier, NumberProvider failureMultiplier) {
+    public ShopOrderModifier(IIngredientModifier<? super ItemStack> ingredientModifier, NumberProvider successMultiplier, NumberProvider failureMultiplier) {
         this.ingredientModifier = ingredientModifier;
         this.successMultiplier = successMultiplier;
         this.failureMultiplier = failureMultiplier;
     };
 
-    public IngredientModifier getIngredientModifier() {
+    public IIngredientModifier<? super ItemStack> getIngredientModifier() {
         return ingredientModifier;
     };
 

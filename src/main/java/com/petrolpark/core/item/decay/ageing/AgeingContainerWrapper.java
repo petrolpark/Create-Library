@@ -2,6 +2,7 @@ package com.petrolpark.core.item.decay.ageing;
 
 import javax.annotation.Nonnull;
 
+import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.core.item.decay.ItemDecay;
 
@@ -9,8 +10,18 @@ import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 
 public interface AgeingContainerWrapper extends Container {
+
+    public static boolean ageingInVanillaBarrelsEnabled() {
+        return PetrolparkConfig.SERVER.ageingInVanillaBarrels.getAsBoolean();
+    };
+
+    public static boolean isAgeingContainer(Container container) {
+        if (container instanceof AgeingContainerWrapper) return true;
+        return container instanceof BarrelBlockEntity && ageingInVanillaBarrelsEnabled();
+    };
 
     public static ItemStack getItem(Level level, GetItem getItem, int slot) {
         return checkDecay(level, getItem.getItem(slot));

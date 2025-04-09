@@ -12,7 +12,7 @@ public interface IngredientRandomizer extends LootContextUser {
     /**
      * Use {@link IngredientRandomizer#CODEC} instead.
      */
-    static final Codec<IngredientRandomizer> TYPED_CODEC = PetrolparkRegistries.INGREDIENT_RANDOMIZER_TYPE
+    static final Codec<IngredientRandomizer> TYPED_CODEC = PetrolparkRegistries.INGREDIENT_RANDOMIZER_TYPES
         .byNameCodec()
         .dispatch(IngredientRandomizer::getType, IngredientRandomizerType::codec);
 

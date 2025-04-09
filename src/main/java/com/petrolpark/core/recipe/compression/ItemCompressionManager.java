@@ -89,8 +89,10 @@ public class ItemCompressionManager {
 
     private static boolean areIngredientsEqual(Ingredient ingredient1, Ingredient ingredient2) {
         if (ingredient1 == ingredient2) return true;
-        if (!Objects.equals(ingredient1.getCustomIngredient(), ingredient2.getCustomIngredient())) return false;
-        return Arrays.equals(ingredient1.getValues(), ingredient2.getValues());
+        if (ingredient1.isCustom()) {
+            if (!ingredient2.isCustom()) return false;
+            return Objects.equals(ingredient1.getCustomIngredient(), ingredient2.getCustomIngredient());
+        } else return Arrays.equals(ingredient1.getValues(), ingredient2.getValues());
     };
 
     public static record CompressionRecipe(Ingredient ingredient, ItemCompression compression) implements IItemCompression {

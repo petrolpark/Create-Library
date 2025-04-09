@@ -1,5 +1,7 @@
 package com.petrolpark.mixin;
 
+import static com.petrolpark.core.item.decay.ageing.AgeingContainerWrapper.ageingInVanillaBarrelsEnabled;
+
 import javax.annotation.Nonnull;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,22 +29,23 @@ public abstract class BarrelBlockEntityMixin extends RandomizableContainerBlockE
 
     @Override
     public ItemStack getItem(int index) {
-        return AgeingContainerWrapper.getItem(level, super::getItem, index);
+        return ageingInVanillaBarrelsEnabled() ? AgeingContainerWrapper.getItem(level, super::getItem, index) : super.getItem(index);
     };
 
     @Override
     public ItemStack removeItem(int index, int count) {
-        return AgeingContainerWrapper.removeItem(level, super::removeItem, index, count);
+        return ageingInVanillaBarrelsEnabled() ? AgeingContainerWrapper.removeItem(level, super::removeItem, index, count) : super.removeItem(index, count);
     };
 
     @Override
     public ItemStack removeItemNoUpdate(int index) {
-        return AgeingContainerWrapper.removeItemNoUpdate(level, super::removeItemNoUpdate, index);
+        return ageingInVanillaBarrelsEnabled() ? AgeingContainerWrapper.removeItemNoUpdate(level, super::removeItemNoUpdate, index) : super.removeItemNoUpdate(index);
     };
 
     @Override
     public void setItem(int index, @Nonnull ItemStack stack) {
-        AgeingContainerWrapper.setItem(level, super::setItem, index, stack);
+        if (ageingInVanillaBarrelsEnabled()) AgeingContainerWrapper.setItem(level, super::setItem, index, stack);
+        else super.setItem(index, stack);
     };
     
 };

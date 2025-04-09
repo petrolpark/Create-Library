@@ -37,7 +37,7 @@ public abstract class ChestMenuMixin extends AbstractContainerMenu {
     public ItemStack wrapGetItem(Slot instance, Operation<ItemStack> original) {
         Level level;
         if (instance.container instanceof BarrelBlockEntity barrel) level = barrel.getLevel();
-        else if (instance.container instanceof AgeingContainerWrapper ageingContainer) level = ageingContainer.getLevel();
+        else if (instance.container instanceof AgeingContainerWrapper ageingContainer && AgeingContainerWrapper.ageingInVanillaBarrelsEnabled()) level = ageingContainer.getLevel();
         else return original.call(instance);
         return AgeingContainerWrapper.withAgeingDecayRemoved(level, original.call(instance));
     };

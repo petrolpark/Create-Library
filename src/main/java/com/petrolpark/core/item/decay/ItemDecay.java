@@ -1,7 +1,6 @@
 package com.petrolpark.core.item.decay;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
 
 import com.petrolpark.Petrolpark;
@@ -37,7 +36,7 @@ public interface ItemDecay {
      * Get the form of the given ItemStack accounting for the current {@link ItemDecay#getGameTime() game time} and any possible {@link IDecayProduct}s the Item has. This is recursive and will give the ItemStack accurate to the original decay start time.
      * @param stack
      * @return The "true" ItemStack, accounting for that into which it may have decayed
-     * @see ItemDecay#checkDecay(ItemStack, Consumer)
+     * @see ItemDecay#checkDecay(ItemStack, UnaryOperator)
      */
     public static ItemStack checkDecay(ItemStack stack) {
         return checkDecay(stack, s -> s);

@@ -2,32 +2,36 @@ package com.petrolpark.core.recipe.ingredient.modifier;
 
 import java.util.List;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkIngredientModifierTypes;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.world.item.ItemStack;
 
-public record NotIngredientModifier(IngredientModifier modifier) implements IngredientModifier {
+public record NotIngredientModifier<STACK>(IIngredientModifier<? super STACK> modifier) implements ITypelessIngredientModifier<STACK> {
 
-    public static final MapCodec<NotIngredientModifier> CODEC = CodecHelper.singleFieldMap(IngredientModifier.CODEC, "modifier", NotIngredientModifier::modifier, NotIngredientModifier::new);
-    public static final StreamCodec<RegistryFriendlyByteBuf, NotIngredientModifier> STREAM_CODEC = StreamCodec.composite(IngredientModifier.STREAM_CODEC, NotIngredientModifier::modifier, NotIngredientModifier::new);
+    public static final <STACK> MapCodec<NotIngredientModifier<STACK>> codec(Codec<IIngredientModifier<? super STACK>> typeCodec) {
+        return CodecHelper.singleFieldMap(typeCodec, "modifier", NotIngredientModifier::modifier, NotIngredientModifier::new);
+    };
 
+    public static final <STACK> StreamCodec<? super RegistryFriendlyByteBuf, NotIngredientModifier<STACK>> streamCodec(StreamCodec<? super RegistryFriendlyByteBuf, IIngredientModifier<? super STACK>> typeStreamCodec) {
+        return StreamCodec.composite(typeStreamCodec, NotIngredientModifier::modifier, NotIngredientModifier::new);
+    };
+    
     @Override
-    public boolean test(ItemStack stack) {
+    public boolean test(STACK stack) {
         return !modifier().test(stack);
     };
 
     @Override
-    public void modifyExamples(List<ItemStack> exampleStacks) {
+    public void modifyExamples(List<? extends STACK> exampleStacks) {
         modifier().modifyCounterExamples(exampleStacks);
     };
 
     @Override
-    public void modifyCounterExamples(List<ItemStack> counterExampleStacks) {
+    public void modifyCounterExamples(List<? extends STACK> counterExampleStacks) {
         modifier().modifyExamples(counterExampleStacks);
     };
 
@@ -39,11 +43,6 @@ public record NotIngredientModifier(IngredientModifier modifier) implements Ingr
     @Override
     public void addToCounterDescription(List<Component> description) {
         modifier().addToDescription(description);
-    };
-
-    @Override
-    public IngredientModifierType getType() {
-        return PetrolparkIngredientModifierTypes.NOT.get();
     };
     
 };
