@@ -88,7 +88,6 @@ public class RecyclingOutputs extends LinkedList<RecyclingOutput> {
      * Splits every existing {@link RecyclingOutput} into two.
      * @param proportion The proportion of each Output to be modified
      * @param modification The modification to apply to that proportion of the Output
-     * @see RecyclingOutputs#splitAll(float, Consumer, Consumer)
      */
     public void splitAll(double proportion, Consumer<RecyclingOutput> modification) {
         splitAll(proportion, modification, o -> {});
@@ -99,7 +98,6 @@ public class RecyclingOutputs extends LinkedList<RecyclingOutput> {
      * @param proportion The proportion of each Output to be modified
      * @param modification The modification to apply to that proportion of the Output
      * @param remainderModification The modification to apply to the remainder of the Output
-     * @see RecyclingOutputs#splitAll(float, Consumer)
      */
     public void splitAll(double proportion, Consumer<RecyclingOutput> modification, Consumer<RecyclingOutput> remainderModification) {
         List<RecyclingOutput> existingOutputs = new ArrayList<>(this);
