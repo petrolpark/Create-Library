@@ -25,6 +25,7 @@ public interface ITubeRenderer<T extends SmartBlockEntity> {
         if (tube == null || !tube.isController()) return;
         final PartialModel[] segmentModels = getTubeSegmentModels(be);
         final TubeSpline spline = tube.getSpline();
+        if (spline == null) return;
         final VertexConsumer vc = bufferSource.getBuffer(RenderType.solid());
         final float[] segmentScales = new float[spline.getPoints().size()];
         Arrays.fill(segmentScales, 1f);
