@@ -17,6 +17,12 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
 public class CodecHelper {
+
+    public static <OBJECT, FIELD> Codec<OBJECT> singleField(Codec<FIELD> fieldCodec, String fieldName, Function<OBJECT, FIELD> getter, Function<FIELD, OBJECT> constructor) {
+        return RecordCodecBuilder.create(instance -> instance.group(
+            fieldCodec.fieldOf(fieldName).forGetter(getter)
+        ).apply(instance, constructor));
+    };
     
     public static <OBJECT, FIELD> MapCodec<OBJECT> singleFieldMap(Codec<FIELD> fieldCodec, String fieldName, Function<OBJECT, FIELD> getter, Function<FIELD, OBJECT> constructor) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(

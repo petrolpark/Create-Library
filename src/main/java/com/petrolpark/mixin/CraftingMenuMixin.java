@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.petrolpark.PetrolparkConfig;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.contamination.recipe.IHandleContaminationMyselfRecipe;
 import com.petrolpark.core.item.decay.ItemDecay;
@@ -51,7 +51,7 @@ public class CraftingMenuMixin {
         if (!itemstack.isEmpty()) {
             ItemDecay.startDecay(itemstack);
             Optional<RecipeHolder<CraftingRecipe>> optional = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftinginput, level, recipe); // For mystery reasons this cannot be localcaptured
-            if (PetrolparkConfig.SERVER.craftingTablePropagatesContaminants.get() && optional.map(rh -> {
+            if (PetrolparkConfigs.server().craftingTablePropagatesContaminants.get() && optional.map(rh -> {
                 if (rh.value() instanceof IHandleContaminationMyselfRecipe contamHandled) {
                     return !contamHandled.isContaminationHandled(craftinginput, level.registryAccess());
                 } else return true;

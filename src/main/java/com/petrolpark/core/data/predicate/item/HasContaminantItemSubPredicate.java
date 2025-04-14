@@ -1,8 +1,8 @@
-package com.petrolpark.core.data.loot.predicate.item;
+package com.petrolpark.core.data.predicate.item;
 
 import javax.annotation.Nonnull;
 
-import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.Codec;
 import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.util.CodecHelper;
@@ -13,7 +13,7 @@ import net.minecraft.world.item.ItemStack;
 
 public record HasContaminantItemSubPredicate(Holder<Contaminant> contaminant) implements ItemSubPredicate {
 
-    public static final MapCodec<HasContaminantItemSubPredicate> CODEC = CodecHelper.singleFieldMap(Contaminant.CODEC, "contaminant", HasContaminantItemSubPredicate::contaminant, HasContaminantItemSubPredicate::new);
+    public static final Codec<HasContaminantItemSubPredicate> CODEC = CodecHelper.singleField(Contaminant.CODEC, "contaminant", HasContaminantItemSubPredicate::contaminant, HasContaminantItemSubPredicate::new);
 
     @Override
     public boolean matches(@Nonnull ItemStack stack) {

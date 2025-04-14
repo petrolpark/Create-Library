@@ -2,7 +2,7 @@ package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
-import com.petrolpark.core.data.loot.predicate.ParameterSuppliedLootCondition;
+import com.petrolpark.core.data.loot.condition.ParameterSuppliedLootCondition;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;

@@ -11,7 +11,7 @@ import com.petrolpark.util.Lang;
 
 import net.minecraft.util.StringRepresentable;
 
-public enum SharedFeatures implements StringRepresentable {
+public enum SharedFeatureFlag implements StringRepresentable {
     
     // Machines/Gameplay
     CENTRIFUGE,
@@ -29,14 +29,14 @@ public enum SharedFeatures implements StringRepresentable {
     MANDREL(SPRING),
     ;
 
-    public static final Codec<SharedFeatures> CODEC = StringRepresentable.fromEnum(SharedFeatures::values);
+    public static final Codec<SharedFeatureFlag> CODEC = StringRepresentable.fromEnum(SharedFeatureFlag::values);
 
-    private final SharedFeatures[] dependencies;
+    private final SharedFeatureFlag[] dependencies;
     
     private final SortedSet<Mods> users = new TreeSet<>(Mods::compareTo);
     private boolean enabled = false;
 
-    SharedFeatures(SharedFeatures... dependencies) {
+    SharedFeatureFlag(SharedFeatureFlag... dependencies) {
         this.dependencies = dependencies;
     };
 
@@ -47,12 +47,12 @@ public enum SharedFeatures implements StringRepresentable {
     public void enable(Mods mod) {
         enabled = true;
         users.add(mod);
-        for (SharedFeatures feature : dependencies) feature.enable(mod);
+        for (SharedFeatureFlag feature : dependencies) feature.enable(mod);
     };
 
     @ApiStatus.Internal
     public static void enableAll() {
-        for (SharedFeatures feature : values()) feature.enable(Mods.PETROLPARK);
+        for (SharedFeatureFlag feature : values()) feature.enable(Mods.PETROLPARK);
     };
 
     @Override

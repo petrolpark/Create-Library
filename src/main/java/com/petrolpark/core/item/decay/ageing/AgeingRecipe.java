@@ -17,12 +17,12 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
-import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
-public record AgeingRecipe(Ingredient ingredient, IDecayProduct product, DecayTime decayTime) implements Recipe<AgeingRecipe.Input> {
+public record AgeingRecipe(Ingredient ingredient, IDecayProduct product, DecayTime decayTime) implements Recipe<SingleRecipeInput> {
 
     public static final MapCodec<AgeingRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Ingredient.CODEC_NONEMPTY.fieldOf("ingredient").forGetter(AgeingRecipe::ingredient),
@@ -41,9 +41,9 @@ public record AgeingRecipe(Ingredient ingredient, IDecayProduct product, DecayTi
      * Must be passed the {@link ItemDecay#checkDecay(ItemStack) true} ItemStack.
      */
     @Override
-    public boolean matches(@Nonnull Input input, @Nonnull Level level) {
-        IDecayProduct product = input.stack().get(PetrolparkDataComponents.DECAY_PRODUCT);
-        return ingredient().test(input.stack()) && (product == null || product.equals(product())); // Applicable to Items which aren't currently decaying (to check when putting in the Barrel) or which have this recipe's decay (to check when taking out of the Barrel)
+    public boolean matches(@Nonnull SingleRecipeInput input, @Nonnull Level level) {
+        IDecayProduct product = input.item().get(PetrolparkDataComponents.DECAY_PRODUCT);
+        return ingredient().test(input.item()) && (product == null || product.equals(product())); // Applicable to Items which aren't currently decaying (to check when putting in the Barrel) or which have this recipe's decay (to check when taking out of the Barrel)
     };
 
     public ItemStack setDecayProductAndTime(ItemStack stack) {
@@ -53,12 +53,12 @@ public record AgeingRecipe(Ingredient ingredient, IDecayProduct product, DecayTi
     };
 
     @Override
-    public ItemStack assemble(@Nonnull Input input, @Nonnull HolderLookup.Provider registries) {
+    public ItemStack assemble(@Nonnull SingleRecipeInput input, @Nonnull HolderLookup.Provider registries) {
         return assemble(input, true);
     };
 
-    public ItemStack assemble(@Nonnull Input input, boolean startDecay) {
-        ItemStack result = input.stack().copy();
+    public ItemStack assemble(@Nonnull SingleRecipeInput input, boolean startDecay) {
+        ItemStack result = input.item().copy();
         setDecayProductAndTime(result);
         if (startDecay) ItemDecay.startDecay(result);
         return result;
@@ -84,24 +84,9 @@ public record AgeingRecipe(Ingredient ingredient, IDecayProduct product, DecayTi
         return PetrolparkRecipeTypes.AGEING.getType();
     };
 
-    public static final AgeingRecipe cast(Recipe<AgeingRecipe.Input> recipe) {
+    public static final AgeingRecipe cast(Recipe<SingleRecipeInput> recipe) {
         if (recipe instanceof AgeingRecipe ageingRecipe) return ageingRecipe;
         return null;
-    };
-    
-    public static record Input(ItemStack stack) implements RecipeInput {
-
-        @Override
-        @Deprecated
-        public ItemStack getItem(int index) {
-            return stack;
-        };
-
-        @Override
-        public int size() {
-            return 1;
-        };
-
     };
 
     public static class Serializer implements RecipeSerializer<AgeingRecipe> {

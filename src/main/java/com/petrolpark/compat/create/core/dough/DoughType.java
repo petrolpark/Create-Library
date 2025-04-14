@@ -7,8 +7,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
 @RequiresCreate
-public class Dough {
+public class DoughType {
     
-    public static final Codec<Dough> CODEC = Codec.unit(new Dough());
-    public static final StreamCodec<RegistryFriendlyByteBuf, Dough> STREAM_CODEC = StreamCodec.unit(new Dough());
+    public static final Codec<DoughType> CODEC = Codec.unit(new DoughType());
+    public static final StreamCodec<RegistryFriendlyByteBuf, DoughType> STREAM_CODEC = StreamCodec.unit(new DoughType());
 };

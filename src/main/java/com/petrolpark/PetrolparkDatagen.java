@@ -3,6 +3,8 @@ package com.petrolpark;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
+import com.petrolpark.compat.Mods;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.badge.BadgeDataProvider;
 
 import net.minecraft.core.HolderLookup;
@@ -15,6 +17,10 @@ import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public class PetrolparkDatagen {
+
+    public static void prepareDatagen(GatherDataEvent event) {
+        for (SharedFeatureFlag flag : SharedFeatureFlag.values()) flag.enable(Mods.PETROLPARK); // All must be enabled for Datagen
+    };
 
     public static void gatherData(GatherDataEvent event) {
 

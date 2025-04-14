@@ -6,7 +6,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.compat.SharedFeatures;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.badge.Badge;
 import com.petrolpark.core.badge.BadgeRegistrateBuilder;
 import com.petrolpark.core.data.loot.numberprovider.entity.EntityNumberProvider;
@@ -27,14 +27,15 @@ import com.petrolpark.core.item.decay.product.DecayProductType;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
 import com.petrolpark.core.recipe.ingredient.modifier.FluidIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.GenericIngredientModifierType;
-import com.petrolpark.core.recipe.ingredient.modifier.ITypelessIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
+import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
+import com.petrolpark.core.recipe.ingredient.modifier.ITypelessIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.IngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.ItemIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
+import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
 import com.petrolpark.core.team.ITeam;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
@@ -49,12 +50,15 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.minecraft.Util;
 import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -106,8 +110,20 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, PetrolparkRegistries.Keys.TEAM_PROVIDER_TYPE, () -> new ITeam.ProviderType(codec, streamCodec));
     };
 
+    public RegistryEntry<Attribute, Attribute> attribute(String name, NonNullFunction<String, Attribute> factory) {
+        return simple(name, Registries.ATTRIBUTE, () -> factory.apply(name));
+    };
+
     public <C extends CriterionTrigger<?>> RegistryEntry<CriterionTrigger<?>, C> criterionTrigger(String name, NonNullSupplier<C> triggerFactory) {
         return simple(name, Registries.TRIGGER_TYPE, triggerFactory);
+    };
+
+    public <PREDICATE extends ItemSubPredicate> RegistryEntry<ItemSubPredicate.Type<?>, ItemSubPredicate.Type<PREDICATE>> itemSubPredicateType(String name, Codec<PREDICATE> codec) {
+        return simple(name, Registries.ITEM_SUB_PREDICATE_TYPE, () -> new ItemSubPredicate.Type<>(codec));
+    };
+
+    public <PREDICATE extends EntitySubPredicate> RegistryEntry<MapCodec<? extends EntitySubPredicate>, MapCodec<PREDICATE>> entitySubPredicateType(String name, MapCodec<PREDICATE> codec) {
+        return simple(name, Registries.ENTITY_SUB_PREDICATE_TYPE, () -> codec);
     };
 
     public RegistryEntry<LootItemConditionType, LootItemConditionType> lootConditionType(String name, MapCodec<? extends LootItemCondition> codec) {
@@ -205,34 +221,34 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     public class SharedFeatureBuilderCallback implements BuilderCallback {
 
-        protected final SharedFeatures feature;
+        protected final SharedFeatureFlag featureFlag;
 
-        public SharedFeatureBuilderCallback(SharedFeatures feature) {
-            this.feature = feature;
+        public SharedFeatureBuilderCallback(SharedFeatureFlag featureFlag) {
+            this.featureFlag = featureFlag;
         };
 
         @Override
         public <R, T extends R> RegistryEntry<R, T> accept(@Nonnull String name, @Nonnull ResourceKey<? extends Registry<R>> type, @Nonnull Builder<R, T, ?, ?> builder, @Nonnull NonNullSupplier<? extends T> factory, @Nonnull NonNullFunction<DeferredHolder<R, T>, ? extends RegistryEntry<R, T>> entryFactory) {
-            if (feature.enabled()) return PetrolparkRegistrate.super.accept(name, type, builder, factory, entryFactory);
+            if (featureFlag.enabled()) return PetrolparkRegistrate.super.accept(name, type, builder, factory, entryFactory);
             return entryFactory.apply(DeferredHolder.create(type, ResourceLocation.fromNamespaceAndPath(getModid(), name))); // Create entry but do not register it
         };
 
     };
 
-    protected <R, T extends R, P, S2 extends Builder<R, T, P, S2>> S2 sharedEntry(SharedFeatures feature, @Nonnull String name, @Nonnull NonNullFunction<BuilderCallback, S2> factory) {
-        return factory.apply(new SharedFeatureBuilderCallback(feature));
+    protected <R, T extends R, P, S2 extends Builder<R, T, P, S2>> S2 sharedEntry(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BuilderCallback, S2> factory) {
+        return factory.apply(new SharedFeatureBuilderCallback(featureFlag));
     };
 
-    public <T extends BlockEntity> BlockEntityBuilder<T, PetrolparkRegistrate> sharedBlockEntity(SharedFeatures feature, String name, BlockEntityFactory<T> factory) {
-        return sharedEntry(feature, name, callback -> BlockEntityBuilder.create(this, this, name, callback, factory));
+    public <T extends BlockEntity> BlockEntityBuilder<T, PetrolparkRegistrate> sharedBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {
+        return sharedEntry(featureFlag, name, callback -> SharedBlockEntityBuilder.create(this, this, featureFlag, name, callback, factory));
     };
 
-    public <T extends Block, P> BlockBuilder<T, PetrolparkRegistrate> sharedBlock(SharedFeatures feature, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
-        return sharedEntry(feature, name, callback -> SharedBlockBuilder.create(this, this, feature, name, callback, factory));
+    public <T extends Block, P> BlockBuilder<T, PetrolparkRegistrate> sharedBlock(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
+        return sharedEntry(featureFlag, name, callback -> SharedBlockBuilder.create(this, this, featureFlag, name, callback, factory));
     };
 
-    public <T extends Item, P> ItemBuilder<T, P> sharedItem(P parent, SharedFeatures feature, String name, NonNullFunction<Item.Properties, T> factory) {
-        return sharedEntry(feature, name, callback -> ItemBuilder.create(this, parent, name, callback, factory));
+    public <T extends Item, P> ItemBuilder<T, P> sharedItem(P parent, SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
+        return sharedEntry(featureFlag, name, callback -> ItemBuilder.create(this, parent, name, callback, factory));
     };
     
 };

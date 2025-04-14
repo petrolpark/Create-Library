@@ -9,6 +9,7 @@ import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.badge.Badges;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.core.recipe.ingredient.randomizer.PetrolparkIngredientRandomizerTypes;
@@ -20,8 +21,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
@@ -48,11 +49,12 @@ public class Petrolpark {
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
 
         // Config
-        modContainer.registerConfig(ModConfig.Type.SERVER, PetrolparkConfig.serverSpec);
+        PetrolparkConfigs.register(ModLoadingContext.get(), modContainer);
 
         // Registration
         PetrolparkPackets.register();
         PetrolparkDataComponents.register(modEventBus);
+        PetrolparkAttributes.register();
         PetrolparkAttachmentTypes.register(modEventBus);
         Badges.register();
         IPetrolparkRecipeTypes.register(modEventBus);
@@ -63,6 +65,7 @@ public class Petrolpark {
         // Registration - data/loot
         PetrolparkDataLoadingConditions.register();
         PetrolparkCriteriaTriggers.register();
+        PetrolparkDataSubPredicates.register();
         PetrolparkLootConditionTypes.register();
         PetrolparkLootItemFunctions.register();
         PetrolparkNumberProviderTypes.register();

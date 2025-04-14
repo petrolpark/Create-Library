@@ -11,11 +11,22 @@ import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
 @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public enum PetrolparkKeys {
     
+	// Tubes
     TUBE_BUILD("tube.build", GLFW.GLFW_KEY_ENTER),
     TUBE_DELETE_CONTROL_POINT("tube.delete_control_point", GLFW.GLFW_KEY_BACKSPACE),
     TUBE_ADD_CONTROL_POINT_AFTER("tube.add_control_point_after", GLFW.GLFW_KEY_EQUAL),
     TUBE_ADD_CONTROL_POINT_BEFORE("tube.add_control_point_before", GLFW.GLFW_KEY_MINUS),
-    TUBE_CANCEL("tube.cancel", GLFW.GLFW_KEY_X)
+    TUBE_CANCEL("tube.cancel", GLFW.GLFW_KEY_X),
+
+	// Extended Hotbar
+	HOTBAR_SLOT_9("hotbar.10", GLFW.GLFW_KEY_0),
+	HOTBAR_SLOT_10("hotbar.11", GLFW.GLFW_KEY_MINUS),
+	HOTBAR_SLOT_11("hotbar.12", GLFW.GLFW_KEY_EQUAL),
+	HOTBAR_SLOT_12("hotbar.13", -1),
+	HOTBAR_SLOT_13("hotbar.14", -1),
+	HOTBAR_SLOT_14("hotbar.15", -1),
+	HOTBAR_SLOT_15("hotbar.16", -1),
+	HOTBAR_SLOT_16("hotbar.17", -1);
     ;
 
 	public KeyMapping keybind;

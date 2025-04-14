@@ -7,19 +7,19 @@ import net.minecraft.world.level.block.Block;
 
 public class SharedFeatureBlockItem extends BlockItem implements ISharedFeature {
 
-    public static final NonNullBiFunction<Block, Properties, SharedFeatureBlockItem> of(SharedFeatures feature) {
-        return (block, properties) -> new SharedFeatureBlockItem(block, properties, feature);
+    public static final NonNullBiFunction<Block, Properties, SharedFeatureBlockItem> of(SharedFeatureFlag featureFlag) {
+        return (block, properties) -> new SharedFeatureBlockItem(block, properties, featureFlag);
     };
 
-    public final SharedFeatures feature;
+    public final SharedFeatureFlag feature;
 
-    public SharedFeatureBlockItem(Block block, Properties properties, SharedFeatures feature) {
+    public SharedFeatureBlockItem(Block block, Properties properties, SharedFeatureFlag feature) {
         super(block, properties);
         this.feature = feature;
     };
 
     @Override
-    public SharedFeatures getSharedFeature() {
+    public SharedFeatureFlag getSharedFeatureFlag() {
         return feature;
     };
     

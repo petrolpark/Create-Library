@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.petrolpark.PetrolparkConfig;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
 
@@ -46,7 +46,7 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
     public void inCreateResult(CallbackInfo ci, SmithingRecipeInput smithingrecipeinput, List<SmithingRecipe> list, RecipeHolder<SmithingRecipe> recipeHolder, ItemStack result) {
-        if (PetrolparkConfig.SERVER.smithingPropagatesContaminants.get()) {
+        if (PetrolparkConfigs.server().smithingPropagatesContaminants.get()) {
             ItemContamination.perpetuateSingle(Stream.of(inputSlots.getItem(1), inputSlots.getItem(2)), result);
         };
         ItemDecay.startDecay(result);

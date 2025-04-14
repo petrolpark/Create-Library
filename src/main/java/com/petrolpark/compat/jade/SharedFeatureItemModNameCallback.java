@@ -4,7 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.SharedFeatures;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.world.item.ItemStack;
@@ -15,8 +15,8 @@ public class SharedFeatureItemModNameCallback implements JadeItemModNameCallback
     @Override
     public @Nullable String gatherItemModName(ItemStack stack) {
         if (stack.getItem() instanceof ISharedFeature sharedFeature) {
-            SharedFeatures feature = sharedFeature.getSharedFeature();
-            if (feature.enabled()) return Lang.shortList(feature.streamUsers().map(Mods::getName).toArray(i -> new String[i]));
+            SharedFeatureFlag featureFlag = sharedFeature.getSharedFeatureFlag();
+            if (featureFlag.enabled()) return Lang.shortList(featureFlag.streamUsers().map(Mods::getName).toArray(i -> new String[i]));
         };
         return null;
     };

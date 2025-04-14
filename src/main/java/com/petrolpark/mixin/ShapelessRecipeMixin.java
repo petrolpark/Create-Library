@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import com.petrolpark.PetrolparkConfig;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.contamination.recipe.IHandleContaminationMyselfRecipe;
 import com.petrolpark.core.item.decay.ItemDecay;
@@ -28,12 +28,12 @@ public abstract class ShapelessRecipeMixin implements IHandleContaminationMyself
     )
     public void inAssemble(CraftingInput input, HolderLookup.Provider registries, CallbackInfoReturnable<ItemStack> cir) {
         ItemDecay.startDecay(cir.getReturnValue());
-        if (PetrolparkConfig.SERVER.shapelessCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(input.items().stream(), cir.getReturnValue());
+        if (PetrolparkConfigs.server().shapelessCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(input.items().stream(), cir.getReturnValue());
     };
 
     @Override
     public boolean isContaminationHandled(CraftingInput input, HolderLookup.Provider registrie) {
-        return PetrolparkConfig.SERVER.shapelessCraftingPropagatesContaminants.get();
+        return PetrolparkConfigs.server().shapelessCraftingPropagatesContaminants.get();
     };
     
 

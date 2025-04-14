@@ -2,20 +2,21 @@ package com.petrolpark.core.item.decay.ageing;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.PetrolparkRecipeTypes;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.item.decay.ItemDecay;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 
 public interface AgeingContainerWrapper extends Container {
 
     public static boolean ageingInVanillaBarrelsEnabled() {
-        return PetrolparkConfig.SERVER.ageingInVanillaBarrels.getAsBoolean();
+        return PetrolparkConfigs.server().ageingInVanillaBarrels.get();
     };
 
     public static boolean isAgeingContainer(Container container) {
@@ -40,13 +41,13 @@ public interface AgeingContainerWrapper extends Container {
     };
 
     public static ItemStack withAgeingDecayRemoved(Level level, ItemStack stack) {
-        level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.AGEING.getType(), new AgeingRecipe.Input(stack), level).stream().findAny()
+        level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.AGEING.getType(), new SingleRecipeInput(stack), level).stream().findAny()
             .ifPresent(rh -> ItemDecay.removeAppliedDecay(stack));
         return checkDecay(level, stack);
     };
 
     public static ItemStack withAgeingDecay(Level level, ItemStack stack, boolean startDecay) {
-        AgeingRecipe.Input input = new AgeingRecipe.Input(stack);
+        SingleRecipeInput input = new SingleRecipeInput(stack);
         return checkDecay(level, level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.AGEING.getType(), input, level).stream().findAny()
             .map(RecipeHolder::value)
             .map(AgeingRecipe::cast)

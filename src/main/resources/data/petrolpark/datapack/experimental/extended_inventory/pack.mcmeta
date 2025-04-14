@@ -1,0 +1,13 @@
+{
+    "features": {
+        "enabled": [
+            "petrolpark:extended_inventory"
+        ]
+    },
+    "pack": {
+    "description": {
+      "translate": "petrolpark.dataPack.extended_inventory.description"
+    },
+    "pack_format": 48
+  }
+}

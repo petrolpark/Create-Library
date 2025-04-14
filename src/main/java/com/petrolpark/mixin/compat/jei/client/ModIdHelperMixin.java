@@ -12,7 +12,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.SharedFeatures;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.util.Lang;
 
 import mezz.jei.api.helpers.IModIdHelper;
@@ -36,8 +36,8 @@ public abstract class ModIdHelperMixin implements IModIdHelper {
     @SuppressWarnings("rawtypes")
     public String wrapGetDisplayModId(IIngredientHelper instance, Object ingredient, Operation<String> original) {
         if (ingredient instanceof ItemStack stack && stack.getItem() instanceof ISharedFeature sharedFeature) {
-            SharedFeatures feature = sharedFeature.getSharedFeature();
-            if (feature.enabled()) return SHARED_FEATURE_ID_KEY + DELIMITER + feature.streamUsers().map(Mods::getId).collect(Collectors.joining(DELIMITER));
+            SharedFeatureFlag featureFlag = sharedFeature.getSharedFeatureFlag();
+            if (featureFlag.enabled()) return SHARED_FEATURE_ID_KEY + DELIMITER + featureFlag.streamUsers().map(Mods::getId).collect(Collectors.joining(DELIMITER));
         };
         return original.call(instance, ingredient);
     };

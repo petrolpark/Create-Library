@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.petrolpark.PetrolparkConfig;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehaviour;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.core.contamination.IContamination;
@@ -96,7 +96,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
     )
     public void inApplyRecipeEnd(CallbackInfo ci, Optional<RecipeHolder<ProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> list) {
         list.forEach(ItemDecay::startDecay);
-        if (PetrolparkConfig.SERVER.createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
+        if (PetrolparkConfigs.server().createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
             IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
             Level level = getLevel();
             if (level != null) list.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));

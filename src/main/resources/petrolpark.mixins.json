@@ -9,6 +9,7 @@
         "compat.create.BasinBlockEntityMixin",
         "compat.create.BasinBlockMixin",
         "compat.create.BasinRecipeMixin",
+        "compat.create.BuiltInRegistriesMixin",
         "compat.create.BeltInventoryMixin",
         "compat.create.ContraptionMixin",
         "compat.create.CrushingWheelBlockEntityMixin",

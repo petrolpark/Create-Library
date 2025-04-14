@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.petrolpark.PetrolparkConfig;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
@@ -28,7 +28,7 @@ public class RecipeApplierMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
     private static void inApplyRecipeOn(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir, List<ItemStack> stacks) {
-        if (PetrolparkConfig.SERVER.createOtherRecipesPropagateContaminants.get()) {
+        if (PetrolparkConfigs.server().createOtherRecipesPropagateContaminants.get()) {
             IContamination<?, ?> inputContamination = ItemContamination.get(stackIn);
             stacks.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
         };

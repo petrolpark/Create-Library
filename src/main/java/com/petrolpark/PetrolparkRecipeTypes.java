@@ -11,6 +11,9 @@ import com.petrolpark.core.item.decay.DecayingItemCookingRecipe;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
+import com.petrolpark.core.recipe.recycling.DirectRecyclingRecipe;
+import com.petrolpark.core.recipe.recycling.IRecyclingRecipe;
+import com.petrolpark.core.recipe.recycling.IngredientRecyclingRecipe;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.resources.ResourceLocation;
@@ -25,7 +28,12 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
 
     AGEING(AgeingRecipe.class, AgeingRecipe.Serializer::new),
+
+    RECYCLING(DirectRecyclingRecipe.class, IRecyclingRecipe.serializer(DirectRecyclingRecipe::new)),
+    INGREDIENT_RECYCLING(IngredientRecyclingRecipe.class, IRecyclingRecipe.serializer(IngredientRecyclingRecipe::new)),
+
     DECAYING_ITEM_COOKING(() -> DecayingItemCookingRecipe.SERIALIZER, () -> null, false), //TODO remove null
+    
     MANUAL_ONLY_CRAFTING_SHAPED(ManualOnlyShapedRecipe.Serializer::new, () -> RecipeType.CRAFTING),
     CONTAMINATED_ITEM_COMBINATION(() -> CombineContaminatedItemsRecipe.SERIALIZER, () -> RecipeType.CRAFTING),
     BADGE_DUPLICATION(() -> BadgeDuplicationRecipe.BADGE_DUPLICATION, () -> RecipeType.CRAFTING),

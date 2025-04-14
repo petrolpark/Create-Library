@@ -4,6 +4,8 @@ import com.petrolpark.core.actionrecord.ActionRecordEntryResult;
 import com.petrolpark.core.actionrecord.packet.entrant.ICustomPacketPayloadEntrant;
 import com.petrolpark.core.actionrecord.packet.entrant.PacketEntrants;
 import com.petrolpark.core.actionrecord.packet.recordable.RecordablePacketPayload;
+import com.petrolpark.core.extendedinventory.ExtraInventorySizeChangePacket;
+import com.petrolpark.core.extendedinventory.RequestInventoryFullStatePacket;
 import com.petrolpark.core.team.packet.BindTeamBlockPacket;
 import com.petrolpark.core.team.packet.BindTeamItemPacket;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeamComponentChangedPacket;
@@ -21,11 +23,13 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
 	// Client -> server
     BIND_TEAM_ITEM(BindTeamItemPacket.class, BindTeamItemPacket.STREAM_CODEC),
     BIND_TEAM_BLOCK(BindTeamBlockPacket.class, BindTeamBlockPacket.STREAM_CODEC),
+	REQUEST_INVENTORY_FULL_STATE(RequestInventoryFullStatePacket.class, RequestInventoryFullStatePacket.STREAM_CODEC, false),
 
 	// Server -> client
 	SINGLE_PLAYER_TEAM_COMPONENT_CHANGED(SinglePlayerTeamComponentChangedPacket.class, SinglePlayerTeamComponentChangedPacket.STREAM_CODEC, false),
     SCOREBOARD_TEAM_COMPONENT_CHANGED(ScoreboardTeamComponentChangedPacket.class, ScoreboardTeamComponentChangedPacket.STREAM_CODEC, false),
-    ;
+    EXTRA_INVENTORY_SIZE_CHANGE(ExtraInventorySizeChangePacket.class, ExtraInventorySizeChangePacket.STREAM_CODEC, false),
+	;
 
     private final CatnipPacketRegistry.PacketType<?> type;
 	private final boolean recordable;

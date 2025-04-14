@@ -3,10 +3,8 @@ package com.petrolpark;
 import java.util.Optional;
 import java.util.function.Function;
 
-import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus;
 
-import com.petrolpark.compat.create.core.dough.Dough;
-import com.petrolpark.compat.create.core.dough.DoughCut;
 import com.petrolpark.core.badge.Badge;
 import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.data.loot.numberprovider.entity.LootEntityNumberProviderType;
@@ -108,12 +106,14 @@ public class PetrolparkRegistries {
     public static final Registry<EntityRewardType> ENTITY_REWARD_TYPES = simple(Keys.ENTITY_REWARD_TYPE);
     public static final Registry<TeamRewardType> TEAM_REWARD_TYPES = simple(Keys.TEAM_REWARD_TYPE);
 
-    private static <T> Registry<T> simple(ResourceKey<Registry<T>> key) {
+    @ApiStatus.Internal
+    public static <T> Registry<T> simple(ResourceKey<Registry<T>> key) {
         return register(key, false);
     };
 
+    @ApiStatus.Internal
     @SuppressWarnings({"deprecation", "unchecked", "rawtypes"})
-	private static <T> Registry<T> register(ResourceKey<Registry<T>> key, boolean hasIntrusiveHolders) {
+	public static <T> Registry<T> register(ResourceKey<Registry<T>> key, boolean hasIntrusiveHolders) {
 		RegistryBuilder<T> builder = new RegistryBuilder<>(key).sync(true);
 
 		if (hasIntrusiveHolders) builder.withIntrusiveHolders();
@@ -123,7 +123,7 @@ public class PetrolparkRegistries {
 		return registry;
 	};
 
-	@Internal
+	@ApiStatus.Internal
 	public static void init() {
 		// make sure the class is loaded.
 		// this method is called at the tail of BuiltInRegistries, injected by BuiltInRegistriesMixin.
@@ -155,11 +155,6 @@ public class PetrolparkRegistries {
         // Shops
         public static final ResourceKey<Registry<Shop>> SHOP = key("shop");
         public static final ResourceKey<Registry<ShopOfferGenerator>> SHOP_OFFER_GENERATOR = key("shop_offer_generator");
-
-        // Dough
-        //TODO move to Create compat directory
-        public static final ResourceKey<Registry<Dough>> DOUGH = key("dough"); // Data
-        public static final ResourceKey<Registry<DoughCut>> DOUGH_CUT = key("dough_cut"); // Data
 
         private static <T> ResourceKey<Registry<T>> key(String name) {
 		    return ResourceKey.createRegistryKey(Petrolpark.asResource(name));

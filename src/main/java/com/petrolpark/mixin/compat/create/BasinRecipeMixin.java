@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.petrolpark.PetrolparkConfig;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -50,7 +50,7 @@ public class BasinRecipeMixin {
         if (simulate) {
             recipeOutputItems.forEach(ItemDecay::startDecay);
 
-            if (PetrolparkConfig.SERVER.createBasinRecipesPropagateContaminants.get()) {
+            if (PetrolparkConfigs.server().createBasinRecipesPropagateContaminants.get()) {
                 ItemStack[] itemInputs = new ItemStack[availableItems.getSlots()];
                 for (int slot = 0; slot < availableItems.getSlots(); slot++) {
                     itemInputs[slot] = availableItems.getStackInSlot(slot).copyWithCount(extractedItemsFromSlot[slot]);
@@ -63,7 +63,7 @@ public class BasinRecipeMixin {
                 };
 
                 Level level = basin.getLevel();
-                if (level != null) IContamination.perpetuate(Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfig.SERVER.createFluidContaminantWeight.get(), recipeOutputItems.stream(), recipeOutputFluids.stream());
+                if (level != null) IContamination.perpetuate(Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfigs.server().createFluidContaminantWeight.get(), recipeOutputItems.stream(), recipeOutputFluids.stream());
             };
         };
     };

@@ -3,7 +3,7 @@ package com.petrolpark.compat.create.core.dough;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.compat.create.CreateRegistries;
 import com.petrolpark.util.NBTHelper;
 
 import net.minecraft.nbt.CompoundTag;
@@ -16,7 +16,7 @@ public class DoughBall {
     public static final float THICKNESS_AREA_SCALE = 4f; // One tile of width/length is four units of thickness
     
     // Defining fields
-    public final Dough dough;
+    public final DoughType dough;
     protected float thickness = 4f;
     protected byte width = 1;
     protected byte length = 1;
@@ -25,7 +25,7 @@ public class DoughBall {
     // Internal fields
     protected int cutTiles = 0;
 
-    public DoughBall(Dough dough, float thickness, byte width, byte length, List<CutEntry> cuts) {
+    public DoughBall(DoughType dough, float thickness, byte width, byte length, List<CutEntry> cuts) {
         this.dough = dough;
         this.thickness = thickness;
         this.width = width;
@@ -35,7 +35,7 @@ public class DoughBall {
     };
 
     public DoughBall(CompoundTag tag) {
-        this(NBTHelper.readRegistryObject(tag, "Dough", PetrolparkRegistries.Keys.DOUGH), tag.getFloat("Thickness"), tag.getByte("Width"), tag.getByte("Length"), NBTHelper.readCompoundList(tag.getList("Cuts", Tag.TAG_COMPOUND), CutEntry::new));
+        this(NBTHelper.readRegistryObject(tag, "Dough", CreateRegistries.Keys.DOUGH_TYPE), tag.getFloat("Thickness"), tag.getByte("Width"), tag.getByte("Length"), NBTHelper.readCompoundList(tag.getList("Cuts", Tag.TAG_COMPOUND), CutEntry::new));
     };
 
     public static DoughBall get(ItemStack stack) {
@@ -51,7 +51,7 @@ public class DoughBall {
     public record CutEntry(DoughCut cut, byte x, byte y, Rotation rotation) {
 
         public CutEntry(CompoundTag tag) {
-            this(NBTHelper.readRegistryObject(tag, "Shape", PetrolparkRegistries.Keys.DOUGH_CUT), tag.getByte("x"), tag.getByte("y"), NBTHelper.readEnum(tag, "Rotation", Rotation.class));
+            this(NBTHelper.readRegistryObject(tag, "Shape", CreateRegistries.Keys.DOUGH_CUT), tag.getByte("x"), tag.getByte("y"), NBTHelper.readEnum(tag, "Rotation", Rotation.class));
         };
     };
 };

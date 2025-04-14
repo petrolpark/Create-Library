@@ -3,18 +3,18 @@ package com.petrolpark.core.data.condition;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.compat.SharedFeatures;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.util.CodecHelper;
 
 import net.neoforged.neoforge.common.conditions.ICondition;
 
-public record SharedFeatureEnabledCondition(SharedFeatures feature) implements ICondition {
+public record SharedFeatureEnabledCondition(SharedFeatureFlag featureFlag) implements ICondition {
 
-    public static final MapCodec<SharedFeatureEnabledCondition> CODEC = CodecHelper.singleFieldMap(SharedFeatures.CODEC, "feature", SharedFeatureEnabledCondition::feature, SharedFeatureEnabledCondition::new);
+    public static final MapCodec<SharedFeatureEnabledCondition> CODEC = CodecHelper.singleFieldMap(SharedFeatureFlag.CODEC, "feature", SharedFeatureEnabledCondition::featureFlag, SharedFeatureEnabledCondition::new);
 
     @Override
     public boolean test(@Nonnull IContext context) {
-        return feature.enabled();
+        return featureFlag.enabled();
     };
 
     @Override

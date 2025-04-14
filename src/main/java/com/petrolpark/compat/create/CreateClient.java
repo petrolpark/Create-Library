@@ -17,5 +17,7 @@ public class CreateClient {
         modEventBus.register(CreateClientModEvents.class);
         forgeEventBus.register(CreateClientEvents.class);
         forgeEventBus.register(ClientTubePlacementHandler.class);
+
+        PetrolparkPartialModels.register();
     };
 };

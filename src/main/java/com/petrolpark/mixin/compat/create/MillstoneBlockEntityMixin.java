@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.PetrolparkConfig;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehaviour;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.core.contamination.IContamination;
@@ -94,7 +94,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
             results = lastRecipe.rollResults();
         };
 
-        if (PetrolparkConfig.SERVER.createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
+        if (PetrolparkConfigs.server().createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
             IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
             Level level = getLevel();
             if (level != null) results.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));

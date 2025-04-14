@@ -34,13 +34,14 @@
     "biome.petrolpark.unknown": "Unknown Biome",
 
     "block.petrolpark.basin_lid": "Basin Lid",
+    "block.petrolpark.mandrel": "Mandrel",
     "block.petrolpark.tube": "Tube Segment",
 
-    "commands.petrolpark.contaminate.failed": "Nothing changed. Targets either have no item in their hands or the contaminant could not be applied",
+    "commands.petrolpark.contaminate.failed": "Nothing changed. Targets either have no item in their hands or the Contaminant could not be applied",
     "commands.petrolpark.contaminate.failed.entity": "%s is not a valid entity for this command",
     "commands.petrolpark.contaminate.failed.itemless": "%s is not holding any item",
-    "commands.petrolpark.contaminate.success.multiple": "Applied contaminant %s to %s entities",
-    "commands.petrolpark.contaminate.success.single": "Applied contaminant %s to %s's item",
+    "commands.petrolpark.contaminate.success.multiple": "Applied Contaminant %s to %s entities' items",
+    "commands.petrolpark.contaminate.success.single": "Applied Contaminant %s to %s's item",
 
     "config.jade.plugin_petrolpark.contamination": "Contamination",
 
@@ -89,6 +90,12 @@
     "minecraft.packet.use_item_on": "Use item in %1$s on %2$s of block at %3$s",
     "minecraft.packet.use_item": "Use item in %1$s facing (%2$s° / %3$s°)",
 
+    "petrolpark.dataPack.extended_inventory.description": "Enables experimental, indev features allowing mods to add more inventory and hotbar slots",
+    "petrolpark.dataPack.extended_inventory.name": "Petrolpark's Extended Inventory",
+    "petrolpark.dataPack.extended_inventory.intro": "This world has enabled experimental Extended Inventory features. ",
+    "petrolpark.dataPack.extended_inventory.report_bugs": "Click here to report any bugs you experience. ",
+    "petrolpark.dataPack.extended_inventory.safe_mode": "If you want to be a big help, disable safe mode (click here) and report any modded menus that do / don't cause issues, so they can be tagged as working / not working in safe mode.",
+
     "petrolpark.generic.action.start_destroy_block": "Start breaking block at %1$s",
     "petrolpark.generic.action.abort_destroy_block": "Stop breaking block at %1$s",
     "petrolpark.generic.action.stop_destroy_block": "Break block at %1$s",
@@ -117,11 +124,20 @@
     "petrolpark.generic.list.comma": "%1$s, %2$s",
     "petrolpark.generic.list.none": "None",
 
+    "petrolpark.key.hotbar.10": "Hotbar Slot 10",
+    "petrolpark.key.hotbar.11": "Hotbar Slot 11",
+    "petrolpark.key.hotbar.12": "Hotbar Slot 12",
+    "petrolpark.key.hotbar.13": "Hotbar Slot 13",
+    "petrolpark.key.hotbar.14": "Hotbar Slot 14",
+    "petrolpark.key.hotbar.15": "Hotbar Slot 15",
+    "petrolpark.key.hotbar.16": "Hotbar Slot 16",
+    "petrolpark.key.hotbar.17": "Hotbar Slot 17",
     "petrolpark.key.tube.build": "Confirm tube construction",
     "petrolpark.key.tube.delete_control_point": "Delete tube node",
     "petrolpark.key.tube.add_control_point_after": "Add tube node (after)",
     "petrolpark.key.tube.add_control_point_before": "Add tube node (before)",
     "petrolpark.key.tube.cancel": "Cancel tube construction",
+    
 
     "petrolpark.packet.unsupported": "Unknown Action",
     "petrolpark.packet.unsupported.advanced": "Unknown Packet Type: %1$s",

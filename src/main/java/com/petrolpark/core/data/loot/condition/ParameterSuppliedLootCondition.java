@@ -1,4 +1,4 @@
-package com.petrolpark.core.data.loot.predicate;
+package com.petrolpark.core.data.loot.condition;
 
 import java.util.Collection;
 import java.util.HashMap;

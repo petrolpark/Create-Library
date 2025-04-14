@@ -13,6 +13,8 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -106,6 +108,30 @@ public class PetrolparkTags {
 
         public boolean matches(BlockEntityType<?> blockEntityType) {
             return PetrolparkRegistries.getHolder(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType).orElseThrow().is(tag);
+        };
+    };
+
+    public enum RecipeTypes {
+
+        RECYCLABLE,
+        ;
+
+        public final TagKey<RecipeType<?>> tag;
+
+        RecipeTypes() {
+            tag = TagKey.create(Registries.RECIPE_TYPE, Petrolpark.asResource(Lang.asId(name())));
+        };
+
+        public boolean matches(Holder<RecipeType<?>> holder) {
+            return holder.is(tag);
+        };
+
+        public boolean matches(RecipeType<?> recipeType) {
+            return PetrolparkRegistries.getHolder(BuiltInRegistries.RECIPE_TYPE, recipeType).map(this::matches).orElse(false);
+        };
+
+        public boolean matches(Recipe<?> recipe) {
+            return matches(recipe.getType());
         };
     };
     

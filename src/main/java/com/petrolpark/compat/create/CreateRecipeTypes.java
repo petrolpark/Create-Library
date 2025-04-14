@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.compat.create.common.processing.mandrel.MandrelRecipe;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.util.Lang;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
@@ -21,6 +22,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo {
 
+    MANDREL(MandrelRecipe.Serializer::new)
     //FIRST_TIME_LUCKY_MILLING(FTLMillingRecipe::new, AllRecipeTypes.MILLING::getType),
     ;
 
