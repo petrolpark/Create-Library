@@ -1,0 +1,99 @@
+{
+    "badge.destroy.patreon_1": "破壊の淑女",
+    "badge.destroy.patreon_1.description": "DestroyをPatreonの最初のティアで支援する",
+    "badge.destroy.patreon_2": "破壊の公爵",
+    "badge.destroy.patreon_2.description": "7.77メートルを完走してDestroyをPatreonの2番目のティアで支援する",
+    "badge.destroy.patreon_3": "破壊神",
+    "badge.destroy.patreon_3.description": "DestroyをPatreonの最高ティアで支援して究極のサポートを示す",
+
+    "badge.petrolpark.beta_tester": "ベータテスター",
+    "badge.petrolpark.beta_tester.description": "petrolparkのModの今後の機能をテストするのを手伝う",
+    "badge.petrolpark.bestie": "親友",
+    "badge.petrolpark.bestie.description": "親友になる",
+    "badge.petrolpark.competition_winner": "勝者、夕食はチキン",
+    "badge.petrolpark.competition_winner.description": "コミュニティイベントで優勝する",
+    "badge.petrolpark.content_creator": "収益化停止",
+    "badge.petrolpark.content_creator.description": "コンテンツクリエイターとしてpetrolparkのModを無料で紹介し、宣伝する",
+    "badge.petrolpark.developer": "開発者",
+    "badge.petrolpark.developer.description": "petrolparkのModのコードまたはアートを作成する",
+    "badge.petrolpark.early_bird": "早起きは三文の徳",
+    "badge.petrolpark.early_bird.description": "petrolparkのModのメジャーアップデートをプレイする最初の1000人になる",
+    "badge.petrolpark.nitro": "CH\u2083NO\u2082",
+    "badge.petrolpark.nitro.description": "DiscordサーバーをNitroでブーストする",
+    "badge.petrolpark.suggestion": "良い提案",
+    "badge.petrolpark.suggestion.description": "最終的に実装されるpetrolparkのModに新しいアイデアを提供する",
+    "badge.petrolpark.translator": "巧妙な言語学者",
+    "badge.petrolpark.translator.description": "petrolparkのModのローカライズに大きく貢献する",
+
+    "biome.petrolpark.unknown": "未知のバイオーム",
+
+    "commands.petrolpark.contaminate.failed": "何も変更されませんでした。対象がアイテムを手に持っていないか、汚染物質を適用できませんでした",
+    "commands.petrolpark.contaminate.failed.entity": "%s はこのコマンドの有効なエンティティではありません",
+    "commands.petrolpark.contaminate.failed.itemless": "%s は何もアイテムを持っていません",
+    "commands.petrolpark.contaminate.success.multiple": "汚染物質 %sを %s 個のエンティティに適用しました",
+    "commands.petrolpark.contaminate.success.single": "汚染物質 %s を %s のアイテムに適用しました",
+
+    "config.jade.plugin_petrolpark.contamination": "汚染",
+
+    "contaminant.petrolpark.example_child": "例 (子)",
+    "contaminant.petrolpark.example_child.absent": "例なし (子)",
+    "contaminant.petrolpark.example_parent": "例 (親)",
+    "contaminant.petrolpark.example_parent.absent": "例なし (親)",
+
+    "create.item_attributes.has_contaminant": "汚染物質: %s",
+    "create.item_attributes.has_contaminant.inverted": "汚染物質: %s を持っていない",
+
+    "curios.identifier.petrolpark_badge": "バッジ",
+
+    "effect.petrolpark.numbness": "麻痺",
+    "effect.petrolpark.numbness.description": "Mobは他のMobからダメージを受けても気づかず、反応しません。",
+
+    "item.petrolpark.badge.awarded": "%1$s に %2$s に授与",
+    "item.petrolpark.badge.unknown": "これは本物のバッジではありません...",
+    "item.petrolpark.decaying_item.remaining": "%1$s で腐敗",
+    "item.petrolpark.menu": "メニュー",
+    "item.petrolpark.menu.team_selection": "この %1$s のチームを選択",
+
+    "petrolpark.generic.list.and": "%1$s と %2$s",
+    "petrolpark.generic.list.and_more": "%1$s とあと %2$s 個",
+    "petrolpark.generic.list.comma": "%1$s、%2$s",
+    "petrolpark.generic.list.none": "なし",
+
+    "petrolpark.key.tube.build": "チューブの建設を確定",
+    "petrolpark.key.tube.delete_control_point": "チューブノードを削除",
+    "petrolpark.key.tube.add_control_point_after": "チューブノードを追加 (後)",
+    "petrolpark.key.tube.add_control_point_before": "チューブノードを追加 (前)",
+    "petrolpark.key.tube.cancel": "チューブの建設をキャンセル",
+
+    "petrolpark.recipe.biome_specific": "以下のバイオームで行う必要があります:",
+    "petrolpark.recipe.item_decay": "アイテムの腐敗",
+    "petrolpark.recipe.manual_crafting": "手動のみのクラフト",
+
+    "petrolpark.tube.connect_another": "別の %1$s を設置して接続します",
+    "petrolpark.tube.title": "    %1$s %2$s を建設中",
+    "petrolpark.tube.control.build": "    [%1$s] 建設",
+    "petrolpark.tube.control.grab_control_point": "    [ドラッグ] ノードを移動",
+    "petrolpark.tube.control.move_control_point": "    [スクロール] 近づける/遠ざける",
+    "petrolpark.tube.control.delete_control_point": "    [%1$s] ノードを削除",
+    "petrolpark.tube.control.add_control_point_after": "    [%1$s] ノードを後に追加",
+    "petrolpark.tube.control.add_control_point_before": "    [%1$s] ノードを前に追加",
+    "petrolpark.tube.control.cancel": "    [%1$s] キャンセル",
+    "petrolpark.tube.result.success": "建設可能",
+    "petrolpark.tube.result.blocked": "ブロックが邪魔です",
+    "petrolpark.tube.result.too_sharp": "カーブが急すぎます",
+    "petrolpark.tube.result.too_long": "長すぎます",
+    "petrolpark.tube.result.too_short": "短すぎます",
+    "petrolpark.tube.result.too_big": "チューブが伸びすぎです",
+    "petrolpark.tube.result.points_too_close": "ノードが近すぎます",
+    "petrolpark.tube.result.too_poor": "%1$s が不足しています",
+    "petrolpark.tube.result.too_many_points": "制御点が多すぎます",
+    "petrolpark.tube.result.wrong_block": "これらの種類のブロックは接続できません",
+    "petrolpark.tube.result.wrong_face": "その面には接続できません",
+
+    "reward.petrolpark.xp": "経験値",
+
+    "shop.petrolpark.example": "ショップの例",
+    "shop.petrolpark.unknown": "不明なショップ",
+
+    "team.petrolpark.none": "チームなし"
+}
