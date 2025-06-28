@@ -38,6 +38,7 @@ public abstract class AbstractRememberPlacerBehaviour extends BlockEntityBehavio
     @Nullable
     public Player getPlayer() {
         if (playerUUID == null) return null;
+        if (getWorld() == null) return null;
         return getWorld().getPlayerByUUID(playerUUID);
     };
 
