@@ -40,7 +40,7 @@ public class PetrolparkMixinPlugin implements IMixinConfigPlugin {
      * @param requiredMods Mods upon which this Mixin depends
      */
     protected void requireMultipleMods(String mixinClassName, CompatMods ...requiredMods) {
-        String className = getMixinPackage()+".compat."+requiredMods[0]+"."+mixinClassName;
+        String className = getMixinPackage()+".compat."+requiredMods[0].id+"."+mixinClassName;
         shouldLoad.put(className, () -> {
             for (CompatMods mod : requiredMods) if (!mod.isLoading()) return false;
             return true;
