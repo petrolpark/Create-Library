@@ -1,6 +1,7 @@
 package com.petrolpark.core.data.loot.numberprovider.entity;
 
 import com.petrolpark.PetrolparkNumberProviderTypes;
+import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -12,6 +13,11 @@ public class ExperienceLevelNumberProvider implements EntityNumberProvider {
     public float getFloat(Entity entity, LootContext lootContext) {
         if (entity instanceof Player player) return player.experienceLevel;
         return 0f;
+    };
+
+    @Override
+    public NumberEstimate getEstimate() {
+        return NumberEstimate.ranged(0f, 100f, true);
     };
 
     @Override

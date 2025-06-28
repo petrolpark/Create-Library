@@ -10,6 +10,7 @@ import com.petrolpark.core.data.reward.entity.GiveItemEntityReward;
 import com.petrolpark.core.data.reward.entity.GiveLootEntityReward;
 import com.petrolpark.core.data.reward.entity.GrantExperiencePlayerReward;
 import com.petrolpark.core.data.reward.entity.UnlockTradeEntityReward;
+import com.petrolpark.core.data.reward.entity.VillagerGossipEntityReward;
 import com.petrolpark.core.data.reward.team.GrantShopXPTeamReward;
 import com.petrolpark.core.data.reward.team.MembersTeamReward;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
@@ -28,11 +29,12 @@ public class PetrolparkRewardTypes {
     GIVE_LOOT = REGISTRATE.entityRewardType("give_loot", GiveLootEntityReward.CODEC),
     GRANT_EXPERIENCE = REGISTRATE.entityRewardType("grant_experience", GrantExperiencePlayerReward.CODEC),
     UNLOCK_TRADE = REGISTRATE.entityRewardType("unlock_trade", UnlockTradeEntityReward.CODEC),
+    GOSSIP = REGISTRATE.entityRewardType("villager_gossip", VillagerGossipEntityReward.CODEC),
     ALL_TEAMS = REGISTRATE.entityRewardType("all_teams", null);
 
     public static final RegistryEntry<TeamRewardType, TeamRewardType>
 
-    MEMBERS = REGISTRATE.teamRewardType("null", MembersTeamReward.CODEC),
+    MEMBERS = REGISTRATE.teamRewardType("members", MembersTeamReward.CODEC),
     GRANT_SHOP_XP = REGISTRATE.teamRewardType("grant_shop_xp", GrantShopXPTeamReward.CODEC);
   
     public static final void register() {};

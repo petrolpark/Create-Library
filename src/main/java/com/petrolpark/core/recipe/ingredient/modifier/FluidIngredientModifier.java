@@ -32,5 +32,5 @@ public interface FluidIngredientModifier extends IIngredientModifier<FluidStack>
     };
 
     @Override
-    public IngredientModifierType<FluidStack> getType();
+    public NamedIngredientModifierType<FluidStack> getType();
 };

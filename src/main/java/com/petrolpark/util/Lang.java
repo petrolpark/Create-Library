@@ -1,17 +1,32 @@
 package com.petrolpark.util;
 
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Stream;
 
+import org.spongepowered.include.com.google.common.base.Strings;
+
+import net.minecraft.Util;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.ai.gossip.GossipType;
 import net.minecraft.world.inventory.ClickType;
+import net.neoforged.neoforge.common.Tags;
 
 public class Lang {
+
+    public static final DecimalFormat INT_DF = new DecimalFormat();
+    static {
+        INT_DF.setMinimumFractionDigits(0);
+        INT_DF.setMaximumFractionDigits(0);
+    };
     
     public static String asId(String string) {
         return string.toLowerCase(Locale.ROOT);
@@ -81,5 +96,78 @@ public class Lang {
 
     public static Component enabled(boolean enabled) {
         return enabled ? generic("enabled") : generic("disabled");
+    };
+
+    public static Component gossipType(GossipType type) {
+        return generic("gossip_type."+type.name());
+    };
+
+    public static Component tag(TagKey<?> tagKey) {
+		String tagTranslationKey = Tags.getTagTranslationKey(tagKey);
+		return Component.translatableWithFallback(tagTranslationKey, "#" + tagKey.location());
+	};
+
+    public static Component loot(ResourceLocation id) {
+        return Component.translatableWithFallback(Util.makeDescriptionId("loot_table", id), "" + id);
+    };
+
+    public static Component unknownRange() {
+        return generic("range.unknown");
+    };
+
+    public static Component range(float min, float max, DecimalFormat df) {
+        return range(min, max, false, df);
+    };
+
+    public static Component range(float min, float max, boolean approximate, DecimalFormat df) {
+        String postfix;
+        String[] args;
+        if (min == Float.NaN) {
+            if (max == Float.NaN) return unknownRange();
+            postfix = "range.at_most";
+            args = new String[]{df.format(max)};
+        } else if (max == Float.NaN) {
+            postfix = "range.at_least";
+            args = new String[]{df.format(min)};
+        } else {
+            postfix = "range";
+            args = new String[]{df.format(min), df.format(max)};
+        }
+        if (approximate) postfix += ".approximate";
+        return generic(postfix, (Object[])args);
+    };
+
+    public static class IndentedTooltipBuilder {
+
+        protected List<Component> components;
+        protected int indents = 0;
+
+        public IndentedTooltipBuilder(List<Component> components) {
+            this.components = components;
+        };
+
+        public IndentedTooltipBuilder indent() {
+            indents++;
+            return this;
+        };
+
+        public IndentedTooltipBuilder unindent() {
+            indents--;
+            return this;
+        };
+
+        public IndentedTooltipBuilder add(Component component) {
+            components.add(withIndent(component));
+            return this;
+        };
+
+        public IndentedTooltipBuilder addAll(Stream<Component> components) {
+            this.components.addAll(components.map(this::withIndent).toList());
+            return this;
+        };
+
+        protected Component withIndent(Component unindentedComponent) {
+            return Component.literal(Strings.repeat(" ", indents)).append(unindentedComponent);
+        };
     };
 };

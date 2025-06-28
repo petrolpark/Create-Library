@@ -9,9 +9,9 @@ import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.core.data.reward.team.ITeamReward;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.util.CodecHelper;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.neoforged.api.distmarker.Dist;
@@ -27,10 +27,12 @@ public record ContextTeamReward(ITeamReward reward) implements IReward {
         reward.render(graphics);
     };
 
-    @OnlyIn(Dist.CLIENT)
     @Override
-    public Component getName() {
-        return reward.getName();
+    public void addToDescription(IndentedTooltipBuilder builder) {
+        builder.add(translateSimple());
+        builder.indent();
+        reward().addToDescription(builder);
+        builder.unindent();
     };
 
     @Override

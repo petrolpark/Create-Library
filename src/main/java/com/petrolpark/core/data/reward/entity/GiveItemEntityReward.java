@@ -5,9 +5,10 @@ import java.util.stream.Stream;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.PetrolparkRewardTypes;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -44,14 +45,13 @@ public class GiveItemEntityReward extends AbstractGiveItemsEntityReward {
     };
 
     @Override
-    public Component getName() {
-        return stack.getDisplayName();
-    }
+    public void addToDescription(IndentedTooltipBuilder builder) {
+        builder.add(translateSimple(stack.getDisplayName()));
+    };
 
     @Override
     public EntityRewardType getType() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getType'");
+        return PetrolparkRewardTypes.GIVE_ITEM.get();
     };
     
 };

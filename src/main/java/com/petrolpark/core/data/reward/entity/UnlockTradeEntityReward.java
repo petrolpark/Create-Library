@@ -3,9 +3,9 @@ package com.petrolpark.core.data.reward.entity;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkRewardTypes;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffer;
@@ -29,9 +29,16 @@ public record UnlockTradeEntityReward(MerchantOffer trade) implements IEntityRew
     };
 
     @Override
-    public Component getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+    public void addToDescription(IndentedTooltipBuilder builder) {
+        builder.add(translateSimple())
+            .indent()
+            .add(trade().getResult().getHoverName())
+            .unindent()
+            .add(translate("buying"))
+            .indent()
+            .add(trade().getCostA().getHoverName());
+        if (!trade().getCostB().isEmpty()) builder.add(trade().getCostB().getHoverName());
+        builder.unindent();
     };
 
     @Override

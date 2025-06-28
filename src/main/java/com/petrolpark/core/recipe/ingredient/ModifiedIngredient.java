@@ -1,7 +1,5 @@
 package com.petrolpark.core.recipe.ingredient;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
@@ -13,40 +11,30 @@ import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.ItemIngredientModifier;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
 
-public record ModifiedIngredient(Ingredient ingredient, List<IIngredientModifier<? super ItemStack>> modifiers) implements ICustomIngredient {
+public record ModifiedIngredient(IIngredientModifier<? super ItemStack> modifier) implements ICustomIngredient {
 
     public static final MapCodec<ModifiedIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Ingredient.CODEC.fieldOf("ingredient").forGetter(ModifiedIngredient::ingredient),
-        ItemIngredientModifier.CODEC.listOf().fieldOf("modifiers").forGetter(ModifiedIngredient::modifiers)
+        ItemIngredientModifier.CODEC.fieldOf("modifier").forGetter(ModifiedIngredient::modifier)
     ).apply(instance, ModifiedIngredient::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ModifiedIngredient> STREAM_CODEC = StreamCodec.composite(
-        Ingredient.CONTENTS_STREAM_CODEC, ModifiedIngredient::ingredient,
-        ItemIngredientModifier.STREAM_CODEC.apply(ByteBufCodecs.list()), ModifiedIngredient::modifiers,
+        ItemIngredientModifier.STREAM_CODEC, ModifiedIngredient::modifier,
         ModifiedIngredient::new
     );
 
     @Override
     public boolean test(@Nonnull ItemStack stack) {
-        if (!ingredient.test(stack)) return false;
-        for (IIngredientModifier<? super ItemStack> modifier : modifiers()) {
-            if (!modifier.test(stack)) return false;
-        };
-        return true;
+        return modifier().test(stack);
     };
 
     @Override
     public Stream<ItemStack> getItems() {
-        List<ItemStack> items = Arrays.asList(ingredient.getItems());
-        modifiers().forEach(modifier -> modifier.modifyExamples(items));
-        return items.stream();
+        return modifier().streamExamples().map(s -> s instanceof ItemStack stack ? stack : null);
     };
 
     @Override

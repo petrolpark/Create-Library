@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.loot.providers.number.LootNumberProvide
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
-public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider midpoint, NumberProvider value) implements NumberProvider {
+public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider midpoint, NumberProvider value) implements NumberProvider, IEstimableNumberProvider {
 
     public static final MapCodec<SigmoidNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         NumberProviders.CODEC.fieldOf("shallowness").forGetter(SigmoidNumberProvider::shallowness),
@@ -28,6 +28,18 @@ public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider m
         float shallowness = this.shallowness.getFloat(lootContext);
         if (shallowness == 0f) return 1f;
         return 1f / (1f + (float)Math.exp((midpoint.getFloat(lootContext) - value.getFloat(lootContext)) / shallowness));
+    };
+
+    @Override
+    public float getMaxFloat(LootContext context) {
+        return Float.MAX_VALUE;
+    };
+    
+    @Override
+    public NumberEstimate getEstimate() {
+        return NumberEstimate.ONE.add(
+            NumberEstimate.get(midpoint()).subtract(NumberEstimate.get(value())).divide(NumberEstimate.get(shallowness())).exp()
+        ).reciprocal();
     };
 
     @Override

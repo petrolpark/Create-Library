@@ -1,0 +1,13 @@
+{
+    "type": "petrolpark:mandrel",
+    "ingredient": {
+        "tag": "c:plates/copper"
+    },
+    "result": {
+        "id": "create:fluid_pipe"
+    },
+    "animation": {
+        "type": "petrolpark:pipe",
+        "model": "petrolpark:blocks/mandrel/block"
+    }
+}

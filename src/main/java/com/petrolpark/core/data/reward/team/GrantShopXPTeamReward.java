@@ -9,13 +9,14 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkDataComponents;
 import com.petrolpark.PetrolparkLootContextParams;
 import com.petrolpark.PetrolparkRewardTypes;
+import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.ShopsData;
 import com.petrolpark.core.team.ITeam;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -40,9 +41,10 @@ public record GrantShopXPTeamReward(Holder<Shop> shop, NumberProvider amount) im
     };
 
     @Override
-    public Component getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+    public void addToDescription(IndentedTooltipBuilder builder) {
+        NumberEstimate amount = NumberEstimate.get(amount());
+        if (amount.unknown()) builder.add(translate("unknown_amount", shop.value().getName()));
+        else builder.add(translateSimple(amount.getIntComponent(), shop.value().getName()));
     };
 
     @Override

@@ -4,9 +4,9 @@ import com.mojang.serialization.Codec;
 
 import net.minecraft.server.level.ServerPlayer;
 
-public interface IRecordableAction<ACTION extends IRecordableAction<? super ACTION>> {
+public interface IRecordedAction<ACTION extends IRecordedAction<? super ACTION>> {
 
-    public void play(ServerPlayer player);
+    public void play(ServerPlayer player) throws RecordedActionExecutionException;
 
     public Codec<ACTION> codec();
 };

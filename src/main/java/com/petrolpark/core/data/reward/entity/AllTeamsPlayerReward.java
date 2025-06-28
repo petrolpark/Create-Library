@@ -6,9 +6,9 @@ import com.petrolpark.core.data.reward.team.ITeamReward;
 import com.petrolpark.core.team.GatherTeamProvidersEvent;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.util.CodecHelper;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.neoforged.neoforge.common.NeoForge;
@@ -33,9 +33,9 @@ public record AllTeamsPlayerReward(ITeamReward reward) implements IPlayerReward 
     };
 
     @Override
-    public Component getName() {
+    public void addToDescription(IndentedTooltipBuilder builder) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+        
     };
 
     @Override

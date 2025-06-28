@@ -3,6 +3,7 @@ package com.petrolpark.core.data.loot.numberprovider;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
@@ -13,7 +14,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
-public abstract class FunctionNumberProvider implements NumberProvider {
+public abstract class FunctionNumberProvider implements NumberProvider, IEstimableNumberProvider {
 
     public static final <PROVIDER extends FunctionNumberProvider> MapCodec<PROVIDER> codec(Function<List<NumberProvider>, PROVIDER> constructor) {
         return CodecHelper.singleFieldMap(NumberProviders.CODEC.listOf(), "values", FunctionNumberProvider::getChildren, constructor);
@@ -34,6 +35,18 @@ public abstract class FunctionNumberProvider implements NumberProvider {
         return apply(lootContext, children.stream().mapToDouble(child -> child.getFloat(lootContext)));
     };
 
+    @Override
+    public final NumberEstimate getEstimate() {
+        return applyEstimate(children.stream().map(NumberEstimate::get).dropWhile(NumberEstimate::unknown));
+    };
+
+    @Override
+    public final float getMaxFloat(LootContext context) {
+        return apply(context, children.stream().mapToDouble(p -> NumberEstimate.getMax(context, p)));
+    };
+
     public abstract float apply(LootContext lootContext, DoubleStream childResults);
+
+    public abstract NumberEstimate applyEstimate(Stream<NumberEstimate> estimates);
     
 };

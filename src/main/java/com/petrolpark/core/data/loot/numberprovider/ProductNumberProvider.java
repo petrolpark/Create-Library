@@ -2,6 +2,7 @@ package com.petrolpark.core.data.loot.numberprovider;
 
 import java.util.List;
 import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 import com.petrolpark.PetrolparkNumberProviderTypes;
 
@@ -18,6 +19,11 @@ public class ProductNumberProvider extends FunctionNumberProvider {
     @Override
     public float apply(LootContext lootContext, DoubleStream children) {
         return (float)children.reduce(1d, (a, b) -> a * b);
+    };
+
+    @Override
+    public NumberEstimate applyEstimate(Stream<NumberEstimate> estimates) {
+        return estimates.reduce(NumberEstimate::multiply).orElse(NumberEstimate.UNKNOWN);
     };
 
     @Override

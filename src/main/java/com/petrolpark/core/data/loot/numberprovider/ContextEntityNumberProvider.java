@@ -17,7 +17,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public record ContextEntityNumberProvider(IEntityTarget target, EntityNumberProvider value) implements NumberProvider {
+public record ContextEntityNumberProvider(IEntityTarget target, EntityNumberProvider value) implements NumberProvider, IEstimableNumberProvider {
 
     public static final MapCodec<ContextEntityNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         IEntityTarget.CODEC.fieldOf("target").forGetter(ContextEntityNumberProvider::target),
@@ -28,6 +28,18 @@ public record ContextEntityNumberProvider(IEntityTarget target, EntityNumberProv
     public float getFloat(@Nonnull LootContext context) {
         Entity entity = target.get(context);
         if (entity != null) return value.getFloat(entity, context);
+        return 0f;
+    };
+
+    @Override
+    public NumberEstimate getEstimate() {
+        return value().getEstimate();
+    };
+
+    @Override
+    public float getMaxFloat(LootContext context) {
+        Entity entity = target.get(context);
+        if (entity != null) return value.getMaxFloat(entity, context);
         return 0f;
     };
 

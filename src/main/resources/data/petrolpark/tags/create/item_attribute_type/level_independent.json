@@ -1,0 +1,85 @@
+{
+    "values": [
+        {
+            "required": false,
+            "id": "create:placeable"
+        },
+        {
+            "required": false,
+            "id": "create:consumable"
+        },
+        {
+            "required": false,
+            "id": "create:enchanted"
+        },
+        {
+            "required": false,
+            "id": "create:max_enchanted"
+        },
+        {
+            "required": false,
+            "id": "create:renamed"
+        },
+        {
+            "required": false,
+            "id": "create:damaged"
+        },
+        {
+            "required": false,
+            "id": "create:badly_damaged"
+        },
+        {
+            "required": false,
+            "id": "create:not_stackable"
+        },
+        {
+            "required": false,
+            "id": "create:equipable"
+        },
+        {
+            "required": false,
+            "id": "create:furnace_fuel"
+        },
+        {
+            "required": false,
+            "id": "create:compostable"
+        },
+        {
+            "required": false,
+            "id": "create:in_tag"
+        },
+        {
+            "required": false,
+            "id": "create:added_by"
+        },
+        {
+            "required": false,
+            "id": "create:has_enchant"
+        },
+        {
+            "required": false,
+            "id": "create:shulker_fill_level"
+        },
+        {
+            "required": false,
+            "id": "create:has_color"
+        },
+        {
+            "required": false,
+            "id": "create:has_fluid"
+        },
+        {
+            "required": false,
+            "id": "create:has_name"
+        },
+        {
+            "required": false,
+            "id": "create:book_author"
+        },
+        {
+            "required": false,
+            "id": "create:book_copy"
+        },
+        "petrolpark:has_contaminant"
+    ]
+}

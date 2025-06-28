@@ -17,6 +17,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 
+//TODO change to conditional loot function
 public record ContaminationLootItemFunction(Holder<Contaminant> contaminantHolder, Action action) implements LootItemFunction {
 
     public static final MapCodec<ContaminationLootItemFunction> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

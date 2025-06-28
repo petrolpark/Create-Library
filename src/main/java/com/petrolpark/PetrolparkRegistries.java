@@ -20,6 +20,7 @@ import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.offer.ShopOfferGenerator;
 import com.petrolpark.core.team.ITeam;
+import com.petrolpark.core.trade.ITradeListingReference;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
@@ -87,8 +88,9 @@ public class PetrolparkRegistries {
 
     // Core
     public static final Registry<DecayProductType> DECAY_PRODUCT_TYPES = simple(Keys.DECAY_PRODUCT_TYPE);
-    public static final Registry<Badge> BADGES = simple(Keys.BADGE);
     public static final Registry<ITeam.ProviderType> TEAM_PROVIDER_TYPES = simple(Keys.TEAM_PROVIDER_TYPE);
+    public static final Registry<Badge> BADGES = simple(Keys.BADGE);
+    public static final Registry<ITradeListingReference.Type> TRADE_LISTING_REFERENCE_TYPES = simple(Keys.TRADE_LISTING_REFERENCE_TYPE);
 
     // Loot/Data
     public static final Registry<LootItemStackNumberProviderType> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE);
@@ -135,6 +137,7 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<DecayProductType>> DECAY_PRODUCT_TYPE = key("decay_product_type");
         public static final ResourceKey<Registry<ITeam.ProviderType>> TEAM_PROVIDER_TYPE = key("team_provider_type");
         public static final ResourceKey<Registry<Badge>> BADGE = key("badge");
+        public static final ResourceKey<Registry<ITradeListingReference.Type>> TRADE_LISTING_REFERENCE_TYPE = key("trade_listing_reference_type");
 
         // Loot/Data
         public static final ResourceKey<Registry<LootItemStackNumberProviderType>> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE = key("loot_item_stack_number_provider_type");

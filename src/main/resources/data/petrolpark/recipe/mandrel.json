@@ -12,7 +12,7 @@
     "type": "minecraft:crafting_shaped",
     "pattern": [
         "AS",
-        " C "
+        " C"
     ],
     "key": {
         "A": {

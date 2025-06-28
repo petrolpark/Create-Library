@@ -9,9 +9,10 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.core.data.loot.ILootTableAccessor;
+import com.petrolpark.util.Lang;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -53,9 +54,11 @@ public class GiveLootEntityReward extends AbstractGiveItemsEntityReward implemen
     };
 
     @Override
-    public Component getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+    public void addToDescription(IndentedTooltipBuilder builder) {
+        builder.add(lootTable.map(
+            key -> translateSimple(Lang.loot(key.location())),
+            table -> translate("unknown_table")
+        ));
     };
 
     @Override

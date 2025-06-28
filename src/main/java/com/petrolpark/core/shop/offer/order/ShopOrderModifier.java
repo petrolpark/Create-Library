@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.ItemIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.PassIngredientModifier;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -51,7 +52,7 @@ public class ShopOrderModifier implements LootContextUser {
 
     public List<Component> getDescription(Level level) {
         List<Component> description = new ArrayList<>();
-        ingredientModifier.addToDescription(description);
+        ingredientModifier.addToDescription(new IndentedTooltipBuilder(description));
         return description;
     };
 

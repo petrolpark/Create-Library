@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.mojang.serialization.Codec;
 
+import net.minecraft.Util;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
@@ -23,6 +25,12 @@ public interface IEntityTarget extends StringRepresentable {
 
     public static void register(LootContextParam<? extends Entity> lootContextParam) {
         CUSTOM.put(lootContextParam.getName(), lootContextParam);
+    };
+
+    public Component getName();
+
+    public static Component getName(LootContextParam<? extends Entity> param) {
+        return Component.translatable(Util.makeDescriptionId("loot_context_param", param.getName()));
     };
 
     public Entity get(LootContext context);
@@ -64,6 +72,11 @@ public interface IEntityTarget extends StringRepresentable {
         };
 
         @Override
+        public Component getName() {
+            return IEntityTarget.getName(target.getParam());
+        };
+
+        @Override
         public String getSerializedName() {
             return target.getName();
         };
@@ -86,6 +99,11 @@ public interface IEntityTarget extends StringRepresentable {
         @Override
         public Entity get(LootContext context) {
             return context.getParamOrNull(param);
+        };
+
+        @Override
+        public Component getName() {
+            return IEntityTarget.getName(param);
         };
 
         @Override

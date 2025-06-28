@@ -33,7 +33,7 @@ public class VanillaPacketEntrants {
     
     public static final IVanillaPacketEntrant<?, ?>
     
-    SERVERBOUND_CUSTOM = register(CommonPacketTypes.SERVERBOUND_CUSTOM_PAYLOAD, new ServerboundCustomPacketEntrant()),
+    CUSTOM = register(CommonPacketTypes.SERVERBOUND_CUSTOM_PAYLOAD, new ServerboundCustomPacketEntrant()),
 
     CONTAINER_BUTTON_CLICK = registerSingleTranslationArg(GamePacketTypes.SERVERBOUND_CONTAINER_BUTTON_CLICK, ServerboundContainerButtonClickPacket::buttonId),
     CONTAINER_CLICK = register(GamePacketTypes.SERVERBOUND_CONTAINER_CLICK, new ContainerClickPacketEntrant()),

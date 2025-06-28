@@ -9,11 +9,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkRewardTypes;
+import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.core.data.reward.entity.IEntityReward;
 import com.petrolpark.core.team.ITeam;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -56,9 +57,14 @@ public record MembersTeamReward(IEntityReward reward, Either<NumberProvider, Num
     };
 
     @Override
-    public Component getName() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getName'");
+    public void addToDescription(IndentedTooltipBuilder builder) {
+        builder.add(who.map(
+            count -> translate("count", NumberEstimate.get(count).getIntComponent()),
+            proportion -> NumberEstimate.get(proportion).min() == 1f ? translate("all") : translate("percentage", NumberEstimate.get(proportion).multiply(100f).getIntComponent())
+        ));
+        builder.indent();
+        reward().addToDescription(builder);
+        builder.unindent();
     };
 
     @Override

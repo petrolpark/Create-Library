@@ -2,6 +2,7 @@ package com.petrolpark.core.data.loot.numberprovider;
 
 import java.util.List;
 import java.util.stream.DoubleStream;
+import java.util.stream.Stream;
 
 import com.petrolpark.PetrolparkNumberProviderTypes;
 
@@ -18,6 +19,20 @@ public class MinNumberProvider extends FunctionNumberProvider {
     @Override
     public float apply(LootContext lootContext, DoubleStream childResults) {
         return (float)childResults.min().orElse(0f);
+    };
+
+    @Override
+    public NumberEstimate applyEstimate(Stream<NumberEstimate> estimates) {
+        float min = 0f;
+        float max = 0f;
+        boolean approximate = false;
+        for (NumberEstimate estimate : estimates.toList()) {
+            if (estimate.unknown()) return estimate;
+            min = Math.min(min, estimate.min());
+            max = Math.min(max, estimate.max());
+            approximate |= estimate.approximate;
+        };
+        return NumberEstimate.ranged(min, max, approximate);
     };
 
     @Override

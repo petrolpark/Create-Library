@@ -2,10 +2,11 @@ package com.petrolpark.core.data.reward.entity;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRewardTypes;
+import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.util.CodecHelper;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -30,8 +31,10 @@ public record GrantExperiencePlayerReward(NumberProvider amount) implements IPla
     };
 
     @Override
-    public Component getName() {
-        return Component.translatable("reward.petrolpark.xp");
+    public void addToDescription(IndentedTooltipBuilder builder) {
+        NumberEstimate amount = NumberEstimate.get(amount());
+        if (amount.unknown()) builder.add(translate("unknown_amount"));
+        else builder.add(translateSimple(amount.getIntComponent()));
     };
 
     @Override

@@ -2,6 +2,7 @@ package com.petrolpark.core.data.loot.numberprovider.itemstack;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkNumberProviderTypes;
+import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.core.Holder;
@@ -16,6 +17,16 @@ public record EnchantmentLevelItemStackNumberProvider(Holder<Enchantment> enchan
     @Override
     public float getFloat(ItemStack stack, LootContext lootContext) {
         return stack.getEnchantmentLevel(enchantment);
+    };
+
+    @Override
+    public NumberEstimate getEstimate() {
+        return NumberEstimate.ranged(0f, enchantment().value().getMaxLevel(), false);
+    };
+
+    @Override
+    public float getMaxFloat(ItemStack stack, LootContext lootContext) {
+        return getFloat(stack, lootContext);
     };
 
     @Override

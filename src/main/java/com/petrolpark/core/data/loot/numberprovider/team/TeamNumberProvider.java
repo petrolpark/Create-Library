@@ -2,6 +2,7 @@ package com.petrolpark.core.data.loot.numberprovider.team;
 
 import com.mojang.serialization.Codec;
 import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.core.team.ITeam;
 
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -21,6 +22,12 @@ public interface TeamNumberProvider extends LootContextUser {
     );
     
     public float getFloat(ITeam team, LootContext context);
+
+    public NumberEstimate getEstimate();
+
+    public default float getMaxFloat(ITeam team, LootContext context) {
+        return getFloat(team, context);
+    };
 
     public LootTeamNumberProviderType getType();
 };

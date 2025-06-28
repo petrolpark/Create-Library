@@ -17,7 +17,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public record ContextTeamNumberProvider(TeamNumberProvider value) implements NumberProvider {
+public record ContextTeamNumberProvider(TeamNumberProvider value) implements NumberProvider, IEstimableNumberProvider {
 
     public static final MapCodec<ContextTeamNumberProvider> CODEC = CodecHelper.singleFieldMap(TeamNumberProvider.CODEC, "value", ContextTeamNumberProvider::value, ContextTeamNumberProvider::new);
     
@@ -25,6 +25,18 @@ public record ContextTeamNumberProvider(TeamNumberProvider value) implements Num
     public float getFloat(@Nonnull LootContext context) {
         ITeam team = context.getParam(PetrolparkLootContextParams.TEAM);
         if (team != null) return value.getFloat(team, context);
+        return 0f;
+    };
+
+    @Override
+    public NumberEstimate getEstimate() {
+        return value().getEstimate();
+    };
+
+    @Override
+    public float getMaxFloat(LootContext context) {
+        ITeam team = context.getParam(PetrolparkLootContextParams.TEAM);
+        if (team != null) return value.getMaxFloat(team, context);
         return 0f;
     };
 

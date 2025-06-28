@@ -17,7 +17,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public record ContextToolNumberProvider(ItemStackNumberProvider value) implements NumberProvider {
+public record ContextToolNumberProvider(ItemStackNumberProvider value) implements NumberProvider, IEstimableNumberProvider {
 
     public static final MapCodec<ContextToolNumberProvider> CODEC = CodecHelper.singleFieldMap(ItemStackNumberProvider.CODEC, "value", ContextToolNumberProvider::value, ContextToolNumberProvider::new);
 
@@ -25,6 +25,18 @@ public record ContextToolNumberProvider(ItemStackNumberProvider value) implement
     public float getFloat(@Nonnull LootContext lootContext) {
         ItemStack tool = lootContext.getParamOrNull(LootContextParams.TOOL);
         if (tool != null) return value.getFloat(tool, lootContext);
+        return 0f;
+    };
+
+    @Override
+    public NumberEstimate getEstimate() {
+        return value().getEstimate();
+    };
+
+    @Override
+    public float getMaxFloat(LootContext context) {
+        ItemStack tool = context.getParamOrNull(LootContextParams.TOOL);
+        if (tool != null) return value.getMaxFloat(tool, context);
         return 0f;
     };
 

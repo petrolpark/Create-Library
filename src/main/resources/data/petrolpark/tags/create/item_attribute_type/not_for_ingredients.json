@@ -1,0 +1,13 @@
+{
+    "values": [
+        {
+            "required": false,
+            "id": "create:in_tag"
+        },
+        {
+            "required": false,
+            "id": "create:has_enchant"
+        },
+        "petrolpark:has_contaminant"
+    ]
+}

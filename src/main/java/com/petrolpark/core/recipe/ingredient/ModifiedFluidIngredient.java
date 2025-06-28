@@ -1,7 +1,5 @@
 package com.petrolpark.core.recipe.ingredient;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.MapCodec;
@@ -11,7 +9,6 @@ import com.petrolpark.core.recipe.ingredient.modifier.FluidIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
@@ -20,46 +17,32 @@ import net.neoforged.neoforge.fluids.crafting.FluidIngredientType;
 public class ModifiedFluidIngredient extends FluidIngredient {
 
     public static final MapCodec<ModifiedFluidIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        FluidIngredient.CODEC.fieldOf("ingredient").forGetter(ModifiedFluidIngredient::getIngredient),
-        FluidIngredientModifier.CODEC.listOf().fieldOf("modifiers").forGetter(ModifiedFluidIngredient::getModifiers)
+        FluidIngredientModifier.CODEC.fieldOf("modifier").forGetter(ModifiedFluidIngredient::getModifier)
     ).apply(instance, ModifiedFluidIngredient::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, ModifiedFluidIngredient> STREAM_CODEC = StreamCodec.composite(
-        FluidIngredient.STREAM_CODEC, ModifiedFluidIngredient::getIngredient,
-        FluidIngredientModifier.STREAM_CODEC.apply(ByteBufCodecs.list()), ModifiedFluidIngredient::getModifiers,
+        FluidIngredientModifier.STREAM_CODEC, ModifiedFluidIngredient::getModifier,
         ModifiedFluidIngredient::new
     );
 
-    protected final FluidIngredient ingredient;
-    protected final List<IIngredientModifier<? super FluidStack>> modifiers;
+    protected final IIngredientModifier<? super FluidStack> modifier;
 
-    public ModifiedFluidIngredient(FluidIngredient ingredient, List<IIngredientModifier<? super FluidStack>> modifiers) {
-        this.ingredient = ingredient;
-        this.modifiers = modifiers;
+    public ModifiedFluidIngredient(IIngredientModifier<? super FluidStack> modifier) {
+        this.modifier = modifier;
     };
 
-    public FluidIngredient getIngredient() {
-        return ingredient;
-    };
-
-    public List<IIngredientModifier<? super FluidStack>> getModifiers() {
-        return modifiers;
+    public IIngredientModifier<? super FluidStack> getModifier() {
+        return modifier;
     };
 
     @Override
     public boolean test(FluidStack stack) {
-        if (!ingredient.test(stack)) return false;
-        for (IIngredientModifier<? super FluidStack> modifier : modifiers) {
-            if (!modifier.test(stack)) return false;
-        };
-        return true;
+        return modifier.test(stack);
     };
 
     @Override
     protected Stream<FluidStack> generateStacks() {
-        List<FluidStack> items = Arrays.asList(ingredient.getStacks());
-        modifiers.forEach(modifier -> modifier.modifyExamples(items));
-        return items.stream();
+        return modifier.streamExamples().map(s -> s instanceof FluidStack fluidStack ? fluidStack : null);
     };
 
     @Override
@@ -74,15 +57,13 @@ public class ModifiedFluidIngredient extends FluidIngredient {
 
     @Override
     public int hashCode() {
-        int hash = ingredient.hashCode();
-        for (IIngredientModifier<? super FluidStack> modifier : modifiers) hash ^= modifier.hashCode();
-        return hash;
+        return 31 * modifier.hashCode();
     };
 
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
-        return obj instanceof ModifiedFluidIngredient ingredient && ingredient.ingredient.equals(this.ingredient) && ingredient.modifiers.equals(modifiers);
+        return obj instanceof ModifiedFluidIngredient ingredient && ingredient.modifier.equals(modifier);
     };
     
 };

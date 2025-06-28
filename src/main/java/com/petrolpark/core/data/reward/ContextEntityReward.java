@@ -1,5 +1,6 @@
 package com.petrolpark.core.data.reward;
 
+import java.util.Collections;
 import java.util.Set;
 
 import com.mojang.serialization.Codec;
@@ -8,11 +9,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.core.data.IEntityTarget;
 import com.petrolpark.core.data.reward.entity.IEntityReward;
-
-import java.util.Collections;
+import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
@@ -49,10 +48,12 @@ public record ContextEntityReward(IEntityTarget target, IEntityReward reward) im
         reward.render(graphics);
     };
 
-    @OnlyIn(Dist.CLIENT)
     @Override
-    public Component getName() {
-        return reward.getName();
+    public void addToDescription(IndentedTooltipBuilder builder) {
+        builder.add(translateSimple(target.getName()));
+        builder.indent();
+        reward().addToDescription(builder);
+        builder.unindent();
     };
 
     @Override

@@ -5,6 +5,7 @@ import java.util.Set;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkNumberProviderTypes;
+import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
 
 import net.minecraft.util.StringRepresentable;
@@ -25,6 +26,17 @@ public record EquipmentNumberProvider(EquipmentSlot slot, ItemStackNumberProvide
     public float getFloat(Entity entity, LootContext lootContext) {
         if (entity instanceof LivingEntity livingEntity) return value.getFloat(livingEntity.getItemBySlot(slot), lootContext);
         return 0f;
+    };
+
+    @Override
+    public float getMaxFloat(Entity entity, LootContext lootContext) {
+        if (entity instanceof LivingEntity livingEntity) return value.getMaxFloat(livingEntity.getItemBySlot(slot), lootContext);
+        return 0f;
+    };
+
+    @Override
+    public NumberEstimate getEstimate() {
+        return value().getEstimate();
     };
 
     @Override

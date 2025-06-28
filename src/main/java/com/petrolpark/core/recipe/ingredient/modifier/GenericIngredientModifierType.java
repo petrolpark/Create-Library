@@ -24,5 +24,9 @@ public final class GenericIngredientModifierType<STACK, TYPELESS_MODIFIER extend
     public StreamCodec<? super RegistryFriendlyByteBuf, ? extends IIngredientModifier<? super STACK>> streamCodec() {
         return streamCodec;
     };
+
+    public TypeAttachedIngredientModifier<STACK, TYPELESS_MODIFIER> create(TYPELESS_MODIFIER modifier) {
+        return new TypeAttachedIngredientModifier<>(modifier, this);
+    };
     
 };

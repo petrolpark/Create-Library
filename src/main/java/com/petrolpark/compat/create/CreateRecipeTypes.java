@@ -85,5 +85,7 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
         return world.getRecipeManager()
             .getRecipeFor(getType(), inv, world);
     };
+
+    public static final void init() {};
     
 };
