@@ -12,7 +12,6 @@ import com.petrolpark.compat.jei.PetrolparkJEI;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.common.network.IConnectionToServer;
-import mezz.jei.gui.config.InternalKeyMappings;
 import mezz.jei.neoforge.JustEnoughItemsClient;
 import mezz.jei.neoforge.events.PermanentEventSubscriptions;
 import mezz.jei.neoforge.network.NetworkHandler;
@@ -29,7 +28,6 @@ public class JustEnoughItemsClientMixin {
         NetworkHandler networkHandler,
         PermanentEventSubscriptions subscriptions,
         CallbackInfo ci,
-        InternalKeyMappings keyMappings,
         IConnectionToServer serverConnection,
         List<IModPlugin> plugins
     ) {

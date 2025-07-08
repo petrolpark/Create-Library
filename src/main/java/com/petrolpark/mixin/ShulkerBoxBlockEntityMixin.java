@@ -34,6 +34,7 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
 
     @Override
     public GenericContamination getContamination() {
+        if (contamination == null) contamination = new GenericContamination();
         return contamination;
     };
 
@@ -47,7 +48,7 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
         at = @At("RETURN")
     )
     public void inInit(CallbackInfo ci) {
-        contamination = new GenericContamination();
+        getContamination();
     };
 
     @Inject(
@@ -63,7 +64,7 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
         at = @At("HEAD")
     )
     public void inSaveAdditional(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
-        tag.put("Contamination", contamination.writeNBT(levelRegistry));
+        tag.put("Contamination", getContamination().writeNBT(levelRegistry));
     };
     
 };
