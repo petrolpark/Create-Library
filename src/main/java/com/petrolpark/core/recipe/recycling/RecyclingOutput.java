@@ -26,8 +26,8 @@ public final class RecyclingOutput {
     /**
      * {@link ItemStack#getCount() Count} is ignored.
      */
-    public ItemStack item;
-    public double expectedCount;
+    protected ItemStack item;
+    protected double expectedCount;
 
     public RecyclingOutput(ItemStack stack) {
         this(stack, stack.getCount());
@@ -38,12 +38,20 @@ public final class RecyclingOutput {
         this.expectedCount = expectedCount;
     };
 
-    public ItemStack getItem() {
+    public RecyclingOutput(BigItemStack bigStack) {
+        this(bigStack.getSingleItemStack(), bigStack.getCount());
+    };
+
+    protected ItemStack getItem() {
         return item;
     };
 
-    public double getExpectedCount() {
+    protected double getExpectedCount() {
         return expectedCount;
+    };
+
+    public double getExpectedRemainder() {
+        return expectedCount - (long)expectedCount;
     };
 
     public RecyclingOutput multiply(double multiplier) {

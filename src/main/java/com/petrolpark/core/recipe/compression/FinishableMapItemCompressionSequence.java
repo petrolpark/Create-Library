@@ -67,7 +67,16 @@ public class FinishableMapItemCompressionSequence implements IItemCompressionSeq
 
     @Override
     public Fraction getEquivalentBaseItems(ItemStack stack) {
-        return fractionsByStack.get(stack);
+        Fraction fraction = fractionsByStack.get(stack);
+        if (fraction == null) return null;
+        return fraction.multiplyBy(Fraction.getFraction(stack.getCount(), 1));
+    };
+
+    @Override
+    public double getEquivalentBaseItems(ItemStack stack, double count) {
+        Fraction fraction = fractionsByStack.get(stack);
+        if (fraction == null) return 0d;
+        return fraction.doubleValue() * count;
     };
 
     @Override

@@ -1,10 +1,13 @@
 package com.petrolpark.core.recipe.compression;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.math.Fraction;
+
+import com.petrolpark.util.BigItemStack;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -47,6 +50,14 @@ public interface IItemCompressionSequence {
     public Fraction getEquivalentBaseItems(ItemStack stack);
 
     /**
+     * Get the number of {@link IItemCompressionSequence#getBaseItem() base Items} a given amount of the given Item.
+     * @param stack The count of this Stack is ignored
+     * @param count
+     * @return {@code 0} if the Item (considering its Components) are not part of this sequence
+     */
+    public double getEquivalentBaseItems(ItemStack stack, double count);
+
+    /**
      * Get the number of {@link IItemCompressionSequence#getBaseItem() base Items} equivalent to the {@code item}th {@link IItemCompressionSequence#getAllItems() Item (Stack) in this sequence}.
      * @param item
      * @return {@code null} if {@code item} is outside the bounds of the number of Items in this sequence.
@@ -68,6 +79,22 @@ public interface IItemCompressionSequence {
 
     public default boolean isEmpty() {
         return false;
+    };
+
+    /**
+     * Divide a number of {@link IItemCompressionSequence#getBaseItem() base Items} into the biggest possible compressed forms, producing the smallest total number of Item Stacks.
+     * @param baseItemCount
+     */
+    public default List<BigItemStack> getFewestStacks(long baseItemCount) {
+        if (baseItemCount <= 0) return Collections.emptyList();
+        List<BigItemStack> stacks = new ArrayList<>(size());
+        for (int item = size() - 1; item >= 0; item--) {
+            long amount = Fraction.getFraction((int)baseItemCount, 1).divideBy(getEquivalentBaseItems(item)).longValue();
+            if (amount == 0) continue;
+            stacks.add(new BigItemStack(getAllItems().get(item), amount));
+            baseItemCount -= Fraction.getFraction((int)amount, 1).multiplyBy(getEquivalentBaseItems(item)).longValue();
+        };
+        return stacks;
     };
 
     public static final IItemCompressionSequence EMPTY = new EmptyItemCompressionSequence();
@@ -99,6 +126,11 @@ public interface IItemCompressionSequence {
         @Override
         public Fraction getEquivalentBaseItems(ItemStack stack) {
             return null;
+        };
+
+        @Override
+        public double getEquivalentBaseItems(ItemStack stack, double count) {
+            return 0d;
         };
 
         @Override

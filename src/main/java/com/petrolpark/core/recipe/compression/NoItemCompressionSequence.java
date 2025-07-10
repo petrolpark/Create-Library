@@ -48,6 +48,11 @@ public class NoItemCompressionSequence implements IItemCompressionSequence {
     };
 
     @Override
+    public double getEquivalentBaseItems(ItemStack stack, double count) {
+        return ItemStack.isSameItemSameComponents(stack, this.stack) ? count : 0d;
+    };
+
+    @Override
     public Optional<CompressedBlock> getBaseBlock() {
         return baseBlock;
     };

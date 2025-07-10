@@ -9,6 +9,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import com.petrolpark.Petrolpark;
 import com.petrolpark.core.recipe.compression.IItemCompressionSequence.EmptyItemCompressionSequence;
 
 import net.minecraft.core.HolderLookup;
@@ -126,7 +127,12 @@ public class ItemCompressionManager {
                 FinishableMapItemCompressionSequence sequence = new FinishableMapItemCompressionSequence(stack.copy());
                 IItemCompression nextCompression = compression;
                 while (nextCompression != null) {
-                    if (!sequence.add(nextCompression)) return new EmptySharedItemCompressionSequence(sequence); // Remove all circular Compression sequences
+                    try {
+                        if (!sequence.add(nextCompression)) return new EmptySharedItemCompressionSequence(sequence); // Remove all circular Compression sequences
+                    } catch (ArithmeticException e) { //TODO switch to BigFraction
+                        Petrolpark.LOGGER.warn("Item %s has too large of a compression factor to recognise compression sequence");
+                        return new EmptySharedItemCompressionSequence(sequence);
+                    };
                     nextCompression = COMPRESSIONS.get(nextCompression.result());
                 };
                 return sequence.finish();

@@ -155,7 +155,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
     public void dropItemsAlongSpline(BigItemStack stack) {
         if (getWorld().isClientSide() || !getWorld().getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) return;
         int points = getSpline().getPoints().size();
-        int items = stack.getCount();
+        int items = (int)stack.getCount();
         if (items / points > 0) for (Vec3 point : getSpline().getPoints()) ItemHelper.pop(getWorld(), point, stack.copyStackWithCount(items / points));
         for (int i = 0; i < items % points; i++) ItemHelper.pop(getWorld(), getSpline().getPoints().get(i), stack.getSingleItemStack());
     };

@@ -34,7 +34,8 @@ public class RecyclingManager {
 
     static {
         registerModifier(RecyclingOutputsModifier.DURABILITY);
-        registerModifier(RecyclingOutputsModifier.CONTAMINANTS);  
+        registerModifier(RecyclingOutputsModifier.CONTAMINANTS);
+        registerModifier(RecyclingOutputsModifier.DECOMPRESSION);
     };
 
     public static final void loadIngredientInverses(RecipeManager recipeManager) {

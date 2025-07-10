@@ -27,6 +27,12 @@ public enum PetrolparkGuiTexture implements IGuiTexture {
 	JEI_EXPLOSION("jei/widgets", 169, 0, 18, 21),
     JEI_NERD_EMOJI("jei/widgets", 115, 19, 16, 14),
     JEI_GLOBE("jei/widgets", 115 + 16, 19, 16, 14),
+
+    // Extended Inventory
+    INVENTORY_BACKGROUND("inventory", 0, 0, 9, 9, 64, 64),
+	INVENTORY_SLOT("inventory", 0, 22, 18, 18, 64, 64),
+	HOTBAR_BACKGROUND("inventory", 9, 0, 22, 22, 64, 64),
+	HOTBAR_SLOT("inventory", 31, 0, 20, 20, 64, 64),
     
     // Creative Mode Tab
 	CREATIVE_MODE_TAB_BLANK_ROW("creative_inventory", 0, 0, 162, 18),
