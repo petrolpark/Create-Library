@@ -1,5 +1,6 @@
 package com.petrolpark;
 
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
@@ -25,14 +26,16 @@ import com.petrolpark.core.data.reward.team.ITeamReward;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
 import com.petrolpark.core.item.decay.product.DecayProductType;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
+import com.petrolpark.core.recipe.bogglepattern.BogglePatternGeneratorType;
+import com.petrolpark.core.recipe.bogglepattern.IBogglePatternGenerator;
 import com.petrolpark.core.recipe.ingredient.modifier.FluidIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.GenericIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.INamedIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.ITypelessIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.NamedIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.ItemIngredientModifier;
+import com.petrolpark.core.recipe.ingredient.modifier.NamedIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
@@ -68,6 +71,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
@@ -130,6 +135,14 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     public <PREDICATE extends EntitySubPredicate> RegistryEntry<MapCodec<? extends EntitySubPredicate>, MapCodec<PREDICATE>> entitySubPredicateType(String name, MapCodec<PREDICATE> codec) {
         return simple(name, Registries.ENTITY_SUB_PREDICATE_TYPE, () -> codec);
+    };
+
+    public LootContextParamSet lootContextParamSet(String name, Consumer<LootContextParamSet.Builder> builderConsumer) {
+        LootContextParamSet.Builder builder = new LootContextParamSet.Builder();
+        builderConsumer.accept(builder);
+        LootContextParamSet paramSet = builder.build();
+        ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(getModid(), name);
+        return LootContextParamSets.REGISTRY.put(rl, paramSet);
     };
 
     public RegistryEntry<LootItemConditionType, LootItemConditionType> lootConditionType(String name, MapCodec<? extends LootItemCondition> codec) {
@@ -228,6 +241,15 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     public RegistryEntry<TeamRewardType, TeamRewardType> teamRewardType(String name, MapCodec<? extends ITeamReward> codec) {
         ResourceLocation id = ResourceLocation.fromNamespaceAndPath(getModid(), name);
         return simple(name, PetrolparkRegistries.Keys.TEAM_REWARD_TYPE, () -> new TeamRewardType(Util.makeDescriptionId("team_reward", id), codec));
+    };
+
+    public RegistryEntry<BogglePatternGeneratorType, BogglePatternGeneratorType> bogglePatternGeneratorType(String name, MapCodec<? extends IBogglePatternGenerator> codec, MapCodec<? extends IBogglePatternGenerator> directCodec) {
+        return simple(name, PetrolparkRegistries.Keys.BOGGLE_PATTERN_GENERATOR_TYPE, () -> new BogglePatternGeneratorType(codec, directCodec));
+    };
+
+    public RegistryEntry<BogglePatternGeneratorType, BogglePatternGeneratorType> bogglePatternGeneratorType(String name, NonNullSupplier<? extends IBogglePatternGenerator> unitFactory) {
+        MapCodec<? extends IBogglePatternGenerator> codec = MapCodec.unit(unitFactory);
+        return simple(name, PetrolparkRegistries.Keys.BOGGLE_PATTERN_GENERATOR_TYPE, () -> new BogglePatternGeneratorType(codec, codec));
     };
     
     // Shared features

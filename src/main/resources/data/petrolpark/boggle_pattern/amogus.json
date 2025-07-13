@@ -1,0 +1,11 @@
+{
+    "generator": {
+        "type": "petrolpark:fixed",
+        "pattern": [
+            " ...",
+            "..  ",
+            "....",
+            " . ."
+        ]
+    }
+}

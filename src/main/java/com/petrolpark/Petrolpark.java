@@ -13,6 +13,7 @@ import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.badge.Badges;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
+import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
 import com.petrolpark.core.recipe.ingredient.randomizer.PetrolparkIngredientRandomizerTypes;
 import com.petrolpark.core.team.PetrolparkTeamProviderTypes;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeamManager;
@@ -43,10 +44,11 @@ public class Petrolpark {
     };
 
     static {
-        SharedFeatureFlag.MANDREL.enable(Mods.PETROLPARK);
+        SharedFeatureFlag.MANDREL.enable(Mods.PETROLPARK); // testing only
     };
 
     public static final ScoreboardTeamManager SCOREBOARD_TEAMS = new ScoreboardTeamManager();
+    public static final BogglePattern.Manager BOGGLE_PATTERNS = new BogglePattern.Manager();
 
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
 
@@ -67,6 +69,7 @@ public class Petrolpark {
         PetrolparkMobEffects.register();
         PetrolparkTeamProviderTypes.register();
         PetrolparkTradeListingReferenceTypes.register();
+        PetrolparkBogglePatternGeneratorTypes.register();
 
         // Registration - data/loot
         PetrolparkDataLoadingConditions.register();

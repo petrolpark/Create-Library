@@ -1,14 +1,8 @@
-package com.petrolpark.util;
-
-import com.petrolpark.core.recipe.bogglepattern.BogglePatternHelper;
+package com.petrolpark.core.recipe.bogglepattern;
 
 import net.minecraft.world.level.block.Rotation;
 
-/**
- * @deprecated Replaced with {@link BogglePatternHelper}
- */
-@Deprecated
-public class BinaryMatrix4x4 {
+public class BogglePatternHelper {
     
     /*
      *  y x0  1  2  3

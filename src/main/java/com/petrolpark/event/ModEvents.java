@@ -3,6 +3,7 @@ package com.petrolpark.event;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.offer.ShopOfferGenerator;
 
@@ -18,5 +19,6 @@ public class ModEvents {
         event.dataPackRegistry(PetrolparkRegistries.Keys.CONTAMINANT, Contaminant.DIRECT_CODEC, Contaminant.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.SHOP, Shop.DIRECT_CODEC, Shop.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.SHOP_OFFER_GENERATOR, ShopOfferGenerator.DIRECT_CODEC, ShopOfferGenerator.DIRECT_CODEC);
+        event.dataPackRegistry(PetrolparkRegistries.Keys.BOGGLE_PATTERN, BogglePattern.DIRECT_CODEC, BogglePattern.DIRECT_NETWORK_CODEC);
     };
 };

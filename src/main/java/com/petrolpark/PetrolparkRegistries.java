@@ -15,6 +15,8 @@ import com.petrolpark.core.data.reward.entity.EntityRewardType;
 import com.petrolpark.core.data.reward.generator.RewardGeneratorType;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
 import com.petrolpark.core.item.decay.product.DecayProductType;
+import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
+import com.petrolpark.core.recipe.bogglepattern.BogglePatternGeneratorType;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.shop.Shop;
@@ -108,6 +110,8 @@ public class PetrolparkRegistries {
     public static final Registry<EntityRewardType> ENTITY_REWARD_TYPES = simple(Keys.ENTITY_REWARD_TYPE);
     public static final Registry<TeamRewardType> TEAM_REWARD_TYPES = simple(Keys.TEAM_REWARD_TYPE);
 
+    public static final Registry<BogglePatternGeneratorType> BOGGLE_PATTERN_GENERATOR_TYPES = simple(Keys.BOGGLE_PATTERN_GENERATOR_TYPE);
+
     @ApiStatus.Internal
     public static <T> Registry<T> simple(ResourceKey<Registry<T>> key) {
         return register(key, false);
@@ -158,6 +162,10 @@ public class PetrolparkRegistries {
         // Shops
         public static final ResourceKey<Registry<Shop>> SHOP = key("shop");
         public static final ResourceKey<Registry<ShopOfferGenerator>> SHOP_OFFER_GENERATOR = key("shop_offer_generator");
+
+        // Boggle Patterns
+        public static final ResourceKey<Registry<BogglePatternGeneratorType>> BOGGLE_PATTERN_GENERATOR_TYPE = key("boggle_pattern_generator_type");
+        public static final ResourceKey<Registry<BogglePattern>> BOGGLE_PATTERN = key("boggle_pattern");
 
         private static <T> ResourceKey<Registry<T>> key(String name) {
 		    return ResourceKey.createRegistryKey(Petrolpark.asResource(name));

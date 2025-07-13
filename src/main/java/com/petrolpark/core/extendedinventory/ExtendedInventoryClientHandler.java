@@ -171,15 +171,15 @@ public class ExtendedInventoryClientHandler {
      * The number of additional hotbar slots to the left of the vanilla hotbar.
      * @param totalExtraHotbarSlots The number of extra hotbar slots on either side of the vanilla hotbar
      */
-    public static final int getLeftExtraHotbarSlots(int extraSlots) {
-        if (extraSlots == 0) return 0;
+    public static final int getLeftExtraHotbarSlots(int totalExtraHotbarSlots) {
+        if (totalExtraHotbarSlots == 0) return 0;
         switch (getExtraHotbarSlotLocations()) {
-            case ALL_LEFT: return extraSlots;
+            case ALL_LEFT: return totalExtraHotbarSlots;
             case ALL_RIGHT: return 0;
-            case START_LEFT: return (extraSlots % 2) + (extraSlots / 2);
-            case START_RIGHT: return extraSlots / 2;
-            case PRIORITY_LEFT: return Math.min(extraSlots, getExtraHotbarPrioritySlots());
-            case PRIORITY_RIGHT: return Math.max(0, extraSlots - getExtraHotbarPrioritySlots());
+            case START_LEFT: return (totalExtraHotbarSlots % 2) + (totalExtraHotbarSlots / 2);
+            case START_RIGHT: return totalExtraHotbarSlots / 2;
+            case PRIORITY_LEFT: return Math.min(totalExtraHotbarSlots, getExtraHotbarPrioritySlots());
+            case PRIORITY_RIGHT: return Math.max(0, totalExtraHotbarSlots - getExtraHotbarPrioritySlots());
         };
         return 0;
     };
