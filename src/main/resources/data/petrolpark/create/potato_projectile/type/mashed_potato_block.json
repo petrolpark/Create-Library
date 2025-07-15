@@ -1,0 +1,10 @@
+{
+  "damage": 4,
+  "items": "#c:storage_blocks/mashed_potato",
+  "velocity_multiplier": 0.8,
+  "reload_ticks": 5,
+  "sticky": true,
+  "render_mode": {
+    "type": "create:tumble"
+  }
+}

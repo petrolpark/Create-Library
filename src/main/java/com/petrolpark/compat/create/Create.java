@@ -24,6 +24,8 @@ public class Create {
         CreateBlocks.register();
         CreateIngredientModifierTypes.register();
         CreateGlobalLootModifierSerializers.register();
+        CreateFluids.register();
+        CreateItems.register();
 
         PetrolparkMovementChecks.register();
         PetrolparkMandrelAnimationTypes.register();

@@ -47,6 +47,15 @@ public class PetrolparkTags {
 		return commonTag(BuiltInRegistries.FLUID, path);
 	};
 
+    public enum Blocks {
+
+        ;
+
+        public static final TagKey<Block> common(String path) {
+            return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", path));
+        };
+    };
+
     public enum Items {
 
         INCONTAMINABLE,
@@ -66,6 +75,10 @@ public class PetrolparkTags {
 
         public boolean matches(ItemStack stack) {
             return stack.is(tag);
+        };
+
+        public static final TagKey<Item> common(String path) {
+            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));
         };
     };
 
@@ -88,6 +101,10 @@ public class PetrolparkTags {
         @SuppressWarnings("deprecation")
         public boolean matches(FluidStack stack) {
             return stack.getFluid().is(tag);
+        };
+
+        public static final TagKey<Fluid> common(String path) {
+            return TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("c", path));
         };
     };
 

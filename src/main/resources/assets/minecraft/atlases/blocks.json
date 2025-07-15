@@ -1,0 +1,8 @@
+{
+    "sources": [
+      {
+        "type": "single",
+        "resource": "petrolpark:fluid/cream"
+      }
+    ]
+  }

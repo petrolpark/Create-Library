@@ -1,0 +1,12 @@
+{
+    "values": [
+        {
+            "id": "petrolpark:butter",
+            "required": false
+        },
+        {
+            "id": "petrolpark:mashed_potato",
+            "required": false
+        }
+    ]
+}

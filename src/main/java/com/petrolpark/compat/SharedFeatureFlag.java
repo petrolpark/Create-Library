@@ -23,8 +23,9 @@ public enum SharedFeatureFlag implements StringRepresentable {
     MESH,
     EGG_PRODUCTS, // Egg Whites & Yolks, Meringue
     SUNFLOWER_OIL,
-    MILK_PRODUCTS(CENTRIFUGE),
+    MILK_PRODUCTS(CENTRIFUGE), // Butter, Skimmed Milk and Cream
     SPRING,
+    POTATO_PRODUCTS(MILK_PRODUCTS, EXTRUSION), // Mashed Potato
 
     MANDREL(SPRING),
     ;

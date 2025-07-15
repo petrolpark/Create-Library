@@ -13,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.petrolpark.core.extendedinventory.ExtendedInventory;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.game.ServerGamePacketListener;
 import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.network.protocol.game.ServerboundSetCreativeModeSlotPacket;
@@ -21,6 +20,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerGamePacketListenerImplMixin implements ServerGamePacketListener {
@@ -40,7 +40,7 @@ public abstract class ServerGamePacketListenerImplMixin implements ServerGamePac
         ),
         cancellable = true
     )
-    public void handleSetCarriedItem(ServerboundSetCarriedItemPacket packet, CallbackInfo ci) {
+    public void inHandleSetCarriedItem(ServerboundSetCarriedItemPacket packet, CallbackInfo ci) {
         Optional<ExtendedInventory> invOp = ExtendedInventory.get(player);
         if (invOp.isEmpty()) return;
         ExtendedInventory inv = invOp.get();
@@ -60,13 +60,12 @@ public abstract class ServerGamePacketListenerImplMixin implements ServerGamePac
         method = "handleSetCreativeModeSlot",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z",
-            ordinal = 1
+            target = "Lnet/minecraft/world/item/ItemStack;isEmpty()Z"
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT,
         cancellable = true
     )
-    public void inHandleSetCreativeModeSlot(ServerboundSetCreativeModeSlotPacket packet, CallbackInfo ci, boolean flag, ItemStack itemstack, CompoundTag compoundtag) {
+    public void inHandleSetCreativeModeSlot(ServerboundSetCreativeModeSlotPacket packet, CallbackInfo ci, boolean flag, ItemStack itemstack, CustomData customData) {
         if (packet.slotNum() >= 1 && (itemstack.isEmpty() || itemstack.getDamageValue() >= 0 && !itemstack.isEmpty())) {
             player.inventoryMenu.getSlot(packet.slotNum()).setByPlayer(itemstack);
             player.inventoryMenu.broadcastChanges();

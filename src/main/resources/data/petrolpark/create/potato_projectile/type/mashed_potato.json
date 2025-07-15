@@ -1,0 +1,10 @@
+{
+  "damage": 1,
+  "items": "#c:foods/mashed_potato",
+  "velocity_multiplier": 0.8,
+  "reload_ticks": 3,
+  "sticky": true,
+  "render_mode": {
+    "type": "create:tumble"
+  }
+}

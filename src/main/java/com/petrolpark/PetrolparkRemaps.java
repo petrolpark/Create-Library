@@ -1,0 +1,66 @@
+package com.petrolpark;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.petrolpark.compat.Mods;
+import com.petrolpark.util.Pair;
+
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.registries.RegisterEvent;
+
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Petrolpark.MOD_ID)
+public class PetrolparkRemaps {
+    
+    private static final List<Pair<ResourceLocation, ResourceLocation>> BLOCKS = new ArrayList<>();
+    private static final List<Pair<ResourceLocation, ResourceLocation>> ITEMS = new ArrayList<>();
+
+    static {
+        destroyItem("butter");
+        destroyItem("mashed_potato");
+        destroyItem("mesh");
+
+        destroyBlockAndItem("mashed_potato_block");
+    };
+
+    private static final void item(ResourceLocation oldRL, String newName) {
+        ITEMS.add(Pair.of(oldRL, Petrolpark.asResource(newName)));
+    };
+
+    private static final void destroyItem(String name) {
+        item(Mods.DESTROY.asResource(name), name);
+    };
+
+    private static final void block(ResourceLocation oldRL, String newName) {
+        BLOCKS.add(Pair.of(oldRL, Petrolpark.asResource(newName)));
+    };
+
+    private static final void destroyBlock(String name) {
+        block(Mods.DESTROY.asResource(name), name);
+    };
+
+    private static final void destroyBlockAndItem(String name) {
+        destroyItem(name);
+        destroyBlock(name);
+    };
+
+    @SubscribeEvent
+    public static final void onRegister(RegisterEvent event) {
+        Registry<?> registry = event.getRegistry();
+        ResourceKey<?> key = registry.key();
+        
+        List<Pair<ResourceLocation, ResourceLocation>> remaps;
+        if (key == Registries.BLOCK) remaps = BLOCKS;
+        else if (key == Registries.ITEM) remaps = ITEMS;
+        else return;
+
+        remaps.forEach(pair -> registry.addAlias(pair.getFirst(), pair.getSecond()));
+    };
+
+    
+};

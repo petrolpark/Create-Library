@@ -6,12 +6,14 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BlockEntityBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
+import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class SharedBlockEntityBuilder<T extends BlockEntity, P> extends BlockEntityBuilder<T, P> {
 
@@ -30,6 +32,12 @@ public class SharedBlockEntityBuilder<T extends BlockEntity, P> extends BlockEnt
     public BlockEntityBuilder<T, P> renderer(@Nonnull NonNullSupplier<NonNullFunction<Context, BlockEntityRenderer<? super T>>> renderer) {
         if (featureFlag.enabled()) return super.renderer(renderer);
         return this;
+    };
+
+    @Override
+    public BlockEntityBuilder<T, P> onRegister(@Nonnull NonNullConsumer<? super BlockEntityType<T>> callback) {
+        if (!featureFlag.enabled()) return this;
+        return super.onRegister(callback);
     };
     
 };

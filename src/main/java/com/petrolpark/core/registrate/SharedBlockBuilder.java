@@ -10,9 +10,9 @@ import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.providers.ProviderType;
-import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
+import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
@@ -65,8 +65,9 @@ public class SharedBlockBuilder<T extends Block, P extends PetrolparkRegistrate>
     };
 
     @Override
-    public BlockEntry<T> register() {
-        return super.register();
+    public BlockBuilder<T, P> onRegister(@Nonnull NonNullConsumer<? super T> callback) {
+        if (!featureFlag.enabled()) return this;
+        return super.onRegister(callback);
     };
     
 };

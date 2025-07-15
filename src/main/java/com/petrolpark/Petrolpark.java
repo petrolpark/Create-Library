@@ -65,6 +65,7 @@ public class Petrolpark {
         PetrolparkAttachmentTypes.register(modEventBus);
         Badges.register();
         IPetrolparkRecipeTypes.register(modEventBus);
+        PetrolparkBlocks.register();
         PetrolparkItems.register();
         PetrolparkMobEffects.register();
         PetrolparkTeamProviderTypes.register();

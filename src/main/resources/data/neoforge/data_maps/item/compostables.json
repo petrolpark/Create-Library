@@ -1,0 +1,10 @@
+{
+    "values": {
+        "#c:foods/mashed_potato": {
+            "chance": 0.7
+        },
+        "#c:storage_blocks/mashed_potato": {
+            "chance": 1.0
+        }
+    }
+}
