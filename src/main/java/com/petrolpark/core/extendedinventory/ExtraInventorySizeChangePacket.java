@@ -24,7 +24,7 @@ public record ExtraInventorySizeChangePacket(int extraInventorySize, int extraHo
 
     @Override
     public void handle(LocalPlayer player) {
-        //ExtendedInventoryClientHandler.handleExtendedInventorySizeChange(this);
+        ExtendedInventoryClientHandler.handleExtendedInventorySizeChange(this);
     };
     
 };

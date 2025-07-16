@@ -60,7 +60,11 @@
         "compat.create.client.PonderUIMixin",
         "compat.jei.client.JustEnoughItemsClientMixin",
         "compat.jei.client.ModIdHelperMixin",
-        "client.CreativeModeInventoryScreenMixin"
+        "client.CreativeModeInventoryScreenMixin",
+        "client.GameRendererMixin",
+        "client.GuiMixin",
+        "client.MinecraftMixin",
+        "client.RecipeBookComponentMixin"
     ],
     "injectors": {
         "defaultRequire": 1

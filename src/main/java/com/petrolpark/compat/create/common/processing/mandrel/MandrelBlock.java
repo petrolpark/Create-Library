@@ -99,7 +99,7 @@ public class MandrelBlock extends HorizontalKineticBlock implements IBE<MandrelB
 
 		if (mandrel == null) return;
 
-		IItemHandler capability = entityIn.level().getCapability(Capabilities.ItemHandler.BLOCK, mandrel.getBlockPos(), null);
+		IItemHandler capability = entityIn.level().getCapability(Capabilities.ItemHandler.BLOCK, mandrel.getBlockPos(), Direction.UP);
 		if (capability == null) return;
 
 		ItemStack remainder = capability.insertItem(0, itemEntity.getItem(), false);

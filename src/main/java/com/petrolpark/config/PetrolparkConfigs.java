@@ -21,13 +21,13 @@ public class PetrolparkConfigs {
     
     private static final Map<ModConfig.Type, ConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
 
-	//private static CClient client;
+	private static PetrolparkClientConfig client;
 	//private static CCommon common;
 	private static PetrolparkServerConfig server;
 
-	// public static CClient client() {
-	// 	return client;
-	// };
+	public static PetrolparkClientConfig client() {
+		return client;
+	};
 
 	// public static CCommon common() {
 	// 	return common;
@@ -55,7 +55,7 @@ public class PetrolparkConfigs {
 	};
 
 	public static void register(ModLoadingContext context, ModContainer container) {
-		// client = register(CClient::new, ModConfig.Type.CLIENT);
+		client = register(PetrolparkClientConfig::new, ModConfig.Type.CLIENT);
 		// common = register(CCommon::new, ModConfig.Type.COMMON);
 		server = register(PetrolparkServerConfig::new, ModConfig.Type.SERVER);
 

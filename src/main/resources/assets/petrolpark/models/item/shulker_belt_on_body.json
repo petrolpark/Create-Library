@@ -1,0 +1,68 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"0": "petrolpark:item/shulker_belt_on_body",
+		"particle": "petrolpark:item/shulker_belt_on_body"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 0],
+			"to": [7, 2, 4],
+			"faces": {
+				"north": {"uv": [0, 4, 7, 6], "texture": "#0"},
+				"east": {"uv": [7, 4, 11, 6], "texture": "#0"},
+				"south": {"uv": [0, 4, 7, 6], "texture": "#0"},
+				"west": {"uv": [7, 4, 11, 6], "texture": "#0"},
+				"up": {"uv": [0, 0, 7, 4], "texture": "#0"},
+				"down": {"uv": [0, 6, 7, 10], "texture": "#0"}
+			}
+		},
+		{
+			"from": [1, -1, -1],
+			"to": [3, 2, 0],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, -2]},
+			"faces": {
+				"north": {"uv": [11, 1, 13, 4], "texture": "#0"},
+				"east": {"uv": [13, 1, 14, 4], "texture": "#0"},
+				"south": {"uv": [11, 1, 13, 4], "texture": "#0"},
+				"west": {"uv": [13, 1, 14, 4], "texture": "#0"},
+				"up": {"uv": [11, 0, 13, 1], "texture": "#0"},
+				"down": {"uv": [11, 4, 13, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [1, -1, 4],
+			"to": [3, 2, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 3]},
+			"faces": {
+				"north": {"uv": [11, 1, 13, 4], "texture": "#0"},
+				"east": {"uv": [13, 1, 14, 4], "texture": "#0"},
+				"south": {"uv": [11, 1, 13, 4], "texture": "#0"},
+				"west": {"uv": [13, 1, 14, 4], "texture": "#0"},
+				"up": {"uv": [11, 0, 13, 1], "texture": "#0"},
+				"down": {"uv": [11, 4, 13, 5], "texture": "#0"}
+			}
+		},
+		{
+			"from": [4, -1, 4],
+			"to": [6, 2, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3, 0, 3]},
+			"faces": {
+				"north": {"uv": [11, 1, 13, 4], "texture": "#0"},
+				"east": {"uv": [13, 1, 14, 4], "texture": "#0"},
+				"south": {"uv": [11, 1, 13, 4], "texture": "#0"},
+				"west": {"uv": [13, 1, 14, 4], "texture": "#0"},
+				"up": {"uv": [11, 0, 13, 1], "texture": "#0"},
+				"down": {"uv": [11, 4, 13, 5], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"head": {
+			"translation": [9, -9.75, 12],
+			"scale": [2, 2, 2]
+		}
+	}
+}

@@ -6,6 +6,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
 import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
+import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistries;
 
 import net.minecraft.commands.CommandBuildContext;
@@ -26,11 +27,11 @@ public class ContaminateHeldItemCommand {
    private static final SimpleCommandExceptionType ERROR_NOTHING_HAPPENED = new SimpleCommandExceptionType(Component.translatable("commands.petrolpark.contaminate.failed"));
  
    public static void register(CommandDispatcher<CommandSourceStack> dispatcher, CommandBuildContext context) {
-      dispatcher.register(Commands.literal("contaminate").requires(source -> {
+      dispatcher.register(Commands.literal(Petrolpark.MOD_ID).then(Commands.literal("contaminate").requires(source -> {
          return source.hasPermission(2);
       }).then(Commands.argument("targets", EntityArgument.entities()).then(Commands.argument("contaminant", ResourceArgument.resource(context, PetrolparkRegistries.Keys.CONTAMINANT)).executes(ctx -> 
          contaminate(ctx.getSource(), EntityArgument.getEntities(ctx, "targets"), ResourceArgument.getResource(ctx, "contaminant", PetrolparkRegistries.Keys.CONTAMINANT))
-      ))));
+      )))));
    };
  
    private static int contaminate(CommandSourceStack source, Collection<? extends Entity> targets, Holder<Contaminant> contaminantHolder) throws CommandSyntaxException {

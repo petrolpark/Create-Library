@@ -1,4 +1,7 @@
 {
+    "attribute.petrolpark.player.extra_hotbar_slots": "Extra Hotbar Slots",
+    "attribute.petrolpark.player.extra_inventory_size": "Extra Inventory Size",
+
     "badge.destroy.patreon_1": "Dame of Demolition",
     "badge.destroy.patreon_1.description": "Pledge to the first tier on the Destroy Patreon",
     "badge.destroy.patreon_2": "Duke of Devastation",
@@ -52,7 +55,7 @@
     "curios.identifier.petrolpark_badge": "Badge",
 
     "effect.petrolpark.numbness": "Numbness",
-    "effect.petrolpark.numbness.description": "Mobs will not notice or respond to being damaged by another mob.",
+    "effect.petrolpark.numbness.description": "Mobs will not notice or respond to being damaged by another mob or player.",
 
     "fluid.petrolpark.cream": "Cream",
     "fluid.petrolpark.skimmed_milk": "Skimmed Milk",
@@ -86,6 +89,7 @@
     "item.petrolpark.menu": "Menu",
     "item.petrolpark.menu.team_selection": "Select a Team for this %1$s",
     "item.petrolpark.mesh": "Mesh",
+    "item.petrolpark.shulker_belt": "Shulker Belt",
     "item.petrolpark.unprocessed_mashed_potato": "Unfinished Mashed Potato",
 
     "loot_context_param.minecraft.this_entity": "Entity",

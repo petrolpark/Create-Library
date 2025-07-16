@@ -1,6 +1,6 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-      "layer0": "destroy:item/unprocessed_mashed_potato"
+      "layer0": "petrolpark:item/shulker_belt"
     }
   }

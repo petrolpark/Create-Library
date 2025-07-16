@@ -66,7 +66,7 @@ public abstract class ServerGamePacketListenerImplMixin implements ServerGamePac
         cancellable = true
     )
     public void inHandleSetCreativeModeSlot(ServerboundSetCreativeModeSlotPacket packet, CallbackInfo ci, boolean flag, ItemStack itemstack, CustomData customData) {
-        if (packet.slotNum() >= 1 && (itemstack.isEmpty() || itemstack.getDamageValue() >= 0 && !itemstack.isEmpty())) {
+        if (packet.slotNum() >= 1 && packet.slotNum() < player.inventoryMenu.slots.size() && (itemstack.isEmpty() || itemstack.getDamageValue() >= 0 && !itemstack.isEmpty())) {
             player.inventoryMenu.getSlot(packet.slotNum()).setByPlayer(itemstack);
             player.inventoryMenu.broadcastChanges();
             ci.cancel();

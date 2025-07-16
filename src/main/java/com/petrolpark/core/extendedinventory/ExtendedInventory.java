@@ -19,6 +19,7 @@ import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
 import net.minecraft.ReportedException;
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -45,20 +46,38 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-//TODO copy mixins over from Destroy
 @ApiStatus.Experimental
 @EventBusSubscriber(modid = Petrolpark.MOD_ID)
 public class ExtendedInventory extends Inventory {
 
+    /**
+     * Whether the {@link PetrolparkFeatureFlags#EXTENDED_INVENTORY Extended Inventory experiment} is enabled in this world.
+     * @return {@code false} if it is not enabled, or if it is too early to say
+     * @see ExtendedInventory#enabled(FeatureFlagSet) Safer method to use if possible
+     */
     public static final boolean enabled() {
+        if (Petrolpark.runForDist(() -> () -> Minecraft.getInstance().getConnection() == null, () -> () -> false)) return false; // Not initialized before we join the world
         return PetrolparkFeatureFlags.EXTENDED_INVENTORY.isEnabled();
     };
 
+    /**
+     * Whether the {@link PetrolparkFeatureFlags#EXTENDED_INVENTORY Extended Inventory experiment} is enabled in this world.
+     * @param flagSet
+     * @see ExtendedInventory#enabled() Less safe method to use if necessary
+     */
     public static final boolean enabled(FeatureFlagSet flagSet) {
         return PetrolparkFeatureFlags.EXTENDED_INVENTORY.isEnabled(flagSet);
     };
 
+    /**
+     * The ItemStacks additional to those in the Vanilla Inventory, including all those on the Hotbar.
+     * Controlled by {@link PetrolparkAttributes#EXTRA_INVENTORY_SIZE}.
+     */
     public NonNullList<ItemStack> extraItems = NonNullList.of(ItemStack.EMPTY);
+    /**
+     * The number of additional Hotbar Slots. This is limited by the size of {@link ExtendedInventory#extraItems}.
+     * Controlled by {@link PetrolparkAttributes#EXTRA_HOTBAR_SLOTS}.
+     */
     private int extraHotbarSlots = 0;
 
     public ExtendedInventory(Player player) {
@@ -67,27 +86,52 @@ public class ExtendedInventory extends Inventory {
     };
 
     /**
+     * Attempt to access the Player's Extended Inventory (cast as such).
      * @param player
-     * @return The Player's Extended Inventory
+     * @return The Player's Extended Inventory, if they are enabled in this world and one can be found
      */
     public static Optional<ExtendedInventory> get(Player player) {
         return player.getInventory() instanceof ExtendedInventory extendedInv ? Optional.of(extendedInv) : Optional.empty();
     };
 
+    /**
+     * @see ExtendedInventory#updateSize(boolean)
+     */
     public void updateSize() {
         updateSize(false);
     };
 
+    /**
+     * Update the size of the Extended Inventory and Hotbar based on the corresponding {@link PetrolparkAttributes}.
+     * @param forceSync Whether to sync the size of the Extended Inventory to the client
+     * @see ExtendedInventory#updateSize() Shortcut call with {@code forceSync = false}
+     */
     public void updateSize(boolean forceSync) {
         int sizeBefore = extraItems.size();
         int hotbarBefore = extraHotbarSlots;
         if (player.getAttributes().hasAttribute(PetrolparkAttributes.EXTRA_HOTBAR_SLOTS.getDelegate())) setExtraHotbarSlots((int)player.getAttributeValue(PetrolparkAttributes.EXTRA_HOTBAR_SLOTS.getDelegate()));
         if (player.getAttributes().hasAttribute(PetrolparkAttributes.EXTRA_INVENTORY_SIZE.getDelegate())) setExtraInventorySize((int)player.getAttributeValue(PetrolparkAttributes.EXTRA_INVENTORY_SIZE.getDelegate()));
         if ((forceSync || sizeBefore != extraItems.size() || hotbarBefore != extraHotbarSlots) && !player.level().isClientSide() && player instanceof ServerPlayer sp && sp.connection != null) {
+            player.closeContainer();
             CatnipServices.NETWORK.sendToClient(sp, new ExtraInventorySizeChangePacket(extraItems.size(), extraHotbarSlots, false));
+            refreshPlayerInventoryMenuServer(sp);
         };
     };
 
+    /**
+     * Re-create the Player's {@link Player#inventoryMenu Inventory Menu} with the right number of extra Slots, in the right places.
+     * This is the riskiest part of the whole Extended Inventory API as we are reassigning what was originally a {@code final} field.
+     * @param player
+     * @param columns How many columns in the (non-Hotbar) Inventory set of Slots
+     * @param invX Left side of the (non-Hotbar) Inventory set of Slots
+     * @param invY Top side of the (non-Hotbar) Inventory set of Slots
+     * @param leftHotbarSlots How many Hotbar Slots to put on the left of the Vanilla Hotbar
+     * @param leftHotbarX Left side of the extra Hotbar Slots to the left of the Vanilla Hotbar
+     * @param leftHotbarY Top side of the extra Hotbar Slots to the left of the Vanilla Hotbar
+     * @param rightHotbarX Left side of the extra Hotbar Slots to the right of the Vanilla Hotbar
+     * @param rightHotbarY Right side of the extra Hotbar Slots to the right of the Vanilla Hotbar
+     * @see ExtendedInventory#refreshPlayerInventoryMenuServer(Player) Refresh the Inventory Menu with the Slots in unknown positions (possible on the server side)
+     */
     public static void refreshPlayerInventoryMenu(Player player, int columns, int invX, int invY, int leftHotbarSlots, int leftHotbarX, int leftHotbarY, int rightHotbarX, int rightHotbarY) {
         player.inventoryMenu = new InventoryMenu(player.getInventory(), !player.level().isClientSide(), player); // Usually this field would be final; don't tell anybody I did this
         get(player).ifPresent(inv -> inv.addExtraInventorySlotsToMenu(player.inventoryMenu, columns, invX, invY, leftHotbarSlots, leftHotbarX, leftHotbarY, rightHotbarX, rightHotbarY));
@@ -95,14 +139,20 @@ public class ExtendedInventory extends Inventory {
         if (player instanceof ServerPlayer sp && sp.containerSynchronizer != null && sp.containerListener != null) sp.initInventoryMenu();
     };
 
+    /**
+     * Re-create the Player's {@link Player#inventoryMenu Inventory Menu} on the logical server.
+     * All Slots are added at (0,0) (or some arbitrary location) because their location does not matter on the server side.
+     * @param player
+     * @see ExtendedInventory#refreshPlayerInventoryMenu(Player, int, int, int, int, int, int, int, int) Specify the locations of the Slots
+     */
     public static void refreshPlayerInventoryMenuServer(Player player) {
         refreshPlayerInventoryMenu(player, 5, 0, 0, 0, 0, 0, 0, 0);
     };
 
     /**
-     * Whether the given Slot index corresponds to a vanilla hotbar Slot.
+     * Whether the given Slot index corresponds to a Vanilla Hotbar Slot.
      * @param index
-     * @return {@code false} if the Slot is not in the vanilla hotbar, even if there are additional hotbar Slots
+     * @return {@code false} if the Slot is not in the Vanilla Hotbar, even if there are additional Hotbar Slots
      */
     public static boolean isVanillaHotbarSlot(int index) {
         return Inventory.isHotbarSlot(index);
@@ -116,7 +166,7 @@ public class ExtendedInventory extends Inventory {
         if (size == extraItems.size()) return;
         if (size < extraItems.size()) {
             for (int stack = size; stack < extraItems.size(); stack++) {
-                player.drop(extraItems.get(stack), false);
+                placeItemBackInInventory(extraItems.get(stack), true);
             };
         };
         NonNullList<ItemStack> newExtraItems = NonNullList.withSize(size, ItemStack.EMPTY);
@@ -136,7 +186,7 @@ public class ExtendedInventory extends Inventory {
     };
 
     /**
-     * The number of additional hotbar Slots beyond the usual 9.
+     * The number of additional Hotbar Slots beyond the usual 9.
      */
     public int getExtraHotbarSlots() {
         return Math.min(extraItems.size(), extraHotbarSlots);
@@ -146,9 +196,9 @@ public class ExtendedInventory extends Inventory {
         return super.getContainerSize();
     };
     /**
-     * Whether the given slot index is part of the extended hotbar
+     * Whether the given Slot index is part of the extended Hotbar
      * @param index
-     * @return {@code true} if it's a vanilla or extended index
+     * @return {@code true} if it's a Vanilla or extended index
      */
     public boolean isFullHotbarSlot(int index) {
         int extraInventoryStart = getExtraInventoryStartSlotIndex();
@@ -156,7 +206,7 @@ public class ExtendedInventory extends Inventory {
     };
 
     /**
-     * The total hotbar size, vanilla + extra slots
+     * The total Hotbar size, Vanilla + extra Slots
      * @see ExtendedInventory#getExtraHotbarSlots()
      */
     public int getHotbarSize() {
@@ -164,7 +214,7 @@ public class ExtendedInventory extends Inventory {
     };
 
     /**
-     * Get the Slot index of the given index in the displayed hotbar - how far right the selected slot is, considering the sides on which the extra slots are
+     * Get the Slot index of the given index in the displayed Hotbar - how far right the selected Slot is, considering the sides on which the extra Slots are
      * @param hotbarIndex A number from {@code 0} to {@code 8 + getExtraHotbarSlots()}
      */
     protected int getSlotIndex(int hotbarIndex) {
@@ -222,19 +272,19 @@ public class ExtendedInventory extends Inventory {
     public void addExtraInventorySlotsToMenu(Consumer<Slot> slotAdder, SlotFactory slotFactory, int columns, int invX, int invY, int leftHotbarSlots, int leftHotbarX, int leftHotbarY, int rightHotbarX, int rightHotbarY) {
         int extraItemsStart = getExtraInventoryStartSlotIndex();
 
-        // Add right hotbar slots
+        // Add right Hotbar Slots
         for (int i = 0; i < getExtraHotbarSlots() - leftHotbarSlots; i++) {
             slotAdder.accept(slotFactory.create(this, extraItemsStart + i, rightHotbarX + i * 18, rightHotbarY));
         };
         
-        // Add left hotbar slots
+        // Add left Hotbar Slots
         int j = 0;
         for (int i = getExtraHotbarSlots() - leftHotbarSlots; i < getExtraHotbarSlots(); i++) {
             slotAdder.accept(slotFactory.create(this, extraItemsStart + i, leftHotbarX + j * 18, leftHotbarY));
             j++;
         };
 
-        // Add non-hotbar slots
+        // Add non-Hotbar Slots
         j = 0;
         for (int i = getExtraHotbarSlots(); i < extraItems.size(); i++) {
             slotAdder.accept(slotFactory.create(this, extraItemsStart + i, invX + 18 * (j % columns), invY + 18 * (j / columns)));
@@ -292,7 +342,7 @@ public class ExtendedInventory extends Inventory {
         } else if (matchingSlot != -1) {
             pickSlot(matchingSlot);
         } else {
-            selected = getSuitableHotbarSlot(); // Switch to a new or replaceable hotbar slot
+            selected = getSuitableHotbarSlot(); // Switch to a new or replaceable Hotbar Slot
             if (!getItem(selected).isEmpty()) { // Find a place to put the old Item which was selected
                 int freeSlot = getFreeSlot();
                 if (freeSlot != -1) setItem(freeSlot, stack);
@@ -302,7 +352,7 @@ public class ExtendedInventory extends Inventory {
     };
 
     /**
-     * Stick an Item from the Inventory in the hotbar
+     * Stick an Item from the Inventory in the Hotbar
      */
     @Override
     public void pickSlot(int index) {
@@ -323,7 +373,7 @@ public class ExtendedInventory extends Inventory {
     };
 
     /**
-     * Search for a slot in the vanilla and extended Inventories (i.e. not armor or offhand)
+     * Search for a Slot in the Vanilla and extended Inventories (i.e. not armor or offhand).
      * @param stackPredicate
      */
     public int findSlot(Predicate<ItemStack> stackPredicate) {
@@ -381,7 +431,9 @@ public class ExtendedInventory extends Inventory {
     };
 
     /**
-     * Copied from {@link Inventory#add(int, ItemStack) Minecraft source code}
+     * Copied from {@link Inventory#add(int, ItemStack) Minecraft source code}.
+     * Place an ItemStack in the specified Slot, and shrink the ItemStack appropriately.
+     * @return {@code true} if any of the ItemStack could be placed in the Slot
      */
     @Override
     public boolean add(int slot, @Nonnull ItemStack stack) {
@@ -407,21 +459,21 @@ public class ExtendedInventory extends Inventory {
                         return false;
                     }
                 } else {
-                    int i;
+                    int count;
                     do {
-                        i = stack.getCount();
+                        count = stack.getCount();
                         if (slot == -1) {
                             stack.setCount(addResource(stack));
                         } else {
                             stack.setCount(addResource(slot, stack));
                         };
-                    } while (!stack.isEmpty() && stack.getCount() < i);
+                    } while (!stack.isEmpty() && stack.getCount() < count);
 
-                    if (stack.getCount() == i && player.getAbilities().instabuild) {
+                    if (stack.getCount() == count && player.getAbilities().instabuild) {
                         stack.setCount(0);
                         return true;
                     } else {
-                        return stack.getCount() < i;
+                        return stack.getCount() < count;
                     }
                 }
             } catch (Throwable throwable) {
@@ -496,9 +548,8 @@ public class ExtendedInventory extends Inventory {
             ItemStack stack = extraItems.get(i);
             if (!stack.isEmpty()) {
                CompoundTag tag = new CompoundTag();
-               tag.putInt("Slot", i + extraInventoryStart);
-               stack.save(player.registryAccess(), tag);
-               listTag.add(tag);
+               tag.putByte("Slot", (byte)(i + extraInventoryStart));
+               listTag.add(stack.save(player.registryAccess(), tag));
             };
         };
 
@@ -507,16 +558,20 @@ public class ExtendedInventory extends Inventory {
 
     @Override
     public void load(@Nonnull ListTag listTag) {
-        updateSize();
         super.load(listTag);
+        player.detectEquipmentUpdates(); // Need to do this now as Attribute Modifiers due to equipped Items don't usually load until after the whole Inventory
+        updateSize();
         int extraInventoryStart = getExtraInventoryStartSlotIndex();
         for (int i = 0; i < listTag.size(); i++) {
             CompoundTag tag = listTag.getCompound(i);
-            if (tag.contains("Slot", Tag.TAG_INT)) {
-                int slotIndex = tag.getInt("Slot");
+            if (tag.contains("Slot", Tag.TAG_BYTE)) {
+                int slotIndex = tag.getByte("Slot") & 255;
                 if (slotIndex >= extraInventoryStart) {
                     slotIndex -= extraInventoryStart;
-                    if (slotIndex < extraItems.size()) extraItems.set(slotIndex, ItemStack.parse(player.registryAccess(), tag).orElse(ItemStack.EMPTY));
+                    if (slotIndex < extraItems.size()) {
+                        ItemStack stack = ItemStack.parse(player.registryAccess(), tag).orElse(ItemStack.EMPTY);
+                        extraItems.set(slotIndex, stack);
+                    };
                 };
             };
         };

@@ -114,6 +114,8 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
         for (Slot slot : player.inventoryMenu.slots) {
             if (slot.getSlotIndex() >= inv.getExtraInventoryStartSlotIndex()) extendedInventorySlots.put(slot.getSlotIndex(), slot);
         };
+        PetrolparkClient.EXTENDED_INVENTORY_HANDLER.currentScreen = this;
+        PetrolparkClient.EXTENDED_INVENTORY_HANDLER.refreshExtraInventoryAreas(inv);
         PetrolparkClient.EXTENDED_INVENTORY_HANDLER.addSlotsToClientMenu(inv, menu::addSlot, (c, i, x, y) -> new CreativeModeInventoryScreen.SlotWrapper(extendedInventorySlots.get(i), i, x, y));
     };
 

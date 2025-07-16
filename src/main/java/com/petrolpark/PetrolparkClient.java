@@ -23,11 +23,12 @@ public class PetrolparkClient {
         Mods.CURIOS.executeIfInstalled(() -> () -> CuriosClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
 	};
 
-    public void clientCtor(IEventBus modEventBus, IEventBus neoEventBus) {
+    public final void clientCtor(IEventBus modEventBus, IEventBus neoEventBus) {
         modEventBus.addListener(PetrolparkClient::clientInit);
+        neoEventBus.register(EXTENDED_INVENTORY_HANDLER);
     };
     
-    public static void clientInit(final FMLClientSetupEvent event) {
+    public static final void clientInit(final FMLClientSetupEvent event) {
         event.enqueueWork(() -> { // Work which must be done on main thread
             
         });

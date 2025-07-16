@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.petrolpark.compat.jei.PetrolparkJEI;
+import com.petrolpark.compat.jei.PetrolparkCreateJEI;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.common.network.IConnectionToServer;
@@ -31,6 +31,6 @@ public class JustEnoughItemsClientMixin {
         IConnectionToServer serverConnection,
         List<IModPlugin> plugins
     ) {
-        plugins.add(new PetrolparkJEI());
+        plugins.add(new PetrolparkCreateJEI());
     };
 };

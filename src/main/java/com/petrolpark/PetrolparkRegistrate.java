@@ -123,8 +123,8 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, PetrolparkRegistries.Keys.TRADE_LISTING_REFERENCE_TYPE, () -> new ITradeListingReference.Type(codec, streamCodec));
     };
 
-    public RegistryEntry<Attribute, Attribute> attribute(String name, NonNullFunction<String, Attribute> factory) {
-        return simple(name, Registries.ATTRIBUTE, () -> factory.apply(name));
+    public RegistryEntry<Attribute, Attribute> attribute(String name, NonNullSupplier<Attribute> factory) {
+        return simple(name, Registries.ATTRIBUTE, factory);
     };
 
     public <C extends CriterionTrigger<?>> RegistryEntry<CriterionTrigger<?>, C> criterionTrigger(String name, NonNullSupplier<C> triggerFactory) {

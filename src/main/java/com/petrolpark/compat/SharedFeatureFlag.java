@@ -13,20 +13,15 @@ import net.minecraft.util.StringRepresentable;
 
 public enum SharedFeatureFlag implements StringRepresentable {
     
-    // Machines/Gameplay
     CENTRIFUGE,
-    EXTRUSION,
     BASIN_LID,
     TORQUE_LIMITER,
-
-    // Items/Fluids
     MESH,
-    EGG_PRODUCTS, // Egg Whites & Yolks, Meringue
+    EXTRUSION(MESH),
     SUNFLOWER_OIL,
     MILK_PRODUCTS(CENTRIFUGE), // Butter, Skimmed Milk and Cream
     SPRING,
-    POTATO_PRODUCTS(MILK_PRODUCTS, EXTRUSION), // Mashed Potato
-
+    POTATO_PRODUCTS(MILK_PRODUCTS, EXTRUSION), // Mashed Potato, Fries
     MANDREL(SPRING),
     ;
 

@@ -27,6 +27,7 @@ public class Curios {
     
     public static void ctor(IEventBus modEventBus, IEventBus forgeEventBus) {
 
+        // Add predicates
         Mods.CREATE.executeIfInstalled(() -> () -> GogglesItem.addIsWearingPredicate(wearingCurioPredicate(stack -> CuriosSetup.ENGINEERS_GOGGLES.stream().anyMatch(b -> b.get().get().equals(stack.getItem())), "head")));
 
         // Rendering

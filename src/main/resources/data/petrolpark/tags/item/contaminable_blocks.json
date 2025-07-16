@@ -21,7 +21,7 @@
         "minecraft:string",
 
         "minecraft:nether_wart",
-        "#forge:seeds",
+        "#c:seeds",
         "#minecraft:villager_plantable_seeds"
     ]
 }

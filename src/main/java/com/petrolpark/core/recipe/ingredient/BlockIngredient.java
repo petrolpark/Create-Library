@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
+@Deprecated
 public interface BlockIngredient<T extends BlockIngredient<T>> {
 
     public static final ImpossibleBlockIngredient IMPOSSIBLE = new ImpossibleBlockIngredient();

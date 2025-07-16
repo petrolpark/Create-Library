@@ -9,7 +9,11 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class RequestInventoryFullStatePacket implements ServerboundPacketPayload {
 
-    public static final StreamCodec<ByteBuf, RequestInventoryFullStatePacket> STREAM_CODEC = StreamCodec.unit(new RequestInventoryFullStatePacket());
+    public static final RequestInventoryFullStatePacket INSTANCE = new RequestInventoryFullStatePacket();
+
+    private RequestInventoryFullStatePacket() {};
+
+    public static final StreamCodec<ByteBuf, RequestInventoryFullStatePacket> STREAM_CODEC = StreamCodec.unit(INSTANCE);
 
     @Override
     public PacketTypeProvider getTypeProvider() {

@@ -31,6 +31,7 @@ import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.wrapper.CombinedInvWrapper;
 
+//TODO
 public class MandrelBlockEntity extends KineticBlockEntity {
 
     public final ItemStackHandler inputInv;
@@ -133,6 +134,8 @@ public class MandrelBlockEntity extends KineticBlockEntity {
         running = false;
 
         SingleRecipeInput inventoryIn = new SingleRecipeInput(inputInv.getStackInSlot(0));
+        Level level = getLevel();
+        if (level == null) return;
 
 		if (lastRecipe == null || !lastRecipe.matches(inventoryIn, level)) {
 			Optional<RecipeHolder<MandrelRecipe>> recipe = level.getRecipeManager().getRecipeFor(CreateRecipeTypes.MANDREL.getType(), inventoryIn, level);

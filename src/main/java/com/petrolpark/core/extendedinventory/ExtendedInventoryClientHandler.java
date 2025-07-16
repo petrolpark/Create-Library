@@ -11,10 +11,11 @@ import org.jetbrains.annotations.ApiStatus;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkClient;
 import com.petrolpark.PetrolparkKeys;
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
 import com.petrolpark.client.rendering.PetrolparkNineSlices;
+import com.petrolpark.config.PetrolparkClientConfig;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.extendedinventory.ExtendedInventory.DelayedSlotPopulation;
 import com.petrolpark.core.extendedinventory.ExtendedInventory.SlotFactory;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
@@ -24,13 +25,13 @@ import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.client.gui.screens.inventory.InventoryScreen;
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.renderer.Rect2i;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
@@ -48,16 +49,20 @@ import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
 
 @OnlyIn(Dist.CLIENT)
 @ApiStatus.Experimental
-@EventBusSubscriber(value = Dist.CLIENT, modid = Petrolpark.MOD_ID)
 public class ExtendedInventoryClientHandler {
 
-    protected static final ResourceLocation WIDGETS_LOCATION = ResourceLocation.withDefaultNamespace("textures/gui/widgets.png");
-
-    private static final List<KeyMapping> hotbarKeys = new ArrayList<>(17);
-    private static boolean keysInitialized = false;
+    /**
+     * Ordered list of Keys which switch to the different Hotbar slots.
+     */
+    private static final List<KeyMapping> HOTBAR_KEYS = new ArrayList<>(17);
 
     /**
-     * The last known settings for where the Extended Inventory slots should be rendered in a menu
+     * Whether {@link ExtendedInventoryClientHandler#HOTBAR_KEYS_INITIALIZED} is the complete list yet (it may not be as the Keys from the Petrolpark Library are added after registration).
+     */
+    private static boolean HOTBAR_KEYS_INITIALIZED = false;
+
+    /**
+     * The last known settings for where the Extended Inventory Slots should be rendered in a menu.
      */
     private ExtraInventoryClientSettings settings = null;
     
@@ -65,19 +70,21 @@ public class ExtendedInventoryClientHandler {
      * Tick the Extended Inventory, client side.
      * This:<ul>
      * <li>Checks to see if the {@link ExtendedInventoryClientHandler#settings render settings} of the Extended Inventory has been changed in the configs
-     * <li>Consumes hotbar key presses
+     * <li>Consumes Hotbar key presses
      * </ul>
      * <p> </p>
      * @param event
      */
-    public void tick(ClientTickEvent.Pre event) {
+    @SubscribeEvent
+    public final void onClientTick(ClientTickEvent.Pre event) {
+        if (!ExtendedInventory.enabled()) return;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
         Optional<ExtendedInventory> invOp = ExtendedInventory.get(mc.player);
         if (invOp.isEmpty()) return;
         ExtendedInventory inv = invOp.get();
 
-        // Update survival inventory screen if the layout of the Extended Inventory has changed
+        // Update survival Inventory  screen if the layout of the Extended Inventory has changed
         ExtraInventoryClientSettings currentSettings = getExtraInventoryClientSettings();
         if (!currentSettings.equals(settings)) {
             settings = currentSettings;
@@ -85,16 +92,16 @@ public class ExtendedInventoryClientHandler {
         };
 
         // Initialize Key Mappings
-        if (!keysInitialized) {
-            Collections.addAll(hotbarKeys, mc.options.keyHotbarSlots);
-            Collections.addAll(hotbarKeys, PetrolparkKeys.HOTBAR_SLOT_9.keybind, PetrolparkKeys.HOTBAR_SLOT_10.keybind, PetrolparkKeys.HOTBAR_SLOT_11.keybind, PetrolparkKeys.HOTBAR_SLOT_12.keybind, PetrolparkKeys.HOTBAR_SLOT_13.keybind, PetrolparkKeys.HOTBAR_SLOT_14.keybind, PetrolparkKeys.HOTBAR_SLOT_15.keybind, PetrolparkKeys.HOTBAR_SLOT_16.keybind);
-            keysInitialized = true;
+        if (!HOTBAR_KEYS_INITIALIZED) {
+            Collections.addAll(HOTBAR_KEYS, mc.options.keyHotbarSlots);
+            Collections.addAll(HOTBAR_KEYS, PetrolparkKeys.HOTBAR_SLOT_9.keybind, PetrolparkKeys.HOTBAR_SLOT_10.keybind, PetrolparkKeys.HOTBAR_SLOT_11.keybind, PetrolparkKeys.HOTBAR_SLOT_12.keybind, PetrolparkKeys.HOTBAR_SLOT_13.keybind, PetrolparkKeys.HOTBAR_SLOT_14.keybind, PetrolparkKeys.HOTBAR_SLOT_15.keybind, PetrolparkKeys.HOTBAR_SLOT_16.keybind);
+            HOTBAR_KEYS_INITIALIZED = true;
         };
 
-        // Allow switching to extended hotbar slots
+        // Allow switching to extended Hotbar Slots
         if (mc.getOverlay() != null || mc.screen != null || mc.options.keyLoadHotbarActivator.isDown() || mc.options.keySaveHotbarActivator.isDown()) return;
         for (int i = 0; i < inv.getHotbarSize(); i++) {
-            if (hotbarKeys.get(i).consumeClick()) {
+            if (HOTBAR_KEYS.get(i).consumeClick()) {
                 int slot = i - getLeftExtraHotbarSlots(inv.getExtraHotbarSlots());
                 if (slot < 0) slot += inv.getHotbarSize();
                 inv.selected = inv.getSlotIndex(slot);
@@ -103,7 +110,7 @@ public class ExtendedInventoryClientHandler {
     };
 
     /**
-     * Refresh the locations of the Extended Inventory slots in the Survival Inventory only.
+     * Refresh the locations of the Extended Inventory Slots in the Survival Inventory only.
      * @param inv The Player's Extended Inventory
      */
     public static void refreshClientInventoryMenu(ExtendedInventory inv) {
@@ -142,6 +149,10 @@ public class ExtendedInventoryClientHandler {
         ExtendedInventory.refreshPlayerInventoryMenu(inv.player,getExtraInventoryWidth(), invX + INVENTORY_PADDING, invY + INVENTORY_PADDING, getLeftExtraHotbarSlots(inv.getExtraHotbarSlots()), leftX, leftY, rightX, rightY);
     };
 
+    /**
+     * Syncronize the additional Inventory Slots and Hotbar Slots on the client so they match the server. This should be done whenever attributes are synced anyway, but we have this just in case.
+     * @param packet
+     */
     public static void handleExtendedInventorySizeChange(ExtraInventorySizeChangePacket packet) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
@@ -151,25 +162,25 @@ public class ExtendedInventoryClientHandler {
         inv.setExtraInventorySize(packet.extraInventorySize());
         inv.setExtraHotbarSlots(packet.extraHotbarSlots());
         refreshClientInventoryMenu(inv);
-        if (packet.requestFullState()) CatnipServices.NETWORK.sendToServer(new RequestInventoryFullStatePacket());
+        if (packet.requestFullState()) CatnipServices.NETWORK.sendToServer(RequestInventoryFullStatePacket.INSTANCE); // Get an up-to-date list of the Items in the additional Slots
     };
 
     /**
-     * The space between the edge of the Extended Inventory "window" and the actual Slot
+     * The space between the edge of the Extended Inventory "window" and the actual Slot.
      */
     public static final int INVENTORY_PADDING = 7;
     /**
-     * The space between the regular Inventory "window" and any Extended Inventory "window"
+     * The space between the regular Inventory "window" and any Extended Inventory "window".
      */
     public static final int INVENTORY_SPACING = 4;
     /**
-     * The vertical space between the main Inventory and hotbar Slots
+     * The vertical space between the main Inventory and Hotbar Slots.
      */
     public static final int INVENTORY_HOTBAR_SPACING = 4;
 
     /**
-     * The number of additional hotbar slots to the left of the vanilla hotbar.
-     * @param totalExtraHotbarSlots The number of extra hotbar slots on either side of the vanilla hotbar
+     * The number of additional Hotbar Slots to the left of the Vanilla Hotbar.
+     * @param totalExtraHotbarSlots The number of extra Hotbar Slots on either side of the vanilla hotbar
      */
     public static final int getLeftExtraHotbarSlots(int totalExtraHotbarSlots) {
         if (totalExtraHotbarSlots == 0) return 0;
@@ -185,43 +196,52 @@ public class ExtendedInventoryClientHandler {
     };
 
     /**
-     * The number of additional hotbar slots to the right of the vanilla hotbar.
-     * @param totalExtraHotbarSlots The number of extra hotbar slots on either side of the vanilla hotbar
+     * The number of additional Hotbar Slots to the right of the Vanilla Hotbar.
+     * @param totalExtraHotbarSlots The number of extra Hotbar Slots on either side of the vanilla hotbar
      */
     public static final int getRightExtraHotbarSlots(int totalExtraHotbarSlots) {
         return totalExtraHotbarSlots - getLeftExtraHotbarSlots(totalExtraHotbarSlots);
     };
 
     /**
-     * Where the extra non-hotbar slots of the Extended Inventory are
+     * Where the extra non-Hotbar Slots of the Extended Inventory are.
      * @return {@code true} on left, {@code false} on right
      */
     public static final boolean isExtraInventoryOnLeft() {
-        return true; //TODO config
+        return PetrolparkConfigs.client().extraInventoryLeft.get();
     };
 
     /**
-     * The number of slots wide non-hotbar section of the Extended Inventory is
+     * The number of Slots wide non-hotbar section of the Extended Inventory is.
      */
     public static final int getExtraInventoryWidth() {
-        return 3; //TODO config
+        return PetrolparkConfigs.client().extraInventoryWidth.get();
     };
 
+    /**
+     * How the additional Hotbar Slots should be arranged according to the Player's configs.
+     */
     public static final ExtraHotbarSlotLocations getExtraHotbarSlotLocations() {
-        return ExtraHotbarSlotLocations.ALL_LEFT; //TODO config
+        return PetrolparkConfigs.client().extraHotbarSlotLocations.get();
     };
 
+    /**
+     * @see PetrolparkClientConfig#extraHotbarPrioritySlotCount
+     */
     public static final int getExtraHotbarPrioritySlots() {
-        return 3; //TODO config
+        return PetrolparkConfigs.client().extraHotbarPrioritySlotCount.get();
     };
 
+    /**
+     * @see PetrolparkClientConfig#extraInventory
+     */
     public ExtraInventoryClientSettings getExtraInventoryClientSettings() {
         return new ExtraInventoryClientSettings(isExtraInventoryOnLeft(), getExtraInventoryWidth(), getExtraHotbarSlotLocations(), getExtraHotbarPrioritySlots());
     };
 
     /**
-     * The location of the very top left of the "window" for Extended Inventory hotbar Slots on the left.
-     * @return {@code null} if there are no hotbar Slots rendered on the left
+     * The location of the very top left of the "window" for Extended Inventory Hotbar Slots on the left.
+     * @return {@code null} if there are no Hotbar Slots rendered on the left
      */
     public static final Rect2i getLeftHotbarLocation(ExtendedInventory inv, Rect2i screenArea, int hotbarY) {
         int slots = getLeftExtraHotbarSlots(inv.getExtraHotbarSlots());
@@ -230,8 +250,8 @@ public class ExtendedInventoryClientHandler {
     };
 
     /**
-     * The location of the very top left of the "window" for Extended Inventory hotbar Slots on the right.
-     * @return {@code null} if there are no hotbar Slots rendered on the right
+     * The location of the very top left of the "window" for Extended Inventory Hotbar Slots on the right.
+     * @return {@code null} if there are no Hotbar Slots rendered on the right
      */
     public static final Rect2i getRightHotbarLocation(ExtendedInventory inv, Rect2i screenArea, int hotbarY) {
         int slots = getRightExtraHotbarSlots(inv.getExtraHotbarSlots());
@@ -240,7 +260,7 @@ public class ExtendedInventoryClientHandler {
     };
 
     /**
-     * The location of an Extended Inventory hotbar "window" with padding applied.
+     * The location of an Extended Inventory Hotbar "window" with padding applied.
      */
     protected static final Rect2i getHotbarLocation(Rect2i screenArea, int hotbarY, int xOffset, int slots) {
         return new Rect2i(
@@ -252,8 +272,8 @@ public class ExtendedInventoryClientHandler {
     };
 
     /**
-     * The location of a combined "window" for both the main Extended Inventory Slots and the hotbar Slots on the same side.
-     * @return {@code null} if the main Extended Inventory section is too short to merge with the hotbar "window", or if there is no hotbar "window" on the side of the main Inventory.
+     * The location of a combined "window" for both the main Extended Inventory Slots and the Hotbar Slots on the same side.
+     * @return {@code null} if the main Extended Inventory section is too short to merge with the Hotbar "window", or if there is no Hotbar "window" on the side of the main Inventory.
      */
     public static final Rect2i getCombinedInventoryHotbarLocation(ExtendedInventory inv, Rect2i screenArea, int hotbarY) {
         boolean left = isExtraInventoryOnLeft();
@@ -311,7 +331,7 @@ public class ExtendedInventoryClientHandler {
     /**
      * The Screen currently being rendered with extra Slots, or {@code null} if no Screen showing extra Slots is being rendered.
      */
-    private AbstractContainerScreen<?> currentScreen = null;
+    public AbstractContainerScreen<?> currentScreen = null;
     /**
      * @see ExtendedInventoryClientHandler#getLeftHotbarLocation(ExtendedInventory, Rect2i, int)
      */
@@ -334,7 +354,7 @@ public class ExtendedInventoryClientHandler {
     private List<Rect2i> extraGuiAreas = Collections.emptyList();
 
     /**
-     * Refresh the locations of the "windows" for the Extended Inventory slots on the {@link ExtendedInventoryClientHandler#currentScreen current Screen}.
+     * Refresh the locations of the "windows" for the Extended Inventory Slots on the {@link ExtendedInventoryClientHandler#currentScreen current Screen}.
      */
     public void refreshExtraInventoryAreas(ExtendedInventory inv) {
         if (currentScreen == null) return;
@@ -369,7 +389,7 @@ public class ExtendedInventoryClientHandler {
     };
 
     /**
-     * Search the Slots of the given Screen to find where the (non-Extended) Inventory's hotbar is rendered.
+     * Search the Slots of the given Screen to find where the (non-Extended) Inventory's Hotbar is rendered.
      */
     public static int findHotbarY(AbstractContainerScreen<?> screen) {
         Minecraft mc = Minecraft.getInstance();
@@ -393,10 +413,25 @@ public class ExtendedInventoryClientHandler {
         return leftHotbar == null ? 0 : leftHotbar.getX();
     };
 
+    /**
+     * Add Slots corresponding to those of the Extended Inventory to a Menu, on the client side.
+     * Unlike with {@link ExtendedInventory#refreshPlayerInventoryMenuServer(Player)}, the location is important.
+     * @param inv
+     * @param menu
+     * @see ExtendedInventoryClientHandler#addSlotsToClientMenu(ExtendedInventory, Consumer, SlotFactory) Instantiating Slots in a special way (e.g. for the {@link CreativeModeInventoryScreen}).
+     */
     public void addSlotsToClientMenu(ExtendedInventory inv, AbstractContainerMenu menu) {
         addSlotsToClientMenu(inv, menu::addSlot, Slot::new);
     };
 
+    /**
+     * Add Slots corresponding to those of the Extended Inventory to a Menu, on the client side.
+     * Unlike with {@link ExtendedInventory#refreshPlayerInventoryMenuServer(Player)}, the location is important.
+     * @param inv
+     * @param slotAdder
+     * @param slotFactory
+     * @see ExtendedInventoryClientHandler#addSlotsToClientMenu(ExtendedInventory, AbstractContainerMenu) Instantiating Slots normally
+     */
     public void addSlotsToClientMenu(ExtendedInventory inv, Consumer<Slot> slotAdder, SlotFactory slotFactory) {
         Rect2i inventoryRect = combinedInventoryHotbar == null ? inventory : combinedInventoryHotbar;
         int invX;
@@ -429,7 +464,13 @@ public class ExtendedInventoryClientHandler {
         inv.addExtraInventorySlotsToMenu(slotAdder, slotFactory, getExtraInventoryWidth(), invX + INVENTORY_PADDING, invY + INVENTORY_PADDING, getLeftExtraHotbarSlots(inv.getExtraHotbarSlots()), leftX, leftY, rightX, rightY);
     };
 
-    public void onOpenContainerScreen(ScreenEvent.Init.Post event) {
+    /**
+     * Before opening a Screen, add the additional Slots (if they are not already added).
+     * @param event
+     */
+    @SubscribeEvent
+    public void onScreenInitPost(ScreenEvent.Init.Post event) {
+        if (!ExtendedInventory.enabled()) return;
         if (!(event.getScreen() instanceof AbstractContainerScreen screen)) {
             currentScreen = null;
             return;
@@ -439,7 +480,7 @@ public class ExtendedInventoryClientHandler {
         Player player = mc.player;
         if (player == null) return;
 
-        if (menu == player.inventoryMenu) CatnipServices.NETWORK.sendToServer(new RequestInventoryFullStatePacket()); // Just in case
+        if (menu == player.inventoryMenu) CatnipServices.NETWORK.sendToServer(RequestInventoryFullStatePacket.INSTANCE); // Just in case
 
         if (!ExtendedInventory.supportsExtraInventory(menu) && !(menu == player.inventoryMenu || screen instanceof CreativeModeInventoryScreen)) {
             currentScreen = null;
@@ -454,21 +495,24 @@ public class ExtendedInventoryClientHandler {
             currentScreen = screen;
             refreshExtraInventoryAreas(inv);
         };
+
         if (!(
-            menu == player.inventoryMenu // Survival Inventory Menu slots are added in a Player mixin
-            || screen instanceof CreativeModeInventoryScreen // Creative Inventory Menu slots are added in a CreativeModeInventoryScreen mixin
+            menu == player.inventoryMenu // Survival Inventory Menu Slots are added in a Player mixin
+            || screen instanceof CreativeModeInventoryScreen // Creative Inventory Menu Slots are added in a CreativeModeInventoryScreen mixin
             || menu instanceof IExtendedInventoryMenu // Custom Extended Inventory Menu screens add the Slots themselves
         )) {
             addSlotsToClientMenu(inv, menu);
-            ((DelayedSlotPopulation)menu).populateDelayedSlots(); // Client recieves the stacks to fill early. The mixin stores them and we put them back in their proper place here.
+            ((DelayedSlotPopulation)menu).populateDelayedSlots(); // Client recieves the stacks to fill too early. The mixin stores them and we put them back in their proper place here.
         };
     };
 
     /**
-     * Render the "window" backgrounds and Slot backgrounds of Extended Inventory slots.
+     * Render the "window" backgrounds and Slot backgrounds of Extended Inventory Slots.
+     * @param event
      */
-    public void renderScreen(ScreenEvent.Render.Pre event) {
-        if (!(event.getScreen() instanceof AbstractContainerScreen screen) || screen != currentScreen) return;
+    @SubscribeEvent
+    public void onScreenRenderPre(ScreenEvent.Render.Pre event) {
+        if (!ExtendedInventory.enabled() || !(event.getScreen() instanceof AbstractContainerScreen screen) || screen != currentScreen) return;
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         if (player == null) return;
@@ -505,17 +549,17 @@ public class ExtendedInventoryClientHandler {
                 if (rightHotbar != null) PetrolparkNineSlices.INVENTORY_BACKGROUND.render(graphics, rightHotbar);
             };
             ms.popPose();
-            // Render left hotbar slot backgrounds
+            // Render left Hotbar Slot backgrounds
             if (leftHotbar != null) for (int i = 0; i < leftHotbarSlots; i++) {
                 PetrolparkGuiTexture.INVENTORY_SLOT.render(graphics, leftHotbar.getX() + INVENTORY_PADDING - 1 + i * 18, leftHotbar.getY() + INVENTORY_PADDING - 1);
             };
-            // Render right hotbar slot backgrounds
+            // Render right Hotbar Slot backgrounds
             int j = 0;
             if (rightHotbar != null) for (int i = leftHotbarSlots; i < inv.getExtraHotbarSlots(); i++) {
                 PetrolparkGuiTexture.INVENTORY_SLOT.render(graphics, rightHotbar.getX() + INVENTORY_PADDING - 1 + j * 18, rightHotbar.getY() + INVENTORY_PADDING - 1);
                 j++;
             };
-            // Render main extra inventory slot backgrounds
+            // Render main extra Inventory Slot backgrounds
             j = 0;
             Rect2i invRect = combinedInventoryHotbar == null ? inventory : combinedInventoryHotbar;
             if (invRect != null) for (int i = inv.getExtraHotbarSlots(); i < inv.extraItems.size(); i++) {
@@ -525,14 +569,20 @@ public class ExtendedInventoryClientHandler {
         }; ms.popPose();
     };
 
-    public void onCloseScreen(ScreenEvent.Closing event) {
+    /**
+     * Upon closing a Screen, forget which Screen should have extra Slots rendered for it.
+     * @param event
+     */
+    @SubscribeEvent
+    public void onScreenClosing(ScreenEvent.Closing event) {
         currentScreen = null;
     };
 
     /**
-     * Render the borders for the Extended Inventory Slots on the hotbar.
+     * Render the borders for the Extended Inventory Slots on the Hotbar.
      */
     public static void renderExtraHotbarBackground(GuiGraphics graphics, DeltaTracker deltaTracker) {
+        if (!ExtendedInventory.enabled()) return;
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         MultiPlayerGameMode gameMode = mc.gameMode;
@@ -555,7 +605,7 @@ public class ExtendedInventoryClientHandler {
                 slotCount = getRightExtraHotbarSlots(extraSlots);
                 x += 9 * 20;
             } else {
-                slotCount =getLeftExtraHotbarSlots(extraSlots);
+                slotCount = getLeftExtraHotbarSlots(extraSlots);
                 x -= slotCount * 20;
             };
 
@@ -567,10 +617,11 @@ public class ExtendedInventoryClientHandler {
     };
 
     /**
-     * Render the Slot icons and actual Items in the Extended Inventory hotbar Slots.
+     * Render the Slot icons and actual Items in the Extended Inventory Hotbar Slots.
      * Also render the selected Slot (again).
      */
     public static void renderExtraHotbar(GuiGraphics graphics, DeltaTracker deltaTracker) {
+        if (!ExtendedInventory.enabled()) return;
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
         MultiPlayerGameMode gameMode = mc.gameMode;
@@ -612,52 +663,53 @@ public class ExtendedInventoryClientHandler {
 
         int selected = inv.getSelectedHotbarIndex();
         int selectedX = graphics.guiWidth() / 2 - 92;
-        if (inv.getSelectedHotbarIndex() >= Inventory.getSelectionSize() + getRightExtraHotbarSlots(extraSlots)) { // If a left extra slot is selected
+        if (inv.getSelectedHotbarIndex() >= Inventory.getSelectionSize() + getRightExtraHotbarSlots(extraSlots)) { // If a left extra Slot is selected
             selectedX -= getLeftExtraHotbarSlots(extraSlots) * 20;
             selected -= (Inventory.getSelectionSize() + getRightExtraHotbarSlots(extraSlots));
         };
         selectedX += selected * 20;
 
-        graphics.blit(WIDGETS_LOCATION, selectedX, y - 2, 0, 22, 24, 22);
+        graphics.blitSprite(Gui.HOTBAR_SELECTION_SPRITE, selectedX, y - 2, 24, 23);
         
         ms.popPose();
     };
 
+    /**
+     * The spaces on the screen taken up by the Extended Inventory "windows".
+     * JEI needs to know these. We also use them to move the Recipe Book out of the way.
+     */
     public List<Rect2i> getGuiExtraAreas() {
         if (currentScreen == null) return Collections.emptyList();
         return extraGuiAreas;
     };
 
+    /**
+     * Displace a {@link Rect2i}.
+     * @param rect
+     * @param x
+     * @param y
+     */
+    private static Rect2i offset(Rect2i rect, int x, int y) {
+        return new Rect2i(rect.getX() + x, rect.getY() + y, rect.getWidth(), rect.getHeight());
+    };
+
     @EventBusSubscriber(value = Dist.CLIENT, modid = Petrolpark.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
     public static class ModBusEvents {
 
+        /**
+         * Register the renderers for the longer Hotbar.
+         * @param event
+         */
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiLayersEvent event) {
-            if (!ExtendedInventory.enabled()) return;
             event.registerBelow(VanillaGuiLayers.HOTBAR, Petrolpark.asResource("extra_hotbar_background"), ExtendedInventoryClientHandler::renderExtraHotbarBackground);
             event.registerAbove(VanillaGuiLayers.HOTBAR, Petrolpark.asResource("extra_hotbar"), ExtendedInventoryClientHandler::renderExtraHotbar);
         };
     };
 
-    private static Rect2i offset(Rect2i rect, int x, int y) {
-        return new Rect2i(rect.getX() + x, rect.getY() + y, rect.getWidth(), rect.getHeight());
-    };
-    
-    @SubscribeEvent
-    public static void onScreenInitPost(ScreenEvent.Init.Post event) {
-        if (ExtendedInventory.enabled()) PetrolparkClient.EXTENDED_INVENTORY_HANDLER.onOpenContainerScreen(event);
-    };
-
-    @SubscribeEvent
-    public static void onScreenRenderPre(ScreenEvent.Render.Pre event) {
-        if (ExtendedInventory.enabled()) PetrolparkClient.EXTENDED_INVENTORY_HANDLER.renderScreen(event);
-    };
-
-    @SubscribeEvent
-    public static void onScreenClosing(ScreenEvent.Closing event) {
-        if (ExtendedInventory.enabled()) PetrolparkClient.EXTENDED_INVENTORY_HANDLER.onCloseScreen(event);
-    };
-
+    /**
+     * @see PetrolparkClientConfig#extraHotbarSlotLocations
+     */
     public static enum ExtraHotbarSlotLocations {
         ALL_LEFT,
         ALL_RIGHT,
