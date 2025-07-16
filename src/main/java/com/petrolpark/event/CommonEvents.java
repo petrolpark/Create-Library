@@ -1,7 +1,5 @@
 package com.petrolpark.event;
 
-import java.util.stream.Stream;
-
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.PetrolparkTags;
@@ -9,16 +7,18 @@ import com.petrolpark.badge.BadgesCapability;
 import com.petrolpark.command.ContaminateCommand;
 import com.petrolpark.contamination.Contaminant;
 import com.petrolpark.contamination.ItemContamination;
-import com.petrolpark.item.decay.IDecayingItem;
 import com.petrolpark.item.decay.DecayingItemHandler.ServerDecayingItemHandler;
+import com.petrolpark.item.decay.IDecayingItem;
 import com.petrolpark.shop.customer.EntityCustomer;
 import com.petrolpark.team.SinglePlayerTeam;
-
+import com.petrolpark.util.IGameRendererMixin;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -27,6 +27,8 @@ import net.minecraftforge.event.brewing.PotionBrewEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+
+import java.util.stream.Stream;
 
 @EventBusSubscriber
 public class CommonEvents {
@@ -94,5 +96,11 @@ public class CommonEvents {
             if (PetrolparkConfig.SERVER.brewingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(Stream.of(event.getItem(3), potion).dropWhile(s -> PetrolparkConfig.SERVER.brewingWaterBottleContaminantsIgnored.get() && PotionUtils.getPotion(s) == Potions.WATER), potion);
         };
     };
-    
+
+    //DISCONNECTION CLEANING CLIENT SIDE
+    @SubscribeEvent
+    public static void onPlayerLogOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        IGameRendererMixin gameRenderer = (( IGameRendererMixin ) Minecraft.getInstance().gameRenderer);
+        gameRenderer.cleanShaderEffects();
+    }
 };

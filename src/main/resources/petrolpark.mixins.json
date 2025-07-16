@@ -32,6 +32,8 @@
         "FluidTankMixin",
         "ItemStackMixin",
         "LivingEntityMixin",
+        "MobEffectMixin",
+        "MobEffectInstanceMixin",
         "ServerAdvancementManagerMixin",
         "ShapedRecipeMixin",
         "ShapelessRecipeMixin",
@@ -52,7 +54,9 @@
         "compat.create.client.GoggleOverlayRendererMixin",
         "compat.create.client.PonderUIMixin",
         "compat.jei.client.JustEnoughItemsClientMixin",
-        "client.CreativeModeInventoryScreenMixin"
+        "client.CreativeModeInventoryScreenMixin",
+        "client.GameRendererMixin",
+        "client.PostPassMixin"
     ],
     "injectors": {
         "defaultRequire": 1

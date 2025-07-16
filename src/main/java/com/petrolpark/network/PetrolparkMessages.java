@@ -5,6 +5,8 @@ import java.util.function.Function;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.network.packet.C2SPacket;
 import com.petrolpark.network.packet.S2CPacket;
+import com.petrolpark.shadereffects.packet.MEIShaderRemovePacket;
+import com.petrolpark.shadereffects.packet.SyncInitialDurationPacket;
 import com.petrolpark.team.packet.BindTeamBlockPacket;
 import com.petrolpark.team.packet.BindTeamItemPacket;
 
@@ -34,6 +36,9 @@ public class PetrolparkMessages {
 
         addC2SPacket(BindTeamBlockPacket.class, BindTeamBlockPacket::new);
         addC2SPacket(BindTeamItemPacket.class, BindTeamItemPacket::new);
+
+        addS2CPacket(MEIShaderRemovePacket.class, MEIShaderRemovePacket::new);
+        addS2CPacket(SyncInitialDurationPacket.class, SyncInitialDurationPacket::new);
     };
 
     public static <T extends S2CPacket> void addS2CPacket(Class<T> clazz, Function<FriendlyByteBuf, T> decoder) {
