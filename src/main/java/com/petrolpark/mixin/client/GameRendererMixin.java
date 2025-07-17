@@ -1,6 +1,7 @@
 package com.petrolpark.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.petrolpark.shadereffects.ShaderEffectReloadHandler;
 import com.petrolpark.util.IGameRendererMixin;
 import com.petrolpark.util.IMobEffectInstanceMixin;
 import net.minecraft.client.Minecraft;
@@ -17,7 +18,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -59,22 +59,21 @@ public class GameRendererMixin implements IGameRendererMixin {
 
     @Override
     public void addMobEffectInstanceShader(ResourceLocation location, MobEffectInstance effect) {
-        try {
-            PostChain postChain = new PostChain(this.minecraft.getTextureManager(), this.resourceManager, this.minecraft.getMainRenderTarget(), location);
-            postChain.resize(this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight());
-            loadedEffects.put((( IMobEffectInstanceMixin ) effect), postChain);
-        } catch ( IOException e ) {
-            System.err.println("[Petrolpark] Failed to load shader: " + location);
-            e.printStackTrace();
+        if (ShaderEffectReloadHandler.hasForbiddenEffect(effect.getEffect())) return;
+
+        PostChain postChain = ShaderEffectReloadHandler.getShader(location);
+
+        if (postChain == null) {
+            System.err.println("[Petrolpark] Shader wasn't preloaded as intended: " + location);
+            return;
         }
+
+        loadedEffects.put((( IMobEffectInstanceMixin ) effect), postChain);
     }
 
     @Override
     public void removeMobEffectInstanceShader(IMobEffectInstanceMixin effect) {
-        PostChain postChain = loadedEffects.remove(effect);
-        if (postChain != null) {
-            postChain.close();
-        }
+         loadedEffects.remove(effect);
     }
 
     @Override
