@@ -18,8 +18,11 @@ public abstract class PostPassMixin {
 
     @Inject(method = "process", at = @At(value = "HEAD"))
     public void inProcess(float pPartialTicks, CallbackInfo ci) {
-        for ( PetrolparkPostUniforms postUniform : PetrolparkPostUniforms.values() ) {
-            postUniform.applyUniform(this.effect.safeGetUniform(postUniform.getName()));
+        if (effect == null) return;
+
+        for (PetrolparkPostUniforms uniform : PetrolparkPostUniforms.values()) {
+            var shaderUniform = effect.safeGetUniform(uniform.getName());
+            uniform.applyUniform(shaderUniform);
         }
     }
 }

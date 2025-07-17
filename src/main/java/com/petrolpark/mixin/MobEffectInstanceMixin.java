@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraftforge.common.extensions.IForgeMobEffectInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,7 +24,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import java.util.Optional;
 
 @Mixin( MobEffectInstance.class)
-public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin, Comparable<MobEffectInstance>, net.minecraftforge.common.extensions.IForgeMobEffectInstance{
+public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin, Comparable<MobEffectInstance>, IForgeMobEffectInstance{
     @Shadow
     int duration;
 
@@ -38,7 +39,6 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
         throw new AbstractMethodError("Shadow");
     };
 
-    private boolean shouldUpdateUniform = false;
     private boolean shaderInitialized = false;
 
     @Inject(method = "<init>(Lnet/minecraft/world/effect/MobEffect;IIZZZLnet/minecraft/world/effect/MobEffectInstance;Ljava/util/Optional;)V", at = @At("RETURN"))
@@ -48,18 +48,17 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void inTick(LivingEntity pEntity, Runnable pOnExpirationRunnable, CallbackInfoReturnable<Boolean> ci) {
-        if (!pEntity.level().isClientSide() && !sentInitialDuration && pEntity instanceof ServerPlayer ) {
-            PetrolparkMessages.sendToClient(new SyncInitialDurationPacket(this.initialDuration, this.effect), (( ServerPlayer ) pEntity));
+        //Server side
+        if (!pEntity.level().isClientSide() && !sentInitialDuration && pEntity instanceof ServerPlayer player && effect instanceof IShaderEffect) {
+            PetrolparkMessages.sendToClient(new SyncInitialDurationPacket(this.initialDuration, this.effect), player);
+            sentInitialDuration = true;
         }
-        if (pEntity.level().isClientSide()) {
+
+        //Client side
+        if (pEntity.level().isClientSide() && effect instanceof IShaderEffect shaderEffect && !shaderInitialized) {
+            shaderInitialized = true;
             IGameRendererMixin gameRenderer = ( IGameRendererMixin ) Minecraft.getInstance().gameRenderer;
-            if (effect instanceof IShaderEffect ) {
-                if (!shaderInitialized) {
-                    shaderInitialized = true;
-                    shouldUpdateUniform = true;
-                    gameRenderer.addMobEffectInstanceShader((( IShaderEffect ) effect).getShader(), ((MobEffectInstance) (Object) this));
-                }
-            }
+            gameRenderer.addMobEffectInstanceShader(shaderEffect.getShader(), ((MobEffectInstance) (Object) this));
         }
     }
 
@@ -71,31 +70,28 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
     }
 
     @Inject(method = "loadSpecifiedEffect", at = @At("RETURN"), cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT)
-    private static void inLoadSpecifiedEffect(MobEffect pEffect, CompoundTag pNbt, CallbackInfoReturnable<MobEffectInstance> ci, int i, int j, boolean flag, boolean flag1, boolean flag2, MobEffectInstance mobeffectinstance, Optional<MobEffectInstance.FactorData> optional) {
+    private static void inLoadSpecifiedEffect(MobEffect pEffect, CompoundTag pNbt, CallbackInfoReturnable<MobEffectInstance> ci, int i, int j, boolean flag, boolean flag1, boolean flag2, MobEffectInstance mobeffectinstance, Optional< MobEffectInstance.FactorData> optional) {
         int initialDuration = pNbt.getInt("InitialDuration");
-        MobEffectInstance inMobEffectinstance = readCurativeItems(new MobEffectInstance(pEffect, j, Math.max(0, i), flag, flag1, flag2, mobeffectinstance, optional), pNbt);
-        if (inMobEffectinstance.getEffect() instanceof  IShaderEffect) {
-            if (initialDuration > 0) {
-                (( IMobEffectInstanceMixin ) inMobEffectinstance).setInitialDuration(initialDuration);
-            } else {
-                (( IMobEffectInstanceMixin ) inMobEffectinstance).setInitialDuration(1);
-            }
+
+        MobEffectInstance instance = readCurativeItems(
+                new MobEffectInstance(pEffect, j, Math.max(0, i), flag, flag1, flag2, mobeffectinstance, optional),
+                pNbt
+        );
+
+        if (instance.getEffect() instanceof  IShaderEffect) {
+            (( IMobEffectInstanceMixin ) instance).setInitialDuration(Math.max(1, initialDuration));
         }
-        ci.setReturnValue(inMobEffectinstance);
+        ci.setReturnValue(instance);
         ci.cancel();
     }
 
     @Override
     public void updateUniforms() {
-        if (duration >= 0) {
-            PetrolparkPostUniforms.EFFECT_FACTOR.update((uniform) -> {
-                uniform.set((float) duration /  initialDuration);
-            });
-        } else {
-            PetrolparkPostUniforms.EFFECT_FACTOR.update((uniform) -> {
-                uniform.set(0.5f);
-            });
-        }
+        float value = duration >= 0 && initialDuration > 0 ?
+                (float) duration / initialDuration :
+                0.5f;
+
+        PetrolparkPostUniforms.EFFECT_FACTOR.update(uniform -> uniform.set(value));
     }
 
     @Override

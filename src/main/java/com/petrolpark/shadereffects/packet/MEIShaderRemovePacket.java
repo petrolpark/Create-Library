@@ -34,16 +34,16 @@ public class MEIShaderRemovePacket extends S2CPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             LocalPlayer player = Minecraft.getInstance().player;
+            if ( player == null ) return;
+
+            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(mobEffect);
+            if ( effect == null ) return;
+
+            MobEffectInstance instance = player.getEffect(effect);
+            if ( instance == null ) return;
+
             IGameRendererMixin gameRenderer = (( IGameRendererMixin ) Minecraft.getInstance().gameRenderer);
-            if ( player != null ) {
-                MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(mobEffect);
-                if ( effect != null ) {
-                    MobEffectInstance instance = player.getEffect(effect);
-                    if ( instance != null ) {
-                        gameRenderer.removeMobEffectInstanceShader((( IMobEffectInstanceMixin ) instance));
-                    }
-                }
-            }
+            gameRenderer.removeMobEffectInstanceShader((( IMobEffectInstanceMixin ) instance));
         });
         return true;
     }

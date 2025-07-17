@@ -18,7 +18,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.IdentityHashMap;
+import java.util.Map;
 
 @Mixin( GameRenderer.class )
 public class GameRendererMixin implements IGameRendererMixin {
@@ -41,13 +43,16 @@ public class GameRendererMixin implements IGameRendererMixin {
             )
     )
     public void inRender(float pPartialTicks, long pNanoTime, boolean pRenderLevel, CallbackInfo ci) {
-        for ( IMobEffectInstanceMixin effect : loadedEffects.keySet()) {
-            PostChain postChain = loadedEffects.get(effect);
+        for ( Map.Entry<IMobEffectInstanceMixin, PostChain> entry : loadedEffects.entrySet()) {
+            IMobEffectInstanceMixin effect = entry.getKey();
+            PostChain postChain = entry.getValue();
+
             effect.updateUniforms();
 
             RenderSystem.disableBlend();
             RenderSystem.disableDepthTest();
             RenderSystem.resetTextureMatrix();
+
             postChain.process(pPartialTicks);
         }
     }
@@ -59,7 +64,7 @@ public class GameRendererMixin implements IGameRendererMixin {
             postChain.resize(this.minecraft.getWindow().getWidth(), this.minecraft.getWindow().getHeight());
             loadedEffects.put((( IMobEffectInstanceMixin ) effect), postChain);
         } catch ( IOException e ) {
-            System.out.println("Shader ["+ location +"] failed to load O-O");
+            System.err.println("[Petrolpark] Failed to load shader: " + location);
             e.printStackTrace();
         }
     }
@@ -67,13 +72,15 @@ public class GameRendererMixin implements IGameRendererMixin {
     @Override
     public void removeMobEffectInstanceShader(IMobEffectInstanceMixin effect) {
         PostChain postChain = loadedEffects.remove(effect);
-        postChain.close();
+        if (postChain != null) {
+            postChain.close();
+        }
     }
 
     @Override
     public void cleanShaderEffects() {
-        for (IMobEffectInstanceMixin mei : loadedEffects.keySet()) {
-            removeMobEffectInstanceShader(mei);
+        for (IMobEffectInstanceMixin effect : new ArrayList<>(loadedEffects.keySet()) ) {
+            removeMobEffectInstanceShader(effect);
         }
     }
 }

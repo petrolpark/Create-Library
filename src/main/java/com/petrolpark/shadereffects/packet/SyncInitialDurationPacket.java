@@ -37,15 +37,15 @@ public class SyncInitialDurationPacket extends S2CPacket {
     public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         supplier.get().enqueueWork(() -> {
             LocalPlayer player = Minecraft.getInstance().player;
-            if (player != null) {
-                MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(mobEffectRL);
-                if (effect != null) {
-                    MobEffectInstance instance = player.getEffect(effect);
-                    if (instance != null) {
-                        (( IMobEffectInstanceMixin ) instance).setInitialDuration(initialDuration);
-                    }
-                }
-            }
+            if (player == null) return;
+
+            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(mobEffectRL);
+            if (effect == null) return;
+
+            MobEffectInstance instance = player.getEffect(effect);
+            if (instance == null) return;
+
+            (( IMobEffectInstanceMixin ) instance).setInitialDuration(initialDuration);
         });
         return true;
     }
