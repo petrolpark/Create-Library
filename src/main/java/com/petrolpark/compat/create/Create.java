@@ -22,6 +22,7 @@ public class Create {
         CreatePackets.register();
         CreateBlockEntityTypes.register();
         CreateBlocks.register();
+        CreateCriterionTriggers.register();
         CreateIngredientModifierTypes.register();
         CreateGlobalLootModifierSerializers.register();
         CreateFluids.register();

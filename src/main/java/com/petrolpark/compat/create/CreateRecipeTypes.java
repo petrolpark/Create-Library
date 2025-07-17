@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import javax.annotation.Nullable;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRecipe;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.util.Lang;
@@ -22,6 +23,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo {
 
+    EXTRUSION(ExtrusionRecipe.Serializer::new),
     MANDREL(MandrelRecipe.Serializer::new)
     //FIRST_TIME_LUCKY_MILLING(FTLMillingRecipe::new, AllRecipeTypes.MILLING::getType),
     ;
@@ -78,6 +80,11 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
     @Override
     @SuppressWarnings("unchecked")
     public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType() {
+        return (RecipeType<R>) type.get();
+    };
+
+    @SuppressWarnings("unchecked")
+    public <I extends RecipeInput, R extends Recipe<I>> RecipeType<R> getType(Class<R> recipeClass) {
         return (RecipeType<R>) type.get();
     };
 

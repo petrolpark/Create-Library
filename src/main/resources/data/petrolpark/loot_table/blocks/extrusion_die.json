@@ -2,7 +2,11 @@
   "neoforge:conditions": [
     {
       "type": "petrolpark:feature_enabled",
-      "feature": "potato_products"
+      "feature": "extrusion"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
     }
   ],
   "type": "minecraft:block",
@@ -17,11 +21,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "petrolpark:mashed_potato_block"
+          "name": "petrolpark:extrusion_die"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "petrolpark:blocks/mashed_potato_block"
+  "random_sequence": "petrolpark:blocks/extrusion_die"
 }

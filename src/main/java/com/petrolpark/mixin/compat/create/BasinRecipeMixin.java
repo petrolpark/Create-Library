@@ -29,6 +29,27 @@ import net.neoforged.neoforge.items.IItemHandler;
 @Mixin(BasinRecipe.class)
 public class BasinRecipeMixin {
     
+    /**
+     * Start {@link ItemDecay} and propagate Contaminants in Basin Recipes.
+     * @param basin
+     * @param recipe
+     * @param test
+     * @param cir
+     * @param isBasinRecipe
+     * @param availableItems
+     * @param availableFluids
+     * @param heat
+     * @param recipeOutputItems
+     * @param recipeOutputFluids
+     * @param ingredients
+     * @param fluidIngredients
+     * @param trueAndFalse
+     * @param i1
+     * @param i2
+     * @param simulate
+     * @param extractedItemsFromSlot
+     * @param extractedFluidsFromTank
+     */
     @Inject(
         method = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;Z)Z",
         at = @At(
@@ -47,7 +68,7 @@ public class BasinRecipeMixin {
         boolean trueAndFalse[], int i1, int i2, boolean simulate,
         int extractedItemsFromSlot[], int extractedFluidsFromTank[]
     ) {
-        if (simulate) {
+        if (!simulate) {
             recipeOutputItems.forEach(ItemDecay::startDecay);
 
             if (PetrolparkConfigs.server().createBasinRecipesPropagateContaminants.get()) {

@@ -8,6 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.authlib.GameProfile;
 import com.petrolpark.core.extendedinventory.ExtendedInventory;
 
@@ -41,23 +43,26 @@ public abstract class PlayerMixin extends LivingEntity {
         ExtendedInventory.refreshPlayerInventoryMenuServer((Player)(Object)this);
     };
 
-    @Inject(
-        method = "setItemSlot",
-        at = @At("HEAD"),
-        cancellable = true
+    /**
+     * Handle setting the mainhand Item if the extended Hotbar is in use.
+     * @param slot
+     * @param stack
+     * @param original
+     */
+    @WrapMethod(
+        method = "setItemSlot"
     )
-    public void inSetItemSlot(EquipmentSlot slot, ItemStack stack, CallbackInfo ci) {
-        verifyEquippedItem(stack);
+    public void inSetItemSlot(EquipmentSlot slot, ItemStack stack, Operation<Void> original) {
         if (slot == EquipmentSlot.MAINHAND) {
             Optional<ExtendedInventory> invOp = ExtendedInventory.get((Player)(Object)this);
             if (invOp.isPresent()) {
+                verifyEquippedItem(stack);
                 ExtendedInventory inv = invOp.get();
                 ItemStack oldStack = inv.getItem(inv.selected);
                 inv.setItem(inv.selected, stack);
                 onEquipItem(slot, oldStack, stack);
-                ci.cancel();
             };
-
         };
+        original.call(slot, stack);
     };
 };

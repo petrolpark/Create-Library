@@ -2,9 +2,8 @@ package com.petrolpark.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.contamination.recipe.IHandleContaminationMyselfRecipe;
@@ -21,14 +20,14 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 @Mixin(ShapedRecipe.class)
 public abstract class ShapedRecipeMixin implements IHandleContaminationMyselfRecipe<CraftingInput> {
 
-    @Inject(
+    @ModifyReturnValue(
         method = "Lnet/minecraft/world/item/crafting/ShapedRecipe;assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;",
-        at = @At("RETURN"),
-        cancellable = true
+        at = @At("RETURN")
     )
-    public void inAssemble(CraftingInput input, HolderLookup.Provider registries, CallbackInfoReturnable<ItemStack> cir) {
-        ItemDecay.startDecay(cir.getReturnValue());
-        if (PetrolparkConfigs.server().shapedCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(input.items().stream(), cir.getReturnValue());
+    public ItemStack modifyAssemble(ItemStack output, CraftingInput input, HolderLookup.Provider registries) {
+        ItemDecay.startDecay(output);
+        if (PetrolparkConfigs.server().shapedCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(input.items().stream(), output);
+        return output;
     };
 
     @Override

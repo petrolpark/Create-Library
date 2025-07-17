@@ -7,6 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.petrolpark.compat.create.core.item.directional.DirectionalTransportedItemStack;
 import com.petrolpark.compat.create.core.item.directional.IDirectionalOnBelt;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
@@ -17,17 +19,15 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(value = DepotBehaviour.class, remap = false)
 public abstract class DepotBehaviourMixin {
     
-    @Inject(
+    @WrapMethod(
         method = "insert(Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;Z)Lnet/minecraft/world/item/ItemStack;",
-        at = @At("HEAD"),
-        cancellable = true,
         remap = false
     )
-    public void inInsert(TransportedItemStack heldItem, boolean simulate, CallbackInfoReturnable<ItemStack> cir) {
+    public ItemStack inInsert(TransportedItemStack heldItem, boolean simulate, Operation<ItemStack> original) {
         if (!(heldItem instanceof DirectionalTransportedItemStack) && heldItem.stack.getItem() instanceof IDirectionalOnBelt directionalItem) {
-            cir.setReturnValue(((DepotBehaviour)(Object)this).insert(directionalItem.makeDirectionalTransportedItemStack(heldItem), simulate));
-            cir.cancel();
+            heldItem = directionalItem.makeDirectionalTransportedItemStack(heldItem);
         };
+        return original.call(heldItem, simulate);
     };
 
     @Inject(

@@ -32,6 +32,7 @@
 
     "block.petrolpark.basin_lid": "Basin Lid",
     "block.petrolpark.centrifuge": "Centrifuge",
+    "block.petrolpark.extrusion_die": "Extrusion Die",
     "block.petrolpark.mandrel": "Mandrel",
     "block.petrolpark.mashed_potato_block": "Block of Mashed Potato",
     "block.petrolpark.tube": "Tube Segment",
@@ -54,8 +55,10 @@
 
     "curios.identifier.petrolpark_badge": "Badge",
 
+    "death.attack.petrolpark.extrusion_die": "%1$s extrusion died",
+
     "effect.petrolpark.numbness": "Numbness",
-    "effect.petrolpark.numbness.description": "Mobs will not notice or respond to being damaged by another mob or player.",
+    "effect.petrolpark.numbness.description": "Mobs will not notice or respond to being damaged.",
 
     "fluid.petrolpark.cream": "Cream",
     "fluid.petrolpark.skimmed_milk": "Skimmed Milk",

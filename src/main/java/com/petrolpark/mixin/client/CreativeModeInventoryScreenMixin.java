@@ -85,7 +85,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
             target = "Lnet/minecraft/core/NonNullList;size()I"
         )
     )
-    public int addLimitedSlots(NonNullList<Slot> slots, Operation<Integer> original) {
+    public int wrapSlotListSize(NonNullList<Slot> slots, Operation<Integer> original) {
         return 46;
     };
 
@@ -119,6 +119,14 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
         PetrolparkClient.EXTENDED_INVENTORY_HANDLER.addSlotsToClientMenu(inv, menu::addSlot, (c, i, x, y) -> new CreativeModeInventoryScreen.SlotWrapper(extendedInventorySlots.get(i), i, x, y));
     };
 
+    /**
+     * Allow adding Items to Extended Inventory Slots
+     * @param slot
+     * @param slotId
+     * @param mouseButton
+     * @param type
+     * @param ci
+     */
     @Inject(
         method = "Lnet/minecraft/client/gui/screens/inventory/CreativeModeInventoryScreen;slotClicked",
         at = @At("HEAD")

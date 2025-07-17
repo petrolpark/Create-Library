@@ -1,0 +1,15 @@
+{
+    "variants": {
+        "axis=x": {
+            "model": "petrolpark:block/extrusion_die",
+            "y": 90
+        },
+        "axis=y": {
+            "model": "petrolpark:block/extrusion_die",
+            "x": 90
+        },
+        "axis=z": {
+            "model": "petrolpark:block/extrusion_die"
+        }
+    }
+}

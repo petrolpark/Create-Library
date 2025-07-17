@@ -1,0 +1,7 @@
+{
+    "type": "petrolpark:extrusion",
+    "inputs": "minecraft:quartz_block",
+    "output": {
+        "Name": "minecraft:quartz_pillar"
+    }
+}

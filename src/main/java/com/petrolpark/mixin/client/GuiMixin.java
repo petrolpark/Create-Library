@@ -5,8 +5,9 @@ import java.util.Optional;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
 
+import com.petrolpark.PetrolparkMobEffects;
 import com.petrolpark.core.extendedinventory.ExtendedInventory;
 import com.petrolpark.core.extendedinventory.ExtendedInventoryClientHandler;
 
@@ -29,7 +30,6 @@ public abstract class GuiMixin {
   
     /**
      * Move the ItemStack in the Offhand out of the way of the extended Hotbar.
-     * @param gui
      * @param graphics
      * @param x
      * @param y
@@ -38,17 +38,18 @@ public abstract class GuiMixin {
      * @param stack
      * @param seed
      */
-    @Redirect(
+    @ModifyArg(
         method = "renderItemHotbar",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/Gui;renderSlot(Lnet/minecraft/client/gui/GuiGraphics;IILnet/minecraft/client/DeltaTracker;Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;I)V"
-        )
+        ),
+        index = 1
     )
-    private void renderOffhandItemOffset(Gui gui, GuiGraphics graphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, int seed) {
+    private int modifyOffhandItemOffset(GuiGraphics graphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, int seed) {
         if (stack == player.getOffhandItem()) { // If we're rendering the offhand Item
             Optional<ExtendedInventory> invOp = ExtendedInventory.get(player);
-            if (invOp.isEmpty()) return;
+            if (invOp.isEmpty()) return x;
             ExtendedInventory inv = invOp.get();
             if (player.getMainArm().getOpposite() == HumanoidArm.LEFT) {
                 x -= 20 * ExtendedInventoryClientHandler.getLeftExtraHotbarSlots(inv.getExtraHotbarSlots());
@@ -56,38 +57,48 @@ public abstract class GuiMixin {
                 x += 20 * ExtendedInventoryClientHandler.getRightExtraHotbarSlots(inv.getExtraHotbarSlots());
             };
         };
-        renderSlot(graphics, x, y, deltaTracker, player, stack, seed);
+        return x;
     };
 
     /**
      * Move the background of the Offhand Slot out of the way of the extended Hotbar.
-     * @param graphics
      * @param atlasLocation
      * @param x
      * @param y
      * @param width
      * @param height
      */
-    @Redirect(
+    @ModifyArg(
         method = "renderItemHotbar",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/gui/GuiGraphics;blitSprite(Lnet/minecraft/resources/ResourceLocation;IIII)V"
-        )
+        ),
+        index = 1
     )
-    private void renderOffhandBackgroundOffset(GuiGraphics graphics, ResourceLocation atlasLocation, int x, int y, int width, int height) {
+    private int modifyOffhandBackgroundOffsetX(ResourceLocation atlasLocation, int x, int y, int width, int height) {
         if (atlasLocation == Gui.HOTBAR_OFFHAND_LEFT_SPRITE || atlasLocation == Gui.HOTBAR_OFFHAND_RIGHT_SPRITE) { // If we're rendering the offhand background
             Optional<ExtendedInventory> invOp = ExtendedInventory.get(getCameraPlayer());
-            if (invOp.isEmpty()) return;
+            if (invOp.isEmpty()) return x;
             ExtendedInventory inv = invOp.get();
-            graphics.pose().pushPose();
             if (getCameraPlayer().getMainArm().getOpposite() == HumanoidArm.LEFT) {
-                x -= 20 * ExtendedInventoryClientHandler.getLeftExtraHotbarSlots(inv.getExtraHotbarSlots());
+                return x -= 20 * ExtendedInventoryClientHandler.getLeftExtraHotbarSlots(inv.getExtraHotbarSlots());
             } else {
-                x += 20 * ExtendedInventoryClientHandler.getRightExtraHotbarSlots(inv.getExtraHotbarSlots());
-            };
-            graphics.pose().popPose();
+                return x += 20 * ExtendedInventoryClientHandler.getRightExtraHotbarSlots(inv.getExtraHotbarSlots());
+            }
         };
-        graphics.blitSprite(atlasLocation, x, y, width, height);
+        return x;
+    };
+
+    @ModifyArg(
+        method = "renderHealthLevel",
+        at = @At(
+            value = "INVOKE",
+            target = "renderHearts(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/entity/player/Player;IIIIFIIIZ)V"
+        ),
+        index = 10   
+    )
+    private boolean modifyRenderHighlight(boolean renderHighlight) {
+        return renderHighlight && !getCameraPlayer().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate());
     };
 };

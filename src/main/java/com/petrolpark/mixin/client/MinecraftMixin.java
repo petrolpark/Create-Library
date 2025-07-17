@@ -5,8 +5,9 @@ import java.util.Optional;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Redirect;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.core.extendedinventory.ExtendedInventory;
 
 import net.minecraft.client.Minecraft;
@@ -28,21 +29,21 @@ public abstract class MinecraftMixin {
      * @param stack
      * @param slotID
      */
-    @Redirect(
+    @WrapOperation(
         method = "pickBlock",
         at = @At(
             value = "INVOKE",
             target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;handleCreativeModeItemAdd(Lnet/minecraft/world/item/ItemStack;I)V"
         )
     )
-    private void redirectHandleCreativeModeItemAdd(MultiPlayerGameMode gameMode, ItemStack stack, int slotID) {
+    private void redirectHandleCreativeModeItemAdd(MultiPlayerGameMode gameMode, ItemStack stack, int slotID, Operation<Void> original) {
         Optional<ExtendedInventory> invOp = ExtendedInventory.get(player);
         if (invOp.isPresent()) {
             ExtendedInventory inv = invOp.get();
             if (!ExtendedInventory.isVanillaHotbarSlot(inv.getSelectedHotbarIndex())) {
-                gameMode.handleCreativeModeItemAdd(stack, inv.selected - inv.getExtraInventoryStartSlotIndex() + VANILLA_INVENTORY_MENU_SLOTS);
+                original.call(stack, inv.selected - inv.getExtraInventoryStartSlotIndex() + VANILLA_INVENTORY_MENU_SLOTS);
             };
         };
-        gameMode.handleCreativeModeItemAdd(stack, slotID); // Default behaviour
+        original.call(stack, slotID); // Default behaviour
     };
 };

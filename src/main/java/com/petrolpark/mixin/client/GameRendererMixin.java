@@ -19,7 +19,7 @@ public abstract class GameRendererMixin {
         method = "bobHurt",
         at = @At(
             value = "INVOKE",
-            target = "Lnet/minecraft/world/damagesource/DamageSource;is(Lnet/minecraft/tags/TagKey;)Z"
+            target = "getLastDamageSource"
         ),
         cancellable = true
     )

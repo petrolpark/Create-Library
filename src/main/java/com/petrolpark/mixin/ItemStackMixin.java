@@ -30,7 +30,7 @@ public class ItemStackMixin implements IItemStackDuck {
     };
 
     /**
-     * Replace Items with their Decaying forms.
+     * Replace Items with their Decaying forms for comparison.
      * @param stack
      * @param otherStack
      * @param cir

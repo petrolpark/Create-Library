@@ -9,9 +9,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.config.PetrolparkConfigs;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehaviour;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
@@ -19,7 +21,6 @@ import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
 import com.simibubi.create.content.kinetics.millstone.MillstoneBlockEntity;
-import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
@@ -73,25 +74,25 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
 
     /**
      * Allow first-time lucky milling recipes to guarantee outputs the first time they are done by a player.
+     * Also start Decay of result ItemStacks, and propagate Contaminants.
      */
-    @Inject(
+    @WrapOperation(
         method = "Lcom/simibubi/create/content/kinetics/millstone/MillstoneBlockEntity;process()V",
         at = @At(
             value = "INVOKE",
             target = "Lcom/simibubi/create/content/kinetics/millstone/MillingRecipe;rollResults()Ljava/util/List;"
         ),
-        cancellable = true,
         remap = false
     )
     @SuppressWarnings("unchecked")
-    public void inProcessEnd(CallbackInfo ci) {
+    public List<ItemStack> modifyRollResults(MillingRecipe recipe, Operation<List<ItemStack>> original) {
         FTLRecipesBehaviour behaviour = getBehaviour(FTLRecipesBehaviour.TYPE);
         List<ItemStack> results;
 
         if (behaviour != null && lastRecipe instanceof IFTLProcessingRecipe ftlr) {
             results = ftlr.rollLuckyResults(behaviour.getPlayer());
         } else {
-            results = lastRecipe.rollResults();
+            results = original.call();
         };
 
         if (PetrolparkConfigs.server().createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
@@ -104,8 +105,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
             ItemDecay.startDecay(stack);
             ItemHandlerHelper.insertItemStacked(outputInv, stack, false);
         });
-        award(AllAdvancements.MILLSTONE);
-        notifyUpdate();
-        ci.cancel();
+
+        return results;
     };
 };

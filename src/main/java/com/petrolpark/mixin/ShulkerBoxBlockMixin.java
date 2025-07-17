@@ -7,9 +7,8 @@ import javax.annotation.Nullable;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.core.block.entity.IShulkerBoxBlockEntityDuck;
 import com.petrolpark.core.contamination.GenericContamination;
 import com.petrolpark.core.contamination.ItemContamination;
@@ -36,21 +35,29 @@ public abstract class ShulkerBoxBlockMixin extends BaseEntityBlock {
         throw new AssertionError();
     };
 
-    @Inject(
+    /**
+     * Contaminate the dropped Shulker Box Item with the Contaminants of the placed Block Entity.
+     * @param original
+     * @param state
+     * @param params
+     */
+    @ModifyReturnValue(
         method = "getDrops",
-        at = @At("RETURN"),
-        cancellable = true
+        at = @At("RETURN")
     )
-    public void inGetDrops(BlockState pState, LootParams.Builder pParams, CallbackInfoReturnable<List<ItemStack>> cir) {
-        List<ItemStack> drops = cir.getReturnValue();
-        BlockEntity be = pParams.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
+    public List<ItemStack> modifyGetDrops(List<ItemStack> original, BlockState state, LootParams.Builder params) {
+        BlockEntity be = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
         if (be instanceof ShulkerBoxBlockEntity shulkerBox) {
             GenericContamination contamination = ((IShulkerBoxBlockEntityDuck)shulkerBox).getContamination();
-            drops.stream().filter(s -> s.getItem() instanceof BlockItem b && b.getBlock() == this).map(ItemContamination::get).forEach(contam -> contam.contaminateAll(contamination.streamOrphanExtrinsicContaminants()));
-            cir.setReturnValue(drops);
+            original.stream().filter(s -> s.getItem() instanceof BlockItem b && b.getBlock() == this).map(ItemContamination::get).forEach(contam -> contam.contaminateAll(contamination.streamOrphanExtrinsicContaminants()));
         };
+        return original;
     };
-
+    
+    /**
+     * Contaminate the placed Block Entity with the Contaminants of the Item.
+     */
+    @Override
     public void setPlacedBy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         level.getBlockEntity(pos, BlockEntityType.SHULKER_BOX)
             .map(IShulkerBoxBlockEntityDuck.class::cast)

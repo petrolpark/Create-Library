@@ -6,6 +6,7 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlock;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlock;
+import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionDieBlock;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlock;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlock;
 import com.simibubi.create.foundation.data.BlockStateGen;
@@ -13,6 +14,7 @@ import com.simibubi.create.foundation.data.ModelGen;
 import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
 
 public class CreateBlocks {
@@ -21,6 +23,13 @@ public class CreateBlocks {
         .initialProperties(SharedProperties::copperMetal)
         .lang("Basin Lid")
         .blockstate(BlockStateGen.horizontalBlockProvider(false))
+        .item()
+        .build()
+        .register();
+
+    public static final BlockEntry<ExtrusionDieBlock> EXTRUSION_DIE = REGISTRATE.sharedBlock(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlock::new)
+        .initialProperties(SharedProperties::softMetal)
+        .properties(BlockBehaviour.Properties::noCollission)
         .item()
         .build()
         .register();

@@ -1,0 +1,8 @@
+{
+    "values": [
+        {
+            "id": "petrolpark:extrusion_die",
+            "required": false
+        }
+    ]
+}

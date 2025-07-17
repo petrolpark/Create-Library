@@ -7,6 +7,7 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlockEntity;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlockEntity;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlockEntity;
+import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionDieBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRenderer;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlockEntity;
@@ -17,6 +18,10 @@ public class CreateBlockEntityTypes {
 
     public static final BlockEntityEntry<BasinLidBlockEntity> BASIN_LID = REGISTRATE.sharedBlockEntity(SharedFeatureFlag.BASIN_LID, "basin_lid", BasinLidBlockEntity::new)
         .validBlock(CreateBlocks.BASIN_LID)
+        .register();
+
+    public static final BlockEntityEntry<ExtrusionDieBlockEntity> EXTRUSION_DIE = REGISTRATE.sharedBlockEntity(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlockEntity::new)
+        .validBlock(CreateBlocks.EXTRUSION_DIE)
         .register();
 
     public static final BlockEntityEntry<MandrelBlockEntity> MANDREL = REGISTRATE.sharedBlockEntity(SharedFeatureFlag.MANDREL, "mandrel", MandrelBlockEntity::new)

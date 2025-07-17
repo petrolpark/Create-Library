@@ -17,6 +17,6 @@
     }
   },
   "result": {
-    "item": "destroy:mesh"
+    "id": "destroy:mesh"
   }
 }

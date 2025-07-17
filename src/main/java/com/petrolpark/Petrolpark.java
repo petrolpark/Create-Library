@@ -8,6 +8,7 @@ import com.mojang.logging.LogUtils;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.Create;
+import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.config.PetrolparkConfigs;
@@ -45,10 +46,12 @@ public class Petrolpark {
 
     static {
         SharedFeatureFlag.MANDREL.enable(Mods.PETROLPARK); // testing only
+        SharedFeatureFlag.EXTRUSION.enable(Mods.PETROLPARK); // testing only
     };
 
     public static final ScoreboardTeamManager SCOREBOARD_TEAMS = new ScoreboardTeamManager();
     public static final BogglePattern.Manager BOGGLE_PATTERNS = new BogglePattern.Manager();
+    public static final ExtrusionRecipe.MovementBehaviourProvider EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER = new ExtrusionRecipe.MovementBehaviourProvider();
 
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
 
@@ -90,6 +93,7 @@ public class Petrolpark {
     
         modEventBus.addListener(this::init);
         modEventBus.addListener(EventPriority.LOWEST, PetrolparkDatagen::gatherData);
+        NeoForge.EVENT_BUS.register(EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER);
 
         // Compat
         if (Mods.JEI.isLoading()) NeoForge.EVENT_BUS.register(ITickableCategory.ClientEvents.class);

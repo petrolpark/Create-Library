@@ -11,22 +11,19 @@
   ],
   "type": "minecraft:crafting_shaped",
   "pattern": [
-    "BDB",
+    " B ",
     "BFB",
-    "BDB"
+    " B "
   ],
   "key": {
     "B": {
-      "tag": "forge:plates/brass"
-    },
-    "D": {
-      "item": "destroy:nanodiamonds"
+      "tag": "c:plates/brass"
     },
     "F": {
       "item": "petrolpark:mesh"
     }
   },
   "result": {
-    "item": "destroy:extrusion_die"
+    "id": "petrolpark:extrusion_die"
   }
 }

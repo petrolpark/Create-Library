@@ -3,6 +3,7 @@ package com.petrolpark;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
 import com.petrolpark.common.mobeffect.SimpleMobEffect;
+import com.petrolpark.common.mobeffect.SyncedMobEffect;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
@@ -12,7 +13,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 
 public class PetrolparkMobEffects {
     
-    public static final RegistryEntry<MobEffect, SimpleMobEffect> NUMBNESS = REGISTRATE.simple("numbness", Registries.MOB_EFFECT, NonNullSupplier.of(() -> new SimpleMobEffect(MobEffectCategory.HARMFUL, 0x7A2337)));
+    public static final RegistryEntry<MobEffect, SimpleMobEffect> NUMBNESS = REGISTRATE.simple("numbness", Registries.MOB_EFFECT, NonNullSupplier.of(() -> new SyncedMobEffect(MobEffectCategory.HARMFUL, 0x7A2337)));
 
     public static final void register() {};
 };
