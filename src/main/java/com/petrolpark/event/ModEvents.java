@@ -45,8 +45,8 @@ public class ModEvents {
                     for ( MobEffect effect : ForgeRegistries.MOB_EFFECTS.getValues() ) {
                         if (effect instanceof IShaderEffect shaderEffect ) {
                             ResourceLocation location = shaderEffect.getShader();
-                            if (location != null && !ShaderEffectReloadHandler.hasShader(location)) {
-                                ShaderEffectReloadHandler.createShader(location, shaderEffect, mc, pResourceManager);
+                            if (location != null && !ShaderEffectReloadHandler.hasShader(shaderEffect)) {
+                                ShaderEffectReloadHandler.createShader(shaderEffect, mc, pResourceManager);
                             }
                         }
                     }

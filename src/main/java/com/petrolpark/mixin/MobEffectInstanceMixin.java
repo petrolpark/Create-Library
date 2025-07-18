@@ -55,7 +55,7 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
         }
 
         //Client side
-        if (pEntity.level().isClientSide() && effect instanceof IShaderEffect shaderEffect && !shaderInitialized) {
+        if (pEntity.level().isClientSide() && !shaderInitialized && effect instanceof IShaderEffect shaderEffect) {
             shaderInitialized = true;
             IGameRendererMixin gameRenderer = ( IGameRendererMixin ) Minecraft.getInstance().gameRenderer;
             gameRenderer.addMobEffectInstanceShader(shaderEffect.getShader(), ((MobEffectInstance) (Object) this));

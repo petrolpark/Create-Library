@@ -1,6 +1,7 @@
 package com.petrolpark.mixin.client;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.petrolpark.shadereffects.IShaderEffect;
 import com.petrolpark.shadereffects.ShaderEffectReloadHandler;
 import com.petrolpark.util.IGameRendererMixin;
 import com.petrolpark.util.IMobEffectInstanceMixin;
@@ -59,9 +60,7 @@ public class GameRendererMixin implements IGameRendererMixin {
 
     @Override
     public void addMobEffectInstanceShader(ResourceLocation location, MobEffectInstance effect) {
-        if (ShaderEffectReloadHandler.hasForbiddenEffect(effect.getEffect())) return;
-
-        PostChain postChain = ShaderEffectReloadHandler.getShader(location);
+        PostChain postChain = ShaderEffectReloadHandler.getShader((( IShaderEffect ) effect.getEffect()));
 
         if (postChain == null) {
             System.err.println("[Petrolpark] Shader wasn't preloaded as intended: " + location);
