@@ -260,7 +260,7 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
         mezz.jei.api.recipe.RecipeType<R> type = new mezz.jei.api.recipe.RecipeType<R>(ResourceLocation.fromNamespaceAndPath(modid, name), recipeClass);
 
         Info<R> info = new Info<R>(
-            type,
+            mezz.jei.api.recipe.RecipeType.createRecipeHolderType(ResourceLocation.fromNamespaceAndPath(modid, name)),
             Component.translatable(modid+".recipe."+name),
             background,
             icon,

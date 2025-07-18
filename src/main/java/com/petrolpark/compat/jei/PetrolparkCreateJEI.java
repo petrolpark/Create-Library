@@ -18,13 +18,16 @@ import com.petrolpark.compat.jei.category.AgeingCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
 import com.petrolpark.compat.jei.category.ExtrusionCategory;
+import com.petrolpark.compat.jei.category.LiddedBasinCategory;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
 import com.petrolpark.mixin.compat.jei.client.JustEnoughItemsClientMixin;
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.helpers.IJeiHelpers;
@@ -95,10 +98,18 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .emptyBackground(125, 20)
             .build("item_decay", DecayingItemCategory::new);
 
-        CreateRecipeCategory<?> extrusion;
+        CreateRecipeCategory<?> lidded_basin, extrusion;
+
+        if (SharedFeatureFlag.BASIN_LID.enabled()) lidded_basin = builder(BasinRecipe.class)
+            .addTypedRecipes(CreateRecipeTypes.LIDDED_BASIN)
+            .catalyst(CreateBlocks.BASIN_LID::get)
+            .catalyst(AllBlocks.BASIN::get)
+            .doubleItemIcon(CreateBlocks.BASIN_LID.get(), AllBlocks.BASIN.get())
+            .emptyBackground(177, 103)
+            .build("lidded_basin", LiddedBasinCategory::new);
 
         if (SharedFeatureFlag.EXTRUSION.enabled()) extrusion = builder(ExtrusionRecipe.class)
-            .addTypedRecipes(CreateRecipeTypes.EXTRUSION::getType)
+            .addTypedRecipes(CreateRecipeTypes.EXTRUSION)
             .catalyst(CreateBlocks.EXTRUSION_DIE::get)
             .itemIcon(CreateBlocks.EXTRUSION_DIE.get())
             .emptyBackground(177, 55)

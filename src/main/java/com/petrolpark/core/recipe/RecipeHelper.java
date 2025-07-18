@@ -15,12 +15,12 @@ public class RecipeHelper {
 
     private static final Random r = new Random();
 
-    public static List<ItemStack> rollResults(ProcessingRecipe<?> recipe, int multiplier) {
+    public static List<ItemStack> rollResults(ProcessingRecipe<?, ?> recipe, int multiplier) {
         return rollResults(recipe, null, multiplier);
     };
     
     @SuppressWarnings("unchecked")
-    public static List<ItemStack> rollResults(ProcessingRecipe<?> recipe, Player player, int multiplier) {
+    public static List<ItemStack> rollResults(ProcessingRecipe<?, ?> recipe, Player player, int multiplier) {
         List<ItemStack> results = new ArrayList<>();
         if (recipe == null) return results;
         if (recipe instanceof IFTLProcessingRecipe luckyRecipe && player != null && multiplier > 0) {

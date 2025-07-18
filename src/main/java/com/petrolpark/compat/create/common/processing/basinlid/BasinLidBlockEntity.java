@@ -2,6 +2,7 @@ package com.petrolpark.compat.create.common.processing.basinlid;
 
 import java.util.Optional;
 
+import com.petrolpark.compat.create.CreateRecipeTypes;
 import com.petrolpark.compat.create.core.block.entity.DirectlyAboveBasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
@@ -60,8 +61,7 @@ public class BasinLidBlockEntity extends DirectlyAboveBasinOperatingBlockEntity 
 
     @Override
     protected boolean matchStaticFilters(RecipeHolder<? extends Recipe<?>> recipe) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'matchStaticFilters'");
+        return recipe.value().getType() == CreateRecipeTypes.LIDDED_BASIN.getType();
     };
 
     @Override
@@ -81,7 +81,7 @@ public class BasinLidBlockEntity extends DirectlyAboveBasinOperatingBlockEntity 
 		super.write(compound, registries, clientPacket);
 	};
 
-    protected Optional<ProcessingRecipe<?>> getCurrentProcessingRecipe() {
+    protected Optional<ProcessingRecipe<?, ?>> getCurrentProcessingRecipe() {
         return currentRecipe instanceof ProcessingRecipe pr ? Optional.of(pr) : Optional.empty();
     };
     

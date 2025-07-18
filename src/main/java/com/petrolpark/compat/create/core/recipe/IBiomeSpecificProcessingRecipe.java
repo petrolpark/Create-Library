@@ -1,5 +1,7 @@
 package com.petrolpark.compat.create.core.recipe;
 
+import java.util.Optional;
+
 import com.petrolpark.RequiresCreate;
 
 import net.minecraft.core.BlockPos;
@@ -10,13 +12,11 @@ import net.minecraft.world.level.biome.Biome;
 
 @RequiresCreate
 public interface IBiomeSpecificProcessingRecipe {
-    
-    void setAllowedBiomes(HolderSet<Biome> biomes);
 
-    public HolderSet<Biome> getAllowedBiomes();
+    public Optional<HolderSet<Biome>> getAllowedBiomes();
 
     public default boolean isValidIn(Holder<Biome> biome) {
-        return getAllowedBiomes().contains(biome);
+        return getAllowedBiomes().map(set -> set.contains(biome)).orElse(true);
     };
 
     public default boolean isValidAt(Level level, BlockPos pos) {

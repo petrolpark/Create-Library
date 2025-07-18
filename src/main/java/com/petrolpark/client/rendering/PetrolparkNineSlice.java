@@ -13,7 +13,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.Rect2i;
 
-//TODO replace with 1.21.1 vanilla NineSlice textures
 public class PetrolparkNineSlice {
     
     public final boolean stretch;

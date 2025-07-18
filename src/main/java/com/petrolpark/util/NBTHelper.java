@@ -75,12 +75,12 @@ public class NBTHelper {
         return tag;
     };
 
-    public static int readBinaryMatrix4x4(CompoundTag tag, String key) {
+    public static int readBogglePattern(CompoundTag tag, String key) {
         if (!tag.contains(key, Tag.TAG_SHORT)) return 0;
         return BinaryMatrix4x4.fromShort(tag.getShort(key));
     };
 
-    public static void writeBinaryMatrix4x4(CompoundTag tag, String key, int binaryMatrix) {
+    public static void writeBogglePattern(CompoundTag tag, String key, int binaryMatrix) {
         tag.putShort(key, BinaryMatrix4x4.asShort(binaryMatrix));
     };
 

@@ -201,6 +201,7 @@
     "petrolpark.recipe.biome_specific": "Must be done in:",
     "petrolpark.recipe.extrusion": "Extrusion",
     "petrolpark.recipe.item_decay": "Item Decay",
+    "petrolpark.recipe.lidded_basin": "Lidded Basin",
     "petrolpark.recipe.manual_crafting": "Manual-Only Crafting",
 
     "petrolpark.tube.connect_another": "Place another %1$s to connect them",

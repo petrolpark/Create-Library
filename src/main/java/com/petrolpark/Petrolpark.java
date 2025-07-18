@@ -45,6 +45,7 @@ public class Petrolpark {
     };
 
     static {
+        SharedFeatureFlag.BASIN_LID.enable(Mods.PETROLPARK); // testing only
         SharedFeatureFlag.MANDREL.enable(Mods.PETROLPARK); // testing only
         SharedFeatureFlag.EXTRUSION.enable(Mods.PETROLPARK); // testing only
     };

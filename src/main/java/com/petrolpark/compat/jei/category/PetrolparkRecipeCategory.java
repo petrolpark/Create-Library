@@ -10,6 +10,7 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.crafting.Recipe;
 
@@ -28,7 +29,7 @@ public abstract class PetrolparkRecipeCategory<T extends Recipe<?>> extends Crea
 	};
 
     public static void addOptionalRequiredBiomeSlot(IRecipeLayoutBuilder builder, IBiomeSpecificProcessingRecipe recipe, int x, int y) {
-        if (recipe.getAllowedBiomes().size() != 0) builder.addSlot(RecipeIngredientRole.RENDER_ONLY, x, y)
+        if (recipe.getAllowedBiomes().map(HolderSet::size).orElse(0) != 0) builder.addSlot(RecipeIngredientRole.RENDER_ONLY, x, y)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(BiomeIngredientType.TYPE, BiomeSpecificTooltipHelper.getAllBiomes(recipe).toList())
             .addRichTooltipCallback(BiomeSpecificTooltipHelper.getAllowedBiomeList(recipe)); 

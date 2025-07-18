@@ -22,7 +22,7 @@ public class BiomeSpecificTooltipHelper {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) return Stream.empty();
-        return recipe.getAllowedBiomes().stream().map(Holder::value);
+        return recipe.getAllowedBiomes().map(op -> op.stream().map(Holder::value)).orElse(Stream.empty());
     };
     
     public static IRecipeSlotRichTooltipCallback getAllowedBiomeList(IBiomeSpecificProcessingRecipe recipe) {

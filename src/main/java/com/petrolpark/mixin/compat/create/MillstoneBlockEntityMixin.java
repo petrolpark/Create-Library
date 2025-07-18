@@ -86,11 +86,10 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
     )
     @SuppressWarnings("unchecked")
     public List<ItemStack> modifyRollResults(MillingRecipe recipe, Operation<List<ItemStack>> original) {
-        FTLRecipesBehaviour behaviour = getBehaviour(FTLRecipesBehaviour.TYPE);
         List<ItemStack> results;
 
-        if (behaviour != null && lastRecipe instanceof IFTLProcessingRecipe ftlr) {
-            results = ftlr.rollLuckyResults(behaviour.getPlayer());
+        if (lastRecipe instanceof IFTLProcessingRecipe ftlr) {
+            results = ftlr.rollLuckyResults(this);
         } else {
             results = original.call();
         };

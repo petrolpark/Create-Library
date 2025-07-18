@@ -10,6 +10,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
@@ -60,7 +63,7 @@ public class BasinRecipeMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    private static void inApply(
+    private static void inApplyPropagateContaminants(
         BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir,
         boolean isBasinRecipe, IItemHandler availableItems, IFluidHandler availableFluids, BlazeBurnerBlock.HeatLevel heat,
         List<ItemStack> recipeOutputItems, List<FluidStack> recipeOutputFluids,
@@ -68,7 +71,7 @@ public class BasinRecipeMixin {
         boolean trueAndFalse[], int i1, int i2, boolean simulate,
         int extractedItemsFromSlot[], int extractedFluidsFromTank[]
     ) {
-        if (!simulate) {
+        if (simulate) {
             recipeOutputItems.forEach(ItemDecay::startDecay);
 
             if (PetrolparkConfigs.server().createBasinRecipesPropagateContaminants.get()) {
@@ -87,5 +90,27 @@ public class BasinRecipeMixin {
                 if (level != null) IContamination.perpetuate(Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfigs.server().createFluidContaminantWeight.get(), recipeOutputItems.stream(), recipeOutputFluids.stream());
             };
         };
+    };
+
+    /**
+     * Replace normal Recipe Outputs with First-Time-Lucky outputs, if applicable.
+     * @param basinRecipe
+     * @param original
+     * @param basin
+     * @param recipe
+     * @param test
+     */
+    @WrapOperation(
+        method = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;Z)Z",
+        at = @At(
+            value = "INVOKE",
+            target = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;rollResults()Ljava/util/List;"
+        ),
+        remap = false
+    )
+    @SuppressWarnings("unchecked")
+    private static final List<ItemStack> wrapRollResults(BasinRecipe basinRecipe, Operation<List<ItemStack>> original, BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
+        if (basinRecipe instanceof IFTLProcessingRecipe ftlRecipe) return ftlRecipe.rollLuckyResults(basin);
+        return original.call(basinRecipe);
     };
 };

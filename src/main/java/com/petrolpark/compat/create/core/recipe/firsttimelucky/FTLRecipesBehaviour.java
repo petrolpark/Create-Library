@@ -35,8 +35,9 @@ public class FTLRecipesBehaviour extends AbstractRememberPlacerBehaviour {
     @Override
     public boolean shouldRememberPlacer(Player placer) {
         return !RecipeFinder.get(recipeCacheKey, getWorld(), recipeFilter.and(
-            rh -> rh.value() instanceof IFTLProcessingRecipe
-            && !placer.getData(CreateAttachmentTypes.FTL_RECIPES).contains(rh.id())
+            rh -> rh.value() instanceof IFTLProcessingRecipe recipe
+            && recipe.getFirstTimeLuckyKey().isPresent()
+            && !placer.getData(CreateAttachmentTypes.FTL_RECIPES).contains(recipe.getFirstTimeLuckyKey().get())
         )).isEmpty();
     };
 

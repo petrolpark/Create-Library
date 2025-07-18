@@ -40,8 +40,6 @@ public class ExtrusionCategory extends PetrolparkRecipeCategory<ExtrusionRecipe>
 
     @Override
     public void draw(@Nonnull ExtrusionRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics graphics, double mouseX, double mouseY) {
-        super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
-
         AllGuiTextures.JEI_SHADOW.render(graphics, 61, 26);
 		AllGuiTextures.JEI_LONG_ARROW.render(graphics, 52, 39);
         PoseStack ms = graphics.pose();

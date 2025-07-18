@@ -11,16 +11,16 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehaviour;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelControllerBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
+import com.simibubi.create.content.processing.recipe.StandardProcessingRecipe;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
@@ -77,11 +77,10 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         remap = false
     )
     @SuppressWarnings("unchecked")
-    public void inApplyRecipeMiddle(CallbackInfo ci, Optional<RecipeHolder<ProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> rolledResults, int rolls, int slot) {
+    public void inApplyRecipeMiddle(CallbackInfo ci, Optional<RecipeHolder<StandardProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> rolledResults, int rolls, int slot) {
         if (slot == 0) {
-            FTLRecipesBehaviour behaviour = getBehaviour(FTLRecipesBehaviour.TYPE);
-            if (behaviour != null && recipe.get().value() instanceof IFTLProcessingRecipe ftlr) {
-                List<ItemStack> results = ftlr.rollLuckyResults(behaviour.getPlayer());
+            if (recipe.get().value() instanceof IFTLProcessingRecipe ftlr) {
+                List<ItemStack> results = ftlr.rollLuckyResults(this);
                 rolledResults.clear();
                 rolledResults.addAll(results);
             };
@@ -94,7 +93,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void inApplyRecipeEnd(CallbackInfo ci, Optional<RecipeHolder<ProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> list) {
+    public void inApplyRecipeEnd(CallbackInfo ci, Optional<RecipeHolder<StandardProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> list) {
         list.forEach(ItemDecay::startDecay);
         if (PetrolparkConfigs.server().createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
             IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
