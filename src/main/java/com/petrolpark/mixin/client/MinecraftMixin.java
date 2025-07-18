@@ -44,6 +44,6 @@ public abstract class MinecraftMixin {
                 original.call(stack, inv.selected - inv.getExtraInventoryStartSlotIndex() + VANILLA_INVENTORY_MENU_SLOTS);
             };
         };
-        original.call(stack, slotID); // Default behaviour
+        original.call(gameMode, stack, slotID); // Default behaviour
     };
 };

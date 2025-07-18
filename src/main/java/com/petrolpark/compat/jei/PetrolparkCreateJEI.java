@@ -10,9 +10,14 @@ import javax.annotation.Nonnull;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.jei.category.AgeingCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
+import com.petrolpark.compat.jei.category.ExtrusionCategory;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
@@ -89,6 +94,15 @@ public class PetrolparkCreateJEI implements IModPlugin {
             ).itemIcon(Items.ROTTEN_FLESH)
             .emptyBackground(125, 20)
             .build("item_decay", DecayingItemCategory::new);
+
+        CreateRecipeCategory<?> extrusion;
+
+        if (SharedFeatureFlag.EXTRUSION.enabled()) extrusion = builder(ExtrusionRecipe.class)
+            .addTypedRecipes(CreateRecipeTypes.EXTRUSION::getType)
+            .catalyst(CreateBlocks.EXTRUSION_DIE::get)
+            .itemIcon(CreateBlocks.EXTRUSION_DIE.get())
+            .emptyBackground(177, 55)
+            .build("extrusion", ExtrusionCategory::new);
     };
 
     @Override

@@ -187,15 +187,19 @@
     "petrolpark.key.tube.add_control_point_before": "Add tube node (before)",
     "petrolpark.key.tube.cancel": "Cancel tube construction",
     
-
     "petrolpark.packet.unsupported": "Unknown Action",
     "petrolpark.packet.unsupported.advanced": "Unknown Packet Type: %1$s",
     "petrolpark.packet_payload.build_tube": "Connect tubes between %1$s and %2$s",
     "petrolpark.packet_payload.bind_team_item": "Bind Team %1$s to main hand item",
     "petrolpark.packet_payload.bind_team_block": "Bind Team %1$s to block at %2$s",
 
+    "petrolpark.ponder.extrusion_die.header": "Extruding blocks with the Extrusion Die",
+    "petrolpark.ponder.extrusion_die.text_1": "The Extrusion Die can transform some blocks when they are pushed through it.",
+    "petrolpark.ponder.extrusion_die.text_2": "The Extrusion Die must remain static.",
+
     "petrolpark.recipe.ageing": "Ageing",
     "petrolpark.recipe.biome_specific": "Must be done in:",
+    "petrolpark.recipe.extrusion": "Extrusion",
     "petrolpark.recipe.item_decay": "Item Decay",
     "petrolpark.recipe.manual_crafting": "Manual-Only Crafting",
 

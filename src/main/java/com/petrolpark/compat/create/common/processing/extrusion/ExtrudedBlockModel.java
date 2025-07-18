@@ -8,13 +8,11 @@ import com.simibubi.create.content.decoration.copycat.CopycatModel;
 import com.simibubi.create.foundation.model.BakedModelHelper;
 import com.simibubi.create.foundation.model.BakedQuadHelper;
 
-import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -54,7 +52,7 @@ public class ExtrudedBlockModel extends CopycatModel {
 
             quads.add(BakedQuadHelper.cloneWithCustomGeometry(quad, scale(
                 BakedModelHelper.cropAndMove(quad.getVertices(), quad.getSprite(), bb, Vec3.ZERO)
-            , 1.01f + Mth.sin(AnimationTickHolder.getRenderTime() / 10f))));
+            , 1.01f)));
         };
         
         return quads;

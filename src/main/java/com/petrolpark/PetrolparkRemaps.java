@@ -18,6 +18,7 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 public class PetrolparkRemaps {
     
     private static final List<Pair<ResourceLocation, ResourceLocation>> BLOCKS = new ArrayList<>();
+    private static final List<Pair<ResourceLocation, ResourceLocation>> BLOCK_ENTITY_TYPES = new ArrayList<>();
     private static final List<Pair<ResourceLocation, ResourceLocation>> ITEMS = new ArrayList<>();
 
     static {
@@ -26,6 +27,8 @@ public class PetrolparkRemaps {
         destroyItem("mesh");
 
         destroyBlockAndItem("mashed_potato_block");
+        
+        destroyBlockEntityAndItem("extrusion_die");
     };
 
     private static final void item(ResourceLocation oldRL, String newName) {
@@ -44,9 +47,23 @@ public class PetrolparkRemaps {
         block(Mods.DESTROY.asResource(name), name);
     };
 
+    private static final void blockEntityType(ResourceLocation oldRL, String newName) {
+        BLOCK_ENTITY_TYPES.add(Pair.of(oldRL, Petrolpark.asResource(newName)));
+    };
+
+    private static final void destroyBlockEntityType(String name) {
+        blockEntityType(Mods.DESTROY.asResource(name), name);
+    };
+
     private static final void destroyBlockAndItem(String name) {
         destroyItem(name);
         destroyBlock(name);
+    };
+
+    private static final void destroyBlockEntityAndItem(String name) {
+        destroyItem(name);
+        destroyBlock(name);
+        destroyBlockEntityType(name);
     };
 
     @SubscribeEvent

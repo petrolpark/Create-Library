@@ -8,18 +8,21 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.core.recipe.ingredient.BlockHolderSetIngredient;
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.api.registry.SimpleRegistry;
 
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
+import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -32,7 +35,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 
-public record ExtrusionRecipe(HolderSet<Block> inputs, BlockState output) implements Recipe<ExtrusionRecipe.Input> {
+public class ExtrusionRecipe implements Recipe<ExtrusionRecipe.Input> {
 
     static {
         MovementBehaviour.REGISTRY.registerProvider(Petrolpark.EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER);
@@ -48,6 +51,24 @@ public record ExtrusionRecipe(HolderSet<Block> inputs, BlockState output) implem
         ByteBufCodecs.idMapper(Block.BLOCK_STATE_REGISTRY), ExtrusionRecipe::output,
         ExtrusionRecipe::new
     );
+
+    private final HolderSet<Block> inputs;
+    public final Ingredient itemIngredient;
+    private final BlockState output;
+    
+    public ExtrusionRecipe(HolderSet<Block> inputs, BlockState output) {
+        this.inputs = inputs;
+        itemIngredient = new BlockHolderSetIngredient(inputs).toVanilla();
+        this.output = output;
+    };
+
+    public HolderSet<Block> inputs() {
+        return inputs;
+    };
+
+    public BlockState output() {
+        return output;
+    };
 
     @Override
     public boolean matches(@Nonnull Input input, @Nonnull Level level) {
@@ -78,8 +99,17 @@ public record ExtrusionRecipe(HolderSet<Block> inputs, BlockState output) implem
     };
 
     @Override
-    public ItemStack getResultItem(@Nonnull HolderLookup.Provider registries) {
+    public NonNullList<Ingredient> getIngredients() {
+        return NonNullList.of(itemIngredient);
+    };
+
+    public ItemStack getResultItem() {
         return new ItemStack(output().getBlock());
+    };
+
+    @Override
+    public ItemStack getResultItem(@Nonnull HolderLookup.Provider registries) {
+        return getResultItem();
     };
 
     @Override
@@ -91,7 +121,6 @@ public record ExtrusionRecipe(HolderSet<Block> inputs, BlockState output) implem
     public RecipeType<ExtrusionRecipe> getType() {
         return CreateRecipeTypes.EXTRUSION.getType();
     };
-
     
     public static record Input(BlockState state, Direction extrusionDirection) implements RecipeInput {
 

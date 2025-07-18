@@ -16,7 +16,6 @@ import com.simibubi.create.foundation.virtualWorld.VirtualRenderWorld;
 import net.createmod.catnip.math.VecHelper;
 import net.createmod.catnip.render.SuperBufferFactory;
 import net.createmod.catnip.render.SuperByteBuffer;
-import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
@@ -137,7 +136,7 @@ public class ExtrusionMovementBehaviour implements MovementBehaviour {
         if (modelTransform != null) extrudedBlockBuffer.transform(modelTransform);
         
         extrudedBlockBuffer
-            .light(LevelRenderer.getLightColor(renderWorld, context.localPos))
+            .useLevelLight(context.world, matrices.getWorld())
             .renderInto(ms, vbSolid);
         ms.popPose();
     };
