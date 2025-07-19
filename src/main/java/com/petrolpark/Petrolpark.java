@@ -72,6 +72,7 @@ public class Petrolpark {
         PetrolparkBlocks.register();
         PetrolparkItems.register();
         PetrolparkMobEffects.register();
+        PetrolparkParticleTypes.register();
         PetrolparkTeamProviderTypes.register();
         PetrolparkTradeListingReferenceTypes.register();
         PetrolparkBogglePatternGeneratorTypes.register();

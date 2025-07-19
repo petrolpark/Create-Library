@@ -21,6 +21,7 @@ public class CreateBlocks {
 
     public static final BlockEntry<BasinLidBlock> BASIN_LID = REGISTRATE.sharedBlock(SharedFeatureFlag.BASIN_LID, "basin_lid", BasinLidBlock::new)
         .initialProperties(SharedProperties::copperMetal)
+        .properties(BlockBehaviour.Properties::noOcclusion)
         .lang("Basin Lid")
         .blockstate(BlockStateGen.horizontalBlockProvider(false))
         .item()

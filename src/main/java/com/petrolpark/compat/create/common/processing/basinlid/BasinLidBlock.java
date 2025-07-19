@@ -14,6 +14,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -46,6 +47,12 @@ public class BasinLidBlock extends HorizontalDirectionalBlock implements IBE<Bas
 		builder.add(WATERLOGGED, FACING);
 		super.createBlockStateDefinition(builder);
 	};
+
+    @Override
+    protected void onPlace(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState oldState, boolean movedByPiston) {
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+        getBlockEntityOptional(level, pos).ifPresent(be -> be.basinChecker.scheduleUpdate());
+    };
 
     @Override
     @Nullable

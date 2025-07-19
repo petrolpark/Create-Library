@@ -1,5 +1,6 @@
 package com.petrolpark.compat.create.common.processing.basinlid;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -45,11 +46,22 @@ public class LiddedBasinRecipe extends BasinRecipe {
         };
     };
 
+    public boolean bubbles() {
+        return bubbles;
+    };
+
+    @Override
+    public List<String> validate() {
+        List<String> errors = super.validate();
+        if (processingDuration <= 0) errors.add("Recipe does not specify a positive duration.");
+        return errors;
+    };
+
     protected static class Params extends AdvancedProcessingRecipeParams {
 
         public static final MapCodec<ProcessingRecipeParams> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             codec(LiddedBasinRecipe.Params::new).forGetter(Function.identity()),
-            Codec.BOOL.optionalFieldOf("bubbles", false).forGetter(LiddedBasinRecipe.Params::bubbles)
+            Codec.BOOL.optionalFieldOf("bubbles", true).forGetter(LiddedBasinRecipe.Params::bubbles)
         ).apply(instance, (params, bubbles) -> {
             params.bubbles = bubbles;
             return params;

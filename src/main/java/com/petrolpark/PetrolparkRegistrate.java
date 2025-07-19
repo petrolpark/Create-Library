@@ -60,6 +60,8 @@ import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Registry;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -252,6 +254,10 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     public RegistryEntry<BogglePatternGeneratorType, BogglePatternGeneratorType> bogglePatternGeneratorType(String name, NonNullSupplier<? extends IBogglePatternGenerator> unitFactory) {
         MapCodec<? extends IBogglePatternGenerator> codec = MapCodec.unit(unitFactory);
         return simple(name, PetrolparkRegistries.Keys.BOGGLE_PATTERN_GENERATOR_TYPE, () -> new BogglePatternGeneratorType(codec, codec));
+    };
+
+    public <O extends ParticleOptions, T extends ParticleType<O>> RegistryEntry<ParticleType<?>, T> particleType(String name, NonNullSupplier<T> factory) {
+        return simple(name, Registries.PARTICLE_TYPE, factory);
     };
     
     // Shared features
