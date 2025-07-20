@@ -14,11 +14,13 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.client.model.EmptyModel;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import net.neoforged.neoforge.client.model.data.ModelData.Builder;
 
 public class ExtrudedBlockModel extends CopycatModel {
 
@@ -33,6 +35,11 @@ public class ExtrudedBlockModel extends CopycatModel {
         this.extrusionResult = extrusionResult;
         this.movementDirection = movementDirection;
         this.progress = progress;
+    };
+
+    @Override
+    protected ModelData.Builder gatherModelData(Builder builder, BlockAndTintGetter world, BlockPos pos, BlockState state, ModelData blockEntityData) {
+        return super.gatherModelData(builder, world, pos, state, blockEntityData).with(MATERIAL_PROPERTY, extrusionResult);
     };
 
     @Override
