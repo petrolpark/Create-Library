@@ -3,6 +3,8 @@ package com.petrolpark;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.client.offgridtiling.OffGridTilingModel;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.world.level.block.Block;
@@ -20,6 +22,10 @@ public class PetrolparkBlocks {
             .strength(0.2f)
         ).item()
         .build()
+        .register();
+
+    public static final BlockEntry<Block> TILING_TEST = REGISTRATE.block("tiling_test", Block::new)
+        .onRegister(CreateRegistrate.blockModel(() -> OffGridTilingModel::new))
         .register();
         
 

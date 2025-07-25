@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
+import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationRecipe;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRecipe;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
@@ -24,9 +25,10 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo {
 
+    CENTRIFUGATION(CentrifugationRecipe.Serializer::new),
     EXTRUSION(ExtrusionRecipe.Serializer::new),
     LIDDED_BASIN(LiddedBasinRecipe.Serializer::new),
-    MANDREL(MandrelRecipe.Serializer::new)
+    MANDREL(MandrelRecipe.Serializer::new),
     //FIRST_TIME_LUCKY_MILLING(FTLMillingRecipe::new, AllRecipeTypes.MILLING::getType),
     ;
 
@@ -48,8 +50,8 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
     //     this(() -> new AdvancedProcessingRecipeSerializer<>(processingFactory));
     // };
 
-    // CreateRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory<?> processingFactory, Supplier<RecipeType<?>> typeSupplier) {
-    //     this(() -> new AdvancedProcessingRecipeSerializer<>(processingFactory), typeSupplier);
+    // CreateRecipeTypes(ProcessingRecipe.Factory<?, ?> processingFactory, Supplier<RecipeType<?>> typeSupplier) {
+    //     this(() -> new AdvancedProcessingRecipe.Serializer<>(processingFactory), typeSupplier);
     // };
 
     CreateRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier) {

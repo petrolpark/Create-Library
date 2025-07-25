@@ -59,13 +59,13 @@ public class LiddedBasinRecipe extends BasinRecipe {
 
     protected static class Params extends AdvancedProcessingRecipeParams {
 
-        public static final MapCodec<ProcessingRecipeParams> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        public static final MapCodec<ProcessingRecipeParams> CODEC = RecordCodecBuilder.<LiddedBasinRecipe.Params>mapCodec(instance -> instance.group(
             codec(LiddedBasinRecipe.Params::new).forGetter(Function.identity()),
             Codec.BOOL.optionalFieldOf("bubbles", true).forGetter(LiddedBasinRecipe.Params::bubbles)
         ).apply(instance, (params, bubbles) -> {
             params.bubbles = bubbles;
             return params;
-        })).flatXmap(
+        })).<ProcessingRecipeParams>flatXmap(
             DataResult::success,
             params -> params instanceof LiddedBasinRecipe.Params properParams ? DataResult.success(properParams) : DataResult.error(() -> "Not Lidden Basin Recipe Params")
         );

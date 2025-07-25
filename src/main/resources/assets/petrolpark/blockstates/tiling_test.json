@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "": [
+            {
+                "model": "petrolpark:block/tiling_test"
+            }
+        ]
+    }
+}

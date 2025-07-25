@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.Petrolpark;
+import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.create.CreateRecipeTypes;
 import com.petrolpark.core.recipe.ingredient.BlockHolderSetIngredient;
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
@@ -38,7 +38,7 @@ import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 public class ExtrusionRecipe implements Recipe<ExtrusionRecipe.Input> {
 
     static {
-        MovementBehaviour.REGISTRY.registerProvider(Petrolpark.EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER);
+        MovementBehaviour.REGISTRY.registerProvider(Create.EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER);
     };
 
     public static final MapCodec<ExtrusionRecipe> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -161,8 +161,7 @@ public class ExtrusionRecipe implements Recipe<ExtrusionRecipe.Input> {
             return recipeManager.getAllRecipesFor(CreateRecipeTypes.EXTRUSION.getType(ExtrusionRecipe.class)).stream()
                 .filter(rh -> 
                     rh.value().inputs().contains(block.builtInRegistryHolder())
-                )
-                .findFirst()
+                ).findFirst()
                 .map(ExtrusionMovementBehaviour::new)
                 .orElse(null);
         };

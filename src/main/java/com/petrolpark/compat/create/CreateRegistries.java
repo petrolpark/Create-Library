@@ -7,8 +7,8 @@ import org.jetbrains.annotations.ApiStatus;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.compat.create.common.processing.mandrel.animation.MandrelAnimationType;
-import com.petrolpark.compat.create.core.dough.DoughType;
 import com.petrolpark.compat.create.core.dough.DoughCut;
+import com.petrolpark.compat.create.core.dough.DoughType;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
@@ -21,7 +21,7 @@ public class CreateRegistries {
     @ApiStatus.Internal
 	public static void init() {
 		// make sure the class is loaded.
-		// this method is called at the tail of BuiltInRegistries, injected by BuiltInRegistriesMixin.
+		// this method is called at the tail of BuiltInRegistries, injected by CreateBuiltInRegistriesMixin.
 	};
     
     public static class Keys {

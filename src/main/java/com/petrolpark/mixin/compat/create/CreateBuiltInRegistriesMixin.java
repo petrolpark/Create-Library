@@ -7,7 +7,7 @@ import com.petrolpark.compat.create.CreateRegistries;
 import net.minecraft.core.registries.BuiltInRegistries;
 
 @Mixin(BuiltInRegistries.class)
-public class BuiltInRegistriesMixin {
+public class CreateBuiltInRegistriesMixin {
 
 	static {
 		CreateRegistries.init();

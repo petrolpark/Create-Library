@@ -8,7 +8,12 @@ public class PetrolparkPartialModels {
     
     public static final PartialModel
 
-    MANDREL_SHAFT = block("mandrel/shaft");
+    MANDREL_SHAFT = block("mandrel/shaft"),
+
+    DEPLOYER_HAND_PAPER = block("deployer/hand_paper"),
+    DEPLOYER_HAND_SCISSORS = block("deployer/hand_scissors"),
+    DEPLOYER_HAND_SWEARING = block("deployer/hand_swearing")
+    ;
 
     private static PartialModel block(String path) {
         return PartialModel.of(Petrolpark.asResource("block/"+path));

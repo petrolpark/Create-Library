@@ -1,6 +1,7 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
 import com.petrolpark.compat.create.core.loot.CreateGlobalLootModifierSerializers;
 import com.petrolpark.compat.create.event.CreateModEvents;
@@ -11,6 +12,8 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 
 @RequiresCreate
 public class Create {
+
+    public static final ExtrusionRecipe.MovementBehaviourProvider EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER = new ExtrusionRecipe.MovementBehaviourProvider();
 
     static {
         CreateRecipeTypes.init();
@@ -36,6 +39,7 @@ public class Create {
         modEventBus.register(CreateModEvents.class);
         mainEventBus.register(PetrolparkStressConfig.class);
         mainEventBus.register(AbstractRememberPlacerBehaviour.class);
+        mainEventBus.register(EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER);
     };
 
     private static final void onRegister(final RegisterEvent event) {

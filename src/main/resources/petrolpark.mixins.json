@@ -9,9 +9,9 @@
         "compat.create.BasinBlockEntityMixin",
         "compat.create.BasinBlockMixin",
         "compat.create.BasinRecipeMixin",
-        "compat.create.BuiltInRegistriesMixin",
         "compat.create.BeltInventoryMixin",
         "compat.create.ContraptionMixin",
+        "compat.create.CreateBuiltInRegistriesMixin",
         "compat.create.CrushingWheelBlockEntityMixin",
         "compat.create.CrushingWheelControllerBlockEntityMixin",
         "compat.create.CrushingWheelControllerBlockMixin",
@@ -64,7 +64,8 @@
         "client.GameRendererMixin",
         "client.GuiMixin",
         "client.MinecraftMixin",
-        "client.RecipeBookComponentMixin"
+        "client.RecipeBookComponentMixin",
+        "client.SpriteLoaderMixin"
     ],
     "injectors": {
         "defaultRequire": 1
