@@ -78,10 +78,11 @@ public class TubeBehaviour extends BlockEntityBehaviour {
      */
     public TubeSpline getSpline() {
         if (spline == null && controller) {
-            if (!(blockEntity.getBlockState().getBlock() instanceof ITubeBlock tubeBlock)) return null;
+            BlockState thisState = blockEntity.getBlockState();
+            if (!(thisState.getBlock() instanceof ITubeBlock tubeBlock)) return null;
             BlockState endState = getWorld().getBlockState(otherEndPos);
             if (endState.getBlock() != tubeBlock) return null;
-            spline = new TubeSpline(BlockFace.of(getPos(), tubeBlock.getTubeConnectingFace(getWorld(), getPos(), getWorld().getBlockState(getPos()))), BlockFace.of(otherEndPos, tubeBlock.getTubeConnectingFace(getWorld(), otherEndPos, endState)), middleControlPoints, tubeBlock.getTubeMaxAngle(), tubeBlock.getTubeSegmentLength(), tubeBlock.getTubeSegmentRadius());
+            spline = new TubeSpline(BlockFace.of(getPos(), tubeBlock.getTubeConnectingFace(getWorld(), getPos(), thisState)), BlockFace.of(otherEndPos, tubeBlock.getTubeConnectingFace(getWorld(), otherEndPos, endState)), middleControlPoints, tubeBlock.getTubeMaxAngle(), tubeBlock.getTubeSegmentLength(), tubeBlock.getTubeSegmentRadius());
             tubeBlockEntity.invalidateTubeRenderBoundingBox();
         };
         return spline;
