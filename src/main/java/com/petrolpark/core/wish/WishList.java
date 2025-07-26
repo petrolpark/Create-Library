@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 import com.google.common.collect.Lists;
 import com.petrolpark.Petrolpark;
@@ -11,7 +12,8 @@ import com.petrolpark.core.recipe.ingredient.modifier.IForcingItemIngredientModi
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
 
 import net.createmod.catnip.data.IntAttached;
-import net.minecraft.util.Mth;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -40,17 +42,19 @@ public abstract class WishList {
     protected final boolean getLootTableWishedAndRandomItemsRaw(LootTable table, IIngredientModifier<? super ItemStack> wish, LootContext context, Consumer<ItemStack> output) {
         LootContext.VisitedEntry<?> visitedTableEntry = LootContext.createVisitedEntry(table);
         if (context.pushVisitedElement(visitedTableEntry)) {
-            Consumer<ItemStack> consumer = LootItemFunction.decorate(table.compositeFunction, output, context);
+            //Consumer<ItemStack> consumer = LootItemFunction.decorate(table.compositeFunction, output, context);
 
-            for (LootPool pool : table.pools) {
-                addLootPoolWishedAndRandomItems(pool, wish, consumer, context);
-                pool.addRandomItems(consumer, context);
-            };
+            // for (LootPool pool : table.pools) {
+            //     addLootPoolWishedAndRandomItems(pool, wish, consumer, context);
+            //     pool.addRandomItems(consumer, context);
+            // };
 
             context.popVisitedElement(visitedTableEntry);
         } else {
             Petrolpark.LOGGER.warn("Infinite loop in Loot Table while trying to grant wish");
         }
+
+        return false;
     };
 
     /**
@@ -64,9 +68,9 @@ public abstract class WishList {
     protected final boolean addLootPoolWishedAndRandomItems(LootPool pool, WishList wishList, Consumer<ItemStack> stackConsumer, LootContext context) {
         if (!pool.compositeCondition.test(context)) return false;
 
-        int rolls = pool.getRolls().getInt(context) + Mth.floor(pool.getBonusRolls().getFloat(context) * context.getLuck());
+        //int rolls = pool.getRolls().getInt(context) + Mth.floor(pool.getBonusRolls().getFloat(context) * context.getLuck());
 
-
+        return false;
     };
 
     /**
@@ -83,7 +87,12 @@ public abstract class WishList {
 
             if (entryContainer instanceof NestedLootTable lootTable) {
 
-                return getLootTableWishedAndRandomItemsRaw(lootTable.contents, wish, context, stackConsumer);
+                if (getLootTableWishedAndRandomItemsRaw(
+                    lootTable.contents.map(
+                        rl -> context.getResolver().get(Registries.LOOT_TABLE, rl).map(Holder::value).orElse(LootTable.EMPTY),
+                        Function.identity()
+                    ), wish, context, stackConsumer
+                )) return true; //TODO determine if stacks are actually added
 
             } else if (entryContainer instanceof LootPoolSingletonContainer singletonContainer) {
 
@@ -113,7 +122,6 @@ public abstract class WishList {
                         return true;
                     };
                 };
-                return false;
 
             } else {
 
@@ -139,11 +147,12 @@ public abstract class WishList {
                             return true;
                         };
                     };
-                    return false;
-                };
 
-            };
+                };
+            }
         };
+
+        return false;
     };
 
     public class SingletonWishList extends WishList {

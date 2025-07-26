@@ -7,6 +7,8 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 
 public class AdvancementHelper {
 
@@ -28,5 +30,10 @@ public class AdvancementHelper {
     public static final boolean testState(Optional<StatePropertiesPredicate> statePredicate, BlockState state) {
         if (statePredicate.isEmpty()) return true;
         return statePredicate.get().matches(state);
+    };
+
+    public static final boolean testFluid(Optional<FluidIngredient> fluidPredicate, FluidStack fluid) {
+        if (fluidPredicate.isEmpty()) return true;
+        return fluidPredicate.get().test(fluid);
     };
 };

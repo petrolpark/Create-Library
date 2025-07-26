@@ -24,10 +24,5 @@ public class PetrolparkBlocks {
         .build()
         .register();
 
-    public static final BlockEntry<Block> TILING_TEST = REGISTRATE.block("tiling_test", Block::new)
-        .onRegister(CreateRegistrate.blockModel(() -> OffGridTilingModel::new))
-        .register();
-        
-
     public static final void register() {};
 };

@@ -32,6 +32,11 @@ public abstract class AdvancedProcessingRecipe extends ProcessingRecipe<RecipeWr
     };
 
     @Override
+    public Optional<ResourceLocation> getFirstTimeLuckyKey() {
+        return firstTimeLuckyKey;
+    };
+
+    @Override
     public Optional<HolderSet<Biome>> getAllowedBiomes() {
         return allowedBiomes;
     };

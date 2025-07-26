@@ -5,7 +5,6 @@ import java.util.Optional;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.simibubi.create.content.kinetics.millstone.MillingRecipe;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 
 import net.minecraft.resources.ResourceLocation;
 
@@ -17,7 +16,7 @@ public class FTLMillingRecipe extends MillingRecipe implements IFTLProcessingRec
 
     public final Optional<ResourceLocation> firstTimeLuckyKey;
 
-    public FTLMillingRecipe(ProcessingRecipeParams params) {
+    public FTLMillingRecipe(AdvancedProcessingRecipeParams params) {
         super(params);
         firstTimeLuckyKey = params instanceof AdvancedProcessingRecipeParams advancedParams ? advancedParams.firstTimeLuckyKey() : Optional.empty();
     };

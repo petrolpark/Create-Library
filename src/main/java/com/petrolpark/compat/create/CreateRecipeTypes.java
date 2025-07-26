@@ -7,11 +7,13 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
-import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationRecipe;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRecipe;
+import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
+import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.util.Lang;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
 import net.minecraft.resources.ResourceLocation;
@@ -25,18 +27,29 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo {
 
-    CENTRIFUGATION(CentrifugationRecipe.Serializer::new),
+    //CENTRIFUGATION(CentrifugationRecipe::new),
     EXTRUSION(ExtrusionRecipe.Serializer::new),
     LIDDED_BASIN(LiddedBasinRecipe.Serializer::new),
     MANDREL(MandrelRecipe.Serializer::new),
     //FIRST_TIME_LUCKY_MILLING(FTLMillingRecipe::new, AllRecipeTypes.MILLING::getType),
     ;
 
+    /**
+     * The ResourceLocation of both the Serializer, and Type (if the Type is registered here).
+     */
     private final ResourceLocation id;
     private final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<?>> serializerObject;
-    @Nullable
-    private final DeferredHolder<RecipeType<?>, RecipeType<?>> typeObject;
+    private final @Nullable DeferredHolder<RecipeType<?>, RecipeType<?>> typeObject;
     private final Supplier<RecipeType<?>> type;
+
+    /**
+     * Create the Serializer and Type similar to how Create does it, just with {@link AdvancedProcessingRecipe} Params and Serializers.
+     * @param <R> Type of the Advanced Processing Recipe
+     * @param processingFactory
+     */
+    <R extends AdvancedProcessingRecipe> CreateRecipeTypes(ProcessingRecipe.Factory<AdvancedProcessingRecipeParams, R> processingFactory) {
+        this(() -> new AdvancedProcessingRecipe.Serializer<>(processingFactory));
+    };
 
     CreateRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier) {
         String name = Lang.asId(name());
@@ -46,13 +59,9 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
         type = typeObject;
     };
 
-    // CreateRecipeTypes(ProcessingRecipeBuilder.ProcessingRecipeFactory<?> processingFactory) {
-    //     this(() -> new AdvancedProcessingRecipeSerializer<>(processingFactory));
-    // };
-
-    // CreateRecipeTypes(ProcessingRecipe.Factory<?, ?> processingFactory, Supplier<RecipeType<?>> typeSupplier) {
-    //     this(() -> new AdvancedProcessingRecipe.Serializer<>(processingFactory), typeSupplier);
-    // };
+    <R extends AdvancedProcessingRecipe> CreateRecipeTypes(ProcessingRecipe.Factory<AdvancedProcessingRecipeParams, R> processingFactory, Supplier<RecipeType<?>> typeSupplier) {
+        this(() -> new AdvancedProcessingRecipe.Serializer<>(processingFactory), typeSupplier);
+    };
 
     CreateRecipeTypes(Supplier<RecipeSerializer<?>> serializerSupplier, Supplier<RecipeType<?>> typeSupplier) {
         this(serializerSupplier, typeSupplier, false);
@@ -71,6 +80,9 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
         };
     };
 
+    /**
+     * The ResourceLocation of both the Serializer, and Type (if the Type is registered here).
+     */
     @Override
     public ResourceLocation getId() {
         return id;
@@ -93,8 +105,7 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
     };
 
     public <I extends RecipeInput, T extends Recipe<I>> Optional<RecipeHolder<T>> find(I inv, Level world) {
-        return world.getRecipeManager()
-            .getRecipeFor(getType(), inv, world);
+        return world.getRecipeManager().getRecipeFor(getType(), inv, world);
     };
 
     public static final void init() {};

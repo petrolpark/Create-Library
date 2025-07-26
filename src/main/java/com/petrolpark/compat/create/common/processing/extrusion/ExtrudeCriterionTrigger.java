@@ -50,8 +50,8 @@ public class ExtrudeCriterionTrigger extends SimpleCriterionTrigger<ExtrudeCrite
             StatePropertiesPredicate.CODEC.optionalFieldOf("output_state").forGetter(Instance::inputState)
         ).apply(instance, Instance::new));
 
-        boolean matches(RecipeHolder<ExtrusionRecipe> recipeHoler, BlockState inputState, BlockState outputState) {
-            return AdvancementHelper.test(recipeId(), recipeHoler.id())
+        boolean matches(RecipeHolder<ExtrusionRecipe> recipeHolder, BlockState inputState, BlockState outputState) {
+            return AdvancementHelper.test(recipeId(), recipeHolder.id())
                 && AdvancementHelper.testBlocks(inputBlock(), inputState) && AdvancementHelper.testState(inputState(), inputState)
                 && AdvancementHelper.testBlocks(outputBlock(), outputState) && AdvancementHelper.testState(outputState(), outputState);
         };
