@@ -58,7 +58,7 @@
         "compat.create.client.DepotRendererMixin",
         "compat.create.client.GoggleOverlayRendererMixin",
         "compat.create.client.PonderUIMixin",
-        "compat.jei.client.JustEnoughItemsClientMixin",
+        "compat.jei.client.ForgePluginFinderMixin",
         "compat.jei.client.ModIdHelperMixin",
         "client.CreativeModeInventoryScreenMixin",
         "client.GameRendererMixin",

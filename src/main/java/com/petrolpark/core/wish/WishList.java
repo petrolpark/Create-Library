@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import com.google.common.collect.Lists;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.core.recipe.ingredient.modifier.IForcingItemIngredientModifier;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
+@ApiStatus.Experimental
 public abstract class WishList {
 
     public static final int DEFAULT_ATTEMPTS = 10;
@@ -75,7 +78,6 @@ public abstract class WishList {
 
     /**
      * 
-     * @param <MODIFIER>
      * @param pool
      * @param wish
      * @param stackConsumer

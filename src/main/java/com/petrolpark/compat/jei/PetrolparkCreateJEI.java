@@ -24,7 +24,7 @@ import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
-import com.petrolpark.mixin.compat.jei.client.JustEnoughItemsClientMixin;
+import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
@@ -50,7 +50,7 @@ import net.minecraft.world.level.block.Blocks;
 
 /**
  * For now, this library's JEI plugin relies heavily on Create, so is set up to load only when Create is loaded.
- * This is done with {@link JustEnoughItemsClientMixin} instead of annotating this class.
+ * This is done with {@link ForgePluginFinderMixin} instead of annotating this class.
  */
 @RequiresCreate
 public class PetrolparkCreateJEI implements IModPlugin {
