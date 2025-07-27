@@ -14,6 +14,6 @@ public class SimpleMobEffect extends MobEffect implements IShaderEffect {
 
     @Override
     public ResourceLocation getShader() {
-        return Petrolpark.asResource("shaders/post/baby_blue_withdrawal.json");
+        return Petrolpark.asResource("baby_blue_withdrawal");
     }
 };

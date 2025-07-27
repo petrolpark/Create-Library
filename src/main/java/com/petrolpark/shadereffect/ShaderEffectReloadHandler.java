@@ -13,7 +13,7 @@ public class ShaderEffectReloadHandler {
     private static final Map<IShaderEffect, PostChain> shaderCache = new HashMap<>();
 
     public static void createShader(IShaderEffect shaderEffect, Minecraft minecraft, ResourceManager manager) {
-        ResourceLocation location = shaderEffect.getShader();
+        ResourceLocation location = rlForShader(shaderEffect.getShader());
 
         try {
             PostChain chain = new PostChain(minecraft.getTextureManager(), manager, minecraft.getMainRenderTarget(), location);
@@ -36,5 +36,9 @@ public class ShaderEffectReloadHandler {
     public static void clearCache() {
         shaderCache.values().forEach(PostChain::close);
         shaderCache.clear();
+    }
+
+    private static ResourceLocation rlForShader(ResourceLocation rl) {
+        return ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), "shaders/post/" + rl.getPath() + ".json");
     }
 }
