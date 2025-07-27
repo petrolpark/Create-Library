@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
@@ -41,11 +40,6 @@ public class Petrolpark {
 
     public static ResourceLocation asResource(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
-    };
-
-    static {
-        SharedFeatureFlag.MANDREL.enable(Mods.PETROLPARK); // testing only
-        SharedFeatureFlag.EXTRUSION.enable(Mods.PETROLPARK); // testing only
     };
 
     public static final ScoreboardTeamManager SCOREBOARD_TEAMS = new ScoreboardTeamManager();

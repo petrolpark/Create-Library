@@ -15,6 +15,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import net.minecraft.client.gui.GuiGraphics;
 
+//TODO Biome-specificity
 public class LiddedBasinCategory extends BasinCategory {
 
     private final JEIBlockRenderer blockRenderer = new JEIBlockRenderer();
