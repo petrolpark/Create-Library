@@ -1,0 +1,20 @@
+{
+  "blend": {
+    "func": "add",
+    "srcrgb": "srcalpha",
+    "dstrgb": "1-srcalpha"
+  },
+  "vertex": "blit",
+  "fragment": "bezier_mix",
+  "attributes": [ "Position" ],
+  "samplers": [
+    { "name": "DiffuseSampler" },
+    { "name":  "ToMix" }
+  ],
+  "uniforms": [
+    { "name": "ProjMat",       "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+    { "name": "OutSize",       "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
+    { "name": "EffectFactor",  "type": "float",     "count": 1,  "values": [ 1.0 ] },
+    { "name":  "Points",       "type": "matrix4x4", "count": 16, "values": [ 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.5, 1.0, 0.5, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 0.0 ] }
+  ]
+}

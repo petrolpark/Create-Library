@@ -11,6 +11,9 @@ import com.petrolpark.core.team.packet.BindTeamItemPacket;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeamComponentChangedPacket;
 import com.petrolpark.core.team.singleplayer.SinglePlayerTeamComponentChangedPacket;
 
+import com.petrolpark.shadereffect.packet.MEIShaderRemovePacket;
+import com.petrolpark.shadereffect.packet.RemoveAllShadersPacket;
+import com.petrolpark.shadereffect.packet.SyncInitialDurationPacket;
 import net.createmod.catnip.net.base.BasePacketPayload;
 import net.createmod.catnip.net.base.CatnipPacketRegistry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -29,6 +32,9 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
 	SINGLE_PLAYER_TEAM_COMPONENT_CHANGED(SinglePlayerTeamComponentChangedPacket.class, SinglePlayerTeamComponentChangedPacket.STREAM_CODEC, false),
     SCOREBOARD_TEAM_COMPONENT_CHANGED(ScoreboardTeamComponentChangedPacket.class, ScoreboardTeamComponentChangedPacket.STREAM_CODEC, false),
     EXTRA_INVENTORY_SIZE_CHANGE(ExtraInventorySizeChangePacket.class, ExtraInventorySizeChangePacket.STREAM_CODEC, false),
+	MEI_SHADER_REMOVE(MEIShaderRemovePacket.class, MEIShaderRemovePacket.STREAM_CODEC, false),
+	SYNC_INITIAL_DURATION(SyncInitialDurationPacket.class, SyncInitialDurationPacket.STREAM_CODEC, false),
+	REMOVE_ALL_SHADERS(RemoveAllShadersPacket.class, RemoveAllShadersPacket.STREAM_CODEC, false),
 	;
 
     private final CatnipPacketRegistry.PacketType<?> type;
