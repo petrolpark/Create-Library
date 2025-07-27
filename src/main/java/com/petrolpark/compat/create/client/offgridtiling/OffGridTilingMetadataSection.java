@@ -17,11 +17,13 @@ import net.neoforged.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public record OffGridTilingMetadataSection(float xSize, float ySize, float scale) {
     
-    public static final Codec<OffGridTilingMetadataSection> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+    @SuppressWarnings("unused")
+    public static final Codec<OffGridTilingMetadataSection> CODEC = RecordCodecBuilder.<OffGridTilingMetadataSection>create(instance -> instance.group(
         ExtraCodecs.POSITIVE_FLOAT.fieldOf("x").forGetter(OffGridTilingMetadataSection::xSize), // The width of the tiling pattern proportional to the width of a block
         ExtraCodecs.POSITIVE_FLOAT.fieldOf("y").forGetter(OffGridTilingMetadataSection::ySize), // The height of the tiling pattern proportional to the height of a block
         ExtraCodecs.POSITIVE_FLOAT.fieldOf("scale").forGetter(OffGridTilingMetadataSection::scale) // The size of the texture proportional to the UV size of a full block side (which is typically 16x16 pixels)
-    ).apply(instance, OffGridTilingMetadataSection::new)).validate(section -> {
+    ).apply(instance, OffGridTilingMetadataSection::new)).<OffGridTilingMetadataSection>validate(obj -> {
+        OffGridTilingMetadataSection section = (OffGridTilingMetadataSection)obj; // Won't compile otherwise for some reason
         if (section.xSize() == 0f || section.ySize() == 0f || section.scale() == 0f) return DataResult.error(() -> "Off-grid-tiling fields may not be 0");
         return DataResult.success(section);
     });
