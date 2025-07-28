@@ -92,6 +92,7 @@
     "item.petrolpark.menu": "Menu",
     "item.petrolpark.menu.team_selection": "Select a Team for this %1$s",
     "item.petrolpark.mesh": "Mesh",
+    "item.petrolpark.recipe_book": "Recipe Book",
     "item.petrolpark.shulker_belt": "Shulker Belt",
     "item.petrolpark.unprocessed_mashed_potato": "Unfinished Mashed Potato",
 
@@ -224,6 +225,8 @@
     "petrolpark.tube.result.too_many_points": "Too many control points",
     "petrolpark.tube.result.wrong_block": "Can't connect those types of blocks",
     "petrolpark.tube.result.wrong_face": "Can't connect on that face",
+
+    "recipe.petrolpark.unknown": "Unknown Recipe",
 
     "reward.petrolpark.to_entity": "For %1$s:",
     "reward.petrolpark.to_team": "For the Team:",

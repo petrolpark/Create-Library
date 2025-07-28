@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 
 public class BadgeDuplicationRecipe extends CustomRecipe {
 
-    public static final RecipeSerializer<BadgeDuplicationRecipe> BADGE_DUPLICATION = new SimpleCraftingRecipeSerializer<>(BadgeDuplicationRecipe::new);
+    public static final RecipeSerializer<BadgeDuplicationRecipe> SERIALIZER = new SimpleCraftingRecipeSerializer<>(BadgeDuplicationRecipe::new);
 
     public BadgeDuplicationRecipe(CraftingBookCategory category) {
         super(category);
@@ -53,7 +53,7 @@ public class BadgeDuplicationRecipe extends CustomRecipe {
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return BADGE_DUPLICATION;
+        return SERIALIZER;
     };
     
 };

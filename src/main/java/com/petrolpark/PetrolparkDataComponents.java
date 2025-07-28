@@ -13,6 +13,7 @@ import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.Contamination;
 import com.petrolpark.core.item.decay.DecayTime;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
+import com.petrolpark.core.recipe.book.RecipeReferenceDataComponent;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.ShopsData;
 import com.petrolpark.core.team.ITeam;
@@ -43,6 +44,11 @@ public class PetrolparkDataComponents {
     public static final DataComponentType<List<Holder<Contaminant>>> ORPHAN_CONTAMINANTS = register(
         "contamination", 
         builder -> builder.persistent(Contamination.ORPHAN_HOLDER_LIST_CODEC).networkSynchronized(Contamination.ORPHAN_HOLDER_LIST_STREAM_CODEC)
+    );
+
+    public static final DataComponentType<RecipeReferenceDataComponent> RECIPE_REFERENCE = register(
+        "recipe_reference",
+        builder -> builder.persistent(RecipeReferenceDataComponent.CODEC).networkSynchronized(RecipeReferenceDataComponent.STREAM_CODEC)
     );
 
     public static final DataComponentType<IDecayProduct> DECAY_PRODUCT = register(
