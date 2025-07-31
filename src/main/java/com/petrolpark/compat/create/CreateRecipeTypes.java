@@ -11,6 +11,7 @@ import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
+import com.petrolpark.compat.create.core.recipe.RecipeBookMechanicalCraftingRecipe;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.util.Lang;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
@@ -32,6 +33,7 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
     LIDDED_BASIN(LiddedBasinRecipe.Serializer::new),
     MANDREL(MandrelRecipe.Serializer::new),
     //FIRST_TIME_LUCKY_MILLING(FTLMillingRecipe::new, AllRecipeTypes.MILLING::getType),
+    RECIPE_BOOK_MECHANICAL_CRAFTING(RecipeBookMechanicalCraftingRecipe.Serializer::new),
     ;
 
     /**

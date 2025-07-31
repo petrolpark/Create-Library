@@ -10,6 +10,7 @@ import com.petrolpark.core.contamination.recipe.CombineContaminatedItemsRecipe;
 import com.petrolpark.core.item.decay.DecayingItemCookingRecipe;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
+import com.petrolpark.core.recipe.book.RecipeBookDuplicationRecipe;
 import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
 import com.petrolpark.core.recipe.recycling.DirectRecyclingRecipe;
 import com.petrolpark.core.recipe.recycling.IRecyclingRecipe;
@@ -36,7 +37,8 @@ public enum PetrolparkRecipeTypes implements IPetrolparkRecipeTypes {
     
     MANUAL_ONLY_CRAFTING_SHAPED(ManualOnlyShapedRecipe.Serializer::new, () -> RecipeType.CRAFTING),
     CONTAMINATED_ITEM_COMBINATION(() -> CombineContaminatedItemsRecipe.SERIALIZER, () -> RecipeType.CRAFTING),
-    BADGE_DUPLICATION(() -> BadgeDuplicationRecipe.BADGE_DUPLICATION, () -> RecipeType.CRAFTING),
+    BADGE_DUPLICATION(() -> BadgeDuplicationRecipe.SERIALIZER, () -> RecipeType.CRAFTING),
+    RECIPE_BOOK_DUPLICATION(RecipeBookDuplicationRecipe.Serializer::new, () -> RecipeType.CRAFTING),
     ;
 
     private final ResourceLocation id;

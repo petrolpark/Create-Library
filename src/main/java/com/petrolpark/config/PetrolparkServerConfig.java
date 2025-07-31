@@ -21,6 +21,7 @@ public class PetrolparkServerConfig extends ConfigBase {
     // Processing
     public final ConfigGroup processing = group(0, "processing");
     public final ConfigBool ageingInVanillaBarrels = b(true, "ageingInVanillaBarrels", "Ageing Recipes are possible in Vanilla Barrels (and modded Barrels which extend it)");
+    public final ConfigBool chiseledBookShelfProvidesRecipeBooks = b(true, "chiseledBookShelfProvidesRecipeBooks", "Chiseled Bookshelves containing Recipe Books and Knowledge Books can provide the Recipes they contain to adjacent Blocks");
 
     // Contaminants
     public final ConfigGroup contamination = group(0, "contamination");

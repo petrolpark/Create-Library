@@ -1,23 +1,33 @@
 package com.petrolpark.mixin.compat.create;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.petrolpark.compat.create.core.block.entity.DirectlyAboveBasinOperatingBlockEntity;
+import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
+import com.petrolpark.mixin.compat.create.accessor.BasinOperatingBlockEntityAccessor;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
+import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(BasinBlockEntity.class)
-public abstract class BasinBlockEntityMixin extends SmartBlockEntity {
+public abstract class BasinBlockEntityMixin extends SmartBlockEntity implements IRecipeBookAcceptorBlockEntity {
     
+    @Shadow
+    abstract Optional<BasinOperatingBlockEntity> getOperator();
+
     public BasinBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         throw new AssertionError();
@@ -30,5 +40,15 @@ public abstract class BasinBlockEntityMixin extends SmartBlockEntity {
     @SuppressWarnings("null")
     public Optional<BasinOperatingBlockEntity> wrapGetOperator(Operation<Optional<BasinOperatingBlockEntity>> operation) {
         return operation.call().or(() -> level.getBlockEntity(getBlockPos().above()) instanceof DirectlyAboveBasinOperatingBlockEntity bobe ? Optional.of(bobe) : Optional.empty());
+    };
+
+    @Override
+    public void addProxyRecipeBookAcceptorPositions(Consumer<BlockPos> posAdder) {
+        getOperator().map(BlockEntity::getBlockPos).ifPresent(posAdder);
+    };
+
+    @Override
+    public boolean acceptsRecipeBook(RecipeHolder<?> recipeHolder) {
+        return getOperator().map(be -> ((BasinOperatingBlockEntityAccessor)be).matchStaticFilters(recipeHolder)).orElse(recipeHolder.value() instanceof BasinRecipe);
     };
 };

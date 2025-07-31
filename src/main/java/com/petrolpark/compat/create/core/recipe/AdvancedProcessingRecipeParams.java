@@ -3,6 +3,7 @@ package com.petrolpark.compat.create.core.recipe;
 import java.util.Optional;
 import java.util.function.Function;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
@@ -20,9 +21,11 @@ public class AdvancedProcessingRecipeParams extends ProcessingRecipeParams {
 
     public static final MapCodec<AdvancedProcessingRecipeParams> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 		codec(AdvancedProcessingRecipeParams::new).forGetter(Function.identity()),
+        Codec.BOOL.fieldOf("book_required").forGetter(AdvancedProcessingRecipeParams::isBookRequired),
 		RegistryCodecs.homogeneousList(Registries.BIOME).optionalFieldOf("biomes").forGetter(AdvancedProcessingRecipeParams::allowedBiomes),
         ResourceLocation.CODEC.optionalFieldOf("first_time_lucky_key").forGetter(AdvancedProcessingRecipeParams::firstTimeLuckyKey)
-	).apply(instance, (params, allowedBiomes, firstTimeLuckyKey) -> {
+	).apply(instance, (params, bookRequired, allowedBiomes, firstTimeLuckyKey) -> {
+        params.bookRequired = bookRequired;
 		params.allowedBiomes = allowedBiomes;
         params.firstTimeLuckyKey = firstTimeLuckyKey;
 		return params;
@@ -30,8 +33,13 @@ public class AdvancedProcessingRecipeParams extends ProcessingRecipeParams {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, AdvancedProcessingRecipeParams> STREAM_CODEC = streamCodec(AdvancedProcessingRecipeParams::new);
     
+    protected boolean bookRequired = false;
     protected Optional<HolderSet<Biome>> allowedBiomes = Optional.empty();
     protected Optional<ResourceLocation> firstTimeLuckyKey = Optional.empty();
+
+    public final boolean isBookRequired() {
+        return bookRequired;
+    };
 
     public final Optional<HolderSet<Biome>> allowedBiomes() {
 		return allowedBiomes;
@@ -44,6 +52,7 @@ public class AdvancedProcessingRecipeParams extends ProcessingRecipeParams {
     @Override
     protected void encode(RegistryFriendlyByteBuf buffer) {
         super.encode(buffer);
+        ByteBufCodecs.BOOL.encode(buffer, bookRequired);
         ByteBufCodecs.optional(ByteBufCodecs.holderSet(Registries.BIOME)).encode(buffer, allowedBiomes());
         ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC).encode(buffer, firstTimeLuckyKey);
     };
@@ -51,6 +60,7 @@ public class AdvancedProcessingRecipeParams extends ProcessingRecipeParams {
     @Override
     protected void decode(RegistryFriendlyByteBuf buffer) {
         super.decode(buffer);
+        bookRequired = ByteBufCodecs.BOOL.decode(buffer);
         allowedBiomes = ByteBufCodecs.optional(ByteBufCodecs.holderSet(Registries.BIOME)).decode(buffer);
         firstTimeLuckyKey = ByteBufCodecs.optional(ResourceLocation.STREAM_CODEC).decode(buffer);
     };
