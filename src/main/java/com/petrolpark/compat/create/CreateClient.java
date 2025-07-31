@@ -1,6 +1,7 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.client.outline.Outliner;
+import com.petrolpark.compat.create.core.recipe.RecipeBookProviderHighlighter;
 import com.petrolpark.compat.create.core.tube.ClientTubePlacementHandler;
 import com.petrolpark.compat.create.event.CreateClientEvents;
 import com.petrolpark.compat.create.event.CreateClientModEvents;
@@ -12,13 +13,15 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 public class CreateClient {
 
     public static final Outliner OUTLINER = new Outliner();
+    public static final RecipeBookProviderHighlighter RECIPE_BOOK_PROVIDER_HIGHLIGHTER = new RecipeBookProviderHighlighter();
     
-    public static final void clientCtor(IEventBus modEventBus, IEventBus forgeEventBus) {
+    public static final void clientCtor(IEventBus modEventBus, IEventBus mainEventBus) {
 
         // Event Bus Subscribers
         modEventBus.register(CreateClientModEvents.class);
-        forgeEventBus.register(CreateClientEvents.class);
-        forgeEventBus.register(ClientTubePlacementHandler.class);
+        mainEventBus.register(CreateClientEvents.class);
+        mainEventBus.register(ClientTubePlacementHandler.class);
+        mainEventBus.register(RECIPE_BOOK_PROVIDER_HIGHLIGHTER);
         modEventBus.addListener(CreateClient::clientInit);
 
         PetrolparkPartialModels.register();

@@ -1,8 +1,8 @@
 package com.petrolpark.compat.jei.category;
 
-import com.petrolpark.compat.create.core.recipe.IBiomeSpecificProcessingRecipe;
 import com.petrolpark.compat.jei.BiomeSpecificTooltipHelper;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
+import com.petrolpark.core.recipe.IBiomeSpecificRecipe;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -28,7 +28,7 @@ public abstract class PetrolparkRecipeCategory<T extends Recipe<?>> extends Crea
 		CreateRecipeCategory<T> create(Info<T> info, IJeiHelpers helpers);
 	};
 
-    public static void addOptionalRequiredBiomeSlot(IRecipeLayoutBuilder builder, IBiomeSpecificProcessingRecipe recipe, int x, int y) {
+    public static void addOptionalRequiredBiomeSlot(IRecipeLayoutBuilder builder, IBiomeSpecificRecipe recipe, int x, int y) {
         if (recipe.getAllowedBiomes().map(HolderSet::size).orElse(0) != 0) builder.addSlot(RecipeIngredientRole.RENDER_ONLY, x, y)
             .setBackground(getRenderedSlot(), -1, -1)
             .addIngredients(BiomeIngredientType.TYPE, BiomeSpecificTooltipHelper.getAllBiomes(recipe).toList())

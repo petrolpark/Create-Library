@@ -1,8 +1,6 @@
-package com.petrolpark.compat.create.core.recipe;
+package com.petrolpark.core.recipe;
 
 import java.util.Optional;
-
-import com.petrolpark.RequiresCreate;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -10,8 +8,7 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 
-@RequiresCreate
-public interface IBiomeSpecificProcessingRecipe {
+public interface IBiomeSpecificRecipe {
 
     public Optional<HolderSet<Biome>> getAllowedBiomes();
 

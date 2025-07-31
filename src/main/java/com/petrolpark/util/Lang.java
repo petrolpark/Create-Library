@@ -8,6 +8,7 @@ import java.util.stream.Stream;
 import org.spongepowered.include.com.google.common.base.Strings;
 
 import net.minecraft.Util;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -30,6 +31,10 @@ public class Lang {
     
     public static String asId(String string) {
         return string.toLowerCase(Locale.ROOT);
+    };
+
+    public static Component shortList(List<? extends Component> elements, int maxTextWidth) {
+        return shortList(elements, maxTextWidth, Minecraft.getInstance().font);
     };
 
     public static Component shortList(List<? extends Component> elements, int maxTextWidth, Font font) {

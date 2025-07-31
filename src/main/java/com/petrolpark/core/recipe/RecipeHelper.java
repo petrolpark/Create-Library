@@ -5,11 +5,15 @@ import java.util.List;
 import java.util.Random;
 
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
+import com.petrolpark.core.recipe.book.IBookRequiredRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.Level;
 
 public class RecipeHelper {
 
@@ -37,5 +41,19 @@ public class RecipeHelper {
             results.add(output.getStack().copyWithCount(count % stackSize));
         };
         return results;
+    };
+
+    /**
+     * Check if a Recipe has a {@link IBiomeSpecificRecipe Biome requirement} that it is fulfilled,
+     * and that if it {@link IBookRequiredRecipe requires a Recipe Book}, that one is present.
+     * @param recipeHolder
+     * @param level
+     * @param pos
+     * @return Whether the checks listed above pass
+     */
+    public static boolean isValidAt(RecipeHolder<?> recipeHolder, Level level, BlockPos pos) {
+        if (recipeHolder.value() instanceof IBiomeSpecificRecipe biomeSpecificRecipe && !biomeSpecificRecipe.isValidAt(level, pos)) return false;
+        if (recipeHolder.value() instanceof IBookRequiredRecipe bookRequiredRecipe && bookRequiredRecipe.isBookRequired(level) && !IBookRequiredRecipe.hasRequiredBook(level, pos, recipeHolder)) return false;
+        return true;
     };
 };

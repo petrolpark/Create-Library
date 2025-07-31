@@ -3,6 +3,7 @@ package com.petrolpark;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.CreateClient;
 import com.petrolpark.compat.curios.CuriosClient;
+import com.petrolpark.compat.jei.PetrolparkJEI;
 import com.petrolpark.core.extendedinventory.ExtendedInventoryClientHandler;
 
 import net.neoforged.api.distmarker.Dist;
@@ -21,6 +22,7 @@ public class PetrolparkClient {
 
         Mods.CREATE.executeIfInstalled(() -> () -> CreateClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
         Mods.CURIOS.executeIfInstalled(() -> () -> CuriosClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
+        Mods.JEI.executeIfInstalled(() -> () -> PetrolparkJEI.ctor(modEventBus, NeoForge.EVENT_BUS));
 	};
 
     public final void clientCtor(IEventBus modEventBus, IEventBus neoEventBus) {
