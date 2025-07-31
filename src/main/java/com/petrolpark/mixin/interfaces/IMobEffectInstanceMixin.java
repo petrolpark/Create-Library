@@ -1,4 +1,4 @@
-package com.petrolpark.util;
+package com.petrolpark.mixin.interfaces;
 
 public interface IMobEffectInstanceMixin {
     void setInitialDuration(int duration);

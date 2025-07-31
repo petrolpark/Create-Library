@@ -8,7 +8,7 @@ import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.shadereffect.IShaderEffect;
 import com.petrolpark.shadereffect.packet.RemoveAllShadersPacket;
-import com.petrolpark.util.IGameRendererMixin;
+import com.petrolpark.mixin.interfaces.IGameRendererMixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
@@ -103,6 +103,10 @@ public class CommonEvents {
         }
     }
 
+    /**
+     * Gets rid of shader effects on player death
+     * @param event
+     */
     @SubscribeEvent
     public static void onEntityDeath(LivingDeathEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) {

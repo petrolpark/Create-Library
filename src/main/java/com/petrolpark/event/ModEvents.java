@@ -34,6 +34,10 @@ public class ModEvents {
         event.dataPackRegistry(PetrolparkRegistries.Keys.BOGGLE_PATTERN, BogglePattern.DIRECT_CODEC, BogglePattern.DIRECT_NETWORK_CODEC);
     };
 
+    /**
+     * Caches shader effects on reload (avoid lag spikes)
+     * @param event
+     */
     @SubscribeEvent
     public static void registerClientReloadListeners(RegisterClientReloadListenersEvent event) {
         event.registerReloadListener(new PreparableReloadListener() {

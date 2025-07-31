@@ -5,8 +5,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.PetrolparkMobEffects;
 import com.petrolpark.shadereffect.IShaderEffect;
 import com.petrolpark.shadereffect.ShaderEffectReloadHandler;
-import com.petrolpark.util.IGameRendererMixin;
-import com.petrolpark.util.IMobEffectInstanceMixin;
+import com.petrolpark.mixin.interfaces.IGameRendererMixin;
+import com.petrolpark.mixin.interfaces.IMobEffectInstanceMixin;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
@@ -29,6 +29,17 @@ import java.util.Map;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin implements IGameRendererMixin {
+
+    @Shadow
+    @Final
+    Minecraft minecraft;
+
+    @Shadow
+    @Final
+    ResourceManager resourceManager;
+
+    @Unique
+    IdentityHashMap<IMobEffectInstanceMixin, PostChain> loadedEffects = new IdentityHashMap<>();
     
     @Inject(
         method = "bobHurt",
@@ -42,17 +53,6 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
         Minecraft mc = Minecraft.getInstance();
         if (mc.getCameraEntity() instanceof LivingEntity livingEntity && livingEntity.hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate())) ci.cancel();
     };
-
-    @Shadow
-    @Final
-    Minecraft minecraft;
-
-    @Shadow
-    @Final
-    ResourceManager resourceManager;
-
-    @Unique
-    IdentityHashMap<IMobEffectInstanceMixin, PostChain> loadedEffects = new IdentityHashMap<>();
 
     @Inject(
             method = "render",

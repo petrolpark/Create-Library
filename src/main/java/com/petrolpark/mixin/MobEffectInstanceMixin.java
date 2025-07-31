@@ -1,12 +1,10 @@
 package com.petrolpark.mixin;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.petrolpark.PetrolparkPostUniforms;
+import com.petrolpark.shadereffect.ClientEffectHandler;
 import com.petrolpark.shadereffect.IShaderEffect;
 import com.petrolpark.shadereffect.packet.SyncInitialDurationPacket;
-import com.petrolpark.util.IGameRendererMixin;
-import com.petrolpark.util.IMobEffectInstanceMixin;
-import net.minecraft.client.Minecraft;
+import com.petrolpark.mixin.interfaces.IMobEffectInstanceMixin;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -53,8 +51,8 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
         //Client side
         if (pEntity.level().isClientSide() && !shaderInitialized && effect.value() instanceof IShaderEffect shaderEffect) {
             shaderInitialized = true;
-            IGameRendererMixin gameRenderer = ( IGameRendererMixin ) Minecraft.getInstance().gameRenderer;
-            gameRenderer.addMobEffectInstanceShader(shaderEffect.getShader(), ((MobEffectInstance) (Object) this));
+            //Isolation required due to mixins things
+            ClientEffectHandler.initShaderEffect((MobEffectInstance)(Object)this, shaderEffect);
         }
     }
 
@@ -79,7 +77,7 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
                 (float) duration / initialDuration :
                 0.5f;
 
-        PetrolparkPostUniforms.EFFECT_FACTOR.update(uniform -> uniform.set(value));
+        ClientEffectHandler.updateUniforms(value);
     }
 
     @Override

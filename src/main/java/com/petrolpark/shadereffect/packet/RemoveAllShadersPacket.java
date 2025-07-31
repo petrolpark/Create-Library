@@ -1,7 +1,7 @@
 package com.petrolpark.shadereffect.packet;
 
 import com.petrolpark.PetrolparkPackets;
-import com.petrolpark.util.IGameRendererMixin;
+import com.petrolpark.mixin.interfaces.IGameRendererMixin;
 import net.createmod.catnip.net.base.ClientboundPacketPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
