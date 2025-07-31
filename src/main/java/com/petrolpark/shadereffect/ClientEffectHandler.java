@@ -1,7 +1,7 @@
 package com.petrolpark.shadereffect;
 
 import com.petrolpark.PetrolparkPostUniforms;
-import com.petrolpark.mixin.interfaces.IGameRendererMixin;
+import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.effect.MobEffectInstance;
 

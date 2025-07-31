@@ -1,4 +1,4 @@
-package com.petrolpark.mixin.interfaces;
+package com.petrolpark.util.mixininterfaces;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffectInstance;

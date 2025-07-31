@@ -8,7 +8,7 @@ import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.shadereffect.IShaderEffect;
 import com.petrolpark.shadereffect.packet.RemoveAllShadersPacket;
-import com.petrolpark.mixin.interfaces.IGameRendererMixin;
+import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;

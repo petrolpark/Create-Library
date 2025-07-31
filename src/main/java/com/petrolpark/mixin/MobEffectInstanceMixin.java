@@ -4,7 +4,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.shadereffect.ClientEffectHandler;
 import com.petrolpark.shadereffect.IShaderEffect;
 import com.petrolpark.shadereffect.packet.SyncInitialDurationPacket;
-import com.petrolpark.mixin.interfaces.IMobEffectInstanceMixin;
+import com.petrolpark.util.mixininterfaces.IMobEffectInstanceMixin;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;

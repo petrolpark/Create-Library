@@ -1,7 +1,7 @@
 package com.petrolpark.shadereffect.packet;
 
 import com.petrolpark.PetrolparkPackets;
-import com.petrolpark.mixin.interfaces.IMobEffectInstanceMixin;
+import com.petrolpark.util.mixininterfaces.IMobEffectInstanceMixin;
 import net.createmod.catnip.net.base.ClientboundPacketPayload;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
