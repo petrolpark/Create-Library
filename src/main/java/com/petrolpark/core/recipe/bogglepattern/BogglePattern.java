@@ -32,7 +32,7 @@ public class BogglePattern {
     };
     
     public IBogglePatternGenerator getGenerator() {
-        return getGenerator();
+        return this.generator;
     };
 
     public int getPattern(Level level) {
