@@ -16,10 +16,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 @Mixin(BuiltInRegistries.class)
 public class BuiltInRegistriesMixin {
 
-	static {
-		PetrolparkRegistries.init();
-	};
-
 	@WrapOperation(
         method = "validate",
         at = @At(

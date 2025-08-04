@@ -1,6 +1,8 @@
 package com.petrolpark;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -28,14 +30,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.WritableRegistry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
@@ -88,6 +88,8 @@ public class PetrolparkRegistries {
         return object -> provider.lookupOrThrow(registryKey).listElements().filter(h -> h.value() == object).findAny();
     };
 
+    private static final Set<Registry<?>> registries = new HashSet<>();
+
     // Core
     public static final Registry<DecayProductType> DECAY_PRODUCT_TYPES = simple(Keys.DECAY_PRODUCT_TYPE);
     public static final Registry<ITeam.ProviderType> TEAM_PROVIDER_TYPES = simple(Keys.TEAM_PROVIDER_TYPE);
@@ -118,22 +120,23 @@ public class PetrolparkRegistries {
     };
 
     @ApiStatus.Internal
-    @SuppressWarnings({"deprecation", "unchecked", "rawtypes"})
+    @SuppressWarnings("deprecation")
 	public static <T> Registry<T> register(ResourceKey<Registry<T>> key, boolean hasIntrusiveHolders) {
 		RegistryBuilder<T> builder = new RegistryBuilder<>(key).sync(true);
 
 		if (hasIntrusiveHolders) builder.withIntrusiveHolders();
 
 		Registry<T> registry = builder.create();
-		((WritableRegistry) BuiltInRegistries.REGISTRY).register(key, registry, RegistrationInfo.BUILT_IN);
+        registries.add(registry);
 		return registry;
 	};
 
-	@ApiStatus.Internal
-	public static void init() {
-		// make sure the class is loaded.
-		// this method is called at the tail of BuiltInRegistries, injected by BuiltInRegistriesMixin.
-	};
+    @ApiStatus.Internal
+    public static void init(NewRegistryEvent event) {
+        for (Registry<?> registry : registries) {
+            event.register(registry);
+        }
+    }
     
     public static class Keys {
         // Core

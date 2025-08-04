@@ -10,6 +10,7 @@ import com.petrolpark.core.shop.offer.ShopOfferGenerator;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 
 @EventBusSubscriber(modid = Petrolpark.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ModEvents {
@@ -21,4 +22,9 @@ public class ModEvents {
         event.dataPackRegistry(PetrolparkRegistries.Keys.SHOP_OFFER_GENERATOR, ShopOfferGenerator.DIRECT_CODEC, ShopOfferGenerator.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.BOGGLE_PATTERN, BogglePattern.DIRECT_CODEC, BogglePattern.DIRECT_NETWORK_CODEC);
     };
+
+    @SubscribeEvent
+    public static final void onNewRegistry(NewRegistryEvent event) {
+        PetrolparkRegistries.init(event);
+    }
 };
