@@ -2,6 +2,8 @@ package com.petrolpark.core.recipe.bogglepattern;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import com.mojang.serialization.Codec;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistries;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 
+@ApiStatus.Experimental
 public class BogglePattern {
 
     public static final Codec<BogglePattern> DIRECT_CODEC = CodecHelper.singleField(IBogglePatternGenerator.CODEC, "generator", BogglePattern::getGenerator, BogglePattern::new);
@@ -32,7 +35,7 @@ public class BogglePattern {
     };
     
     public IBogglePatternGenerator getGenerator() {
-        return getGenerator();
+        return generator;
     };
 
     public int getPattern(Level level) {
