@@ -36,9 +36,9 @@ public class Shop {
     public static final Codec<Shop> DIRECT_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance -> 
         instance.group(
             Codec.STRING.fieldOf("name").forGetter(Shop::getTranslationKey),
-            Codec.list(OfferGeneratorEntry.CODEC).fieldOf("offerGenerators").forGetter(Shop::getOfferGeneratorEntries),
-            Codec.list(ShopOrderModifierEntry.CODEC).optionalFieldOf("globalOrderModifiers", Collections.emptyList()).forGetter(Shop::getGlobalOrderModifierEntries),
-            TagKey.codec(Registries.ENTITY_TYPE).optionalFieldOf("customerEntityTypes").forGetter(Shop::getCustomerEntityTypes)
+            Codec.list(OfferGeneratorEntry.CODEC).fieldOf("offer_generators").forGetter(Shop::getOfferGeneratorEntries),
+            Codec.list(ShopOrderModifierEntry.CODEC).optionalFieldOf("global_order_modifiers", Collections.emptyList()).forGetter(Shop::getGlobalOrderModifierEntries),
+            TagKey.codec(Registries.ENTITY_TYPE).optionalFieldOf("customer_entity_types").forGetter(Shop::getCustomerEntityTypes)
         ).apply(instance, Shop::new)
     ));
 

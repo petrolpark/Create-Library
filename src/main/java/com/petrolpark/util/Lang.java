@@ -53,6 +53,7 @@ public class Lang {
                 extendedList = Component.translatable("petrolpark.generic.list.and", namedList, nextElement);
             };
         } while (font.width(extendedList) < maxTextWidth && namedElements < elements.size());
+        list = extendedList;
         return list;
     };
 

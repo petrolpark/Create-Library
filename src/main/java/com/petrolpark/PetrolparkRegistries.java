@@ -1,6 +1,8 @@
 package com.petrolpark;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -19,6 +21,8 @@ import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
 import com.petrolpark.core.recipe.bogglepattern.BogglePatternGeneratorType;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
+import com.petrolpark.core.scratch.symbol.type.IScratchSymbolType;
+import com.petrolpark.core.scratch.type.IScratchType;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.offer.ShopOfferGenerator;
 import com.petrolpark.core.team.ITeam;
@@ -28,17 +32,18 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.RegistrationInfo;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.WritableRegistry;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegistryBuilder;
 import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
+@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD)
 public class PetrolparkRegistries {
 
     /**
@@ -88,11 +93,16 @@ public class PetrolparkRegistries {
         return object -> provider.lookupOrThrow(registryKey).listElements().filter(h -> h.value() == object).findAny();
     };
 
+    private static final Set<Registry<?>> REGISTRIES = new HashSet<>(15);
+
     // Core
     public static final Registry<DecayProductType> DECAY_PRODUCT_TYPES = simple(Keys.DECAY_PRODUCT_TYPE);
     public static final Registry<ITeam.ProviderType> TEAM_PROVIDER_TYPES = simple(Keys.TEAM_PROVIDER_TYPE);
     public static final Registry<Badge> BADGES = simple(Keys.BADGE);
     public static final Registry<ITradeListingReference.Type> TRADE_LISTING_REFERENCE_TYPES = simple(Keys.TRADE_LISTING_REFERENCE_TYPE);
+
+    // Scratch
+
 
     // Loot/Data
     public static final Registry<LootItemStackNumberProviderType> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE);
@@ -118,16 +128,22 @@ public class PetrolparkRegistries {
     };
 
     @ApiStatus.Internal
-    @SuppressWarnings({"deprecation", "unchecked", "rawtypes"})
+    @SuppressWarnings("deprecation")
 	public static <T> Registry<T> register(ResourceKey<Registry<T>> key, boolean hasIntrusiveHolders) {
 		RegistryBuilder<T> builder = new RegistryBuilder<>(key).sync(true);
 
 		if (hasIntrusiveHolders) builder.withIntrusiveHolders();
 
 		Registry<T> registry = builder.create();
-		((WritableRegistry) BuiltInRegistries.REGISTRY).register(key, registry, RegistrationInfo.BUILT_IN);
+		REGISTRIES.add(registry);
+
 		return registry;
 	};
+
+    @SubscribeEvent
+    public static final void onNewRegistries(NewRegistryEvent event) {
+        REGISTRIES.forEach(event::register);
+    };
 
 	@ApiStatus.Internal
 	public static void init() {
@@ -142,6 +158,10 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<ITeam.ProviderType>> TEAM_PROVIDER_TYPE = key("team_provider_type");
         public static final ResourceKey<Registry<Badge>> BADGE = key("badge");
         public static final ResourceKey<Registry<ITradeListingReference.Type>> TRADE_LISTING_REFERENCE_TYPE = key("trade_listing_reference_type");
+
+        // Scratch
+        public static final ResourceKey<Registry<IScratchType<?>>> SCRATCH_TYPE = key("scratch_type");
+        public static final ResourceKey<Registry<IScratchSymbolType<?>>> SCRATCH_SYMBOL_TYPE = key("scratch_symbol_type");
 
         // Loot/Data
         public static final ResourceKey<Registry<LootItemStackNumberProviderType>> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE = key("loot_item_stack_number_provider_type");

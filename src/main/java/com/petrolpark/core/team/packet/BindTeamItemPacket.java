@@ -25,7 +25,7 @@ public class BindTeamItemPacket extends BindTeamPacket {
     @Override
     public void handle(ITeam.Provider teamProvider, ServerPlayer player) {
         ItemStack heldStack = player.getMainHandItem();
-        if (heldStack.getItem() instanceof ITeamBoundItem<?> bindableItem) bindableItem.bind(teamProvider, heldStack, player);
+        if (heldStack.getItem() instanceof ITeamBoundItem bindableItem) bindableItem.bind(teamProvider, heldStack, player);
     };
 
     @Override

@@ -33,6 +33,12 @@ public enum PetrolparkGuiTexture implements IGuiTexture {
 	INVENTORY_SLOT("inventory", 0, 22, 18, 18, 64, 64),
 	HOTBAR_BACKGROUND("inventory", 9, 0, 22, 22, 64, 64),
 	HOTBAR_SLOT("inventory", 31, 0, 20, 20, 64, 64),
+
+    // Select Team
+    SELECT_TEAM_BACKGROUND("team_selection", 176, 163),
+    SELECT_TEAM("sprites/team_selection/team", 0, 0, 145, 35, 145, 35),
+    SELECT_TEAM_SELECTED("sprites/team_selection/team_selected", 0, 0, 145, 35, 145, 35),
+    SELECT_TEAM_HIGHLIGHTED("sprites/team_selection/team_highlighted", 0, 0, 145, 35, 145, 35),
     
     // Creative Mode Tab
 	CREATIVE_MODE_TAB_BLANK_ROW("creative_inventory", 0, 0, 162, 18),

@@ -1,7 +1,10 @@
 package com.petrolpark.core.team.scoreboard;
 
+import java.util.List;
 import java.util.stream.Stream;
 
+import com.mojang.blaze3d.systems.RenderSystem;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.Petrolpark;
@@ -11,7 +14,12 @@ import com.petrolpark.core.team.NoTeam;
 import com.petrolpark.core.team.PetrolparkTeamProviderTypes;
 import com.petrolpark.util.CodecHelper;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.PlayerFaceRenderer;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.client.multiplayer.PlayerInfo;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -88,7 +96,33 @@ public class ScoreboardTeam extends AbstractTeam {
 
     @Override
     public void renderIcon(GuiGraphics graphics) {
-        //TODO
+        Integer color = team.getColor().getColor();
+        RenderSystem.disableBlend();
+        PoseStack ms = graphics.pose();
+
+        // Colored background
+        graphics.fill(RenderType.guiOverlay(), 0, 0, 16, 16, color == null ? 0xFFFFFFFF : color | 0xFF000000);
+
+        Minecraft mc = Minecraft.getInstance();
+        ClientPacketListener connection = mc.getConnection();
+
+        // Player faces
+        if (connection != null) {
+            List<String> playerNames = streamMemberUsernames().toList();
+            ms.pushPose();
+            ms.translate(1f, 1f, 0f);
+            ms.scale(7 / 16f, 7 / 16f, 1f);
+            int i = 0;
+            for (String name : playerNames) {
+                if (i >= 4) break;
+                PlayerInfo playerInfo = connection.getPlayerInfo(name);
+                if (playerInfo == null) continue;
+                PlayerFaceRenderer.draw(graphics, playerInfo.getSkin(), 16 * (i % 2), 16 * (i / 2), 16);
+                i++;
+            };
+            ms.popPose();
+        };
+
     };
 
     public static record Provider(String teamName) implements ITeam.Provider {

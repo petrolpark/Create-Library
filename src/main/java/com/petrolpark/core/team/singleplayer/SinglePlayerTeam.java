@@ -94,7 +94,7 @@ public class SinglePlayerTeam extends AbstractTeam {
 
     @Override
     public Component getName() {
-        return player.getDisplayName();
+        return player.getName();
     };
 
     @Override
@@ -111,7 +111,7 @@ public class SinglePlayerTeam extends AbstractTeam {
 
     @Override
     public Component getRenderedMemberList(int maxTextWidth) {
-        return player.getDisplayName();
+        return player.getName();
     };
 
     public static record Provider(UUID playerUUID) implements ITeam.Provider {

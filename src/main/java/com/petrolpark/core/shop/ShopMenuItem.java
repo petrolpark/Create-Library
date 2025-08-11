@@ -2,6 +2,7 @@ package com.petrolpark.core.shop;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
@@ -25,7 +26,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
+public class ShopMenuItem extends Item implements ITeamBoundItem {
 
     public static final String SHOP_TAG_KEY = "Shop";
 
@@ -64,8 +65,12 @@ public class ShopMenuItem extends Item implements ITeamBoundItem<Item> {
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nonnull TooltipContext context, @Nonnull List<Component> tooltipComponents, @Nonnull TooltipFlag isAdvanced) {
         Optional.ofNullable(stack.get(PetrolparkDataComponents.SHOP)).ifPresent(shop -> {
-            ITeam team = ITeamBoundItem.getTeam(stack, context.level());
-            if (!team.isNone()) Optional.ofNullable(team.get(PetrolparkDataComponents.SHOPS_DATA)).ifPresent(shops ->  tooltipComponents.add(shops.getName(shop).copy().withStyle(ChatFormatting.GRAY)));
+            Optional.of(ITeamBoundItem.getTeam(stack, context.level()))
+                .filter(Predicate.not(ITeam::isNone))
+                .map(team -> team.get(PetrolparkDataComponents.SHOPS_DATA))
+                .map(shops -> shops.getName(shop))
+                .or(() -> Optional.of(shop.value().getName()))
+                .ifPresent(name -> tooltipComponents.add(name.copy().withStyle(ChatFormatting.GRAY)));
         });
     };
 
