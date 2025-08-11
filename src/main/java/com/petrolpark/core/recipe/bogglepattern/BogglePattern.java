@@ -5,7 +5,6 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.util.CodecHelper;
 
@@ -102,7 +101,7 @@ public class BogglePattern {
             
             lookup.listElements().map(Holder::value).forEach(pattern -> pattern.getPattern(overworld)); // Generate any new patterns
 
-            lookup.listElements().forEach(holder -> Petrolpark.LOGGER.info("pattern " + holder.key().location().toString() + " is " + holder.value().getPattern(overworld))); // Temp
+            //lookup.listElements().forEach(holder -> Petrolpark.LOGGER.info("pattern " + holder.key().location().toString() + " is " + holder.value().getPattern(overworld))); // Temp
 
             return savedData;
         };
