@@ -84,8 +84,11 @@ public class Petrolpark {
         PetrolparkIngredientModifierTypes.register();
         PetrolparkIngredientRandomizerTypes.register();
     
+        // Events
         modEventBus.addListener(this::init);
         modEventBus.addListener(EventPriority.LOWEST, PetrolparkDatagen::gatherData);
+        NeoForge.EVENT_BUS.register(SCOREBOARD_TEAMS);
+        NeoForge.EVENT_BUS.register(BOGGLE_PATTERNS);
 
         // Compat
         if (Mods.JEI.isLoading()) NeoForge.EVENT_BUS.register(ITickableCategory.ClientEvents.class);

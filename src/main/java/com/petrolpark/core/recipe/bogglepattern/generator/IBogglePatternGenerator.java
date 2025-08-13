@@ -1,4 +1,4 @@
-package com.petrolpark.core.recipe.bogglepattern;
+package com.petrolpark.core.recipe.bogglepattern.generator;
 
 import java.util.ArrayList;
 import java.util.List;

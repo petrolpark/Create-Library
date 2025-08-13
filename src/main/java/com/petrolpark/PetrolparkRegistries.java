@@ -18,7 +18,7 @@ import com.petrolpark.core.data.reward.generator.RewardGeneratorType;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
 import com.petrolpark.core.item.decay.product.DecayProductType;
 import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
-import com.petrolpark.core.recipe.bogglepattern.BogglePatternGeneratorType;
+import com.petrolpark.core.recipe.bogglepattern.generator.BogglePatternGeneratorType;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.scratch.symbol.type.IScratchSymbolType;

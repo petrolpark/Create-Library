@@ -13,6 +13,7 @@ import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.Contamination;
 import com.petrolpark.core.item.decay.DecayTime;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
+import com.petrolpark.core.recipe.bogglepattern.BogglePatternHelper;
 import com.petrolpark.core.recipe.book.RecipeReferenceDataComponent;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.ShopsData;
@@ -64,10 +65,17 @@ public class PetrolparkDataComponents {
         builder -> builder.persistent(Codec.LONG).networkSynchronized(ByteBufCodecs.VAR_LONG)
     );
 
+    public static final DataComponentType<Integer> BOGGLE_PATTERN = register(
+        "boggle_pattern",
+        builder -> builder.persistent(BogglePatternHelper.SHORT_CODEC).networkSynchronized(BogglePatternHelper.SHORT_STREAM_CODEC)
+    );
+
     public static final DataComponentType<Holder<Shop>> SHOP = register(
         "shop",
         builder -> builder.persistent(Shop.CODEC).networkSynchronized(Shop.STREAM_CODEC)
     );
+
+    // TEAMS
 
     public static final DataComponentType<ShopsData> SHOPS_DATA = register(
         "shops_data", builder -> builder.persistent(ShopsData.CODEC)

@@ -1,11 +1,14 @@
 package com.petrolpark.core.recipe.bogglepattern;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
+import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.core.recipe.bogglepattern.generator.IBogglePatternGenerator;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.core.Holder;
@@ -19,6 +22,8 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
 
 @ApiStatus.Experimental
 public class BogglePattern {
@@ -37,9 +42,26 @@ public class BogglePattern {
         return generator;
     };
 
-    public int getPattern(Level level) {
-        if (pattern == null) pattern = generator.generate(level.random);
+    /**
+     * Use {@link BogglePattern#getOrGeneratePattern(Level)} wherever possible.
+     * @return Possible {@code null} pattern
+     */
+    @Nullable
+    public Integer getPattern() {
         return pattern;
+    };
+
+    public int getOrGeneratePattern(Level level) {
+        if (pattern == null) {
+            pattern = generator.generate(level.random);
+            Petrolpark.BOGGLE_PATTERNS.markDirty();
+        };
+        return pattern;
+    };
+
+    public void forgetPattern() {
+        if (pattern != null) Petrolpark.BOGGLE_PATTERNS.markDirty();
+        pattern = null;
     };
 
     public static class Manager {
@@ -57,7 +79,9 @@ public class BogglePattern {
 
         public void playerLogout(Player player) {};
 
-        public void levelLoaded(LevelAccessor level) {
+        @SubscribeEvent
+        public void onLevelLoaded(LevelEvent.Load event) {
+            LevelAccessor level = event.getLevel();
             MinecraftServer server = level.getServer();
             if (server == null || server.overworld() != level) return;
             savedData = null;
@@ -82,7 +106,7 @@ public class BogglePattern {
             @Override
             public CompoundTag save(@Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider registries) {
                 registries.lookupOrThrow(PetrolparkRegistries.Keys.BOGGLE_PATTERN).listElements().forEach(holder -> {
-                    tag.putInt(holder.key().location().toString(), holder.value().getPattern(level));
+                    tag.putInt(holder.key().location().toString(), holder.value().getOrGeneratePattern(level));
                 });
                 return tag;
             };
@@ -99,11 +123,13 @@ public class BogglePattern {
                 );
             };
             
-            lookup.listElements().map(Holder::value).forEach(pattern -> pattern.getPattern(overworld)); // Generate any new patterns
-
-            //lookup.listElements().forEach(holder -> Petrolpark.LOGGER.info("pattern " + holder.key().location().toString() + " is " + holder.value().getPattern(overworld))); // Temp
+            lookup.listElements().map(Holder::value).forEach(pattern -> pattern.getOrGeneratePattern(overworld)); // Generate any new patterns
 
             return savedData;
+        };
+
+        public void markDirty() {
+            if (savedData != null) savedData.setDirty();
         };
     };
 };

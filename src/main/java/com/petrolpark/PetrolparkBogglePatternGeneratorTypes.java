@@ -2,10 +2,10 @@ package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
-import com.petrolpark.core.recipe.bogglepattern.BogglePatternGeneratorType;
-import com.petrolpark.core.recipe.bogglepattern.EasyBogglePatternGenerator;
-import com.petrolpark.core.recipe.bogglepattern.FixedBogglePatternGenerator;
-import com.petrolpark.core.recipe.bogglepattern.HardBogglePatternGenerator;
+import com.petrolpark.core.recipe.bogglepattern.generator.BogglePatternGeneratorType;
+import com.petrolpark.core.recipe.bogglepattern.generator.EasyBogglePatternGenerator;
+import com.petrolpark.core.recipe.bogglepattern.generator.FixedBogglePatternGenerator;
+import com.petrolpark.core.recipe.bogglepattern.generator.HardBogglePatternGenerator;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 public class PetrolparkBogglePatternGeneratorTypes {

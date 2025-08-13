@@ -1,4 +1,4 @@
-package com.petrolpark.core.recipe.bogglepattern;
+package com.petrolpark.core.recipe.bogglepattern.generator;
 
 import com.mojang.serialization.MapCodec;
 

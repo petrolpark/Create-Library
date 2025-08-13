@@ -37,6 +37,8 @@
     "block.petrolpark.mashed_potato_block": "Block of Mashed Potato",
     "block.petrolpark.tube": "Tube Segment",
 
+    "commands.petrolpark.bogglepattern.list": "There are %s registered Boggle Patterns: %s",
+    "commands.petrolpark.bogglepattern.show": "Boggle Pattern %s is:",
     "commands.petrolpark.contaminate.failed": "Nothing changed. Targets either have no item in their hands or the Contaminant could not be applied",
     "commands.petrolpark.contaminate.failed.entity": "%s is not a valid entity for this command",
     "commands.petrolpark.contaminate.failed.itemless": "%s is not holding any item",
