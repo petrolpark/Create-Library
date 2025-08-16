@@ -14,6 +14,7 @@ import com.petrolpark.PetrolparkAttributes;
 import com.petrolpark.PetrolparkFeatureFlags;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.config.PetrolparkConfigs;
+import com.petrolpark.util.EntityHelper;
 
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.CrashReport;
@@ -559,7 +560,7 @@ public class ExtendedInventory extends Inventory {
     @Override
     public void load(@Nonnull ListTag listTag) {
         super.load(listTag);
-        player.detectEquipmentUpdates(); // Need to do this now as Attribute Modifiers due to equipped Items don't usually load until after the whole Inventory
+        EntityHelper.refreshEquipmentAttributeModifiers(player); // Need to do this now as Attribute Modifiers due to equipped Items don't usually load until after the whole Inventory
         updateSize();
         int extraInventoryStart = getExtraInventoryStartSlotIndex();
         for (int i = 0; i < listTag.size(); i++) {

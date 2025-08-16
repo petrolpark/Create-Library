@@ -38,9 +38,11 @@ public abstract class PlayerMixin extends LivingEntity {
         at = @At("RETURN")
     )
     public void inInit(Level level, BlockPos pos, float yRot, GameProfile gameProfile, CallbackInfo ci) {
-        ExtendedInventory extendedInv = new ExtendedInventory((Player)(Object)this);
-        inventory = extendedInv;
-        ExtendedInventory.refreshPlayerInventoryMenuServer((Player)(Object)this);
+        if (ExtendedInventory.enabled(level.enabledFeatures())) {
+            ExtendedInventory extendedInv = new ExtendedInventory((Player)(Object)this);
+            inventory = extendedInv;
+            ExtendedInventory.refreshPlayerInventoryMenuServer((Player)(Object)this);
+        };
     };
 
     /**
