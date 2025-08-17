@@ -1,0 +1,9 @@
+{
+    "sources": [
+        {
+            "type": "petrolpark:small_banner",
+            "source": "entity/banner",
+            "prefix": "entity/banner/small/"
+        }
+    ]
+}
