@@ -5,6 +5,7 @@ import com.petrolpark.shadereffect.ClientEffectHandler;
 import com.petrolpark.shadereffect.IShaderEffect;
 import com.petrolpark.shadereffect.packet.SyncInitialDurationPacket;
 import com.petrolpark.util.mixininterfaces.IMobEffectInstanceMixin;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -49,7 +50,7 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
         }
 
         //Client side
-        if (pEntity.level().isClientSide() && !shaderInitialized && effect.value() instanceof IShaderEffect shaderEffect) {
+        if (pEntity.level().isClientSide() && pEntity instanceof LocalPlayer && !shaderInitialized && effect.value() instanceof IShaderEffect shaderEffect) {
             shaderInitialized = true;
             //Isolation required due to mixins things
             ClientEffectHandler.initShaderEffect((MobEffectInstance)(Object)this, shaderEffect);

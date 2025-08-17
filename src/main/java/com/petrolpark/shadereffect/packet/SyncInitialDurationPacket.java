@@ -12,6 +12,8 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.Optional;
 
@@ -28,6 +30,7 @@ public record SyncInitialDurationPacket(int initialDuration, String mobEffectID)
     }
 
     @Override
+    @OnlyIn( Dist.CLIENT)
     public void handle(LocalPlayer localPlayer) {
         Optional<Holder.Reference<MobEffect>> effect = BuiltInRegistries.MOB_EFFECT.getHolder(ResourceLocation.parse(mobEffectID));
         if ( effect.isEmpty() ) return;

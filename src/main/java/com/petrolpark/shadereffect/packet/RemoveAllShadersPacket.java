@@ -8,6 +8,8 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 
 public record RemoveAllShadersPacket(boolean filler) implements ClientboundPacketPayload {
 
@@ -21,6 +23,7 @@ public record RemoveAllShadersPacket(boolean filler) implements ClientboundPacke
     }
 
     @Override
+    @OnlyIn( Dist.CLIENT)
     public void handle(LocalPlayer player) {
         IGameRendererMixin gameRenderer = (( IGameRendererMixin ) Minecraft.getInstance().gameRenderer);
         gameRenderer.cleanShaderEffects();
