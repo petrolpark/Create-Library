@@ -6,6 +6,7 @@ import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.ContaminateHeldItemCommand;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
+import com.petrolpark.core.recipe.bogglepattern.BogglePatternCommand;
 import com.petrolpark.shadereffect.IShaderEffect;
 import com.petrolpark.shadereffect.packet.RemoveAllShadersPacket;
 import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
@@ -39,6 +40,7 @@ public class CommonEvents {
     @SubscribeEvent
     public static void registerCommands(RegisterCommandsEvent event) {
         ContaminateHeldItemCommand.register(event.getDispatcher(), event.getBuildContext());
+        BogglePatternCommand.register(event.getDispatcher(), event.getBuildContext());
     };
 
     @SubscribeEvent

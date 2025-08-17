@@ -1,9 +1,16 @@
 package com.petrolpark.core.recipe.bogglepattern;
 
+import com.mojang.serialization.Codec;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.block.Rotation;
 
 public class BogglePatternHelper {
-    
+
+    public static final Codec<Integer> SHORT_CODEC = Codec.SHORT.xmap(BogglePatternHelper::fromShort, BogglePatternHelper::asShort);
+    public static final StreamCodec<ByteBuf, Integer> SHORT_STREAM_CODEC = ByteBufCodecs.SHORT.map(BogglePatternHelper::fromShort, BogglePatternHelper::asShort);
     /*
      *  y x0  1  2  3
      *  0  00 01 02 03
@@ -119,5 +126,17 @@ public class BogglePatternHelper {
 
     public static final int fromShort(short binaryMatrixShort) {
         return (int)Short.MAX_VALUE + (int)binaryMatrixShort;  
+    };
+
+    public static final String[] format(int bogglePattern) {
+        String[] lines = new String[4];
+        for (int row = 0; row < 4; row++) {
+            String line = "";
+            for (int column = 0; column < 4; column++) {
+                line += is1(bogglePattern, column, row) ? "█" : "▒";
+            };
+            lines[row] = line;
+        };
+        return lines;
     };
 };

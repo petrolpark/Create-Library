@@ -1,10 +1,11 @@
-package com.petrolpark.core.recipe.bogglepattern;
+package com.petrolpark.core.recipe.bogglepattern.generator;
 
 import java.util.List;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkBogglePatternGeneratorTypes;
+import com.petrolpark.core.recipe.bogglepattern.BogglePatternHelper;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.util.RandomSource;
@@ -31,7 +32,7 @@ public class FixedBogglePatternGenerator implements IBogglePatternGenerator {
             String line = patternString.get(y);
             if (line.length() != 4) throw new IllegalArgumentException("Pattern must be 4 by 4");
             for (int x = 0; x <= 3; x++) {
-                if (line.charAt(x) != ' ') BogglePatternHelper.set1(pattern, x, y);
+                if (line.charAt(x) != ' ') pattern = BogglePatternHelper.set1(pattern, x, y);
             };
         };
         this.pattern = pattern;

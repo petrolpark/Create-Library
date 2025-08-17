@@ -21,6 +21,8 @@ public class Create {
   
     public static void ctor(IEventBus modEventBus, IEventBus mainEventBus) {
 
+        CreateRegistries.init();
+
         // Registrations
         CreatePackets.register();
         CreateBlockEntityTypes.register();

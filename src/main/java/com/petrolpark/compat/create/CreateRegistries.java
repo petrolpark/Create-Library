@@ -1,7 +1,5 @@
 package com.petrolpark.compat.create;
 
-import static com.petrolpark.Petrolpark.REGISTRATE;
-
 import org.jetbrains.annotations.ApiStatus;
 
 import com.petrolpark.Petrolpark;
@@ -12,7 +10,6 @@ import com.petrolpark.compat.create.core.dough.DoughType;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
-import net.neoforged.neoforge.registries.RegistryBuilder;
 
 public class CreateRegistries {
     
@@ -26,7 +23,7 @@ public class CreateRegistries {
     
     public static class Keys {
 
-        public static final ResourceKey<Registry<MandrelAnimationType>> MANDREL_ANIMATION_TYPE = REGISTRATE.makeRegistry("mandrel_animation_type", RegistryBuilder::new);
+        public static final ResourceKey<Registry<MandrelAnimationType>> MANDREL_ANIMATION_TYPE = key("mandrel_animation_type");
 
         // Dough
         public static final ResourceKey<Registry<DoughType>> DOUGH_TYPE = key("dough_type"); // Data

@@ -21,6 +21,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.scores.PlayerTeam;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
+import net.neoforged.neoforge.event.level.LevelEvent;
 
 public class ScoreboardTeamManager {
 
@@ -36,14 +40,17 @@ public class ScoreboardTeamManager {
 
     public <T> void dataComponentChanged(Level level, ScoreboardTeam team, @Nonnull DataComponentPatch patch) {
         CatnipServices.PLATFORM.executeOnServerOnly(() -> () -> CatnipServices.NETWORK.sendToAllClients(new ScoreboardTeamComponentChangedPacket(team.team.getName(), patch)));
-        if (savedData != null) savedData.setDirty();
+        markDirty();
     };
 
     public <T> void applyPatch(Level level, String teamName, DataComponentPatch patch) {
         get(level, teamName).ifPresent(team -> team.applyComponents(patch));
+        markDirty();
     };
 
-    public void playerLogin(Player player) {
+    @SubscribeEvent
+    public void onPlayerLogIn(PlayerLoggedInEvent event) {
+        Player player = event.getEntity();
 		if (player instanceof ServerPlayer serverPlayer) {
 			loadSavedData(serverPlayer.getServer());
 			for (ScoreboardTeam team : teams.values()) {
@@ -52,9 +59,12 @@ public class ScoreboardTeamManager {
 		}
 	};
 
-	public void playerLogout(Player player) {};
+    @SubscribeEvent
+	public void onPlayerLogOut(PlayerLoggedOutEvent event) {};
 
-	public void levelLoaded(LevelAccessor level) {
+    @SubscribeEvent
+	public void onLoadLevel(LevelEvent.Load event) {
+        LevelAccessor level = event.getLevel();
 		MinecraftServer server = level.getServer();
 		if (server == null || server.overworld() != level) return;
         teams.clear();
@@ -68,6 +78,10 @@ public class ScoreboardTeamManager {
             .getDataStorage()
             .computeIfAbsent(new SavedData.Factory<>(ScoreboardTeamSavedData::new, (tag, registries) -> load(server.overworld(), tag)), "petrolpark_teams");
 	};
+
+    public void markDirty() {
+        if (savedData != null) savedData.setDirty();
+    };
 
     public class ScoreboardTeamSavedData extends SavedData {
 

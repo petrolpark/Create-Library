@@ -26,8 +26,8 @@ import com.petrolpark.core.data.reward.team.ITeamReward;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
 import com.petrolpark.core.item.decay.product.DecayProductType;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
-import com.petrolpark.core.recipe.bogglepattern.BogglePatternGeneratorType;
-import com.petrolpark.core.recipe.bogglepattern.IBogglePatternGenerator;
+import com.petrolpark.core.recipe.bogglepattern.generator.BogglePatternGeneratorType;
+import com.petrolpark.core.recipe.bogglepattern.generator.IBogglePatternGenerator;
 import com.petrolpark.core.recipe.ingredient.modifier.FluidIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.GenericIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
@@ -41,6 +41,12 @@ import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType
 import com.petrolpark.core.registrate.SharedBlockBuilder;
 import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
 import com.petrolpark.core.registrate.SharedItemBuilder;
+import com.petrolpark.core.scratch.symbol.IScratchSymbol;
+import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
+import com.petrolpark.core.scratch.symbol.type.IScratchSymbolType;
+import com.petrolpark.core.scratch.symbol.type.SimpleScratchExpressionType;
+import com.petrolpark.core.scratch.type.IScratchType;
+import com.petrolpark.core.scratch.type.SimpleScratchType;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.trade.ITradeListingReference;
 import com.tterrag.registrate.AbstractRegistrate;
@@ -258,6 +264,23 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     public <O extends ParticleOptions, T extends ParticleType<O>> RegistryEntry<ParticleType<?>, T> particleType(String name, NonNullSupplier<T> factory) {
         return simple(name, Registries.PARTICLE_TYPE, factory);
+    };
+
+    public <T, SCRATCH_TYPE extends IScratchType<T>> RegistryEntry<IScratchType<?>, SCRATCH_TYPE> scratchType(String name, NonNullSupplier<SCRATCH_TYPE> factory) {
+        return simple(name, PetrolparkRegistries.Keys.SCRATCH_TYPE, factory);
+    };
+
+    public <T> RegistryEntry<IScratchType<?>, SimpleScratchType<T>> scratchType(String name, Class<T> clazz) {
+        return scratchType(name, () -> new SimpleScratchType<>(clazz));
+    };
+
+    public <SYMBOL extends IScratchSymbol<?, ?>, SYMBOL_TYPE extends IScratchSymbolType<SYMBOL>> RegistryEntry<IScratchSymbolType<?>, SYMBOL_TYPE> scratchSymbolType(String name, NonNullSupplier<SYMBOL_TYPE> typeFactory) {
+        return simple(name, PetrolparkRegistries.Keys.SCRATCH_SYMBOL_TYPE, typeFactory);
+    };
+
+    public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchSymbolType<?>, SimpleScratchExpressionType<EXPRESSION>> simpleScratchExpressionType(String name, NonNullSupplier<EXPRESSION> expressionFactory) {
+        final EXPRESSION expressionUnit = expressionFactory.get();
+        return scratchSymbolType(name, () -> new SimpleScratchExpressionType<>(Codec.unit(expressionUnit), StreamCodec.unit(expressionUnit)));
     };
     
     // Shared features

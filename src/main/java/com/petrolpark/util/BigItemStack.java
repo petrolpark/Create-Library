@@ -28,7 +28,7 @@ public class BigItemStack {
     };
 
     public ItemStack getSingleItemStack() {
-        return stack;
+        return stack.copy();
     };
 
     public long getCount() {
