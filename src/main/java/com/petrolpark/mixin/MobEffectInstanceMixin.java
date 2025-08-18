@@ -3,9 +3,9 @@ package com.petrolpark.mixin;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.shadereffect.ClientEffectHandler;
 import com.petrolpark.shadereffect.IShaderEffect;
+import com.petrolpark.shadereffect.packet.InitShaderPacket;
 import com.petrolpark.shadereffect.packet.SyncInitialDurationPacket;
 import com.petrolpark.util.mixininterfaces.IMobEffectInstanceMixin;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
@@ -14,13 +14,14 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin( MobEffectInstance.class)
 public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin, Comparable<MobEffectInstance>{
@@ -30,30 +31,20 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
     @Shadow
     private Holder<MobEffect> effect;
 
-    public int initialDuration;
-    private boolean sentInitialDuration;
-
-    private boolean shaderInitialized;
+    private int initialDuration;
 
     @Inject(method = "<init>(Lnet/minecraft/core/Holder;IIZZZLnet/minecraft/world/effect/MobEffectInstance;)V", at = @At("RETURN"))
-    private void onInitialize(CallbackInfo ci) {
+    private void onInitialize(CallbackInfo ignored) {
         initialDuration = duration;
     }
 
-    @Inject(method = "tick", at = @At("HEAD"))
-    private void inTick(LivingEntity pEntity, Runnable pOnExpirationRunnable, CallbackInfoReturnable<Boolean> ci) {
-        //Server side
-        if (!pEntity.level().isClientSide() && !sentInitialDuration && pEntity instanceof ServerPlayer player && effect.value() instanceof IShaderEffect ) {
+    @Inject(method = "onEffectAdded", at = @At("TAIL"))
+    private void inEffectAdded(LivingEntity entity, CallbackInfo ignored) {
+        if (entity instanceof ServerPlayer player && effect.value() instanceof IShaderEffect) {
+            String effectId = BuiltInRegistries.MOB_EFFECT.getKey(this.effect.value()).toString();
             PacketDistributor.sendToPlayer(player,
-                    new SyncInitialDurationPacket(this.initialDuration, BuiltInRegistries.MOB_EFFECT.getKey(this.effect.value()).toString()));
-            sentInitialDuration = true;
-        }
-
-        //Client side
-        if (pEntity.level().isClientSide() && pEntity instanceof LocalPlayer && !shaderInitialized && effect.value() instanceof IShaderEffect shaderEffect) {
-            shaderInitialized = true;
-            //Isolation required due to mixins things
-            ClientEffectHandler.initShaderEffect((MobEffectInstance)(Object)this, shaderEffect);
+                    new SyncInitialDurationPacket(this.initialDuration, effectId),
+                    new InitShaderPacket(effectId));
         }
     }
 
@@ -73,6 +64,7 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
     }
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void updateUniforms() {
         float value = duration >= 0 && initialDuration > 0 ?
                 (float) duration / initialDuration :

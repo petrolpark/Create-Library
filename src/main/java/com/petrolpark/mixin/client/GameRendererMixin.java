@@ -12,34 +12,23 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PostChain;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.ArrayList;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin implements IGameRendererMixin {
 
-    @Shadow
-    @Final
-    Minecraft minecraft;
-
-    @Shadow
-    @Final
-    ResourceManager resourceManager;
-
     @Unique
-    IdentityHashMap<IMobEffectInstanceMixin, PostChain> loadedEffects = new IdentityHashMap<>();
+    HashMap<IMobEffectInstanceMixin, PostChain> loadedEffects = new HashMap<>();
     
     @Inject(
         method = "bobHurt",

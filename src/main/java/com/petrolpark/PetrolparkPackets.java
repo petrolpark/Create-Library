@@ -11,6 +11,7 @@ import com.petrolpark.core.team.packet.BindTeamItemPacket;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeamComponentChangedPacket;
 import com.petrolpark.core.team.singleplayer.SinglePlayerTeamComponentChangedPacket;
 
+import com.petrolpark.shadereffect.packet.InitShaderPacket;
 import com.petrolpark.shadereffect.packet.MEIShaderRemovePacket;
 import com.petrolpark.shadereffect.packet.RemoveAllShadersPacket;
 import com.petrolpark.shadereffect.packet.SyncInitialDurationPacket;
@@ -35,6 +36,7 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
 	MEI_SHADER_REMOVE(MEIShaderRemovePacket.class, MEIShaderRemovePacket.STREAM_CODEC, false),
 	SYNC_INITIAL_DURATION(SyncInitialDurationPacket.class, SyncInitialDurationPacket.STREAM_CODEC, false),
 	REMOVE_ALL_SHADERS(RemoveAllShadersPacket.class, RemoveAllShadersPacket.STREAM_CODEC, false),
+	INIT_SHADER(InitShaderPacket.class, InitShaderPacket.STREAM_CODEC, false)
 	;
 
     private final CatnipPacketRegistry.PacketType<?> type;
