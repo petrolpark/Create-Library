@@ -1,6 +1,6 @@
 package com.petrolpark.shadereffect;
 
-import com.petrolpark.shadereffect.packet.MEIShaderRemovePacket;
+import com.petrolpark.shadereffect.packet.RemoveShaderPacket;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
@@ -14,7 +14,7 @@ public interface IShaderEffect {
         System.out.println("Politely asking to obliterate shader");
         if ( pLivingEntity != null ) {
             PacketDistributor.sendToPlayer(pLivingEntity,
-                    new MEIShaderRemovePacket(BuiltInRegistries.MOB_EFFECT.getKey(( MobEffect ) effect).toString()));
+                    new RemoveShaderPacket(BuiltInRegistries.MOB_EFFECT.getKey(( MobEffect ) effect).toString()));
         }
     }
 }

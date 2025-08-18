@@ -19,16 +19,16 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.Optional;
 
-public record MEIShaderRemovePacket(String mobEffectID) implements ClientboundPacketPayload {
+public record RemoveShaderPacket(String mobEffectID) implements ClientboundPacketPayload {
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, MEIShaderRemovePacket> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.STRING_UTF8, MEIShaderRemovePacket::mobEffectID,
-            MEIShaderRemovePacket::new
+    public static final StreamCodec<RegistryFriendlyByteBuf, RemoveShaderPacket> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.STRING_UTF8, RemoveShaderPacket::mobEffectID,
+            RemoveShaderPacket::new
     );
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return PetrolparkPackets.MEI_SHADER_REMOVE;
+        return PetrolparkPackets.REMOVE_SHADER;
     }
 
     @Override
