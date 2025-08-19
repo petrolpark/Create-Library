@@ -58,6 +58,11 @@ public class CodecHelper {
         return base.apply(ByteBufCodecs.list());
     };
 
+    public static final Codec<Byte> byteRanged(byte minInclusive, byte maxInclusive) {
+        final Function<Byte, DataResult<Byte>> checker = Codec.checkRange(minInclusive, maxInclusive);
+        return Codec.BYTE.flatXmap(checker, checker);
+    };
+
     public static final StreamCodec<ByteBuf, MinMaxBounds.Ints> INT_BOUNDS_STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.optional(ByteBufCodecs.INT), MinMaxBounds.Ints::min,
         ByteBufCodecs.optional(ByteBufCodecs.INT), MinMaxBounds.Ints::max,

@@ -91,7 +91,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
         if (lastRecipe instanceof IFTLProcessingRecipe ftlr) {
             results = ftlr.rollLuckyResults(this);
         } else {
-            results = original.call();
+            results = original.call(recipe);
         };
 
         if (PetrolparkConfigs.server().createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
