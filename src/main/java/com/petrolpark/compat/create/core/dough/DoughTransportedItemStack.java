@@ -9,13 +9,13 @@ import net.minecraft.world.item.ItemStack;
 @RequiresCreate
 public class DoughTransportedItemStack extends DirectionalTransportedItemStack {
 
-    public final DoughBall doughBall;
+    public final DoughBall<?> doughBall;
 
     public DoughTransportedItemStack(ItemStack stack) {
         this(stack, DoughBall.get(stack));
     };
 
-    protected DoughTransportedItemStack(ItemStack stack, DoughBall doughBall) {
+    protected DoughTransportedItemStack(ItemStack stack, DoughBall<?> doughBall) {
         super(stack);
         this.doughBall = doughBall;
     };

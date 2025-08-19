@@ -6,7 +6,7 @@ import java.util.function.UnaryOperator;
 import org.jetbrains.annotations.ApiStatus.Internal;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.compat.create.core.dough.DoughType;
+import com.petrolpark.compat.create.core.dough.IDough;
 import com.petrolpark.core.badge.BadgeItem;
 import com.petrolpark.core.badge.BadgeItem.BadgeAward;
 import com.petrolpark.core.contamination.Contaminant;
@@ -88,9 +88,9 @@ public class PetrolparkDataComponents {
         builder -> builder.persistent(Rotation.CODEC).networkSynchronized(CodecHelper.enumStream(Rotation.class))
     );
 
-    public static final DataComponentType<DoughType> DOUGH = register(
+    public static final DataComponentType<IDough<?>> DOUGH = register(
         "dough",
-        builder -> builder.persistent(DoughType.CODEC).networkSynchronized(DoughType.STREAM_CODEC)
+        builder -> builder.persistent(IDough.CODEC).networkSynchronized(IDough.STREAM_CODEC)
     );
     
     private static <T> DataComponentType<T> register(String name, UnaryOperator<Builder<T>> builder) {

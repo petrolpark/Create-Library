@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import com.mojang.blaze3d.platform.NativeImage;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -31,6 +33,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterSpriteSourceTypesEvent;
 
+@ApiStatus.Experimental
 @EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class SmallBannerSpriteSource implements SpriteSource {
 
