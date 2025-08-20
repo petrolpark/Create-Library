@@ -13,7 +13,7 @@ public record MobEffectOpenPipeEffectHandler(MobEffectInstance effect) implement
     @Override
     public void apply(Level level, AABB area, FluidStack fluid) {
         if (level.getGameTime() % 5 != 0) return;
-        level.getEntitiesOfClass(LivingEntity.class, area, LivingEntity::isAffectedByPotions).forEach(entity -> entity.addEffect(effect));
+        level.getEntitiesOfClass(LivingEntity.class, area, LivingEntity::isAffectedByPotions).forEach(entity -> entity.addEffect(mobEffect));
     };
     
 };

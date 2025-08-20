@@ -27,6 +27,10 @@ public class SyncedMobEffect extends SimpleMobEffect {
 
     @SubscribeEvent
     public static final void onEffectAdded(MobEffectEvent.Added event) {
+
+        // Sync Effect total duration to effect recipient
+
+        // Sync SyncedMobEffects to all Players tracking the Mob, not just the mob (Player) itself
         if (event.getEffectInstance().getEffect().value() instanceof SyncedMobEffect
             && event.getEntity().level().getChunkSource() instanceof ServerChunkCache chunkCache
         ) chunkCache.broadcast(event.getEntity(), new ClientboundUpdateMobEffectPacket(event.getEntity().getId(), event.getEffectInstance(), false));
@@ -34,6 +38,8 @@ public class SyncedMobEffect extends SimpleMobEffect {
 
     @SubscribeEvent
     public static final void onEffectRemoved(MobEffectEvent.Remove event) {
+
+        // Sync SyncedMobEffects to all Players tracking the Mob, not just the mob (Player) itself
         if (event.getEffect().value() instanceof SyncedMobEffect
             && event.getEntity().level().getChunkSource() instanceof ServerChunkCache chunkCache
         ) chunkCache.broadcast(event.getEntity(), new ClientboundRemoveMobEffectPacket(event.getEntity().getId(), event.getEffect()));
@@ -41,6 +47,8 @@ public class SyncedMobEffect extends SimpleMobEffect {
 
     @SubscribeEvent
     public static final void onStartTrackingEntity(PlayerEvent.StartTracking event) {
+
+        // Sync SyncedMobEffects to all Players tracking the Mob, not just the mob (Player) itself
         if (event.getTarget() instanceof LivingEntity entity && event.getEntity() instanceof ServerPlayer player) {
             final List<Packet<? super ClientGamePacketListener>> packets = new ArrayList<>();
             for (MobEffectInstance effectInstance : entity.getActiveEffects()) {

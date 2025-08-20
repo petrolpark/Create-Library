@@ -1,6 +1,7 @@
-package com.petrolpark.shadereffect;
+package com.petrolpark.common.mobeffect.shader;
 
 import com.petrolpark.PetrolparkPostUniforms;
+
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
