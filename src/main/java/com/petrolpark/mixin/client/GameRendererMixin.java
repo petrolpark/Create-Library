@@ -84,12 +84,11 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
         }
 
         petrolpark$loadedEffects.put(effect.getEffect(), postChain);
-        System.out.println(petrolpark$loadedEffects);
     }
 
     @Override
     public void petrolpark$removeMobEffectInstanceShader(MobEffectInstance effect) {
-        System.out.println(petrolpark$loadedEffects.remove(effect.getEffect()));
+        petrolpark$loadedEffects.remove(effect.getEffect());
     }
 
     @Override
