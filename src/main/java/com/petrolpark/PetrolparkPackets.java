@@ -1,5 +1,9 @@
 package com.petrolpark;
 
+import com.petrolpark.common.mobeffect.shader.packet.InitEffectShaderPacket;
+import com.petrolpark.common.mobeffect.shader.packet.RemoveAllEffectShadersPacket;
+import com.petrolpark.common.mobeffect.shader.packet.RemoveEffectShaderPacket;
+import com.petrolpark.common.mobeffect.shader.packet.SyncMobEffectTotalDurationPacket;
 import com.petrolpark.core.actionrecord.ActionRecordEntryResult;
 import com.petrolpark.core.actionrecord.packet.entrant.ICustomPacketPayloadEntrant;
 import com.petrolpark.core.actionrecord.packet.entrant.PacketEntrants;
@@ -29,6 +33,10 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
 	SINGLE_PLAYER_TEAM_COMPONENT_CHANGED(SinglePlayerTeamComponentChangedPacket.class, SinglePlayerTeamComponentChangedPacket.STREAM_CODEC, false),
     SCOREBOARD_TEAM_COMPONENT_CHANGED(ScoreboardTeamComponentChangedPacket.class, ScoreboardTeamComponentChangedPacket.STREAM_CODEC, false),
     EXTRA_INVENTORY_SIZE_CHANGE(ExtraInventorySizeChangePacket.class, ExtraInventorySizeChangePacket.STREAM_CODEC, false),
+	REMOVE_SHADER(RemoveEffectShaderPacket.class, RemoveEffectShaderPacket.STREAM_CODEC, false),
+	SYNC_MOB_EFFECT_TOTAL_DURATION(SyncMobEffectTotalDurationPacket.class, SyncMobEffectTotalDurationPacket.STREAM_CODEC, false),
+	REMOVE_ALL_EFFECT_SHADERS(RemoveAllEffectShadersPacket.class, RemoveAllEffectShadersPacket.STREAM_CODEC, false),
+	INIT_SHADER(InitEffectShaderPacket.class, InitEffectShaderPacket.STREAM_CODEC, false)
 	;
 
     private final CatnipPacketRegistry.PacketType<?> type;

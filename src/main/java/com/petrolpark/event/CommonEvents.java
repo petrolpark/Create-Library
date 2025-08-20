@@ -3,26 +3,37 @@ package com.petrolpark.event;
 import java.util.stream.Stream;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.common.mobeffect.shader.IShaderEffect;
+import com.petrolpark.common.mobeffect.shader.packet.RemoveAllEffectShadersPacket;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.ContaminateHeldItemCommand;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.core.recipe.bogglepattern.BogglePatternCommand;
+import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.PotionBrewEvent;
+import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
+import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 @EventBusSubscriber
 public class CommonEvents {
@@ -74,5 +85,38 @@ public class CommonEvents {
             );
         };
     };
-    
+
+    /**
+     * Cleans residual shader effects on disconnection
+     * @param event
+     */
+    @OnlyIn(Dist.CLIENT)
+    @SubscribeEvent
+    public static void onPlayerLogOut(ClientPlayerNetworkEvent.LoggingOut event) {
+        IGameRendererMixin gameRenderer = ((IGameRendererMixin) Minecraft.getInstance().gameRenderer);
+        gameRenderer.cleanShaderEffects();
+    };
+
+    /**
+     * Gets rid of shader effects on effect removal.
+     * @param event
+     */
+    @SubscribeEvent
+    public static void onMobEffectRemoved(MobEffectEvent.Remove event) {
+        MobEffect effect = event.getEffect().value();
+        if (effect instanceof IShaderEffect shaderEffect && event.getEntity() instanceof ServerPlayer serverPlayer) {
+            shaderEffect.cleanupShader(serverPlayer, event.getEffect());
+        };
+    };
+
+    /**
+     * Gets rid of shader effects on Player death.
+     * @param event
+     */
+    @SubscribeEvent
+    public static void onEntityDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            PacketDistributor.sendToPlayer(player, new RemoveAllEffectShadersPacket(true));
+        };
+    };
 };

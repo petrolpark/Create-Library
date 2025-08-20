@@ -40,6 +40,7 @@
         "FluidTankMixin",
         "ItemStackMixin",
         "LivingEntityMixin",
+        "MobEffectInstanceMixin",
         "PlayerMixin",
         "ServerGamePacketListenerImplMixin",
         "ShapedRecipeMixin",
@@ -66,7 +67,10 @@
         "client.GameRendererMixin",
         "client.GuiMixin",
         "client.MinecraftMixin",
-        "client.RecipeBookComponentMixin"
+        "client.RecipeBookComponentMixin",
+        "client.CreativeModeInventoryScreenMixin",
+        "client.GameRendererMixin",
+        "client.PostPassMixin"
     ],
     "injectors": {
         "defaultRequire": 1
