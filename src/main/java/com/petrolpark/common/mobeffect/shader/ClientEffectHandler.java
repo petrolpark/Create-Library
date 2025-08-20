@@ -8,6 +8,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 @OnlyIn( Dist.CLIENT)
 public class ClientEffectHandler {
     public static void updateUniforms(float value) {
-        PetrolparkPostUniforms.EFFECT_FACTOR.update(uniform -> uniform.set(value));
+        PetrolparkPostUniforms.set("EffectFactor", uniform -> uniform.set(value));
     }
 }

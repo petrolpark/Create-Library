@@ -1,7 +1,9 @@
 package com.petrolpark.mixin;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -30,22 +32,24 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
     @Shadow
     private int duration;
 
+    @Final
     @Shadow
     private Holder<MobEffect> effect;
 
-    private int initialDuration;
+    @Unique
+    private int petrolpark$initialDuration;
 
     @Inject(method = "<init>(Lnet/minecraft/core/Holder;IIZZZLnet/minecraft/world/effect/MobEffectInstance;)V", at = @At("RETURN"))
     private void onInitialize(CallbackInfo ignored) {
-        initialDuration = duration;
+        petrolpark$initialDuration = duration;
     }
 
     @Inject(method = "onEffectAdded", at = @At("TAIL"))
     private void inEffectAdded(LivingEntity entity, CallbackInfo ignored) {
-        PacketDistributor.sendToPlayer(player, null, null);
+        //PacketDistributor.sendToPlayer(player, null, null);
         if (entity instanceof ServerPlayer player && effect.value() instanceof IShaderEffect) {
             PacketDistributor.sendToPlayer(player,
-                new SyncMobEffectTotalDurationPacket(this.initialDuration, effect),
+                new SyncMobEffectTotalDurationPacket(this.petrolpark$initialDuration, effect),
                 new InitEffectShaderPacket(effect));
         };
     };
@@ -53,35 +57,35 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
     @ModifyReturnValue( method = "save", at = @At("RETURN") )
     private Tag saveData(Tag original) {
         CompoundTag nbt = (( CompoundTag ) original);
-        nbt.putInt("initialDuration", this.getInitialDuration());
+        nbt.putInt("initialDuration", this.petrolpark$getInitialDuration());
         return nbt;
     }
 
     @ModifyReturnValue(method = "load", at = @At("RETURN"))
     private static MobEffectInstance loadData(MobEffectInstance original, CompoundTag nbt) {
         if (original != null) {
-            (( IMobEffectInstanceMixin ) original).setTotalDuration(nbt.getInt("initialDuration"));
+            (( IMobEffectInstanceMixin ) original).petrolpark$setTotalDuration(nbt.getInt("initialDuration"));
         }
         return original;
     }
 
     @Override
     @OnlyIn(Dist.CLIENT)
-    public void updateUniforms() {
-        float value = duration >= 0 && initialDuration > 0 ?
-                (float) duration / initialDuration :
+    public void petrolpark$updateUniforms() {
+        float value = duration >= 0 && petrolpark$initialDuration > 0 ?
+                (float) duration / petrolpark$initialDuration :
                 0.5f;
 
         ClientEffectHandler.updateUniforms(value);
     }
 
     @Override
-    public void setTotalDuration(int initialDuration) {
-        this.initialDuration = initialDuration;
+    public void petrolpark$setTotalDuration(int initialDuration) {
+        this.petrolpark$initialDuration = initialDuration;
     }
 
     @Override
-    public int getInitialDuration() {
-        return initialDuration;
+    public int petrolpark$getInitialDuration() {
+        return petrolpark$initialDuration;
     }
 }

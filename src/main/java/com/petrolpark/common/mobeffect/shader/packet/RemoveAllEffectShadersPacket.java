@@ -28,6 +28,6 @@ public record RemoveAllEffectShadersPacket(boolean filler) implements Clientboun
     @OnlyIn( Dist.CLIENT)
     public void handle(LocalPlayer player) {
         IGameRendererMixin gameRenderer = (( IGameRendererMixin ) Minecraft.getInstance().gameRenderer);
-        gameRenderer.cleanShaderEffects();
+        gameRenderer.petrolpark$cleanShaderEffects();
     };
 };

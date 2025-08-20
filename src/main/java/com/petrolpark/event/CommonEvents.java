@@ -1,7 +1,5 @@
 package com.petrolpark.event;
 
-import java.util.stream.Stream;
-
 import com.petrolpark.Petrolpark;
 import com.petrolpark.common.mobeffect.shader.IShaderEffect;
 import com.petrolpark.common.mobeffect.shader.packet.RemoveAllEffectShadersPacket;
@@ -12,8 +10,8 @@ import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.core.recipe.bogglepattern.BogglePatternCommand;
 import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
@@ -34,6 +32,8 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+
+import java.util.stream.Stream;
 
 @EventBusSubscriber
 public class CommonEvents {
@@ -94,7 +94,7 @@ public class CommonEvents {
     @SubscribeEvent
     public static void onPlayerLogOut(ClientPlayerNetworkEvent.LoggingOut event) {
         IGameRendererMixin gameRenderer = ((IGameRendererMixin) Minecraft.getInstance().gameRenderer);
-        gameRenderer.cleanShaderEffects();
+        gameRenderer.petrolpark$cleanShaderEffects();
     };
 
     /**
@@ -103,11 +103,23 @@ public class CommonEvents {
      */
     @SubscribeEvent
     public static void onMobEffectRemoved(MobEffectEvent.Remove event) {
-        MobEffect effect = event.getEffect().value();
-        if (effect instanceof IShaderEffect shaderEffect && event.getEntity() instanceof ServerPlayer serverPlayer) {
-            shaderEffect.cleanupShader(serverPlayer, event.getEffect());
+        Holder<MobEffect> effectHolder = event.getEffectInstance().getEffect();
+        if (effectHolder.value() instanceof IShaderEffect shaderEffect && event.getEntity() instanceof ServerPlayer serverPlayer) {
+            shaderEffect.cleanupShader(serverPlayer, effectHolder);
         };
     };
+
+    /**
+     * Gets rid of shader effects on effect expiration
+     * @param event
+     */
+    @SubscribeEvent
+    public static void onMobEffectExpired(MobEffectEvent.Expired event) {
+        Holder<MobEffect> effectHolder = event.getEffectInstance().getEffect();
+        if (effectHolder.value() instanceof IShaderEffect shaderEffect && event.getEntity() instanceof ServerPlayer serverPlayer) {
+            shaderEffect.cleanupShader(serverPlayer, effectHolder);
+        };
+    }
 
     /**
      * Gets rid of shader effects on Player death.

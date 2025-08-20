@@ -36,6 +36,6 @@ public record RemoveEffectShaderPacket(Holder<MobEffect> mobEffect) implements C
         if (instance == null) return;
 
         IGameRendererMixin gameRenderer = ((IGameRendererMixin) Minecraft.getInstance().gameRenderer);
-        gameRenderer.removeMobEffectInstanceShader((( IMobEffectInstanceMixin ) instance));
+        gameRenderer.petrolpark$removeMobEffectInstanceShader((( IMobEffectInstanceMixin ) instance));
     };
 };

@@ -1,34 +1,24 @@
 package com.petrolpark;
 
 import com.mojang.blaze3d.shaders.AbstractUniform;
+import net.minecraft.client.renderer.EffectInstance;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
-public enum PetrolparkPostUniforms {
-    EFFECT_FACTOR("EffectFactor");
+public class PetrolparkPostUniforms {
+    private static final HashMap<String, Consumer<AbstractUniform>> UNIFORMS = new HashMap<>();
 
-    final String name;
-    Consumer<AbstractUniform> onUpdate;
-
-    PetrolparkPostUniforms(String name, Consumer<AbstractUniform> onUpdate) {
-        this.name = name;
-        this.onUpdate = onUpdate;
+    public static void set(String name, Consumer<AbstractUniform> uniform) {
+        UNIFORMS.put(name, uniform);
     }
 
-    PetrolparkPostUniforms(String name) {
-        this.name = name;
-        this.onUpdate = (uniform) -> {};
-    }
-
-    public void update(Consumer<AbstractUniform> onUpdate) {
-        this.onUpdate = onUpdate;
-    }
-
-    public void applyUniform(AbstractUniform uniform) {
-        this.onUpdate.accept(uniform);
-    }
-
-    public String getName() {
-        return this.name;
+    public static void apply(@NotNull EffectInstance effectInstance) {
+        for (Map.Entry<String, Consumer<AbstractUniform>> uniform : UNIFORMS.entrySet()){
+            AbstractUniform shaderUniform = effectInstance.safeGetUniform(uniform.getKey());
+            uniform.getValue().accept(shaderUniform);
+        }
     }
 }

@@ -38,7 +38,7 @@ public record InitEffectShaderPacket(Holder<MobEffect> mobEffect) implements Cli
         MobEffect mobEffect = instance.getEffect().value();
         if (mobEffect instanceof IShaderEffect shaderEffect) {
             IGameRendererMixin gameRenderer = (IGameRendererMixin) Minecraft.getInstance().gameRenderer;
-            gameRenderer.addMobEffectInstanceShader(shaderEffect.getShader(), instance);
+            gameRenderer.petrolpark$addMobEffectInstanceShader(shaderEffect.getShader(), instance);
         };
     };
 };
