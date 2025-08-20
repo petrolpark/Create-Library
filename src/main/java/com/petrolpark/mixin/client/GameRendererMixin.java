@@ -10,9 +10,12 @@ import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
 import com.petrolpark.util.mixininterfaces.IMobEffectInstanceMixin;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.PostChain;
+import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,7 +32,7 @@ import java.util.Map;
 public abstract class GameRendererMixin implements IGameRendererMixin {
 
     @Unique
-    IdentityHashMap<IMobEffectInstanceMixin, PostChain> petrolpark$loadedEffects = new IdentityHashMap<>();
+    IdentityHashMap<Holder<MobEffect>, PostChain> petrolpark$loadedEffects = new IdentityHashMap<>();
     
     @Inject(
         method = "bobHurt",
@@ -52,11 +55,16 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
             )
     )
     public void inRender(DeltaTracker deltaTracker, boolean renderLevel, CallbackInfo ci) {
-        for ( Map.Entry<IMobEffectInstanceMixin, PostChain> entry : petrolpark$loadedEffects.entrySet()) {
-            IMobEffectInstanceMixin effect = entry.getKey();
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        for ( Map.Entry<Holder<MobEffect>, PostChain> entry : petrolpark$loadedEffects.entrySet()) {
+            MobEffectInstance instance = player.getEffect(entry.getKey());
+            if (instance == null) continue;
+
             PostChain postChain = entry.getValue();
 
-            effect.petrolpark$updateUniforms();
+            (( IMobEffectInstanceMixin ) instance).petrolpark$updateUniforms();
 
             RenderSystem.disableBlend();
             RenderSystem.disableDepthTest();
@@ -75,18 +83,25 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
             return;
         }
 
-        petrolpark$loadedEffects.put((( IMobEffectInstanceMixin ) effect), postChain);
+        petrolpark$loadedEffects.put(effect.getEffect(), postChain);
+        System.out.println(petrolpark$loadedEffects);
     }
 
     @Override
-    public void petrolpark$removeMobEffectInstanceShader(IMobEffectInstanceMixin effect) {
-        petrolpark$loadedEffects.remove(effect);
+    public void petrolpark$removeMobEffectInstanceShader(MobEffectInstance effect) {
+        System.out.println(petrolpark$loadedEffects.remove(effect.getEffect()));
     }
 
     @Override
     public void petrolpark$cleanShaderEffects() {
-        for (IMobEffectInstanceMixin effect : new ArrayList<>(petrolpark$loadedEffects.keySet()) ) {
-            petrolpark$removeMobEffectInstanceShader(effect);
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        for (Holder<MobEffect> effect : new ArrayList<>(petrolpark$loadedEffects.keySet()) ) {
+            MobEffectInstance instance = player.getEffect(effect);
+            if (instance == null) continue;
+
+            petrolpark$removeMobEffectInstanceShader(instance);
         }
     }
 };
