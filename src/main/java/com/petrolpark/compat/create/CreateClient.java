@@ -1,6 +1,7 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.client.outline.Outliner;
+import com.petrolpark.compat.create.client.offgridtiling.OffGridTilingMetadataSection;
 import com.petrolpark.compat.create.core.recipe.RecipeBookProviderHighlighter;
 import com.petrolpark.compat.create.core.tube.ClientTubePlacementHandler;
 import com.petrolpark.compat.create.event.CreateClientEvents;
@@ -24,6 +25,7 @@ public class CreateClient {
         mainEventBus.register(RECIPE_BOOK_PROVIDER_HIGHLIGHTER);
         modEventBus.addListener(CreateClient::clientInit);
 
+        OffGridTilingMetadataSection.init();
         PetrolparkPartialModels.register();
     };
 

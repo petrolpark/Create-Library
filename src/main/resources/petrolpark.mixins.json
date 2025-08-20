@@ -66,8 +66,7 @@
         "client.GameRendererMixin",
         "client.GuiMixin",
         "client.MinecraftMixin",
-        "client.RecipeBookComponentMixin",
-        "client.SpriteLoaderMixin"
+        "client.RecipeBookComponentMixin"
     ],
     "injectors": {
         "defaultRequire": 1

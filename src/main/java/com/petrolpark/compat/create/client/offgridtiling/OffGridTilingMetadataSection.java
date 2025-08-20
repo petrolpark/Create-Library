@@ -1,13 +1,12 @@
 package com.petrolpark.compat.create.client.offgridtiling;
 
-import java.util.Set;
-
+import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.Petrolpark;
 
-import net.minecraft.client.resources.metadata.animation.AnimationMetadataSection;
+import net.minecraft.client.renderer.texture.SpriteLoader;
 import net.minecraft.server.packs.metadata.MetadataSectionSerializer;
 import net.minecraft.server.packs.metadata.MetadataSectionType;
 import net.minecraft.util.ExtraCodecs;
@@ -32,5 +31,10 @@ public record OffGridTilingMetadataSection(float xSize, float ySize, float scale
 
     public static final MetadataSectionType<OffGridTilingMetadataSection> TYPE = MetadataSectionType.fromCodec(SECTION_NAME, CODEC);
 
-    public static final Set<MetadataSectionSerializer<?>> DEFAULT_METADATA_SERIALIZERS_WITH_OGT = Set.of(AnimationMetadataSection.SERIALIZER, TYPE);
+    public static final void init() {
+        SpriteLoader.DEFAULT_METADATA_SECTIONS = ImmutableSet.<MetadataSectionSerializer<?>>builder()
+            .addAll(SpriteLoader.DEFAULT_METADATA_SECTIONS)
+            .add(TYPE)
+            .build();
+    };
 };
