@@ -8,7 +8,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 public class PetrolparkClient {
 
     public static void clientCtor(IEventBus modEventBus, IEventBus forgeEventBus) {
-        forgeEventBus.addListener(PetrolparkClient::clientInit);
+        modEventBus.addListener(PetrolparkClient::clientInit);
     };
     
     public static void clientInit(final FMLClientSetupEvent event) {
