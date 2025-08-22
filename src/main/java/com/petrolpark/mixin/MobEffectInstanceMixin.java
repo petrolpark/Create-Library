@@ -24,8 +24,8 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
 
-@Mixin( MobEffectInstance.class)
-public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin, Comparable<MobEffectInstance>{
+@Mixin(MobEffectInstance.class)
+public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin, Comparable<MobEffectInstance> {
     
     @Shadow
     private int duration;
@@ -35,12 +35,18 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
 
     private int initialDuration;
 
-    @Inject(method = "<init>(Lnet/minecraft/core/Holder;IIZZZLnet/minecraft/world/effect/MobEffectInstance;)V", at = @At("RETURN"))
+    @Inject(
+        method = "<init>(Lnet/minecraft/core/Holder;IIZZZLnet/minecraft/world/effect/MobEffectInstance;)V",
+        at = @At("RETURN")
+    )
     private void onInitialize(CallbackInfo ignored) {
         initialDuration = duration;
-    }
+    };
 
-    @Inject(method = "onEffectAdded", at = @At("TAIL"))
+    @Inject(
+        method = "onEffectAdded",
+        at = @At("TAIL")
+    )
     private void inEffectAdded(LivingEntity entity, CallbackInfo ignored) {
         PacketDistributor.sendToPlayer(player, null, null);
         if (entity instanceof ServerPlayer player && effect.value() instanceof IShaderEffect) {
@@ -50,38 +56,41 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
         };
     };
 
-    @ModifyReturnValue( method = "save", at = @At("RETURN") )
+    @ModifyReturnValue(
+        method = "save",
+        at = @At("RETURN")
+    )
     private Tag saveData(Tag original) {
         CompoundTag nbt = (( CompoundTag ) original);
         nbt.putInt("initialDuration", this.getInitialDuration());
         return nbt;
-    }
+    };
 
-    @ModifyReturnValue(method = "load", at = @At("RETURN"))
+    @ModifyReturnValue(
+        method = "load",
+        at = @At("RETURN")
+    )
     private static MobEffectInstance loadData(MobEffectInstance original, CompoundTag nbt) {
         if (original != null) {
-            (( IMobEffectInstanceMixin ) original).setTotalDuration(nbt.getInt("initialDuration"));
-        }
+            ((IMobEffectInstanceMixin)original).setTotalDuration(nbt.getInt("initialDuration"));
+        };
         return original;
-    }
+    };
 
     @Override
     @OnlyIn(Dist.CLIENT)
     public void updateUniforms() {
-        float value = duration >= 0 && initialDuration > 0 ?
-                (float) duration / initialDuration :
-                0.5f;
-
+        float value = duration >= 0 && initialDuration > 0 ? (float) duration / initialDuration : 0.5f;
         ClientEffectHandler.updateUniforms(value);
-    }
+    };
 
     @Override
     public void setTotalDuration(int initialDuration) {
         this.initialDuration = initialDuration;
-    }
+    };
 
     @Override
     public int getInitialDuration() {
         return initialDuration;
-    }
+    };
 }
