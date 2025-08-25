@@ -83,6 +83,8 @@
     "ingredient_modifier.petrolpark.enchantments.any.level_range": "Has any of these Enchantments at level %1$s:",
     "ingredient_modifier.petrolpark.enchantments.any.level_range.inverse": "Has none of these Enchantments at level %1$s:",
     "ingredient_modifier.petrolpark.item.inverse": "Not %1$s",
+    "ingredient_modifier.petrolpark.id_regex": "ID matches regular expression '%1$s'",
+    "ingredient_modifier.petrolpark.id_regex.inverse": "ID doesn't match regular expression '%1$s'",
     "ingredient_modifier.petrolpark.tag": "Tagged: %1$s",
     "ingredient_modifier.petrolpark.tag.inverse": "Not Tagged: %1$s",
 

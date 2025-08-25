@@ -1,0 +1,13 @@
+{
+    "sources": [
+        {
+            "type": "petrolpark:mean_shift_cluster",
+            "source": {
+                "type": "directory",
+                "source": "item",
+                "prefix": "item/"
+            },
+            "prefix": "msc/"
+        }
+    ]
+}

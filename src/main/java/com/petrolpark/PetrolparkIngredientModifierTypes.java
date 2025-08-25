@@ -8,6 +8,7 @@ import com.petrolpark.core.recipe.ingredient.modifier.EnchantmentItemIngredientM
 import com.petrolpark.core.recipe.ingredient.modifier.GenericIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
 import com.petrolpark.core.recipe.ingredient.modifier.INamedIngredientModifierType;
+import com.petrolpark.core.recipe.ingredient.modifier.ItemIDRegExIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.ItemItemIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.NotIngredientModifier;
 import com.petrolpark.core.recipe.ingredient.modifier.PassIngredientModifier;
@@ -26,9 +27,10 @@ public class PetrolparkIngredientModifierTypes {
     ITEM_PASS = REGISTRATE.itemIngredientModifierType("pass", PassIngredientModifier.TYPE),
     ITEM_CONTAMINATED = REGISTRATE.itemIngredientModifierType("contaminated", ContaminatedIngredientModifier.TYPE);
     
-    public static final RegistryEntry<IIngredientModifierType<? super ItemStack>, INamedIngredientModifierType<ItemStack>> 
+    public static final RegistryEntry<IIngredientModifierType<? super ItemStack>, ? extends INamedIngredientModifierType<ItemStack>> 
     
     ITEM = REGISTRATE.itemIngredientModifierType("item", ItemItemIngredientModifier.Type::new),
+    ITEM_ID_REGEX = REGISTRATE.itemIngredientModifierType("id_regex", ItemIDRegExIngredientModifier.CODEC, ItemIDRegExIngredientModifier.STREAM_CODEC),
     ITEM_TAG = REGISTRATE.itemIngredientModifierType("tag", TagItemIngredientModifier.Type::new),
     ITEM_ENCHANTMENTS = REGISTRATE.itemIngredientModifierType("enchantments", EnchantmentItemIngredientModifier.Type::new);
     
