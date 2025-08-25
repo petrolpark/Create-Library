@@ -13,7 +13,6 @@ public interface IShaderEffect {
     ResourceLocation getShader();
 
     default void cleanupShader(ServerPlayer livingEntity, Holder<MobEffect> effect) {
-        System.out.println("Politely asking to obliterate shader");
         if (livingEntity != null) {
             PacketDistributor.sendToPlayer(livingEntity, new RemoveEffectShaderPacket(effect));
         };

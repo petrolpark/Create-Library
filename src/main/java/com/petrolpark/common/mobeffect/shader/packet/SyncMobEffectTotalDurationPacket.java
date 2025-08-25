@@ -32,6 +32,6 @@ public record SyncMobEffectTotalDurationPacket(int totalDuration, Holder<MobEffe
     public void handle(LocalPlayer localPlayer) {
         MobEffectInstance instance = localPlayer.getEffect(mobEffect());
         if (instance == null) return;
-        ((IMobEffectInstanceMixin) instance).setTotalDuration(totalDuration);
+        ((IMobEffectInstanceMixin) instance).petrolpark$setTotalDuration(totalDuration);
     };
 };

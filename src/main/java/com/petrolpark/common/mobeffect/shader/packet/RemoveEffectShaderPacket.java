@@ -2,8 +2,6 @@ package com.petrolpark.common.mobeffect.shader.packet;
 
 import com.petrolpark.PetrolparkPackets;
 import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
-import com.petrolpark.util.mixininterfaces.IMobEffectInstanceMixin;
-
 import net.createmod.catnip.net.base.ClientboundPacketPayload;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -36,6 +34,6 @@ public record RemoveEffectShaderPacket(Holder<MobEffect> mobEffect) implements C
         if (instance == null) return;
 
         IGameRendererMixin gameRenderer = ((IGameRendererMixin) Minecraft.getInstance().gameRenderer);
-        gameRenderer.removeMobEffectInstanceShader((( IMobEffectInstanceMixin ) instance));
+        gameRenderer.petrolpark$removeMobEffectInstanceShader(instance);
     };
 };
