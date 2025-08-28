@@ -13,11 +13,11 @@ public class ScratchTextureAtlas {
 
     public static final ResourceLocation LOCATION = Petrolpark.asResource("scratch");
 
-    public static final ResourceLocation MSC_TEST_LOCATION = Petrolpark.asResource("msc_test");
+    //public static final ResourceLocation MSC_TEST_LOCATION = Petrolpark.asResource("msc_test");
     
     @SubscribeEvent
     public static final void registerAtlases(RegisterMaterialAtlasesEvent event) {
         event.register(LOCATION, LOCATION);
-        event.register(MSC_TEST_LOCATION, MSC_TEST_LOCATION);
+        //event.register(MSC_TEST_LOCATION, MSC_TEST_LOCATION);
     };
 };

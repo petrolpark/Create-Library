@@ -1,5 +1,7 @@
 package com.petrolpark.client.sprite;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
@@ -15,10 +17,12 @@ public abstract class WrappedSpriteSource implements SpriteSource {
 
     private final SpriteSource wrappedSource;
     private final String prefix;
+    private final Optional<List<String>> allowedNamespaces;
 
-    public WrappedSpriteSource(SpriteSource wrappedSource, String prefix) {
+    public WrappedSpriteSource(SpriteSource wrappedSource, String prefix, Optional<List<String>> allowedNamespaces) {
         this.wrappedSource = wrappedSource;
         this.prefix = prefix;
+        this.allowedNamespaces = allowedNamespaces;
     };
 
     public SpriteSource getWrappedSource() {
@@ -29,6 +33,10 @@ public abstract class WrappedSpriteSource implements SpriteSource {
         return prefix;
     };
 
+    public Optional<List<String>> getAllowedNamespaces() {
+        return allowedNamespaces;
+    };
+
     @Override
     public void run(@Nonnull ResourceManager resourceManager, @Nonnull SpriteSource.Output output) {
         final SpriteResourceLoader resourceLoader = createSpriteResourceLoader();
@@ -36,6 +44,7 @@ public abstract class WrappedSpriteSource implements SpriteSource {
 
             @Override
             public void add(@Nonnull ResourceLocation location, @Nonnull SpriteSupplier sprite) {
+                if (allowedNamespaces.isPresent() && !allowedNamespaces.get().contains(location.getNamespace())) return;
                 output.add(location.withPrefix(prefix), transform(sprite.apply(resourceLoader)));
             };
 

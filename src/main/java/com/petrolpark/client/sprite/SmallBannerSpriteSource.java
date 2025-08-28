@@ -130,10 +130,6 @@ public class SmallBannerSpriteSource implements SpriteSource {
                 };
 
                 NativeImage smallImage = new NativeImage(NativeImage.Format.RGBA, bigImage.getWidth() / 2, bigImage.getHeight() / 2, false);
-
-                if (id.toString().contains("mojang")) {
-                    Petrolpark.LOGGER.info("hi");
-                };
                 
                 if (bottomHalfBottom - topHalfTop <= smallBannerHeight) {
                     if (topHalfTop == 0) {

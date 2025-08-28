@@ -1,24 +1,27 @@
 package com.petrolpark.core.data.predicate.entity;
 
 import java.util.Objects;
+import java.util.Optional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.util.CodecHelper;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.util.ColorHelper;
 
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.animal.Sheep;
-import net.minecraft.world.entity.monster.Shulker;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.phys.Vec3;
 
-public record ColorEntitySubPredicate(DyeColor color) implements EntitySubPredicate {
+public record ColorEntitySubPredicate(Optional<DyeColor> color) implements EntitySubPredicate {
 
-    public static final MapCodec<ColorEntitySubPredicate> CODEC = CodecHelper.singleFieldMap(DyeColor.CODEC, "color", ColorEntitySubPredicate::color, ColorEntitySubPredicate::new);
+    public static final MapCodec<ColorEntitySubPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        DyeColor.CODEC.optionalFieldOf("color").forGetter(ColorEntitySubPredicate::color)
+    ).apply(instance, ColorEntitySubPredicate::new));
 
     @Override
     public MapCodec<? extends EntitySubPredicate> codec() {
@@ -27,9 +30,7 @@ public record ColorEntitySubPredicate(DyeColor color) implements EntitySubPredic
 
     @Override
     public boolean matches(@Nonnull Entity entity, @Nonnull ServerLevel level, @Nullable Vec3 position) {
-        if (entity instanceof Sheep sheep) return sheep.getColor() == color;
-        if (entity instanceof Shulker shulker) return Objects.equals(color, shulker.getColor());
-        return false;
+        return entity instanceof LivingEntity livingEntity ? Objects.equals(color.orElse(null), ColorHelper.getColor(livingEntity)) : false;
     };
     
 };
