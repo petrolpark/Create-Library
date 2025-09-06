@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
@@ -103,7 +104,10 @@ public class CommonEvents {
      */
     @SubscribeEvent
     public static void onMobEffectRemoved(MobEffectEvent.Remove event) {
-        Holder<MobEffect> effectHolder = event.getEffectInstance().getEffect();
+        MobEffectInstance effectInstance = event.getEffectInstance();
+        if (effectInstance == null) return;
+
+        Holder<MobEffect> effectHolder = effectInstance.getEffect();
         if (effectHolder.value() instanceof IShaderEffect shaderEffect && event.getEntity() instanceof ServerPlayer serverPlayer) {
             shaderEffect.cleanupShader(serverPlayer, effectHolder);
         };
@@ -115,7 +119,10 @@ public class CommonEvents {
      */
     @SubscribeEvent
     public static void onMobEffectExpired(MobEffectEvent.Expired event) {
-        Holder<MobEffect> effectHolder = event.getEffectInstance().getEffect();
+        MobEffectInstance effectInstance = event.getEffectInstance();
+        if (effectInstance == null) return;
+
+        Holder<MobEffect> effectHolder = effectInstance.getEffect();
         if (effectHolder.value() instanceof IShaderEffect shaderEffect && event.getEntity() instanceof ServerPlayer serverPlayer) {
             shaderEffect.cleanupShader(serverPlayer, effectHolder);
         };
