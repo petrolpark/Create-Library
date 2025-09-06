@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.compat.create.CreateRecipeTypes;
 import com.petrolpark.core.recipe.RecipeHelper;
 import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
@@ -18,6 +19,7 @@ import com.simibubi.create.content.kinetics.crafter.RecipeGridHandler.GroupedIte
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -44,7 +46,8 @@ public abstract class MechanicalCrafterBlockEntityMixin extends KineticBlockEnti
         ItemStack result = original.call(world, items);
         if (result == null) {
             MechanicalCraftingInput craftingInput = MechanicalCraftingInput.of(items);
-            result = CreateRecipeTypes.RECIPE_BOOK_MECHANICAL_CRAFTING.find(craftingInput, world)
+            result = world.getRecipeManager().getRecipeFor(PetrolparkRecipeTypes.CRAFTING_BOOK_REQUIRED.get(), craftingInput, world)
+                .or(() -> CreateRecipeTypes.RECIPE_BOOK_MECHANICAL_CRAFTING.find(craftingInput, world))
                 .filter(rh -> RecipeHelper.isValidAt(rh, world, getBlockPos()))
                 .map(rh -> rh.value().assemble(craftingInput, world.registryAccess()))
                 .orElse(null);
@@ -59,7 +62,7 @@ public abstract class MechanicalCrafterBlockEntityMixin extends KineticBlockEnti
 
     @Override
     public boolean acceptsRecipeBook(RecipeHolder<?> recipeHolder) {
-        return recipeHolder.value().getType() == CreateRecipeTypes.RECIPE_BOOK_MECHANICAL_CRAFTING.getType();
+        return recipeHolder.value() instanceof CraftingRecipe;
     };
     
 };

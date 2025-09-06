@@ -23,7 +23,7 @@ import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
-import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
+import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
 import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
@@ -66,14 +66,14 @@ public class PetrolparkCreateJEI implements IModPlugin {
         CreateRecipeCategory<?>
 
         ageing = builder(AgeingRecipe.class)
-            .addTypedRecipes(PetrolparkRecipeTypes.AGEING::getType)
+            .addTypedRecipes(PetrolparkRecipeTypes.AGEING::get)
             .catalyst(() -> Items.BARREL)
             .itemIcon(Items.BARREL)
             .emptyBackground(125, 20)
             .build("ageing", AgeingCategory::new),
 
         manual_crafting = builder(CraftingRecipe.class)
-            .addTypedRecipesIf(() -> RecipeType.CRAFTING, rh -> rh.value() instanceof ManualOnlyShapedRecipe)
+            .addTypedRecipesIf(() -> RecipeType.CRAFTING, rh -> rh.value() instanceof ManualOnlyCraftingRecipe)
             .catalyst(() -> Blocks.CRAFTING_TABLE)
             .doubleItemIcon(
                 () -> new ItemStack(Items.CRAFTING_TABLE),

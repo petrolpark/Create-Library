@@ -2,6 +2,8 @@ package com.petrolpark.core.badge;
 
 import javax.annotation.Nonnull;
 
+import com.petrolpark.PetrolparkRecipeSerializers;
+
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -9,12 +11,9 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.Level;
 
 public class BadgeDuplicationRecipe extends CustomRecipe {
-
-    public static final RecipeSerializer<BadgeDuplicationRecipe> SERIALIZER = new SimpleCraftingRecipeSerializer<>(BadgeDuplicationRecipe::new);
 
     public BadgeDuplicationRecipe(CraftingBookCategory category) {
         super(category);
@@ -52,8 +51,8 @@ public class BadgeDuplicationRecipe extends CustomRecipe {
     };
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+    public RecipeSerializer<BadgeDuplicationRecipe> getSerializer() {
+        return PetrolparkRecipeSerializers.BADGE_DUPLICATION.get();
     };
     
 };

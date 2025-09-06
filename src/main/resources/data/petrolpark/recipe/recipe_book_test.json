@@ -1,0 +1,19 @@
+{
+  "type": "petrolpark:crafting_book_required",
+  "recipe": {
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+      " S ",
+      "S S",
+      " S "
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:dirt"
+      }
+    },
+    "result": {
+      "id": "minecraft:diamond"
+    }
+  }
+}

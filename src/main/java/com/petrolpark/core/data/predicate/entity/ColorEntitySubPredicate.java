@@ -1,7 +1,6 @@
 package com.petrolpark.core.data.predicate.entity;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.List;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -17,10 +16,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.phys.Vec3;
 
-public record ColorEntitySubPredicate(Optional<DyeColor> color) implements EntitySubPredicate {
+public record ColorEntitySubPredicate(List<DyeColor> colors) implements EntitySubPredicate {
 
     public static final MapCodec<ColorEntitySubPredicate> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        DyeColor.CODEC.optionalFieldOf("color").forGetter(ColorEntitySubPredicate::color)
+        DyeColor.CODEC.listOf().fieldOf("colors").forGetter(ColorEntitySubPredicate::colors)
     ).apply(instance, ColorEntitySubPredicate::new));
 
     @Override
@@ -30,7 +29,12 @@ public record ColorEntitySubPredicate(Optional<DyeColor> color) implements Entit
 
     @Override
     public boolean matches(@Nonnull Entity entity, @Nonnull ServerLevel level, @Nullable Vec3 position) {
-        return entity instanceof LivingEntity livingEntity ? Objects.equals(color.orElse(null), ColorHelper.getColor(livingEntity)) : false;
+        if (entity instanceof LivingEntity livingEntity) {
+            DyeColor color = ColorHelper.getColor(livingEntity);
+            if (color == null) return colors.isEmpty();
+            return colors.contains(color);
+        };
+        return false;
     };
     
 };

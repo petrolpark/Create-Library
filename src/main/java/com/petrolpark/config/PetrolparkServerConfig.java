@@ -14,9 +14,11 @@ public class PetrolparkServerConfig extends ConfigBase {
         NeoForge.EVENT_BUS.post(new AdditionalEvent());
     };
 
+    public final ConfigBool syncChiseledBookshelves = b(true, "syncChiseledBookshelves", "Chiseled Bookshelves broadcast their data to clients");
+
     // Extended Inventory
     public final ConfigGroup extendedInventory = group(0, "extendedInventory");
-    public final ConfigBool extendedInventorySafeMode = b(true, "safeMode", "todo");
+    public final ConfigBool extendedInventorySafeMode = b(true, "safeMode", "Only attempt to attach the Extended Inventory to menus known not to cause problems");
 
     // Processing
     public final ConfigGroup processing = group(0, "processing");

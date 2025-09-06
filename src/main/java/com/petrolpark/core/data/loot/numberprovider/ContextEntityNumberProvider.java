@@ -15,9 +15,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public record ContextEntityNumberProvider(IEntityTarget target, EntityNumberProvider value) implements NumberProvider, IEstimableNumberProvider {
+public record ContextEntityNumberProvider(IEntityTarget target, EntityNumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<ContextEntityNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         IEntityTarget.CODEC.fieldOf("target").forGetter(ContextEntityNumberProvider::target),

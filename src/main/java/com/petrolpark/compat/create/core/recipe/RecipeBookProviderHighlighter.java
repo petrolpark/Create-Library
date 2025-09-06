@@ -33,7 +33,7 @@ public class RecipeBookProviderHighlighter {
         if (state.getBlock() instanceof IRecipeBookProviderBlock rbpBlock && rbpBlock.shouldHighlightConnectedRecipeBookAcceptors(world, pos, state)) {
             Set<Pair<BlockPos, IRecipeBookProviderBlock.ProvisionType>> provisions = rbpBlock.getRecipeBookProvisions(world, pos, state);
             Outliner.getInstance().showCluster("recipe book acceptors", provisions.stream().filter(pair -> pair.getSecond() == IRecipeBookProviderBlock.ProvisionType.PROVIDES).map(Pair::getFirst).toList())
-                .colored(Color.SPRING_GREEN)
+                .colored(Color.GREEN)
                 .lineWidth(1 / 16f);
             Outliner.getInstance().showCluster("potential recipe book acceptors", provisions.stream().filter(pair -> pair.getSecond() == IRecipeBookProviderBlock.ProvisionType.CAN_PROVIDE).map(Pair::getFirst).toList())
                 .colored(0xDDC166)

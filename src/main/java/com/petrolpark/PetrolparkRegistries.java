@@ -19,7 +19,7 @@ import com.petrolpark.core.data.reward.team.TeamRewardType;
 import com.petrolpark.core.item.decay.product.DecayProductType;
 import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
 import com.petrolpark.core.recipe.bogglepattern.generator.BogglePatternGeneratorType;
-import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
+import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.scratch.symbol.type.IScratchSymbolType;
 import com.petrolpark.core.scratch.type.IScratchType;
@@ -111,8 +111,8 @@ public class PetrolparkRegistries {
 
     // Generated Ingredients
     public static final Registry<IngredientRandomizerType> INGREDIENT_RANDOMIZER_TYPES = simple(Keys.INGREDIENT_RANDOMIZER_TYPE);
-    public static final Registry<IIngredientModifierType<? super ItemStack>> INGREDIENT_MODIFIER_TYPES = simple(Keys.INGREDIENT_MODIFIER_TYPE);
-    public static final Registry<IIngredientModifierType<? super FluidStack>> FLUID_INGREDIENT_MODIFIER_TYPES = simple(Keys.FLUID_INGREDIENT_MODIFIER_TYPE);
+    public static final Registry<IAdvancedIngredientType<? super ItemStack>> ADVANCED_ITEM_INGREDIENT_TYPES = simple(Keys.ADVANCED_ITEM_INGREDIENT_TYPE);
+    public static final Registry<IAdvancedIngredientType<? super FluidStack>> ADVANCED_FLUID_INGREDIENT_TYPES = simple(Keys.ADVANCED_FLUID_INGREDIENT_TYPE);
 
     // Rewards
     public static final Registry<RewardGeneratorType> REWARD_GENERATOR_TYPES = simple(Keys.REWARD_GENERATOR_TYPE);
@@ -170,8 +170,8 @@ public class PetrolparkRegistries {
         
         // Generated ingredients
         public static final ResourceKey<Registry<IngredientRandomizerType>> INGREDIENT_RANDOMIZER_TYPE = key("ingredient_randomizer_type");
-        public static final ResourceKey<Registry<IIngredientModifierType<? super ItemStack>>> INGREDIENT_MODIFIER_TYPE = key("ingredient_modifier_type");
-        public static final ResourceKey<Registry<IIngredientModifierType<? super FluidStack>>> FLUID_INGREDIENT_MODIFIER_TYPE = key("fluid_ingredient_modifier_type");
+        public static final ResourceKey<Registry<IAdvancedIngredientType<? super ItemStack>>> ADVANCED_ITEM_INGREDIENT_TYPE = key("advanced_ingredient_type");
+        public static final ResourceKey<Registry<IAdvancedIngredientType<? super FluidStack>>> ADVANCED_FLUID_INGREDIENT_TYPE = key("advanced_fluid_ingredient_type");
         
         // Rewards
         public static final ResourceKey<Registry<RewardGeneratorType>> REWARD_GENERATOR_TYPE = key("reward_generator_type");

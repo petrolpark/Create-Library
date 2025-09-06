@@ -131,6 +131,8 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
 
     public abstract NumberEstimate exp();
 
+    public abstract NumberEstimate or(NumberEstimate estimate);
+
     public boolean unknown() {
         return this == UNKNOWN;
     };
@@ -205,6 +207,13 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         @Override
         public NumberEstimate exp() {
             return new Exact((float)Math.exp(value), approximate);
+        };
+
+        @Override
+        public NumberEstimate or(NumberEstimate estimate) {
+            if (estimate instanceof Range range) return range.or(this);
+            else if (estimate instanceof Exact exact) return ranged(Math.min(value, exact.value), Math.max(value, exact.value), approximate || estimate.approximate);
+            else return UNKNOWN;
         };
 
     };
@@ -284,6 +293,19 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         public NumberEstimate exp() {
             return ranged((float)Math.exp(min), (float)Math.exp(max), approximate);
         };
+
+        @Override
+        public NumberEstimate or(NumberEstimate estimate) {
+            if (estimate instanceof Exact exact) {
+                if (exact.value > max) {
+                    return ranged(min, exact.value, approximate || estimate.approximate);
+                } else if (exact.value < min) {
+                    return ranged(exact.value, max, approximate || estimate.approximate);
+                } else return this;
+            } else if (estimate instanceof Range range) {
+                return ranged(Math.min(min, range.min), Math.max(max, range.max), approximate || estimate.approximate);
+            } else return UNKNOWN;
+        };
     };
 
     public static final class Unknown extends NumberEstimate {
@@ -342,6 +364,11 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         };
 
         public NumberEstimate exp() {
+            return UNKNOWN;
+        };
+
+        @Override
+        public NumberEstimate or(NumberEstimate estimate) {
             return UNKNOWN;
         };
 

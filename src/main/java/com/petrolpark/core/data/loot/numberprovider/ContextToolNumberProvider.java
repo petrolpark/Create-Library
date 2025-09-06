@@ -15,9 +15,8 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public record ContextToolNumberProvider(ItemStackNumberProvider value) implements NumberProvider, IEstimableNumberProvider {
+public record ContextToolNumberProvider(ItemStackNumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<ContextToolNumberProvider> CODEC = CodecHelper.singleFieldMap(ItemStackNumberProvider.CODEC, "value", ContextToolNumberProvider::value, ContextToolNumberProvider::new);
 

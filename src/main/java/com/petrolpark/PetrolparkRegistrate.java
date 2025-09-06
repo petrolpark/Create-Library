@@ -1,5 +1,6 @@
 package com.petrolpark;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -28,14 +29,14 @@ import com.petrolpark.core.item.decay.product.DecayProductType;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
 import com.petrolpark.core.recipe.bogglepattern.generator.BogglePatternGeneratorType;
 import com.petrolpark.core.recipe.bogglepattern.generator.IBogglePatternGenerator;
-import com.petrolpark.core.recipe.ingredient.modifier.FluidIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.GenericIngredientModifierType;
-import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifierType;
-import com.petrolpark.core.recipe.ingredient.modifier.INamedIngredientModifierType;
-import com.petrolpark.core.recipe.ingredient.modifier.ITypelessIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.ItemIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.NamedIngredientModifierType;
+import com.petrolpark.core.recipe.ingredient.advanced.FluidAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.GenericAdvancedIngredientType;
+import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredientType;
+import com.petrolpark.core.recipe.ingredient.advanced.INamedAdvancedIngredientType;
+import com.petrolpark.core.recipe.ingredient.advanced.ITypelessAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.ItemAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.NamedAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
@@ -64,6 +65,8 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.Util;
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.critereon.EntitySubPredicate;
+import net.minecraft.advancements.critereon.EntitySubPredicates;
+import net.minecraft.advancements.critereon.EntitySubPredicates.EntityVariantPredicateType;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
@@ -73,9 +76,16 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -147,6 +157,16 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, Registries.ENTITY_SUB_PREDICATE_TYPE, () -> codec);
     };
 
+    public <VARIANT> RegistryEntry<MapCodec<? extends EntitySubPredicate>, MapCodec<EntitySubPredicates.EntityVariantPredicateType<VARIANT>.Instance>> entityVariantPredicateType(String name, Codec<VARIANT> variantCodec, Function<Entity, Optional<VARIANT>> variantGetter) {
+        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.create(variantCodec, variantGetter);
+        return entitySubPredicateType(name, predicateType.codec);
+    };
+
+    public <VARIANT> RegistryEntry<MapCodec<? extends EntitySubPredicate>, MapCodec<EntitySubPredicates.EntityVariantPredicateType<VARIANT>.Instance>> entityVariantPredicateType(String name, Registry<VARIANT> variantRegistry, Function<Entity, Optional<VARIANT>> variantGetter) {
+        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.create(variantRegistry, variantGetter);
+        return entitySubPredicateType(name, predicateType.codec);
+    };
+
     public LootContextParamSet lootContextParamSet(String name, Consumer<LootContextParamSet.Builder> builderConsumer) {
         LootContextParamSet.Builder builder = new LootContextParamSet.Builder();
         builderConsumer.accept(builder);
@@ -183,6 +203,33 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, PetrolparkRegistries.Keys.LOOT_TEAM_NUMBER_PROVIDER_TYPE, () -> new LootTeamNumberProviderType(codec));
     };
 
+    public <I extends RecipeInput, R extends Recipe<? extends I>> RegistryEntry<RecipeType<?>, RecipeType<R>> recipeType(String name) {
+        return simple(name, Registries.RECIPE_TYPE, () -> RecipeType.simple(ResourceLocation.fromNamespaceAndPath(getModid(), name)));
+    };
+
+    public <I extends RecipeInput, R extends Recipe<? extends I>, S extends RecipeSerializer<? extends R>> RegistryEntry<RecipeSerializer<?>, S> recipeSerializer(String name, NonNullSupplier<S> factory) {
+        return simple(name, Registries.RECIPE_SERIALIZER, factory);
+    };
+
+    public <R extends CraftingRecipe> RegistryEntry<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<R>> recipeSerializer(String name, SimpleCraftingRecipeSerializer.Factory<R> constructor) {
+        return recipeSerializer(name, () -> new SimpleCraftingRecipeSerializer<>(constructor));
+    };
+
+    public <I extends RecipeInput, R extends Recipe<? extends I>> RegistryEntry<RecipeSerializer<?>, RecipeSerializer<R>> recipeSerializer(String name, MapCodec<R> codec, StreamCodec<RegistryFriendlyByteBuf, R> streamCodec) {
+        return recipeSerializer(name, () -> new RecipeSerializer<R>() {
+            
+            @Override
+            public MapCodec<R> codec() {
+                return codec;
+            };
+
+            @Override
+            public StreamCodec<RegistryFriendlyByteBuf, R> streamCodec() {
+                return streamCodec;
+            };
+        });
+    };
+
     public <I extends ICustomIngredient> RegistryEntry<IngredientType<?>, IngredientType<I>> ingredientType(String name, MapCodec<I> codec, StreamCodec<? super RegistryFriendlyByteBuf, I> streamCodec) {
         return simple(name, NeoForgeRegistries.Keys.INGREDIENT_TYPES, () -> new IngredientType<>(codec, streamCodec));
     };
@@ -195,43 +242,43 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, PetrolparkRegistries.Keys.INGREDIENT_RANDOMIZER_TYPE, () -> new IngredientRandomizerType(serializer));
     };
 
-    protected <STACK, TYPELESS_MODIFIER extends ITypelessIngredientModifier<STACK>> RegistryEntry<IIngredientModifierType<? super STACK>, GenericIngredientModifierType<STACK, TYPELESS_MODIFIER>> genericIngredientModifierType(
-        ResourceKey<Registry<IIngredientModifierType<? super STACK>>> registryKey,
-        Codec<IIngredientModifier<? super STACK>> typeCodec,
-        StreamCodec<RegistryFriendlyByteBuf, IIngredientModifier<? super STACK>> typeStreamCodec,
+    protected <STACK, TYPELESS_INGREDIENT extends ITypelessAdvancedIngredient<STACK>> RegistryEntry<IAdvancedIngredientType<? super STACK>, GenericAdvancedIngredientType<STACK, TYPELESS_INGREDIENT>> genericAdvancedIngredientType(
+        ResourceKey<Registry<IAdvancedIngredientType<? super STACK>>> registryKey,
+        Codec<IAdvancedIngredient<? super STACK>> typeCodec,
+        StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super STACK>> typeStreamCodec,
         String name,
-        Function<Codec<IIngredientModifier<? super STACK>>, MapCodec<TYPELESS_MODIFIER>> codecFactory,
-        Function<StreamCodec<RegistryFriendlyByteBuf, IIngredientModifier<? super STACK>>, StreamCodec<? super RegistryFriendlyByteBuf, TYPELESS_MODIFIER>> streamCodecFactory
+        Function<Codec<IAdvancedIngredient<? super STACK>>, MapCodec<TYPELESS_INGREDIENT>> codecFactory,
+        Function<StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super STACK>>, StreamCodec<? super RegistryFriendlyByteBuf, TYPELESS_INGREDIENT>> streamCodecFactory
     ) {
-        return simple(name, registryKey, () -> new GenericIngredientModifierType<>(codecFactory.apply(typeCodec), streamCodecFactory.apply(typeStreamCodec)));
+        return simple(name, registryKey, () -> new GenericAdvancedIngredientType<>(codecFactory.apply(typeCodec), streamCodecFactory.apply(typeStreamCodec)));
     };
 
-    public RegistryEntry<IIngredientModifierType<? super ItemStack>, NamedIngredientModifierType<ItemStack>> itemIngredientModifierType(String name, MapCodec<? extends ItemIngredientModifier> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends ItemIngredientModifier> streamCodec) {
-        return simple(name, PetrolparkRegistries.Keys.INGREDIENT_MODIFIER_TYPE, () -> new NamedIngredientModifierType<>(Util.makeDescriptionId("ingredient_modifier", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
+    public RegistryEntry<IAdvancedIngredientType<? super ItemStack>, NamedAdvancedIngredientType<ItemStack>> itemAdvancedIngredientType(String name, MapCodec<? extends ItemAdvancedIngredient> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends ItemAdvancedIngredient> streamCodec) {
+        return simple(name, PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE, () -> new NamedAdvancedIngredientType<>(Util.makeDescriptionId("advanced_ingredient", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
     };
 
-    public RegistryEntry<IIngredientModifierType<? super ItemStack>, IIngredientModifierType<? super ItemStack>> itemIngredientModifierType(String name, IIngredientModifierType<? super ItemStack> type) {
-        return simple(name, PetrolparkRegistries.Keys.INGREDIENT_MODIFIER_TYPE, () -> type);
+    public RegistryEntry<IAdvancedIngredientType<? super ItemStack>, IAdvancedIngredientType<? super ItemStack>> itemAdvancedIngredientType(String name, IAdvancedIngredientType<? super ItemStack> type) {
+        return simple(name, PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE, () -> type);
     };
 
-    public RegistryEntry<IIngredientModifierType<? super ItemStack>, INamedIngredientModifierType<ItemStack>> itemIngredientModifierType(String name, NonNullFunction<String, INamedIngredientModifierType<ItemStack>> typeFactory) {
-        return simple(name, PetrolparkRegistries.Keys.INGREDIENT_MODIFIER_TYPE, () -> typeFactory.apply(Util.makeDescriptionId("ingredient_modifier", ResourceLocation.fromNamespaceAndPath(getModid(), name))));
+    public RegistryEntry<IAdvancedIngredientType<? super ItemStack>, INamedAdvancedIngredientType<ItemStack>> itemAdvancedIngredientType(String name, NonNullFunction<String, INamedAdvancedIngredientType<ItemStack>> typeFactory) {
+        return simple(name, PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE, () -> typeFactory.apply(Util.makeDescriptionId("advanced_ingredient", ResourceLocation.fromNamespaceAndPath(getModid(), name))));
     };
 
-    public <TYPELESS_MODIFIER extends ITypelessIngredientModifier<ItemStack>> RegistryEntry<IIngredientModifierType<? super ItemStack>, GenericIngredientModifierType<ItemStack, TYPELESS_MODIFIER>> itemIngredientModifierType(String name, Function<Codec<IIngredientModifier<? super ItemStack>>, MapCodec<TYPELESS_MODIFIER>> codecFactory, Function<StreamCodec<RegistryFriendlyByteBuf, IIngredientModifier<? super ItemStack>>, StreamCodec<? super RegistryFriendlyByteBuf, TYPELESS_MODIFIER>> streamCodecFactory) {
-        return genericIngredientModifierType(PetrolparkRegistries.Keys.INGREDIENT_MODIFIER_TYPE, ItemIngredientModifier.CODEC, ItemIngredientModifier.STREAM_CODEC, name, codecFactory, streamCodecFactory);
+    public <TYPELESS_INGREDIENT extends ITypelessAdvancedIngredient<ItemStack>> RegistryEntry<IAdvancedIngredientType<? super ItemStack>, GenericAdvancedIngredientType<ItemStack, TYPELESS_INGREDIENT>> itemAdvancedIngredientType(String name, Function<Codec<IAdvancedIngredient<? super ItemStack>>, MapCodec<TYPELESS_INGREDIENT>> codecFactory, Function<StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super ItemStack>>, StreamCodec<? super RegistryFriendlyByteBuf, TYPELESS_INGREDIENT>> streamCodecFactory) {
+        return genericAdvancedIngredientType(PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE, ItemAdvancedIngredient.CODEC, ItemAdvancedIngredient.STREAM_CODEC, name, codecFactory, streamCodecFactory);
     };
 
-    public RegistryEntry<IIngredientModifierType<? super FluidStack>, NamedIngredientModifierType<FluidStack>> fluidIngredientModifierType(String name, MapCodec<? extends FluidIngredientModifier> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends FluidIngredientModifier> streamCodec) {
-        return simple(name, PetrolparkRegistries.Keys.FLUID_INGREDIENT_MODIFIER_TYPE, () -> new NamedIngredientModifierType<>(Util.makeDescriptionId("ingredient_modifier", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
+    public RegistryEntry<IAdvancedIngredientType<? super FluidStack>, NamedAdvancedIngredientType<FluidStack>> fluidAdvancedIngredientType(String name, MapCodec<? extends FluidAdvancedIngredient> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends FluidAdvancedIngredient> streamCodec) {
+        return simple(name, PetrolparkRegistries.Keys.ADVANCED_FLUID_INGREDIENT_TYPE, () -> new NamedAdvancedIngredientType<>(Util.makeDescriptionId("advanced_ingredient", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
     };
 
-    public RegistryEntry<IIngredientModifierType<? super FluidStack>, IIngredientModifierType<? super FluidStack>> fluidIngredientModifierType(String name, IIngredientModifierType<? super FluidStack> type) {
-        return simple(name, PetrolparkRegistries.Keys.FLUID_INGREDIENT_MODIFIER_TYPE, () -> type);
+    public RegistryEntry<IAdvancedIngredientType<? super FluidStack>, IAdvancedIngredientType<? super FluidStack>> fluidAdvancedIngredientType(String name, IAdvancedIngredientType<? super FluidStack> type) {
+        return simple(name, PetrolparkRegistries.Keys.ADVANCED_FLUID_INGREDIENT_TYPE, () -> type);
     };
 
-    public <TYPELESS_MODIFIER extends ITypelessIngredientModifier<FluidStack>> RegistryEntry<IIngredientModifierType<? super FluidStack>, GenericIngredientModifierType<FluidStack, TYPELESS_MODIFIER>> fluidIngredientModifierType(String name, Function<Codec<IIngredientModifier<? super FluidStack>>, MapCodec<TYPELESS_MODIFIER>> codecFactory, Function<StreamCodec<RegistryFriendlyByteBuf, IIngredientModifier<? super FluidStack>>, StreamCodec<? super RegistryFriendlyByteBuf, TYPELESS_MODIFIER>> streamCodecFactory) {
-        return genericIngredientModifierType(PetrolparkRegistries.Keys.FLUID_INGREDIENT_MODIFIER_TYPE, FluidIngredientModifier.CODEC, FluidIngredientModifier.STREAM_CODEC, name, codecFactory, streamCodecFactory);
+    public <TYPELESS_INGREDIENT extends ITypelessAdvancedIngredient<FluidStack>> RegistryEntry<IAdvancedIngredientType<? super FluidStack>, GenericAdvancedIngredientType<FluidStack, TYPELESS_INGREDIENT>> fluidAdvancedIngredientType(String name, Function<Codec<IAdvancedIngredient<? super FluidStack>>, MapCodec<TYPELESS_INGREDIENT>> codecFactory, Function<StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super FluidStack>>, StreamCodec<? super RegistryFriendlyByteBuf, TYPELESS_INGREDIENT>> streamCodecFactory) {
+        return genericAdvancedIngredientType(PetrolparkRegistries.Keys.ADVANCED_FLUID_INGREDIENT_TYPE, FluidAdvancedIngredient.CODEC, FluidAdvancedIngredient.STREAM_CODEC, name, codecFactory, streamCodecFactory);
     };
 
     public RegistryEntry<RewardGeneratorType, RewardGeneratorType> rewardGeneratorType(String name, MapCodec<? extends IRewardGenerator> codec) {

@@ -2,12 +2,12 @@ package com.petrolpark.core.recipe.recycling;
 
 import java.util.Collections;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
@@ -40,7 +40,7 @@ public interface IRecyclingRecipe extends Recipe<SingleRecipeInput> {
         );
     };
 
-    public static <R extends IRecyclingRecipe> Supplier<RecipeSerializer<R>> serializer(Factory<R> factory) {
+    public static <R extends IRecyclingRecipe> NonNullSupplier<Serializer<R>> serializer(Factory<R> factory) {
         return () -> new Serializer<>(codec(factory), streamCodec(factory));
     };
 

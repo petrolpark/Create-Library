@@ -10,9 +10,11 @@ import com.petrolpark.core.data.loot.numberprovider.CustomerWaitTimeNumberProvid
 import com.petrolpark.core.data.loot.numberprovider.FunctionNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.MaxNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.MinNumberProvider;
+import com.petrolpark.core.data.loot.numberprovider.PolynomialNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.ProductNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.SigmoidNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.SumNumberProvider;
+import com.petrolpark.core.data.loot.numberprovider.entity.EntityPredicateNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.entity.EquipmentNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.entity.ExperienceLevelNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.entity.LootEntityNumberProviderType;
@@ -33,6 +35,7 @@ public class PetrolparkNumberProviderTypes {
     MIN = REGISTRATE.lootNumberProviderType("min", FunctionNumberProvider.codec(MinNumberProvider::new)),
     SUM = REGISTRATE.lootNumberProviderType("sum", FunctionNumberProvider.codec(SumNumberProvider::new)),
     PRODUCT = REGISTRATE.lootNumberProviderType("product", FunctionNumberProvider.codec(ProductNumberProvider::new)),
+    POLYNOMIAL = REGISTRATE.lootNumberProviderType("polynomial", PolynomialNumberProvider.CODEC),
     SIGMOID = REGISTRATE.lootNumberProviderType("sigmoid", SigmoidNumberProvider.CODEC),
 
     CUSTOMER_WAIT_TIME = REGISTRATE.lootNumberProviderType("customer_wait_time", MapCodec.unit(CustomerWaitTimeNumberProvider::new)),
@@ -44,6 +47,7 @@ public class PetrolparkNumberProviderTypes {
 
     public static final RegistryEntry<LootEntityNumberProviderType, LootEntityNumberProviderType>
     
+    ENTITY_PREDICATE = REGISTRATE.lootEntityNumberProviderType("predicate", EntityPredicateNumberProvider.CODEC),
     EQUIPMENT = REGISTRATE.lootEntityNumberProviderType("equipment_property", EquipmentNumberProvider.CODEC),
     EXPERIENCE_LEVEL = REGISTRATE.lootEntityNumberProviderType("experience_level", MapCodec.unit(ExperienceLevelNumberProvider::new));
 

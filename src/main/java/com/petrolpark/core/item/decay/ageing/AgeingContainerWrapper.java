@@ -41,14 +41,14 @@ public interface AgeingContainerWrapper extends Container {
     };
 
     public static ItemStack withAgeingDecayRemoved(Level level, ItemStack stack) {
-        level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.AGEING.getType(), new SingleRecipeInput(stack), level).stream().findAny()
+        level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.AGEING.get(), new SingleRecipeInput(stack), level).stream().findAny()
             .ifPresent(rh -> ItemDecay.removeAppliedDecay(stack));
         return checkDecay(level, stack);
     };
 
     public static ItemStack withAgeingDecay(Level level, ItemStack stack, boolean startDecay) {
         SingleRecipeInput input = new SingleRecipeInput(stack);
-        return checkDecay(level, level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.AGEING.getType(), input, level).stream().findAny()
+        return checkDecay(level, level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.AGEING.get(), input, level).stream().findAny()
             .map(RecipeHolder::value)
             .map(AgeingRecipe::cast)
             .map(recipe -> recipe.assemble(input, startDecay))

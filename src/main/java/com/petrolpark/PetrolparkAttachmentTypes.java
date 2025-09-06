@@ -2,7 +2,7 @@ package com.petrolpark;
 
 import java.util.function.Supplier;
 
-import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus;
 
 import com.petrolpark.core.badge.PlayerBadges;
 import com.petrolpark.core.shop.customer.EntityCustomer;
@@ -28,7 +28,7 @@ public class PetrolparkAttachmentTypes {
 		"customer", AttachmentType.builder(EntityCustomer::create).serialize(EntityCustomer.ATTACHMENT_SERIALIZER)::build
 	);
 
-	@Internal
+	@ApiStatus.Internal
 	public static void register(IEventBus modEventBus) {
 		ATTACHMENT_TYPES.register(modEventBus);
 	};

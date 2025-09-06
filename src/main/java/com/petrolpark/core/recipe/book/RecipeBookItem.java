@@ -18,6 +18,10 @@ import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -38,6 +42,15 @@ public class RecipeBookItem extends Item {
 
     public RecipeBookItem(Properties properties) {
         super(properties);
+    };
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand usedHand) {
+        ItemStack stack = player.getItemInHand(usedHand);
+        if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+            serverPlayer.awardRecipes(streamProvidedRecipes(level, stack).toList());
+        };
+        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
     };
 
     @Override

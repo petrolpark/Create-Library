@@ -15,9 +15,8 @@ import com.petrolpark.util.CodecHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
-import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public record ContextTeamNumberProvider(TeamNumberProvider value) implements NumberProvider, IEstimableNumberProvider {
+public record ContextTeamNumberProvider(TeamNumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<ContextTeamNumberProvider> CODEC = CodecHelper.singleFieldMap(TeamNumberProvider.CODEC, "value", ContextTeamNumberProvider::value, ContextTeamNumberProvider::new);
     

@@ -2,6 +2,7 @@ package com.petrolpark.core.recipe.recycling;
 
 import javax.annotation.Nonnull;
 
+import com.petrolpark.PetrolparkRecipeSerializers;
 import com.petrolpark.PetrolparkRecipeTypes;
 
 import net.minecraft.world.item.crafting.Ingredient;
@@ -19,12 +20,12 @@ public record IngredientRecyclingRecipe(Ingredient ingredient, RecyclingOutputs 
 
     @Override
     public RecipeSerializer<IngredientRecyclingRecipe> getSerializer() {
-        return PetrolparkRecipeTypes.INGREDIENT_RECYCLING.getSerializer();
+        return PetrolparkRecipeSerializers.INGREDIENT_RECYCLING.get();
     };
 
     @Override
     public RecipeType<IngredientRecyclingRecipe> getType() {
-        return PetrolparkRecipeTypes.INGREDIENT_RECYCLING.getType();
+        return PetrolparkRecipeTypes.INGREDIENT_RECYCLING.get();
     };
     
 };

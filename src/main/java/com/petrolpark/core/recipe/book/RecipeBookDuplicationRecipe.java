@@ -3,7 +3,7 @@ package com.petrolpark.core.recipe.book;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkRecipeTypes;
+import com.petrolpark.PetrolparkRecipeSerializers;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.core.HolderLookup;
@@ -68,22 +68,8 @@ public class RecipeBookDuplicationRecipe extends CustomRecipe {
     };
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return PetrolparkRecipeTypes.RECIPE_BOOK_DUPLICATION.getSerializer();
-    };
-
-    public static class Serializer implements RecipeSerializer<RecipeBookDuplicationRecipe> {
-
-        @Override
-        public MapCodec<RecipeBookDuplicationRecipe> codec() {
-            return CODEC;
-        };
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, RecipeBookDuplicationRecipe> streamCodec() {
-            return STREAM_CODEC;
-        };
-        
+    public RecipeSerializer<RecipeBookDuplicationRecipe> getSerializer() {
+        return PetrolparkRecipeSerializers.RECIPE_BOOK_DUPLICATION.get();
     };
     
 };

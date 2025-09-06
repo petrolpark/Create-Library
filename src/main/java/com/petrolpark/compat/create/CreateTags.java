@@ -1,7 +1,7 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.core.recipe.ingredient.modifier.CreateItemAttributeIngredientModifier;
+import com.petrolpark.core.recipe.ingredient.advanced.CreateItemAttributeAdvancedIngredient;
 import com.petrolpark.util.Lang;
 import com.simibubi.create.api.registry.CreateRegistries;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;
@@ -19,7 +19,7 @@ public class CreateTags {
          */
         LEVEL_INDEPDENDENT,
         /**
-         * Can't be used as an {@link CreateItemAttributeIngredientModifier Ingredient Modifier}.
+         * Can't be used as an {@link CreateItemAttributeAdvancedIngredient Ingredient Modifier}.
          */
         NOT_FOR_INGREDIENTS,
         ;

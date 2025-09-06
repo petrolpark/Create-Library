@@ -3,6 +3,12 @@ package com.petrolpark.util;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 import java.util.stream.Stream;
 
 import org.spongepowered.include.com.google.common.base.Strings;
@@ -13,12 +19,14 @@ import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.gossip.GossipType;
 import net.minecraft.world.inventory.ClickType;
+import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.common.Tags;
 
 public class Lang {
@@ -84,6 +92,10 @@ public class Lang {
         return generic("list.none");
     };
 
+    public static Component rarity(Rarity rarity) {
+        return generic("rarity."+rarity.getSerializedName());
+    };
+
     public static Component direction(Direction direction) {
         return generic("direction."+direction.getName());
     };
@@ -141,6 +153,43 @@ public class Lang {
         }
         if (approximate) postfix += ".approximate";
         return generic(postfix, (Object[])args);
+    };
+
+    public static final Collector<Component, MutableComponent, Component> toComponent() {
+        return toComponent(Component.literal(" "));
+    };
+
+    private static final Set<Collector.Characteristics> COMPONENT_COLLECTOR_CHARACTERISTICS = Set.of(Collector.Characteristics.IDENTITY_FINISH);
+
+    public static Collector<Component, MutableComponent, Component> toComponent(Component joiner) {
+        return new Collector<Component,MutableComponent,Component>() {
+
+            @Override
+            public BiConsumer<MutableComponent, Component> accumulator() {
+                return (mutableComponent, component) -> mutableComponent.append(joiner).append(component);
+            };
+
+            @Override
+            public Set<Characteristics> characteristics() {
+                return COMPONENT_COLLECTOR_CHARACTERISTICS;
+            };
+
+            @Override
+            public BinaryOperator<MutableComponent> combiner() {
+                return (component1, component2) -> component1.append(joiner).append(component2);
+            };
+
+            @Override
+            public Function<MutableComponent, Component> finisher() {
+                return (component) -> (Component)component;
+            };
+
+            @Override
+            public Supplier<MutableComponent> supplier() {
+                return Component::empty;
+            };
+
+        };
     };
 
     public static class IndentedTooltipBuilder {

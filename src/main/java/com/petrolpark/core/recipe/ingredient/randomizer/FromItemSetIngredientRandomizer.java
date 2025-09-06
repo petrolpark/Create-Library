@@ -1,6 +1,7 @@
 package com.petrolpark.core.recipe.ingredient.randomizer;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.PetrolparkIngredientRandomizerTypes;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.core.HolderSet;

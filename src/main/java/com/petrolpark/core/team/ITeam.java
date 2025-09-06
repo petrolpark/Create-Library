@@ -5,25 +5,36 @@ import java.util.stream.Stream;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.PetrolparkTeamProviderTypes;
 import com.petrolpark.util.Lang;
 
+import net.createmod.catnip.net.base.ClientboundPacketPayload;
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
+import net.neoforged.neoforge.common.NeoForge;
 
 /**
  * A collection of Players acting as one Entity.
  * Teams are {@link MutableDataComponentHolder}s, but only {@link ITeam#isMember(Player) members} of a Team are guaranteed to have access to those Components on the client side.
  */
 public interface ITeam extends MutableDataComponentHolder {
+
+    public static Stream<ITeam> streamAll(Player player) {
+        final GatherTeamProvidersEvent event = new GatherTeamProvidersEvent(player);
+        NeoForge.EVENT_BUS.post(event);
+        return event.getTeamProvidersUnmodifiable().stream().map(provider -> provider.provideTeam(player.level()));
+    };
 
     public ITeam.Provider getProvider();
 
@@ -43,6 +54,11 @@ public interface ITeam extends MutableDataComponentHolder {
      */
     @OnlyIn(Dist.DEDICATED_SERVER)
     public Stream<Player> streamMembers();
+
+    @OnlyIn(Dist.DEDICATED_SERVER)
+    public default Stream<ServerPlayer> streamServerMembers() {
+        return streamMembers().map(p -> p instanceof ServerPlayer sp ? sp : null);
+    };
 
     /**
      * If called, it is assumed that {@link ITeam#isMember(Player)} has already passed.
@@ -64,6 +80,10 @@ public interface ITeam extends MutableDataComponentHolder {
     public default Component getRenderedMemberList(int maxTextWidth) {
         Minecraft mc = Minecraft.getInstance();
         return Lang.shortList(streamMemberUsernames().map(Component::literal).toList(), maxTextWidth, mc.font);
+    };
+
+    public default void sendToAllMembers(ClientboundPacketPayload packet) {
+        streamServerMembers().forEach(player -> CatnipServices.NETWORK.sendToClient(player, packet));
     };
 
     public static interface Provider {

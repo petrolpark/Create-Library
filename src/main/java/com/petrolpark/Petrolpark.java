@@ -13,8 +13,6 @@ import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.badge.Badges;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
-import com.petrolpark.core.recipe.ingredient.randomizer.PetrolparkIngredientRandomizerTypes;
-import com.petrolpark.core.team.PetrolparkTeamProviderTypes;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeamManager;
 
 import net.minecraft.resources.ResourceLocation;
@@ -54,35 +52,34 @@ public class Petrolpark {
         PetrolparkConfigs.register(ModLoadingContext.get(), modContainer);
 
         // Registration
-        PetrolparkPackets.register();
-        PetrolparkDataComponents.register(modEventBus);
-        PetrolparkAttributes.register();
-        PetrolparkAttachmentTypes.register(modEventBus);
         Badges.register();
-        IPetrolparkRecipeTypes.register(modEventBus);
+        PetrolparkAdvancedIngredientTypes.register();
+        PetrolparkAttachmentTypes.register(modEventBus);
+        PetrolparkAttributes.register();
         PetrolparkBlocks.register();
-        PetrolparkItems.register();
-        PetrolparkMobEffects.register();
-        PetrolparkParticleTypes.register();
-        PetrolparkTeamProviderTypes.register();
-        PetrolparkTradeListingReferenceTypes.register();
         PetrolparkBogglePatternGeneratorTypes.register();
-
-        // Registration - data/loot
-        PetrolparkDataLoadingConditions.register();
         PetrolparkCriteriaTriggers.register();
+        PetrolparkDataComponents.register(modEventBus);
+        PetrolparkDataLoadingConditions.register();
         PetrolparkDataSubPredicates.register();
+        PetrolparkDecayProductTypes.register();
+        PetrolparkGlobalLootModifierSerializers.register();
+        PetrolparkIngredientRandomizerTypes.register();
+        PetrolparkIngredientTypes.register();
+        PetrolparkItems.register();
         PetrolparkLootConditionTypes.register();
         PetrolparkLootItemFunctions.register();
+        PetrolparkMobEffects.register();
         PetrolparkNumberProviderTypes.register();
-        PetrolparkGlobalLootModifierSerializers.register();
+        PetrolparkPackets.register();
+        PetrolparkParticleTypes.register();
+        PetrolparkRecipeSerializers.register();
+        PetrolparkRecipeTypes.register();
+        IPetrolparkRecipeTypes.register(modEventBus);
         PetrolparkRewardGeneratorTypes.register();
         PetrolparkRewardTypes.register();
-
-        PetrolparkDecayProductTypes.register();
-        PetrolparkIngredientTypes.register();
-        PetrolparkIngredientModifierTypes.register();
-        PetrolparkIngredientRandomizerTypes.register();
+        PetrolparkTeamProviderTypes.register();
+        PetrolparkTradeListingReferenceTypes.register();
     
         // Events
         modEventBus.addListener(this::init);

@@ -15,7 +15,7 @@ import net.minecraft.world.level.storage.loot.providers.number.LootNumberProvide
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
-public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider midpoint, NumberProvider value) implements NumberProvider, IEstimableNumberProvider {
+public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider midpoint, NumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<SigmoidNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         NumberProviders.CODEC.fieldOf("shallowness").forGetter(SigmoidNumberProvider::shallowness),

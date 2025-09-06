@@ -9,10 +9,10 @@ import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkAttachmentTypes;
+import com.petrolpark.PetrolparkTeamProviderTypes;
 import com.petrolpark.core.team.AbstractTeam;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.team.NoTeam;
-import com.petrolpark.core.team.PetrolparkTeamProviderTypes;
 import com.petrolpark.util.CodecHelper;
 
 import net.createmod.catnip.platform.CatnipServices;

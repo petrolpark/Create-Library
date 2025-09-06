@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkRecipeSerializers;
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.core.item.decay.DecayTime;
 import com.petrolpark.core.item.decay.ItemDecay;
@@ -75,31 +76,17 @@ public record AgeingRecipe(Ingredient ingredient, IDecayProduct product, DecayTi
     };
 
     @Override
-    public Serializer getSerializer() {
-        return PetrolparkRecipeTypes.AGEING.getSerializer();
+    public RecipeSerializer<AgeingRecipe> getSerializer() {
+        return PetrolparkRecipeSerializers.AGEING.get();
     };
 
     @Override
-    public RecipeType<?> getType() {
-        return PetrolparkRecipeTypes.AGEING.getType();
+    public RecipeType<AgeingRecipe> getType() {
+        return PetrolparkRecipeTypes.AGEING.get();
     };
 
     public static final AgeingRecipe cast(Recipe<SingleRecipeInput> recipe) {
         if (recipe instanceof AgeingRecipe ageingRecipe) return ageingRecipe;
         return null;
-    };
-
-    public static class Serializer implements RecipeSerializer<AgeingRecipe> {
-
-        @Override
-        public MapCodec<AgeingRecipe> codec() {
-            return CODEC;
-        };
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, AgeingRecipe> streamCodec() {
-            return STREAM_CODEC;
-        };
-
     };
 };

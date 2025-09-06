@@ -8,10 +8,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.Petrolpark;
+import com.petrolpark.PetrolparkTeamProviderTypes;
 import com.petrolpark.core.team.AbstractTeam;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.team.NoTeam;
-import com.petrolpark.core.team.PetrolparkTeamProviderTypes;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.client.Minecraft;

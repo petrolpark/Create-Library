@@ -6,6 +6,8 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.petrolpark.PetrolparkTeamProviderTypes;
+
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;

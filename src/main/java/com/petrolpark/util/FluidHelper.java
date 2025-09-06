@@ -1,5 +1,7 @@
 package com.petrolpark.util;
 
+import java.util.stream.Stream;
+
 import com.petrolpark.core.fluid.FluidMixer;
 
 import net.minecraft.core.RegistryAccess;
@@ -12,7 +14,7 @@ public class FluidHelper {
     
     public static boolean equalIgnoringComponents(FluidStack stack1, FluidStack stack2, DataComponentType<?> ...ignoredComponentTypes) {
         if (stack1.getFluid() != stack2.getFluid()) return false;
-        return DataComponentHelper.equalIgnoring(stack1.getComponents(), stack2.getComponents(), ignoredComponentTypes);
+        return DataComponentHelper.equalIgnoring(stack1.getComponents(), stack2.getComponents(), type -> Stream.of(ignoredComponentTypes).anyMatch(type::equals));
     };
 
     public static int fillTankWithMixer(final RegistryAccess registryAccess, FluidTank tank, FluidStack resource, FluidAction action) {

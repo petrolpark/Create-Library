@@ -39,9 +39,8 @@ public class RecyclingManager {
     };
 
     public static final void loadIngredientInverses(RecipeManager recipeManager) {
-        recipeManager.getAllRecipesFor(PetrolparkRecipeTypes.INGREDIENT_RECYCLING.getType()).stream()
+        recipeManager.getAllRecipesFor(PetrolparkRecipeTypes.INGREDIENT_RECYCLING.get()).stream()
             .map(RecipeHolder::value)
-            .map(IRecyclingRecipe::cast)
             .forEach(recipe -> INGREDIENT_INVERSES.put(recipe.ingredient(), recipe.outputs()));
     };
      
@@ -87,9 +86,8 @@ public class RecyclingManager {
      */
     public static final RecyclingOutputs getRawRecyclingOutputs(Level level, ItemStack stack) {
 
-        Optional<RecyclingOutputs> optional = level.getRecipeManager().getRecipeFor(PetrolparkRecipeTypes.RECYCLING.getType(), new SingleRecipeInput(stack), level)
+        Optional<RecyclingOutputs> optional = level.getRecipeManager().getRecipeFor(PetrolparkRecipeTypes.RECYCLING.get(), new SingleRecipeInput(stack), level)
             .map(RecipeHolder::value)
-            .map(IRecyclingRecipe::cast)
             .map(IRecyclingRecipe::outputs);
         if (optional.isPresent()) return optional.get().copy();
 

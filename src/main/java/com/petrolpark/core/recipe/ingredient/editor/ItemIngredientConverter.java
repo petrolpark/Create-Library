@@ -5,14 +5,15 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import com.petrolpark.core.recipe.ingredient.ModifiedIngredient;
-import com.petrolpark.core.recipe.ingredient.modifier.CompoundIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.IIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.ItemIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.ItemItemIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.NotIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.TagItemIngredientModifier;
-import com.petrolpark.core.recipe.ingredient.modifier.TypeAttachedIngredientModifier;
+import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.core.recipe.ingredient.AdvancedItemIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.CompoundAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.ItemAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.ItemItemAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.NotAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.TagItemAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.TypeAttachedAdvancedIngredient;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -21,41 +22,39 @@ import net.neoforged.neoforge.common.crafting.DifferenceIngredient;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IntersectionIngredient;
 
-import com.petrolpark.PetrolparkRegistries;
-
 public class ItemIngredientConverter implements INeoForgeIngredientConverter<ItemStack, Ingredient> {
 
     /**
      * {@inheritDoc}
-     * <p>This method is intentionally hardcoded. <b>There should never be any need to mixin into it.</b> To add compatibility with your mod's {@link ICustomIngredient}, extend and {@link PetrolparkRegistries.Keys#INGREDIENT_MODIFIER_TYPE register} an {@link ItemIngredientModifier} duplicating the Custom Ingredient's behaviour.</p>
+     * <p>This method is intentionally hardcoded. <b>There should never be any need to mixin into it.</b> To add compatibility with your mod's {@link ICustomIngredient}, extend and {@link PetrolparkRegistries.Keys#ADVANCED_ITEM_INGREDIENT_TYPE register} an {@link ItemAdvancedIngredient} duplicating the Custom Ingredient's behaviour.</p>
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Ingredient convertToNeoForge(IIngredientModifier<? super ItemStack> modifier) throws IngredientConversionException {
-        if (modifier instanceof TypeAttachedIngredientModifier typedModifier && typedModifier.untypedModifier() instanceof CompoundIngredientModifier untypedModifier) {
-            CompoundIngredientModifier<ItemStack> compoundModifier;
+    public Ingredient convertToNeoForgeIngredient(IAdvancedIngredient<? super ItemStack> advancedIngredient) throws IngredientConversionException {
+        if (advancedIngredient instanceof TypeAttachedAdvancedIngredient typedAdvancedIngredient && typedAdvancedIngredient.untypedIngredient() instanceof CompoundAdvancedIngredient untypedAdvancedIngredient) {
+            CompoundAdvancedIngredient<ItemStack> compoundAdvancedIngredient;
             try {
-                compoundModifier = (CompoundIngredientModifier<ItemStack>)untypedModifier;
+                compoundAdvancedIngredient = (CompoundAdvancedIngredient<ItemStack>)untypedAdvancedIngredient;
             } catch (ClassCastException e) {
                 throw new IngredientConversionException("Could not cast the Compound Ingredient type");
             };
 
-            if (!compoundModifier.isAnd() && !compoundModifier.isOr()) throw new IngredientConversionException("Compound Ingredient Modifiers may only require any or all child Modifiers");
+            if (!compoundAdvancedIngredient.isAnd() && !compoundAdvancedIngredient.isOr()) throw new IngredientConversionException("Compound Ingredient AdvancedIngredients may only require any or all child AdvancedIngredients");
 
-            final List<IIngredientModifier<? super ItemStack>> childModifiers = new ArrayList<>();
-            final List<IIngredientModifier<? super ItemStack>> nottedChildModifiers = new ArrayList<>();
+            final List<IAdvancedIngredient<? super ItemStack>> childAdvancedIngredients = new ArrayList<>();
+            final List<IAdvancedIngredient<? super ItemStack>> nottedChildAdvancedIngredients = new ArrayList<>();
             final List<Ingredient.Value> vanillaIngredientValues = new ArrayList<>();
             final List<Ingredient.Value> nottedVanillaIngredientValues = new ArrayList<>();
 
-            for (IIngredientModifier<? super ItemStack> childModifier : compoundModifier.modifiers()) {
-                Optional<IIngredientModifier<? super ItemStack>> notOp = getNot(childModifier);
+            for (IAdvancedIngredient<? super ItemStack> childAdvancedIngredient : compoundAdvancedIngredient.ingredients()) {
+                Optional<IAdvancedIngredient<? super ItemStack>> notOp = getNot(childAdvancedIngredient);
                 boolean not = notOp.isPresent();
-                if (not) childModifier = notOp.get();
-                Optional<Ingredient.Value> valueOp = getVanillaIngredientValue(childModifier);
+                if (not) childAdvancedIngredient = notOp.get();
+                Optional<Ingredient.Value> valueOp = getVanillaIngredientValue(childAdvancedIngredient);
                 if (valueOp.isPresent()) {
                     (not ? nottedVanillaIngredientValues : vanillaIngredientValues).add(valueOp.get());
                 } else {
-                    (not ? nottedChildModifiers : childModifiers).add(childModifier);
+                    (not ? nottedChildAdvancedIngredients : childAdvancedIngredients).add(childAdvancedIngredient);
                 };
             };
 
@@ -64,7 +63,7 @@ public class ItemIngredientConverter implements INeoForgeIngredientConverter<Ite
                 vanillaIngredient = Ingredient.fromValues(vanillaIngredientValues.stream());
             } else {
                 vanillaIngredient = DifferenceIngredient.of(Ingredient.fromValues(vanillaIngredientValues.stream()), 
-                    compoundModifier.isAnd() // de Morgan's Law
+                    compoundAdvancedIngredient.isAnd() // de Morgan's Law
                         ? Ingredient.fromValues(nottedVanillaIngredientValues.stream())
                         : IntersectionIngredient.of(nottedVanillaIngredientValues.stream()
                             .map(Stream::of)
@@ -73,51 +72,51 @@ public class ItemIngredientConverter implements INeoForgeIngredientConverter<Ite
                 );
             };
 
-            if (childModifiers.isEmpty() && nottedChildModifiers.isEmpty()) { // Pure vanilla Ingredient
+            if (childAdvancedIngredients.isEmpty() && nottedChildAdvancedIngredients.isEmpty()) { // Pure vanilla Ingredient
                 if (vanillaIngredientValues.isEmpty()) {
                     throw new IngredientConversionException("Cannot have only 'not' values in a Compound");
                 } else {
                     return vanillaIngredient;
                 }
-            } else if (childModifiers.isEmpty()) { // Not a pure vanilla Ingredient, and only 'nots'
-                throw new IngredientConversionException("Cannot have only 'not' Ingredient Modifiers in a Compound");
+            } else if (childAdvancedIngredients.isEmpty()) { // Not a pure vanilla Ingredient, and only 'nots'
+                throw new IngredientConversionException("Cannot have only 'not' Ingredient AdvancedIngredients in a Compound");
             } else {  // Not a pure vanilla Ingredient
-                List<Ingredient> yesIngredients = new ArrayList<>(childModifiers.size() + (vanillaIngredient.isEmpty() ? 0 : 1));
+                List<Ingredient> yesIngredients = new ArrayList<>(childAdvancedIngredients.size() + (vanillaIngredient.isEmpty() ? 0 : 1));
                 if (!vanillaIngredient.isEmpty()) yesIngredients.add(vanillaIngredient);
-                for (IIngredientModifier<? super ItemStack> childModifier : childModifiers) {
-                    yesIngredients.add(convertToNeoForge(childModifier));
+                for (IAdvancedIngredient<? super ItemStack> childAdvancedIngredient : childAdvancedIngredients) {
+                    yesIngredients.add(convertToNeoForgeIngredient(childAdvancedIngredient));
                 };
-                Ingredient yesIngredient = (compoundModifier.isOr() ? new CompoundIngredient(yesIngredients) : new IntersectionIngredient(yesIngredients)).toVanilla(); // If its not an and compound, it should be an or
+                Ingredient yesIngredient = (compoundAdvancedIngredient.isOr() ? new CompoundIngredient(yesIngredients) : new IntersectionIngredient(yesIngredients)).toVanilla(); // If its not an and compound, it should be an or
 
-                if (nottedChildModifiers.isEmpty()) {
+                if (nottedChildAdvancedIngredients.isEmpty()) {
                     return yesIngredient;
                 } else {
-                    List<Ingredient> noIngredients = new ArrayList<>(nottedChildModifiers.size());
-                    for (IIngredientModifier<? super ItemStack> nottedChildModifier : nottedChildModifiers) {
-                        noIngredients.add(convertToNeoForge(nottedChildModifier));
+                    List<Ingredient> noIngredients = new ArrayList<>(nottedChildAdvancedIngredients.size());
+                    for (IAdvancedIngredient<? super ItemStack> nottedChildAdvancedIngredient : nottedChildAdvancedIngredients) {
+                        noIngredients.add(convertToNeoForgeIngredient(nottedChildAdvancedIngredient));
                     };
-                    Ingredient noIngredient = (compoundModifier.isOr() ? new IntersectionIngredient(noIngredients) : new CompoundIngredient(noIngredients)).toVanilla(); // de Morgan's Law
+                    Ingredient noIngredient = (compoundAdvancedIngredient.isOr() ? new IntersectionIngredient(noIngredients) : new CompoundIngredient(noIngredients)).toVanilla(); // de Morgan's Law
                     return DifferenceIngredient.of(yesIngredient, noIngredient);
                 }
             }
         } else { // Not a compound
-            Optional<Ingredient.Value> valueOp = getVanillaIngredientValue(modifier);
+            Optional<Ingredient.Value> valueOp = getVanillaIngredientValue(advancedIngredient);
             if (valueOp.isPresent()) return Ingredient.fromValues(valueOp.stream());
         };
         throw new IngredientConversionException("todo");
     };
 
-    protected Optional<Ingredient.Value> getVanillaIngredientValue(IIngredientModifier<? super ItemStack> modifier) {
-        if (modifier instanceof ItemItemIngredientModifier itemIIM) return Optional.of(new Ingredient.ItemValue(new ItemStack(itemIIM.item())));
-        if (modifier instanceof TagItemIngredientModifier tagIIM) return Optional.of(new Ingredient.TagValue(tagIIM.tag()));
+    protected Optional<Ingredient.Value> getVanillaIngredientValue(IAdvancedIngredient<? super ItemStack> advancedIngredient) {
+        if (advancedIngredient instanceof ItemItemAdvancedIngredient itemIIM) return Optional.of(new Ingredient.ItemValue(new ItemStack(itemIIM.item())));
+        if (advancedIngredient instanceof TagItemAdvancedIngredient tagIIM) return Optional.of(new Ingredient.TagValue(tagIIM.tag()));
         return Optional.empty();
     };
 
     @SuppressWarnings("unchecked")
-    protected Optional<IIngredientModifier<? super ItemStack>> getNot(IIngredientModifier<? super ItemStack> potentialNotModifier) {
-        if (potentialNotModifier instanceof TypeAttachedIngredientModifier typedModifier && typedModifier.untypedModifier() instanceof NotIngredientModifier untypedModifier) {
+    protected Optional<IAdvancedIngredient<? super ItemStack>> getNot(IAdvancedIngredient<? super ItemStack> potentialNotAdvancedIngredient) {
+        if (potentialNotAdvancedIngredient instanceof TypeAttachedAdvancedIngredient typedAdvancedIngredient && typedAdvancedIngredient.untypedIngredient() instanceof NotAdvancedIngredient untypedAdvancedIngredient) {
             try {
-                return Optional.of(((NotIngredientModifier<ItemStack>)untypedModifier).modifier());
+                return Optional.of(((NotAdvancedIngredient<ItemStack>)untypedAdvancedIngredient).ingredient());
             } catch (ClassCastException e) {
                 return Optional.empty();
             }
@@ -127,39 +126,39 @@ public class ItemIngredientConverter implements INeoForgeIngredientConverter<Ite
 
     /**
      * {@inheritDoc}
-     * <p>This method is intentionally hardcoded. <b>There should never be any need to mixin into it.</b> To add compatibility with your mod's {@link ICustomIngredient}, extend and {@link PetrolparkRegistries.Keys#INGREDIENT_MODIFIER_TYPE register} an {@link ItemIngredientModifier} duplicating the Custom Ingredient's behaviour.</p>
+     * <p>This method is intentionally hardcoded. <b>There should never be any need to mixin into it.</b> To add compatibility with your mod's {@link ICustomIngredient}, extend and {@link PetrolparkRegistries.Keys#ADVANCED_ITEM_INGREDIENT_TYPE register} an {@link ItemAdvancedIngredient} duplicating the Custom Ingredient's behaviour.</p>
      */
     @Override
-    public IIngredientModifier<? super ItemStack> convertToModifier(Ingredient ingredient) throws IngredientConversionException {
+    public IAdvancedIngredient<? super ItemStack> convertToAdvancedIngredient(Ingredient ingredient) throws IngredientConversionException {
         if (ingredient.isCustom()) {
-            if (ingredient.getCustomIngredient() instanceof ModifiedIngredient modifiedIngredient) {
-                return modifiedIngredient.modifier().simplify();
+            if (ingredient.getCustomIngredient() instanceof AdvancedItemIngredient modifiedIngredient) {
+                return modifiedIngredient.advacnedIngredient().simplify();
             } else if (ingredient.getCustomIngredient() instanceof CompoundIngredient compoundIngredient) {
-                List<IIngredientModifier<? super ItemStack>> modifiers = new ArrayList<>(compoundIngredient.children().size());
-                for (Ingredient child : compoundIngredient.children()) modifiers.add(convertToModifier(child));
-                return CompoundIngredientModifier.or(modifiers).simplify();
+                List<IAdvancedIngredient<? super ItemStack>> advancedIngredients = new ArrayList<>(compoundIngredient.children().size());
+                for (Ingredient child : compoundIngredient.children()) advancedIngredients.add(convertToAdvancedIngredient(child));
+                return CompoundAdvancedIngredient.or(advancedIngredients).simplify();
             } else if (ingredient.getCustomIngredient() instanceof IntersectionIngredient intersectionIngredient) {
-                List<IIngredientModifier<? super ItemStack>> modifiers = new ArrayList<>(intersectionIngredient.children().size());
-                for (Ingredient child : intersectionIngredient.children()) modifiers.add(convertToModifier(child));
-                return CompoundIngredientModifier.and(modifiers).simplify();
+                List<IAdvancedIngredient<? super ItemStack>> advancedIngredients = new ArrayList<>(intersectionIngredient.children().size());
+                for (Ingredient child : intersectionIngredient.children()) advancedIngredients.add(convertToAdvancedIngredient(child));
+                return CompoundAdvancedIngredient.and(advancedIngredients).simplify();
             } else if (ingredient.getCustomIngredient() instanceof DifferenceIngredient differenceIngredient) {
-                List<IIngredientModifier<? super ItemStack>> modifiers = new ArrayList<>(2);
-                modifiers.add(convertToModifier(differenceIngredient.base()));
-                modifiers.add(NotIngredientModifier.of(convertToModifier(differenceIngredient.subtracted())));
-                return CompoundIngredientModifier.and(modifiers).simplify();
+                List<IAdvancedIngredient<? super ItemStack>> advancedIngredients = new ArrayList<>(2);
+                advancedIngredients.add(convertToAdvancedIngredient(differenceIngredient.base()));
+                advancedIngredients.add(NotAdvancedIngredient.of(convertToAdvancedIngredient(differenceIngredient.subtracted())));
+                return CompoundAdvancedIngredient.and(advancedIngredients).simplify();
             } else {
                 throw new IngredientConversionException("Cannot convert Custom Ingredient to Petrolpark Modified Ingredient");
             }
             //TODO NeoForge DataComponentIngredients (maybe)
         } else if (ingredient.isSimple()) { // Should always be true at this point but double check in case of weird illegal mixins
-            List<IIngredientModifier<? super ItemStack>> modifiers = new ArrayList<>(ingredient.getValues().length);
+            List<IAdvancedIngredient<? super ItemStack>> advancedIngredients = new ArrayList<>(ingredient.getValues().length);
             for (Ingredient.Value value : ingredient.getValues()) {
-                if (value instanceof Ingredient.ItemValue itemValue) modifiers.add(new ItemItemIngredientModifier(itemValue.item().getItem()));
-                else if (value instanceof Ingredient.TagValue tagValue) modifiers.add(new TagItemIngredientModifier(tagValue.tag()));
+                if (value instanceof Ingredient.ItemValue itemValue) advancedIngredients.add(new ItemItemAdvancedIngredient(itemValue.item().getItem()));
+                else if (value instanceof Ingredient.TagValue tagValue) advancedIngredients.add(new TagItemAdvancedIngredient(tagValue.tag()));
                 // Ignore additional weird (illegal) values
             };
-            if (modifiers.size() == 1) return modifiers.get(0);
-            return CompoundIngredientModifier.or(modifiers);
+            if (advancedIngredients.size() == 1) return advancedIngredients.get(0);
+            return CompoundAdvancedIngredient.or(advancedIngredients);
         };
         throw new IngredientConversionException("Unknown problem");
     };

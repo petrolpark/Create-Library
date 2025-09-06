@@ -15,6 +15,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 public interface IBookRequiredRecipe extends INamedRecipe {
@@ -24,6 +25,10 @@ public interface IBookRequiredRecipe extends INamedRecipe {
     @Nullable
     public static IBookRequiredRecipe checkedCast(Recipe<?> recipe) {
         return recipe instanceof IBookRequiredRecipe bnr ? bnr : null;
+    };
+    
+    public static boolean hasRequiredBook(BlockEntity be, RecipeHolder<?> recipeHolder) {
+        return hasRequiredBook(be.getLevel(), be.getBlockPos(), recipeHolder);
     };
 
     public static boolean hasRequiredBook(Level level, BlockPos pos, RecipeHolder<?> recipeHolder) {

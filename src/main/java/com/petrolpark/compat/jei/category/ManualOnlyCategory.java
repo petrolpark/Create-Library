@@ -3,7 +3,7 @@ package com.petrolpark.compat.jei.category;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
-import com.petrolpark.core.recipe.manualonly.ManualOnlyShapedRecipe;
+import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
@@ -13,6 +13,7 @@ import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapedRecipe;
 
 public class ManualOnlyCategory extends PetrolparkRecipeCategory<CraftingRecipe> {
 
@@ -22,7 +23,8 @@ public class ManualOnlyCategory extends PetrolparkRecipeCategory<CraftingRecipe>
 
     @Override
     public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull CraftingRecipe craftingRecipe, @Nonnull IFocusGroup focuses) {
-        if (!(craftingRecipe instanceof ManualOnlyShapedRecipe recipe)) return;
+        if (!(craftingRecipe instanceof ManualOnlyCraftingRecipe manualRecipe && manualRecipe.getWrappedRecipe() instanceof ShapedRecipe recipe)) return;
+        //TODO non-shaped manual-only recipes
         int gridSize = recipe.getWidth() <= 2 && recipe.getHeight() <= 2 ? 2 : 3;
         for (int i = 0; i < (gridSize == 2 ? 4 : 9); i++) {
             int x = i % gridSize;
@@ -34,7 +36,7 @@ public class ManualOnlyCategory extends PetrolparkRecipeCategory<CraftingRecipe>
         };
         builder.addSlot(RecipeIngredientRole.OUTPUT, 95, 19)
             .setBackground(getRenderedSlot(), -1, -1)
-            .addItemStack(recipe.getExampleResult(getRegistryAccess()));
+            .addItemStack(manualRecipe.getExampleResult(getRegistryAccess()));
     };
 
     @Override

@@ -2,15 +2,13 @@ package com.petrolpark.core.contamination.recipe;
 
 import javax.annotation.Nonnull;
 
-import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkRecipeSerializers;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.util.ItemHelper;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -20,11 +18,8 @@ import net.minecraft.world.level.Level;
 
 public class CombineContaminatedItemsRecipe extends CustomRecipe implements IHandleContaminationMyselfRecipe<CraftingInput> {
 
-    public static final MapCodec<CombineContaminatedItemsRecipe> CODEC = MapCodec.unit(CombineContaminatedItemsRecipe::new);
-    public static final StreamCodec<RegistryFriendlyByteBuf, CombineContaminatedItemsRecipe> STREAM_CODEC = StreamCodec.unit(new CombineContaminatedItemsRecipe());
-
-    public CombineContaminatedItemsRecipe() {
-        super(CraftingBookCategory.MISC);
+    public CombineContaminatedItemsRecipe(CraftingBookCategory category) {
+        super(category);
     };
 
     @Override
@@ -68,28 +63,13 @@ public class CombineContaminatedItemsRecipe extends CustomRecipe implements IHan
     };
 
     @Override
-    public RecipeSerializer<?> getSerializer() {
-        return SERIALIZER;
+    public RecipeSerializer<CombineContaminatedItemsRecipe> getSerializer() {
+        return PetrolparkRecipeSerializers.CONTAMINATED_ITEM_COMBINATION.get();
     };
 
     @Override
     public boolean isContaminationHandled(CraftingInput input, HolderLookup.Provider registries) {
         return true;
     };
-
-    public static final RecipeSerializer<CombineContaminatedItemsRecipe> SERIALIZER = new RecipeSerializer<CombineContaminatedItemsRecipe>() {
-
-        @Override
-        public MapCodec<CombineContaminatedItemsRecipe> codec() {
-            return CODEC;
-        };
-
-        @Override
-        public StreamCodec<RegistryFriendlyByteBuf, CombineContaminatedItemsRecipe> streamCodec() {
-            return STREAM_CODEC;
-        };
-        
-    };
-
     
 };

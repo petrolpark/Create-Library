@@ -3,6 +3,7 @@ package com.petrolpark.core.recipe.ingredient.randomizer;
 import java.util.List;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.PetrolparkIngredientRandomizerTypes;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.world.item.crafting.Ingredient;

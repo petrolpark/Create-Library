@@ -3,9 +3,11 @@ package com.petrolpark.util;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
+import com.mojang.datafixers.util.Function7;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
@@ -19,6 +21,8 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.VarInt;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.animal.horse.Markings;
+import net.minecraft.world.level.block.state.properties.WoodType;
 
 public class CodecHelper {
 
@@ -63,6 +67,49 @@ public class CodecHelper {
         return Codec.BYTE.flatXmap(checker, checker);
     };
 
+    public static <B, C, T1, T2, T3, T4, T5, T6, T7> StreamCodec<B, C> compositeStreamCodec(
+        final StreamCodec<? super B, T1> codec1,
+        final Function<C, T1> getter1,
+        final StreamCodec<? super B, T2> codec2,
+        final Function<C, T2> getter2,
+        final StreamCodec<? super B, T3> codec3,
+        final Function<C, T3> getter3,
+        final StreamCodec<? super B, T4> codec4,
+        final Function<C, T4> getter4,
+        final StreamCodec<? super B, T5> codec5,
+        final Function<C, T5> getter5,
+        final StreamCodec<? super B, T6> codec6,
+        final Function<C, T6> getter6,
+        final StreamCodec<? super B, T7> codec7,
+        final Function<C, T7> getter7,
+        final Function7<T1, T2, T3, T4, T5, T6, T7, C> factory
+    ) {
+        return new StreamCodec<B, C>() {
+            @Override
+            public C decode(@Nonnull B byteBuf) {
+                T1 t1 = codec1.decode(byteBuf);
+                T2 t2 = codec2.decode(byteBuf);
+                T3 t3 = codec3.decode(byteBuf);
+                T4 t4 = codec4.decode(byteBuf);
+                T5 t5 = codec5.decode(byteBuf);
+                T6 t6 = codec6.decode(byteBuf);
+                T7 t7 = codec7.decode(byteBuf);
+                return factory.apply(t1, t2, t3, t4, t5, t6, t7);
+            };
+
+            @Override
+            public void encode(@Nonnull B byteBuf, @Nonnull C object) {
+                codec1.encode(byteBuf, getter1.apply(object));
+                codec2.encode(byteBuf, getter2.apply(object));
+                codec3.encode(byteBuf, getter3.apply(object));
+                codec4.encode(byteBuf, getter4.apply(object));
+                codec5.encode(byteBuf, getter5.apply(object));
+                codec6.encode(byteBuf, getter6.apply(object));
+                codec7.encode(byteBuf, getter7.apply(object));
+            };
+        };
+    };
+
     public static final StreamCodec<ByteBuf, MinMaxBounds.Ints> INT_BOUNDS_STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.optional(ByteBufCodecs.INT), MinMaxBounds.Ints::min,
         ByteBufCodecs.optional(ByteBufCodecs.INT), MinMaxBounds.Ints::max,
@@ -74,4 +121,8 @@ public class CodecHelper {
         INT_BOUNDS_STREAM_CODEC, EnchantmentPredicate::level,
         EnchantmentPredicate::new
     );
+
+    public static final StreamCodec<ByteBuf, WoodType> WOOD_TYPE_STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(WoodType.TYPES::get, WoodType::name);
+
+    public static final Codec<Markings> HORSE_MARKINGS_CODEC = Codec.stringResolver(markings -> Lang.asId(markings.name()), name -> Stream.of(Markings.values()).filter(markings -> Lang.asId(markings.name()).equals(name)).findFirst().orElse(null));
 };

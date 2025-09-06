@@ -28,7 +28,7 @@ public class Create {
         CreateBlockEntityTypes.register();
         CreateBlocks.register();
         CreateCriterionTriggers.register();
-        CreateIngredientModifierTypes.register();
+        CreateAdvancedIngredientTypes.register();
         CreateGlobalLootModifierSerializers.register();
         CreateFluids.register();
         CreateItems.register();

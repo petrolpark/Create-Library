@@ -1,8 +1,9 @@
 package com.petrolpark.core.data.loot.numberprovider;
 
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
-public interface IEstimableNumberProvider {
+public interface IEstimableNumberProvider extends NumberProvider {
     
     /**
      * A rough estimate for the output of this Number Provider, for display purposes only.

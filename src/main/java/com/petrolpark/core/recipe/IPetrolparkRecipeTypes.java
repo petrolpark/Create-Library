@@ -1,7 +1,7 @@
 package com.petrolpark.core.recipe;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkRecipeTypes;
+import com.petrolpark.PetrolparkRecipeTypesOld;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -14,8 +14,9 @@ import net.neoforged.neoforge.registries.DeferredRegister;
 
 public interface IPetrolparkRecipeTypes {
 
+    @SuppressWarnings("deprecation")
     public static void register(IEventBus modEventBus) {
-        PetrolparkRecipeTypes.register();
+        PetrolparkRecipeTypesOld.register();
         Registers.SERIALIZER_REGISTER.register(modEventBus);
         Registers.TYPE_REGISTER.register(modEventBus);
     };
