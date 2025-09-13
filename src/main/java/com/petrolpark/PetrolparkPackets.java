@@ -14,6 +14,7 @@ import com.petrolpark.core.team.packet.BindTeamBlockPacket;
 import com.petrolpark.core.team.packet.BindTeamItemPacket;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeamComponentChangedPacket;
 import com.petrolpark.core.team.singleplayer.SinglePlayerTeamComponentChangedPacket;
+import com.petrolpark.core.wish.WishGrantedPacket;
 
 import net.createmod.catnip.net.base.BasePacketPayload;
 import net.createmod.catnip.net.base.CatnipPacketRegistry;
@@ -33,6 +34,7 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
 	SINGLE_PLAYER_TEAM_COMPONENT_CHANGED(SinglePlayerTeamComponentChangedPacket.class, SinglePlayerTeamComponentChangedPacket.STREAM_CODEC, false),
     SCOREBOARD_TEAM_COMPONENT_CHANGED(ScoreboardTeamComponentChangedPacket.class, ScoreboardTeamComponentChangedPacket.STREAM_CODEC, false),
     EXTRA_INVENTORY_SIZE_CHANGE(ExtraInventorySizeChangePacket.class, ExtraInventorySizeChangePacket.STREAM_CODEC, false),
+	GRANT_WISH(WishGrantedPacket.class, WishGrantedPacket.STREAM_CODEC, false),
 	REMOVE_SHADER(RemoveEffectShaderPacket.class, RemoveEffectShaderPacket.STREAM_CODEC, false),
 	SYNC_MOB_EFFECT_TOTAL_DURATION(SyncMobEffectTotalDurationPacket.class, SyncMobEffectTotalDurationPacket.STREAM_CODEC, false),
 	REMOVE_ALL_EFFECT_SHADERS(RemoveAllEffectShadersPacket.class, RemoveAllEffectShadersPacket.STREAM_CODEC, false),

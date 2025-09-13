@@ -39,6 +39,8 @@ import com.petrolpark.core.recipe.ingredient.advanced.ItemAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.NamedAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
+import com.petrolpark.core.registrate.PetrolparkBlockBuilder;
+import com.petrolpark.core.registrate.PetrolparkItemBuilder;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
 import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
 import com.petrolpark.core.registrate.SharedItemBuilder;
@@ -79,6 +81,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
@@ -114,6 +117,16 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     };
 
     // Builders
+
+    @Override
+    public <T extends Block, P> BlockBuilder<T, P> block(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
+        return entry(name, callback -> PetrolparkBlockBuilder.create(this, parent, name, callback, factory));
+    };
+
+    @Override
+    public <T extends Item, P> ItemBuilder<T, P> item(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<Properties, T> factory) {
+        return entry(name, callback -> PetrolparkItemBuilder.create(this, parent, name, callback, factory));
+    };
 
     public BadgeRegistrateBuilder<Badge, PetrolparkRegistrate> badge(String name) {
         return badge(name, Badge::new);  
@@ -158,12 +171,12 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     };
 
     public <VARIANT> RegistryEntry<MapCodec<? extends EntitySubPredicate>, MapCodec<EntitySubPredicates.EntityVariantPredicateType<VARIANT>.Instance>> entityVariantPredicateType(String name, Codec<VARIANT> variantCodec, Function<Entity, Optional<VARIANT>> variantGetter) {
-        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.create(variantCodec, variantGetter);
+        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.<VARIANT>create(variantCodec, variantGetter);
         return entitySubPredicateType(name, predicateType.codec);
     };
 
     public <VARIANT> RegistryEntry<MapCodec<? extends EntitySubPredicate>, MapCodec<EntitySubPredicates.EntityVariantPredicateType<VARIANT>.Instance>> entityVariantPredicateType(String name, Registry<VARIANT> variantRegistry, Function<Entity, Optional<VARIANT>> variantGetter) {
-        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.create(variantRegistry, variantGetter);
+        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.<VARIANT>create(variantRegistry, variantGetter);
         return entitySubPredicateType(name, predicateType.codec);
     };
 

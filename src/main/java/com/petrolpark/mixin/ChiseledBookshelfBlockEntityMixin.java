@@ -18,9 +18,9 @@ import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(ChiseledBookShelfBlockEntity.class)
-public class ChiseledBookshelfBlockEntityMixin extends BlockEntity {
+public class ChiseledBookShelfBlockEntityMixin extends BlockEntity {
 
-    public ChiseledBookshelfBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
+    public ChiseledBookShelfBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
         throw new AssertionError();
     };

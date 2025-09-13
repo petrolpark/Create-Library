@@ -2,15 +2,12 @@ package com.petrolpark.core.registrate;
 
 import javax.annotation.Nonnull;
 
-import com.google.gson.JsonElement;
 import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.compat.SharedFeatureBlockItem;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.builders.ItemBuilder;
-import com.tterrag.registrate.providers.ProviderType;
-import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
@@ -21,9 +18,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
-import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 
-public class SharedBlockBuilder<T extends Block, P extends PetrolparkRegistrate> extends BlockBuilder<T, P> {
+public class SharedBlockBuilder<T extends Block, P extends PetrolparkRegistrate> extends PetrolparkBlockBuilder<T, P> {
 
     public static <T extends Block, P extends PetrolparkRegistrate> BlockBuilder<T, P> create(PetrolparkRegistrate owner, P parent, SharedFeatureFlag feature, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory) {
         return new SharedBlockBuilder<>(owner, parent, feature, name, callback, factory, () -> BlockBehaviour.Properties.of()).defaultLoot();
@@ -49,19 +45,20 @@ public class SharedBlockBuilder<T extends Block, P extends PetrolparkRegistrate>
     @Override
     public <I extends Item> ItemBuilder<I, BlockBuilder<T, P>> item(@Nonnull NonNullBiFunction<? super T, net.minecraft.world.item.Item.Properties, ? extends I> factory) {
         if (featureFlag.enabled()) return petrolparkOwner.<I, BlockBuilder<T, P>>sharedItem(this, featureFlag, getName(), p -> factory.apply(getEntry(), p))
-            .setData(ProviderType.LANG, NonNullBiConsumer.noop())
-            .model((ctx, prov) -> 
-                getOwner().getDataProvider(ProviderType.BLOCKSTATE)
-                    .flatMap(p -> p.getExistingVariantBuilder(getEntry()))
-                    .map(b -> b.getModels().get(b.partialState()))
-                    .map(BlockStateProvider.ConfiguredModelList::toJSON)
-                    .filter(JsonElement::isJsonObject)
-                    .map(j -> j.getAsJsonObject().get("model"))
-                    .map(JsonElement::getAsString)
-                    .map(model -> prov.withExistingParent(ctx.getName(), model))
-                    .orElse(prov.blockItem(asSupplier()))
-            );
-        return ItemBuilder.create(DummyRegistrate.INSTANCE, this, getName(), petrolparkOwner.new SharedFeatureBuilderCallback(featureFlag), p -> factory.apply(getEntry(), p));
+            // .setData(ProviderType.LANG, NonNullBiConsumer.noop())
+            // .model((ctx, prov) -> 
+            //     getOwner().getDataProvider(ProviderType.BLOCKSTATE)
+            //         .flatMap(p -> p.getExistingVariantBuilder(getEntry()))
+            //         .map(b -> b.getModels().get(b.partialState()))
+            //         .map(BlockStateProvider.ConfiguredModelList::toJSON)
+            //         .filter(JsonElement::isJsonObject)
+            //         .map(j -> j.getAsJsonObject().get("model"))
+            //         .map(JsonElement::getAsString)
+            //         .map(model -> prov.withExistingParent(ctx.getName(), model))
+            //         .orElse(prov.blockItem(asSupplier()))
+            // )
+            ;
+        else return ItemBuilder.create(DummyRegistrate.INSTANCE, this, getName(), petrolparkOwner.new SharedFeatureBuilderCallback(featureFlag), p -> factory.apply(getEntry(), p));
     };
 
     @Override
