@@ -1,17 +1,16 @@
 package com.petrolpark.core.scratch;
 
-public interface ScratchParameters {
+public sealed interface ScratchParameters<CONTEXT extends IScratchContext> permits ScratchParameters.None, ScratchParameters.More, ScratchArguments {
+    
+    public non-sealed interface None<CONTEXT extends IScratchContext> extends ScratchParameters<CONTEXT> {};
 
-    public static interface ScratchParameters1<TYPE_1> extends ScratchParameters {
-        public TYPE_1 get1();
+    public sealed interface More<CONTEXT extends IScratchContext, TYPE> extends ScratchParameters<CONTEXT> permits Just, And, ScratchArguments.More {
+        public TYPE get(CONTEXT context);
     };
 
-    public static interface ScratchParameters2<TYPE_1, TYPE_2> extends ScratchParameters1<TYPE_1> {
-        public TYPE_2 get2();
-    };
+    public sealed interface Just<CONTEXT extends IScratchContext, TYPE> extends More<CONTEXT, TYPE> permits ScratchArguments.Just {};
 
-    public static interface ScratchParameters3<TYPE_1, TYPE_2, TYPE_3> extends ScratchParameters2<TYPE_1, TYPE_2> {
-        public TYPE_3 get3();
+    public sealed interface And<CONTEXT extends IScratchContext, TYPE, NEXT extends More<? super CONTEXT, ?>> extends More<CONTEXT, TYPE> permits ScratchArguments.And {
+        public NEXT next();
     };
-
 };

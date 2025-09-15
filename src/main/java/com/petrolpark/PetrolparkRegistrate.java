@@ -44,12 +44,6 @@ import com.petrolpark.core.registrate.PetrolparkItemBuilder;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
 import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
 import com.petrolpark.core.registrate.SharedItemBuilder;
-import com.petrolpark.core.scratch.symbol.IScratchSymbol;
-import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
-import com.petrolpark.core.scratch.symbol.type.IScratchSymbolType;
-import com.petrolpark.core.scratch.symbol.type.SimpleScratchExpressionType;
-import com.petrolpark.core.scratch.type.IScratchType;
-import com.petrolpark.core.scratch.type.SimpleScratchType;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.trade.ITradeListingReference;
 import com.tterrag.registrate.AbstractRegistrate;
@@ -326,22 +320,22 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, Registries.PARTICLE_TYPE, factory);
     };
 
-    public <T, SCRATCH_TYPE extends IScratchType<T>> RegistryEntry<IScratchType<?>, SCRATCH_TYPE> scratchType(String name, NonNullSupplier<SCRATCH_TYPE> factory) {
-        return simple(name, PetrolparkRegistries.Keys.SCRATCH_TYPE, factory);
-    };
+    // public <T, SCRATCH_TYPE extends IScratchClass<T>> RegistryEntry<IScratchType<?>, SCRATCH_TYPE> scratchType(String name, NonNullSupplier<SCRATCH_TYPE> factory) {
+    //     return simple(name, PetrolparkRegistries.Keys.SCRATCH_TYPE, factory);
+    // };
 
-    public <T> RegistryEntry<IScratchType<?>, SimpleScratchType<T>> scratchType(String name, Class<T> clazz) {
-        return scratchType(name, () -> new SimpleScratchType<>(clazz));
-    };
+    // public <T> RegistryEntry<IScratchType<?>, SimpleScratchType<T>> scratchType(String name, Class<T> clazz) {
+    //     return scratchType(name, () -> new SimpleScratchType<>(clazz));
+    // };
 
-    public <SYMBOL extends IScratchSymbol<?, ?>, SYMBOL_TYPE extends IScratchSymbolType<SYMBOL>> RegistryEntry<IScratchSymbolType<?>, SYMBOL_TYPE> scratchSymbolType(String name, NonNullSupplier<SYMBOL_TYPE> typeFactory) {
-        return simple(name, PetrolparkRegistries.Keys.SCRATCH_SYMBOL_TYPE, typeFactory);
-    };
+    // public <SYMBOL extends IScratchSymbol<?, ?>, SYMBOL_TYPE extends IScratchSymbolType<SYMBOL>> RegistryEntry<IScratchSymbolType<?>, SYMBOL_TYPE> scratchSymbolType(String name, NonNullSupplier<SYMBOL_TYPE> typeFactory) {
+    //     return simple(name, PetrolparkRegistries.Keys.SCRATCH_SYMBOL_TYPE, typeFactory);
+    // };
 
-    public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchSymbolType<?>, SimpleScratchExpressionType<EXPRESSION>> simpleScratchExpressionType(String name, NonNullSupplier<EXPRESSION> expressionFactory) {
-        final EXPRESSION expressionUnit = expressionFactory.get();
-        return scratchSymbolType(name, () -> new SimpleScratchExpressionType<>(Codec.unit(expressionUnit), StreamCodec.unit(expressionUnit)));
-    };
+    // public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchSymbolType<?>, SimpleScratchExpressionType<EXPRESSION>> simpleScratchExpressionType(String name, NonNullSupplier<EXPRESSION> expressionFactory) {
+    //     final EXPRESSION expressionUnit = expressionFactory.asParameters();
+    //     return scratchSymbolType(name, () -> new SimpleScratchExpressionType<>(Codec.unit(expressionUnit), StreamCodec.unit(expressionUnit)));
+    // };
     
     // Shared features
 

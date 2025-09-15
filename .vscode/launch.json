@@ -12,13 +12,13 @@
       "projectName": "Petrolpark-Library",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\p3tr0\\Documents\\Mod Development\\Petrolpark-Library\\build\\moddev\\clientRunProgramArgs.txt"
+        "@/Users/JulieWarburton/Documents/Henry/Minecraft/Petrolpark-Library/build/moddev/clientRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\p3tr0\\Documents\\Mod Development\\Petrolpark-Library\\build\\moddev\\clientRunVmArgs.txt",
-        "-Dfml.modFolders\u003dpetrolpark%%C:\\Users\\p3tr0\\Documents\\Mod Development\\Petrolpark-Library\\bin\\main"
+        "@/Users/JulieWarburton/Documents/Henry/Minecraft/Petrolpark-Library/build/moddev/clientRunVmArgs.txt",
+        "-Dfml.modFolders\u003dpetrolpark%%/Users/JulieWarburton/Documents/Henry/Minecraft/Petrolpark-Library/bin/main"
       ],
-      "cwd": "${workspaceFolder}\\run",
+      "cwd": "${workspaceFolder}/run",
       "env": {},
       "console": "internalConsole",
       "shortenCommandLine": "none"
@@ -34,13 +34,13 @@
       "projectName": "Petrolpark-Library",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\p3tr0\\Documents\\Mod Development\\Petrolpark-Library\\build\\moddev\\dataRunProgramArgs.txt"
+        "@/Users/JulieWarburton/Documents/Henry/Minecraft/Petrolpark-Library/build/moddev/dataRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\p3tr0\\Documents\\Mod Development\\Petrolpark-Library\\build\\moddev\\dataRunVmArgs.txt",
-        "-Dfml.modFolders\u003dpetrolpark%%C:\\Users\\p3tr0\\Documents\\Mod Development\\Petrolpark-Library\\bin\\main"
+        "@/Users/JulieWarburton/Documents/Henry/Minecraft/Petrolpark-Library/build/moddev/dataRunVmArgs.txt",
+        "-Dfml.modFolders\u003dpetrolpark%%/Users/JulieWarburton/Documents/Henry/Minecraft/Petrolpark-Library/bin/main"
       ],
-      "cwd": "${workspaceFolder}\\run",
+      "cwd": "${workspaceFolder}/run",
       "env": {},
       "console": "internalConsole",
       "shortenCommandLine": "none"
@@ -56,13 +56,13 @@
       "projectName": "Petrolpark-Library",
       "mainClass": "net.neoforged.devlaunch.Main",
       "args": [
-        "@C:\\Users\\p3tr0\\Documents\\Mod Development\\Petrolpark-Library\\build\\moddev\\serverRunProgramArgs.txt"
+        "@/Users/JulieWarburton/Documents/Henry/Minecraft/Petrolpark-Library/build/moddev/serverRunProgramArgs.txt"
       ],
       "vmArgs": [
-        "@C:\\Users\\p3tr0\\Documents\\Mod Development\\Petrolpark-Library\\build\\moddev\\serverRunVmArgs.txt",
-        "-Dfml.modFolders\u003dpetrolpark%%C:\\Users\\p3tr0\\Documents\\Mod Development\\Petrolpark-Library\\bin\\main"
+        "@/Users/JulieWarburton/Documents/Henry/Minecraft/Petrolpark-Library/build/moddev/serverRunVmArgs.txt",
+        "-Dfml.modFolders\u003dpetrolpark%%/Users/JulieWarburton/Documents/Henry/Minecraft/Petrolpark-Library/bin/main"
       ],
-      "cwd": "${workspaceFolder}\\run",
+      "cwd": "${workspaceFolder}/run",
       "env": {},
       "console": "internalConsole",
       "shortenCommandLine": "none"
