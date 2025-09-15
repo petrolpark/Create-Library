@@ -8,7 +8,7 @@ public record GenericClassArgument(IScratchClass<?> scratchClass) implements ISc
     };
 
     @Override
-    public IScratchArgument.Type<GenericClassArgument> getType() {
+    public IScratchArgument.Type<IScratchContext, IScratchClass<?>, GenericClassArgument> getType() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getType'");
     };
