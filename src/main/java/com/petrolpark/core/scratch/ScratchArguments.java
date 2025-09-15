@@ -3,7 +3,7 @@ package com.petrolpark.core.scratch;
 import java.util.Collection;
 import java.util.stream.Stream;
 
-public sealed interface ScratchArguments<CONTEXT extends IScratchContext, PARAMETERS extends ScratchParameters<? super CONTEXT>>
+public sealed interface ScratchArguments<CONTEXT extends IScratchContext, PARAMETERS extends ScratchParameters<CONTEXT>>
     extends ScratchParameters<CONTEXT>
     permits ScratchArguments.None, ScratchArguments.More
 {
@@ -69,12 +69,15 @@ public sealed interface ScratchArguments<CONTEXT extends IScratchContext, PARAME
             this.argument = argument;
         };
 
+        protected IScratchArgument<? super CONTEXT, TYPE> getArgument() {
+            return argument;
+        };
+
         @Override
         public Stream<IScratchArgument<? super CONTEXT, ?>> stream() {
             return Stream.of(argument);
         };
 
-        @Override
         public TYPE get(CONTEXT context) {
             return argument.get(context);
         };
@@ -140,7 +143,6 @@ public sealed interface ScratchArguments<CONTEXT extends IScratchContext, PARAME
             return Stream.concat(next().stream(), super.stream());
         };
         
-        @Override
         public NEXT next() {
             return next;
         };

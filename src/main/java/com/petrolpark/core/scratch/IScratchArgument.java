@@ -9,9 +9,11 @@ public interface IScratchArgument<CONTEXT extends IScratchContext, TYPE> {
     
     public TYPE get(CONTEXT context);
 
-    public IScratchArgument.Type<? super CONTEXT, TYPE, ?> getType();
+    public IScratchArgument.Type<CONTEXT, TYPE, ? extends IScratchArgument<CONTEXT, TYPE>> type();
 
-    public interface Type<CONTEXT extends IScratchContext, TYPE, ARGUMENT extends IScratchArgument<CONTEXT, TYPE>> {
+    public interface Type<CONTEXT extends IScratchContext, TYPE, ARGUMENT extends IScratchArgument<? super CONTEXT, TYPE>> {
+
+        public String key();
 
         public Codec<ARGUMENT> codec();
 
