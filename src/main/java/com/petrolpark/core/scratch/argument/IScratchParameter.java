@@ -11,7 +11,7 @@ public interface IScratchParameter<ENVIRONMENT extends IScratchEnvironment, TYPE
 
     public String key();
 
-    public ContextualCodec<IScratchContextHolder<?>, ARGUMENT> codec();
+    public ContextualCodec<IScratchContextHolder<?>, ARGUMENT> argumentCodec();
 
-    public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ARGUMENT> streamCodec();
+    public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ARGUMENT> argumentStreamCodec();
 };

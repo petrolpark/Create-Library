@@ -8,16 +8,17 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
-public abstract class SimpleBlockType<
+public abstract class SimpleInstantiableBlockType<
     ENVIRONMENT extends IScratchEnvironment,
     ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
-    BLOCK extends SimpleBlockType<ENVIRONMENT, ARGUMENTS, ?>
-> extends ScratchBlock<ENVIRONMENT, ARGUMENTS, BLOCK> implements IScratchBlock.Type<BLOCK> {
+    INSTANCE extends IScratchBlockInstance<ENVIRONMENT>,
+    BLOCK extends SimpleInstantiableBlockType<ENVIRONMENT, ARGUMENTS, INSTANCE, BLOCK>
+> extends InstantiatableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE, BLOCK> implements IScratchBlock.Type<BLOCK> {
 
     private final MapCodec<BLOCK> codec = MapCodec.unit(self());
     private final StreamCodec<ByteBuf, BLOCK> streamCodec = StreamCodec.unit(self());
 
-    protected SimpleBlockType(ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
+    protected SimpleInstantiableBlockType(ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
         super(parameters);
     };
 

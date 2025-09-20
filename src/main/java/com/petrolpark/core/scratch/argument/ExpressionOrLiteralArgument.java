@@ -47,11 +47,11 @@ public record ExpressionOrLiteralArgument<ENVIRONMENT extends IScratchEnvironmen
             expressionParameter = new ExpressionParameter<>(key, scratchClass);
             codec = RecordContextualCodecBuilder.create(instance -> instance.group(
                 ContextualCodec.<IScratchContextHolder<?>, TYPE>of(scratchClass.codec()).fieldOf("literal").forGetter(ExpressionOrLiteralArgument::value),
-                expressionParameter.codec().optionalFieldOf("expression").forGetter(ExpressionOrLiteralArgument::expression)
+                expressionParameter.argumentCodec().optionalFieldOf("expression").forGetter(ExpressionOrLiteralArgument::expression)
             ).apply(instance, (value, expression) -> new ExpressionOrLiteralArgument<>(value, expression, this)));
             streamCodec = ContextualStreamCodec.composite(
                 ContextualStreamCodec.of(scratchClass.streamCodec()), ExpressionOrLiteralArgument::value,
-                ContextualStreamCodec.optional(expressionParameter.streamCodec()), ExpressionOrLiteralArgument::expression,
+                ContextualStreamCodec.optional(expressionParameter.argumentStreamCodec()), ExpressionOrLiteralArgument::expression,
                 (value, expression) -> new ExpressionOrLiteralArgument<>(value, expression, this)
             );
         };
@@ -62,12 +62,12 @@ public record ExpressionOrLiteralArgument<ENVIRONMENT extends IScratchEnvironmen
         };
 
         @Override
-        public ContextualCodec<IScratchContextHolder<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> codec() {
+        public ContextualCodec<IScratchContextHolder<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> argumentCodec() {
             return codec;
         };
 
         @Override
-        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> streamCodec() {
+        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> argumentStreamCodec() {
             return streamCodec;
         };
 

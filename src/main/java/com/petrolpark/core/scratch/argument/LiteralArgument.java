@@ -40,12 +40,12 @@ public record LiteralArgument<TYPE>(TYPE value, LiteralParameter<TYPE> parameter
         };
 
         @Override
-        public ContextualCodec<IScratchContextHolder<?>, LiteralArgument<TYPE>> codec() {
+        public ContextualCodec<IScratchContextHolder<?>, LiteralArgument<TYPE>> argumentCodec() {
             return codec;
         };
 
         @Override
-        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, LiteralArgument<TYPE>> streamCodec() {
+        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, LiteralArgument<TYPE>> argumentStreamCodec() {
             return streamCodec;
         };
 

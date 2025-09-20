@@ -2,20 +2,47 @@ package com.petrolpark.core.scratch.symbol.block;
 
 import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.integerParameter;
 
+import com.mojang.serialization.Codec;
+import com.petrolpark.core.codec.ContextualCodec;
+import com.petrolpark.core.codec.ContextualStreamCodec;
+import com.petrolpark.core.codec.RecordContextualCodecBuilder;
+import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.NestedProcedureArgument;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.IScratchContext;
+import com.petrolpark.core.scratch.procedure.ScratchProcedure;
+import com.petrolpark.core.scratch.symbol.block.IScratchBlockInstance.ScratchBlockInstanceCodecContext;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
 
 public class RepeatBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryNestedProcedureBlock<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>, RepeatBlock.Instance<ENVIRONMENT>, RepeatBlock<ENVIRONMENT>> {
 
+    private final ContextualCodec<ScratchBlockInstanceCodecContext<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, RepeatBlock. Instance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>>>>, RepeatBlock.Instance<ENVIRONMENT>> instanceCodec = RecordContextualCodecBuilder.create(instance -> instance.group(
+        ContextualCodec.<ScratchBlockInstanceCodecContext<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, RepeatBlock. Instance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>>>>, Long>of(Codec.LONG).fieldOf("repeats").forGetter(RepeatBlock.Instance::remainingRepeats),
+        instance.context()
+    ).apply(instance, RepeatBlock.Instance::new));
+
+    private final ContextualStreamCodec<ByteBuf, ScratchBlockInstanceCodecContext<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>>>>, RepeatBlock.Instance<ENVIRONMENT>> instanceStreamCodec = ContextualStreamCodec.<ByteBuf, ScratchBlockInstanceCodecContext<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>>>>, Long>of(ByteBufCodecs.VAR_LONG).map(RepeatBlock.Instance::new, RepeatBlock.Instance::remainingRepeats);
+
     protected RepeatBlock(IScratchEnvironment.Type<ENVIRONMENT> contextType) {
-        super(contextType, integerParameter("repeats"));
+        super(integerParameter("repeats"));
     };
 
     @Override
-    public Instance<ENVIRONMENT> run(ENVIRONMENT environment, IScratchContext<?> context, NestedProcedureArgument<ENVIRONMENT, Instance<ENVIRONMENT>> procedureArgument, Long argument) {
+    public Instance<ENVIRONMENT> run(ENVIRONMENT environment, IScratchContext<?> context, ScratchProcedure<ENVIRONMENT, Instance<ENVIRONMENT>> procedureArgument, Long argument) {
         return new RepeatBlock.Instance<>(context, procedureArgument, argument);
+    };
+
+    @Override
+    public ContextualCodec<ScratchBlockInstanceCodecContext<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>>>>, RepeatBlock.Instance<ENVIRONMENT>> instanceCodec() {
+        return instanceCodec;
+    };
+
+    @Override
+    public ContextualStreamCodec<ByteBuf, ScratchBlockInstanceCodecContext<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>>>>, RepeatBlock.Instance<ENVIRONMENT>> instanceStreamCodec() {
+        return instanceStreamCodec;
     };
 
     @Override
@@ -28,8 +55,17 @@ public class RepeatBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryN
 
         protected long remainingRepeats;
 
-        protected Instance(IScratchContext<?> enclosingContext, NestedProcedureArgument<ENVIRONMENT, Instance<ENVIRONMENT>> argument, long repeats) {
-            super(enclosingContext, argument);
+        protected Instance(long repeats, ScratchBlockInstanceCodecContext<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, RepeatBlock. Instance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>>>> context) {
+            this(context.contextHolder(), context.arguments().argument().procedure(), repeats);  
+        };
+
+        protected Instance(IScratchContext<?> enclosingContext, ScratchProcedure<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>> procedure, long repeats) {
+            super(enclosingContext, procedure);
+            this.remainingRepeats = repeats;
+        };
+
+        public long remainingRepeats() {
+            return remainingRepeats;  
         };
 
         @Override

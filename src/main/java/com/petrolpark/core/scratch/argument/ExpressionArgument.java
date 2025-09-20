@@ -128,12 +128,12 @@ public record ExpressionArgument<
         };
 
         @Override
-        public ContextualCodec<IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> codec() {
+        public ContextualCodec<IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> argumentCodec() {
             return codec;
         };
 
         @Override
-        public ContextualStreamCodec<RegistryFriendlyByteBuf, IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> streamCodec() {
+        public ContextualStreamCodec<RegistryFriendlyByteBuf, IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> argumentStreamCodec() {
             return streamCodec;
         };
         

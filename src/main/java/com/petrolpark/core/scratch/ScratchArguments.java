@@ -66,7 +66,7 @@ public sealed interface ScratchArguments<ENVIRONMENT extends IScratchEnvironment
             this.argument = argument;
         };
 
-        public ARGUMENT getArgument() {
+        public ARGUMENT argument() {
             return argument;
         };
 

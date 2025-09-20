@@ -64,6 +64,14 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
             this.parameter = parameter;
         };
 
+        public ContextualCodec<IScratchContextHolder<?>, ARGUMENT> argumentCodec() {
+            return parameter.argumentCodec();
+        };
+
+        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ARGUMENT> argumentStreamCodec() {
+            return parameter.argumentStreamCodec();
+        };
+
         @Override
         public abstract ContextualCodec<IScratchContextHolder<?>, ARGUMENTS> argumentsCodec();
 
@@ -77,8 +85,8 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
         implements ScratchSignature.Just<TYPE>
         permits ScratchParameters.Just.Builder 
     {
-        private final ContextualCodec<IScratchContextHolder<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsCodec = parameter.codec().xmap(ScratchArguments.Just::new, ScratchArguments.Just::getArgument);
-        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsStreamCodec = parameter.streamCodec().map(ScratchArguments.Just::new, ScratchArguments.Just::getArgument);
+        private final ContextualCodec<IScratchContextHolder<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsCodec = argumentCodec().xmap(ScratchArguments.Just::new, ScratchArguments.Just::argument);
+        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsStreamCodec = argumentStreamCodec().map(ScratchArguments.Just::new, ScratchArguments.Just::argument);
 
         protected Just(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter) {
             super(parameter);
@@ -121,12 +129,12 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
         protected final NEXT next;
 
         private final ContextualCodec<IScratchContextHolder<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsCodec = RecordContextualCodecBuilder.create(instance -> instance.group(
-            parameter.codec().fieldOf("argument").forGetter(ScratchArguments.And::getArgument),
+            argumentCodec().fieldOf("argument").forGetter(ScratchArguments.And::argument),
             next().argumentsCodec().fieldOf("next").forGetter(ScratchArguments.And::next)
         ).apply(instance, ScratchArguments.And::new));
 
         private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsStreamCodec = ContextualStreamCodec.composite(
-            parameter.streamCodec(), ScratchArguments.And::getArgument,
+            argumentStreamCodec(), ScratchArguments.And::argument,
             next().argumentsStreamCodec(), ScratchArguments.And::next,
             ScratchArguments.And::new
         );

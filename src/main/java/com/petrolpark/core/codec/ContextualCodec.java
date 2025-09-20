@@ -53,7 +53,7 @@ public interface ContextualCodec<CONTEXT, A> extends ContextualEncoder<CONTEXT, 
                 return name;
             };
         };
-    }
+    };
 
     public static <CONTEXT, A> ContextualCodec<CONTEXT, A> unit(final A defaultValue) {
         return unit(() -> defaultValue);
@@ -71,8 +71,27 @@ public interface ContextualCodec<CONTEXT, A> extends ContextualEncoder<CONTEXT, 
         return ContextualCodec.of(comap(from), map(to), toString() + "[xmapped]");
     };
 
+    public static <CONTEXT, A> ContextualCodec<CONTEXT, A> withContext(final ContextualCodec<CONTEXT, A> codec, final CONTEXT newContext) {
+        return new ContextualCodec<>() {
+
+            @Override
+            public <T> DataResult<T> encode(A input, CONTEXT context, DynamicOps<T> ops, T prefix) {
+                return codec.encode(input, newContext, ops, prefix);
+            };
+
+            @Override
+            public <T> DataResult<Pair<A, T>> decode(DynamicOps<T> ops, CONTEXT context, T input) {
+                return codec.decode(ops, newContext, input);
+            };
+        };
+    };
+
+    public default ContextualCodec<CONTEXT, A> withContext(final CONTEXT newContext) {
+        return withContext(this, newContext);
+    };
+
     @Override
-    default ContextualMapCodec<CONTEXT, A> fieldOf(final String name) {
+    public default ContextualMapCodec<CONTEXT, A> fieldOf(final String name) {
         return ContextualMapCodec.of(
             ContextualEncoder.super.fieldOf(name),
             ContextualDecoder.super.fieldOf(name),
