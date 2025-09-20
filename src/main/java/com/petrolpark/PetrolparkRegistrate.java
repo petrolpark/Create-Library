@@ -44,6 +44,7 @@ import com.petrolpark.core.registrate.PetrolparkItemBuilder;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
 import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
 import com.petrolpark.core.registrate.SharedItemBuilder;
+import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.trade.ITradeListingReference;
 import com.tterrag.registrate.AbstractRegistrate;
@@ -320,9 +321,9 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, Registries.PARTICLE_TYPE, factory);
     };
 
-    // public <T, SCRATCH_TYPE extends IScratchClass<T>> RegistryEntry<IScratchType<?>, SCRATCH_TYPE> scratchType(String name, NonNullSupplier<SCRATCH_TYPE> factory) {
-    //     return simple(name, PetrolparkRegistries.Keys.SCRATCH_TYPE, factory);
-    // };
+    public <T, SCRATCH_CLASS extends IScratchClass<T>> RegistryEntry<IScratchClass<?>, SCRATCH_CLASS> scratchClass(String name, NonNullSupplier<SCRATCH_CLASS> factory) {
+        return simple(name, PetrolparkRegistries.Keys.SCRATCH_CLASS, factory);
+    };
 
     // public <T> RegistryEntry<IScratchType<?>, SimpleScratchType<T>> scratchType(String name, Class<T> clazz) {
     //     return scratchType(name, () -> new SimpleScratchType<>(clazz));

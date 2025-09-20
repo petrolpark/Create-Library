@@ -22,7 +22,8 @@ import com.petrolpark.core.recipe.bogglepattern.generator.BogglePatternGenerator
 import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.scratch.IScratchClass;
-import com.petrolpark.core.scratch.IScratchExpression;
+import com.petrolpark.core.scratch.symbol.block.IScratchBlock;
+import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.offer.ShopOfferGenerator;
 import com.petrolpark.core.team.ITeam;
@@ -103,6 +104,7 @@ public class PetrolparkRegistries {
 
     // Scratch
     public static final Registry<IScratchClass<?>> SCRATCH_CLASSES = simple(Keys.SCRATCH_CLASS);
+    public static final Registry<IScratchBlock.Type<?>> SCRATCH_BLOCK_TYPES = simple(Keys.SCRATCH_BLOCK_TYPE);
     public static final Registry<IScratchExpression.Type<?>> SCRATCH_EXPRESSION_TYPES = simple(Keys.SCRATCH_EXPRESSION_TYPE);
 
     // Loot/Data
@@ -162,6 +164,7 @@ public class PetrolparkRegistries {
 
         // Scratch
         public static final ResourceKey<Registry<IScratchClass<?>>> SCRATCH_CLASS = key("scratch_class");
+        public static final ResourceKey<Registry<IScratchBlock.Type<?>>> SCRATCH_BLOCK_TYPE = key("scratch_block_type");
         public static final ResourceKey<Registry<IScratchExpression.Type<?>>> SCRATCH_EXPRESSION_TYPE = key("scratch_expression_type");
 
         // Loot/Data
