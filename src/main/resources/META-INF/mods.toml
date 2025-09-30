@@ -30,7 +30,7 @@ description='''Common code for petrolpark's Create add-ons and other Minecraft m
  [[dependencies.petrolpark]]
 	modId="create"
 	mandatory=false
-	versionRange="[6.0.4,6.1.0)"
+	versionRange="[6.0.6,6.1.0)"
 	ordering="AFTER"
 	side="BOTH"
 
