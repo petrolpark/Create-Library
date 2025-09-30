@@ -9,9 +9,9 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 public interface IGenericScratchSymbol<ENVIRONMENT extends IScratchEnvironment, GENERIC_TYPE, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> {
     
-    static <SYMBOL extends IGenericScratchSymbol<?, ?, ?>> P1<Mu<SYMBOL>, IScratchClass<?>> commonCodecFields(Instance<SYMBOL> instance) {
+    static <SYMBOL extends IGenericScratchSymbol<?, ?, ?>> P1<Mu<SYMBOL>, IScratchClass<?, ?>> commonCodecFields(Instance<SYMBOL> instance) {
         return instance.group(IScratchClass.CODEC.fieldOf("class").forGetter(IGenericScratchSymbol::getGenericScratchClass));
     };
 
-    IScratchClass<GENERIC_TYPE> getGenericScratchClass();
+    IScratchClass<GENERIC_TYPE, ?> getGenericScratchClass();
 };

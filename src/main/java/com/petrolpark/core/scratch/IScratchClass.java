@@ -12,19 +12,17 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 
-public interface IScratchClass<TYPE> {
+public interface IScratchClass<TYPE, DEFAULT_ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> {
     
-    static Codec<IScratchClass<?>> CODEC = PetrolparkRegistries.SCRATCH_CLASSES.byNameCodec();
+    static Codec<IScratchClass<?, ?>> CODEC = PetrolparkRegistries.SCRATCH_CLASSES.byNameCodec();
 
     public Codec<TYPE> codec();
 
     public StreamCodec<? super RegistryFriendlyByteBuf, TYPE> streamCodec();
 
-    public default <ENVIRONMENT extends IScratchEnvironment> IScratchParameter<ENVIRONMENT, TYPE, ? extends IScratchArgument<ENVIRONMENT, TYPE>> createDefaultParameter(String key) {
-        return ExpressionArgument.parameter(key, this);
-    };
+    public IScratchParameter<IScratchEnvironment, TYPE, DEFAULT_ARGUMENT> createDefaultParameter(String key);
 
-    public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, TYPE, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass);
+    public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, TYPE, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass);
 
     public static interface Caster<ENVIRONMENT extends IScratchEnvironment, FROM_TYPE, TO_TYPE> {
 

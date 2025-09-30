@@ -3,8 +3,8 @@ package com.petrolpark.core.scratch.symbol.expression.math;
 import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.realParameter;
 
 import com.petrolpark.PetrolparkScratchClasses;
-import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
+import com.petrolpark.core.scratch.classes.IntegerScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.UnaryExpressionType;
 
@@ -15,7 +15,7 @@ public class RoundRealScratchExpression extends UnaryExpressionType<IScratchEnvi
     };
 
     @Override
-    public IScratchClass<Long> getReturnClass() {
+    public IntegerScratchClass getReturnClass() {
         return PetrolparkScratchClasses.INTEGER.get();
     };
 

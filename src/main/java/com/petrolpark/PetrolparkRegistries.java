@@ -103,7 +103,7 @@ public class PetrolparkRegistries {
     public static final Registry<ITradeListingReference.Type> TRADE_LISTING_REFERENCE_TYPES = simple(Keys.TRADE_LISTING_REFERENCE_TYPE);
 
     // Scratch
-    public static final Registry<IScratchClass<?>> SCRATCH_CLASSES = simple(Keys.SCRATCH_CLASS);
+    public static final Registry<IScratchClass<?, ?>> SCRATCH_CLASSES = simple(Keys.SCRATCH_CLASS);
     public static final Registry<IScratchBlock.Type<?>> SCRATCH_BLOCK_TYPES = simple(Keys.SCRATCH_BLOCK_TYPE);
     public static final Registry<IScratchExpression.Type<?>> SCRATCH_EXPRESSION_TYPES = simple(Keys.SCRATCH_EXPRESSION_TYPE);
 
@@ -163,7 +163,7 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<ITradeListingReference.Type>> TRADE_LISTING_REFERENCE_TYPE = key("trade_listing_reference_type");
 
         // Scratch
-        public static final ResourceKey<Registry<IScratchClass<?>>> SCRATCH_CLASS = key("scratch_class");
+        public static final ResourceKey<Registry<IScratchClass<?, ?>>> SCRATCH_CLASS = key("scratch_class");
         public static final ResourceKey<Registry<IScratchBlock.Type<?>>> SCRATCH_BLOCK_TYPE = key("scratch_block_type");
         public static final ResourceKey<Registry<IScratchExpression.Type<?>>> SCRATCH_EXPRESSION_TYPE = key("scratch_expression_type");
 

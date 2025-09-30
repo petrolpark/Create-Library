@@ -1,5 +1,6 @@
 package com.petrolpark.util;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -42,6 +43,7 @@ public class ItemHelper {
         ItemStack trueStack2 = ItemDecay.checkDecay(stack2);
         if (!trueStack1.is(trueStack2.getItem())) return false;
         if (trueStack1.isEmpty()) return trueStack2.isEmpty();
+        if (Objects.equals(trueStack1.getComponents(), trueStack2.getComponents())) return true; // Return early to avoid deep-checking all components unnecessarily
         return DataComponentHelper.equalIgnoring(trueStack1.getComponents(), trueStack2.getComponents(), ignoredComponentTypes);
     };
 

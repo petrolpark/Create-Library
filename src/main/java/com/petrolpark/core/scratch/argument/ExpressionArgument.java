@@ -30,7 +30,7 @@ public record ExpressionArgument<
 ) 
     implements IScratchArgument<ENVIRONMENT, TYPE> 
 {
-    public static final <ENVIRONMENT extends IScratchEnvironment, TYPE> ExpressionParameter<ENVIRONMENT, TYPE> parameter(String key, IScratchClass<TYPE> scratchClass) {
+    public static final <ENVIRONMENT extends IScratchEnvironment, TYPE> ExpressionParameter<ENVIRONMENT, TYPE> parameter(String key, IScratchClass<TYPE, ?> scratchClass) {
         return new ExpressionParameter<>(key, scratchClass);
     };
 
@@ -48,7 +48,7 @@ public record ExpressionArgument<
         private static final String ARGUMENTS_KEY = "arguments";
 
         private final String key;
-        private final IScratchClass<TYPE> scratchClass;
+        private final IScratchClass<TYPE, ?> scratchClass;
 
         private final ContextualMapCodec<IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> mapCodec = new ContextualMapCodec<>() {
 
@@ -117,7 +117,7 @@ public record ExpressionArgument<
             value.expression().getParameters().argumentsStreamCodec().encode(buffer, context, value.arguments());
         };
 
-        protected ExpressionParameter(String key, IScratchClass<TYPE> scratchClass) {
+        protected ExpressionParameter(String key, IScratchClass<TYPE, ?> scratchClass) {
             this.key = key;
             this.scratchClass = scratchClass;
         };

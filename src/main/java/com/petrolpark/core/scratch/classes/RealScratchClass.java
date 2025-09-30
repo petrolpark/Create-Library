@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public class RealScratchClass implements IScratchClass<Double> {
+public class RealScratchClass implements IScratchClass<Double, ExpressionOrLiteralArgument<IScratchEnvironment, Double>> {
 
     @Override
     public Codec<Double> codec() {
@@ -25,12 +25,12 @@ public class RealScratchClass implements IScratchClass<Double> {
     };
 
     @Override
-    public <ENVIRONMENT extends IScratchEnvironment> ExpressionOrLiteralParameter<ENVIRONMENT, Double> createDefaultParameter(String key) {
+    public ExpressionOrLiteralParameter<IScratchEnvironment, Double> createDefaultParameter(String key) {
         return ExpressionOrLiteralArgument.realParameter(key);
     };
 
     @Override
-    public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, Double, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
+    public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, Double, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'cast'");
     };

@@ -14,15 +14,15 @@ public abstract class GenericExpression<
     EXPRESSION extends GenericExpression<ENVIRONMENT, GENERIC_TYPE, RETURN_TYPE, ARGUMENTS, ?>
 > extends ScratchExpression<ENVIRONMENT, RETURN_TYPE, ARGUMENTS, EXPRESSION> implements IGenericScratchSymbol<ENVIRONMENT, GENERIC_TYPE, ARGUMENTS> {
 
-    protected final IScratchClass<GENERIC_TYPE> genericClass;
+    protected final IScratchClass<GENERIC_TYPE, ?> genericClass;
 
-    protected GenericExpression(IScratchClass<GENERIC_TYPE> genericClass, ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
+    protected GenericExpression(IScratchClass<GENERIC_TYPE, ?> genericClass, ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
         super(parameters);
         this.genericClass = genericClass;
     };
 
     @Override
-    public final IScratchClass<GENERIC_TYPE> getGenericScratchClass() {
+    public final IScratchClass<GENERIC_TYPE, ?> getGenericScratchClass() {
         return genericClass;
     };
     

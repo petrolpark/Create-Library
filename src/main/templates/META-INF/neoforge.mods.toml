@@ -37,6 +37,6 @@ file="META-INF/accesstransformer.cfg"
 [[dependencies.${mod_id}]]
     modId="jei"
     type="optional"
-    versionRange="[19.22.0.315,19.23.0.0)"
+    versionRange="[19.22.0.315,19.26.0.0)"
     ordering="AFTER"
     side="CLIENT"

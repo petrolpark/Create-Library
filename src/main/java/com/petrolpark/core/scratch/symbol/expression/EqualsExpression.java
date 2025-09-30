@@ -11,17 +11,17 @@ import com.petrolpark.core.scratch.classes.BooleanScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.IScratchContext;;
 
-public final class EqualsExpression<TYPE> extends GenericExpression<
+public final class EqualsExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends GenericExpression<
         IScratchEnvironment,
         TYPE,
         Boolean,
         And<
-            IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>, Just<
-            IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>
-        >>, EqualsExpression<TYPE>
+            IScratchEnvironment, TYPE, ARGUMENT, Just<
+            IScratchEnvironment, TYPE, ARGUMENT
+        >>, EqualsExpression<TYPE, ARGUMENT>
 > {
 
-    protected EqualsExpression(IScratchClass<TYPE> genericClass) {
+    protected EqualsExpression(IScratchClass<TYPE, ARGUMENT> genericClass) {
         super(genericClass, parameters()
             .after(genericClass.createDefaultParameter("value2"))
             .after(genericClass.createDefaultParameter("value1"))
@@ -29,7 +29,7 @@ public final class EqualsExpression<TYPE> extends GenericExpression<
     };
 
     @Override
-    public Boolean evaluate(IScratchEnvironment environment, IScratchContext<?> context, And<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>, Just<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>> arguments) {
+    public Boolean evaluate(IScratchEnvironment environment, IScratchContext<?> context, And<IScratchEnvironment, TYPE, ARGUMENT, Just<IScratchEnvironment, TYPE, ARGUMENT>> arguments) {
         return arguments.get(environment, context).equals(arguments.next().get(environment, context));
     };
 
@@ -39,7 +39,7 @@ public final class EqualsExpression<TYPE> extends GenericExpression<
     };
 
     @Override
-    public IScratchExpression.Type<EqualsExpression<TYPE>> getExpressionType() {
+    public IScratchExpression.Type<EqualsExpression<TYPE, ARGUMENT>> getExpressionType() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getExpressionType'");
     };
