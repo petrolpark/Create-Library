@@ -9,8 +9,7 @@ import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.argument.NestedProcedureArgument;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContext;
-import com.petrolpark.core.scratch.procedure.IScratchContextHolder;
+import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
 import com.petrolpark.core.scratch.procedure.ScratchProcedure;
 
 public abstract class UnaryNestedProcedureBlock<
@@ -19,7 +18,7 @@ public abstract class UnaryNestedProcedureBlock<
     ARGUMENT extends IScratchArgument<ENVIRONMENT, TYPE>,
     INSTANCE extends UnaryNestedProcedureBlock.Instance<ENVIRONMENT, INSTANCE>,
     BLOCK extends UnaryNestedProcedureBlock<ENVIRONMENT, TYPE, ARGUMENT, INSTANCE, BLOCK>
-> extends InstantiatableScratchBlock<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>>, INSTANCE, BLOCK> {
+> extends InstantiableScratchBlock<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>>, INSTANCE, BLOCK> {
 
     private final ScratchParameters.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>, ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT>> parameters;
 
@@ -35,34 +34,30 @@ public abstract class UnaryNestedProcedureBlock<
         this.parameters = parameters;
     };
 
-    protected ContextualCodec<IScratchContextHolder<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> procedureArgumentCodec() {
+    protected ContextualCodec<IScratchContextProvider<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> procedureArgumentCodec() {
         return parameters.argumentCodec();
     };
 
     @Override
-    public final INSTANCE run(ENVIRONMENT environment, IScratchContext<?> context, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> arguments) {
-        return run(environment, context, arguments.get(environment, context), arguments.next().get(environment, context));
+    public final INSTANCE run(ENVIRONMENT environment, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> arguments) {
+        return run(environment, arguments.get(environment), arguments.next().get(environment));
     };
 
-    public abstract INSTANCE run(ENVIRONMENT environment, IScratchContext<?> context, ScratchProcedure<ENVIRONMENT, INSTANCE> procedure, TYPE argument);
+    public abstract INSTANCE run(ENVIRONMENT environment, ScratchProcedure<ENVIRONMENT, INSTANCE> procedure, TYPE argument);
 
     public static abstract class Instance<ENVIRONMENT extends IScratchEnvironment, INSTANCE extends UnaryNestedProcedureBlock.Instance<ENVIRONMENT, INSTANCE>> implements NestedProcedureBlockInstance<ENVIRONMENT, INSTANCE> {
 
-        private final IScratchContext<?> enclosingContext;
         private final ScratchProcedure<ENVIRONMENT, INSTANCE> procedure;
 
-        protected Instance(IScratchContext<?> enclosingContext, ScratchProcedure<ENVIRONMENT, INSTANCE> procedure) {
-            this.enclosingContext = enclosingContext;
+        protected Instance(ScratchProcedure<ENVIRONMENT, INSTANCE> procedure) {
             this.procedure = procedure;
+            procedure().populateContext(self());
         };
+
+        protected abstract INSTANCE self();
 
         public final ScratchProcedure<ENVIRONMENT, INSTANCE> procedure() {
             return procedure;
-        };
-
-        @Override
-        public final IScratchContext<?> enclosingContext() {
-            return enclosingContext;
         };
 
         @Override

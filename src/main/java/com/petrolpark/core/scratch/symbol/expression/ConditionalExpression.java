@@ -9,8 +9,7 @@ import com.petrolpark.core.scratch.ScratchArguments.And;
 import com.petrolpark.core.scratch.ScratchArguments.Just;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
-import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContext;;
+import com.petrolpark.core.scratch.environment.IScratchEnvironment;;
 
 public final class ConditionalExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends GenericExpression<
     IScratchEnvironment,
@@ -32,11 +31,11 @@ public final class ConditionalExpression<TYPE, ARGUMENT extends IScratchArgument
     };
 
     @Override
-    public TYPE evaluate(IScratchEnvironment environment, IScratchContext<?> context, And<IScratchEnvironment, Boolean, ExpressionArgument<IScratchEnvironment, Boolean, ?>, And<IScratchEnvironment, TYPE, ARGUMENT, Just<IScratchEnvironment, TYPE, ARGUMENT>>> arguments) {
-        if (arguments.get(environment, context)) {
-            return arguments.next().get(environment, context);
+    public TYPE evaluate(IScratchEnvironment environment, And<IScratchEnvironment, Boolean, ExpressionArgument<IScratchEnvironment, Boolean, ?>, And<IScratchEnvironment, TYPE, ARGUMENT, Just<IScratchEnvironment, TYPE, ARGUMENT>>> arguments) {
+        if (arguments.get(environment)) {
+            return arguments.next().get(environment);
         } else {
-            return arguments.next().next().get(environment, context);
+            return arguments.next().next().get(environment);
         }
     };
 

@@ -3,7 +3,7 @@ package com.petrolpark.core.scratch.argument;
 import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContextHolder;
+import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
@@ -11,7 +11,7 @@ public interface IScratchParameter<ENVIRONMENT extends IScratchEnvironment, TYPE
 
     public String key();
 
-    public ContextualCodec<IScratchContextHolder<?>, ARGUMENT> argumentCodec();
+    public ContextualCodec<IScratchContextProvider<?>, ARGUMENT> argumentCodec();
 
-    public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ARGUMENT> argumentStreamCodec();
+    public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ARGUMENT> argumentStreamCodec();
 };

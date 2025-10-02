@@ -1,6 +1,7 @@
 package com.petrolpark.core.codec;
 
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -69,6 +70,10 @@ public interface ContextualCodec<CONTEXT, A> extends ContextualEncoder<CONTEXT, 
 
     public default <S> ContextualCodec<CONTEXT, S> xmap(final Function<? super A, ? extends S> to, final Function<? super S, ? extends A> from) {
         return ContextualCodec.of(comap(from), map(to), toString() + "[xmapped]");
+    };
+
+    public default <S> ContextualCodec<CONTEXT, S> flatContextualXmap(final BiFunction<CONTEXT, ? super A, ? extends DataResult<? extends S>> to, final BiFunction<CONTEXT, ? super S, ? extends DataResult<? extends A>> from) {
+        return ContextualCodec.of(flatContextualComap(from), flatContextualMap(to), toString() + "[flatXmapped]");
     };
 
     public static <CONTEXT, A> ContextualCodec<CONTEXT, A> withContext(final ContextualCodec<CONTEXT, A> codec, final CONTEXT newContext) {

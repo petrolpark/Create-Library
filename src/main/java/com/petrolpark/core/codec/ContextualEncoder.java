@@ -1,5 +1,6 @@
 package com.petrolpark.core.codec;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.mojang.serialization.DataResult;
@@ -35,4 +36,19 @@ public interface ContextualEncoder<CONTEXT, A> {
             };
         };
     }
+
+    public default <B> ContextualEncoder<CONTEXT, B> flatContextualComap(final BiFunction<CONTEXT, ? super B, ? extends DataResult<? extends A>> function) {
+
+        return new ContextualEncoder<>() {
+            @Override
+            public <T> DataResult<T> encode(final B input, final CONTEXT context, final DynamicOps<T> ops, final T prefix) {
+                return function.apply(context, input).flatMap(a -> ContextualEncoder.this.encode(a, context, ops, prefix));
+            };
+
+            @Override
+            public String toString() {
+                return ContextualEncoder.this.toString() + "[flatComapped]";
+            };
+        };
+    };
 };

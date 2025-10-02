@@ -1,6 +1,10 @@
 package com.petrolpark.core.scratch.procedure;
 
-public interface IScratchContextHolder<CONTEXT extends IScratchContext<CONTEXT>> {
+public interface IScratchContextHolder {
     
-    public IScratchContextHolder<?> enclosingContextHolder();
+    public <CONTEXT extends IScratchContext<CONTEXT>> void populateContext(IScratchContextProvider<CONTEXT> contextProvider, CONTEXT context);
+
+    public static IScratchContextHolder cast(Object object) {
+        return object instanceof IScratchContextHolder contextHolder ? contextHolder : null;
+    };
 };

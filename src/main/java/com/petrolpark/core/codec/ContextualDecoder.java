@@ -1,5 +1,6 @@
 package com.petrolpark.core.codec;
 
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import com.mojang.datafixers.util.Pair;
@@ -42,6 +43,20 @@ public interface ContextualDecoder<CONTEXT, A> {
             @Override
             public String toString() {
                 return ContextualDecoder.this.toString() + "[mapped]";
+            };
+        };
+    };
+
+    default <B> ContextualDecoder<CONTEXT, B> flatContextualMap(final BiFunction<CONTEXT, ? super A, ? extends DataResult<? extends B>> function) {
+        return new ContextualDecoder<CONTEXT, B>() {
+            @Override
+            public <T> DataResult<Pair<B, T>> decode(final DynamicOps<T> ops, final CONTEXT context, final T input) {
+                return ContextualDecoder.this.decode(ops, context, input).flatMap(p -> function.apply(context, p.getFirst()).map(r -> Pair.of(r, p.getSecond())));
+            };
+
+            @Override
+            public String toString() {
+                return ContextualDecoder.this.toString() + "[flatMapped]";
             };
         };
     }

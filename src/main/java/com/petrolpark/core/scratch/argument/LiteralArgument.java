@@ -4,8 +4,7 @@ import com.mojang.serialization.Codec;
 import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContext;
-import com.petrolpark.core.scratch.procedure.IScratchContextHolder;
+import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -14,7 +13,7 @@ import net.minecraft.network.codec.StreamCodec;
 public record LiteralArgument<TYPE>(TYPE value, LiteralParameter<TYPE> parameter) implements IScratchArgument<IScratchEnvironment, TYPE> {
     
     @Override
-    public TYPE get(IScratchEnvironment context, IScratchContext<?> scope) {
+    public TYPE get(IScratchEnvironment context) {
         return value();
     };
 
@@ -25,8 +24,8 @@ public record LiteralArgument<TYPE>(TYPE value, LiteralParameter<TYPE> parameter
     public static class LiteralParameter<TYPE> implements IScratchParameter<IScratchEnvironment, TYPE, LiteralArgument<TYPE>> {
 
         private final String key;
-        private final ContextualCodec<IScratchContextHolder<?>, LiteralArgument<TYPE>> codec;
-        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, LiteralArgument<TYPE>> streamCodec;
+        private final ContextualCodec<IScratchContextProvider<?>, LiteralArgument<TYPE>> codec;
+        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, LiteralArgument<TYPE>> streamCodec;
         
         public LiteralParameter(String key, Codec<TYPE> codec, StreamCodec<? super RegistryFriendlyByteBuf, TYPE> streamCodec) {
             this.key = key;
@@ -40,12 +39,12 @@ public record LiteralArgument<TYPE>(TYPE value, LiteralParameter<TYPE> parameter
         };
 
         @Override
-        public ContextualCodec<IScratchContextHolder<?>, LiteralArgument<TYPE>> argumentCodec() {
+        public ContextualCodec<IScratchContextProvider<?>, LiteralArgument<TYPE>> argumentCodec() {
             return codec;
         };
 
         @Override
-        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, LiteralArgument<TYPE>> argumentStreamCodec() {
+        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, LiteralArgument<TYPE>> argumentStreamCodec() {
             return streamCodec;
         };
 

@@ -14,6 +14,7 @@ import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.IScratchContext;
 import com.petrolpark.core.scratch.procedure.IScratchContextHolder;
+import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
 import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
 
 import io.netty.handler.codec.DecoderException;
@@ -28,15 +29,20 @@ public record ExpressionArgument<
     ARGUMENTS arguments,
     ExpressionParameter<ENVIRONMENT, TYPE> parameter
 ) 
-    implements IScratchArgument<ENVIRONMENT, TYPE> 
+    implements IScratchArgument<ENVIRONMENT, TYPE>, IScratchContextHolder 
 {
     public static final <ENVIRONMENT extends IScratchEnvironment, TYPE> ExpressionParameter<ENVIRONMENT, TYPE> parameter(String key, IScratchClass<TYPE, ?> scratchClass) {
         return new ExpressionParameter<>(key, scratchClass);
     };
 
     @Override
-    public TYPE get(ENVIRONMENT environment, IScratchContext<?> contxt) {
-        return expression().evaluate(environment, contxt, arguments());
+    public TYPE get(ENVIRONMENT environment) {
+        return expression().evaluate(environment, arguments());
+    };
+
+    @Override
+    public <CONTEXT extends IScratchContext<CONTEXT>> void populateContext(IScratchContextProvider<CONTEXT> contextProvider, CONTEXT context) {
+        arguments().populateContext(contextProvider, context);
     };
 
     public static final class ExpressionParameter<
@@ -50,24 +56,24 @@ public record ExpressionArgument<
         private final String key;
         private final IScratchClass<TYPE, ?> scratchClass;
 
-        private final ContextualMapCodec<IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> mapCodec = new ContextualMapCodec<>() {
+        private final ContextualMapCodec<IScratchContextProvider<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> mapCodec = new ContextualMapCodec<>() {
 
             @Override
             @SuppressWarnings("unchecked")
-            public <T> DataResult<ExpressionArgument<ENVIRONMENT, TYPE, ?>> decode(final DynamicOps<T> ops, final IScratchContextHolder<?> context, final MapLike<T> input) {
+            public <T> DataResult<ExpressionArgument<ENVIRONMENT, TYPE, ?>> decode(final DynamicOps<T> ops, final IScratchContextProvider<?> context, final MapLike<T> input) {
                 return IScratchExpression.CODEC.parse(ops, input.get(EXPRESSION_KEY))
                     .flatMap(expression -> {
                         try {
-                            if (expression.getReturnClass() != scratchClass) return DataResult.error(() -> String.format("Expression {} has wrong return type", expression.getExpressionType()));
+                            if (expression.getReturnClass() != scratchClass) return DataResult.error(() -> String.format("Expression {} has wrong return class", expression.getExpressionType()));
                             return DataResult.success((IScratchExpression<ENVIRONMENT, TYPE, ?, ?>)expression);
                         } catch (ClassCastException e) {
-                            return DataResult.error(() -> String.format("Expression {} has the wrong context or return type", expression.getExpressionType()));
+                            return DataResult.error(() -> String.format("Expression {} has the wrong environment or return class", expression.getExpressionType()));
                         }
                     }).flatMap(expression -> decodeInternal(ops, context, input, expression));
             };
 
             @Override
-            public <T> RecordBuilder<T> encode(final ExpressionArgument<ENVIRONMENT, TYPE, ?> input, final IScratchContextHolder<?> context, final DynamicOps<T> ops, final RecordBuilder<T> prefix) {
+            public <T> RecordBuilder<T> encode(final ExpressionArgument<ENVIRONMENT, TYPE, ?> input, final IScratchContextProvider<?> context, final DynamicOps<T> ops, final RecordBuilder<T> prefix) {
                 return encodeInternal(input, context, ops, prefix);
             };
 
@@ -78,41 +84,44 @@ public record ExpressionArgument<
             
         };
 
-        private <T, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> RecordBuilder<T> encodeInternal(final ExpressionArgument<ENVIRONMENT, TYPE, ARGUMENTS> input, final IScratchContextHolder<?> context, final DynamicOps<T> ops, final RecordBuilder<T> prefix) {
-            //TODO
-            return null;
-        };
-
-        private <T, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> DataResult<ExpressionArgument<ENVIRONMENT, TYPE, ?>> decodeInternal(final DynamicOps<T> ops, final IScratchContextHolder<?> context, final MapLike<T> input, final IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS, ?> expression) {
+        private <T, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> DataResult<ExpressionArgument<ENVIRONMENT, TYPE, ?>> decodeInternal(final DynamicOps<T> ops, final IScratchContextProvider<?> context, final MapLike<T> input, final IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS, ?> expression) {
             return expression.getParameters().argumentsCodec().parse(ops, context, input.get(ARGUMENTS_KEY)).map(arguments -> new ExpressionArgument<>(expression, arguments, this));
         };
 
-        private final ContextualCodec<IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> codec = mapCodec.codec();
+        private <T, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> RecordBuilder<T> encodeInternal(final ExpressionArgument<ENVIRONMENT, TYPE, ARGUMENTS> input, final IScratchContextProvider<?> context, final DynamicOps<T> ops, final RecordBuilder<T> prefix) {
+            prefix.add(EXPRESSION_KEY, IScratchExpression.CODEC.encodeStart(ops, input.expression()));
+            prefix.add(ARGUMENTS_KEY, input.expression().getParameters().argumentsCodec().encodeStart(ops, context, input.arguments()));
+            return prefix;
+        };
 
-        private final ContextualStreamCodec<RegistryFriendlyByteBuf, IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> streamCodec = new ContextualStreamCodec<>() {
+        private final ContextualCodec<IScratchContextProvider<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> codec = mapCodec.codec();
+
+        private final ContextualStreamCodec<RegistryFriendlyByteBuf, IScratchContextProvider<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> streamCodec = new ContextualStreamCodec<>() {
 
             @Override
             @SuppressWarnings("unchecked")
-            public ExpressionArgument<ENVIRONMENT, TYPE, ?> decode(RegistryFriendlyByteBuf buffer, final IScratchContextHolder<?> context) {
+            public ExpressionArgument<ENVIRONMENT, TYPE, ?> decode(RegistryFriendlyByteBuf buffer, final IScratchContextProvider<?> context) {
+                final IScratchExpression<?, ?, ?, ?> expression = IScratchExpression.STREAM_CODEC.decode(buffer);
                 try {
-                    return decodeStreamInternal(buffer, context, (IScratchExpression<ENVIRONMENT, TYPE, ?, ?>)IScratchExpression.STREAM_CODEC.decode(buffer));
+                    if (expression.getReturnClass() != scratchClass) throw new DecoderException(String.format("Expression {} has wrong return class", expression.getExpressionType()));
+                    return decodeStreamInternal(buffer, context, (IScratchExpression<ENVIRONMENT, TYPE, ?, ?>)expression);
                 } catch (ClassCastException e) {
-                    throw new DecoderException("");
+                    throw new DecoderException(String.format("Expression {} has the wrong environment or return class", expression.getExpressionType()));
                 }
             };
 
             @Override
-            public void encode(RegistryFriendlyByteBuf buffer, IScratchContextHolder<?> context, ExpressionArgument<ENVIRONMENT, TYPE, ?> value) {
+            public void encode(RegistryFriendlyByteBuf buffer, IScratchContextProvider<?> context, ExpressionArgument<ENVIRONMENT, TYPE, ?> value) {
                 encodeStreamInternal(buffer, context, value);
             };
             
         };
 
-        private <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionArgument<ENVIRONMENT, TYPE, ?> decodeStreamInternal(RegistryFriendlyByteBuf buffer, IScratchContextHolder<?> context, IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS, ?> expression) {
+        private <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionArgument<ENVIRONMENT, TYPE, ?> decodeStreamInternal(RegistryFriendlyByteBuf buffer, IScratchContextProvider<?> context, IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS, ?> expression) {
             return new ExpressionArgument<>(expression, expression.getParameters().argumentsStreamCodec().decode(buffer, context), this);
         };
 
-        private <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> void encodeStreamInternal(RegistryFriendlyByteBuf buffer, IScratchContextHolder<?> context, ExpressionArgument<ENVIRONMENT, TYPE, ARGUMENTS> value) {
+        private <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> void encodeStreamInternal(RegistryFriendlyByteBuf buffer, IScratchContextProvider<?> context, ExpressionArgument<ENVIRONMENT, TYPE, ARGUMENTS> value) {
             IScratchExpression.STREAM_CODEC.encode(buffer, value.expression());
             value.expression().getParameters().argumentsStreamCodec().encode(buffer, context, value.arguments());
         };
@@ -128,12 +137,12 @@ public record ExpressionArgument<
         };
 
         @Override
-        public ContextualCodec<IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> argumentCodec() {
+        public ContextualCodec<IScratchContextProvider<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> argumentCodec() {
             return codec;
         };
 
         @Override
-        public ContextualStreamCodec<RegistryFriendlyByteBuf, IScratchContextHolder<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> argumentStreamCodec() {
+        public ContextualStreamCodec<RegistryFriendlyByteBuf, IScratchContextProvider<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> argumentStreamCodec() {
             return streamCodec;
         };
         

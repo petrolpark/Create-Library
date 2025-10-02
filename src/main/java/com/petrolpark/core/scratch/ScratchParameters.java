@@ -6,7 +6,7 @@ import com.petrolpark.core.codec.RecordContextualCodecBuilder;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContextHolder;
+import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -15,9 +15,9 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
     extends ScratchSignature
     permits ScratchParameters.None, ScratchParameters.More
 {
-    public ContextualCodec<IScratchContextHolder<?>, ARGUMENTS> argumentsCodec();
+    public ContextualCodec<IScratchContextProvider<?>, ARGUMENTS> argumentsCodec();
 
-    public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ARGUMENTS> argumentsStreamCodec();
+    public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ARGUMENTS> argumentsStreamCodec();
 
     public static <ENVIRONMENT extends IScratchEnvironment> ScratchParameters.None.Builder<ENVIRONMENT> parameters() {
         return new ScratchParameters.None.Builder<>();
@@ -26,16 +26,16 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
     public static sealed class None<ENVIRONMENT extends IScratchEnvironment> implements ScratchParameters<ENVIRONMENT, ScratchArguments.None<ENVIRONMENT>>, ScratchSignature.None permits ScratchParameters.None.Builder {
 
         private final ScratchArguments.None<ENVIRONMENT> noneArgumentsInstance = new ScratchArguments.None<>();
-        private final ContextualCodec<IScratchContextHolder<?>, ScratchArguments.None<ENVIRONMENT>> argumentsCodec = ContextualCodec.unit(noneArgumentsInstance);
-        private final ContextualStreamCodec<ByteBuf, IScratchContextHolder<?>, ScratchArguments.None<ENVIRONMENT>> argumentsStreamCodec = ContextualStreamCodec.unit(noneArgumentsInstance);
+        private final ContextualCodec<IScratchContextProvider<?>, ScratchArguments.None<ENVIRONMENT>> argumentsCodec = ContextualCodec.unit(noneArgumentsInstance);
+        private final ContextualStreamCodec<ByteBuf, IScratchContextProvider<?>, ScratchArguments.None<ENVIRONMENT>> argumentsStreamCodec = ContextualStreamCodec.unit(noneArgumentsInstance);
 
         @Override
-        public ContextualCodec<IScratchContextHolder<?>, ScratchArguments.None<ENVIRONMENT>> argumentsCodec() {
+        public ContextualCodec<IScratchContextProvider<?>, ScratchArguments.None<ENVIRONMENT>> argumentsCodec() {
             return argumentsCodec;
         };
 
         @Override
-        public ContextualStreamCodec<ByteBuf, IScratchContextHolder<?>, ScratchArguments.None<ENVIRONMENT>> argumentsStreamCodec() {
+        public ContextualStreamCodec<ByteBuf, IScratchContextProvider<?>, ScratchArguments.None<ENVIRONMENT>> argumentsStreamCodec() {
             return argumentsStreamCodec;
         };
 
@@ -64,19 +64,19 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
             this.parameter = parameter;
         };
 
-        public ContextualCodec<IScratchContextHolder<?>, ARGUMENT> argumentCodec() {
+        public ContextualCodec<IScratchContextProvider<?>, ARGUMENT> argumentCodec() {
             return parameter.argumentCodec();
         };
 
-        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ARGUMENT> argumentStreamCodec() {
+        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ARGUMENT> argumentStreamCodec() {
             return parameter.argumentStreamCodec();
         };
 
         @Override
-        public abstract ContextualCodec<IScratchContextHolder<?>, ARGUMENTS> argumentsCodec();
+        public abstract ContextualCodec<IScratchContextProvider<?>, ARGUMENTS> argumentsCodec();
 
         @Override
-        public abstract ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ARGUMENTS> argumentsStreamCodec();
+        public abstract ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ARGUMENTS> argumentsStreamCodec();
 
     };
 
@@ -85,20 +85,20 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
         implements ScratchSignature.Just<TYPE>
         permits ScratchParameters.Just.Builder 
     {
-        private final ContextualCodec<IScratchContextHolder<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsCodec = argumentCodec().xmap(ScratchArguments.Just::new, ScratchArguments.Just::argument);
-        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsStreamCodec = argumentStreamCodec().map(ScratchArguments.Just::new, ScratchArguments.Just::argument);
+        private final ContextualCodec<IScratchContextProvider<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsCodec = argumentCodec().xmap(ScratchArguments.Just::new, ScratchArguments.Just::argument);
+        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsStreamCodec = argumentStreamCodec().map(ScratchArguments.Just::new, ScratchArguments.Just::argument);
 
         protected Just(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter) {
             super(parameter);
         };
 
         @Override
-        public ContextualCodec<IScratchContextHolder<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsCodec() {
+        public ContextualCodec<IScratchContextProvider<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsCodec() {
             return argumentsCodec;
         };
 
         @Override
-        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsStreamCodec() {
+        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsStreamCodec() {
             return argumentsStreamCodec;
         };
 
@@ -128,12 +128,12 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
     {
         protected final NEXT next;
 
-        private final ContextualCodec<IScratchContextHolder<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsCodec = RecordContextualCodecBuilder.create(instance -> instance.group(
+        private final ContextualCodec<IScratchContextProvider<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsCodec = RecordContextualCodecBuilder.create(instance -> instance.group(
             argumentCodec().fieldOf("argument").forGetter(ScratchArguments.And::argument),
             next().argumentsCodec().fieldOf("next").forGetter(ScratchArguments.And::next)
         ).apply(instance, ScratchArguments.And::new));
 
-        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsStreamCodec = ContextualStreamCodec.composite(
+        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsStreamCodec = ContextualStreamCodec.composite(
             argumentStreamCodec(), ScratchArguments.And::argument,
             next().argumentsStreamCodec(), ScratchArguments.And::next,
             ScratchArguments.And::new
@@ -145,12 +145,12 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
         };
 
         @Override
-        public ContextualCodec<IScratchContextHolder<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsCodec() {
+        public ContextualCodec<IScratchContextProvider<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsCodec() {
             return argumentsCodec;
         };
 
         @Override
-        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsStreamCodec() {
+        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> argumentsStreamCodec() {
             return argumentsStreamCodec;
         };
 

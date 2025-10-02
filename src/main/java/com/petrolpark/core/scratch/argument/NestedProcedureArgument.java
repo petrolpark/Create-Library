@@ -4,8 +4,7 @@ import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.codec.RecordContextualCodecBuilder;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContext;
-import com.petrolpark.core.scratch.procedure.IScratchContextHolder;
+import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
 import com.petrolpark.core.scratch.procedure.ScratchProcedure;
 import com.petrolpark.core.scratch.symbol.block.NestedProcedureBlockInstance;
 
@@ -21,7 +20,7 @@ public record NestedProcedureArgument<ENVIRONMENT extends IScratchEnvironment, I
     };
 
     @Override
-    public ScratchProcedure<ENVIRONMENT, INSTANCE> get(ENVIRONMENT environment, IScratchContext<?> scope) {
+    public ScratchProcedure<ENVIRONMENT, INSTANCE> get(ENVIRONMENT environment) {
         return procedure();
     };
 
@@ -29,11 +28,11 @@ public record NestedProcedureArgument<ENVIRONMENT extends IScratchEnvironment, I
 
         private final String key;
 
-        private final ContextualCodec<IScratchContextHolder<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> codec = RecordContextualCodecBuilder.create(instance -> instance.group(
+        private final ContextualCodec<IScratchContextProvider<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> codec = RecordContextualCodecBuilder.create(instance -> instance.group(
             ScratchProcedure.<ENVIRONMENT, INSTANCE>codec().fieldOf("procecure").forGetter(NestedProcedureArgument::procedure)
         ).apply(instance, (procedure) -> new NestedProcedureArgument<>(procedure, this)));
 
-        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> streamCodec = ScratchProcedure.<ENVIRONMENT, INSTANCE>streamCodec().map((procedure) -> new NestedProcedureArgument<>(procedure, this), NestedProcedureArgument::procedure);
+        private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> streamCodec = ScratchProcedure.<ENVIRONMENT, INSTANCE>streamCodec().map((procedure) -> new NestedProcedureArgument<>(procedure, this), NestedProcedureArgument::procedure);
 
         public NestedProcedureParameter(String key) {
             this.key = key;
@@ -45,12 +44,12 @@ public record NestedProcedureArgument<ENVIRONMENT extends IScratchEnvironment, I
         };
 
         @Override
-        public ContextualCodec<IScratchContextHolder<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> argumentCodec() {
+        public ContextualCodec<IScratchContextProvider<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> argumentCodec() {
             return codec;
         };
 
         @Override
-        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextHolder<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> argumentStreamCodec() {
+        public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> argumentStreamCodec() {
             return streamCodec;
         };
 

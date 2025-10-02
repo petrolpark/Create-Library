@@ -5,14 +5,14 @@ import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.ScratchSymbol;
 
-public abstract class InstantiatableScratchBlock<
+public abstract class InstantiableScratchBlock<
     ENVIRONMENT extends IScratchEnvironment,
     ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
     INSTANCE extends IScratchBlockInstance<ENVIRONMENT>,
-    BLOCK extends InstantiatableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE, BLOCK>
+    BLOCK extends InstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE, BLOCK>
 > extends ScratchSymbol<ENVIRONMENT, ARGUMENTS> implements IInstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE, BLOCK> {
 
-    protected InstantiatableScratchBlock(ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
+    protected InstantiableScratchBlock(ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
         super(parameters);
     };
 

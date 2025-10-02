@@ -4,8 +4,6 @@ import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContext;
-import com.petrolpark.core.scratch.symbol.block.IScratchBlockInstance.ScratchBlockInstanceCodecContext;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
@@ -16,9 +14,9 @@ public non-sealed interface IInstantiableScratchBlock<
     BLOCK extends IInstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE, BLOCK>
 > extends IScratchBlock<ENVIRONMENT, ARGUMENTS, BLOCK> {
     
-    public INSTANCE run(ENVIRONMENT environment, IScratchContext<?> context, ARGUMENTS arguments);
+    public INSTANCE run(ENVIRONMENT environment, ARGUMENTS arguments);
 
-    public ContextualCodec<ScratchBlockInstanceCodecContext<ENVIRONMENT, ARGUMENTS>, INSTANCE> instanceCodec();
+    public ContextualCodec<ARGUMENTS, INSTANCE> instanceCodec();
 
-    public ContextualStreamCodec<? super RegistryFriendlyByteBuf, ScratchBlockInstanceCodecContext<ENVIRONMENT, ARGUMENTS>, INSTANCE> instanceStreamCodec();
+    public ContextualStreamCodec<? super RegistryFriendlyByteBuf, ARGUMENTS, INSTANCE> instanceStreamCodec();
 };

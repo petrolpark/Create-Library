@@ -8,8 +8,7 @@ import com.petrolpark.core.scratch.ScratchArguments.And;
 import com.petrolpark.core.scratch.ScratchArguments.Just;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
-import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContext;;
+import com.petrolpark.core.scratch.environment.IScratchEnvironment;;
 
 public final class EqualsExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends GenericExpression<
         IScratchEnvironment,
@@ -29,8 +28,8 @@ public final class EqualsExpression<TYPE, ARGUMENT extends IScratchArgument<IScr
     };
 
     @Override
-    public Boolean evaluate(IScratchEnvironment environment, IScratchContext<?> context, And<IScratchEnvironment, TYPE, ARGUMENT, Just<IScratchEnvironment, TYPE, ARGUMENT>> arguments) {
-        return arguments.get(environment, context).equals(arguments.next().get(environment, context));
+    public Boolean evaluate(IScratchEnvironment environment, And<IScratchEnvironment, TYPE, ARGUMENT, Just<IScratchEnvironment, TYPE, ARGUMENT>> arguments) {
+        return arguments.get(environment).equals(arguments.next().get(environment));
     };
 
     @Override

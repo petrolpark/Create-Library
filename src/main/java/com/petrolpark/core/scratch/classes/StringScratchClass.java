@@ -12,7 +12,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public class StringScratchClass implements IScratchClass<String, ExpressionOrLiteralArgument<IScratchEnvironment, String>> {
+public class StringScratchClass implements IParseableScratchClass<String, ExpressionOrLiteralArgument<IScratchEnvironment, String>> {
 
     @Override
     public Codec<String> codec() {
@@ -32,6 +32,11 @@ public class StringScratchClass implements IScratchClass<String, ExpressionOrLit
     @Override
     public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, String, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass) {
         return Optional.empty();
+    };
+
+    @Override
+    public String parse(String string) {
+        return string;
     };
     
 };

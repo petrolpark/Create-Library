@@ -5,7 +5,6 @@ import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContext;
 import com.petrolpark.core.scratch.symbol.IScratchSymbol;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -28,7 +27,7 @@ public interface IScratchExpression<
 
     public static StreamCodec<RegistryFriendlyByteBuf, IScratchExpression<?, ?, ?, ?>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.SCRATCH_EXPRESSION_TYPE).dispatch(IScratchExpression::getExpressionType, IScratchExpression.Type::streamCodec);
 
-    public RETURN_TYPE evaluate(ENVIRONMENT environment, IScratchContext<?> context, ARGUMENTS arguments);
+    public RETURN_TYPE evaluate(ENVIRONMENT environment, ARGUMENTS arguments);
 
     public IScratchClass<RETURN_TYPE, ?> getReturnClass();
 

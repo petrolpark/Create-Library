@@ -5,10 +5,12 @@ import java.util.stream.Stream;
 
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.procedure.IScratchContext;;
+import com.petrolpark.core.scratch.procedure.IScratchContext;
+import com.petrolpark.core.scratch.procedure.IScratchContextHolder;
+import com.petrolpark.core.scratch.procedure.IScratchContextProvider;;
 
 public sealed interface ScratchArguments<ENVIRONMENT extends IScratchEnvironment, SIGNATURE extends ScratchSignature>
-    extends ScratchSignature
+    extends ScratchSignature, IScratchContextHolder
     permits ScratchArguments.None, ScratchArguments.More
 {
 
@@ -24,6 +26,11 @@ public sealed interface ScratchArguments<ENVIRONMENT extends IScratchEnvironment
      * Stream of {@link IScratchArgument}s in reverse order.
      */
     public Stream<IScratchArgument<? super ENVIRONMENT, ?>> stream();
+
+    @Override
+    default <CONTEXT extends IScratchContext<CONTEXT>> void populateContext(IScratchContextProvider<CONTEXT> contextProvider, CONTEXT context) {
+        stream().map(IScratchContextHolder::cast).forEach(ch -> ch.populateContext(contextProvider, context));
+    };
 
     public static sealed interface Builder<ENVIRONMENT extends IScratchEnvironment> permits ScratchArguments.None.Builder, ScratchArguments.More.Builder {
 
@@ -75,8 +82,8 @@ public sealed interface ScratchArguments<ENVIRONMENT extends IScratchEnvironment
             return Stream.of(argument);
         };
 
-        public TYPE get(ENVIRONMENT environment, IScratchContext<?> context) {
-            return argument.get(environment, context);
+        public TYPE get(ENVIRONMENT environment) {
+            return argument.get(environment);
         };
 
         public static sealed interface Builder<ENVIRONMENT extends IScratchEnvironment> extends ScratchArguments.Builder<ENVIRONMENT> permits ScratchArguments.Just.Builder, ScratchArguments.And.Builder {};
