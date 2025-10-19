@@ -39,15 +39,12 @@ import com.petrolpark.core.recipe.ingredient.advanced.ItemAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.NamedAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
+import com.petrolpark.core.registrate.PetrolparkBlockBuilder;
+import com.petrolpark.core.registrate.PetrolparkItemBuilder;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
 import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
 import com.petrolpark.core.registrate.SharedItemBuilder;
-import com.petrolpark.core.scratch.symbol.IScratchSymbol;
-import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
-import com.petrolpark.core.scratch.symbol.type.IScratchSymbolType;
-import com.petrolpark.core.scratch.symbol.type.SimpleScratchExpressionType;
-import com.petrolpark.core.scratch.type.IScratchType;
-import com.petrolpark.core.scratch.type.SimpleScratchType;
+import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.trade.ITradeListingReference;
 import com.tterrag.registrate.AbstractRegistrate;
@@ -79,6 +76,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
@@ -114,6 +112,16 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     };
 
     // Builders
+
+    @Override
+    public <T extends Block, P> BlockBuilder<T, P> block(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
+        return entry(name, callback -> PetrolparkBlockBuilder.create(this, parent, name, callback, factory));
+    };
+
+    @Override
+    public <T extends Item, P> ItemBuilder<T, P> item(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<Properties, T> factory) {
+        return entry(name, callback -> PetrolparkItemBuilder.create(this, parent, name, callback, factory));
+    };
 
     public BadgeRegistrateBuilder<Badge, PetrolparkRegistrate> badge(String name) {
         return badge(name, Badge::new);  
@@ -158,12 +166,12 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     };
 
     public <VARIANT> RegistryEntry<MapCodec<? extends EntitySubPredicate>, MapCodec<EntitySubPredicates.EntityVariantPredicateType<VARIANT>.Instance>> entityVariantPredicateType(String name, Codec<VARIANT> variantCodec, Function<Entity, Optional<VARIANT>> variantGetter) {
-        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.create(variantCodec, variantGetter);
+        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.<VARIANT>create(variantCodec, variantGetter);
         return entitySubPredicateType(name, predicateType.codec);
     };
 
     public <VARIANT> RegistryEntry<MapCodec<? extends EntitySubPredicate>, MapCodec<EntitySubPredicates.EntityVariantPredicateType<VARIANT>.Instance>> entityVariantPredicateType(String name, Registry<VARIANT> variantRegistry, Function<Entity, Optional<VARIANT>> variantGetter) {
-        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.create(variantRegistry, variantGetter);
+        EntitySubPredicates.EntityVariantPredicateType<VARIANT> predicateType = EntityVariantPredicateType.<VARIANT>create(variantRegistry, variantGetter);
         return entitySubPredicateType(name, predicateType.codec);
     };
 
@@ -313,22 +321,22 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, Registries.PARTICLE_TYPE, factory);
     };
 
-    public <T, SCRATCH_TYPE extends IScratchType<T>> RegistryEntry<IScratchType<?>, SCRATCH_TYPE> scratchType(String name, NonNullSupplier<SCRATCH_TYPE> factory) {
-        return simple(name, PetrolparkRegistries.Keys.SCRATCH_TYPE, factory);
+    public <T, SCRATCH_CLASS extends IScratchClass<T, ?>> RegistryEntry<IScratchClass<?, ?>, SCRATCH_CLASS> scratchClass(String name, NonNullSupplier<SCRATCH_CLASS> factory) {
+        return simple(name, PetrolparkRegistries.Keys.SCRATCH_CLASS, factory);
     };
 
-    public <T> RegistryEntry<IScratchType<?>, SimpleScratchType<T>> scratchType(String name, Class<T> clazz) {
-        return scratchType(name, () -> new SimpleScratchType<>(clazz));
-    };
+    // public <T> RegistryEntry<IScratchType<?>, SimpleScratchType<T>> scratchType(String name, Class<T> clazz) {
+    //     return scratchType(name, () -> new SimpleScratchType<>(clazz));
+    // };
 
-    public <SYMBOL extends IScratchSymbol<?, ?>, SYMBOL_TYPE extends IScratchSymbolType<SYMBOL>> RegistryEntry<IScratchSymbolType<?>, SYMBOL_TYPE> scratchSymbolType(String name, NonNullSupplier<SYMBOL_TYPE> typeFactory) {
-        return simple(name, PetrolparkRegistries.Keys.SCRATCH_SYMBOL_TYPE, typeFactory);
-    };
+    // public <SYMBOL extends IScratchSymbol<?, ?>, SYMBOL_TYPE extends IScratchSymbolType<SYMBOL>> RegistryEntry<IScratchSymbolType<?>, SYMBOL_TYPE> scratchSymbolType(String name, NonNullSupplier<SYMBOL_TYPE> typeFactory) {
+    //     return simple(name, PetrolparkRegistries.Keys.SCRATCH_SYMBOL_TYPE, typeFactory);
+    // };
 
-    public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchSymbolType<?>, SimpleScratchExpressionType<EXPRESSION>> simpleScratchExpressionType(String name, NonNullSupplier<EXPRESSION> expressionFactory) {
-        final EXPRESSION expressionUnit = expressionFactory.get();
-        return scratchSymbolType(name, () -> new SimpleScratchExpressionType<>(Codec.unit(expressionUnit), StreamCodec.unit(expressionUnit)));
-    };
+    // public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchSymbolType<?>, SimpleScratchExpressionType<EXPRESSION>> simpleScratchExpressionType(String name, NonNullSupplier<EXPRESSION> expressionFactory) {
+    //     final EXPRESSION expressionUnit = expressionFactory.asParameters();
+    //     return scratchSymbolType(name, () -> new SimpleScratchExpressionType<>(Codec.unit(expressionUnit), StreamCodec.unit(expressionUnit)));
+    // };
     
     // Shared features
 

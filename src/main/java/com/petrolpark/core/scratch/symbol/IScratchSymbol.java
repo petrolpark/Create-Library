@@ -1,13 +1,19 @@
 package com.petrolpark.core.scratch.symbol;
 
-import com.petrolpark.core.scratch.ScratchParameterTypes;
+import com.mojang.serialization.MapCodec;
+import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
-import com.petrolpark.core.scratch.context.IScratchContext;
-import com.petrolpark.core.scratch.symbol.type.IScratchSymbolType;
+import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
-public interface IScratchSymbol<CONTEXT extends IScratchContext, PARAMETERS extends ScratchParameters> {
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
-    public ScratchParameterTypes<PARAMETERS> getParameterTypes();
+public interface IScratchSymbol<ENVIRONMENT extends IScratchEnvironment, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> {
 
-    public IScratchSymbolType<? extends IScratchSymbol<CONTEXT, PARAMETERS>> getSymbolType();
+    public ScratchParameters<ENVIRONMENT, ARGUMENTS> getParameters();
+  
+    public interface Type<SYMBOL extends IScratchSymbol<?, ?>> {
+        public MapCodec<SYMBOL> codec();
+        public StreamCodec<? super RegistryFriendlyByteBuf, SYMBOL> streamCodec();
+    };
 };

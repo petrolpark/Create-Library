@@ -7,6 +7,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.petrolpark.PetrolparkClient;
+import com.petrolpark.core.extendedinventory.ExtendedInventory;
 import com.petrolpark.core.extendedinventory.ExtendedInventoryClientHandler;
 
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
@@ -32,6 +33,6 @@ public abstract class RecipeBookComponentMixin {
         )
     )
     public void inInitVisuals(CallbackInfo ci) {
-        if (!widthTooNarrow) xOffset += - PetrolparkClient.EXTENDED_INVENTORY_HANDLER.getLeftmostX() + ExtendedInventoryClientHandler.INVENTORY_SPACING;
+        if (!widthTooNarrow && ExtendedInventory.enabled()) xOffset += - PetrolparkClient.EXTENDED_INVENTORY_HANDLER.getLeftmostX() + ExtendedInventoryClientHandler.INVENTORY_SPACING;
     };
 };
