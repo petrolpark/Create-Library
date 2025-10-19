@@ -28,7 +28,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 @Mixin(value = MillstoneBlockEntity.class, remap = false)
@@ -36,10 +35,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
 
     @Unique
     ItemStack lastItemProcessed;
-
-    @Shadow
-    private MillingRecipe lastRecipe;
-
+    
     @Shadow
     public ItemStackHandler inputInv;
 
@@ -88,7 +84,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
     public List<ItemStack> modifyRollResults(MillingRecipe recipe, Operation<List<ItemStack>> original) {
         List<ItemStack> results;
 
-        if (lastRecipe instanceof IFTLProcessingRecipe ftlr) {
+        if (recipe instanceof IFTLProcessingRecipe ftlr) {
             results = ftlr.rollLuckyResults(this);
         } else {
             results = original.call(recipe);
@@ -100,10 +96,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
             if (level != null) results.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
         };
 
-        results.forEach(stack -> {
-            ItemDecay.startDecay(stack);
-            ItemHandlerHelper.insertItemStacked(outputInv, stack, false);
-        });
+        results.forEach(ItemDecay::startDecay);
 
         return results;
     };

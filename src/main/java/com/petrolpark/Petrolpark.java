@@ -13,6 +13,7 @@ import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.badge.Badges;
 import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
 import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
+import com.petrolpark.core.recipe.compat.CompatRecipeManager;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeamManager;
 
 import net.minecraft.resources.ResourceLocation;
@@ -40,6 +41,7 @@ public class Petrolpark {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     };
 
+    public static final CompatRecipeManager COMPAT_RECIPES = new CompatRecipeManager();
     public static final ScoreboardTeamManager SCOREBOARD_TEAMS = new ScoreboardTeamManager();
     public static final BogglePattern.Manager BOGGLE_PATTERNS = new BogglePattern.Manager();
 
