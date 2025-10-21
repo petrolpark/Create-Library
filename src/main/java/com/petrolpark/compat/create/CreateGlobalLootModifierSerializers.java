@@ -1,8 +1,9 @@
-package com.petrolpark.compat.create.core.loot;
+package com.petrolpark.compat.create;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.compat.create.core.loot.ContaminatedKineticBlockLootModifier;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.neoforged.neoforge.common.loot.IGlobalLootModifier;

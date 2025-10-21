@@ -6,6 +6,7 @@ import com.petrolpark.core.recipe.ingredient.advanced.CompoundAdvancedIngredient
 import com.petrolpark.core.recipe.ingredient.advanced.ContaminatedAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.EnchantmentItemAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.GenericAdvancedIngredientType;
+import com.petrolpark.core.recipe.ingredient.advanced.HolderSetFluidAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.HolderSetItemAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.advanced.INamedAdvancedIngredientType;
@@ -45,6 +46,10 @@ public class PetrolparkAdvancedIngredientTypes {
     FLUID_PASS = REGISTRATE.fluidAdvancedIngredientType("pass", PassAdvancedIngredient.TYPE),
     FLUID_NOT = REGISTRATE.fluidAdvancedIngredientType("not", NotAdvancedIngredient::codec, NotAdvancedIngredient::streamCodec),
     FLUID_CONTAMINATED = REGISTRATE.fluidAdvancedIngredientType("contaminated", ContaminatedAdvancedIngredient.TYPE);
+
+    public static final RegistryEntry<IAdvancedIngredientType<? super FluidStack>, ? extends INamedAdvancedIngredientType<FluidStack>> 
+
+    FLUID_HOLDER_SET = REGISTRATE.fluidAdvancedIngredientType("set", HolderSetFluidAdvancedIngredient.CODEC, HolderSetFluidAdvancedIngredient.STREAM_CODEC);
     
     public static final void register() {};
 };

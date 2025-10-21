@@ -8,10 +8,12 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.CreateRecipeTypes;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 
 import net.minecraft.core.HolderSet;
@@ -30,6 +32,10 @@ public class LiddedBasinRecipe extends BasinRecipe {
     protected final Optional<HolderSet<Biome>> allowedBiomes;
     protected final Optional<ResourceLocation> firstTimeLuckyKey;
     public final boolean bubbles;
+
+    public static final LiddedBasinRecipe.Builder builder() {
+        return new LiddedBasinRecipe.Builder(Petrolpark.asResource("dont_register_me"));
+    };
 
     protected static final LiddedBasinRecipe create(LiddedBasinRecipe.Params params) {
         return new LiddedBasinRecipe(params);
@@ -104,4 +110,27 @@ public class LiddedBasinRecipe extends BasinRecipe {
 		};
 
 	};
+
+    public static class Builder extends ProcessingRecipeBuilder<ProcessingRecipeParams, LiddedBasinRecipe, LiddedBasinRecipe.Builder> {
+
+        public Builder(ResourceLocation recipeId) {
+            super(LiddedBasinRecipe::new, recipeId);
+        };
+
+        @Override
+        protected LiddedBasinRecipe.Params createParams() {
+            return new LiddedBasinRecipe.Params();
+        };
+
+        @Override
+        public LiddedBasinRecipe.Builder self() {
+            return this;
+        };
+
+        public LiddedBasinRecipe.Builder withBubbles() {
+            ((LiddedBasinRecipe.Params)params).bubbles = true;
+            return self();
+        };
+
+    };
 };

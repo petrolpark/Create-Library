@@ -3,7 +3,6 @@ package com.petrolpark.compat.create;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
-import com.petrolpark.compat.create.core.loot.CreateGlobalLootModifierSerializers;
 import com.petrolpark.compat.create.event.CreateModEvents;
 import com.petrolpark.config.PetrolparkStressConfig;
 
@@ -24,17 +23,19 @@ public class Create {
         CreateRegistries.init();
 
         // Registrations
-        CreatePackets.register();
+        CreateAdvancedIngredientTypes.register();
+        CreateAttachmentTypes.register(modEventBus);
         CreateBlockEntityTypes.register();
         CreateBlocks.register();
+        CreateCompatRecipeDeserializers.register();
         CreateCriterionTriggers.register();
-        CreateAdvancedIngredientTypes.register();
-        CreateGlobalLootModifierSerializers.register();
         CreateFluids.register();
+        CreateGlobalLootModifierSerializers.register();
         CreateItems.register();
-
-        PetrolparkMovementChecks.register();
+        CreatePackets.register();
+    
         PetrolparkMandrelAnimationTypes.register();
+        PetrolparkMovementChecks.register();
 
         // Event Bus Subscribers
         modEventBus.addListener(Create::onRegister);

@@ -46,6 +46,7 @@
         "LivingEntityMixin",
         "MobEffectInstanceMixin",
         "PlayerMixin",
+        "RecipeManagerMixin",
         "ServerGamePacketListenerImplMixin",
         "ShapedRecipeMixin",
         "ShapelessRecipeMixin",

@@ -103,7 +103,7 @@ repositories {
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // ForgeConfigAPIPort
     maven { url = "https://maven.blamejared.com" } // JEI
     maven { url = "https://maven.theillusivec4.top/" } // Curios
-    exclusiveContent { // Destroy and Petrol's Parts
+    exclusiveContent { // Destroy, Petrol's Parts
         forRepository {
             maven {
                 name = "Modrinth"
@@ -138,6 +138,9 @@ dependencies {
     // Jade
     implementation("maven.modrinth:jade:15.10.0+neoforge")
 
+    // Testing purposes
+    implementation("maven.modrinth:farmers-delight:1.21.1-1.2.9")
+    implementation("maven.modrinth:brewin-and-chewin:4.4.1+1.21.1-neoforge")
 }
 
 jar {

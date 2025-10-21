@@ -22,16 +22,16 @@ public class PetrolparkConfigs {
     private static final Map<ModConfig.Type, ConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
 
 	private static PetrolparkClientConfig client;
-	//private static CCommon common;
+	private static PetrolparkCommonConfig common;
 	private static PetrolparkServerConfig server;
 
 	public static PetrolparkClientConfig client() {
 		return client;
 	};
 
-	// public static CCommon common() {
-	// 	return common;
-	// };
+	public static PetrolparkCommonConfig common() {
+		return common;
+	};
 
 	public static PetrolparkServerConfig server() {
 		return server;
@@ -56,7 +56,7 @@ public class PetrolparkConfigs {
 
 	public static void register(ModLoadingContext context, ModContainer container) {
 		client = register(PetrolparkClientConfig::new, ModConfig.Type.CLIENT);
-		// common = register(CCommon::new, ModConfig.Type.COMMON);
+		common = register(PetrolparkCommonConfig::new, ModConfig.Type.COMMON);
 		server = register(PetrolparkServerConfig::new, ModConfig.Type.SERVER);
 
 		for (Entry<ModConfig.Type, ConfigBase> pair : CONFIGS.entrySet()) container.registerConfig(pair.getKey(), pair.getValue().specification);

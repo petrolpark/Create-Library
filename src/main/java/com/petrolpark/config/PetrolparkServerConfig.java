@@ -35,8 +35,12 @@ public class PetrolparkServerConfig extends ConfigBase {
     public final ConfigBool brewingWaterBottleContaminantsIgnored = b(true, "brewingIgnoreWaterBottle", "The Contaminants of a Potion brewed from a Water Bottle depend only on the Contaminants of the added ingredient, not the Water Bottle");
     public final ConfigBool smithingPropagatesContaminants = b(true, "propagateSmithing", "Smithing will propagate the Contaminants of the base Item and added Item to the result");
 
+    // Compat
+    public final ConfigGroup compatibility = group(0, "compatibility");
+
     // Create
     public final ConfigGroup create = group(1, "create");
+    public final ConfigGroup createContamination = group(2, "contamination");
     public final ConfigFloat createFluidContaminantWeight = f(100f, 0f, Float.MAX_VALUE, "fluidWeight", "How many mB of Fluid should be considered to be equal to one Item when weighting preserved Contaminants in any Recipes involving Fluids", "Set to 0 to not count the Contaminants of input Fluids. Contaminants will still propagate to output Fluids.");
     public final ConfigBool createBasinRecipesPropagateContaminants = b(true, "propagateBasin", "Recipes done in a Basin will propagate the Contaminants of the input to the outputs");
     public final ConfigBool createCrushingRecipesPropagateContaminants = b(true, "propagateCrushing", "Recipes done by Millstones and Crushing Wheels will propagate the Contaminants of the input to the outputs");
