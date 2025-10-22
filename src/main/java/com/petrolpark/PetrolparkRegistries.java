@@ -34,7 +34,7 @@ public class PetrolparkRegistries {
     };
 
     public static <OBJECT> Registry<OBJECT> getDataRegistry(ResourceKey<Registry<OBJECT>> key) {
-        return DistExecutor.unsafeRunForDist(() -> () -> Minecraft.getInstance().getConnection().registryAccess(), () -> () -> ServerLifecycleHooks.getCurrentServer().registryAccess()).registryOrThrow(key);
+        return DistExecutor.unsafeRunForDist(() -> () -> Minecraft.getInstance().level.registryAccess(), () -> () -> ServerLifecycleHooks.getCurrentServer().registryAccess()).registryOrThrow(key);
     };
     
     public static class Keys {

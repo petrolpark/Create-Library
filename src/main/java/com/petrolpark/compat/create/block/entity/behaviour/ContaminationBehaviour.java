@@ -9,6 +9,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
@@ -25,14 +26,25 @@ public class ContaminationBehaviour extends BlockEntityBehaviour {
 
     public static final BehaviourType<ContaminationBehaviour> TYPE = new BehaviourType<>();
 
+    protected ListTag contaminationTag;
+    protected boolean updateFromTag = false;
     protected final GenericContamination contamination;
 
     public ContaminationBehaviour(SmartBlockEntity be) {
         super(be);
-        contamination = new GenericContamination(blockEntity::notifyUpdate);
+        contamination = new GenericContamination(this::contaminationUpdated);
+    };
+
+    public void contaminationUpdated() {
+        contaminationTag = contamination.writeNBT();
+        blockEntity.notifyUpdate();
     };
 
     public GenericContamination getContamination() {
+        if (updateFromTag && contaminationTag != null) {
+            contamination.readNBT(contaminationTag);
+            updateFromTag = false;
+        };
         return contamination;
     };
 
@@ -43,13 +55,14 @@ public class ContaminationBehaviour extends BlockEntityBehaviour {
     @Override
     public void read(CompoundTag nbt, boolean clientPacket) {
         super.read(nbt, clientPacket);
-        contamination.readNBT(nbt.getList("Contamination", Tag.TAG_STRING));
+        contaminationTag = nbt.getList("Contamination", Tag.TAG_STRING);
+        updateFromTag = true;
     };
 
     @Override
     public void write(CompoundTag nbt, boolean clientPacket) {
         super.write(nbt, clientPacket);
-        nbt.put("Contamination", contamination.writeNBT());
+        nbt.put("Contamination", contaminationTag);
     };
 
     @Override
