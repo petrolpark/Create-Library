@@ -6,6 +6,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
+
 import com.petrolpark.contamination.IContamination;
 import com.petrolpark.contamination.IItemStackDuck;
 import com.petrolpark.contamination.ItemContamination;
@@ -35,8 +38,9 @@ public class ItemStackMixin implements IItemStackDuck {
         at = @At("HEAD"),
         cancellable = true
     )
-    private static void inIsSameItemSameTags(ItemStack stack, ItemStack otherStack, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(ItemHelper.equalIgnoringTags(stack, otherStack));
+    private static void inIsSameItemSameTags(ItemStack stack, ItemStack otherStack, CallbackInfoReturnable<Boolean> cir, @Local(argsOnly=true, ordinal=0) LocalRef<ItemStack> arg1, @Local(argsOnly=true, ordinal=1) LocalRef<ItemStack> arg2) {
+        arg1.set(IDecayingItem.checkDecay(stack));
+        arg2.set(IDecayingItem.checkDecay(otherStack));
     }
 
     @Override

@@ -9,8 +9,8 @@ import com.petrolpark.badge.BadgesCapability;
 import com.petrolpark.command.ContaminateCommand;
 import com.petrolpark.contamination.Contaminant;
 import com.petrolpark.contamination.ItemContamination;
-import com.petrolpark.item.decay.IDecayingItem;
 import com.petrolpark.item.decay.DecayingItemHandler.ServerDecayingItemHandler;
+import com.petrolpark.item.decay.IDecayingItem;
 import com.petrolpark.shop.customer.EntityCustomer;
 import com.petrolpark.team.SinglePlayerTeam;
 
@@ -42,7 +42,7 @@ public class CommonEvents {
     public static void onTickLevel(LevelTickEvent event) {
         // Decaying Items
         if (event.phase == LevelTickEvent.Phase.END) {
-            if (!event.level.isClientSide() && event.level.getServer().overworld() == event.level) ((ServerDecayingItemHandler)Petrolpark.DECAYING_ITEM_HANDLER.get()).gameTime++;
+            if (!event.level.isClientSide() && event.level.getServer().overworld() == event.level && Petrolpark.DECAYING_ITEM_HANDLER.get() instanceof ServerDecayingItemHandler decayingItemHandler) decayingItemHandler.gameTime++;
         };
         
     };
