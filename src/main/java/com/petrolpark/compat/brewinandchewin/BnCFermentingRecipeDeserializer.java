@@ -6,6 +6,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.codec.RecordDecoderBuilder;
@@ -20,7 +21,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 @RequiresCreate
 public class BnCFermentingRecipeDeserializer implements CompatRecipeDeserializer<LiddedBasinRecipe> {
 
-    public static final ResourceLocation SERIALIZER_ID = ResourceLocation.fromNamespaceAndPath("brewinandchewin", "fermenting");
+    public static final ResourceLocation SERIALIZER_ID = Mods.BREWIN_AND_CHEWIN.asResource("fermenting");
 
     public static final Decoder<Optional<LiddedBasinRecipe>> DECODER = RecordDecoderBuilder.create(instance -> instance.group(
         RecordDecoderBuilder.of(Ingredient.CODEC.listOf(1, 4).fieldOf("ingredients")),

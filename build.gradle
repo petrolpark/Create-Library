@@ -137,10 +137,6 @@ dependencies {
 
     // Jade
     implementation("maven.modrinth:jade:15.10.0+neoforge")
-
-    // Testing purposes
-    implementation("maven.modrinth:farmers-delight:1.21.1-1.2.9")
-    implementation("maven.modrinth:brewin-and-chewin:4.4.1+1.21.1-neoforge")
 }
 
 jar {

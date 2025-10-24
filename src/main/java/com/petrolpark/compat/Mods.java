@@ -27,6 +27,7 @@ public enum Mods {
 
     // Others
     BIG_CANNONS("createbigcannons"),
+    BREWIN_AND_CHEWIN("brewinandchewin"),
     CURIOS,
     JEI,
     TFMG;

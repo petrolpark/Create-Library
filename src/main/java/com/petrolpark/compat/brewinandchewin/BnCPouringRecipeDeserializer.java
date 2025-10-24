@@ -7,6 +7,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.Mods;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.codec.RecordDecoderBuilder;
 import com.petrolpark.core.recipe.compat.CompatRecipeDeserializer;
@@ -21,7 +22,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 @RequiresCreate
 public class BnCPouringRecipeDeserializer implements CompatRecipeDeserializer<FillingRecipe> {
 
-    public static final ResourceLocation SERIALIZER_ID = ResourceLocation.fromNamespaceAndPath("brewinandchewin", "keg_pouring");
+    public static final ResourceLocation SERIALIZER_ID = Mods.BREWIN_AND_CHEWIN.asResource("keg_pouring");
     
     public static final Decoder<Optional<FillingRecipe>> DECODER = RecordDecoderBuilder.create(instance -> instance.group(
         RecordDecoderBuilder.of(FluidStack.CODEC.fieldOf("fluid")),
