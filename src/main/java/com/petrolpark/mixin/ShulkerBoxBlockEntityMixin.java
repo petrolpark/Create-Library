@@ -62,7 +62,7 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
         at = @At("HEAD")
     )
     public void inSaveAdditional(CompoundTag tag, CallbackInfo ci) {
-        tag.put("Contamination", contamination.writeNBT());
+        tag.put("Contamination", contamination.writeNBT(getLevel().registryAccess()));
     };
     
 };

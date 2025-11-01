@@ -26,7 +26,7 @@ public class ContaminationBehaviour extends BlockEntityBehaviour {
 
     public static final BehaviourType<ContaminationBehaviour> TYPE = new BehaviourType<>();
 
-    protected ListTag contaminationTag;
+    protected ListTag contaminationTag = null;
     protected boolean updateFromTag = false;
     protected final GenericContamination contamination;
 
@@ -36,13 +36,13 @@ public class ContaminationBehaviour extends BlockEntityBehaviour {
     };
 
     public void contaminationUpdated() {
-        contaminationTag = contamination.writeNBT();
+        contaminationTag = contamination.writeNBT(getWorld().registryAccess());
         blockEntity.notifyUpdate();
     };
 
     public GenericContamination getContamination() {
         if (updateFromTag && contaminationTag != null) {
-            contamination.readNBT(contaminationTag);
+            contamination.readNBT(getWorld().registryAccess(), contaminationTag);
             updateFromTag = false;
         };
         return contamination;
@@ -62,7 +62,7 @@ public class ContaminationBehaviour extends BlockEntityBehaviour {
     @Override
     public void write(CompoundTag nbt, boolean clientPacket) {
         super.write(nbt, clientPacket);
-        nbt.put("Contamination", contaminationTag);
+        if (contaminationTag != null) nbt.put("Contamination", contaminationTag);
     };
 
     @Override

@@ -37,9 +37,9 @@ public class ContraptionMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void inAddBlocksToWorld(Level world, StructureTransform transform, CallbackInfo ci, boolean var3[], int var4, int var5, boolean nonBrittles, Iterator<StructureBlockInfo> var7, StructureBlockInfo block, BlockPos targetPos, BlockState state, BlockState blockState, boolean verticalRotation, BlockEntity blockEntity) {
+    public void inAddBlocksToWorld(Level world, StructureTransform transform, CallbackInfo ci, boolean var2, boolean var3[], int var4, int var5, boolean nonBrittles, Iterator<StructureBlockInfo> var7, StructureBlockInfo block, BlockPos targetPos, BlockState state, BlockState blockState, boolean verticalRotation, BlockEntity blockEntity) {
         if (blockEntity instanceof SmartBlockEntity sbe) {
-            TransportedItemStackHandlerBehaviour behaviour = sbe.getBehaviour(TransportedItemStackHandlerBehaviour.TYPE);
+            final TransportedItemStackHandlerBehaviour behaviour = sbe.getBehaviour(TransportedItemStackHandlerBehaviour.TYPE);
             if (behaviour != null) behaviour.handleProcessingOnAllItems(stack -> {
                 if (stack instanceof DirectionalTransportedItemStack directionalStack) {
                     if (transform.rotationAxis == Axis.Y) directionalStack.rotate(transform.rotation);

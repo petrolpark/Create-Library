@@ -1,6 +1,7 @@
 package com.petrolpark.mixin.compat.create.client;
 
-import net.createmod.catnip.gui.element.AbstractRenderElement;
+import java.util.List;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -10,14 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.client.ponder.instruction.HighlightTagInstruction;
 import com.petrolpark.mixin.compat.create.accessor.client.SimpleRenderElementAccessor;
+
+import net.createmod.catnip.animation.LerpedFloat;
+import net.createmod.catnip.gui.element.AbstractRenderElement;
 import net.createmod.ponder.foundation.PonderTag;
 import net.createmod.ponder.foundation.ui.PonderButton;
 import net.createmod.ponder.foundation.ui.PonderUI;
-import net.createmod.catnip.animation.LerpedFloat;
-
 import net.minecraft.client.gui.GuiGraphics;
-
-import java.util.List;
 
 @Mixin(PonderUI.class)
 public class PonderUIMixin {
@@ -33,10 +33,11 @@ public class PonderUIMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
+    @SuppressWarnings("rawtypes")
     public void inRenderPonderTags(PoseStack ms, int mouseX, int mouseY, boolean highlightAll, List _list, float fade, float partialTicks, GuiGraphics graphics, double guiScale, int height, CallbackInfo ci, PonderTag _tag, LerpedFloat chase, PonderButton button) {
         if (button.getRenderElement() instanceof AbstractRenderElement.SimpleRenderElement element) {
             if (((SimpleRenderElementAccessor)element).getRenderable() instanceof PonderTag tag) {
-                if (HighlightTagInstruction.highlightedTags.contains(tag)) chase.updateChaseTarget(1);    
+                if (HighlightTagInstruction.highlightedTags.contains(tag.getId())) chase.updateChaseTarget(1);    
             };
         };
     };

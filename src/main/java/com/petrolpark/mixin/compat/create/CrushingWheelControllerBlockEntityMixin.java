@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.contamination.IContamination;
 import com.petrolpark.contamination.ItemContamination;
@@ -64,26 +66,20 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         lastItemProcessed = inventory.getStackInSlot(0).copy();
     };
 
-    @Inject(
+    @WrapOperation(
         method = "applyRecipe()V",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/List;size()I",
-            ordinal = 0
-        ),
-        locals = LocalCapture.CAPTURE_FAILSOFT,
-        remap = false
+            target = "rollResults"
+        )
     )
     @SuppressWarnings("unchecked")
-    public void inApplyRecipeMiddle(CallbackInfo ci, Optional<ProcessingRecipe<RecipeWrapper>> recipe, List<ItemStack> rolledResults, int rolls, int slot) {
-        if (slot == 0) {
-            FirstTimeLuckyRecipesBehaviour behaviour = getBehaviour(FirstTimeLuckyRecipesBehaviour.TYPE);
-            if (behaviour != null && recipe.get() instanceof IFirstTimeLuckyRecipe ftlr) {
-                List<ItemStack> results = ftlr.rollLuckyResults(behaviour.getPlayer());
-                rolledResults.clear();
-                rolledResults.addAll(results);
-            };
+    public List<ItemStack> wrapRollResults(ProcessingRecipe<RecipeWrapper> recipe, Operation<List<ItemStack>> original) {
+        if (recipe instanceof IFirstTimeLuckyRecipe ftlr) {
+            final FirstTimeLuckyRecipesBehaviour behaviour = getBehaviour(FirstTimeLuckyRecipesBehaviour.TYPE);
+            if (behaviour != null) return ftlr.rollLuckyResults(behaviour.getPlayer());
         };
+        return original.call(recipe);
     };
 
     @Inject(

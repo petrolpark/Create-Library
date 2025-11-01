@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import mezz.jei.api.gui.builder.ITooltipBuilder;
 import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;

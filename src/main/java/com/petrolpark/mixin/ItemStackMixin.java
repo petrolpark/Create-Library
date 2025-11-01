@@ -8,12 +8,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-
 import com.petrolpark.contamination.IContamination;
 import com.petrolpark.contamination.IItemStackDuck;
 import com.petrolpark.contamination.ItemContamination;
 import com.petrolpark.item.decay.IDecayingItem;
-import com.petrolpark.util.ItemHelper;
 
 import net.minecraft.world.item.ItemStack;
 

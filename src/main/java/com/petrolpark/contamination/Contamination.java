@@ -7,6 +7,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.stream.Stream;
 
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.nbt.Tag;
@@ -113,13 +114,31 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
         return true;
     };
 
+    /**
+     * Prefer {@link #readNBT(RegistryAccess, ListTag)} whenever the Level is accessible.
+     */
+    @Deprecated
     public void readNBT(ListTag contaminationTag) {
         contaminateAll(contaminationTag.stream().map(Tag::getAsString).map(ResourceLocation::new).map(Contaminant::get));
     };
 
+    public void readNBT(RegistryAccess registryAccess, ListTag contaminationTag) {
+        contaminateAll(contaminationTag.stream().map(Tag::getAsString).map(ResourceLocation::new).map(rl -> Contaminant.get(registryAccess, rl)));
+    };
+
+    /**
+     * Prefer {@link #writeNBT(RegistryAccess)} whenever the Level is accessible.
+     */
+    @Deprecated
     public ListTag writeNBT() {
         ListTag tag = new ListTag();
         orphanContaminants.forEach(c -> tag.add(StringTag.valueOf(c.getLocation().toString())));
+        return tag;
+    };
+
+    public ListTag writeNBT(RegistryAccess registryAccess) {
+        ListTag tag = new ListTag();
+        orphanContaminants.forEach(c -> tag.add(StringTag.valueOf(c.getLocation(registryAccess).toString())));
         return tag;
     };
 };

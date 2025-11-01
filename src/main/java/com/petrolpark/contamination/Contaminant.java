@@ -17,6 +17,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.Style;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
@@ -37,6 +38,10 @@ public class Contaminant {
 
     public static Contaminant get(ResourceLocation resourceLocation) {
         return PetrolparkRegistries.getDataRegistry(PetrolparkRegistries.Keys.CONTAMINANT).get(resourceLocation);
+    };
+
+    public static Contaminant get(RegistryAccess registries, ResourceLocation resourceLocation) {
+        return registries.lookupOrThrow(PetrolparkRegistries.Keys.CONTAMINANT).getOrThrow(ResourceKey.create(PetrolparkRegistries.Keys.CONTAMINANT, resourceLocation)).value();  
     };
 
     public static Contaminant getFromIntrinsicTag(TagKey<?> tagKey) {
@@ -111,8 +116,13 @@ public class Contaminant {
         return parentsView;
     };
 
+    @Deprecated
     public ResourceLocation getLocation() {
-        if (rl == null) rl = ServerLifecycleHooks.getCurrentServer().registryAccess().registryOrThrow(PetrolparkRegistries.Keys.CONTAMINANT).getKey(this);
+        return getLocation(ServerLifecycleHooks.getCurrentServer().registryAccess());
+    };
+
+    public ResourceLocation getLocation(RegistryAccess registryAccess) {
+        if (rl == null) rl = registryAccess.registryOrThrow(PetrolparkRegistries.Keys.CONTAMINANT).getKey(this);
         return rl;
     };
 
