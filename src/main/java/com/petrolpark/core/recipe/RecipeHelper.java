@@ -10,6 +10,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
@@ -19,16 +20,16 @@ public class RecipeHelper {
 
     private static final Random r = new Random();
 
-    public static List<ItemStack> rollResults(ProcessingRecipe<?, ?> recipe, int multiplier) {
-        return rollResults(recipe, null, multiplier);
+    public static List<ItemStack> rollResults(RandomSource random, ProcessingRecipe<?, ?> recipe, int multiplier) {
+        return rollResults(random, recipe, null, multiplier);
     };
     
     @SuppressWarnings("unchecked")
-    public static List<ItemStack> rollResults(ProcessingRecipe<?, ?> recipe, Player player, int multiplier) {
+    public static List<ItemStack> rollResults(RandomSource random, ProcessingRecipe<?, ?> recipe, Player player, int multiplier) {
         List<ItemStack> results = new ArrayList<>();
         if (recipe == null) return results;
         if (recipe instanceof IFTLProcessingRecipe luckyRecipe && player != null && multiplier > 0) {
-            results.addAll(luckyRecipe.rollLuckyResults(player));
+            results.addAll(luckyRecipe.rollLuckyResults(player, random));
             multiplier--;
         };
         if (multiplier <= 0) return results;

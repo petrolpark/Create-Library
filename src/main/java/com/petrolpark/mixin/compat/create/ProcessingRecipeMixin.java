@@ -16,7 +16,7 @@ import net.minecraft.world.item.ItemStack;
 public class ProcessingRecipeMixin {
     
     @ModifyReturnValue(
-        method = "rollResults(Ljava/util/List;)Ljava/util/List;",
+        method = "rollResults(Ljava/util/List;Lnet/minecraft/util/RandomSource;)Ljava/util/List;",
         at = @At("RETURN"),
         remap = false
     )

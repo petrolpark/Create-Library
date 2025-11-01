@@ -18,7 +18,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.IItemDecorator;
 import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent;
 
-@EventBusSubscriber(value = Dist.CLIENT, modid = Petrolpark.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(value = Dist.CLIENT, modid = Petrolpark.MOD_ID)
 public class DecayingItemDecorator implements IItemDecorator {
 
     @Override

@@ -20,6 +20,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
@@ -72,21 +73,12 @@ public abstract class AdvancedProcessingRecipe extends ProcessingRecipe<RecipeWr
     };
 
     /**
-     * @deprecated Use {@link IFTLProcessingRecipe#rollLuckyResults(com.simibubi.create.foundation.blockEntity.SmartBlockEntity)}
+     * @deprecated Use {@link IFTLProcessingRecipe#rollLuckyResults(net.minecraft.world.entity.player.Player, RandomSource)}
      */
     @Override
     @Deprecated
-    public List<ItemStack> rollResults() {
-        return super.rollResults();
-    };
-
-    /**
-     * @deprecated Use {@link IFTLProcessingRecipe#rollLuckyResults(com.simibubi.create.foundation.blockEntity.SmartBlockEntity)}
-     */
-    @Override
-    @Deprecated
-    public List<ItemStack> rollResults(@Nonnull List<ProcessingOutput> rollableResults) {
-        return super.rollResults(rollableResults);
+    public List<ItemStack> rollResults(@Nonnull RandomSource random) {
+        return super.rollResults(random);
     };
 
     public static class Serializer<R extends AdvancedProcessingRecipe> implements RecipeSerializer<R> {

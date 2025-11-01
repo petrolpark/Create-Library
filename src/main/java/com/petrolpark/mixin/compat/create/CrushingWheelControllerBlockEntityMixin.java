@@ -11,6 +11,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehaviour;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.config.PetrolparkConfigs;
@@ -25,6 +27,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
@@ -66,25 +69,17 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         lastItemProcessed = inventory.getStackInSlot(0).copy();
     };
 
-    @Inject(
+    @WrapOperation(
         method = "applyRecipe()V",
         at = @At(
             value = "INVOKE",
-            target = "Ljava/util/List;size()I",
-            ordinal = 0
-        ),
-        locals = LocalCapture.CAPTURE_FAILSOFT,
-        remap = false
+            target = "rollResults"
+        )
     )
     @SuppressWarnings("unchecked")
-    public void inApplyRecipeMiddle(CallbackInfo ci, Optional<RecipeHolder<StandardProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> rolledResults, int rolls, int slot) {
-        if (slot == 0) {
-            if (recipe.get().value() instanceof IFTLProcessingRecipe ftlr) {
-                List<ItemStack> results = ftlr.rollLuckyResults(this);
-                rolledResults.clear();
-                rolledResults.addAll(results);
-            };
-        };
+    public List<ItemStack> wrapRollResults(StandardProcessingRecipe<RecipeWrapper> recipe, RandomSource random, Operation<List<ItemStack>> original) {
+        if (recipe instanceof IFTLProcessingRecipe ftlr) return ftlr.rollLuckyResults(this, random);
+        else return original.call(recipe, random);
     };
 
     @Inject(

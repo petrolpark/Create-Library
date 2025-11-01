@@ -6,7 +6,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Decoder;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.core.fluid.CreateFluidHelper;
 import com.petrolpark.core.codec.EitherDecoder;
 import com.petrolpark.core.codec.RecordDecoderBuilder;
 
@@ -18,6 +17,7 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import net.neoforged.neoforge.fluids.crafting.SingleFluidIngredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import net.neoforged.neoforge.fluids.crafting.TagFluidIngredient;
 
 @RequiresCreate
@@ -45,8 +45,8 @@ public record BnCFluidIngredient(FluidIngredient ingredient, int amount, String 
         return RecordDecoderBuilder.ofOptional(DataComponentPatch.CODEC.<DataComponentPatch>flatMap(components -> components.isEmpty() ? DataResult.success(components) : DataResult.error(() -> "Specific Components not supported in recipe")), "components", DataComponentPatch.EMPTY);
     };
 
-    public Optional<com.simibubi.create.foundation.fluid.FluidIngredient> asCreateIngredient() {
+    public Optional<SizedFluidIngredient> asNeoIngredient() {
         if (!unit.equals(UNIT_MILLIBUCKETS) && !unit.equals(UNIT_LITERS)) return Optional.empty();
-        return CreateFluidHelper.toCreateIngredient(amount, ingredient());
+        return Optional.of(new SizedFluidIngredient(ingredient(), amount()));
     };
 };

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
@@ -221,7 +222,7 @@ public class ScratchProcedure<ENVIRONMENT extends IScratchEnvironment, CONTEXT e
 
         @Override
         @SuppressWarnings("unchecked")
-        public Line<ENVIRONMENT, ?> decode(RegistryFriendlyByteBuf buffer) {
+        public Line<ENVIRONMENT, ?> decode(@Nonnull RegistryFriendlyByteBuf buffer) {
             final IScratchBlock<?, ?, ?> block = IScratchBlock.STREAM_CODEC.decode(buffer);
             try {
                 return decodeInternal(buffer, (IScratchBlock<? super ENVIRONMENT, ?, ?>)block);
@@ -231,7 +232,7 @@ public class ScratchProcedure<ENVIRONMENT extends IScratchEnvironment, CONTEXT e
         };
 
         @Override
-        public void encode(RegistryFriendlyByteBuf buffer, Line<ENVIRONMENT, ?> value) {
+        public void encode(@Nonnull RegistryFriendlyByteBuf buffer, @Nonnull Line<ENVIRONMENT, ?> value) {
             encodeInternal(buffer, value);
         };
 

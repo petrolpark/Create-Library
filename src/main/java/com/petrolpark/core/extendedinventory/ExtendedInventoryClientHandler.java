@@ -693,7 +693,7 @@ public class ExtendedInventoryClientHandler {
         return new Rect2i(rect.getX() + x, rect.getY() + y, rect.getWidth(), rect.getHeight());
     };
 
-    @EventBusSubscriber(value = Dist.CLIENT, modid = Petrolpark.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
+    @EventBusSubscriber(value = Dist.CLIENT, modid = Petrolpark.MOD_ID)
     public static class ModBusEvents {
 
         /**

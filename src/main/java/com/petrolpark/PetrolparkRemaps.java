@@ -14,7 +14,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
-@EventBusSubscriber(bus = EventBusSubscriber.Bus.MOD, modid = Petrolpark.MOD_ID)
+@EventBusSubscriber(modid = Petrolpark.MOD_ID)
 public class PetrolparkRemaps {
     
     private static final List<Pair<ResourceLocation, ResourceLocation>> BLOCKS = new ArrayList<>();

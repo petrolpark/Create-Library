@@ -17,6 +17,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 @RequiresCreate
 public class BnCFermentingRecipeDeserializer implements CompatRecipeDeserializer<LiddedBasinRecipe> {
@@ -38,9 +39,9 @@ public class BnCFermentingRecipeDeserializer implements CompatRecipeDeserializer
 
         // Fluid input
         if (bncFluidOptional.isPresent()) {
-            final Optional<com.simibubi.create.foundation.fluid.FluidIngredient> createFluidOptional = bncFluidOptional.get().asCreateIngredient();
-            if (createFluidOptional.isEmpty()) return Optional.empty();
-            else builder.require(createFluidOptional.get());
+            final Optional<SizedFluidIngredient> fluidOptional = bncFluidOptional.get().asNeoIngredient();
+            if (fluidOptional.isEmpty()) return Optional.empty();
+            else builder.require(fluidOptional.get());
         };
 
         // Item inputs

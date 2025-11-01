@@ -34,7 +34,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.ModelEvent;
 
-@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(Dist.CLIENT)
 public class ShulkerBeltLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
     public static final ModelResourceLocation SHULKER_BELT = ModelResourceLocation.standalone(Petrolpark.asResource("item/shulker_belt_on_body"));

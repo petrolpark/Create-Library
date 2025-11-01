@@ -24,6 +24,7 @@ import com.simibubi.create.content.kinetics.millstone.MillstoneBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -76,18 +77,18 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
         method = "Lcom/simibubi/create/content/kinetics/millstone/MillstoneBlockEntity;process()V",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/simibubi/create/content/kinetics/millstone/MillingRecipe;rollResults()Ljava/util/List;"
+            target = "Lcom/simibubi/create/content/kinetics/millstone/MillingRecipe;rollResults(Lnet/minecraft/util/RandomSource;)Ljava/util/List;"
         ),
         remap = false
     )
     @SuppressWarnings("unchecked")
-    public List<ItemStack> modifyRollResults(MillingRecipe recipe, Operation<List<ItemStack>> original) {
+    public List<ItemStack> wrapRollResults(MillingRecipe recipe, RandomSource random, Operation<List<ItemStack>> original) {
         List<ItemStack> results;
 
         if (recipe instanceof IFTLProcessingRecipe ftlr) {
-            results = ftlr.rollLuckyResults(this);
+            results = ftlr.rollLuckyResults(this, random);
         } else {
-            results = original.call(recipe);
+            results = original.call(recipe, random);
         };
 
         if (PetrolparkConfigs.server().createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {

@@ -19,14 +19,15 @@ import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
-import com.simibubi.create.foundation.fluid.FluidIngredient;
 
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import net.neoforged.neoforge.items.IItemHandler;
 
 @Mixin(BasinRecipe.class)
@@ -104,13 +105,13 @@ public class BasinRecipeMixin {
         method = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;Z)Z",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;rollResults()Ljava/util/List;"
+            target = "rollResults"
         ),
         remap = false
     )
     @SuppressWarnings("unchecked")
-    private static final List<ItemStack> wrapRollResults(BasinRecipe basinRecipe, Operation<List<ItemStack>> original, BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
-        if (basinRecipe instanceof IFTLProcessingRecipe ftlRecipe) return ftlRecipe.rollLuckyResults(basin);
-        return original.call(basinRecipe);
+    private static final List<ItemStack> wrapRollResults(BasinRecipe basinRecipe, RandomSource random, Operation<List<ItemStack>> original, BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
+        if (basinRecipe instanceof IFTLProcessingRecipe ftlRecipe) return ftlRecipe.rollLuckyResults(basin, random);
+        return original.call(basinRecipe, random);
     };
 };

@@ -11,7 +11,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterSpriteSourceTypesEvent;
 
 @ApiStatus.Experimental
-@EventBusSubscriber(value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(Dist.CLIENT)
 public class PetrolparkSpriteSources {
     
     @SubscribeEvent

@@ -11,6 +11,7 @@ import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
@@ -25,18 +26,18 @@ public interface IFTLProcessingRecipe<T extends ProcessingRecipe<?, ?>> {
 
     public Optional<ResourceLocation> getFirstTimeLuckyKey();
 
-    public default List<ItemStack> rollLuckyResults(Player player) {
+    public default List<ItemStack> rollLuckyResults(Player player, RandomSource random) {
         ProcessingRecipe<?, ?> recipe = getAsRecipe();
         Optional<ResourceLocation> key = getFirstTimeLuckyKey();
-        if (key.isEmpty() || player == null) return recipe.rollResults();
+        if (key.isEmpty() || player == null) return recipe.rollResults(random);
         ResourceLocationSet plfr = player.getData(CreateAttachmentTypes.FTL_RECIPES);
         if (plfr.add(key.get())) return recipe.getRollableResults().stream().map(ProcessingOutput::getStack).toList(); // Only guarantee 100% success the first time
-        return recipe.rollResults();
+        return recipe.rollResults(random);
     };
 
-    public default List<ItemStack> rollLuckyResults(SmartBlockEntity blockEntity) {
+    public default List<ItemStack> rollLuckyResults(SmartBlockEntity blockEntity, RandomSource random) {
         FTLRecipesBehaviour behaviour = blockEntity.getBehaviour(FTLRecipesBehaviour.TYPE);
-        if (behaviour != null) return rollLuckyResults(behaviour.getPlayer());
-        return getAsRecipe().rollResults();
+        if (behaviour != null) return rollLuckyResults(behaviour.getPlayer(), random);
+        return getAsRecipe().rollResults(random);
     };
 };
