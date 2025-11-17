@@ -23,6 +23,7 @@ public enum SharedFeatureFlag implements StringRepresentable {
     SPRING,
     POTATO_PRODUCTS(MILK_PRODUCTS, EXTRUSION), // Mashed Potato, Fries
     MANDREL(SPRING),
+    PROGRAMMING_BLOCK
     ;
 
     public static final Codec<SharedFeatureFlag> CODEC = StringRepresentable.fromEnum(SharedFeatureFlag::values);

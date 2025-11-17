@@ -37,7 +37,7 @@ file="META-INF/accesstransformer.cfg"
 [[dependencies.${mod_id}]]
 	modId ="create"
 	type ="optional"
-	versionRange ="[6.0.7,6.1.0)"
+	versionRange ="[6.0.8,6.1.0)"
     reason = "This library modifies Create using mixins, whose targets may change in newer updates"
 	ordering = "AFTER"
 	side = "BOTH"

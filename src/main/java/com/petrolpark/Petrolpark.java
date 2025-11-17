@@ -58,6 +58,7 @@ public class Petrolpark {
         PetrolparkAdvancedIngredientTypes.register();
         PetrolparkAttachmentTypes.register(modEventBus);
         PetrolparkAttributes.register();
+        PetrolparkBlockEntityTypes.register();
         PetrolparkBlocks.register();
         PetrolparkBogglePatternGeneratorTypes.register();
         PetrolparkCriteriaTriggers.register();

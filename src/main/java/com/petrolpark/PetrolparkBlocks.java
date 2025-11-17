@@ -3,6 +3,7 @@ package com.petrolpark;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.core.scratch.world.block.ProgrammingBlock;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.world.level.block.Block;
@@ -19,6 +20,11 @@ public class PetrolparkBlocks {
             .sound(SoundType.SLIME_BLOCK)
             .strength(0.2f)
         ).item()
+        .build()
+        .register();
+
+    public static final BlockEntry<ProgrammingBlock> PROGRAMMING_BLOCK = REGISTRATE.sharedBlock(SharedFeatureFlag.PROGRAMMING_BLOCK, "programming_block", ProgrammingBlock::new)
+        .item()
         .build()
         .register();
 
