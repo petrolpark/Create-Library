@@ -4,13 +4,11 @@ import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.PetrolparkConfig;
 import com.petrolpark.contamination.IContamination;
 import com.petrolpark.contamination.ItemContamination;
-import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.item.decay.IDecayingItem;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
 
@@ -27,14 +25,11 @@ public class RecipeApplierMixin {
         remap = false
     )
     private static List<ItemStack> modifyApplyRecipeOn(List<ItemStack> original, Level level, ItemStack stackIn, Recipe<?> recipe, boolean returnProcessingRemainder) {
-        if (PetrolparkConfigs.server().createOtherRecipesPropagateContaminants.get()) {
-    private static void inApplyRecipeOn(Level level, ItemStack stackIn, Recipe<?> recipe, CallbackInfoReturnable<List<ItemStack>> cir, List<ItemStack> stacks) {
         if (PetrolparkConfig.SERVER.createOtherRecipesPropagateContaminants.get()) {
             IContamination<?, ?> inputContamination = ItemContamination.get(stackIn);
             original.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
         };
-        original.forEach(ItemDecay::startDecay);
+        original.forEach(IDecayingItem::startDecay);
         return original;
-        stacks.forEach(IDecayingItem::startDecay);
     };
 };
