@@ -45,6 +45,7 @@ public enum Orientation implements StringRepresentable {
     });
 
     public static final Orientation fromTopAndFront(Direction top, Direction front) {
+        if (top.getAxis() == front.getAxis()) throw new IllegalArgumentException("Front and top of an orientation must be different axes");
         return LOOKUP.get(lookupKey(top, front));
     };
 
