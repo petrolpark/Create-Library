@@ -14,6 +14,7 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateBlocks;
 import com.petrolpark.compat.create.CreateRecipeTypes;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
+import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerScreen;
 import com.petrolpark.compat.jei.category.AgeingCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
@@ -26,12 +27,14 @@ import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
 import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.compat.jei.GhostIngredientHandler;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.category.IRecipeCategory;
+import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
@@ -145,6 +148,12 @@ public class PetrolparkCreateJEI implements IModPlugin {
     @Override
     public ResourceLocation getPluginUid() {
         return Petrolpark.asResource("create_jei");
+    };
+
+    @Override
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public void registerGuiHandlers(@Nonnull IGuiHandlerRegistration registration) {
+        registration.addGhostIngredientHandler(RedstoneProgrammerScreen.class, new GhostIngredientHandler());
     };
 
     private static class CategoryBuilderImpl<R extends Recipe<?>> extends PetrolparkCategoryBuilder<R, CategoryBuilderImpl<R>> {

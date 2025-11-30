@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkTradeListingReferenceTypes;
+import com.petrolpark.util.CodecHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -15,7 +16,7 @@ public record WanderingTraderTradeListingReference(boolean rare, int index) impl
 
     public static final MapCodec<WanderingTraderTradeListingReference> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("rare").forGetter(WanderingTraderTradeListingReference::rare),
-            Codec.intRange(0, Integer.MAX_VALUE).fieldOf("index").forGetter(WanderingTraderTradeListingReference::index)
+            CodecHelper.POS_INT.fieldOf("index").forGetter(WanderingTraderTradeListingReference::index)
         ).apply(instance, WanderingTraderTradeListingReference::new));
 
     public static final StreamCodec<ByteBuf, WanderingTraderTradeListingReference> STREAM_CODEC = StreamCodec.composite(

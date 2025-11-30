@@ -42,7 +42,46 @@ public enum PetrolparkGuiTexture implements IGuiTexture {
     
     // Creative Mode Tab
 	CREATIVE_MODE_TAB_BLANK_ROW("creative_inventory", 0, 0, 162, 18),
+
+    // Redstone Programmer
+    REDSTONE_PROGRAMMER("redstone_programmer/background", 256, 226),
+	REDSTONE_PROGRAMMER_NOTE_BORDER_MIDDLE("redstone_programmer/widgets", 192, 0, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_BORDER_LEFT("redstone_programmer/widgets", 196, 0, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_BORDER_LONE("redstone_programmer/widgets", 200, 0, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_BORDER_RIGHT("redstone_programmer/widgets", 204, 0, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_0("redstone_programmer/widgets", 192, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_1("redstone_programmer/widgets", 196, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_2("redstone_programmer/widgets", 200, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_3("redstone_programmer/widgets", 204, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_4("redstone_programmer/widgets", 208, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_5("redstone_programmer/widgets", 212, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_6("redstone_programmer/widgets", 216, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_7("redstone_programmer/widgets", 220, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_8("redstone_programmer/widgets", 224, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_9("redstone_programmer/widgets", 228, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_10("redstone_programmer/widgets", 232, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_11("redstone_programmer/widgets", 236, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_12("redstone_programmer/widgets", 240, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_13("redstone_programmer/widgets", 244, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_14("redstone_programmer/widgets", 248, 18, 4, 18),
+	REDSTONE_PROGRAMMER_NOTE_15("redstone_programmer/widgets", 252, 18, 4, 18),
+	REDSTONE_PROGRAMMER_LINE("redstone_programmer/widgets", 179, 16, 2, 199),
+	REDSTONE_PROGRAMMER_BARLINE("redstone_programmer/widgets", 181, 16, 2, 199),
+	REDSTONE_PROGRAMMER_ITEM_SLOTS("redstone_programmer/widgets", 192, 36, 36, 18),
+	REDSTONE_PROGRAMMER_DELETE_CHANNEL("redstone_programmer/widgets", 244, 36, 12, 18),
+	REDSTONE_PROGRAMMER_MOVE_CHANNEL_UP("redstone_programmer/widgets", 228, 36, 12, 9),
+	REDSTONE_PROGRAMMER_MOVE_CHANNEL_DOWN("redstone_programmer/widgets", 228, 45, 12, 9),
+	REDSTONE_PROGRAMMER_PLAYHEAD("redstone_programmer/widgets", 185,16, 7, 199),
+	REDSTONE_PROGRAMMER_REMOVE_BAR("redstone_programmer/widgets", 192, 54, 12, 13),
+	REDSTONE_PROGRAMMER_ADD_BAR("redstone_programmer/widgets", 204, 54, 12, 13),
     ;
+
+    private static final PetrolparkGuiTexture[] notes = new PetrolparkGuiTexture[]{REDSTONE_PROGRAMMER_NOTE_0, REDSTONE_PROGRAMMER_NOTE_1, REDSTONE_PROGRAMMER_NOTE_2, REDSTONE_PROGRAMMER_NOTE_3, REDSTONE_PROGRAMMER_NOTE_4, REDSTONE_PROGRAMMER_NOTE_5, REDSTONE_PROGRAMMER_NOTE_6, REDSTONE_PROGRAMMER_NOTE_7, REDSTONE_PROGRAMMER_NOTE_8, REDSTONE_PROGRAMMER_NOTE_9, REDSTONE_PROGRAMMER_NOTE_10, REDSTONE_PROGRAMMER_NOTE_11, REDSTONE_PROGRAMMER_NOTE_12, REDSTONE_PROGRAMMER_NOTE_13, REDSTONE_PROGRAMMER_NOTE_14, REDSTONE_PROGRAMMER_NOTE_15};
+
+	public static PetrolparkGuiTexture getRedstoneProgrammerNote(int strength) {
+		if (strength > 0 && strength <= 15) return notes[strength];
+		return REDSTONE_PROGRAMMER_NOTE_0;
+	};
 
     public final ResourceLocation location;
 	public final int width, height, startX, startY, textureWidth, textureHeight;

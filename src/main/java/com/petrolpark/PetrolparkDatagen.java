@@ -6,8 +6,11 @@ import java.util.concurrent.CompletableFuture;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.badge.BadgeDataProvider;
+import com.petrolpark.core.registrate.PetrolparkTagGen;
+import com.petrolpark.core.registrate.PetrolparkTagGen.UnrequiredTagsProvider;
 
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.DataGenerator;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.loot.LootTableProvider;
@@ -18,18 +21,19 @@ import net.neoforged.neoforge.data.event.GatherDataEvent;
 
 public class PetrolparkDatagen {
 
-    public static void prepareDatagen(GatherDataEvent event) {
+    public static void prepareDatagen() {
         for (SharedFeatureFlag flag : SharedFeatureFlag.values()) flag.enable(Mods.PETROLPARK); // All must be enabled for Datagen
     };
 
     public static void gatherData(GatherDataEvent event) {
 
-        DataGenerator generator = event.getGenerator();
-        PackOutput output = generator.getPackOutput();
-		CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
-		ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        final DataGenerator generator = event.getGenerator();
+        final PackOutput output = generator.getPackOutput();
+		final CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
+		final ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         generator.addProvider(event.includeServer(), new AdvancementProvider(output, lookupProvider, existingFileHelper, Collections.singletonList(new BadgeDataProvider())));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Collections.emptySet(), Collections.singletonList(new LootTableProvider.SubProviderEntry(BadgeDataProvider::new, LootContextParamSets.ADVANCEMENT_REWARD)), lookupProvider));
+        generator.addProvider(event.includeServer(), new UnrequiredTagsProvider<>(output, Registries.BLOCK, lookupProvider, existingFileHelper, PetrolparkTagGen.UNREQUIRED_BLOCKS));
     };
 };

@@ -5,6 +5,7 @@ import java.util.Map;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.util.CodecHelper;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -22,7 +23,7 @@ public interface IVillagerTradeListingReference extends ITradeListingReference {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
             BuiltInRegistries.VILLAGER_PROFESSION.byNameCodec().fieldOf("profession").forGetter(IVillagerTradeListingReference::profession),
             Codec.intRange(1, 5).fieldOf("level").forGetter(IVillagerTradeListingReference::level),
-            Codec.intRange(0, Integer.MAX_VALUE).fieldOf("index").forGetter(IVillagerTradeListingReference::index)
+            CodecHelper.POS_INT.fieldOf("index").forGetter(IVillagerTradeListingReference::index)
         ).apply(instance, factory::create));
     };
 

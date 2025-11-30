@@ -10,6 +10,8 @@ import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlockEnti
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionDieBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRenderer;
+import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockEntity;
+import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockEntityRenderer;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -29,14 +31,21 @@ public class CreateBlockEntityTypes {
         .renderer(() -> MandrelRenderer::new)
         .register();
 
+    public static final BlockEntityEntry<RedstoneProgrammerBlockEntity> REDSTONE_PROGRAMMER = REGISTRATE.sharedBlockEntity(SharedFeatureFlag.REDSTONE_PROGRAMMER, "redstone_programmer", RedstoneProgrammerBlockEntity::new)
+        .validBlock(CreateBlocks.REDSTONE_PROGRAMMER)
+        .renderer(() -> RedstoneProgrammerBlockEntityRenderer::new)
+        .register();
+
     public static final BlockEntityEntry<TubeStructuralBlockEntity> TUBE_STRUCTURE = REGISTRATE.blockEntity("tube_structure", TubeStructuralBlockEntity::new)
         .validBlock(CreateBlocks.TUBE_STRUCTURE)
         .register();
 
+    @Deprecated
     public static final BlockEntityEntry<TorqueLimiterInputBlockEntity> TORQUE_LIMITER_INPUT = REGISTRATE.sharedBlockEntity(SharedFeatureFlag.TORQUE_LIMITER, "torque_limiter_input", TorqueLimiterInputBlockEntity::new)
         .validBlock(CreateBlocks.TORQUE_LIMITER_INPUT)
         .register();
 
+    @Deprecated
     public static final BlockEntityEntry<TorqueLimiterOutputBlockEntity> TORQUE_LIMITER_OUTPUT = REGISTRATE.sharedBlockEntity(SharedFeatureFlag.TORQUE_LIMITER, "torque_limiter_output", TorqueLimiterOutputBlockEntity::new)
         .validBlock(CreateBlocks.TORQUE_LIMITER_OUTPUT)
         .register();

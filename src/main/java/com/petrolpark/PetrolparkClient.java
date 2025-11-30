@@ -4,7 +4,7 @@ import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.CreateClient;
 import com.petrolpark.compat.curios.CuriosClient;
 import com.petrolpark.compat.jei.PetrolparkJEI;
-import com.petrolpark.core.extendedinventory.ExtendedInventoryClientHandler;
+import com.petrolpark.core.inventory.extended.ExtendedInventoryClientHandler;
 
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;

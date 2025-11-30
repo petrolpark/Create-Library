@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import com.petrolpark.PetrolparkMobEffects;
-import com.petrolpark.core.extendedinventory.ExtendedInventory;
-import com.petrolpark.core.extendedinventory.ExtendedInventoryClientHandler;
+import com.petrolpark.core.inventory.extended.ExtendedInventory;
+import com.petrolpark.core.inventory.extended.ExtendedInventoryClientHandler;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;

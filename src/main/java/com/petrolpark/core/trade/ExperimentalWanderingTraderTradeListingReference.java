@@ -1,9 +1,9 @@
 package com.petrolpark.core.trade;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkTradeListingReferenceTypes;
+import com.petrolpark.util.CodecHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -14,8 +14,8 @@ import net.minecraft.world.entity.npc.VillagerTrades.ItemListing;
 public record ExperimentalWanderingTraderTradeListingReference(int group, int index) implements ITradeListingReference {
 
     public static final MapCodec<ExperimentalWanderingTraderTradeListingReference> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.intRange(0, Integer.MAX_VALUE).fieldOf("group").forGetter(ExperimentalWanderingTraderTradeListingReference::group),
-        Codec.intRange(0, Integer.MAX_VALUE).fieldOf("index").forGetter(ExperimentalWanderingTraderTradeListingReference::index)
+        CodecHelper.POS_INT.fieldOf("group").forGetter(ExperimentalWanderingTraderTradeListingReference::group),
+        CodecHelper.POS_INT.fieldOf("index").forGetter(ExperimentalWanderingTraderTradeListingReference::index)
     ).apply(instance, ExperimentalWanderingTraderTradeListingReference::new));
 
     public static final StreamCodec<ByteBuf, ExperimentalWanderingTraderTradeListingReference> STREAM_CODEC = StreamCodec.composite(

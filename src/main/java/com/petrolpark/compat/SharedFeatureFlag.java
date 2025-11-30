@@ -13,6 +13,7 @@ import net.minecraft.util.StringRepresentable;
 
 public enum SharedFeatureFlag implements StringRepresentable {
     
+    // Machines
     CENTRIFUGE,
     BASIN_LID,
     TORQUE_LIMITER,
@@ -23,7 +24,8 @@ public enum SharedFeatureFlag implements StringRepresentable {
     SPRING,
     POTATO_PRODUCTS(MILK_PRODUCTS, EXTRUSION), // Mashed Potato, Fries
     MANDREL(SPRING),
-    PROGRAMMING_BLOCK
+    PROGRAMMING_BLOCK,
+    REDSTONE_PROGRAMMER
     ;
 
     public static final Codec<SharedFeatureFlag> CODEC = StringRepresentable.fromEnum(SharedFeatureFlag::values);

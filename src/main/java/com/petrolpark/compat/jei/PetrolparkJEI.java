@@ -3,7 +3,7 @@ package com.petrolpark.compat.jei;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.core.extendedinventory.ExtendedInventoryJeiGuiHandler;
+import com.petrolpark.core.inventory.extended.ExtendedInventoryJeiGuiHandler;
 import com.petrolpark.core.recipe.book.RecipeBookItemJEICategoryCache;
 
 import mezz.jei.api.IModPlugin;

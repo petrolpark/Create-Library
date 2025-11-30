@@ -29,6 +29,7 @@ public class PetrolparkRemaps {
         destroyBlockAndItem("mashed_potato_block");
         
         destroyBlockEntityAndItem("extrusion_die");
+        destroyBlockEntityAndItem("redstone_programmer");
     };
 
     private static final void item(ResourceLocation oldRL, String newName) {

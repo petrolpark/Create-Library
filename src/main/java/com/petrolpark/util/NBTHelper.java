@@ -8,15 +8,19 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.mojang.serialization.Codec;
 import com.petrolpark.PetrolparkRegistries;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.DoubleTag;
 import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.Level;
@@ -38,6 +42,14 @@ public class NBTHelper {
             if (tag1 == null || !Objects.equals(tag1.get(key), tag2.get(key))) return false;
         };
         return true;
+    };
+
+    public static final <T> Tag write(HolderLookup.Provider registries, Codec<T> codec, T object) {
+        return codec.encodeStart(RegistryOps.create(NbtOps.INSTANCE, registries), object).getPartialOrThrow();
+    };
+
+    public static final <T> T read(HolderLookup.Provider registries, Codec<T> codec, Tag tag) {
+        return codec.parse(RegistryOps.create(NbtOps.INSTANCE, registries), tag).getPartialOrThrow();
     };
 
     public static Consumer<Tag> writeAt(CompoundTag tag, String key) {

@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "petrolpark:mandrel",
+      "required": false
+    },
+    {
+      "id": "petrolpark:redstone_programmer",
+      "required": false
+    }
+  ]
+}

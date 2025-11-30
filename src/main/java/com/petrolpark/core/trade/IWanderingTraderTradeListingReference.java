@@ -3,6 +3,7 @@ package com.petrolpark.core.trade;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.util.CodecHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -13,7 +14,7 @@ public interface IWanderingTraderTradeListingReference extends ITradeListingRefe
     public static <REF extends IWanderingTraderTradeListingReference> MapCodec<REF> codec(Factory<REF> factory) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
             Codec.BOOL.fieldOf("rare").forGetter(IWanderingTraderTradeListingReference::rare),
-            Codec.intRange(0, Integer.MAX_VALUE).fieldOf("index").forGetter(IWanderingTraderTradeListingReference::index)
+            CodecHelper.POS_INT.fieldOf("index").forGetter(IWanderingTraderTradeListingReference::index)
         ).apply(instance, factory::create));
     };
 

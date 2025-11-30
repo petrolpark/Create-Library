@@ -1,6 +1,6 @@
 package com.petrolpark.config;
 
-import com.petrolpark.core.extendedinventory.ExtendedInventoryClientHandler.ExtraHotbarSlotLocations;
+import com.petrolpark.core.inventory.extended.ExtendedInventoryClientHandler.ExtraHotbarSlotLocations;
 
 import net.createmod.catnip.config.ConfigBase;
 

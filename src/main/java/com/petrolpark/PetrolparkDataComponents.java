@@ -3,7 +3,7 @@ package com.petrolpark;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import org.jetbrains.annotations.ApiStatus.Internal;
+import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
 import com.petrolpark.compat.create.core.dough.IDough;
@@ -99,8 +99,8 @@ public class PetrolparkDataComponents {
 		return type;
 	};
 
-	@Internal
-	public static void register(IEventBus modEventBus) {
+	@ApiStatus.Internal
+	public static final void register(IEventBus modEventBus) {
 		DATA_COMPONENTS.register(modEventBus);
 	};
 };

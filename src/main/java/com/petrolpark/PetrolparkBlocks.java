@@ -1,11 +1,13 @@
 package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
+import static com.petrolpark.core.registrate.PetrolparkTagGen.tagUnrequired;
 
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.scratch.world.block.ProgrammingBlock;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -19,7 +21,8 @@ public class PetrolparkBlocks {
             .mapColor(MapColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
             .strength(0.2f)
-        ).item()
+        ).transform(tagUnrequired(BlockTags.MINEABLE_WITH_HOE))
+        .item()
         .build()
         .register();
 

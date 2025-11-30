@@ -29,9 +29,11 @@ public class Create {
         CreateBlocks.register();
         CreateCompatRecipeDeserializers.register();
         CreateCriterionTriggers.register();
+        CreateDataComponentTypes.register(modEventBus);
         CreateFluids.register();
         CreateGlobalLootModifierSerializers.register();
         CreateItems.register();
+        CreateMenuTypes.register();
         CreatePackets.register();
     
         PetrolparkMandrelAnimationTypes.register();

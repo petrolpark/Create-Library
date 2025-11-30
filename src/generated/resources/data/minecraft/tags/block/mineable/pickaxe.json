@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "petrolpark:extrusion_die",
+      "required": false
+    },
+    {
+      "id": "petrolpark:mandrel",
+      "required": false
+    },
+    {
+      "id": "petrolpark:basin_lid",
+      "required": false
+    },
+    {
+      "id": "petrolpark:redstone_programmer",
+      "required": false
+    }
+  ]
+}

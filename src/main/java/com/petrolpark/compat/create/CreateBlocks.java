@@ -1,6 +1,11 @@
 package com.petrolpark.compat.create;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
+import static com.petrolpark.core.registrate.PetrolparkTagGen.axeOrPickaxe;
+import static com.petrolpark.core.registrate.PetrolparkTagGen.pickaxeOnly;
+import static net.minecraft.world.level.storage.loot.LootPool.lootPool;
+import static net.minecraft.world.level.storage.loot.LootTable.lootTable;
+import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableItem;
 
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlock;
@@ -8,6 +13,8 @@ import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterO
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlock;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionDieBlock;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlock;
+import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlock;
+import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockItem;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlock;
 import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.ModelGen;
@@ -16,14 +23,16 @@ import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class CreateBlocks {
 
     public static final BlockEntry<BasinLidBlock> BASIN_LID = REGISTRATE.sharedBlock(SharedFeatureFlag.BASIN_LID, "basin_lid", BasinLidBlock::new)
         .initialProperties(SharedProperties::copperMetal)
         .properties(BlockBehaviour.Properties::noOcclusion)
-        .lang("Basin Lid")
         .blockstate(BlockStateGen.horizontalBlockProvider(false))
+        .transform(pickaxeOnly())
         .item()
         .build()
         .register();
@@ -31,14 +40,15 @@ public class CreateBlocks {
     public static final BlockEntry<ExtrusionDieBlock> EXTRUSION_DIE = REGISTRATE.sharedBlock(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlock::new)
         .initialProperties(SharedProperties::softMetal)
         .properties(BlockBehaviour.Properties::noCollission)
+        .transform(pickaxeOnly())
         .item()
         .build()
         .register();
 
     public static final BlockEntry<MandrelBlock> MANDREL = REGISTRATE.sharedBlock(SharedFeatureFlag.MANDREL, "mandrel", MandrelBlock::new)
         .initialProperties(SharedProperties::stone)
-        .lang("Mandrel")
         .blockstate(BlockStateGen.horizontalBlockProvider(true))
+        .transform(axeOrPickaxe())
         .item()
         .transform(ModelGen.customItemModel())
         .register();
@@ -46,18 +56,36 @@ public class CreateBlocks {
     public static final BlockEntry<TubeStructuralBlock> TUBE_STRUCTURE = REGISTRATE.block("tube", TubeStructuralBlock::new)
         .properties(p -> p
             .noCollission()
+            .noLootTable()
             .pushReaction(PushReaction.DESTROY)
-        ).lang("Tube Segment")
-        .blockstate((c, p) -> {})
+        ).blockstate((c, p) -> {})
         .register();
 
+    public static final BlockEntry<RedstoneProgrammerBlock> REDSTONE_PROGRAMMER = REGISTRATE.sharedBlock(SharedFeatureFlag.REDSTONE_PROGRAMMER, "redstone_programmer", RedstoneProgrammerBlock::new)
+        .initialProperties(SharedProperties::wooden)
+        .properties(p -> p
+            .noOcclusion()
+        ).loot((lt, b) -> lt.add(b, lootTable()
+            .withPool(
+                lt.applyExplosionCondition(b, lootPool()
+                    .setRolls(ConstantValue.exactly(1f))
+                    .add(lootTableItem(b).apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                        .include(CreateDataComponentTypes.REDSTONE_PROGRAM)
+                    ))
+                )
+            ))
+        ).transform(axeOrPickaxe())
+        .item(RedstoneProgrammerBlockItem::new)
+        .build()
+        .register();
+
+    @Deprecated
     public static final BlockEntry<TorqueLimiterInputBlock> TORQUE_LIMITER_INPUT = REGISTRATE.sharedBlock(SharedFeatureFlag.TORQUE_LIMITER, "torque_limiter_input", TorqueLimiterInputBlock::new)
-        .lang("Torque Limiter")
         .blockstate((c, p) -> {})
         .register();
 
+    @Deprecated
     public static final BlockEntry<TorqueLimiterOutputBlock> TORQUE_LIMITER_OUTPUT = REGISTRATE.sharedBlock(SharedFeatureFlag.TORQUE_LIMITER, "torque_limiter_output", TorqueLimiterOutputBlock::new)
-        .lang("Torque Limiter")
         .blockstate((c, p) -> {})
         .register();
 
