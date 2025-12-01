@@ -41,17 +41,17 @@ public abstract class RedstoneProgram {
 
     public static final <PROGRAM extends RedstoneProgram> Codec<PROGRAM> codec(Factory<PROGRAM> factory) {
         return RecordCodecBuilder.create(instance -> instance.group(
-            PlayMode.CODEC.fieldOf("mode").forGetter(RedstoneProgram::getMode),
-            CodecHelper.POS_INT.fieldOf("length").forGetter(RedstoneProgram::getLength),
-            CodecHelper.POS_INT.fieldOf("playtime").forGetter(RedstoneProgram::getPlaytime),
-            CodecHelper.POS_INT.fieldOf("ticks_to_next_beat").forGetter(RedstoneProgram::getTicksToNextBeat),
-            Codec.BOOL.fieldOf("paused").forGetter(RedstoneProgram::isPaused),
-            Codec.BOOL.fieldOf("was_paused").forGetter(RedstoneProgram::wasPausedLastTick),
-            Codec.BOOL.fieldOf("was_powered").forGetter(RedstoneProgram::wasPoweredLastTick),
-            Codec.list(ChannelData.CODEC).fieldOf("channels").forGetter(RedstoneProgram::getChannelData),
-            CodecHelper.POS_INT.fieldOf("ticks_per_beat").forGetter(RedstoneProgram::getTicksPerBeat),
-            CodecHelper.POS_INT.fieldOf("beats_per_line").forGetter(RedstoneProgram::getBeatsPerLine),
-            CodecHelper.POS_INT.fieldOf("lines_per_bar").forGetter(RedstoneProgram::getLinesPerBar)
+            PlayMode.CODEC.optionalFieldOf("mode", PlayMode.MANUAL).forGetter(RedstoneProgram::getMode),
+            CodecHelper.POS_INT.optionalFieldOf("length", 20).forGetter(RedstoneProgram::getLength),
+            CodecHelper.POS_INT.optionalFieldOf("playtime", 0).forGetter(RedstoneProgram::getPlaytime),
+            CodecHelper.POS_INT.optionalFieldOf("ticks_to_next_beat", 2).forGetter(RedstoneProgram::getTicksToNextBeat),
+            Codec.BOOL.optionalFieldOf("paused", true).forGetter(RedstoneProgram::isPaused),
+            Codec.BOOL.optionalFieldOf("was_paused", false).forGetter(RedstoneProgram::wasPausedLastTick),
+            Codec.BOOL.optionalFieldOf("was_powered", false).forGetter(RedstoneProgram::wasPoweredLastTick),
+            Codec.list(ChannelData.CODEC).optionalFieldOf("channels",Collections.emptyList()).forGetter(RedstoneProgram::getChannelData),
+            CodecHelper.POS_INT.optionalFieldOf("ticks_per_beat", 2).forGetter(RedstoneProgram::getTicksPerBeat),
+            CodecHelper.POS_INT.optionalFieldOf("beats_per_line", 2).forGetter(RedstoneProgram::getBeatsPerLine),
+            CodecHelper.POS_INT.optionalFieldOf("lines_per_bar", 4).forGetter(RedstoneProgram::getLinesPerBar)
         ).apply(instance, factory::create));
     };
 
@@ -133,6 +133,7 @@ public abstract class RedstoneProgram {
         ticksPerBeat = PetrolparkConfigs.server().redstoneProgrammerMinTicksPerBeat.get();
         length = 20;
         playtime = 0;
+        ticksToNextBeat = ticksPerBeat;
         paused = true;
         pausedLastTick = false;
         poweredLastTick = false;
@@ -258,6 +259,10 @@ public abstract class RedstoneProgram {
     public abstract LevelAccessor getWorld();
 
     public void whenChanged() {};
+
+    public Object getHashSalt() {
+        return 0;
+    };
 
     public ImmutableList<Channel> getChannels() {
         return ImmutableList.copyOf(channels);
@@ -431,7 +436,7 @@ public abstract class RedstoneProgram {
 
         @Override
         public int hashCode() {
-            return Objects.hash(networkKey, sequence);
+            return Objects.hash(networkKey, sequence, getHashSalt());
         };
 
     };

@@ -22,12 +22,12 @@ import com.petrolpark.compat.jei.category.ExtrusionCategory;
 import com.petrolpark.compat.jei.category.LiddedBasinCategory;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
+import com.petrolpark.compat.jei.ghost.PetrolparkGhostIngredientHandler;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
 import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.compat.jei.GhostIngredientHandler;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 
@@ -153,7 +153,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void registerGuiHandlers(@Nonnull IGuiHandlerRegistration registration) {
-        registration.addGhostIngredientHandler(RedstoneProgrammerScreen.class, new GhostIngredientHandler());
+        registration.addGhostIngredientHandler(RedstoneProgrammerScreen.class, new PetrolparkGhostIngredientHandler());
     };
 
     private static class CategoryBuilderImpl<R extends Recipe<?>> extends PetrolparkCategoryBuilder<R, CategoryBuilderImpl<R>> {

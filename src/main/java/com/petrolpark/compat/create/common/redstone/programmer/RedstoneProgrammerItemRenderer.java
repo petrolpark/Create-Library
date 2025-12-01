@@ -57,7 +57,7 @@ public class RedstoneProgrammerItemRenderer extends CustomRenderedItemModelRende
         ImmutableList<Channel> channels = program.getChannels();
         for (int i = 0; i < 6; i++) {
             if (i >= channels.size()) continue;
-            boolean powered = !program.paused && program.getChannels().get(i).getTransmittedStrength() != 0;
+            boolean powered = running && program.getChannels().get(i).getTransmittedStrength() != 0;
             ms.pushPose();
             ms.translate(i % 2 == 0 ? 0f : 15 / 16f, 1 / 16f, (3 + 4.5F * (i / 2)) / 16f);
             renderer.render((powered ? PetrolparkPartialModels.REDSTONE_PROGRAMMER_TRANSMITTER_POWERED : PetrolparkPartialModels.REDSTONE_PROGRAMMER_TRANSMITTER).get(), light);

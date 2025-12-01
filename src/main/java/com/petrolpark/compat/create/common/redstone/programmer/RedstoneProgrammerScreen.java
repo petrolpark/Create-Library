@@ -14,6 +14,7 @@ import com.petrolpark.client.rendering.PetrolparkGuiTexture;
 import com.petrolpark.compat.create.CreateBlocks;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgram.Channel;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgram.PlayMode;
+import com.petrolpark.compat.jei.ghost.IConditionalGhostSlot;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
@@ -31,6 +32,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.Slot;
 
 public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<RedstoneProgrammerMenu> {
 
@@ -318,14 +320,10 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
     public boolean mouseScrolled(double mouseX, double mouseY, double deltaX, double deltaY) {
         int mX = (int)mouseX - getGuiLeft();
         int mY = (int)mouseY - getGuiTop();
-        if (ITEM_AREA.contains(mX, mY)) {
+        if (ITEM_AREA.contains(mX, mY) || deltaX != 0d) {
             int oldScroll = verticalScroll;
             clampVerticalScroll(oldScroll + (int)deltaY * 5);
-            if (oldScroll != verticalScroll) {
-                menu.refreshSlots(verticalScroll);
-                shouldSend = true;
-            };
-            return true;
+            if (deltaX == 0d) return true;
         } else if (NOTE_AREA.contains(mX, mY)) {
             followPlayHead = false;
 
@@ -367,13 +365,12 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
             };
 
             // Scrolling horizontally
-            clampHorizontalScroll(horizontalScroll.getChaseTarget() + deltaY * 5, 10d);
+            clampHorizontalScroll(horizontalScroll.getChaseTarget() + (deltaY == 0d ? -deltaX : deltaY) * 5, 10d);
         };
         return super.mouseScrolled(mouseX, mouseY, deltaX, deltaY);
     };
 
     @Override
-    @SuppressWarnings("null")
     protected void renderBg(@Nonnull GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
 
         PoseStack ms = graphics.pose();
@@ -403,7 +400,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
         //UIRenderHelper.swapAndBlitColor(minecraft.getMainRenderTarget(), UIRenderHelper.framebuffer);
 
         // Lines
-        graphics.enableScissor(NOTE_AREA.getX(), NOTE_AREA.getY() - 11, NOTE_AREA.getX() + NOTE_AREA.getWidth(), NOTE_AREA.getY() + NOTE_AREA.getHeight() + 7);
+        enableScissor(graphics, NOTE_AREA.getX(), NOTE_AREA.getY() - 11, NOTE_AREA.getWidth(), NOTE_AREA.getHeight() + 7);
         ms.pushPose();
         ms.translate(NOTE_AREA.getX(), NOTE_AREA.getY() - 10, 0f);
         if (program.beatsPerLine > 0) {
@@ -439,7 +436,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
             };
 
             // Items and buttons
-            graphics.enableScissor(ITEM_AREA.getX(), ITEM_AREA.getY(), ITEM_AREA.getX() + ITEM_AREA.getWidth(), ITEM_AREA.getY() + ITEM_AREA.getHeight());
+            enableScissor(graphics, ITEM_AREA.getX(), ITEM_AREA.getY(), ITEM_AREA.getWidth(), ITEM_AREA.getHeight());
             ms.pushPose();
             ms.translate(ITEM_AREA.getX(), ITEM_AREA.getY() + verticalOffset, 0d);
             PetrolparkGuiTexture.REDSTONE_PROGRAMMER_ITEM_SLOTS.render(graphics, 31, 3);
@@ -451,7 +448,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
             graphics.disableScissor();
 
             // Sequence
-            graphics.enableScissor(NOTE_AREA.getX(), NOTE_AREA.getY(), NOTE_AREA.getX() + NOTE_AREA.getWidth(), NOTE_AREA.getY() + NOTE_AREA.getHeight());
+            enableScissor(graphics, NOTE_AREA.getX(), NOTE_AREA.getY(), NOTE_AREA.getWidth(), NOTE_AREA.getHeight());
             renderNotes: for (int i = 0; i < program.getLength(); i++) {
                 float horizontalOffset = -xOffset + i * noteWidth;
                 if (horizontalOffset < -5) continue;
@@ -475,7 +472,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
         };
 
         // Additional item slots for adding a new channel
-        graphics.enableScissor(ITEM_AREA.getX(), ITEM_AREA.getY(), ITEM_AREA.getX() + ITEM_AREA.getWidth(), ITEM_AREA.getY() + ITEM_AREA.getHeight());
+        enableScissor(graphics, ITEM_AREA.getX(), ITEM_AREA.getY(), ITEM_AREA.getWidth(), ITEM_AREA.getHeight());
         if (channelNo < PetrolparkConfigs.server().redstoneProgrammerMaxChannels.get()) {
             ms.pushPose();
             ms.translate(ITEM_AREA.getX(), NOTE_AREA.getY() + yOffset + channelNo * DISTANCE_BETWEEN_CHANNELS, 0f);
@@ -485,7 +482,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
         graphics.disableScissor();
 
         // Playhead and length buttons
-        graphics.enableScissor(NOTE_AREA.getX(), NOTE_AREA.getY() - 11, NOTE_AREA.getX() + NOTE_AREA.getWidth(), NOTE_AREA.getY() + NOTE_AREA.getHeight() + 11);
+        enableScissor(graphics, NOTE_AREA.getX(), NOTE_AREA.getY() - 11, NOTE_AREA.getWidth(), NOTE_AREA.getHeight() + 11);
         ms.pushPose();
         ms.translate(NOTE_AREA.getX() - xOffset, NOTE_AREA.getY() - 10, channelNo);
 
@@ -518,8 +515,6 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
         // Shadows
         graphics.fillGradient(ITEM_AREA.getX(), ITEM_AREA.getY(), ITEM_AREA.getX() + ITEM_AREA.getWidth(), ITEM_AREA.getY() + 10, 200, 0x77000000, 0x00000000);
         graphics.fillGradient(ITEM_AREA.getX(), ITEM_AREA.getY() + ITEM_AREA.getHeight() - 10, ITEM_AREA.getX() + ITEM_AREA.getWidth(), ITEM_AREA.getY() + ITEM_AREA.getHeight(), 200, 0x00000000, 0x70000000);
-        
-        //UIRenderHelper.swapAndBlitColor(UIRenderHelper.framebuffer, minecraft.getMainRenderTarget());
 
         ms.popPose();
 
@@ -531,8 +526,26 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
         };
     };
 
+    @Override
+    protected void renderSlot(@Nonnull GuiGraphics guiGraphics, @Nonnull Slot slot) {
+        enableScissor(guiGraphics, ITEM_AREA);
+        super.renderSlot(guiGraphics, slot);
+        guiGraphics.disableScissor();
+    };
+
+    @Override
+    protected void renderSlotHighlight(@Nonnull GuiGraphics guiGraphics, @Nonnull Slot slot, int mouseX, int mouseY, float partialTick) {
+        if (slot instanceof IConditionalGhostSlot ghostSlot && ghostSlot.canSetGhostItem()) return;
+        super.renderSlotHighlight(guiGraphics, slot, mouseX, mouseY, partialTick);
+    };
+
     public void clampVerticalScroll(int newScroll) {
+        int oldScroll = verticalScroll;
         verticalScroll = Mth.clamp(newScroll, 0, Math.max(0, 6 + Math.min(program.getChannels().size() + 1, PetrolparkConfigs.server().redstoneProgrammerMaxChannels.get()) * DISTANCE_BETWEEN_CHANNELS - ITEM_AREA.getHeight()));
+        if (oldScroll != verticalScroll) {
+            menu.refreshSlots(verticalScroll);
+            shouldSend = true;
+        };
     };
 
     public void clampHorizontalScroll(double newScroll, double speed) {
@@ -545,6 +558,14 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
 
     public static final MutableComponent translate(String suffix) {
         return Component.translatable(CreateBlocks.REDSTONE_PROGRAMMER.get().getDescriptionId() + "." + suffix);
+    };
+
+    private final void enableScissor(GuiGraphics graphics, Rect2i rect) {
+        enableScissor(graphics, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+    };
+
+    private final void enableScissor(GuiGraphics graphics, int x, int y, int width, int height) {
+        graphics.enableScissor(getGuiLeft() + x, getGuiTop() + y, getGuiLeft() + x + width, getGuiTop() + y + height);
     };
     
 };

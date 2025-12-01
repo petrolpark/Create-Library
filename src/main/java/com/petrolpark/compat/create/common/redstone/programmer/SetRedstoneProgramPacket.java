@@ -2,6 +2,7 @@ package com.petrolpark.compat.create.common.redstone.programmer;
 
 import com.petrolpark.compat.create.CreatePackets;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerMenu.DummyRedstoneProgram;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.actionrecord.ActionRecordEntryResult;
 import com.petrolpark.core.actionrecord.packet.recordable.RecordablePacketPayload;
 
@@ -26,13 +27,14 @@ public record SetRedstoneProgramPacket(RedstoneProgram program) implements Serve
     public void handle(ServerPlayer player) {
         final AbstractContainerMenu menu = player.containerMenu;
         if (menu instanceof RedstoneProgrammerMenu programMenu) {
-            programMenu.refreshSlots();
             final RedstoneProgram program = programMenu.contentHolder;
             program.unload();
             program.copyFrom(program());
             program.load();
             program.whenChanged();
             CatnipServices.NETWORK.sendToClient(player, RefreshRedstoneProgrammerScreenPacket.INSTANCE);
+            if (Math.min(program.getChannels().size() + 1, PetrolparkConfigs.server().redstoneProgrammerMaxChannels.get()) * 2 > programMenu.ghostInventory.getSlots()) // If a channel has been added/removed
+                programMenu.refreshSlots();
         };
     }
 

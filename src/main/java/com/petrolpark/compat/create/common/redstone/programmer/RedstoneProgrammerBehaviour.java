@@ -74,7 +74,7 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
     @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(nbt, registries, clientPacket);
-        nbt.put("Program", com.petrolpark.util.NBTHelper.write(registries, programCodec, program));
+        nbt.put("Program", NBTHelper.write(registries, programCodec, program));
     };
 
     public class BehaviourRedstoneProgram extends RedstoneProgram {
@@ -122,6 +122,11 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
         public BehaviourRedstoneProgram copyFrom(PlayMode mode, int length, int playtime, int ticksToNextBeat, boolean paused, boolean pausedLastTick, boolean poweredLastTick, List<ChannelData> channels, int ticksPerBeat, int beatsPerLine, int linesPerBar) {
             super.copyFrom(mode, length, playtime, ticksToNextBeat, paused, pausedLastTick, poweredLastTick, channels, ticksPerBeat, beatsPerLine, linesPerBar);
             return this;
+        };
+
+        @Override
+        public Object getHashSalt() { // Needed so when the ItemStackRedstoneProgram removes its Channels upon unloading, this one doesn't too
+            return getBlockPos();
         };
         
     };

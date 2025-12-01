@@ -30,7 +30,8 @@ public class PetrolparkGhostIngredientHandler<MENU extends GhostItemMenu<?>, SCR
 		
 		if (ingredient.getType() == VanillaTypes.ITEM_STACK) {
 			for (int i = 36; i < gui.getMenu().slots.size(); i++) {
-				if (!(gui.getMenu().slots.get(i) instanceof IConditionalGhostSlot slot && slot.canSetGhostItem())) targets.add(new PetrolparkGhostTarget<>(gui, i - 36));
+				final Slot slot = gui.getMenu().slots.get(i);
+				if (slot.isActive() && !(slot instanceof IConditionalGhostSlot ghostSlot && !ghostSlot.canSetGhostItem())) targets.add(new PetrolparkGhostTarget<>(gui, i - 36));
 			};
 		};
 		
@@ -54,7 +55,7 @@ public class PetrolparkGhostIngredientHandler<MENU extends GhostItemMenu<?>, SCR
 		public PetrolparkGhostTarget(SCREEN screen, int slotIndex) {
 			this.screen = screen;
 			this.slotIndex = slotIndex;
-			Slot slot = screen.getMenu().slots.get(slotIndex);
+			final Slot slot = screen.getMenu().slots.get(slotIndex + 36);
 			this.area = new Rect2i(screen.getGuiLeft() + slot.x, screen.getGuiTop() + slot.y, 16, 16);
 		};
 

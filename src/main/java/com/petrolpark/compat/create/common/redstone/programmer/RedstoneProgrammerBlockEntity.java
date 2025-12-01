@@ -41,7 +41,7 @@ public class RedstoneProgrammerBlockEntity extends SmartBlockEntity {
         Optional.ofNullable(componentInput.get(CreateDataComponentTypes.REDSTONE_PROGRAM)).ifPresent(program -> {
             program.unload();
             programmer.program.copyFrom(program);
-            programmer.program.unload();
+            programmer.program.load();
         });
     };
     

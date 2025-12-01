@@ -8,6 +8,8 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.Codec;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateDataComponentTypes;
 import com.petrolpark.core.block.IPickUpPutDownBlock;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
@@ -33,7 +35,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
-public class RedstoneProgrammerBlockItem extends BlockItem {
+public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFeature {
 
     public RedstoneProgrammerBlockItem(RedstoneProgrammerBlock block, Properties properties) {
         super(block, properties);
@@ -204,5 +206,10 @@ public class RedstoneProgrammerBlockItem extends BlockItem {
 	public void initializeClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
 		consumer.accept(SimpleCustomRenderer.create(this, new RedstoneProgrammerItemRenderer()));
 	};
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.REDSTONE_PROGRAMMER;
+    };
     
 };
