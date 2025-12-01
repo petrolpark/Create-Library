@@ -1,11 +1,17 @@
 package com.petrolpark;
 
+import java.lang.annotation.ElementType;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
+import com.petrolpark.compat.GetPetrolparkSharedFeatures;
 import com.petrolpark.compat.Mods;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.Create;
 import com.petrolpark.compat.curios.Curios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
@@ -21,11 +27,13 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforgespi.language.ModFileScanData;
 
 @Mod(Petrolpark.MOD_ID)
 public class Petrolpark {
@@ -46,6 +54,8 @@ public class Petrolpark {
     public static final BogglePattern.Manager BOGGLE_PATTERNS = new BogglePattern.Manager();
 
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
+
+        initializeSharedFeatures();
 
         REGISTRATE.registerEventListeners(modEventBus);
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
@@ -96,6 +106,11 @@ public class Petrolpark {
         Mods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, NeoForge.EVENT_BUS));
     };
 
+    @GetPetrolparkSharedFeatures
+    public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
+        return new SharedFeatureFlag[]{};
+    };
+
     private void init(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
 
@@ -124,6 +139,37 @@ public class Petrolpark {
             if (FMLEnvironment.dist == Dist.CLIENT) supplier.get().run();
         } catch (Exception e) {
             throw new RuntimeException();
+        };
+    };
+
+    private static final void initializeSharedFeatures() {
+        Petrolpark.LOGGER.info("Searching for Mods enabling Petrolpark's Shared Features");
+        for (final ModFileScanData scanData : ModList.get().getAllScanData()) {
+
+            scanData.getAnnotatedBy(GetPetrolparkSharedFeatures.class, ElementType.METHOD).forEach(data -> {
+                final String className = data.clazz().getClassName();
+                final String memberName = data.memberName().split("\\(")[0];
+                Petrolpark.LOGGER.info("Found suitable method " + memberName + "in class " + className);
+                try {
+                    final Class<?> clazz = Class.forName(className);
+                    final Mod mod = clazz.getAnnotation(Mod.class);
+                    if (mod == null) throw new IllegalArgumentException("@InitializeSharedFeatures method must be in @Mod class");
+                    Mods compatMod = Mods.LOOKUP.apply(mod.value());
+                    if (compatMod == null) compatMod = Mods.PETROLPARK; // Other Mods can enable Shared Features under the Petrolpark name
+                    final Method method = clazz.getMethod(memberName);
+                    if (Modifier.isStatic(method.getModifiers())) {
+                        if (method.invoke(null) instanceof SharedFeatureFlag[] flags) {
+                            for (SharedFeatureFlag flag : flags) flag.enable(compatMod);
+                        } else {
+                            throw new IllegalArgumentException("Must return an array of SharedFeatureFlag");
+                        };
+                    } else {
+                        throw new IllegalArgumentException("@InitializeSharedFeatures method must be static");
+                    };
+                } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+                    throw new IllegalArgumentException("Could not initialize Shared Features in class " + className, e);
+                };
+            });
         };
     };
 

@@ -1,5 +1,6 @@
 package com.petrolpark.compat;
 
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
@@ -8,12 +9,13 @@ import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.StringRepresentable;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforgespi.language.IModInfo;
 
-public enum Mods {
+public enum Mods implements StringRepresentable {
 
     CREATE,
 
@@ -31,6 +33,8 @@ public enum Mods {
     CURIOS,
     JEI,
     TFMG;
+
+    public static final Function<String, Mods> LOOKUP = StringRepresentable.createNameLookup(values(), Function.identity());
 
     public final String id;
     private PetrolparkRegistrate registrate;
@@ -74,5 +78,10 @@ public enum Mods {
     public PetrolparkRegistrate registrate() {
         if (registrate == null) registrate = new PetrolparkRegistrate(id);
         return registrate;
+    };
+
+    @Override
+    public String getSerializedName() {
+        return id;
     };
 };
