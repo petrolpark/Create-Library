@@ -1,11 +1,14 @@
 package com.petrolpark.core.actionrecord;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.PacketType;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.TooltipFlag;
 
+@ApiStatus.Experimental
 public sealed interface ActionRecordEntryResult permits ActionRecordEntryResult.Logged, ActionRecordEntryResult.SilentIgnore {
 
     public static ActionRecordEntryResult SILENT_IGNORE = new SilentIgnore();

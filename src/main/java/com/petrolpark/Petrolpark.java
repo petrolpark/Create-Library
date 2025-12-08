@@ -82,6 +82,7 @@ public class Petrolpark {
         PetrolparkItems.register();
         PetrolparkLootConditionTypes.register();
         PetrolparkLootItemFunctions.register();
+        PetrolparkLootModifierTypes.register();
         PetrolparkMobEffects.register();
         PetrolparkNumberProviderTypes.register();
         PetrolparkPackets.register();

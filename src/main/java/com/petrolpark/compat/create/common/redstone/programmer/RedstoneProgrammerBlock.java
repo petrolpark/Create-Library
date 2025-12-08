@@ -6,7 +6,7 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.compat.create.CreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.CreateShapes;
-import com.petrolpark.core.block.IPickUpPutDownBlock;
+import com.petrolpark.core.world.block.IPickUpPutDownBlock;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;

@@ -11,6 +11,10 @@ import com.mojang.serialization.MapCodec;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.badge.Badge;
 import com.petrolpark.core.badge.BadgeRegistrateBuilder;
+import com.petrolpark.core.data.loot.modifier.ILootPoolEntryModifier;
+import com.petrolpark.core.data.loot.modifier.ILootTableModifier;
+import com.petrolpark.core.data.loot.modifier.LootPoolEntryModifierType;
+import com.petrolpark.core.data.loot.modifier.LootTableModifierType;
 import com.petrolpark.core.data.loot.numberprovider.entity.EntityNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.entity.LootEntityNumberProviderType;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
@@ -209,6 +213,14 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     
     public RegistryEntry<LootTeamNumberProviderType, LootTeamNumberProviderType> lootTeamNumberProviderType(String name, MapCodec<? extends TeamNumberProvider> codec) {
         return simple(name, PetrolparkRegistries.Keys.LOOT_TEAM_NUMBER_PROVIDER_TYPE, () -> new LootTeamNumberProviderType(codec));
+    };
+
+    public RegistryEntry<LootTableModifierType, LootTableModifierType> lootTableModifierType(String name, MapCodec<? extends ILootTableModifier> codec) {
+        return simple(name, PetrolparkRegistries.Keys.LOOT_TABLE_MODIFIER_TYPE, () -> new LootTableModifierType(codec));  
+    };
+
+    public RegistryEntry<LootPoolEntryModifierType, LootPoolEntryModifierType> lootPoolEntryModifierType(String name, MapCodec<? extends ILootPoolEntryModifier> codec) {
+        return simple(name, PetrolparkRegistries.Keys.LOOT_POOL_ENTRY_MODIFIER_TYPE, () -> new LootPoolEntryModifierType(codec));
     };
 
     public <I extends RecipeInput, R extends Recipe<? extends I>> RegistryEntry<RecipeType<?>, RecipeType<R>> recipeType(String name) {

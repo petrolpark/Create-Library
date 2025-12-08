@@ -1,6 +1,6 @@
 package com.petrolpark.compat.create.core.block;
 
-import com.petrolpark.core.block.OrientedBlock;
+import com.petrolpark.core.world.block.OrientedBlock;
 import com.simibubi.create.api.contraption.transformable.MovedBlockTransformerRegistries.BlockTransformer;
 import com.simibubi.create.content.contraptions.StructureTransform;
 

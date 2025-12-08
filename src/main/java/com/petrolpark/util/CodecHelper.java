@@ -7,11 +7,15 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
+import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Function10;
 import com.mojang.datafixers.util.Function11;
 import com.mojang.datafixers.util.Function7;
+import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+import com.mojang.serialization.DynamicOps;
+import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -228,6 +232,20 @@ public class CodecHelper {
                 codec11.encode(byteBuf, getter11.apply(object));
             };
         };
+    };
+
+    public static final Codec<JsonElement> JSON_ELEMENT_CODEC = new Codec<>() {
+
+        @Override
+        public <T> DataResult<T> encode(JsonElement input, DynamicOps<T> ops, T prefix) {
+            return DataResult.success(JsonOps.INSTANCE.convertTo(ops, input));
+        };
+
+        @Override
+        public <T> DataResult<Pair<JsonElement, T>> decode(DynamicOps<T> ops, T input) {
+            return DataResult.success(new Pair<>(ops.convertTo(JsonOps.INSTANCE, input), input));
+        };
+
     };
 
     public static final StreamCodec<ByteBuf, MinMaxBounds.Ints> INT_BOUNDS_STREAM_CODEC = StreamCodec.composite(

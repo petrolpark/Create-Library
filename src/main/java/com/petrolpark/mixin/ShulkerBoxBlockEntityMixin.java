@@ -8,9 +8,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.core.block.entity.IShulkerBoxBlockEntityDuck;
 import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.GenericContamination;
+import com.petrolpark.core.world.block.entity.IShulkerBoxBlockEntityDuck;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;

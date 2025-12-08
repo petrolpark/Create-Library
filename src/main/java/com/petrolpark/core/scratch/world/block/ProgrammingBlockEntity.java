@@ -1,6 +1,6 @@
 package com.petrolpark.core.scratch.world.block;
 
-import com.petrolpark.core.block.entity.BlockEntityBase;
+import com.petrolpark.core.world.block.entity.BlockEntityBase;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.entity.BlockEntityType;

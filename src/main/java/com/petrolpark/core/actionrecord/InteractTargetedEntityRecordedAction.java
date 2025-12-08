@@ -1,9 +1,12 @@
 package com.petrolpark.core.actionrecord;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import com.mojang.serialization.Codec;
 
 import net.minecraft.server.level.ServerPlayer;
 
+@ApiStatus.Experimental
 public class InteractTargetedEntityRecordedAction implements IRecordedAction<InteractTargetedEntityRecordedAction> {
 
     @Override

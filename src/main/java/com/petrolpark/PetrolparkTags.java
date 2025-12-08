@@ -9,6 +9,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -56,29 +58,43 @@ public class PetrolparkTags {
         };
     };
 
-    public enum Items {
+    public enum Contaminants {
 
-        INCONTAMINABLE,
-        CONTAMINABLE_BLOCKS,
+        HIDDEN,
         ;
 
-        public final TagKey<Item> tag;
+        public final TagKey<Contaminant> tag;
 
-        Items() {
-            tag = TagKey.create(Registries.ITEM, Petrolpark.asResource(Lang.asId(name())));
+        Contaminants() {
+            tag = TagKey.create(PetrolparkRegistries.Keys.CONTAMINANT, Petrolpark.asResource(Lang.asId(name())));
         };
 
-        @SuppressWarnings("deprecation")
-        public boolean matches(Item item) {
-            return item.builtInRegistryHolder().is(tag);
+        Contaminants(String path) {
+            tag = TagKey.create(PetrolparkRegistries.Keys.CONTAMINANT, Petrolpark.asResource(path));
         };
 
-        public boolean matches(ItemStack stack) {
-            return stack.is(tag);
+        public boolean matches(Holder<Contaminant> contaminant) {
+            return contaminant.is(tag);
+        };
+    };
+
+    public enum BlockEntityTypes {
+
+        CONTAMINABLE_KINETIC,
+        ;
+
+        public final TagKey<BlockEntityType<?>> tag;
+
+        BlockEntityTypes() {
+            tag = TagKey.create(Registries.BLOCK_ENTITY_TYPE, Petrolpark.asResource(Lang.asId(name())));
         };
 
-        public static final TagKey<Item> common(String path) {
-            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));
+        public boolean matches(BlockEntity blockEntity) {
+            return matches(blockEntity.getType());
+        };
+
+        public boolean matches(BlockEntityType<?> blockEntityType) {
+            return PetrolparkRegistries.getHolder(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType).orElseThrow().is(tag);
         };
     };
 
@@ -108,50 +124,32 @@ public class PetrolparkTags {
         };
     };
 
-    public enum BlockEntityTypes {
+    public enum Items {
 
-        CONTAMINABLE_KINETIC,
+        INCONTAMINABLE,
+        CONTAMINABLE_BLOCKS,
         ;
 
-        public final TagKey<BlockEntityType<?>> tag;
+        public final TagKey<Item> tag;
 
-        BlockEntityTypes() {
-            tag = TagKey.create(Registries.BLOCK_ENTITY_TYPE, Petrolpark.asResource(Lang.asId(name())));
+        Items() {
+            tag = TagKey.create(Registries.ITEM, Petrolpark.asResource(Lang.asId(name())));
         };
 
-        public boolean matches(BlockEntity blockEntity) {
-            return matches(blockEntity.getType());
+        @SuppressWarnings("deprecation")
+        public boolean matches(Item item) {
+            return item.builtInRegistryHolder().is(tag);
         };
 
-        public boolean matches(BlockEntityType<?> blockEntityType) {
-            return PetrolparkRegistries.getHolder(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType).orElseThrow().is(tag);
+        public boolean matches(ItemStack stack) {
+            return stack.is(tag);
+        };
+
+        public static final TagKey<Item> common(String path) {
+            return TagKey.create(Registries.ITEM, ResourceLocation.fromNamespaceAndPath("c", path));
         };
     };
 
-    public enum RecipeTypes {
-
-        RECYCLABLE,
-        ;
-
-        public final TagKey<RecipeType<?>> tag;
-
-        RecipeTypes() {
-            tag = TagKey.create(Registries.RECIPE_TYPE, Petrolpark.asResource(Lang.asId(name())));
-        };
-
-        public boolean matches(Holder<RecipeType<?>> holder) {
-            return holder.is(tag);
-        };
-
-        public boolean matches(RecipeType<?> recipeType) {
-            return PetrolparkRegistries.getHolder(BuiltInRegistries.RECIPE_TYPE, recipeType).map(this::matches).orElse(false);
-        };
-
-        public boolean matches(Recipe<?> recipe) {
-            return matches(recipe.getType());
-        };
-    };
-    
     public enum MenuTypes {
 
         ALWAYS_SHOWS_EXTENDED_INVENTORY,
@@ -182,24 +180,49 @@ public class PetrolparkTags {
         };
     };
 
-    public enum Contaminants {
+    public enum MobEffects {
 
-        HIDDEN,
-        NOT_PRESERVED_CRUSHING("not_preserved/crushing")
+        CAUSES_INFERTILITY,
         ;
 
-        public final TagKey<Contaminant> tag;
+        public final TagKey<MobEffect> tag;
 
-        Contaminants() {
-            tag = TagKey.create(PetrolparkRegistries.Keys.CONTAMINANT, Petrolpark.asResource(Lang.asId(name())));
+        private MobEffects() {
+            tag = TagKey.create(Registries.MOB_EFFECT, Petrolpark.asResource(Lang.asId(name())));
         };
 
-        Contaminants(String path) {
-            tag = TagKey.create(PetrolparkRegistries.Keys.CONTAMINANT, Petrolpark.asResource(path));
+        public boolean matches(MobEffectInstance effectInstance) {
+            return effectInstance.getEffect().is(tag);
         };
 
-        public boolean matches(Holder<Contaminant> contaminant) {
-            return contaminant.is(tag);
+        public boolean matches(Holder<MobEffect> effect) {
+            return effect.is(tag);
+        };
+
+    };
+
+    public enum RecipeTypes {
+
+        RECYCLABLE,
+        ;
+
+        public final TagKey<RecipeType<?>> tag;
+
+        RecipeTypes() {
+            tag = TagKey.create(Registries.RECIPE_TYPE, Petrolpark.asResource(Lang.asId(name())));
+        };
+
+        public boolean matches(Holder<RecipeType<?>> holder) {
+            return holder.is(tag);
+        };
+
+        public boolean matches(RecipeType<?> recipeType) {
+            return PetrolparkRegistries.getHolder(BuiltInRegistries.RECIPE_TYPE, recipeType).map(this::matches).orElse(false);
+        };
+
+        public boolean matches(Recipe<?> recipe) {
+            return matches(recipe.getType());
         };
     };
+
 };

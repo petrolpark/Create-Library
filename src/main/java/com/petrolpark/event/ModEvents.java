@@ -11,6 +11,7 @@ import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.common.mobeffect.shader.IShaderEffect;
 import com.petrolpark.common.mobeffect.shader.ShaderEffectReloadHandler;
 import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.data.loot.modifier.LootTableModification;
 import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.offer.ShopOfferGenerator;
@@ -33,6 +34,7 @@ public class ModEvents {
     @SubscribeEvent
     public static final void onDataPackRegistry(DataPackRegistryEvent.NewRegistry event) {
         event.dataPackRegistry(PetrolparkRegistries.Keys.CONTAMINANT, Contaminant.DIRECT_CODEC, Contaminant.DIRECT_CODEC);
+        event.dataPackRegistry(PetrolparkRegistries.Keys.LOOT_TABLE_MODIFICATION, LootTableModification.DIRECT_CODEC, LootTableModification.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.SHOP, Shop.DIRECT_CODEC, Shop.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.SHOP_OFFER_GENERATOR, ShopOfferGenerator.DIRECT_CODEC, ShopOfferGenerator.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.BOGGLE_PATTERN, BogglePattern.DIRECT_CODEC, BogglePattern.DIRECT_NETWORK_CODEC);

@@ -7,6 +7,11 @@ import java.util.function.Function;
 
 import net.minecraft.core.Direction;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
 
 public class NetworkHelper {
@@ -39,5 +44,11 @@ public class NetworkHelper {
             list.add(reader.apply(buffer));
         };
         return list;
+    };
+
+    public static final void sendToPlayersTrackingChunk(ServerLevel level, ChunkPos pos, Packet<ClientGamePacketListener> packet) {
+        for (ServerPlayer player : level.getChunkSource().chunkMap.getPlayers(pos, false)) {
+            player.connection.send(packet);
+        };
     };
 };

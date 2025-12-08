@@ -1,6 +1,7 @@
 {
     "attribute.petrolpark.player.extra_hotbar_slots": "Extra Hotbar Slots",
     "attribute.petrolpark.player.extra_inventory_size": "Extra Inventory Size",
+    "attribute.petrolpark.player.ore_discovery_chance": "Ore Discovery Chance",
 
     "badge.destroy.patreon_1": "Dame of Demolition",
     "badge.destroy.patreon_1.description": "Pledge to the first tier on the Destroy Patreon",
@@ -85,6 +86,8 @@
 
     "effect.petrolpark.numbness": "Numbness",
     "effect.petrolpark.numbness.description": "Mobs will not notice or respond to being damaged.",
+    "effect.petrolpark.miners_luck": "Miners' Luck",
+    "effect.petrolpark.miners_luck.description": "Greater chance of finding ore patches while mining.",
 
     "fluid.petrolpark.cream": "Cream",
     "fluid.petrolpark.skimmed_milk": "Skimmed Milk",

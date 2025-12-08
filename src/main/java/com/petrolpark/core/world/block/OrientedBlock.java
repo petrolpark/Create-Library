@@ -1,4 +1,4 @@
-package com.petrolpark.core.block;
+package com.petrolpark.core.world.block;
 
 import javax.annotation.Nonnull;
 

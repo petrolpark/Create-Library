@@ -2,10 +2,13 @@ package com.petrolpark.core.simulation;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.ServerTickRateManager;
 import net.minecraft.server.level.ServerPlayer;
 
+@ApiStatus.Experimental
 public class AlwaysSprintingTickRateManager extends ServerTickRateManager {
 
     protected final MinecraftServer server;

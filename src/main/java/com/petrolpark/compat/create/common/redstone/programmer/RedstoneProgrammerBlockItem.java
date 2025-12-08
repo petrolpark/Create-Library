@@ -11,7 +11,7 @@ import com.mojang.serialization.Codec;
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateDataComponentTypes;
-import com.petrolpark.core.block.IPickUpPutDownBlock;
+import com.petrolpark.core.world.block.IPickUpPutDownBlock;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
 import net.minecraft.core.BlockPos;

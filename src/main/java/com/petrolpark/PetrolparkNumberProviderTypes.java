@@ -3,6 +3,7 @@ package com.petrolpark;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.core.data.loot.numberprovider.ConditionalNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.ContextEntityNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.ContextTeamNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.ContextToolNumberProvider;
@@ -37,6 +38,7 @@ public class PetrolparkNumberProviderTypes {
     PRODUCT = REGISTRATE.lootNumberProviderType("product", FunctionNumberProvider.codec(ProductNumberProvider::new)),
     POLYNOMIAL = REGISTRATE.lootNumberProviderType("polynomial", PolynomialNumberProvider.CODEC),
     SIGMOID = REGISTRATE.lootNumberProviderType("sigmoid", SigmoidNumberProvider.CODEC),
+    CONDITIONAL = REGISTRATE.lootNumberProviderType("conditional", ConditionalNumberProvider.CODEC),
 
     CUSTOMER_WAIT_TIME = REGISTRATE.lootNumberProviderType("customer_wait_time", MapCodec.unit(CustomerWaitTimeNumberProvider::new)),
 

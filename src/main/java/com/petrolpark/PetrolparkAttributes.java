@@ -24,12 +24,17 @@ public class PetrolparkAttributes {
     EXTRA_INVENTORY_SIZE = REGISTRATE.attribute("player.extra_inventory_size", () -> new RangedAttribute("attribute.petrolpark.player.extra_inventory_size", 0d, 0d, 64d)
         .setSyncable(true)
         .setSentiment(Attribute.Sentiment.POSITIVE)
+    ),
+
+    ORE_DISCOVERY_CHANCE = REGISTRATE.attribute("ore_discovery_chance", () -> new RangedAttribute("attribute.player.ore_discovery_chance", 0d, 0d, 1d)
+        .setSentiment(Attribute.Sentiment.POSITIVE)
     );
 
     @SubscribeEvent
     public static final void onEntityAttributeModification(EntityAttributeModificationEvent event) {
         event.add(EntityType.PLAYER, EXTRA_HOTBAR_SLOTS);
         event.add(EntityType.PLAYER, EXTRA_INVENTORY_SIZE);
+        event.add(EntityType.PLAYER, ORE_DISCOVERY_CHANCE);
     };
 
     public static final void register() {};

@@ -2,11 +2,14 @@ package com.petrolpark.core.simulation;
 
 import javax.annotation.Nonnull;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.biome.BiomeManager;
 
+@ApiStatus.Experimental
 public class SingleBiomeManager extends BiomeManager {
 
     public final Holder<Biome> biomeHolder;

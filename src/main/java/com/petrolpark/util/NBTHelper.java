@@ -159,6 +159,7 @@ public class NBTHelper {
      * @param registryKey
      * @return {@code null} if the ResourceLocation is invalid
      */
+    @Deprecated
     public static <OBJECT> OBJECT readRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> registryKey) {
         return PetrolparkRegistries.getRegistry(registryKey).orElseThrow(NBTHelper::registryNotLoadedException).get(ResourceLocation.parse(tag.getString(key)));
     };
@@ -171,6 +172,7 @@ public class NBTHelper {
      * @param registryKey
      * @param object
      */
+    @Deprecated
     public static <OBJECT> void writeRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> registryKey, OBJECT object) {
         ResourceLocation rl = PetrolparkRegistries.getRegistry(registryKey).orElseThrow(NBTHelper::registryNotLoadedException).getKey(object);
         if (rl != null) tag.putString(key, rl.toString());
@@ -184,6 +186,7 @@ public class NBTHelper {
      * @param dataRegistryKey
      * @return {@code null} if the ResourceLocation is invalid
      */
+    @Deprecated
     public static <OBJECT> OBJECT readDataRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> dataRegistryKey) {
         return PetrolparkRegistries.getRegistry(dataRegistryKey).orElseThrow(NBTHelper::registryNotLoadedException).get(ResourceLocation.parse(tag.getString(key)));
     };
@@ -196,6 +199,7 @@ public class NBTHelper {
      * @param dataRegistryKey
      * @param dataObject
      */
+    @Deprecated
     public static <OBJECT> void writeDataRegistryObject(CompoundTag tag, String key, ResourceKey<Registry<OBJECT>> dataRegistryKey, OBJECT dataObject) {
         ResourceLocation rl = PetrolparkRegistries.getRegistry(dataRegistryKey).orElseThrow(NBTHelper::registryNotLoadedException).getKey(dataObject);
         if (rl != null) tag.putString(key, rl.toString());

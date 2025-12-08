@@ -1,4 +1,4 @@
-package com.petrolpark.core.block.entity;
+package com.petrolpark.core.world.block.entity;
 
 import java.util.stream.Stream;
 

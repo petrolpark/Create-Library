@@ -9,6 +9,9 @@ import org.jetbrains.annotations.ApiStatus;
 
 import com.petrolpark.core.badge.Badge;
 import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.data.loot.modifier.LootPoolEntryModifierType;
+import com.petrolpark.core.data.loot.modifier.LootTableModification;
+import com.petrolpark.core.data.loot.modifier.LootTableModifierType;
 import com.petrolpark.core.data.loot.numberprovider.entity.LootEntityNumberProviderType;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.LootItemStackNumberProviderType;
 import com.petrolpark.core.data.loot.numberprovider.team.LootTeamNumberProviderType;
@@ -50,6 +53,7 @@ public class PetrolparkRegistries {
     /**
      * <b>Only call during gameplay, not during world loading or before.</b>
      */
+    @Deprecated
     public static final RegistryAccess registryAccess() {
         return Petrolpark.runForDist(() -> () -> {
             ClientPacketListener connection = Minecraft.getInstance().getConnection();
@@ -64,6 +68,7 @@ public class PetrolparkRegistries {
      * @param <OBJECT> Type of objects in the Registry
      * @param key
      */
+    @Deprecated
     public static <OBJECT> Optional<Registry<OBJECT>> getRegistry(ResourceKey<Registry<OBJECT>> key) {
         return registryAccess().registry(key);
     };
@@ -75,6 +80,7 @@ public class PetrolparkRegistries {
      * @see PetrolparkRegistries#getHolder(Registry, Object)
      * @see PetrolparkRegistries#getHolder(net.minecraft.core.HolderLookup.Provider, ResourceKey, Object)
      */
+    @Deprecated
     public static <OBJECT> Optional<Holder.Reference<OBJECT>> getHolder(ResourceKey<Registry<OBJECT>> registryKey, OBJECT object) {
         return getRegistry(registryKey).flatMap(reg -> getHolder(reg, object));
     };
@@ -111,6 +117,8 @@ public class PetrolparkRegistries {
     public static final Registry<LootItemStackNumberProviderType> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE);
     public static final Registry<LootEntityNumberProviderType> LOOT_ENTITY_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_ENTITY_NUMBER_PROVIDER_TYPE);
     public static final Registry<LootTeamNumberProviderType> LOOT_TEAM_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_TEAM_NUMBER_PROVIDER_TYPE);
+    public static final Registry<LootTableModifierType> LOOT_TABLE_MODIFIER_TYPES = simple(Keys.LOOT_TABLE_MODIFIER_TYPE);
+    public static final Registry<LootPoolEntryModifierType> LOOT_POOL_ENTRY_MODIFIER_TYPES = simple(Keys.LOOT_POOL_ENTRY_MODIFIER_TYPE);
 
     // Generated Ingredients
     public static final Registry<IngredientRandomizerType> INGREDIENT_RANDOMIZER_TYPES = simple(Keys.INGREDIENT_RANDOMIZER_TYPE);
@@ -171,7 +179,10 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<LootItemStackNumberProviderType>> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE = key("loot_item_stack_number_provider_type");
         public static final ResourceKey<Registry<LootEntityNumberProviderType>> LOOT_ENTITY_NUMBER_PROVIDER_TYPE = key("loot_entity_number_provider_type");
         public static final ResourceKey<Registry<LootTeamNumberProviderType>> LOOT_TEAM_NUMBER_PROVIDER_TYPE = key("loot_team_number_provider_type");
-        
+        public static final ResourceKey<Registry<LootTableModifierType>> LOOT_TABLE_MODIFIER_TYPE = key("loot_table_modifier_type");
+        public static final ResourceKey<Registry<LootPoolEntryModifierType>> LOOT_POOL_ENTRY_MODIFIER_TYPE = key("loot_pool_entry_modifier_type");
+        public static final ResourceKey<Registry<LootTableModification>> LOOT_TABLE_MODIFICATION = key("loot_table_modification");
+
         // Generated ingredients
         public static final ResourceKey<Registry<IngredientRandomizerType>> INGREDIENT_RANDOMIZER_TYPE = key("ingredient_randomizer_type");
         public static final ResourceKey<Registry<IAdvancedIngredientType<? super ItemStack>>> ADVANCED_ITEM_INGREDIENT_TYPE = key("advanced_ingredient_type");

@@ -3,7 +3,7 @@ package com.petrolpark.core.scratch.world.block;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.core.block.OrientedBlock;
+import com.petrolpark.core.world.block.OrientedBlock;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.EntityBlock;
