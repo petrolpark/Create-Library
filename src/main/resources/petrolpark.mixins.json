@@ -72,6 +72,7 @@
         "compat.create.client.PonderUIMixin",
         "compat.jei.client.ForgePluginFinderMixin",
         "compat.jei.client.ModIdHelperMixin",
+        "client.ClientLevelMixin",
         "client.CreativeModeInventoryScreenMixin",
         "client.GameRendererMixin",
         "client.GuiMixin",

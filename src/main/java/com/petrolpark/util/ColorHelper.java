@@ -2,12 +2,17 @@ package com.petrolpark.util;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Sheep;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
@@ -103,5 +108,19 @@ public class ColorHelper {
             return color;
         };
 
+    };
+
+    @OnlyIn(Dist.CLIENT)
+    public static final void refreshChunkColors(ChunkPos centerPos) {
+        final Minecraft mc = Minecraft.getInstance();
+        final ClientLevel level = mc.level;
+        if (level == null) return;
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                final ChunkPos pos = new ChunkPos(centerPos.x + x, centerPos.z + z);
+                level.tintCaches.values().forEach(cache -> cache.invalidateForChunk(pos.x, pos.z));
+                for (int y = level.getMinSection(); y < level.getMaxSection(); y++) mc.levelRenderer.setSectionDirty(pos.x, y, pos.z);
+            };
+        };
     };
 };
