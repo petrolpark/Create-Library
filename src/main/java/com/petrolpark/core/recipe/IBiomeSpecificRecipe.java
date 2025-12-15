@@ -12,8 +12,12 @@ public interface IBiomeSpecificRecipe {
 
     public Optional<HolderSet<Biome>> getAllowedBiomes();
 
+    public static boolean isValidIn(Optional<HolderSet<Biome>> biomes, Holder<Biome> biome) {
+        return biomes.map(set -> set.contains(biome)).orElse(true);
+    };
+
     public default boolean isValidIn(Holder<Biome> biome) {
-        return getAllowedBiomes().map(set -> set.contains(biome)).orElse(true);
+        return isValidIn(getAllowedBiomes(), biome);
     };
 
     public default boolean isValidAt(Level level, BlockPos pos) {

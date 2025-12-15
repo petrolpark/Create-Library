@@ -11,6 +11,8 @@ import com.google.gson.JsonElement;
 import com.mojang.datafixers.util.Function10;
 import com.mojang.datafixers.util.Function11;
 import com.mojang.datafixers.util.Function7;
+import com.mojang.datafixers.util.Function8;
+import com.mojang.datafixers.util.Function9;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -116,6 +118,104 @@ public class CodecHelper {
                 codec5.encode(byteBuf, getter5.apply(object));
                 codec6.encode(byteBuf, getter6.apply(object));
                 codec7.encode(byteBuf, getter7.apply(object));
+            };
+        };
+    };
+
+    public static final <B, C, T1, T2, T3, T4, T5, T6, T7, T8> StreamCodec<B, C> compositeStreamCodec(
+        final StreamCodec<? super B, T1> codec1,
+        final Function<C, T1> getter1,
+        final StreamCodec<? super B, T2> codec2,
+        final Function<C, T2> getter2,
+        final StreamCodec<? super B, T3> codec3,
+        final Function<C, T3> getter3,
+        final StreamCodec<? super B, T4> codec4,
+        final Function<C, T4> getter4,
+        final StreamCodec<? super B, T5> codec5,
+        final Function<C, T5> getter5,
+        final StreamCodec<? super B, T6> codec6,
+        final Function<C, T6> getter6,
+        final StreamCodec<? super B, T7> codec7,
+        final Function<C, T7> getter7,
+        final StreamCodec<? super B, T8> codec8,
+        final Function<C, T8> getter8,
+        final Function8<T1, T2, T3, T4, T5, T6, T7, T8, C> factory
+    ) {
+        return new StreamCodec<B, C>() {
+            @Override
+            public C decode(@Nonnull B byteBuf) {
+                T1 t1 = codec1.decode(byteBuf);
+                T2 t2 = codec2.decode(byteBuf);
+                T3 t3 = codec3.decode(byteBuf);
+                T4 t4 = codec4.decode(byteBuf);
+                T5 t5 = codec5.decode(byteBuf);
+                T6 t6 = codec6.decode(byteBuf);
+                T7 t7 = codec7.decode(byteBuf);
+                T8 t8 = codec8.decode(byteBuf);
+                return factory.apply(t1, t2, t3, t4, t5, t6, t7, t8);
+            };
+
+            @Override
+            public void encode(@Nonnull B byteBuf, @Nonnull C object) {
+                codec1.encode(byteBuf, getter1.apply(object));
+                codec2.encode(byteBuf, getter2.apply(object));
+                codec3.encode(byteBuf, getter3.apply(object));
+                codec4.encode(byteBuf, getter4.apply(object));
+                codec5.encode(byteBuf, getter5.apply(object));
+                codec6.encode(byteBuf, getter6.apply(object));
+                codec7.encode(byteBuf, getter7.apply(object));
+                codec8.encode(byteBuf, getter8.apply(object));
+            };
+        };
+    };
+
+    public static final <B, C, T1, T2, T3, T4, T5, T6, T7, T8, T9> StreamCodec<B, C> compositeStreamCodec(
+        final StreamCodec<? super B, T1> codec1,
+        final Function<C, T1> getter1,
+        final StreamCodec<? super B, T2> codec2,
+        final Function<C, T2> getter2,
+        final StreamCodec<? super B, T3> codec3,
+        final Function<C, T3> getter3,
+        final StreamCodec<? super B, T4> codec4,
+        final Function<C, T4> getter4,
+        final StreamCodec<? super B, T5> codec5,
+        final Function<C, T5> getter5,
+        final StreamCodec<? super B, T6> codec6,
+        final Function<C, T6> getter6,
+        final StreamCodec<? super B, T7> codec7,
+        final Function<C, T7> getter7,
+        final StreamCodec<? super B, T8> codec8,
+        final Function<C, T8> getter8,
+        final StreamCodec<? super B, T9> codec9,
+        final Function<C, T9> getter9,
+        final Function9<T1, T2, T3, T4, T5, T6, T7, T8, T9, C> factory
+    ) {
+        return new StreamCodec<B, C>() {
+            @Override
+            public C decode(@Nonnull B byteBuf) {
+                T1 t1 = codec1.decode(byteBuf);
+                T2 t2 = codec2.decode(byteBuf);
+                T3 t3 = codec3.decode(byteBuf);
+                T4 t4 = codec4.decode(byteBuf);
+                T5 t5 = codec5.decode(byteBuf);
+                T6 t6 = codec6.decode(byteBuf);
+                T7 t7 = codec7.decode(byteBuf);
+                T8 t8 = codec8.decode(byteBuf);
+                T9 t9 = codec9.decode(byteBuf);
+                return factory.apply(t1, t2, t3, t4, t5, t6, t7, t8, t9);
+            };
+
+            @Override
+            public void encode(@Nonnull B byteBuf, @Nonnull C object) {
+                codec1.encode(byteBuf, getter1.apply(object));
+                codec2.encode(byteBuf, getter2.apply(object));
+                codec3.encode(byteBuf, getter3.apply(object));
+                codec4.encode(byteBuf, getter4.apply(object));
+                codec5.encode(byteBuf, getter5.apply(object));
+                codec6.encode(byteBuf, getter6.apply(object));
+                codec7.encode(byteBuf, getter7.apply(object));
+                codec8.encode(byteBuf, getter8.apply(object));
+                codec9.encode(byteBuf, getter9.apply(object));
             };
         };
     };

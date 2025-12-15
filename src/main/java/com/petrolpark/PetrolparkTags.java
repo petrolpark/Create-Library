@@ -29,23 +29,23 @@ public class PetrolparkTags {
      * Copied from {@link com.simibubi.create.AllTags#optionalTag(Registry, ResourceLocation) Create source code}.
      * @return A TagKey
      */
-    public static <T> TagKey<T> optionalTag(Registry<T> registry, ResourceLocation id) {
+    public static final <T> TagKey<T> optionalTag(Registry<T> registry, ResourceLocation id) {
 		return TagKey.create(registry.key(), id);
 	};
 
-	public static <T> TagKey<T> commonTag(Registry<T> registry, String path) {
+	public static final <T> TagKey<T> commonTag(Registry<T> registry, String path) {
 		return optionalTag(registry, ResourceLocation.fromNamespaceAndPath("c", path));
 	};
 
-	public static TagKey<Block> commonBlockTag(String path) {
+	public static final TagKey<Block> commonBlockTag(String path) {
 		return commonTag(BuiltInRegistries.BLOCK, path);
 	};
 
-	public static TagKey<Item> commonItemTag(String path) {
+	public static final TagKey<Item> commonItemTag(String path) {
 		return commonTag(BuiltInRegistries.ITEM, path);
 	};
 
-	public static TagKey<Fluid> commonFluidTag(String path) {
+	public static final TagKey<Fluid> commonFluidTag(String path) {
 		return commonTag(BuiltInRegistries.FLUID, path);
 	};
 

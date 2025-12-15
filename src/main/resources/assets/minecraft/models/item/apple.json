@@ -1,0 +1,19 @@
+{
+    "loader": "petrolpark:extruded",
+    "base": {
+        "parent": "block/block",
+        "textures": {
+            "top": "minecraft:block/stone",
+            "side": "minecraft:block/stone",
+            "bottom": "minecraft:block/stone"
+        }
+    },
+    "mask": {
+        "pattern": [
+            ". .",
+            "...",
+            ". ."
+        ]
+    }
+
+}

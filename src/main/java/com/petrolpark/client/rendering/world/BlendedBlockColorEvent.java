@@ -1,9 +1,11 @@
 package com.petrolpark.client.rendering.world;
 
+import com.petrolpark.util.ColorHelper;
+
 import net.minecraft.client.color.block.BlockColor;
-import net.minecraft.client.color.block.BlockTintCache;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.ColorResolver;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.api.distmarker.Dist;
@@ -14,7 +16,8 @@ import net.neoforged.neoforge.common.NeoForge;
 /**
  * {@link BlockColor}s are called after Biome blending has been done.
  * This event is fired on the {@link NeoForge#EVENT_BUS} on the client side to allow Block colors to be modified before they are blended.
- * The result of this event is cached but can be reset with {@link BlockTintCache#invalidateForChunk}.
+ * <p>The result of this event is cached but can be reset with {@link ColorHelper#refreshChunkColors(ChunkPos)}.</p>
+ * <p>This event will be fired many times for every block in a chunk, so it is recommended to cache intermediate values.</p>
  */
 @OnlyIn(Dist.CLIENT)
 public class BlendedBlockColorEvent extends Event {

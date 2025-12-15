@@ -242,6 +242,7 @@
 
     "petrolpark.recipe.ageing": "Ageing",
     "petrolpark.recipe.biome_specific": "Must be done in:",
+    "petrolpark.recipe.crop_fertilizing": "Crop Fertilizing",
     "petrolpark.recipe.extrusion": "Extrusion",
     "petrolpark.recipe.item_decay": "Item Decay",
     "petrolpark.recipe.lidded_basin": "Lidded Basin",

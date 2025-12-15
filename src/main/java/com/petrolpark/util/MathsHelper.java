@@ -19,7 +19,7 @@ public class MathsHelper {
         return result;
     };
 
-    public static int exponentiate(int base, int exponent) {
+    public static final int exponentiate(int base, int exponent) {
         int result = 1;
         while (exponent > 0) {
             if ((exponent & 1) == 1) result *= base;
@@ -27,7 +27,18 @@ public class MathsHelper {
             exponent >>= 1;
         };
         return result;
-    }
+    };
+
+    public static final double floorMod(double value, double modulus) {
+        final double result = (value - Math.floor(value / modulus) * modulus);
+        return result == modulus ? 0 : result;
+    };
+
+    public static final float floorMod(float value, float modulus) {
+        final float result = (value - (float)Math.floor(value / modulus) * modulus);
+        return result == modulus ? 0 : result;
+    };
+
 
     /**
      * The directional angle in degrees between two vectors, between 0 and 360.
@@ -35,7 +46,7 @@ public class MathsHelper {
      * @param vec2
      * @param plane The approximate vector around which {@code vec1} was rotated to get {@code vec2}
      */
-    public static double angleBetween(Vec3 vec1, Vec3 vec2, Vec3 plane) {
+    public static final double angleBetween(Vec3 vec1, Vec3 vec2, Vec3 plane) {
         double angle = Math.acos(vec1.dot(vec2) / (vec1.length() * vec2.length())) * 180d / Mth.PI;
         if (vec1.dot(vec2.cross(plane)) < 0d) angle = 360d - angle;
         return angle;
@@ -46,7 +57,7 @@ public class MathsHelper {
      * @param rotationAxis The vector about which to rotate the first vector
      * @param angle The angle in degrees through which to rotate the first vector around the second
      */
-    public static Vec3 rotate(Vec3 vec, Vec3 rotationAxis, double angle) {
+    public static final Vec3 rotate(Vec3 vec, Vec3 rotationAxis, double angle) {
         Vec3 k = rotationAxis.normalize();
         double angleInRads = angle * Mth.PI / 180d;
         // Rodrigues' formula
@@ -55,31 +66,31 @@ public class MathsHelper {
             .add(k.scale(k.dot(vec) * (1 - Math.cos(angleInRads)))); 
     };
 
-    public static Vec3i add(Vec3i vec1, Vec3i vec2) {
+    public static final Vec3i add(Vec3i vec1, Vec3i vec2) {
         return new Vec3i(vec1.getX() + vec2.getX(), vec1.getY() + vec2.getY(), vec1.getZ() + vec2.getZ());
     };
 
-    public static Comparator<Vec3> getClosest(Vec3 targetVector) {
+    public static final Comparator<Vec3> getClosest(Vec3 targetVector) {
         return (v1, v2) -> Double.compare(v1.dot(targetVector), v2.dot(targetVector));
     };
 
-    public static double azimuth(Vec3 vec) {
+    public static final double azimuth(Vec3 vec) {
         return Math.atan2(vec.x, vec.z);
     };
 
-    public static double inclination(Vec3 vec) {
+    public static final double inclination(Vec3 vec) {
         return Math.atan2(Math.sqrt(vec.x() * vec.x() + vec.z() * vec.z()), vec.y());
     };
 
-    public static AABB expandToInclude(AABB box, Vec3 point) {
+    public static final AABB expandToInclude(AABB box, Vec3 point) {
         return new AABB(Math.min(box.minX, point.x), Math.min(box.minY, point.y), Math.min(box.minZ, point.z), Math.max(box.maxX, point.x), Math.max(box.maxY, point.y), Math.max(box.maxZ, point.z));
     };
 
-    public static AABB expandToInclude(AABB box, BlockPos pos) {
+    public static final AABB expandToInclude(AABB box, BlockPos pos) {
         return expandToInclude(expandToInclude(box, Vec3.atLowerCornerOf(pos)), Vec3.atLowerCornerOf(pos).add(1d, 1d, 1d));
     };
 
-    public static double volume(AABB box) {
+    public static final double volume(AABB box) {
         return (box.maxX - box.minX) * (box.maxY - box.minY) * (box.maxZ - box.minZ);
     };
 };

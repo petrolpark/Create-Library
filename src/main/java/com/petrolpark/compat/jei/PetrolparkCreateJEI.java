@@ -16,6 +16,7 @@ import com.petrolpark.compat.create.CreateRecipeTypes;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerScreen;
 import com.petrolpark.compat.jei.category.AgeingCategory;
+import com.petrolpark.compat.jei.category.CropFertilizingCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
 import com.petrolpark.compat.jei.category.ExtrusionCategory;
@@ -24,7 +25,9 @@ import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.compat.jei.ghost.PetrolparkGhostIngredientHandler;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
+import com.petrolpark.compat.jei.ingredient.BlockStateIngredientType;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
+import com.petrolpark.core.recipe.CropFertilizingRecipe;
 import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
 import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
 import com.simibubi.create.AllBlocks;
@@ -50,6 +53,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * For now, this library's JEI plugin relies heavily on Create, so is set up to load only when Create is loaded.
@@ -99,7 +103,13 @@ public class PetrolparkCreateJEI implements IModPlugin {
                 ::toList
             ).itemIcon(Items.ROTTEN_FLESH)
             .emptyBackground(125, 20)
-            .build("item_decay", DecayingItemCategory::new);
+            .build("item_decay", DecayingItemCategory::new),
+
+        crop_fertilizing = builder(CropFertilizingRecipe.class)
+            .addTypedRecipes(PetrolparkRecipeTypes.CROP_FERTILIZING::get)
+            .itemIcon(Items.BONE_MEAL)
+            .emptyBackground(120, 125)
+            .build("crop_fertilizing", CropFertilizingCategory::new);
 
         CreateRecipeCategory<?> lidded_basin, extrusion;
 
@@ -139,6 +149,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
     @Override
     public void registerIngredients(@Nonnull IModIngredientRegistration registration) {
         registration.register(BiomeIngredientType.TYPE, Collections.emptySet(), BiomeIngredientType.HELPER, BiomeIngredientType.RENDERER, BiomeIngredientType.HELPER.getRegistry().byNameCodec());
+        registration.register(BlockStateIngredientType.TYPE, Collections.emptySet(), BlockStateIngredientType.HELPER, BlockStateIngredientType.RENDERER, BlockState.CODEC);
     };
 
     private <T extends Recipe<?>> CategoryBuilderImpl<T> builder(Class<? extends T> recipeClass) {

@@ -77,6 +77,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.item.Item;
@@ -221,6 +222,14 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     public RegistryEntry<LootPoolEntryModifierType, LootPoolEntryModifierType> lootPoolEntryModifierType(String name, MapCodec<? extends ILootPoolEntryModifier> codec) {
         return simple(name, PetrolparkRegistries.Keys.LOOT_POOL_ENTRY_MODIFIER_TYPE, () -> new LootPoolEntryModifierType(codec));
+    };
+
+    public RegistryEntry<SoundEvent, SoundEvent> soundEvent(String name, float range) {
+        return simple(name, Registries.SOUND_EVENT, () -> SoundEvent.createFixedRangeEvent(ResourceLocation.fromNamespaceAndPath(getModid(), name), range));
+    };
+
+    public RegistryEntry<SoundEvent, SoundEvent> soundEvent(String name) {
+        return simple(name, Registries.SOUND_EVENT, () -> SoundEvent.createVariableRangeEvent(ResourceLocation.fromNamespaceAndPath(getModid(), name)));
     };
 
     public <I extends RecipeInput, R extends Recipe<? extends I>> RegistryEntry<RecipeType<?>, RecipeType<R>> recipeType(String name) {

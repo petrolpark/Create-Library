@@ -5,6 +5,7 @@ import static com.petrolpark.Petrolpark.REGISTRATE;
 import com.petrolpark.core.badge.BadgeDuplicationRecipe;
 import com.petrolpark.core.contamination.recipe.CombineContaminatedItemsRecipe;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
+import com.petrolpark.core.recipe.CropFertilizingRecipe;
 import com.petrolpark.core.recipe.book.RecipeBookDuplicationRecipe;
 import com.petrolpark.core.recipe.crafting.BookRequiredCraftingRecipe;
 import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
@@ -26,7 +27,8 @@ public class PetrolparkRecipeSerializers {
     public static final RegistryEntry<RecipeSerializer<?>, RecipeSerializer<ManualOnlyCraftingRecipe>> CRAFTING_MANUAL_ONLY = REGISTRATE.recipeSerializer("crafting_manual_only", WrappedCraftingRecipe.serializer(ManualOnlyCraftingRecipe::new));
     public static final RegistryEntry<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<CombineContaminatedItemsRecipe>> CONTAMINATED_ITEM_COMBINATION = REGISTRATE.recipeSerializer("contaminated_item_combination", CombineContaminatedItemsRecipe::new);
     public static final RegistryEntry<RecipeSerializer<?>, SimpleCraftingRecipeSerializer<BadgeDuplicationRecipe>> BADGE_DUPLICATION = REGISTRATE.recipeSerializer("badge_duplication", BadgeDuplicationRecipe::new);
-    public static final RegistryEntry<RecipeSerializer<?>, RecipeSerializer<RecipeBookDuplicationRecipe>> RECIPE_BOOK_DUPLICATION = REGISTRATE.recipeSerializer("recipe_book_duplication", RecipeBookDuplicationRecipe.CODEC, RecipeBookDuplicationRecipe.STREAM_CODEC);    
+    public static final RegistryEntry<RecipeSerializer<?>, RecipeSerializer<RecipeBookDuplicationRecipe>> RECIPE_BOOK_DUPLICATION = REGISTRATE.recipeSerializer("recipe_book_duplication", RecipeBookDuplicationRecipe.CODEC, RecipeBookDuplicationRecipe.STREAM_CODEC);
+    public static final RegistryEntry<RecipeSerializer<?>, RecipeSerializer<CropFertilizingRecipe>> CROP_FERTILIZING = REGISTRATE.recipeSerializer("crop_fertilizing", CropFertilizingRecipe.CODEC, CropFertilizingRecipe.STREAM_CODEC); 
 
     public static final void register() {};
 };
