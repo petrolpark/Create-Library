@@ -129,7 +129,8 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe {
 
                 final Function<? super ItemStack, Wood> woodGetter = WOOD_GETTERS.get(ingredient);
                 if (woodGetter != null) {
-                    Wood thisWood = woodGetter.apply(stack);
+                    final Wood thisWood = woodGetter.apply(stack);
+                    if (thisWood == null) return ItemStack.EMPTY;
                     if (wood != null) {
                         if (!wood.equals(thisWood)) return ItemStack.EMPTY;
                     } else { 
