@@ -4,11 +4,16 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -36,6 +41,21 @@ public class BlockHelper {
             .flatMap(List::stream);
         if (blockPredicate.properties().isPresent()) stream = stream.filter(blockPredicate.properties().get()::matches);
         return stream;
+    };
+
+    @Nullable
+    public static final Block getBlock(Object obj) {
+        if (obj instanceof Holder holder) return getBlock(holder.value());
+        if (obj instanceof Block block) return block;
+        else if (obj instanceof BlockState state) return state.getBlock();
+        else {
+            final Item potentialItem;
+            if (obj instanceof Item item) potentialItem = item;
+            else if (obj instanceof ItemStack stack) potentialItem = stack.getItem();
+            else return null;
+            if (potentialItem instanceof BlockItem blockItem) return blockItem.getBlock();
+            else return null;
+        }
     };
 
 

@@ -19,6 +19,7 @@ import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.ShopsData;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.util.CodecHelper;
+import com.petrolpark.util.WoodHelper;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
@@ -73,6 +74,11 @@ public class PetrolparkDataComponents {
     public static final DataComponentType<Holder<Shop>> SHOP = register(
         "shop",
         builder -> builder.persistent(Shop.CODEC).networkSynchronized(Shop.STREAM_CODEC)
+    );
+
+    public static final DataComponentType<WoodHelper.Wood> WOOD = register(
+        "wood",
+        builder -> builder.persistent(WoodHelper.Wood.CODEC).networkSynchronized(WoodHelper.Wood.STREAM_CODEC)
     );
 
     // TEAMS

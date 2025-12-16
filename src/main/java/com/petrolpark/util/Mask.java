@@ -303,9 +303,14 @@ public class Mask implements Cloneable {
     };
 
     public static final Mask rect(int x, int y, int width, int height) {
+        if (width < 0 || height < 0) throw new IllegalArgumentException("Cannot have negative width or height");
         final Mask mask = new Mask(x, y, width, height);
         mask.bits.set(0, mask.bits.length());
         return mask;
+    };
+
+    public static final Mask fromTo(int fromX, int fromY, int toX, int toY) {
+        return rect(fromX, fromY, toX - fromX, toY - fromY);
     };
 
 };
