@@ -1,4 +1,4 @@
-package com.petrolpark.core.recipe.crafting;
+package com.petrolpark.core.item.wooden;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,8 +32,15 @@ import net.neoforged.neoforge.common.Tags;
 public class WoodCraftingShapedRecipe extends ShapedRecipe {
 
     public static final Ingredient PLANKS_INGREDIENT = Ingredient.of(ItemTags.PLANKS);
-    public static final Ingredient LOGS_INGREDIENT = Ingredient.of(ItemTags.LOGS);
-    public static final Ingredient STRIPPED_LOGS_INGREDIENT = Ingredient.of(Tags.Items.STRIPPED_LOGS);
+    public static final Ingredient SLAB_INGREDIENT = Ingredient.of(ItemTags.WOODEN_SLABS);
+    public static final Ingredient STAIRS_INGREDIENT = Ingredient.of(ItemTags.WOODEN_STAIRS);
+    public static final Ingredient FENCE_INGREDIENT = Ingredient.of(ItemTags.WOODEN_FENCES);
+    public static final Ingredient FENCE_GATE_INGREDIENT = Ingredient.of(Tags.Items.FENCE_GATES_WOODEN);
+    public static final Ingredient BUTTON_INGREDIENT = Ingredient.of(ItemTags.WOODEN_BUTTONS);
+    public static final Ingredient LOG_INGREDIENT = Ingredient.of(ItemTags.LOGS);
+    public static final Ingredient STRIPPED_LOG_INGREDIENT = Ingredient.of(Tags.Items.STRIPPED_LOGS);
+    public static final Ingredient DOOR_INGREDIENT = Ingredient.of(ItemTags.WOODEN_DOORS);
+    public static final Ingredient TRAPDOOR_INGREDIENT = Ingredient.of(ItemTags.WOODEN_TRAPDOORS);
 
     protected static final Map<Character, Ingredient> BUILT_IN_INGREDIENTS = new HashMap<>();
     protected static final Map<Ingredient, Function<? super ItemStack, Wood>> WOOD_GETTERS = new HashMap<>();
@@ -45,8 +52,15 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe {
 
     static {
         register('P', PLANKS_INGREDIENT, WoodHelper::getWoodFromPlanks);
-        register('L', LOGS_INGREDIENT, WoodHelper::getWoodFromLog);
-        register('S', STRIPPED_LOGS_INGREDIENT, WoodHelper::getWoodFromStrippedLog);
+        register('_', SLAB_INGREDIENT, WoodHelper::getWoodFromSlab);
+        register('S', STAIRS_INGREDIENT, WoodHelper::getWoodFromStairs);
+        register('F', FENCE_INGREDIENT, WoodHelper::getWoodFromFence);
+        register('G', FENCE_GATE_INGREDIENT, WoodHelper::getWoodFromFenceGate);
+        register('B', BUTTON_INGREDIENT, WoodHelper::getWoodFromButton);
+        register('L', LOG_INGREDIENT, WoodHelper::getWoodFromLog);
+        register('s', STRIPPED_LOG_INGREDIENT, WoodHelper::getWoodFromStrippedLog);
+        register('D', DOOR_INGREDIENT, WoodHelper::getWoodFromDoor);
+        register('T', TRAPDOOR_INGREDIENT, WoodHelper::getWoodFromTrapdoor);
     };
 
     public static final MapCodec<ShapedRecipePattern> PATTERN_MAP_CODEC = ShapedRecipePattern.Data.MAP_CODEC.flatXmap(WoodCraftingShapedRecipe::unpackPatternData, WoodCraftingShapedRecipe::packPattern);

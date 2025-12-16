@@ -5,6 +5,7 @@ import static com.petrolpark.Petrolpark.REGISTRATE;
 import com.petrolpark.common.item.shulkerbelt.ShulkerBeltItem;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.item.SharedItem;
+import com.petrolpark.core.item.wooden.WoodenItem;
 import com.petrolpark.core.recipe.book.RecipeBookItem;
 import com.petrolpark.core.shop.ShopMenuItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
@@ -12,6 +13,9 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.world.item.Rarity;
 
 public class PetrolparkItems {
+
+    public static final ItemEntry<WoodenItem> ROLLING_PIN = REGISTRATE.item("rolling_pin", WoodenItem::new)    
+        .register();
     
     public static final ItemEntry<ShopMenuItem> MENU = REGISTRATE.item("menu", ShopMenuItem::new).register();
 

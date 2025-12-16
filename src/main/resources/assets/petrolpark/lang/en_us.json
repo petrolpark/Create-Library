@@ -129,6 +129,8 @@
     "item.petrolpark.shulker_belt": "Shulker Belt",
     "item.petrolpark.unprocessed_mashed_potato": "Unfinished Mashed Potato",
 
+    "item.petrolpark.rolling_pin": "%1$s Rolling Pin",
+
     "loot_context_param.minecraft.this_entity": "Entity",
     "loot_context_param.minecraft.last_damage_player": "Killer Player",
     "loot_context_param.minecraft.attacking_entity": "Killer Entity",
@@ -210,6 +212,8 @@
     "petrolpark.generic.rarity.uncommon": "Uncommon",
     "petrolpark.generic.rarity.rare": "Rare",
     "petrolpark.generic.rarity.epic": "Epic",
+    "petrolpark.generic.wooden": "Wooden",
+    "petrolpark.generic.wood_planks_regex": "^(.*?)\\s+Planks$",
 
     "petrolpark.key.hotbar.10": "Hotbar Slot 10",
     "petrolpark.key.hotbar.11": "Hotbar Slot 11",

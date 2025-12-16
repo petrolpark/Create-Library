@@ -1,0 +1,89 @@
+{
+	"loader": "petrolpark:wooden",
+	"template": {
+		"format_version": "1.9.0",
+		"credit": "Made with Blockbench",
+		"textures": {
+			"0": "block/stripped_oak_log",
+			"particle": "block/stripped_oak_log"
+		},
+		"elements": [
+			{
+				"name": "Body",
+				"from": [6, 2, 6],
+				"to": [10, 14, 10],
+				"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
+				"faces": {
+					"north": {"uv": [0, 0, 4, 12], "texture": "#0"},
+					"east": {"uv": [0, 0, 4, 12], "rotation": 180, "texture": "#0"},
+					"south": {"uv": [0, 0, 4, 12], "rotation": 180, "texture": "#0"},
+					"west": {"uv": [0, 0, 4, 12], "rotation": 180, "texture": "#0"},
+					"up": {"uv": [0, 0, 4, 4], "rotation": 90, "texture": "#0"},
+					"down": {"uv": [0, 0, 4, 4], "rotation": 90, "texture": "#0"}
+				}
+			},
+			{
+				"name": "Handle1",
+				"from": [7, 14, 7],
+				"to": [9, 17, 9],
+				"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
+				"faces": {
+					"north": {"uv": [0, 13, 2, 16], "texture": "#0"},
+					"east": {"uv": [0, 13, 2, 16], "rotation": 180, "texture": "#0"},
+					"south": {"uv": [0, 13, 2, 16], "rotation": 180, "texture": "#0"},
+					"west": {"uv": [0, 13, 2, 16], "rotation": 180, "texture": "#0"},
+					"up": {"uv": [0, 0, 2, 2], "rotation": 90, "texture": "#0"}
+				}
+			},
+			{
+				"name": "Handle2",
+				"from": [7, -1, 7],
+				"to": [9, 2, 9],
+				"rotation": {"angle": 0, "axis": "z", "origin": [8, 8, 8]},
+				"faces": {
+					"north": {"uv": [0, 0, 2, 3], "texture": "#0"},
+					"east": {"uv": [0, 0, 2, 3], "rotation": 180, "texture": "#0"},
+					"south": {"uv": [0, 0, 2, 3], "rotation": 180, "texture": "#0"},
+					"west": {"uv": [0, 0, 2, 3], "rotation": 180, "texture": "#0"},
+					"down": {"uv": [0, 0, 2, 2], "rotation": 90, "texture": "#0"}
+				}
+			}
+		],
+		"display": {
+			"thirdperson_righthand": {
+				"translation": [0, 4, 1],
+				"scale": [0.67, 0.67, 0.67]
+			},
+			"thirdperson_lefthand": {
+				"translation": [0, 5, 1],
+				"scale": [0.75, 0.75, 0.75]
+			},
+			"firstperson_righthand": {
+				"rotation": [0, -90, 9],
+				"translation": [1.13, 3.2, 1.13],
+				"scale": [0.5, 0.5, 0.5]
+			},
+			"firstperson_lefthand": {
+				"rotation": [0, 90, -9],
+				"translation": [1.13, 3.2, 1.13],
+				"scale": [0.5, 0.5, 0.5]
+			},
+			"ground": {
+				"rotation": [90, 0, 0],
+				"scale": [0.5, 0.5, 0.5]
+			},
+			"gui": {
+				"rotation": [30, -135, 45],
+				"scale": [0.9, 0.9, 0.9]
+			}
+		},
+		"groups": [
+			{
+				"name": "Rolling Pin",
+				"origin": [8, 8, 8],
+				"color": 0,
+				"children": [0, 1, 2]
+			}
+		]
+	}
+}
