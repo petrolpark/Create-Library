@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 /**
  * A modification to the {@link RecyclingOutputs} of a {@link RecyclingManager#getRawRecyclingOutputs(Level, ItemStack) recycled Item}.
  * This can add, remove or modify individual {@link RecyclingOutput}s based on the input Item Stack (and particularly its {@link ItemStack#getComponents() Components}).
- * <p>Recipe-dependent modifications should not be done with a {@link RecyclingOutputModifier} but by implementing {@link IRecyclableRecipe} on your Recipe.</p>
+ * <p>Recipe-dependent modifications should not be done with a {@link RecyclingOutputsModifier} but by implementing {@link IRecyclableRecipe} on your Recipe.</p>
  * @see RecyclingManager#registerModifier(RecyclingOutputsModifier) Register a {@link RecyclingOutputsModifier}
  * @see RecyclingOutputsModifier#DURABILITY Example
  */
