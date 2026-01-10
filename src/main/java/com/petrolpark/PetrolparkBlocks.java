@@ -4,6 +4,8 @@ import static com.petrolpark.Petrolpark.REGISTRATE;
 import static com.petrolpark.core.registrate.PetrolparkTagGen.tagUnrequired;
 
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.core.item.decay.drying.rack.DryingRackBlock;
+import com.petrolpark.core.item.wooden.WoodenBlockItem;
 import com.petrolpark.core.scratch.world.block.ProgrammingBlock;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
@@ -23,6 +25,12 @@ public class PetrolparkBlocks {
             .strength(0.2f)
         ).transform(tagUnrequired(BlockTags.MINEABLE_WITH_HOE))
         .item()
+        .build()
+        .register();
+
+    public static final BlockEntry<DryingRackBlock> DRYING_RACK = REGISTRATE.sharedBlock(SharedFeatureFlag.DRYING_RACK, "drying_rack", DryingRackBlock::new)
+        .initialProperties(() -> Blocks.OAK_FENCE)
+        .item(WoodenBlockItem::new)
         .build()
         .register();
 

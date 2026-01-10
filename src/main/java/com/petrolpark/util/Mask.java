@@ -11,6 +11,9 @@ import net.minecraft.client.renderer.Rect2i;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+/**
+ * A set of "enabled" pixels in a global 2D grid.
+ */
 public class Mask implements Cloneable {
 
     public static final Codec<Mask> FRIENDLY_CODEC = RecordCodecBuilder.create(instance -> instance.group(
@@ -34,8 +37,6 @@ public class Mask implements Cloneable {
         bits = new BitSet(width * height);
     };
 
-    // Internal methods
-
     private int index(int x, int y) {
         return (y - yOffset) * width + (x - xOffset);
     };
@@ -45,21 +46,28 @@ public class Mask implements Cloneable {
     };
 
     /**
-     * Does not change this mask, but expands the BitSet internally to cover the space occupied by the given Mask.
-     * @see Mask#trim()
+     * Does not change this {@link Mask}, but expands the BitSet internally to cover the space occupied by the given {@link Mask}.
+     * @see Mask#trim() Inverse
      */
     public void cover(Mask other) {
         cover(other.minX(), other.minY(), other.maxX(), other.maxY());
     };
 
     /**
-     * Does not change this mask, but expands the BitSet internally to cover at least the given space.
+     * Does not change this {@link Mask}, but expands the BitSet internally to cover at least the given space.
      * @see Mask#trim()
      */
     public void cover(int minX, int minY, int maxX, int maxY) {
         rebase(Math.min(minX(), minX), Math.min(minY(), minY), Math.max(maxX(), maxX), Math.max(maxY(), maxY));
     };
 
+    /**
+     * Scales this {@link Mask} internally, potentially removing set pixels.
+     * @param newMinX
+     * @param newMinY
+     * @param newMaxX
+     * @param newMaxY
+     */
     private void rebase(int newMinX, int newMinY, int newMaxX, int newMaxY) {
         if (newMinX == xOffset && newMinY == yOffset && newMaxX == maxX() && newMaxY == maxY()) return;
 
@@ -84,7 +92,7 @@ public class Mask implements Cloneable {
     };
 
     /**
-     * Does not change this Mask, but shrinks the BitSet internally as much as possible.
+     * Does not change this {@link Mask}, but shrinks the BitSet internally as much as possible.
      */
     private void trim() {
         if (bits.isEmpty()) {
@@ -121,20 +129,38 @@ public class Mask implements Cloneable {
     @FunctionalInterface
     public static interface Combination { boolean combine(boolean a, boolean b); };
 
-    // Access
-
+    /**
+     * Get the internal x origin of this {@link Mask}.
+     * This is at most but not necessarily equal to the x coordinate of the leftmost set pixel.
+     * To ensure equality, call {@link Mask#trim()}.
+     */
     public int minX() { 
         return xOffset; 
     };
 
+    /**
+     * Get the internal y origin of this {@link Mask}.
+     * This is at most but not necessarily equal to the y coordinate of the topmost set pixel.
+     * To ensure equality, call {@link Mask#trim()}.
+     */
     public int minY() { 
         return yOffset;
     };
 
+    /**
+     * Get the internal x maximum of this {@link Mask}.
+     * This is at most but not necessarily equal to the x coordinate of the rightmost set pixel.
+     * To ensure equality, call {@link Mask#trim()}.
+     */
     public int maxX() {
         return xOffset + width - 1;
     };
 
+    /**
+     * Get the internal y maximum of this {@link Mask}.
+     * This is at most but not necessarily equal to the y coordinate of the bottommost set pixel.
+     * To ensure equality, call {@link Mask#trim()}.
+     */
     public int maxY() {
         return yOffset + height - 1;
     };
@@ -148,7 +174,7 @@ public class Mask implements Cloneable {
     };
 
     /**
-     * Adds the given pixel to this Mask.
+     * Sets the given pixel in this {@link Mask}.
      * @param x
      * @param y
      */
@@ -158,20 +184,34 @@ public class Mask implements Cloneable {
     };
 
     /**
-     * Removes the given pixel from this Mask.
+     * Removes the given pixel from this {@link Mask}.
      * @param x
      * @param y
-     * @see Mask#trim() Make the Mask internally as small as possible.
+     * @see Mask#trim() Make the Mask internally as small as possible after doing this
      */
     public void clear(int x, int y) {
         if (inBounds(x, y)) bits.clear(index(x, y));
     };
 
+    /**
+     * Moves every pixel in this {@link Mask}.
+     * @param dX
+     * @param dY
+     */
     public void move(int dX, int dY) {
         xOffset = xOffset + dX;
         yOffset = yOffset + dY;
     };
 
+    /**
+     * Perform a binary operation on this {@link Mask} based on the contents of the given {@link Mask}.
+     * This modifies this {@link Mask}, but not the given one.
+     * @param mask
+     * @param combination
+     * @see Mask#or(Mask)
+     * @see Mask#and(Mask)
+     * @see Mask#andNot(Mask)
+     */
     public void combine(Mask mask, Combination combination) {
         cover(mask);
         for (int x = minX(); x <= maxX(); x++) {
@@ -181,16 +221,40 @@ public class Mask implements Cloneable {
         };
     };
 
+    /**
+     * Effectively add the given {@link Mask} to this one.
+     * This modifies this {@link Mask}, but not the given one.
+     * @param mask
+     * @see Mask#combine(Mask, Combination)
+     * @see Mask#and(Mask)
+     * @see Mask#andNot(Mask)
+     */
     public void or(Mask mask) {
         combine(mask, (a, b) -> a || b);
         // no need to trim
     };
 
+    /**
+     * Intersect this {@link Mask} with the given {@link Mask}.
+     * This modifies this {@link Mask}, but not the given one.
+     * @param mask
+     * @see Mask#combine(Mask, Combination)
+     * @see Mask#or(Mask)
+     * @see Mask#andNot(Mask)
+     */
     public void and(Mask mask) {
         combine(mask, (a, b) -> a && b);
         trim();
     };
 
+    /**
+     * Subtract the given {@link Mask} from this one.
+     * This modifies this {@link Mask}, but not the given one.
+     * @param mask
+     * @see Mask#combine(Mask, Combination)
+     * @see Mask#or(Mask)
+     * @see Mask#and(Mask)
+     */
     public void andNot(Mask mask) {
         combine(mask, (a, b) -> a && !b);
         trim();
@@ -221,6 +285,9 @@ public class Mask implements Cloneable {
         return clone;
     };
 
+    /**
+     * Serialize this {@link Mask}. Set pixels will be represented with a {@code .} and unset pixels with a space.
+     */
     public List<String> rowStrings() {
         final List<String> rowStrings = new ArrayList<>(height);
         for (int y = minY(); y <= maxY(); y++) {
@@ -233,6 +300,12 @@ public class Mask implements Cloneable {
         return rowStrings;
     };
 
+    /**
+     * Deserialize a {@link Mask}. Spaces represent unset pixels and any other symbols represent set pixels.
+     * @param xOffset Horizontal offset to apply to the whole {@link Mask}. The same effect would be achieved by including {@code xOffset} spaces at the front of every line, but this field can also work for negative offsets.
+     * @param yOffset Vertical offset to apply to the whole {@link Mask}. The same effect would be achieved by including {@code yOffset} empty lines at the start, but this field can also work for negative offsets.
+     * @param rowStrings Must have all Strings the same length
+     */
     public static final Mask fromRowStrings(int xOffset, int yOffset, List<String> rowStrings) {
         if (rowStrings.isEmpty()) return new Mask(xOffset, yOffset, 0, 0);
         final int width = rowStrings.get(0).length();
@@ -248,8 +321,13 @@ public class Mask implements Cloneable {
         return mask;
     };
 
+    /**
+     * Convert this {@link Mask} to a List of {@link Rect2i rectangles}.
+     * More horizontal rectangles are preferred.
+     * @return List of {@link Rect2i rectangles} covering every pixel in this {@link Mask} exactly once.
+     */
     @OnlyIn(Dist.CLIENT)
-    public  List<Rect2i> rectangularize() {
+    public List<Rect2i> rectangularize() {
         final List<Rect2i> rectangles = new ArrayList<>();
         if (bits.isEmpty()) return rectangles;
 
@@ -302,6 +380,14 @@ public class Mask implements Cloneable {
 
     };
 
+    /**
+     * Construct a {@link Mask} at the given position of the given size.
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @see Mask#fromTo(int, int, int, int)
+     */
     public static final Mask rect(int x, int y, int width, int height) {
         if (width < 0 || height < 0) throw new IllegalArgumentException("Cannot have negative width or height");
         final Mask mask = new Mask(x, y, width, height);
@@ -309,6 +395,14 @@ public class Mask implements Cloneable {
         return mask;
     };
 
+    /**
+     * Construct a {@link Mask} with the given upper and lower corners.
+     * @param fromX
+     * @param fromY
+     * @param toX
+     * @param toY
+     * @see Mask#rect(int, int, int, int)
+     */
     public static final Mask fromTo(int fromX, int fromY, int toX, int toY) {
         return rect(fromX, fromY, toX - fromX, toY - fromY);
     };

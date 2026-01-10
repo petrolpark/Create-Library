@@ -110,6 +110,7 @@ public class Petrolpark {
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
         return new SharedFeatureFlag[]{};
+        //return new SharedFeatureFlag[]{SharedFeatureFlag.DRYING_RACK};
     };
 
     private void init(final FMLCommonSetupEvent event) {
@@ -154,7 +155,7 @@ public class Petrolpark {
                 try {
                     final Class<?> clazz = Class.forName(className);
                     final Mod mod = clazz.getAnnotation(Mod.class);
-                    if (mod == null) throw new IllegalArgumentException("@InitializeSharedFeatures method must be in @Mod class");
+                    if (mod == null) throw new IllegalArgumentException("@GetPetrolparkSharedFeatures method must be in @Mod class");
                     Mods compatMod = Mods.LOOKUP.apply(mod.value());
                     if (compatMod == null) compatMod = Mods.PETROLPARK; // Other Mods can enable Shared Features under the Petrolpark name
                     final Method method = clazz.getMethod(memberName);
@@ -165,7 +166,7 @@ public class Petrolpark {
                             throw new IllegalArgumentException("Must return an array of SharedFeatureFlag");
                         };
                     } else {
-                        throw new IllegalArgumentException("@InitializeSharedFeatures method must be static");
+                        throw new IllegalArgumentException("@GetPetrolparkSharedFeatures method must be static");
                     };
                 } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
                     throw new IllegalArgumentException("Could not initialize Shared Features in class " + className, e);

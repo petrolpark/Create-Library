@@ -1,12 +1,13 @@
 package com.petrolpark.core.item.decay;
 
-import net.createmod.catnip.animation.AnimationTickHolder;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.petrolpark.RequiresCreate;
 import com.petrolpark.client.rendering.item.TransparentItemRenderer;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModel;
 import com.simibubi.create.foundation.item.render.CustomRenderedItemModelRenderer;
 import com.simibubi.create.foundation.item.render.PartialItemModelRenderer;
 
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -15,6 +16,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 
+@RequiresCreate
 public class FlashingDecayingItemRenderer extends CustomRenderedItemModelRenderer {
 
     @Override

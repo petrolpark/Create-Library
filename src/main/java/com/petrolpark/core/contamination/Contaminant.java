@@ -60,7 +60,7 @@ public class Contaminant {
     public static ResourceKey<Contaminant> getKeyFromTag(TagKey<?> tagKey, String pathSuffix) {
         ResourceLocation rl = tagKey.location();
         String[] path = rl.getPath().split("/");
-        if (!path[0].equals("contaminant") || !path[2].equals(pathSuffix)) return null;
+        if (!path[0].equals("contaminant") || !path[path.length - 1].equals(pathSuffix)) return null;
         return ResourceKey.create(PetrolparkRegistries.Keys.CONTAMINANT, ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), path[1]));
     };
 

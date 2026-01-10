@@ -36,6 +36,7 @@ public class Create {
         CreateMenuTypes.register();
         CreatePackets.register();
     
+        PetrolparkArmInteractionPointTypes.register();
         PetrolparkMandrelAnimationTypes.register();
         PetrolparkMovementChecks.register();
 

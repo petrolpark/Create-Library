@@ -1,4 +1,4 @@
-package com.petrolpark.common.mobeffect;
+package com.petrolpark.core.world.effect;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,12 +4,11 @@ import javax.annotation.Nonnull;
 
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.config.PetrolparkConfigs;
+import com.petrolpark.core.item.decay.IApplyDecayRecipe;
 import com.petrolpark.core.item.decay.ItemDecay;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BarrelBlockEntity;
 
@@ -25,38 +24,19 @@ public interface AgeingContainerWrapper extends Container {
     };
 
     public static ItemStack getItem(Level level, GetItem getItem, int slot) {
-        return checkDecay(level, getItem.getItem(slot));
+        return IApplyDecayRecipe.checkDecay(level, PetrolparkRecipeTypes.AGEING.get(), getItem.getItem(slot));
     };
 
     public static ItemStack removeItem(Level level, RemoveItem removeItem, int slot, int amount) {
-        return withAgeingDecayRemoved(level, removeItem.removeItem(slot, amount));
+        return IApplyDecayRecipe.withAgeingDecayRemoved(level, PetrolparkRecipeTypes.AGEING.get(), removeItem.removeItem(slot, amount));
     };
 
     public static ItemStack removeItemNoUpdate(Level level, RemoveItemNoUpdate removeItemNoUpdate, int slot) {
-        return withAgeingDecayRemoved(level, removeItemNoUpdate.removeItemNoUpdate(slot));
+        return IApplyDecayRecipe.withAgeingDecayRemoved(level, PetrolparkRecipeTypes.AGEING.get(), removeItemNoUpdate.removeItemNoUpdate(slot));
     };
 
     public static void setItem(Level level, SetItem setItem, int slot, @Nonnull ItemStack stack) {
-        setItem.setItem(slot, withAgeingDecay(level, ItemDecay.checkDecay(stack), true));
-    };
-
-    public static ItemStack withAgeingDecayRemoved(Level level, ItemStack stack) {
-        level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.AGEING.get(), new SingleRecipeInput(stack), level).stream().findAny()
-            .ifPresent(rh -> ItemDecay.removeAppliedDecay(stack));
-        return checkDecay(level, stack);
-    };
-
-    public static ItemStack withAgeingDecay(Level level, ItemStack stack, boolean startDecay) {
-        SingleRecipeInput input = new SingleRecipeInput(stack);
-        return checkDecay(level, level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.AGEING.get(), input, level).stream().findAny()
-            .map(RecipeHolder::value)
-            .map(AgeingRecipe::cast)
-            .map(recipe -> recipe.assemble(input, startDecay))
-            .orElse(stack));
-    };
-
-    public static ItemStack checkDecay(Level level, ItemStack stack) {
-        return ItemDecay.checkDecay(stack, s -> withAgeingDecay(level, s, false));
+        setItem.setItem(slot, IApplyDecayRecipe.withAgeingDecay(level, PetrolparkRecipeTypes.AGEING.get(), ItemDecay.checkDecay(stack), true));
     };
 
     @FunctionalInterface

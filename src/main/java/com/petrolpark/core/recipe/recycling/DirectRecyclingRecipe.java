@@ -11,6 +11,11 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.level.Level;
 
+/**
+ * Directly {@link RecyclingManager recycle} an Item into known {@link RecyclingOutputs}.
+ * <p>Items matching {@link DirectRecyclingRecipe#ingredient()} will be recycled into {@link DirectRecyclingRecipe#outputs()}.
+ * This contrasts to {@link IngredientRecyclingRecipe}s, in which any <i>other</i> Recipes that include {@link IngredientRecyclingRecipe#ingredient()} will be recycled into {@link IngredientRecyclingRecipe#outputs()}.</p>
+ */
 public record DirectRecyclingRecipe(Ingredient ingredient, RecyclingOutputs outputs) implements IRecyclingRecipe {
 
     @Override

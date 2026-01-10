@@ -1,6 +1,6 @@
-package com.petrolpark.common.mobeffect.shader;
+package com.petrolpark.core.world.effect.shader;
 
-import com.petrolpark.common.mobeffect.shader.packet.RemoveEffectShaderPacket;
+import com.petrolpark.core.world.effect.shader.packet.RemoveEffectShaderPacket;
 
 import net.minecraft.core.Holder;
 import net.minecraft.resources.ResourceLocation;

@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
+import com.petrolpark.RequiresCreate;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
 import net.minecraft.network.chat.Component;
@@ -17,6 +18,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
+@RequiresCreate
 public abstract class StackableFlashingDecayingItem extends Item {
 
     public StackableFlashingDecayingItem(Properties properties) {

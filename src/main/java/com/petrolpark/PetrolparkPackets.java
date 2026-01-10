@@ -1,9 +1,5 @@
 package com.petrolpark;
 
-import com.petrolpark.common.mobeffect.shader.packet.InitEffectShaderPacket;
-import com.petrolpark.common.mobeffect.shader.packet.RemoveAllEffectShadersPacket;
-import com.petrolpark.common.mobeffect.shader.packet.RemoveEffectShaderPacket;
-import com.petrolpark.common.mobeffect.shader.packet.SyncMobEffectTotalDurationPacket;
 import com.petrolpark.core.actionrecord.ActionRecordEntryResult;
 import com.petrolpark.core.actionrecord.packet.entrant.ICustomPacketPayloadEntrant;
 import com.petrolpark.core.actionrecord.packet.entrant.PacketEntrants;
@@ -15,6 +11,10 @@ import com.petrolpark.core.team.packet.BindTeamItemPacket;
 import com.petrolpark.core.team.scoreboard.ScoreboardTeamComponentChangedPacket;
 import com.petrolpark.core.team.singleplayer.SinglePlayerTeamComponentChangedPacket;
 import com.petrolpark.core.wish.WishGrantedPacket;
+import com.petrolpark.core.world.effect.shader.packet.InitEffectShaderPacket;
+import com.petrolpark.core.world.effect.shader.packet.RemoveAllEffectShadersPacket;
+import com.petrolpark.core.world.effect.shader.packet.RemoveEffectShaderPacket;
+import com.petrolpark.core.world.effect.shader.packet.SyncMobEffectTotalDurationPacket;
 
 import net.createmod.catnip.net.base.BasePacketPayload;
 import net.createmod.catnip.net.base.CatnipPacketRegistry;

@@ -13,9 +13,9 @@ import net.minecraft.util.StringRepresentable;
 
 public enum SharedFeatureFlag implements StringRepresentable {
     
-    // Machines
     CENTRIFUGE,
     BASIN_LID,
+    DRYING_RACK,
     TORQUE_LIMITER,
     MESH,
     EXTRUSION(MESH),

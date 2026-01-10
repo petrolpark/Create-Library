@@ -31,7 +31,7 @@ public record GrantShopXPTeamReward(Holder<Shop> shop, NumberProvider amount) im
 
     @Override
     public void reward(ITeam team, LootContext context, float multiplier) {
-        team.getOrDefault(PetrolparkDataComponents.SHOPS_DATA, new ShopsData()).grantXP(shop, amount.getInt(context));
+        team.getOrDefault(PetrolparkDataComponents.TEAM_SHOPS, new ShopsData()).grantXP(shop, amount.getInt(context));
     };
 
     @Override

@@ -1,7 +1,7 @@
-package com.petrolpark.common.mobeffect.shader.packet;
+package com.petrolpark.core.world.effect.shader.packet;
 
 import com.petrolpark.PetrolparkPackets;
-import com.petrolpark.common.mobeffect.shader.IShaderEffect;
+import com.petrolpark.core.world.effect.shader.IShaderEffect;
 import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
 
 import net.createmod.catnip.net.base.ClientboundPacketPayload;

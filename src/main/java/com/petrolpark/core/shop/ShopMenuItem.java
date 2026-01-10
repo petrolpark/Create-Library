@@ -67,7 +67,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem {
         Optional.ofNullable(stack.get(PetrolparkDataComponents.SHOP)).ifPresent(shop -> {
             Optional.of(ITeamBoundItem.getTeam(stack, context.level()))
                 .filter(Predicate.not(ITeam::isNone))
-                .map(team -> team.get(PetrolparkDataComponents.SHOPS_DATA))
+                .map(team -> team.get(PetrolparkDataComponents.TEAM_SHOPS))
                 .map(shops -> shops.getName(shop))
                 .or(() -> Optional.of(shop.value().getName()))
                 .ifPresent(name -> tooltipComponents.add(name.copy().withStyle(ChatFormatting.GRAY)));

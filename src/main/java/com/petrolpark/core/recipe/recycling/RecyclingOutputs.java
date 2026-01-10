@@ -5,7 +5,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BinaryOperator;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
+import java.util.stream.Collector;
 
 import com.petrolpark.util.BigItemStack;
 
@@ -43,6 +49,10 @@ public class RecyclingOutputs extends LinkedList<RecyclingOutput> {
 
     public double getExpectationMultiplier() {
         return expectationMultiplier;
+    };
+
+    public boolean hasOutputs() {
+        return !isEmpty();
     };
 
     @Override
@@ -125,5 +135,34 @@ public class RecyclingOutputs extends LinkedList<RecyclingOutput> {
     @Override
     public boolean equals(Object o) {
         return o instanceof RecyclingOutputs outputs && expectationMultiplier == outputs.expectationMultiplier && super.equals(outputs);
+    };
+
+    public static final Collector<RecyclingOutputs, RecyclingOutputs, RecyclingOutputs> COLLECTOR = new Collector<RecyclingOutputs,RecyclingOutputs,RecyclingOutputs>() {
+
+        @Override
+        public Supplier<RecyclingOutputs> supplier() {
+            return RecyclingOutputs::empty;
+        };
+
+        @Override
+        public BiConsumer<RecyclingOutputs, RecyclingOutputs> accumulator() {
+            return RecyclingOutputs::addOther;
+        };
+
+        @Override
+        public BinaryOperator<RecyclingOutputs> combiner() {
+            return RecyclingOutputs::addOther;
+        };
+
+        @Override
+        public Function<RecyclingOutputs, RecyclingOutputs> finisher() {
+            return Function.identity();
+        };
+
+        @Override
+        public Set<Collector.Characteristics> characteristics() {
+            return Set.of(Collector.Characteristics.IDENTITY_FINISH);
+        };
+        
     };
 };

@@ -22,6 +22,9 @@ import net.minecraft.client.renderer.texture.atlas.SpriteSources;
 import net.minecraft.client.resources.metadata.animation.FrameSize;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * 
+ */
 public class MeanShiftClusterSpriteSource extends WrappedSpriteSource {
 
     public static final MapCodec<MeanShiftClusterSpriteSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

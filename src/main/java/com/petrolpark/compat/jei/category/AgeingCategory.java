@@ -26,7 +26,7 @@ public class AgeingCategory extends SimpleConversionCategory<AgeingRecipe> {
 
     @Override
     public List<ItemStack> getOutputs(AgeingRecipe recipe, IFocusGroup focuses) {
-        return streamInputs(recipe, focuses).map(recipe.product()::get).toList();
+        return streamInputs(recipe, focuses).map(recipe.decayProduct()::get).toList();
     };
 
     protected Stream<ItemStack> streamInputs(AgeingRecipe recipe, IFocusGroup focuses) {

@@ -1,4 +1,4 @@
-package com.petrolpark.common.mobeffect.shader;
+package com.petrolpark.core.world.effect.shader;
 
 import com.petrolpark.PetrolparkPostUniforms;
 

@@ -86,7 +86,7 @@ public interface ItemDecay {
     };
 
     public static long getRemainingTime(ItemStack decayingItemStack, long creationTime) {
-        return getRemainingTime(decayingItemStack.getOrDefault(PetrolparkDataComponents.DECAY_TIME, DecayTime.NONE).lifetime(), creationTime);
+        return getRemainingTime(getLifetimeOrNone(decayingItemStack), creationTime);
     };
 
     public static long getRemainingTime(long lifetime, long creationTime) {
@@ -104,7 +104,7 @@ public interface ItemDecay {
     public static void extendLifetime(ItemStack decayingItemStack, int additionalLifetime) {
         if (decayingItemStack.has(PetrolparkDataComponents.DECAY_TIME)) {
             Long creationTime = decayingItemStack.get(PetrolparkDataComponents.DECAY_START_TIME);
-            if (creationTime == null) return; // Hasn't began decay
+            if (creationTime == null) return; // Hasn't begun decay
             long remainingTime = getRemainingTime(decayingItemStack, creationTime);
             long newLifetime = Math.max(0, additionalLifetime + remainingTime);
             decayingItemStack.set(PetrolparkDataComponents.DECAY_START_TIME, getGameTime() + newLifetime - getLifetimeOrNone(decayingItemStack));

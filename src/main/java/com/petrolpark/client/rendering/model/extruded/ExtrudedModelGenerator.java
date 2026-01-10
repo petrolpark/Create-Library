@@ -26,6 +26,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 /**
  * Largely copied from {@link ItemModelGenerator}.
+ * @see ExtrudedModelGenerator#generateExtrudedModel(Mask, float, float, BlockFaceUV, Function, BlockModel)
  */
 public class ExtrudedModelGenerator {
 
@@ -36,13 +37,15 @@ public class ExtrudedModelGenerator {
     public static final List<String> TEXTURE_KEYS = List.of(TOP_TEXTURE_KEY, SIDE_TEXTURE_KEY, BOTTOM_TEXTURE_KEY);
 
     /**
-     * Top and bottom textures must cover the given mask.
-     * @param mask
+     * Generate an {@link ExtrudedModel}. The extrusion takes place in the z direction.
+     * @param mask The {@link Mask} to use
      * @param minZ
-     * @param maxZ
-     * @param topUV
+     * @param maxZ Should be > {@code minZ}
+     * @param topUV The UV coordinates for the top texture, were the {@code mask} to just cover the whole Block (i.e. {@code (0, 0)} to {@code (16, 16)}).
+     * This will be used to decide how to map the {@code top} and {@code bottom} textures to the resulting south and north faces.
      * @param spriteGetter
-     * @param baseModel
+     * @param baseModel A {@link BlockModel} containing no {@link BlockElement elements}, but the {@link BlockModel#textureMap specifying the textures} {@code top}, {@code side} and {@code bottom}.
+     * The {@code side} texture should be 16x16 and will be tiled, but the top and bottom textures will not be, so they need to be large enough for the {@code topUV}, when fit to the {@code mask}, to still fit.
      */
     public BlockModel generateExtrudedModel(Mask mask, float minZ, float maxZ, BlockFaceUV topUV, Function<Material, TextureAtlasSprite> spriteGetter, BlockModel baseModel) {
         final Map<String, Either<Material, String>> textures = Maps.newHashMap();

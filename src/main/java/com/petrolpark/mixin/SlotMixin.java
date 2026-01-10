@@ -5,6 +5,8 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.petrolpark.PetrolparkRecipeTypes;
+import com.petrolpark.core.item.decay.IApplyDecayRecipe;
 import com.petrolpark.core.item.decay.ageing.AgeingContainerWrapper;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 
@@ -31,7 +33,7 @@ public abstract class SlotMixin {
         method = "Lnet/minecraft/world/inventory/Slot;onTake(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;)V"
     )
     public void wrapOnTake(Player player, ItemStack stack, Operation<Void> operation) {
-        if (AgeingContainerWrapper.isAgeingContainer(container)) AgeingContainerWrapper.withAgeingDecayRemoved(player.level(), stack);
+        if (AgeingContainerWrapper.isAgeingContainer(container)) IApplyDecayRecipe.withAgeingDecayRemoved(player.level(), PetrolparkRecipeTypes.AGEING.get(), stack);
         operation.call(player, stack);
     };
 };

@@ -37,7 +37,7 @@ public class DecayingItemDecorator implements IItemDecorator {
 
     @SubscribeEvent
     public static final void onRegisterItemDecorations(RegisterItemDecorationsEvent event) {
-        DecayingItemDecorator decorator = new DecayingItemDecorator();
+        final DecayingItemDecorator decorator = new DecayingItemDecorator();
         BuiltInRegistries.ITEM.forEach(item -> event.register(item, decorator));
     };
     

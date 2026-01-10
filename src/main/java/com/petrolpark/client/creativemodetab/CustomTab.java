@@ -21,6 +21,10 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.ItemStack;
 
+/**
+ * A more versatile Creative Mode Tab that allows you to leave Slots empty and add labels.
+ * Initialize with {@link CustomTab.Builder#Builder(Row, int)}.
+ */
 public class CustomTab extends CreativeModeTab {
 
     public final ImmutableList<ITabEntry> entries;
@@ -50,7 +54,7 @@ public class CustomTab extends CreativeModeTab {
 
         public final List<ITabEntry> entries = new ArrayList<>();
 
-        public Builder(Row row, int column) {
+        public Builder(CreativeModeTab.Row row, int column) {
             super(row, column);
             withTabFactory(b -> {
                 if (!(b instanceof Builder cb)) throw new IllegalArgumentException("Supplied builder must extend CustomTab.Builder");
@@ -93,7 +97,6 @@ public class CustomTab extends CreativeModeTab {
         };
 
         /**
-         * 
          * @param stacks The ordered list of stacks to which to add this entry
          * @param parameters
          * @param specialRenderLocation If this entry {@link ITabEntry#hasSpecialRendering() has special rendering}, pass this the slot to render it at 
@@ -129,6 +132,9 @@ public class CustomTab extends CreativeModeTab {
             };
         };
 
+        /**
+         * A simple ItemStack, like in a normal {@link CreativeModeTab}.
+         */
         public static class Item implements ITabEntry {
 
             public final Supplier<ItemStack> stack;
@@ -149,6 +155,9 @@ public class CustomTab extends CreativeModeTab {
 
         };
 
+        /**
+         * Add an ItemStack to this {@link CustomTab}, but only add it to the search bar if the condition passes.
+         */
         public static class ConditionalItem extends Item {
 
             public final Supplier<Boolean> condition;
@@ -171,6 +180,9 @@ public class CustomTab extends CreativeModeTab {
 
         };
 
+        /**
+         * Add an ItemStack to this {@link CustomTab}, but do not add it to the search bar, as it is already there.
+         */
         public static class DuplicateItem extends Item {
 
             public DuplicateItem(Supplier<ItemStack> stack) {
@@ -183,6 +195,9 @@ public class CustomTab extends CreativeModeTab {
             };
         };
 
+        /**
+         * Add a caption that takes up a whole row in this {@link CustomTab}.
+         */
         public static class Subheading implements ITabEntry {
 
             public final Component subheading;

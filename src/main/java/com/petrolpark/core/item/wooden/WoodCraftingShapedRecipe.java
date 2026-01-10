@@ -2,9 +2,12 @@ package com.petrolpark.core.item.wooden;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
@@ -12,6 +15,9 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.core.recipe.recycling.IRecyclableRecipe;
+import com.petrolpark.core.recipe.recycling.RecyclingManager;
+import com.petrolpark.core.recipe.recycling.RecyclingOutputs;
 import com.petrolpark.util.WoodHelper;
 import com.petrolpark.util.WoodHelper.Wood;
 
@@ -29,12 +35,12 @@ import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.Tags;
 
-public class WoodCraftingShapedRecipe extends ShapedRecipe {
+public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclableRecipe {
 
     public static final Ingredient PLANKS_INGREDIENT = Ingredient.of(ItemTags.PLANKS);
     public static final Ingredient SLAB_INGREDIENT = Ingredient.of(ItemTags.WOODEN_SLABS);
     public static final Ingredient STAIRS_INGREDIENT = Ingredient.of(ItemTags.WOODEN_STAIRS);
-    public static final Ingredient FENCE_INGREDIENT = Ingredient.of(ItemTags.WOODEN_FENCES);
+    public static final Ingredient FENCE_INGREDIENT = Ingredient.of(Tags.Items.FENCES_WOODEN);
     public static final Ingredient FENCE_GATE_INGREDIENT = Ingredient.of(Tags.Items.FENCE_GATES_WOODEN);
     public static final Ingredient BUTTON_INGREDIENT = Ingredient.of(ItemTags.WOODEN_BUTTONS);
     public static final Ingredient LOG_INGREDIENT = Ingredient.of(ItemTags.LOGS);
@@ -46,6 +52,7 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe {
     protected static final Map<Ingredient, Function<? super ItemStack, Wood>> WOOD_GETTERS = new HashMap<>();
 
     public static final void register(Character character, Ingredient ingredient, Function<? super ItemStack, Wood> woodGetter) {
+        if (!ingredient.isSimple()) throw new IllegalArgumentException("Built-in ingredients must be simple");
         BUILT_IN_INGREDIENTS.put(character, ingredient);
         WOOD_GETTERS.put(ingredient, woodGetter);
     };
@@ -61,6 +68,14 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe {
         register('s', STRIPPED_LOG_INGREDIENT, WoodHelper::getWoodFromStrippedLog);
         register('D', DOOR_INGREDIENT, WoodHelper::getWoodFromDoor);
         register('T', TRAPDOOR_INGREDIENT, WoodHelper::getWoodFromTrapdoor);
+    };
+
+    @Nullable
+    public static final Wood getWood(ItemStack stack) {
+        for (final Map.Entry<Ingredient, Function<? super ItemStack, Wood>> entry : WOOD_GETTERS.entrySet()) {
+            if (entry.getKey().test(stack)) return entry.getValue().apply(stack);
+        };
+        return null;
     };
 
     public static final MapCodec<ShapedRecipePattern> PATTERN_MAP_CODEC = ShapedRecipePattern.Data.MAP_CODEC.flatXmap(WoodCraftingShapedRecipe::unpackPatternData, WoodCraftingShapedRecipe::packPattern);
@@ -90,16 +105,19 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe {
         final Map<Character, Ingredient> existingKeys = patternData.key();
         final ImmutableMap.Builder<Character, Ingredient> allKeys = ImmutableMap.builder();
         allKeys.putAll(existingKeys);
-        boolean usesBuiltInKeys = false;
+        boolean hasWoodIngredient = false;
         for (final Map.Entry<Character, Ingredient> builtInKey : BUILT_IN_INGREDIENTS.entrySet()) {
             if (existingKeys.containsKey(builtInKey.getKey())) return DataResult.error(() -> "Invalid pattern: '"+builtInKey.getKey()+"'' is a reserved symbol");
             for (String line : patternData.pattern()) if (line.indexOf(builtInKey.getKey()) != -1) {
                 allKeys.put(builtInKey);
-                usesBuiltInKeys = true;
+                hasWoodIngredient = true;
                 break;
             };
         };
-        if (!usesBuiltInKeys) return DataResult.error(() -> "Invalid pattern: must use at least one built-in wood item symbol");
+        if (!hasWoodIngredient) for (final Ingredient ingredient : existingKeys.values()) {
+            if (ingredient.isSimple() && Stream.of(ingredient.getItems()).allMatch(s -> s.has(PetrolparkDataComponents.WOOD))) hasWoodIngredient = true;
+        };
+        if (!hasWoodIngredient) return DataResult.error(() -> "Invalid pattern: must use at least one built-in wood item symbol");
         return ShapedRecipePattern.unpack(new ShapedRecipePattern.Data(allKeys.build(), patternData.pattern()));
     };
 
@@ -132,6 +150,12 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe {
         return assemble(input, false);
     };
 
+    public ItemStack getResult(Wood wood) {
+        final ItemStack result = this.result.copy();
+        result.set(PetrolparkDataComponents.WOOD, wood);
+        return result;
+    };
+
     public ItemStack assemble(@Nonnull CraftingInput input, boolean mirrored) {
         Wood wood = null;
         for (int y = 0; y < getPattern().height(); y++) {
@@ -142,8 +166,8 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe {
                 if (!ingredient.test(stack)) return ItemStack.EMPTY;
 
                 final Function<? super ItemStack, Wood> woodGetter = WOOD_GETTERS.get(ingredient);
-                if (woodGetter != null) {
-                    final Wood thisWood = woodGetter.apply(stack);
+                if (woodGetter != null || stack.has(PetrolparkDataComponents.WOOD)) {
+                    final Wood thisWood = woodGetter != null ? woodGetter.apply(stack) : stack.get(PetrolparkDataComponents.WOOD);
                     if (thisWood == null) return ItemStack.EMPTY;
                     if (wood != null) {
                         if (!wood.equals(thisWood)) return ItemStack.EMPTY;
@@ -157,10 +181,35 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe {
         if (wood == null) {
             return ItemStack.EMPTY;
         } else {
-            final ItemStack result = this.result.copy();
-            result.set(PetrolparkDataComponents.WOOD, wood);
-            return result;
+            return getResult(wood);
         }
+    };
+
+    public Stream<Ingredient> streamSpecificIngredientsFor(ItemStack result) {
+        final Wood wood = result.get(PetrolparkDataComponents.WOOD);
+        if (wood == null) return Stream.empty();
+        return getIngredients().stream()
+            .map(ingredient -> {
+                final Function<? super ItemStack, Wood> woodGetter = WOOD_GETTERS.get(ingredient);
+                if (woodGetter != null) {
+                    return Ingredient.of(Stream.of(ingredient.getItems()).filter(stack -> woodGetter.apply(stack).equals(wood)));
+                } else if (ingredient.isSimple()) {
+                    return Ingredient.of(Stream.of(ingredient.getItems()).map(stack -> {
+                        if (stack.has(PetrolparkDataComponents.WOOD)) {
+                            final ItemStack copy = stack.copy();
+                            copy.set(PetrolparkDataComponents.WOOD, wood);
+                            return copy;
+                        } else return stack;
+                    }));
+                } else {
+                    return ingredient;
+                }
+            });
+    };
+
+    @Override
+    public Optional<RecyclingOutputs> getRecyclingOutputs(Level level, ItemStack stack) {
+        return Optional.of(streamSpecificIngredientsFor(stack).map(RecyclingManager::getInverse).collect(RecyclingOutputs.COLLECTOR)).filter(RecyclingOutputs::hasOutputs);
     };
 
     public static class Serializer implements RecipeSerializer<WoodCraftingShapedRecipe> {

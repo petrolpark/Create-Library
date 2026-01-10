@@ -5,6 +5,8 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 import javax.annotation.Nullable;
 
@@ -29,6 +31,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DoorBlock;
@@ -57,15 +60,22 @@ public class WoodHelper {
 
     @OnlyIn(Dist.CLIENT)
     public static final Component getName(@Nullable Wood wood) {
-        if (wood == null) return Lang.generic("wooden");
+        if (wood == null) return Lang.generic("wood.unknown");
         return getPlanksBlock(wood)
             .map(Block::getName)
             .map(MutableComponent::getString)
-            .map(Pattern.compile(Lang.generic("wood_planks_regex").getString())::matcher)
+            .map(Pattern.compile(Lang.generic("wood.planks_regex").getString())::matcher)
             .filter(Matcher::find)
             .map(matcher -> matcher.group(1))
             .<Component>map(Component::literal)
-            .orElse(Lang.generic("wooden"));
+            .orElse(Lang.generic("wood.unknown"));
+    };
+
+    public static final Stream<Wood> streamAllWoods() {
+        return StreamSupport.stream(BuiltInRegistries.BLOCK.getTagOrEmpty(BlockTags.PLANKS)
+            .spliterator(), false
+            ).map(Holder::value)
+            .map(WoodHelper::getWoodFromPlanksBlock);
     };
 
     @OnlyIn(Dist.CLIENT)
@@ -87,7 +97,7 @@ public class WoodHelper {
         map.put(TRAPDOOR_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(getTrapdoorBlockOrOak(wood).defaultBlockState(), Direction.UP));
 
 		return BakedModelHelper.swapSprites(template, map::get);
-	}
+	};
 
     public static final Optional<Block> getPlanksBlock(Wood wood) {
         final Optional<Block> planksBlock = BuiltInRegistries.BLOCK.getHolder(ResourceLocation.fromNamespaceAndPath(wood.namespace(), wood.name() + "_planks")).map(Holder::value);

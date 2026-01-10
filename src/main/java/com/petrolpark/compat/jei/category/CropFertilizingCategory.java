@@ -82,14 +82,6 @@ public class CropFertilizingCategory extends PetrolparkRecipeCategory<CropFertil
                 .addIngredients(BlockStateIngredientType.TYPE, soilStates)
                 .setSlotName("soils");
 
-            if (requiresSpecificSoil) {
-                final IRecipeSlotBuilder soilStackSlot = builder.addInputSlot(LEFT_BLOCK_X - 2, 106)
-                    .setBackground(getRenderedSlot(), -1, -1)
-                    .addItemStacks(soilStates.stream().map(BlockState::getBlock).<ItemStack>map(ItemStack::new).toList());
-                
-                builder.createFocusLink(soilStateSlot, soilStackSlot);
-            };
-
             final List<BlockState> resultSoilStates = soilStates.stream().map(recipe::getResultSoilState).toList();
 
             final IRecipeSlotBuilder resultSoilStateSlot = builder.addSlot(RecipeIngredientRole.OUTPUT)
@@ -101,7 +93,15 @@ public class CropFertilizingCategory extends PetrolparkRecipeCategory<CropFertil
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addItemStacks(resultSoilStates.stream().map(BlockState::getBlock).<ItemStack>map(ItemStack::new).toList());
 
-            builder.createFocusLink(soilStateSlot, resultSoilStateSlot, resultSoilStackSlot);
+            if (requiresSpecificSoil) {
+                final IRecipeSlotBuilder soilStackSlot = builder.addInputSlot(LEFT_BLOCK_X - 2, 106)
+                    .setBackground(getRenderedSlot(), -1, -1)
+                    .addItemStacks(soilStates.stream().map(BlockState::getBlock).<ItemStack>map(ItemStack::new).toList());
+                
+                builder.createFocusLink(soilStateSlot, soilStackSlot, resultSoilStateSlot, resultSoilStackSlot);
+            } else {
+                builder.createFocusLink(soilStateSlot, resultSoilStateSlot, resultSoilStackSlot);
+            };
         };
 
         final List<BlockState> subsoilStates;
@@ -120,14 +120,6 @@ public class CropFertilizingCategory extends PetrolparkRecipeCategory<CropFertil
                 .setPosition(-Integer.MAX_VALUE, -Integer.MAX_VALUE)
                 .addIngredients(BlockStateIngredientType.TYPE, subsoilStates)
                 .setSlotName("subsoils");
-            
-            if (requiresSpecificSubsoil) {
-                final IRecipeSlotBuilder subsoilStackSlot = builder.addInputSlot(LEFT_BLOCK_X + 16, 106)
-                    .setBackground(getRenderedSlot(), -1, -1)
-                    .addItemStacks(subsoilStates.stream().map(BlockState::getBlock).<ItemStack>map(ItemStack::new).toList());
-                
-                builder.createFocusLink(subsoilStateSlot, subsoilStackSlot);
-            };
 
             final List<BlockState> resultSubsoilStates = subsoilStates.stream().map(recipe::getResultSubsoilState).toList();
 
@@ -140,7 +132,15 @@ public class CropFertilizingCategory extends PetrolparkRecipeCategory<CropFertil
                 .setBackground(getRenderedSlot(), -1, -1)
                 .addItemStacks(resultSubsoilStates.stream().map(BlockState::getBlock).<ItemStack>map(ItemStack::new).toList());
 
-            builder.createFocusLink(subsoilStateSlot, resultSubsoilStateSlot, resultSubsoilStackSlot);
+            if (requiresSpecificSubsoil) {
+                final IRecipeSlotBuilder subsoilStackSlot = builder.addInputSlot(LEFT_BLOCK_X + 16, 106)
+                    .setBackground(getRenderedSlot(), -1, -1)
+                    .addItemStacks(subsoilStates.stream().map(BlockState::getBlock).<ItemStack>map(ItemStack::new).toList());
+                
+                builder.createFocusLink(subsoilStateSlot, subsoilStackSlot, resultSubsoilStateSlot, resultSubsoilStackSlot);
+            } else {
+                builder.createFocusLink(subsoilStateSlot, resultSubsoilStateSlot, resultSubsoilStackSlot);
+            };
         };
 
     };

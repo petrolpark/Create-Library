@@ -56,6 +56,12 @@ public class CompatRecipeManager {
 
     protected final Decoder<List<CompatRecipeDeserializer<?>>> deserializersDecoder = deserializersMapDecoder.decoder();
 
+    /**
+     * Register a new {@link CompatRecipeDeserializer}.
+     * @param <D> Type of the {@link CompatRecipeDeserializer}
+     * @param deserializer
+     * @see Petrolpark#COMPAT_RECIPES The instance on which to call this method
+     */
     public final <D extends CompatRecipeDeserializer<?>> D register(D deserializer) {
         if (registrationDone) throw new IllegalStateException("New Compat Recipe Deserializers must be registered during initiation");
         final List<CompatRecipeDeserializer<?>> list;

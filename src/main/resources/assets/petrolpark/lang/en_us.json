@@ -212,8 +212,8 @@
     "petrolpark.generic.rarity.uncommon": "Uncommon",
     "petrolpark.generic.rarity.rare": "Rare",
     "petrolpark.generic.rarity.epic": "Epic",
-    "petrolpark.generic.wooden": "Wooden",
-    "petrolpark.generic.wood_planks_regex": "^(.*?)\\s+Planks$",
+    "petrolpark.generic.wood.planks_regex": "^(.*?)\\s+Planks$",
+    "petrolpark.generic.wood.unknown": "Unknown Wood",
 
     "petrolpark.key.hotbar.10": "Hotbar Slot 10",
     "petrolpark.key.hotbar.11": "Hotbar Slot 11",

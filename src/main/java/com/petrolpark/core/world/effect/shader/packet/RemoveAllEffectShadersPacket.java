@@ -1,4 +1,4 @@
-package com.petrolpark.common.mobeffect.shader.packet;
+package com.petrolpark.core.world.effect.shader.packet;
 
 import com.petrolpark.PetrolparkPackets;
 import com.petrolpark.util.mixininterfaces.IGameRendererMixin;

@@ -5,14 +5,14 @@ import java.util.stream.Stream;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkTags;
-import com.petrolpark.common.mobeffect.shader.IShaderEffect;
-import com.petrolpark.common.mobeffect.shader.packet.RemoveAllEffectShadersPacket;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.ContaminateHeldItemCommand;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.core.recipe.bogglepattern.BogglePatternCommand;
+import com.petrolpark.core.world.effect.shader.IShaderEffect;
+import com.petrolpark.core.world.effect.shader.packet.RemoveAllEffectShadersPacket;
 import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
 
 import net.minecraft.client.Minecraft;

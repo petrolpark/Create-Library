@@ -16,6 +16,7 @@ import net.neoforged.neoforge.common.NeoForge;
 /**
  * {@link BlockColor}s are called after Biome blending has been done.
  * This event is fired on the {@link NeoForge#EVENT_BUS} on the client side to allow Block colors to be modified before they are blended.
+ * <p>It is not fired on the main thread.</p>
  * <p>The result of this event is cached but can be reset with {@link ColorHelper#refreshChunkColors(ChunkPos)}.</p>
  * <p>This event will be fired many times for every block in a chunk, so it is recommended to cache intermediate values.</p>
  */

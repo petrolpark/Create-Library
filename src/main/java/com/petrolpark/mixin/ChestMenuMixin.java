@@ -5,6 +5,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.petrolpark.PetrolparkRecipeTypes;
+import com.petrolpark.core.item.decay.IApplyDecayRecipe;
 import com.petrolpark.core.item.decay.ageing.AgeingContainerWrapper;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 
@@ -39,7 +41,7 @@ public abstract class ChestMenuMixin extends AbstractContainerMenu {
         if (instance.container instanceof BarrelBlockEntity barrel) level = barrel.getLevel();
         else if (instance.container instanceof AgeingContainerWrapper ageingContainer && AgeingContainerWrapper.ageingInVanillaBarrelsEnabled()) level = ageingContainer.getLevel();
         else return original.call(instance);
-        return AgeingContainerWrapper.withAgeingDecayRemoved(level, original.call(instance));
+        return IApplyDecayRecipe.withAgeingDecayRemoved(level, PetrolparkRecipeTypes.AGEING.get(), original.call(instance));
     };
     
 };

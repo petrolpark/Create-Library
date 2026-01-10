@@ -29,6 +29,12 @@ import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 
+/**
+ * A model based on a top, side and bottom texture, and a {@link Mask}.
+ * The {@link Mask} is applied to the top and bottom textures and the model is generated with these as the south and north faces respectively.
+ * They are joined by several side faces that follow the edge of the {@link Mask}.
+ * @see ExtrudedModelGenerator#generateExtrudedModel(Mask, float, float, BlockFaceUV, Function, BlockModel)
+ */
 @OnlyIn(Dist.CLIENT)
 @EventBusSubscriber(Dist.CLIENT)
 public record ExtrudedModel(BlockModel baseModel, Mask mask, float minZ, float maxZ) implements IUnbakedGeometry<ExtrudedModel> {

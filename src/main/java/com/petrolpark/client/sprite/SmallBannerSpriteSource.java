@@ -27,6 +27,25 @@ import net.minecraft.server.packs.resources.ResourceMetadata;
 import net.minecraft.util.Mth;
 import net.minecraft.util.StringRepresentable;
 
+/**
+ * Takes textures, with the expected format being the same as vanilla Banner Pattern textures,
+ * and intelligently modifies them to be half the size. This is done in one of two ways:
+ * <ul>
+ * <li> "<b>Top-and-Bottom</b>" ({@code top_and_bottom}) finds the top and bottom rows of non-empty pixels and maps these to the top and bottom of the new texture, cutting out any rows of pixels in the middle.
+ * <li> "<b>Squeeze</b>" ({@code squeeze}) removes every other row of pixels.
+ * </ul>
+ * The method to use can be defined in the metadata of the texture file, and will default to {@code top_and_bottom}. For example, in {@code mybannertexture.png.mcmeta}:
+ * 
+ * <pre>
+ * {@code 
+ * "petrolpark:banner_splicer": {
+ *   "splicer": "top_and_bottom"
+ *  }
+ * }
+ * </pre>
+ * 
+ * 
+ */
 public class SmallBannerSpriteSource implements SpriteSource {
 
     public static final MapCodec<SmallBannerSpriteSource> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -53,8 +72,8 @@ public class SmallBannerSpriteSource implements SpriteSource {
             ResourceLocation id = directoryFileToIdConverter.fileToId(location).withPrefix(prefix);
 
             try {
-                Splicer splicer = resource.metadata().getSection(MetadataSection.TYPE).map(MetadataSection::splicer).orElse(Splicer.TOP_AND_BOTTOM);
-                LazyLoadedImage image = new LazyLoadedImage(location, resource, 1);
+                final Splicer splicer = resource.metadata().getSection(MetadataSection.TYPE).map(MetadataSection::splicer).orElse(Splicer.TOP_AND_BOTTOM);
+                final LazyLoadedImage image = new LazyLoadedImage(location, resource, 1);
                 output.add(id, splicer.createSpriteSource(id, image));
             } catch (IOException exception) {
 

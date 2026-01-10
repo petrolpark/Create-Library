@@ -8,13 +8,13 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.common.mobeffect.shader.IShaderEffect;
-import com.petrolpark.common.mobeffect.shader.ShaderEffectReloadHandler;
 import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.data.loot.modifier.LootTableModification;
 import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.offer.ShopOfferGenerator;
+import com.petrolpark.core.world.effect.shader.IShaderEffect;
+import com.petrolpark.core.world.effect.shader.ShaderEffectReloadHandler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;

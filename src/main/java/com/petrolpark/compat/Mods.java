@@ -21,7 +21,6 @@ public enum Mods implements StringRepresentable {
 
     // Petrolpark Mods
     PETROLPARK,
-    ACADEMY,
     CREATE_BISTRO("createbistro"),
     DESTROY,
     PETROLS_PARTS("petrolsparts"),
@@ -32,7 +31,9 @@ public enum Mods implements StringRepresentable {
     BREWIN_AND_CHEWIN("brewinandchewin"),
     CURIOS,
     JEI,
-    TFMG;
+    TFMG,
+    YOUKAIS_HOMECOMING("youkaishomecoming"),
+    ;
 
     public static final Function<String, Mods> LOOKUP = StringRepresentable.createNameLookup(values(), Function.identity());
 

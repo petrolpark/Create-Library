@@ -19,6 +19,10 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 
+/**
+ * @see DirectRecyclingRecipe
+ * @see IngredientRecyclingRecipe
+ */
 public interface IRecyclingRecipe extends Recipe<SingleRecipeInput> {
     
     public Ingredient ingredient();

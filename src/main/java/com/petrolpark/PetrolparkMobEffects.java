@@ -2,8 +2,8 @@ package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
-import com.petrolpark.common.mobeffect.SimpleMobEffect;
-import com.petrolpark.common.mobeffect.SyncedMobEffect;
+import com.petrolpark.core.world.effect.SimpleMobEffect;
+import com.petrolpark.core.world.effect.SyncedMobEffect;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 

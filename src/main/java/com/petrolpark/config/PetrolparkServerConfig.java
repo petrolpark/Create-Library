@@ -39,6 +39,7 @@ public class PetrolparkServerConfig extends ConfigBase {
     public final ConfigGroup compatibility = group(0, "compatibility");
         // Create
         public final ConfigGroup create = group(1, "create");
+            public final ConfigBool createArmsTargetChainConveyors = b(true, "armsTargetChainConveyors", "Whether Mechanical Arms can take from and place on Chain Conveyors");
             public final ConfigGroup createContamination = group(2, "contamination");
                 public final ConfigFloat createFluidContaminantWeight = f(100f, 0f, Float.MAX_VALUE, "fluidWeight", "How many mB of Fluid should be considered to be equal to one Item when weighting preserved Contaminants in any Recipes involving Fluids", "Set to 0 to not count the Contaminants of input Fluids. Contaminants will still propagate to output Fluids.");
                 public final ConfigBool createBasinRecipesPropagateContaminants = b(true, "propagateBasin", "Recipes done in a Basin will propagate the Contaminants of the input to the outputs");

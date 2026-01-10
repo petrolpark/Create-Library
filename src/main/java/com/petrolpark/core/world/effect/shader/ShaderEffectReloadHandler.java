@@ -1,4 +1,4 @@
-package com.petrolpark.common.mobeffect.shader;
+package com.petrolpark.core.world.effect.shader;
 
 import java.io.IOException;
 import java.util.HashMap;

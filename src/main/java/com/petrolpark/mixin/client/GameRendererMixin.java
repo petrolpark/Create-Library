@@ -14,8 +14,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkMobEffects;
-import com.petrolpark.common.mobeffect.shader.IShaderEffect;
-import com.petrolpark.common.mobeffect.shader.ShaderEffectReloadHandler;
+import com.petrolpark.core.world.effect.shader.IShaderEffect;
+import com.petrolpark.core.world.effect.shader.ShaderEffectReloadHandler;
 import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
 import com.petrolpark.util.mixininterfaces.IMobEffectInstanceMixin;
 

@@ -13,6 +13,10 @@ import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 
+/**
+ * Takes an existing {@link SpriteSource} and applies some function to its results,
+ * typically a texture transformation like with {@link MeanShiftClusterSpriteSource}.
+ */
 public abstract class WrappedSpriteSource implements SpriteSource {
 
     private final SpriteSource wrappedSource;
