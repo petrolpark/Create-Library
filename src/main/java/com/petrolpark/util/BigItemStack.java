@@ -1,10 +1,10 @@
 package com.petrolpark.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
-
-import java.util.List;
-import java.util.ArrayList;
 
 public class BigItemStack {
 
@@ -28,7 +28,7 @@ public class BigItemStack {
     };
 
     public ItemStack getSingleItemStack() {
-        return stack;
+        return stack.copy();
     };
 
     public int getCount() {
