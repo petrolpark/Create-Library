@@ -51,6 +51,10 @@ public class ScratchProcedure<ENVIRONMENT extends IScratchEnvironment, CONTEXT e
         return false;
     };
 
+    public boolean canRun() {
+        return !lines.stream().allMatch(ScratchProcedure.Line::canRun);
+    };
+
     public void populateContext(CONTEXT context) {
         for (ScratchProcedure.Line<?, ?> line : lines) line.arguments().populateContext(this, context);
     };
@@ -77,6 +81,10 @@ public class ScratchProcedure<ENVIRONMENT extends IScratchEnvironment, CONTEXT e
             if (block() instanceof final IInstantiableScratchBlock<? super ENVIRONMENT, ARGUMENTS, ?> instantiableBlock) return ScratchProcedure.CurrentLine.fromInstantiable(instantiableBlock, arguments(), environment);
             else if (block() instanceof final IInstantScratchBlock<? super ENVIRONMENT, ARGUMENTS> instantBlock) instantBlock.run(environment, arguments());
             return null;
+        };
+
+        public boolean canRun() {
+            return block().canEvaluate(arguments());
         };
 
     };

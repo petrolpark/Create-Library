@@ -132,6 +132,7 @@ public class RepeatBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryN
         @Override
         public void run(ENVIRONMENT environment, RepeatBlock.Instance<ENVIRONMENT> argument) {
             argument.remainingRepeats = 0;
+            argument.procedure().exit();
         };
 
         @Override

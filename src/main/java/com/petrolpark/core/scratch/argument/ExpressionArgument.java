@@ -25,7 +25,7 @@ public record ExpressionArgument<
     TYPE,
     ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>
 > (
-    IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS, ?> expression,
+    IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS> expression,
     ARGUMENTS arguments,
     ExpressionParameter<ENVIRONMENT, TYPE> parameter
 ) 
@@ -65,7 +65,7 @@ public record ExpressionArgument<
                     .flatMap(expression -> {
                         try {
                             if (expression.getReturnClass() != scratchClass) return DataResult.error(() -> String.format("Expression {} has wrong return class", expression.getExpressionType()));
-                            return DataResult.success((IScratchExpression<ENVIRONMENT, TYPE, ?, ?>)expression);
+                            return DataResult.success((IScratchExpression<ENVIRONMENT, TYPE, ?>)expression);
                         } catch (ClassCastException e) {
                             return DataResult.error(() -> String.format("Expression {} has the wrong environment or return class", expression.getExpressionType()));
                         }
@@ -84,7 +84,7 @@ public record ExpressionArgument<
             
         };
 
-        private <T, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> DataResult<ExpressionArgument<ENVIRONMENT, TYPE, ?>> decodeInternal(final DynamicOps<T> ops, final IScratchContextProvider<?> context, final MapLike<T> input, final IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS, ?> expression) {
+        private <T, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> DataResult<ExpressionArgument<ENVIRONMENT, TYPE, ?>> decodeInternal(final DynamicOps<T> ops, final IScratchContextProvider<?> context, final MapLike<T> input, final IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS> expression) {
             return expression.getParameters().argumentsCodec().parse(ops, context, input.get(ARGUMENTS_KEY)).map(arguments -> new ExpressionArgument<>(expression, arguments, this));
         };
 
@@ -101,12 +101,12 @@ public record ExpressionArgument<
             @Override
             @SuppressWarnings("unchecked")
             public ExpressionArgument<ENVIRONMENT, TYPE, ?> decode(RegistryFriendlyByteBuf buffer, final IScratchContextProvider<?> context) {
-                final IScratchExpression<?, ?, ?, ?> expression = IScratchExpression.STREAM_CODEC.decode(buffer, context.environmentType());
+                final IScratchExpression<?, ?, ?> expression = IScratchExpression.STREAM_CODEC.decode(buffer, context.environmentType());
                 try {
                     if (expression.getReturnClass() != scratchClass) throw new DecoderException(String.format("Expression {} has wrong return class", expression.getExpressionType()));
-                    return decodeStreamInternal(buffer, context, (IScratchExpression<ENVIRONMENT, TYPE, ?, ?>)expression);
+                    return decodeStreamInternal(buffer, context, (IScratchExpression<ENVIRONMENT, TYPE, ?>)expression);
                 } catch (ClassCastException e) {
-                    throw new DecoderException(String.format("Expression {} has the wrong environment or return class", expression.getExpressionType()));
+                    throw new DecoderException(String.format("Expression {} has the wrong Environment or return class", expression.getExpressionType()));
                 }
             };
 
@@ -117,7 +117,7 @@ public record ExpressionArgument<
             
         };
 
-        private <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionArgument<ENVIRONMENT, TYPE, ?> decodeStreamInternal(RegistryFriendlyByteBuf buffer, IScratchContextProvider<?> context, IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS, ?> expression) {
+        private <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionArgument<ENVIRONMENT, TYPE, ?> decodeStreamInternal(RegistryFriendlyByteBuf buffer, IScratchContextProvider<?> context, IScratchExpression<ENVIRONMENT, TYPE, ARGUMENTS> expression) {
             return new ExpressionArgument<>(expression, expression.getParameters().argumentsStreamCodec().decode(buffer, context), this);
         };
 

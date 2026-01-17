@@ -18,7 +18,7 @@ public final class EqualsExpression<TYPE> extends GenericExpression<
     ScratchArguments.And<
         IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>, ScratchArguments.Just<
         IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>
-    >>, EqualsExpression<TYPE>
+    >>
 > {
 
     public static final GenericExpression.Type<EqualsExpression<?>> TYPE = new GenericExpression.Type<>(EqualsExpression::create);

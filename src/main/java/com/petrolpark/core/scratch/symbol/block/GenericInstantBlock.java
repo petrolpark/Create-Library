@@ -10,10 +10,11 @@ import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+import com.petrolpark.core.scratch.symbol.IGenericScratchSymbol;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
-public abstract class GenericInstantBlock<ENVIRONMENT extends IScratchEnvironment, GENERIC_TYPE, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> extends InstantScratchBlock<ENVIRONMENT, ARGUMENTS> {
+public abstract class GenericInstantBlock<ENVIRONMENT extends IScratchEnvironment, GENERIC_TYPE, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> extends InstantScratchBlock<ENVIRONMENT, ARGUMENTS> implements IGenericScratchSymbol<ENVIRONMENT, GENERIC_TYPE, ARGUMENTS> {
 
     protected final IScratchClass<GENERIC_TYPE> genericScratchClass;
 
@@ -22,6 +23,7 @@ public abstract class GenericInstantBlock<ENVIRONMENT extends IScratchEnvironmen
         this.genericScratchClass = genericClass;
     };
 
+    @Override
     public final IScratchClass<GENERIC_TYPE> getGenericScratchClass() {
         return genericScratchClass;
     };

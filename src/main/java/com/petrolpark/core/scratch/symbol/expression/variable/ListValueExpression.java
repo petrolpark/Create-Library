@@ -24,7 +24,7 @@ public final class ListValueExpression<TYPE> extends GenericExpression<
         IVariableScratchEnvironment, ScratchVariableIdentifier, VariableArgument, ScratchArguments.And<
         IVariableScratchEnvironment, Long, ExpressionOrLiteralArgument<IVariableScratchEnvironment, Long>, ScratchArguments.Just<
         IVariableScratchEnvironment, TYPE, IScratchArgument<IVariableScratchEnvironment, TYPE>
-    >>>, ListValueExpression<TYPE>
+    >>>
 > {
 
     public static final GenericExpression.Type<ListValueExpression<?>> TYPE = new GenericExpression.Type<>(ListValueExpression::create);

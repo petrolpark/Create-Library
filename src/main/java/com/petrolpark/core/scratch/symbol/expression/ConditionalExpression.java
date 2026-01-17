@@ -20,7 +20,7 @@ public final class ConditionalExpression<TYPE> extends GenericExpression<
         IScratchEnvironment, Boolean, ExpressionArgument<IScratchEnvironment, Boolean, ?>, And<
         IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>, Just<
         IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>
-    >>>, ConditionalExpression<TYPE>
+    >>>
 > {
 
     public static final GenericExpression.Type<ConditionalExpression<?>> TYPE = new GenericExpression.Type<>(ConditionalExpression::create);

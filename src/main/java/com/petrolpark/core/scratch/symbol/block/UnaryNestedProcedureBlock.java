@@ -49,4 +49,9 @@ public abstract class UnaryNestedProcedureBlock<
     @Nullable
     public abstract INSTANCE run(ENVIRONMENT environment, ScratchProcedure<ENVIRONMENT, INSTANCE> procedure, TYPE argument);
 
+    @Override
+    public boolean canEvaluate(ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> arguments) {
+        return arguments.argument().procedure().canRun();
+    };
+
 };

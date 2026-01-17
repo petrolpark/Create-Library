@@ -11,7 +11,7 @@ import com.petrolpark.core.scratch.environment.variable.ScratchVariableIdentifie
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
 
-public final class VariableValueExpression<TYPE> extends GenericExpression<IVariableScratchEnvironment, TYPE, TYPE, ScratchArguments.Just<IVariableScratchEnvironment, ScratchVariableIdentifier, VariableArgument>, VariableValueExpression<TYPE>> {
+public final class VariableValueExpression<TYPE> extends GenericExpression<IVariableScratchEnvironment, TYPE, TYPE, ScratchArguments.Just<IVariableScratchEnvironment, ScratchVariableIdentifier, VariableArgument>> {
 
     public static final GenericExpression.Type<VariableValueExpression<?>> TYPE = new GenericExpression.Type<>(VariableValueExpression::create);
 

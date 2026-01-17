@@ -16,4 +16,12 @@ public interface IScratchSymbol<ENVIRONMENT extends IScratchEnvironment, ARGUMEN
         public ContextualMapCodec<IScratchEnvironment.Type<?>, SYMBOL> codec();
         public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchEnvironment.Type<?>, SYMBOL> streamCodec();
     };
+
+    /**
+     * Whether this Symbol can run or evaluate without crashing
+     * @param arguments
+     */
+    public default boolean canEvaluate(ARGUMENTS arguments) {
+        return true; //TODO trace through ScratchArguments
+    };
 };

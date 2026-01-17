@@ -13,7 +13,7 @@ public abstract class SimpleExpressionType<
     RETURN_TYPE,
     ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
     EXPRESSION extends SimpleExpressionType<ENVIRONMENT, RETURN_TYPE, ARGUMENTS, EXPRESSION>
-> extends ScratchExpression<ENVIRONMENT, RETURN_TYPE, ARGUMENTS, EXPRESSION> implements IScratchExpression.Type<EXPRESSION> {
+> extends ScratchExpression<ENVIRONMENT, RETURN_TYPE, ARGUMENTS> implements IScratchExpression.Type<EXPRESSION> {
 
     private final ContextualMapCodec<IScratchEnvironment.Type<?>, EXPRESSION> codec = ContextualMapCodec.unit(self());
     private final ContextualStreamCodec<ByteBuf, IScratchEnvironment.Type<?>, EXPRESSION> streamCodec = ContextualStreamCodec.unit(self());
