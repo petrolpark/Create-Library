@@ -66,6 +66,20 @@ public interface ContextualMapDecoder<CONTEXT, A> extends Keyable {
 
     <T> KeyCompressor<T> compressor(DynamicOps<T> ops);
 
+    default ContextualDecoder<CONTEXT, A> decoder() {
+        return new ContextualDecoder<CONTEXT, A>() {
+            @Override
+            public <T> DataResult<Pair<A, T>> decode(final DynamicOps<T> ops, final CONTEXT context, final T input) {
+                return compressedDecode(ops, context, input).map(r -> Pair.of(r, input));
+            };
+
+            @Override
+            public String toString() {
+                return ContextualMapDecoder.this.toString();
+            };
+        };
+    };
+
     default <B> ContextualMapDecoder<CONTEXT, B> map(final Function<? super A, ? extends B> function) {
         return new Implementation<CONTEXT, B>() {
             @Override
@@ -83,7 +97,7 @@ public interface ContextualMapDecoder<CONTEXT, A> extends Keyable {
                 return ContextualMapDecoder.this.toString() + "[mapped]";
             };
         };
-    }
+    };
 
     abstract class Implementation<CONTEXT, A> extends CompressorHolder implements ContextualMapDecoder<CONTEXT, A> {};
 

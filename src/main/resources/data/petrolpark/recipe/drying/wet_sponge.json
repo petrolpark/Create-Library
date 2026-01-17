@@ -1,0 +1,16 @@
+{
+    "type": "petrolpark:drying",
+    "ingredient": {
+        "item": "minecraft:wet_sponge"
+    },
+    "product": {
+        "type": "petrolpark:change_item",
+        "item": {
+            "id": "minecraft:sponge"
+        }
+    },
+    "time": {
+        "translation_key": "item.petrolpark.drying_item.remaining",
+        "time": 100
+    }
+}

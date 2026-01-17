@@ -11,10 +11,9 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;;
 
 public abstract class UnaryInstantiableBlockType<
     ENVIRONMENT extends IScratchEnvironment,
-    TYPE,
-    ARGUMENT extends IScratchArgument<ENVIRONMENT, TYPE>,
+    TYPE, ARGUMENT extends IScratchArgument<ENVIRONMENT, TYPE>,
     INSTANCE extends IScratchBlockInstance<ENVIRONMENT>,
-    BLOCK extends UnaryInstantiableBlockType<ENVIRONMENT, TYPE, ARGUMENT, INSTANCE, BLOCK>
+    BLOCK extends UnaryInstantiableBlockType<ENVIRONMENT, TYPE, ARGUMENT, INSTANCE, ?>
 > extends SimpleInstantiableBlockType<ENVIRONMENT, Just<ENVIRONMENT, TYPE, ARGUMENT>, INSTANCE, BLOCK> {
 
     protected UnaryInstantiableBlockType(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter) {

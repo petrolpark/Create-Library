@@ -33,7 +33,21 @@ public interface ContextualStreamCodec<B, CONTEXT, V> {
                 streamCodec.encode(buffer, value);
             };
         };
-    }
+    };
+
+    public static <B, CONTEXT, V> ContextualStreamCodec<B, CONTEXT, V> of(Function<CONTEXT, V> factory) {
+        return new ContextualStreamCodec<B,CONTEXT,V>() {
+            @Override
+            public void encode(B buffer, CONTEXT context, V value) {
+            
+            };
+
+            @Override
+            public V decode(B buffer, CONTEXT context) {
+                return factory.apply(context);
+            };
+        };
+    };
 
     public static <B, CONTEXT, V> ContextualStreamCodec<B, CONTEXT, V> unit(final V expectedValue) {
         return new ContextualStreamCodec<B, CONTEXT, V>() {
@@ -145,6 +159,29 @@ public interface ContextualStreamCodec<B, CONTEXT, V> {
             @Override
             public void encode(B buffer, CONTEXT context, O value) {
                 ContextualStreamCodec.this.encode(buffer, context, (V)getter.apply(value, context));
+            };
+        };
+    };
+
+    @SuppressWarnings("unchecked")
+    public static <B, CONTEXT, V, U> ContextualStreamCodec<B, CONTEXT, U> dispatch(
+        final StreamCodec<B, V> typeCodec,
+        final Function<? super U, ? extends V> keyGetter, final Function<? super V, ? extends ContextualStreamCodec<? super B, CONTEXT, ? extends U>> codecGetter
+    ) {
+        return new ContextualStreamCodec<B, CONTEXT, U>() {
+            @Override
+            public U decode(B byteBuffer, CONTEXT context) {
+                final V v = typeCodec.decode(byteBuffer);
+                final ContextualStreamCodec<? super B, CONTEXT, ? extends U> streamcodec = (ContextualStreamCodec<? super B, CONTEXT, ? extends U>)codecGetter.apply(v);
+                return (U)streamcodec.decode(byteBuffer, context);
+            };
+
+            @Override
+            public void encode(B byteBuffer, CONTEXT context, U value) {
+                final V v = (V)keyGetter.apply(value);
+                final ContextualStreamCodec<B, CONTEXT, U> streamcodec = (ContextualStreamCodec<B, CONTEXT, U>)codecGetter.apply(v);
+                typeCodec.encode(byteBuffer, v);
+                streamcodec.encode(byteBuffer, context, value);
             };
         };
     };

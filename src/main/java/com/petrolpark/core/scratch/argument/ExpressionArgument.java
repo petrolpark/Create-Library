@@ -31,7 +31,7 @@ public record ExpressionArgument<
 ) 
     implements IScratchArgument<ENVIRONMENT, TYPE>, IScratchContextHolder 
 {
-    public static final <ENVIRONMENT extends IScratchEnvironment, TYPE> ExpressionParameter<ENVIRONMENT, TYPE> parameter(String key, IScratchClass<TYPE, ?> scratchClass) {
+    public static final <ENVIRONMENT extends IScratchEnvironment, TYPE> ExpressionParameter<ENVIRONMENT, TYPE> parameter(String key, IScratchClass<TYPE> scratchClass) {
         return new ExpressionParameter<>(key, scratchClass);
     };
 
@@ -54,14 +54,14 @@ public record ExpressionArgument<
         private static final String ARGUMENTS_KEY = "arguments";
 
         private final String key;
-        private final IScratchClass<TYPE, ?> scratchClass;
+        private final IScratchClass<TYPE> scratchClass;
 
         private final ContextualMapCodec<IScratchContextProvider<?>, ExpressionArgument<ENVIRONMENT, TYPE, ?>> mapCodec = new ContextualMapCodec<>() {
 
             @Override
             @SuppressWarnings("unchecked")
             public <T> DataResult<ExpressionArgument<ENVIRONMENT, TYPE, ?>> decode(final DynamicOps<T> ops, final IScratchContextProvider<?> context, final MapLike<T> input) {
-                return IScratchExpression.CODEC.parse(ops, input.get(EXPRESSION_KEY))
+                return IScratchExpression.CODEC.parse(ops, context.environmentType(), input.get(EXPRESSION_KEY))
                     .flatMap(expression -> {
                         try {
                             if (expression.getReturnClass() != scratchClass) return DataResult.error(() -> String.format("Expression {} has wrong return class", expression.getExpressionType()));
@@ -89,7 +89,7 @@ public record ExpressionArgument<
         };
 
         private <T, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> RecordBuilder<T> encodeInternal(final ExpressionArgument<ENVIRONMENT, TYPE, ARGUMENTS> input, final IScratchContextProvider<?> context, final DynamicOps<T> ops, final RecordBuilder<T> prefix) {
-            prefix.add(EXPRESSION_KEY, IScratchExpression.CODEC.encodeStart(ops, input.expression()));
+            prefix.add(EXPRESSION_KEY, IScratchExpression.CODEC.encodeStart(ops, context.environmentType(), input.expression()));
             prefix.add(ARGUMENTS_KEY, input.expression().getParameters().argumentsCodec().encodeStart(ops, context, input.arguments()));
             return prefix;
         };
@@ -101,7 +101,7 @@ public record ExpressionArgument<
             @Override
             @SuppressWarnings("unchecked")
             public ExpressionArgument<ENVIRONMENT, TYPE, ?> decode(RegistryFriendlyByteBuf buffer, final IScratchContextProvider<?> context) {
-                final IScratchExpression<?, ?, ?, ?> expression = IScratchExpression.STREAM_CODEC.decode(buffer);
+                final IScratchExpression<?, ?, ?, ?> expression = IScratchExpression.STREAM_CODEC.decode(buffer, context.environmentType());
                 try {
                     if (expression.getReturnClass() != scratchClass) throw new DecoderException(String.format("Expression {} has wrong return class", expression.getExpressionType()));
                     return decodeStreamInternal(buffer, context, (IScratchExpression<ENVIRONMENT, TYPE, ?, ?>)expression);
@@ -122,11 +122,11 @@ public record ExpressionArgument<
         };
 
         private <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> void encodeStreamInternal(RegistryFriendlyByteBuf buffer, IScratchContextProvider<?> context, ExpressionArgument<ENVIRONMENT, TYPE, ARGUMENTS> value) {
-            IScratchExpression.STREAM_CODEC.encode(buffer, value.expression());
+            IScratchExpression.STREAM_CODEC.encode(buffer, context.environmentType(), value.expression());
             value.expression().getParameters().argumentsStreamCodec().encode(buffer, context, value.arguments());
         };
 
-        protected ExpressionParameter(String key, IScratchClass<TYPE, ?> scratchClass) {
+        protected ExpressionParameter(String key, IScratchClass<TYPE> scratchClass) {
             this.key = key;
             this.scratchClass = scratchClass;
         };

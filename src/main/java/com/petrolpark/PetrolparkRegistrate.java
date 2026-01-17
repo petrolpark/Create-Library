@@ -342,7 +342,7 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, Registries.PARTICLE_TYPE, factory);
     };
 
-    public <T, SCRATCH_CLASS extends IScratchClass<T, ?>> RegistryEntry<IScratchClass<?, ?>, SCRATCH_CLASS> scratchClass(String name, NonNullSupplier<SCRATCH_CLASS> factory) {
+    public <T, SCRATCH_CLASS extends IScratchClass<T>> RegistryEntry<IScratchClass<?>, SCRATCH_CLASS> scratchClass(String name, NonNullSupplier<SCRATCH_CLASS> factory) {
         return simple(name, PetrolparkRegistries.Keys.SCRATCH_CLASS, factory);
     };
 

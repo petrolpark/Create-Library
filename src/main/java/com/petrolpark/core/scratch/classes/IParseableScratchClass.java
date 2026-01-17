@@ -1,10 +1,8 @@
 package com.petrolpark.core.scratch.classes;
 
 import com.petrolpark.core.scratch.IScratchClass;
-import com.petrolpark.core.scratch.argument.IScratchArgument;
-import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
-public interface IParseableScratchClass<TYPE, DEFAULT_ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends IScratchClass<TYPE, DEFAULT_ARGUMENT> {
+public interface IParseableScratchClass<TYPE> extends IScratchClass<TYPE> {
     
     public TYPE parse(String string);
 };

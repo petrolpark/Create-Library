@@ -74,9 +74,9 @@ public class DryingRackBlock extends Block implements EntityBlock {
         return level.getBlockEntity(pos, PetrolparkBlockEntityTypes.DRYING_RACK.get()).map(rack -> {
             if (!rack.inv.getStackInSlot(0).isEmpty()) return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
             final ItemStack remainder = rack.inv.insertItem(0, stack, false);
-            if (!ItemStack.isSameItemSameComponents(stack, remainder)) {
+            if (remainder != stack) {
                 player.setItemInHand(hand, remainder);
-                return ItemInteractionResult.CONSUME_PARTIAL;
+                return ItemInteractionResult.sidedSuccess(level.isClientSide());
             };
             return ItemInteractionResult.FAIL;
         }).orElse(ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION);
@@ -84,8 +84,8 @@ public class DryingRackBlock extends Block implements EntityBlock {
 
     @Override
     protected void onRemove(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState newState, boolean movedByPiston) {
-        super.onRemove(state, level, pos, newState, movedByPiston);
         if (!state.is(newState.getBlock())) level.getBlockEntity(pos, PetrolparkBlockEntityTypes.DRYING_RACK.get()).ifPresent(DryingRackBlockEntity::dropContents);
+        super.onRemove(state, level, pos, newState, movedByPiston);
     };
 
     @Override

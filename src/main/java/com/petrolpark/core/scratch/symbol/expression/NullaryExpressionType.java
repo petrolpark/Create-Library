@@ -7,7 +7,7 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 public abstract class NullaryExpressionType<
     ENVIRONMENT extends IScratchEnvironment,
     RETURN_TYPE,
-    EXPRESSION extends NullaryExpressionType<ENVIRONMENT, RETURN_TYPE, ?>
+    EXPRESSION extends NullaryExpressionType<ENVIRONMENT, RETURN_TYPE, EXPRESSION>
 > extends SimpleExpressionType<ENVIRONMENT, RETURN_TYPE, ScratchArguments.None<ENVIRONMENT>, EXPRESSION> {
 
     public NullaryExpressionType() {

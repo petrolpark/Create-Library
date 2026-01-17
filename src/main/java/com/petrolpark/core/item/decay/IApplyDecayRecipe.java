@@ -27,13 +27,14 @@ public interface IApplyDecayRecipe extends Recipe<SingleRecipeInput> {
 
     public DecayTime decayTime();
 
-    public static <R extends IApplyDecayRecipe> ItemStack withAgeingDecayRemoved(Level level, RecipeType<R> recipeType, ItemStack stack) {
-        level.getRecipeManager().getRecipesFor(recipeType, new SingleRecipeInput(stack), level).stream().findAny()
-            .ifPresent(rh -> ItemDecay.removeAppliedDecay(stack));
-        return checkDecay(level, recipeType, stack);
+    public static <R extends IApplyDecayRecipe> ItemStack withAppliedDecayRemoved(Level level, RecipeType<R> recipeType, ItemStack stack) {
+        final ItemStack trueStack = ItemDecay.checkDecay(stack);
+        level.getRecipeManager().getRecipesFor(recipeType, new SingleRecipeInput(trueStack), level).stream().findAny()
+            .ifPresent(rh -> ItemDecay.removeAppliedDecay(trueStack));
+        return checkDecay(level, recipeType, trueStack);
     };
 
-    public static <R extends IApplyDecayRecipe> ItemStack withAgeingDecay(Level level, RecipeType<R> recipeType, ItemStack stack, boolean startDecay) {
+    public static <R extends IApplyDecayRecipe> ItemStack withAppliedDecay(Level level, RecipeType<R> recipeType, ItemStack stack, boolean startDecay) {
         final SingleRecipeInput input = new SingleRecipeInput(stack);
         return checkDecay(level, recipeType, level.getRecipeManager().getRecipesFor(recipeType, input, level).stream().findAny()
             .map(RecipeHolder::value)
@@ -43,7 +44,7 @@ public interface IApplyDecayRecipe extends Recipe<SingleRecipeInput> {
     };
 
     public static <R extends IApplyDecayRecipe> ItemStack checkDecay(Level level, RecipeType<R> recipeType, ItemStack stack) {
-        return ItemDecay.checkDecay(stack, s -> withAgeingDecay(level, recipeType, s, false));
+        return ItemDecay.checkDecay(stack, s -> withAppliedDecay(level, recipeType, s, false));
     };
 
     public static <R extends IApplyDecayRecipe> MapCodec<R> codec(Factory<R> factory) {

@@ -25,6 +25,8 @@ import com.petrolpark.core.recipe.bogglepattern.generator.BogglePatternGenerator
 import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
 import com.petrolpark.core.scratch.IScratchClass;
+import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+import com.petrolpark.core.scratch.environment.variable.IScratchScope;
 import com.petrolpark.core.scratch.symbol.block.IScratchBlock;
 import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
 import com.petrolpark.core.shop.Shop;
@@ -109,9 +111,11 @@ public class PetrolparkRegistries {
     public static final Registry<ITradeListingReference.Type> TRADE_LISTING_REFERENCE_TYPES = simple(Keys.TRADE_LISTING_REFERENCE_TYPE);
 
     // Scratch
-    public static final Registry<IScratchClass<?, ?>> SCRATCH_CLASSES = simple(Keys.SCRATCH_CLASS);
+    public static final Registry<IScratchClass<?>> SCRATCH_CLASSES = simple(Keys.SCRATCH_CLASS);
+    public static final Registry<IScratchEnvironment.Type<?>> SCRATCH_ENVIRONMENT_TYPES = simple(Keys.SCRATCH_ENVIRONMENT_TYPE);
     public static final Registry<IScratchBlock.Type<?>> SCRATCH_BLOCK_TYPES = simple(Keys.SCRATCH_BLOCK_TYPE);
     public static final Registry<IScratchExpression.Type<?>> SCRATCH_EXPRESSION_TYPES = simple(Keys.SCRATCH_EXPRESSION_TYPE);
+    public static final Registry<IScratchScope> SCRATCH_SCOPES = simple(Keys.SCRATCH_SCOPE);
 
     // Loot/Data
     public static final Registry<LootItemStackNumberProviderType> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPES = simple(Keys.LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE);
@@ -171,9 +175,11 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<ITradeListingReference.Type>> TRADE_LISTING_REFERENCE_TYPE = key("trade_listing_reference_type");
 
         // Scratch
-        public static final ResourceKey<Registry<IScratchClass<?, ?>>> SCRATCH_CLASS = key("scratch_class");
+        public static final ResourceKey<Registry<IScratchClass<?>>> SCRATCH_CLASS = key("scratch_class");
+        public static final ResourceKey<Registry<IScratchEnvironment.Type<?>>> SCRATCH_ENVIRONMENT_TYPE = key("scratch_environment_type");
         public static final ResourceKey<Registry<IScratchBlock.Type<?>>> SCRATCH_BLOCK_TYPE = key("scratch_block_type");
         public static final ResourceKey<Registry<IScratchExpression.Type<?>>> SCRATCH_EXPRESSION_TYPE = key("scratch_expression_type");
+        public static final ResourceKey<Registry<IScratchScope>> SCRATCH_SCOPE = key("scratch_scope");
 
         // Loot/Data
         public static final ResourceKey<Registry<LootItemStackNumberProviderType>> LOOT_ITEM_STACK_NUMBER_PROVIDER_TYPE = key("loot_item_stack_number_provider_type");

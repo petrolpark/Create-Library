@@ -20,7 +20,7 @@ public final class BooleanBlockStatePropertyExpression extends BlockStatePropert
     };
 
     @Override
-    public IScratchClass<Boolean, ?> getReturnClass() {
+    public IScratchClass<Boolean> getReturnClass() {
         return PetrolparkScratchClasses.BOOLEAN.get();
     };
 

@@ -5,6 +5,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.google.common.base.Suppliers;
 import com.mojang.datafixers.util.Pair;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
@@ -36,6 +37,10 @@ public interface ContextualCodec<CONTEXT, A> extends ContextualEncoder<CONTEXT, 
         };
     };
 
+    public static <CONTEXT, A> ContextualCodec<CONTEXT, A> of(Function<CONTEXT, A> factory) {
+        return ContextualMapCodec.of(factory).codec();
+    };
+
     public static <CONTEXT, A> ContextualCodec<CONTEXT, A> of(final ContextualEncoder<CONTEXT, A> encoder, final ContextualDecoder<CONTEXT, A> decoder, final String name) {
         return new ContextualCodec<CONTEXT, A>() {
 
@@ -53,6 +58,39 @@ public interface ContextualCodec<CONTEXT, A> extends ContextualEncoder<CONTEXT, 
             public String toString() {
                 return name;
             };
+        };
+    };
+
+    public static <CONTEXT, A> ContextualCodec<CONTEXT, A> recursive(final String name, final Function<ContextualCodec<CONTEXT, A>, ContextualCodec<CONTEXT, A>> wrapped) {
+        return new RecursiveContextualCodec<>(name, wrapped);
+    };
+
+    public static <CONTEXT, A> ContextualCodec<CONTEXT, A> lazyInitialized(final Supplier<ContextualCodec<CONTEXT, A>> delegate) {
+        return new RecursiveContextualCodec<>(delegate.toString(), self -> delegate.get());
+    };
+
+    public class RecursiveContextualCodec<CONTEXT, T> implements ContextualCodec<CONTEXT, T> {
+        private final String name;
+        private final Supplier<ContextualCodec<CONTEXT, T>> wrapped;
+
+        private RecursiveContextualCodec(final String name, final Function<ContextualCodec<CONTEXT, T>, ContextualCodec<CONTEXT, T>> wrapped) {
+            this.name = name;
+            this.wrapped = Suppliers.memoize(() -> wrapped.apply(this));
+        };
+
+        @Override
+        public <S> DataResult<Pair<T, S>> decode(final DynamicOps<S> ops, final CONTEXT context, final S input) {
+            return wrapped.get().decode(ops, context, input);
+        };
+
+        @Override
+        public <S> DataResult<S> encode(final T input, final CONTEXT context, final DynamicOps<S> ops, final S prefix) {
+            return wrapped.get().encode(input, context, ops, prefix);
+        };
+
+        @Override
+        public String toString() {
+            return "RecursiveContextualCodec[" + name + ']';
         };
     };
 
@@ -106,6 +144,22 @@ public interface ContextualCodec<CONTEXT, A> extends ContextualEncoder<CONTEXT, 
 
     public default ContextualMapCodec<CONTEXT, Optional<A>> optionalFieldOf(final String name) {
         return optionalField(name, this, false);
+    };
+
+    public static <CONTEXT, A, E> ContextualCodec<CONTEXT, E> dispatch(final Codec<A> typeCodec, final Function<? super E, ? extends A> type, final Function<? super A, ? extends ContextualMapCodec<CONTEXT, ? extends E>> codec) {
+        return dispatch("type", typeCodec, type, codec);
+    };
+
+    public static <CONTEXT, A, E> ContextualCodec<CONTEXT, E> dispatch(final String typeKey, final Codec<A> typeCodec, final Function<? super E, ? extends A> type, final Function<? super A, ? extends ContextualMapCodec<CONTEXT, ? extends E>> codec) {
+        return partialDispatch(typeKey, typeCodec, type.andThen(DataResult::success), codec.andThen(DataResult::success));
+    };
+
+    public static <CONTEXT, A, E> ContextualCodec<CONTEXT, E> partialDispatch(final String typeKey, final Codec<A> typeCodec, final Function<? super E, ? extends DataResult<? extends A>> type, final Function<? super A, ? extends DataResult<? extends ContextualMapCodec<CONTEXT, ? extends E>>> codec) {
+        return new ContextualKeyDispatchCodec<>(typeKey, typeCodec, type, codec).codec();
+    };
+
+    public default ContextualCodec<CONTEXT, A> validate(final BiFunction<CONTEXT, A, DataResult<A>> checker) {
+        return flatContextualXmap(checker, checker);
     };
 
 };

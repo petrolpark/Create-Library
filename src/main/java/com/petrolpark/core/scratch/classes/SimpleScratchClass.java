@@ -5,7 +5,7 @@ import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
-public abstract class SimpleScratchClass<TYPE> implements IScratchClass<TYPE, ExpressionArgument<IScratchEnvironment, TYPE, ?>> {
+public abstract class SimpleScratchClass<TYPE> implements IScratchClass<TYPE> {
 
     @Override
     public IScratchParameter<IScratchEnvironment, TYPE, ExpressionArgument<IScratchEnvironment, TYPE, ?>> createDefaultParameter(String key) {

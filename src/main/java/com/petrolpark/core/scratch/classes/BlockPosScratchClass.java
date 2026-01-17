@@ -23,7 +23,7 @@ public class BlockPosScratchClass extends SimpleScratchClass<BlockPos> {
     };
 
     @Override
-    public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, BlockPos, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass) {
+    public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, BlockPos, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
         return Optional.empty();
     };
     

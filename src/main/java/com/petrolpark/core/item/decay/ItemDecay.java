@@ -52,7 +52,7 @@ public interface ItemDecay {
     public static ItemStack checkDecay(ItemStack stack, UnaryOperator<ItemStack> newDecay) {
         if (stack.isEmpty()) return stack;
         if (!stack.has(PetrolparkDataComponents.DECAY_TIME) || !stack.has(PetrolparkDataComponents.DECAY_PRODUCT)) return stack;
-        Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
+        final Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
         if (creationTime != null) {
             long timeDead = -getRemainingTime(stack, creationTime);
             if (timeDead >= 0) {
@@ -114,7 +114,7 @@ public interface ItemDecay {
     @OnlyIn(Dist.CLIENT)
     public static Optional<Component> getTooltip(ItemStack stack) {
         return Optional.ofNullable(stack.get(PetrolparkDataComponents.DECAY_TIME)).map(decayTime -> {
-            Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
+            final Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
             long displayedSecondsRemaining;
             if (creationTime != null) {
                 long ticksRemaining = ItemDecay.getRemainingTime(decayTime.lifetime(), (long)creationTime);

@@ -1,5 +1,8 @@
 package com.petrolpark.compat.jade;
 
+import com.petrolpark.core.item.decay.drying.rack.DryingRackBlock;
+import com.petrolpark.core.item.decay.drying.rack.DryingRackJadeBlockComponentProvider;
+
 import net.minecraft.world.level.block.Block;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaPlugin;
@@ -10,7 +13,12 @@ public class PetrolparkJade implements IWailaPlugin {
     
     @Override
     public void registerClient(IWailaClientRegistration registration) {
+
+        // Blocks
         registration.registerBlockComponent(new ContaminationBlockComponentProvider(), Block.class);
+        registration.registerBlockComponent(new DryingRackJadeBlockComponentProvider(), DryingRackBlock.class);
+
+        // Items
         registration.addItemModNameCallback(new SharedFeatureItemModNameCallback());
     };
 };

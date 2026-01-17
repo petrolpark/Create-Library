@@ -14,7 +14,7 @@ public record DecayTime(String translationKey, long lifetime) {
     public static final DecayTime NONE = new DecayTime(DEFAULT_TRANSLATION_KEY, 0);
 
     public static final Codec<DecayTime> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.STRING.optionalFieldOf("translationKey", DEFAULT_TRANSLATION_KEY).forGetter(DecayTime::translationKey),
+        Codec.STRING.optionalFieldOf("translation_key", DEFAULT_TRANSLATION_KEY).forGetter(DecayTime::translationKey),
         Codec.LONG.fieldOf("time").forGetter(DecayTime::lifetime)
     ).apply(instance, DecayTime::new));
 

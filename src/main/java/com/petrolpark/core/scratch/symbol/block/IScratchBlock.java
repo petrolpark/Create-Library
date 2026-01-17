@@ -1,32 +1,30 @@
 package com.petrolpark.core.scratch.symbol.block;
 
-import com.mojang.serialization.Codec;
 import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.core.codec.ContextualCodec;
+import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.IScratchSymbol;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 
 public sealed interface IScratchBlock<
     ENVIRONMENT extends IScratchEnvironment,
-    ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
-    BLOCK extends IScratchBlock<ENVIRONMENT, ARGUMENTS, BLOCK>
+    ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>
 > extends IScratchSymbol<ENVIRONMENT, ARGUMENTS> permits IInstantiableScratchBlock, IInstantScratchBlock {
 
     /**
      * Use {@link #CODEC} instead.
      */
-    static Codec<IScratchBlock<?, ?, ?>> TYPED_CODEC = PetrolparkRegistries.SCRATCH_BLOCK_TYPES.byNameCodec().dispatch(IScratchBlock::getBlockType, IScratchBlock.Type::codec);
+    static ContextualCodec<IScratchEnvironment.Type<?>, IScratchBlock<?, ?>> TYPED_CODEC = ContextualCodec.dispatch(PetrolparkRegistries.SCRATCH_BLOCK_TYPES.byNameCodec(), IScratchBlock::getBlockType, IScratchBlock.Type::codec);
 
-    public static Codec<IScratchBlock<?, ?, ?>> CODEC = Codec.lazyInitialized(() -> TYPED_CODEC);
+    public static ContextualCodec<IScratchEnvironment.Type<?>, IScratchBlock<?, ?>> CODEC = ContextualCodec.lazyInitialized(() -> TYPED_CODEC);
 
-    public static StreamCodec<RegistryFriendlyByteBuf, IScratchBlock<?, ?, ?>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.SCRATCH_BLOCK_TYPE).dispatch(IScratchBlock::getBlockType, IScratchBlock.Type::streamCodec);
+    public static ContextualStreamCodec<RegistryFriendlyByteBuf, IScratchEnvironment.Type<?>, IScratchBlock<?, ?>> STREAM_CODEC = ContextualStreamCodec.dispatch(ByteBufCodecs.registry(PetrolparkRegistries.Keys.SCRATCH_BLOCK_TYPE), IScratchBlock::getBlockType, IScratchBlock.Type::streamCodec);
 
-    public IScratchBlock.Type<BLOCK> getBlockType();
+    public IScratchBlock.Type<?> getBlockType();
 
-    public interface Type<BLOCK extends IScratchBlock<?, ?, ?>> extends IScratchSymbol.Type<BLOCK> {};
-
+    public interface Type<BLOCK extends IScratchBlock<?, ?>> extends IScratchSymbol.Type<BLOCK> {};
 };

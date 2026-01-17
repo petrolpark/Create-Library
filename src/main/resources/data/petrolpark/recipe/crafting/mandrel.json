@@ -11,18 +11,13 @@
     ],
     "type": "minecraft:crafting_shaped",
     "pattern": [
-        "AS",
-        " C"
+        "FNF",
+        "F F",
+        "F F"
     ],
     "key": {
-        "A": {
-            "item": "create:andesite_alloy"
-        },
-        "S": {
-            "item": "create:shaft"
-        },
-        "C": {
-            "item": "create:andesite_casing"
+        "N": {
+            "tag": "c:nuggets/iron"
         }
     },
     "result": {

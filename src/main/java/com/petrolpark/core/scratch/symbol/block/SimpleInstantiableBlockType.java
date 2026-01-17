@@ -1,22 +1,22 @@
 package com.petrolpark.core.scratch.symbol.block;
 
-import com.mojang.serialization.MapCodec;
+import com.petrolpark.core.codec.ContextualMapCodec;
+import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 
 public abstract class SimpleInstantiableBlockType<
     ENVIRONMENT extends IScratchEnvironment,
     ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
     INSTANCE extends IScratchBlockInstance<ENVIRONMENT>,
-    BLOCK extends SimpleInstantiableBlockType<ENVIRONMENT, ARGUMENTS, INSTANCE, BLOCK>
-> extends InstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE, BLOCK> implements IScratchBlock.Type<BLOCK> {
+    BLOCK extends SimpleInstantiableBlockType<ENVIRONMENT, ARGUMENTS, INSTANCE, ?>
+> extends InstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE> implements IScratchBlock.Type<BLOCK> {
 
-    private final MapCodec<BLOCK> codec = MapCodec.unit(self());
-    private final StreamCodec<ByteBuf, BLOCK> streamCodec = StreamCodec.unit(self());
+    private final ContextualMapCodec<IScratchEnvironment.Type<?>, BLOCK> codec = ContextualMapCodec.unit(self());
+    private final ContextualStreamCodec<ByteBuf, IScratchEnvironment.Type<?>, BLOCK> streamCodec = ContextualStreamCodec.unit(self());
 
     protected SimpleInstantiableBlockType(ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
         super(parameters);
@@ -25,12 +25,12 @@ public abstract class SimpleInstantiableBlockType<
     protected abstract BLOCK self();
 
     @Override
-    public final MapCodec<BLOCK> codec() {
+    public final ContextualMapCodec<IScratchEnvironment.Type<?>, BLOCK> codec() {
         return codec;
     };
 
     @Override
-    public final StreamCodec<ByteBuf, BLOCK> streamCodec() {
+    public final ContextualStreamCodec<ByteBuf, IScratchEnvironment.Type<?>, BLOCK> streamCodec() {
         return streamCodec;
     };
 

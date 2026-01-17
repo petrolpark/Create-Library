@@ -20,18 +20,18 @@ public record DropdownArgument<ENVIRONMENT extends IScratchEnvironment, TYPE>(
 
     @Override
     public TYPE get(ENVIRONMENT environment) {
-        return parameter().values.get(index).value();
+        return parameter().values.get(index).value(environment);
     };
 
     public static class DropdownParameter<ENVIRONMENT extends IScratchEnvironment, TYPE> implements IScratchParameter<ENVIRONMENT, TYPE, DropdownArgument<ENVIRONMENT, TYPE>> {
 
         private final String key;
-        private final List<Named<TYPE>> values;
+        protected final List<DropdownArgument.Entry<? super ENVIRONMENT, TYPE>> values;
 
         private final ContextualCodec<IScratchContextProvider<?>, DropdownArgument<ENVIRONMENT, TYPE>> codec;
         private final ContextualStreamCodec<ByteBuf, IScratchContextProvider<?>, DropdownArgument<ENVIRONMENT, TYPE>> streamCodec;
 
-        public DropdownParameter(String key, List<Named<TYPE>> values) {
+        public DropdownParameter(String key, List<DropdownArgument.Entry<? super ENVIRONMENT, TYPE>> values) {
             this.key = key;
             this.values = values;
             codec = ContextualCodec.<IScratchContextProvider<?>, Integer>of(Codec.intRange(0, values.size() - 1)).xmap(i -> new DropdownArgument<>(i, this), DropdownArgument::index);
@@ -55,11 +55,24 @@ public record DropdownArgument<ENVIRONMENT extends IScratchEnvironment, TYPE>(
         
     };
 
-    public static interface Named<TYPE> {
+    public static interface Entry<ENVIRONMENT extends IScratchEnvironment, TYPE> {
 
-        public TYPE value();
+        public TYPE value(ENVIRONMENT environment);
 
-        public Component name();
+        public Component name(ENVIRONMENT environment);
+    };
+
+    public static record SimpleEntry<TYPE>(TYPE value, Component name) implements DropdownArgument.Entry<IScratchEnvironment, TYPE> {
+
+        @Override
+        public TYPE value(IScratchEnvironment environment) {
+            return value();
+        };
+
+        @Override
+        public Component name(IScratchEnvironment environment) {
+            return name();
+        };
     };
     
 };

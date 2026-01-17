@@ -1,4 +1,4 @@
-package com.petrolpark.core.scratch.symbol.block;
+package com.petrolpark.core.scratch.symbol.block.control;
 
 import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.integerParameter;
 
@@ -9,6 +9,8 @@ import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.environment.ITickingEnvironment;
+import com.petrolpark.core.scratch.symbol.block.IScratchBlockInstance;
+import com.petrolpark.core.scratch.symbol.block.UnaryInstantiableBlockType;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -55,7 +57,7 @@ public class WaitBlock extends UnaryInstantiableBlockType<ITickingEnvironment, L
         };
 
         @Override
-        public boolean run(ITickingEnvironment context) {
+        public boolean tick(ITickingEnvironment context) {
             if (remainingTicks <= 0) return true;
             remainingTicks--;
             return false;

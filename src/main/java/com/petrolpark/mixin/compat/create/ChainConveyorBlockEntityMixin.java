@@ -6,21 +6,28 @@ import java.util.Map;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
+import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.compat.create.core.chainconveyer.ChainConveyorArmInteractionPoint;
 import com.petrolpark.compat.create.core.chainconveyer.IChainConveyorBlockEntityDuck;
 import com.petrolpark.config.PetrolparkConfigs;
+import com.petrolpark.core.item.decay.IApplyDecayRecipe;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorPackage;
+import com.simibubi.create.content.logistics.box.PackageItem;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 @Mixin(ChainConveyorBlockEntity.class)
 public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity implements IChainConveyorBlockEntityDuck {
@@ -59,6 +66,19 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
     @SuppressWarnings("null")
     private boolean wrapExportToPort(ChainConveyorBlockEntity ccbe, ChainConveyorPackage box, BlockPos offset, Operation<Boolean> original, @Local ChainConveyorBlockEntity.ConnectedPort port) {
         return original.call(ccbe, box, offset) || (PetrolparkConfigs.server().createArmsTargetChainConveyors.get() && level.getBlockEntity(getBlockPos().offset(offset), AllBlockEntityTypes.MECHANICAL_ARM.get()).map(arm -> ChainConveyorArmInteractionPoint.exportToArm(ccbe, port, arm, box)).orElse(false));
+    };
+
+    @Inject(
+        method = "Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorBlockEntity;drop(Lcom/simibubi/create/content/kinetics/chainConveyor/ChainConveyorPackage;)V",
+        at = @At("HEAD")
+    )
+    @SuppressWarnings("null")
+    private void inDrop(ChainConveyorPackage box, CallbackInfo ci) {
+        if (!(box.item.getItem() instanceof PackageItem)) {
+            final Vec3 pos = box.worldPosition.subtract(0d, 0.5d, 0d);
+            level.addFreshEntity(new ItemEntity(level, pos.x(), pos.y(), pos.z(), IApplyDecayRecipe.withAppliedDecayRemoved(level, PetrolparkRecipeTypes.DRYING.get(), box.item)));
+            ci.cancel();
+        };
     };
 
     @Override

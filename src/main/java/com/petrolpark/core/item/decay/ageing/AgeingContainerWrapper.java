@@ -28,15 +28,15 @@ public interface AgeingContainerWrapper extends Container {
     };
 
     public static ItemStack removeItem(Level level, RemoveItem removeItem, int slot, int amount) {
-        return IApplyDecayRecipe.withAgeingDecayRemoved(level, PetrolparkRecipeTypes.AGEING.get(), removeItem.removeItem(slot, amount));
+        return IApplyDecayRecipe.withAppliedDecayRemoved(level, PetrolparkRecipeTypes.AGEING.get(), removeItem.removeItem(slot, amount));
     };
 
     public static ItemStack removeItemNoUpdate(Level level, RemoveItemNoUpdate removeItemNoUpdate, int slot) {
-        return IApplyDecayRecipe.withAgeingDecayRemoved(level, PetrolparkRecipeTypes.AGEING.get(), removeItemNoUpdate.removeItemNoUpdate(slot));
+        return IApplyDecayRecipe.withAppliedDecayRemoved(level, PetrolparkRecipeTypes.AGEING.get(), removeItemNoUpdate.removeItemNoUpdate(slot));
     };
 
     public static void setItem(Level level, SetItem setItem, int slot, @Nonnull ItemStack stack) {
-        setItem.setItem(slot, IApplyDecayRecipe.withAgeingDecay(level, PetrolparkRecipeTypes.AGEING.get(), ItemDecay.checkDecay(stack), true));
+        setItem.setItem(slot, IApplyDecayRecipe.withAppliedDecay(level, PetrolparkRecipeTypes.AGEING.get(), ItemDecay.checkDecay(stack), true));
     };
 
     @FunctionalInterface

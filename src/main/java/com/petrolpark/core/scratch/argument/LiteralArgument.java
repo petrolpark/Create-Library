@@ -4,6 +4,7 @@ import com.mojang.serialization.Codec;
 import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+import com.petrolpark.core.scratch.environment.variable.ScratchVariableIdentifier;
 import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -15,6 +16,10 @@ public record LiteralArgument<TYPE>(TYPE value, LiteralParameter<TYPE> parameter
     @Override
     public TYPE get(IScratchEnvironment context) {
         return value();
+    };
+
+    public static final LiteralParameter<ScratchVariableIdentifier> variable(String key) {
+        return new LiteralParameter<>(key, ScratchVariableIdentifier.CODEC, ScratchVariableIdentifier.STREAM_CODEC);
     };
 
     public static final LiteralParameter<Integer> intLiteral(String key) {

@@ -85,7 +85,7 @@ public class Lang {
         return list;
     };
 
-    protected static Component generic(String keyEnd, Object... translationArgs) {
+    public static Component generic(String keyEnd, Object... translationArgs) {
         return Component.translatable("petrolpark.generic."+keyEnd, translationArgs);
     };
 

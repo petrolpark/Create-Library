@@ -3,6 +3,7 @@ package com.petrolpark.core.codec;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.CompressorHolder;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.KeyCompressor;
 import com.mojang.serialization.Keyable;
@@ -26,8 +27,22 @@ public interface ContextualMapEncoder<CONTEXT, A> extends Keyable {
 
     <T> KeyCompressor<T> compressor(final DynamicOps<T> ops);
 
+    public default ContextualEncoder<CONTEXT, A> encoder() {
+        return new ContextualEncoder<CONTEXT, A>() {
+            @Override
+            public <T> DataResult<T> encode(final A input, final CONTEXT context, final DynamicOps<T> ops, final T prefix) {
+                return ContextualMapEncoder.this.encode(input, context, ops, compressedBuilder(ops)).build(prefix);
+            };
+
+            @Override
+            public String toString() {
+                return ContextualMapEncoder.this.toString();
+            };
+        };
+    };
+
     abstract class Implementation<CONTEXT, A> extends CompressorHolder implements ContextualMapEncoder<CONTEXT, A> {
-    }
+    };
 
     static <CONTEXT, A> ContextualMapEncoder<CONTEXT, A> empty() {
         return new ContextualMapEncoder.Implementation<CONTEXT, A>() {

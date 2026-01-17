@@ -3,6 +3,7 @@ package com.petrolpark.core.scratch.symbol.expression;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
+import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 public abstract class BinaryExpressionType<
@@ -26,8 +27,8 @@ public abstract class BinaryExpressionType<
     >>, EXPRESSION
 > {
 
-    protected BinaryExpressionType(ScratchParameters<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, TYPE_1, ARGUMENT_1, ScratchArguments.Just<ENVIRONMENT, TYPE_2, ARGUMENT_2>>> parameters) {
-        super(parameters);
+    protected BinaryExpressionType(IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1> parameter1, IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2> parameter2) {
+        super(ScratchParameters.<ENVIRONMENT>parameters().after(parameter2).after(parameter1));
     };
 
     @Override

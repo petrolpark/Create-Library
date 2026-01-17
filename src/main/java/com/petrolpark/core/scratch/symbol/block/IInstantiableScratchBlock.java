@@ -1,5 +1,7 @@
 package com.petrolpark.core.scratch.symbol.block;
 
+import javax.annotation.Nullable;
+
 import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
@@ -10,10 +12,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 public non-sealed interface IInstantiableScratchBlock<
     ENVIRONMENT extends IScratchEnvironment,
     ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
-    INSTANCE extends IScratchBlockInstance<ENVIRONMENT>,
-    BLOCK extends IInstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE, BLOCK>
-> extends IScratchBlock<ENVIRONMENT, ARGUMENTS, BLOCK> {
+    INSTANCE extends IScratchBlockInstance<ENVIRONMENT>
+> extends IScratchBlock<ENVIRONMENT, ARGUMENTS> {
     
+    @Nullable
     public INSTANCE run(ENVIRONMENT environment, ARGUMENTS arguments);
 
     public ContextualCodec<ARGUMENTS, INSTANCE> instanceCodec();

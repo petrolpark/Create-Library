@@ -41,7 +41,7 @@ public abstract class ChestMenuMixin extends AbstractContainerMenu {
         if (instance.container instanceof BarrelBlockEntity barrel) level = barrel.getLevel();
         else if (instance.container instanceof AgeingContainerWrapper ageingContainer && AgeingContainerWrapper.ageingInVanillaBarrelsEnabled()) level = ageingContainer.getLevel();
         else return original.call(instance);
-        return IApplyDecayRecipe.withAgeingDecayRemoved(level, PetrolparkRecipeTypes.AGEING.get(), original.call(instance));
+        return IApplyDecayRecipe.withAppliedDecayRemoved(level, PetrolparkRecipeTypes.AGEING.get(), original.call(instance));
     };
     
 };

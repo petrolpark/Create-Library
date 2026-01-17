@@ -49,12 +49,14 @@ public record ExpressionOrLiteralArgument<ENVIRONMENT extends IScratchEnvironmen
         private final ContextualCodec<IScratchContextProvider<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> codec;
         private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> streamCodec;
 
-        public ExpressionOrLiteralParameter(String key, IParseableScratchClass<TYPE, ?> scratchClass) {
+        public ExpressionOrLiteralParameter(String key, IParseableScratchClass<TYPE> scratchClass) {
             expressionParameter = new ExpressionParameter<>(key, scratchClass);
+
             codec = RecordContextualCodecBuilder.create(instance -> instance.group(
                 ContextualCodec.<IScratchContextProvider<?>, TYPE>of(scratchClass.codec()).fieldOf("literal").forGetter(ExpressionOrLiteralArgument::value),
                 expressionParameter.argumentCodec().optionalFieldOf("expression").forGetter(ExpressionOrLiteralArgument::expression)
             ).apply(instance, (value, expression) -> new ExpressionOrLiteralArgument<>(value, expression, this)));
+            
             streamCodec = ContextualStreamCodec.composite(
                 ContextualStreamCodec.of(scratchClass.streamCodec()), ExpressionOrLiteralArgument::value,
                 ContextualStreamCodec.optional(expressionParameter.argumentStreamCodec()), ExpressionOrLiteralArgument::expression,
