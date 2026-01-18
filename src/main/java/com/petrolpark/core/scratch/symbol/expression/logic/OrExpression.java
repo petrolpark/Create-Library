@@ -3,9 +3,9 @@ package com.petrolpark.core.scratch.symbol.expression.logic;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
-public class OrExpression extends BinaryBooleanExpressionType<OrExpression> {
+public final class OrExpression extends BinaryBooleanExpressionType<OrExpression> {
 
-    protected OrExpression(BooleanScratchClass scratchClass) {
+    public OrExpression(BooleanScratchClass scratchClass) {
         super(scratchClass);
     };
 

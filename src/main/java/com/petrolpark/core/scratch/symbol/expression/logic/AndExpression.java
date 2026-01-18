@@ -3,9 +3,9 @@ package com.petrolpark.core.scratch.symbol.expression.logic;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
-public class AndExpression extends BinaryBooleanExpressionType<AndExpression> {
+public final class AndExpression extends BinaryBooleanExpressionType<AndExpression> {
 
-    protected AndExpression(BooleanScratchClass scratchClass) {
+    public AndExpression(BooleanScratchClass scratchClass) {
         super(scratchClass);
     };
 

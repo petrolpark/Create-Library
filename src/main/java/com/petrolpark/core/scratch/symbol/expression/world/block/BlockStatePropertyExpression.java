@@ -6,7 +6,6 @@ import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.s
 import javax.annotation.Nullable;
 
 import com.petrolpark.PetrolparkScratchClasses;
-import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
@@ -27,11 +26,7 @@ public abstract class BlockStatePropertyExpression<TYPE, ARGUMENT extends IScrat
 > {
 
     protected BlockStatePropertyExpression(IScratchParameter<ILevelEnvironment, TYPE, ARGUMENT> fallbackParameter) {
-        super(ScratchParameters.<ILevelEnvironment>parameters()
-            .after(fallbackParameter)
-            .after(stringParameter("property"))
-            .after(parameter("position", PetrolparkScratchClasses.BLOCK_POS.get()))
-        );
+        super(parameter("position", PetrolparkScratchClasses.BLOCK_POS.get()), stringParameter("property"), fallbackParameter);
     };
 
     @Override

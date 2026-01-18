@@ -18,6 +18,11 @@ public record LiteralArgument<TYPE>(TYPE value, LiteralParameter<TYPE> parameter
         return value();
     };
 
+    @Override
+    public boolean canEvaluate() {
+        return true;
+    };
+
     public static final LiteralParameter<ScratchVariableIdentifier> variable(String key) {
         return new LiteralParameter<>(key, ScratchVariableIdentifier.CODEC, ScratchVariableIdentifier.STREAM_CODEC);
     };

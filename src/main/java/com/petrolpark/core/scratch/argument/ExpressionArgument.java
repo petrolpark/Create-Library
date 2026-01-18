@@ -41,6 +41,11 @@ public record ExpressionArgument<
     };
 
     @Override
+    public boolean canEvaluate() {
+        return arguments().canEvaluate();
+    };
+
+    @Override
     public <CONTEXT extends IScratchContext<CONTEXT>> void populateContext(IScratchContextProvider<CONTEXT> contextProvider, CONTEXT context) {
         arguments().populateContext(contextProvider, context);
     };

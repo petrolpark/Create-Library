@@ -6,5 +6,10 @@ public interface IScratchArgument<ENVIRONMENT extends IScratchEnvironment, TYPE>
     
     public TYPE get(ENVIRONMENT environment);
 
+    /**
+     * Whether this Argument can evaluate without crashing.
+     */
+    public boolean canEvaluate();
+
     public IScratchParameter<ENVIRONMENT, TYPE, ? extends IScratchArgument<? super ENVIRONMENT, TYPE>> parameter();
 };

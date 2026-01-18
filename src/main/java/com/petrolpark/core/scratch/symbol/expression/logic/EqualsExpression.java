@@ -3,6 +3,7 @@ package com.petrolpark.core.scratch.symbol.expression.logic;
 import static com.petrolpark.core.scratch.ScratchParameters.parameters;
 
 import com.petrolpark.PetrolparkScratchClasses;
+import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
@@ -21,9 +22,7 @@ public final class EqualsExpression<TYPE> extends GenericExpression<
     >>
 > {
 
-    public static final GenericExpression.Type<EqualsExpression<?>> TYPE = new GenericExpression.Type<>(EqualsExpression::create);
-
-    protected static final <TYPE> EqualsExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
+    public static final <TYPE> EqualsExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
         return new EqualsExpression<>(scratchClass);
     };
 
@@ -46,7 +45,7 @@ public final class EqualsExpression<TYPE> extends GenericExpression<
 
     @Override
     public IScratchExpression.Type<EqualsExpression<?>> getExpressionType() {
-        return TYPE;
+        return PetrolparkScratchExpressionTypes.EQUALS.get();
     };
     
 };

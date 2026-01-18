@@ -35,6 +35,11 @@ public record ExpressionOrDropdownArgument<ENVIRONMENT extends IScratchEnvironme
     };
 
     @Override
+    public boolean canEvaluate() {
+        return expression().map(ExpressionArgument::canEvaluate).orElse(true);
+    };
+
+    @Override
     public <CONTEXT extends IScratchContext<CONTEXT>> void populateContext(IScratchContextProvider<CONTEXT> contextProvider, CONTEXT context) {
         expression().ifPresent(expression -> expression.populateContext(contextProvider, context));
     };

@@ -49,6 +49,14 @@ import com.petrolpark.core.registrate.SharedBlockBuilder;
 import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
 import com.petrolpark.core.registrate.SharedItemBuilder;
 import com.petrolpark.core.scratch.IScratchClass;
+import com.petrolpark.core.scratch.classes.BooleanScratchClass;
+import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+import com.petrolpark.core.scratch.symbol.block.FlexibleEnvironmentScratchBlockType;
+import com.petrolpark.core.scratch.symbol.block.GenericInstantBlock;
+import com.petrolpark.core.scratch.symbol.block.IScratchBlock;
+import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
+import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
+import com.petrolpark.core.scratch.symbol.expression.SimpleExpressionType;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.trade.ITradeListingReference;
 import com.tterrag.registrate.AbstractRegistrate;
@@ -342,24 +350,41 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, Registries.PARTICLE_TYPE, factory);
     };
 
+    // Simple Registered Objects - Scratch
+
     public <T, SCRATCH_CLASS extends IScratchClass<T>> RegistryEntry<IScratchClass<?>, SCRATCH_CLASS> scratchClass(String name, NonNullSupplier<SCRATCH_CLASS> factory) {
         return simple(name, PetrolparkRegistries.Keys.SCRATCH_CLASS, factory);
     };
 
-    // public <T> RegistryEntry<IScratchType<?>, SimpleScratchType<T>> scratchType(String name, Class<T> clazz) {
-    //     return scratchType(name, () -> new SimpleScratchType<>(clazz));
-    // };
+    public <ENVIRONMENT extends IScratchEnvironment, TYPE extends IScratchEnvironment.Type<ENVIRONMENT>> RegistryEntry<IScratchEnvironment.Type<?>, TYPE> scratchEnvironmentType(String name, NonNullSupplier<TYPE> factory) {
+        return simple(name, PetrolparkRegistries.Keys.SCRATCH_ENVIRONMENT_TYPE, factory);
+    };
 
-    // public <SYMBOL extends IScratchSymbol<?, ?>, SYMBOL_TYPE extends IScratchSymbolType<SYMBOL>> RegistryEntry<IScratchSymbolType<?>, SYMBOL_TYPE> scratchSymbolType(String name, NonNullSupplier<SYMBOL_TYPE> typeFactory) {
-    //     return simple(name, PetrolparkRegistries.Keys.SCRATCH_SYMBOL_TYPE, typeFactory);
-    // };
+    public <BLOCK extends IScratchBlock<?, ?>, TYPE extends IScratchBlock.Type<BLOCK>> RegistryEntry<IScratchBlock.Type<?>, TYPE> scratchBlockType(String name, NonNullSupplier<TYPE> factory) {
+        return simple(name, PetrolparkRegistries.Keys.SCRATCH_BLOCK_TYPE, factory);
+    };
 
-    // public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchSymbolType<?>, SimpleScratchExpressionType<EXPRESSION>> simpleScratchExpressionType(String name, NonNullSupplier<EXPRESSION> expressionFactory) {
-    //     final EXPRESSION expressionUnit = expressionFactory.asParameters();
-    //     return scratchSymbolType(name, () -> new SimpleScratchExpressionType<>(Codec.unit(expressionUnit), StreamCodec.unit(expressionUnit)));
-    // };
+    public <BLOCK extends GenericInstantBlock<?, ?, ?>> RegistryEntry<IScratchBlock.Type<?>, GenericInstantBlock.Type<BLOCK>> genericScratchBlockType(String name, Function<IScratchClass<?>, BLOCK> blockFactory) {
+        return scratchBlockType(name, () -> new GenericInstantBlock.Type<>(blockFactory));
+    };
+
+    public <BASE_ENVIRONMENT extends IScratchEnvironment, BLOCK extends IScratchBlock<?, ?>> RegistryEntry<IScratchBlock.Type<?>, FlexibleEnvironmentScratchBlockType<BASE_ENVIRONMENT, BLOCK>> flexibleEnvironmentScratchBlockType(String name, Class<BASE_ENVIRONMENT> environmentClass, Function<IScratchEnvironment.Type<?>, BLOCK> factory) {
+        return scratchBlockType(name, () -> new FlexibleEnvironmentScratchBlockType<>(environmentClass, factory));
+    };
+
+    public <EXPRESSION extends IScratchExpression<?, ?, ?>, TYPE extends IScratchExpression.Type<EXPRESSION>> RegistryEntry<IScratchExpression.Type<?>, TYPE> scratchExpressionType(String name, NonNullSupplier<TYPE> expressionTypeFactory) {
+        return simple(name, PetrolparkRegistries.Keys.SCRATCH_EXPRESSION_TYPE, expressionTypeFactory);
+    };
+
+    public <EXPRESSION extends GenericExpression<?, ?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<EXPRESSION>> genericScratchExpressionType(String name, Function<IScratchClass<?>, EXPRESSION> expressionFactory) {
+        return scratchExpressionType(name, () -> new GenericExpression.Type<>(expressionFactory));
+    };
+
+    public <TYPE extends SimpleExpressionType<?, ?, ?, TYPE>> RegistryEntry<IScratchExpression.Type<?>, TYPE> booleanScratchExpression(String name, Function<BooleanScratchClass, TYPE> expressionFactory) {
+        return scratchExpressionType(name, () -> expressionFactory.apply(PetrolparkScratchClasses.BOOLEAN.get()));
+    };
     
-    // Shared features
+    // Shared Features
 
     public class SharedFeatureBuilderCallback implements BuilderCallback {
 

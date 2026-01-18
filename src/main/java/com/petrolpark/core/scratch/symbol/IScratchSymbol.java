@@ -22,6 +22,6 @@ public interface IScratchSymbol<ENVIRONMENT extends IScratchEnvironment, ARGUMEN
      * @param arguments
      */
     public default boolean canEvaluate(ARGUMENTS arguments) {
-        return true; //TODO trace through ScratchArguments
+        return arguments.canEvaluate();
     };
 };

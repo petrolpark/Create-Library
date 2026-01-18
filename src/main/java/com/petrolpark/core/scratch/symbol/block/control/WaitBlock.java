@@ -7,7 +7,6 @@ import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
-import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.environment.ITickingEnvironment;
 import com.petrolpark.core.scratch.symbol.block.IScratchBlockInstance;
 import com.petrolpark.core.scratch.symbol.block.UnaryInstantiableBlockType;
@@ -17,7 +16,7 @@ import net.minecraft.network.codec.ByteBufCodecs;
 
 public class WaitBlock extends UnaryInstantiableBlockType<ITickingEnvironment, Long, ExpressionOrLiteralArgument<ITickingEnvironment, Long>, WaitBlock.Instance, WaitBlock> {
 
-    protected WaitBlock(IScratchParameter<ITickingEnvironment, Long, ExpressionOrLiteralArgument<ITickingEnvironment, Long>> parameter) {
+    public WaitBlock() {
         super(integerParameter("ticks"));
     };
 

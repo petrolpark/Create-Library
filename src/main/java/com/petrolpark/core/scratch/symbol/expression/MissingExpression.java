@@ -2,6 +2,7 @@ package com.petrolpark.core.scratch.symbol.expression;
 
 import static com.petrolpark.core.scratch.ScratchParameters.parameters;
 
+import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchArguments.None;
@@ -9,9 +10,7 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 public final class MissingExpression<TYPE> extends GenericExpression<IScratchEnvironment, TYPE, TYPE, ScratchArguments.None<IScratchEnvironment>> {
 
-    public static final GenericExpression.Type<MissingExpression<?>> TYPE = new GenericExpression.Type<>(MissingExpression::create);
-
-    protected static final <TYPE> MissingExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
+    public static final <TYPE> MissingExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
         return new MissingExpression<>(scratchClass);
     };
 
@@ -36,7 +35,7 @@ public final class MissingExpression<TYPE> extends GenericExpression<IScratchEnv
 
     @Override
     public IScratchExpression.Type<?> getExpressionType() {
-        return TYPE;
+        return PetrolparkScratchExpressionTypes.MISSING.get();
     };
     
 };

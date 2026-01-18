@@ -1,5 +1,6 @@
 package com.petrolpark.core.scratch.symbol.block.variable;
 
+import com.petrolpark.PetrolparkScratchBlockTypes;
 import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
@@ -10,7 +11,7 @@ import com.petrolpark.core.scratch.environment.variable.ScratchVariableIdentifie
 import com.petrolpark.core.scratch.symbol.block.GenericInstantBlock;
 import com.petrolpark.core.scratch.symbol.block.IScratchBlock;
 
-public class SetVariableBlock<TYPE> extends GenericInstantBlock<
+public class AssignBlock<TYPE> extends GenericInstantBlock<
     IVariableScratchEnvironment,
     TYPE,
     ScratchArguments.And<
@@ -19,13 +20,11 @@ public class SetVariableBlock<TYPE> extends GenericInstantBlock<
     >>
 > {
 
-    public static final GenericInstantBlock.Type<SetVariableBlock<?>> TYPE = new GenericInstantBlock.Type<>(SetVariableBlock::create);
-
-    protected static final <TYPE> SetVariableBlock<TYPE> create(IScratchClass<TYPE> scratchClass) {
-        return new SetVariableBlock<>(scratchClass);  
+    public static final <TYPE> AssignBlock<TYPE> create(IScratchClass<TYPE> scratchClass) {
+        return new AssignBlock<>(scratchClass);  
     };
 
-    protected SetVariableBlock(IScratchClass<TYPE> genericClass) {
+    protected AssignBlock(IScratchClass<TYPE> genericClass) {
         super(genericClass, ScratchParameters.<IVariableScratchEnvironment>parameters()
             .after(genericClass.createDefaultParameter("value"))
             .after(VariableArgument.variable("identifier"))
@@ -40,7 +39,7 @@ public class SetVariableBlock<TYPE> extends GenericInstantBlock<
 
     @Override
     public IScratchBlock.Type<?> getBlockType() {
-        return TYPE;
+        return PetrolparkScratchBlockTypes.ASSIGN.get();
     };
 
 };

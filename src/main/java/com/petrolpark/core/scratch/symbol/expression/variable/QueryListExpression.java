@@ -5,6 +5,7 @@ import static com.petrolpark.core.scratch.argument.VariableArgument.variable;
 
 import java.util.List;
 
+import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
@@ -16,7 +17,7 @@ import com.petrolpark.core.scratch.environment.variable.ScratchVariableIdentifie
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
 
-public final class ListValueExpression<TYPE> extends GenericExpression<
+public final class QueryListExpression<TYPE> extends GenericExpression<
     IVariableScratchEnvironment,
     TYPE,
     TYPE,
@@ -27,13 +28,11 @@ public final class ListValueExpression<TYPE> extends GenericExpression<
     >>>
 > {
 
-    public static final GenericExpression.Type<ListValueExpression<?>> TYPE = new GenericExpression.Type<>(ListValueExpression::create);
-
-    protected static final <TYPE, FALLBACK_ARGUMENT extends IScratchArgument<IVariableScratchEnvironment, TYPE>> ListValueExpression<TYPE> create(IScratchClass<TYPE> genericClass) {
-        return new ListValueExpression<>(genericClass);
+    public static final <TYPE, FALLBACK_ARGUMENT extends IScratchArgument<IVariableScratchEnvironment, TYPE>> QueryListExpression<TYPE> create(IScratchClass<TYPE> genericClass) {
+        return new QueryListExpression<>(genericClass);
     };
 
-    protected ListValueExpression(IScratchClass<TYPE> genericClass) {
+    protected QueryListExpression(IScratchClass<TYPE> genericClass) {
         super(genericClass, ScratchParameters.<IVariableScratchEnvironment>parameters()
             .after(genericClass.createDefaultParameter("fallback"))
             .after(integerParameter("index"))
@@ -58,7 +57,7 @@ public final class ListValueExpression<TYPE> extends GenericExpression<
 
     @Override
     public IScratchExpression.Type<?> getExpressionType() {
-        return TYPE;
+        return PetrolparkScratchExpressionTypes.QUERY_LIST.get();
     };
     
 };

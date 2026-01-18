@@ -24,6 +24,11 @@ public record NestedProcedureArgument<ENVIRONMENT extends IScratchEnvironment, I
         return procedure();
     };
 
+    @Override
+    public boolean canEvaluate() {
+        return procedure().canRun();
+    };
+
     public static final class NestedProcedureParameter<ENVIRONMENT extends IScratchEnvironment, INSTANCE extends INestedProcedureBlockInstance<ENVIRONMENT, INSTANCE>> implements IScratchParameter<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> {
 
         private final String key;

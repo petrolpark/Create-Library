@@ -41,6 +41,11 @@ public class ContextArgument<ENVIRONMENT extends IScratchEnvironment, CONTEXT ex
     };
 
     @Override
+    public boolean canEvaluate() {
+        return context != null;
+    };
+
+    @Override
     public ContextParameter<ENVIRONMENT, CONTEXT> parameter() {
         return parameter;
     };

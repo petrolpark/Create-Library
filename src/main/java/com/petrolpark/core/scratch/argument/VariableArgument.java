@@ -20,6 +20,12 @@ public record VariableArgument(ScratchVariableIdentifier identifier, VariablePar
         return identifier();
     };
 
+    @Override
+    public boolean canEvaluate() {
+        //TODO
+        return true;
+    };
+
     public static class VariableParameter implements IScratchParameter<IVariableScratchEnvironment, ScratchVariableIdentifier, VariableArgument> {
 
         protected final String key;

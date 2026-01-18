@@ -27,8 +27,12 @@ public sealed interface ScratchArguments<ENVIRONMENT extends IScratchEnvironment
      */
     public Stream<IScratchArgument<? super ENVIRONMENT, ?>> stream();
 
+    public default boolean canEvaluate() {
+        return stream().allMatch(IScratchArgument::canEvaluate);
+    };
+
     @Override
-    default <CONTEXT extends IScratchContext<CONTEXT>> void populateContext(IScratchContextProvider<CONTEXT> contextProvider, CONTEXT context) {
+    public default <CONTEXT extends IScratchContext<CONTEXT>> void populateContext(IScratchContextProvider<CONTEXT> contextProvider, CONTEXT context) {
         stream().map(IScratchContextHolder::cast).forEach(ch -> ch.populateContext(contextProvider, context));
     };
 

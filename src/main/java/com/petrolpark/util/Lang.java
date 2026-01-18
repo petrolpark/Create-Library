@@ -85,8 +85,16 @@ public class Lang {
         return list;
     };
 
+    public static final String genericTranslationKey(String keyEnd) {
+        return "petrolpark.generic."+keyEnd;
+    };
+
+    public static final String mathTranslationKey(String key) {
+        return genericTranslationKey("math." + key);
+    };
+
     public static Component generic(String keyEnd, Object... translationArgs) {
-        return Component.translatable("petrolpark.generic."+keyEnd, translationArgs);
+        return Component.translatable(genericTranslationKey(keyEnd), translationArgs);
     };
 
     public static Component none() {

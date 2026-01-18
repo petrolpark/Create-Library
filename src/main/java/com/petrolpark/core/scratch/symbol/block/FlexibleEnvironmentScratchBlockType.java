@@ -10,19 +10,18 @@ import com.mojang.serialization.RecordBuilder;
 import com.petrolpark.core.codec.ContextualMapCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.environment.IScratchEnvironment.Type;
 import com.petrolpark.core.scratch.symbol.IScratchSymbol;
 
 import io.netty.buffer.ByteBuf;
 
-public class FlexibleEnvironmentScratchBlockType<ENVIRONMENT extends IScratchEnvironment, BLOCK extends IScratchBlock<?, ?>> implements IScratchBlock.Type<BLOCK> {
+public class FlexibleEnvironmentScratchBlockType<BASE_ENVIRONMENT extends IScratchEnvironment, BLOCK extends IScratchBlock<?, ?>> implements IScratchBlock.Type<BLOCK> {
 
     protected final Function<IScratchEnvironment.Type<?>, BLOCK> factory;
 
     protected final ContextualMapCodec<IScratchEnvironment.Type<?>, BLOCK> codec;
     protected final ContextualStreamCodec<ByteBuf, IScratchEnvironment.Type<?>, BLOCK> streamCodec;
 
-    public FlexibleEnvironmentScratchBlockType(Class<ENVIRONMENT> environmentClass, Function<Type<?>, BLOCK> factory) {
+    public FlexibleEnvironmentScratchBlockType(Class<BASE_ENVIRONMENT> environmentClass, Function<IScratchEnvironment.Type<?>, BLOCK> factory) {
         this.factory = factory;
 
         codec = new ContextualMapCodec<IScratchEnvironment.Type<?>, BLOCK>() {
@@ -57,6 +56,7 @@ public class FlexibleEnvironmentScratchBlockType<ENVIRONMENT extends IScratchEnv
             };
             
         };
+
         streamCodec = ContextualStreamCodec.of(factory);
     };
 
