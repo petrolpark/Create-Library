@@ -2,7 +2,7 @@
     "badge.destroy.patreon_1": "破壊の淑女",
     "badge.destroy.patreon_1.description": "DestroyをPatreonの最初のティアで支援する",
     "badge.destroy.patreon_2": "破壊の公爵",
-    "badge.destroy.patreon_2.description": "7.77メートルを完走してDestroyをPatreonの2番目のティアで支援する",
+    "badge.destroy.patreon_2.description": "7.77ヤードを完走してDestroyをPatreonの2番目のティアで支援する",
     "badge.destroy.patreon_3": "破壊神",
     "badge.destroy.patreon_3.description": "DestroyをPatreonの最高ティアで支援して究極のサポートを示す",
 
@@ -48,11 +48,11 @@
     "effect.petrolpark.numbness": "麻痺",
     "effect.petrolpark.numbness.description": "Mobは他のMobからダメージを受けても気づかず、反応しません。",
 
-    "item.petrolpark.badge.awarded": "%1$s に %2$s に授与",
+    "item.petrolpark.badge.awarded": "%2$s に %1$s に授与",
     "item.petrolpark.badge.unknown": "これは本物のバッジではありません...",
     "item.petrolpark.decaying_item.remaining": "%1$s で腐敗",
     "item.petrolpark.menu": "メニュー",
-    "item.petrolpark.menu.team_selection": "この %1$s のチームを選択",
+    "item.petrolpark.menu.team_selection": "%1$s のチームを選択",
 
     "petrolpark.generic.list.and": "%1$s と %2$s",
     "petrolpark.generic.list.and_more": "%1$s とあと %2$s 個",
