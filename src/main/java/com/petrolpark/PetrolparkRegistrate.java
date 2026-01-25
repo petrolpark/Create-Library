@@ -402,7 +402,7 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     };
 
-    public <R, T extends R, P, S2 extends Builder<R, T, P, S2>> S2 sharedEntry(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BuilderCallback, S2> factory) {
+    public <R, T extends R, P, BUILDER extends Builder<R, T, P, BUILDER>> BUILDER sharedEntry(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BuilderCallback, BUILDER> factory) {
         return factory.apply(new SharedFeatureBuilderCallback(featureFlag));
     };
 
@@ -410,16 +410,17 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return sharedEntry(featureFlag, name, callback -> SharedBlockEntityBuilder.create(this, this, featureFlag, name, callback, factory));
     };
 
-    public <T extends Block, P> BlockBuilder<T, PetrolparkRegistrate> sharedBlock(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
-        return sharedEntry(featureFlag, name, callback -> SharedBlockBuilder.create(this, this, featureFlag, name, callback, factory));
+    public <T extends Block, P> SharedBlockBuilder<T, PetrolparkRegistrate> sharedBlock(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
+        return (SharedBlockBuilder<T, PetrolparkRegistrate>)sharedEntry(featureFlag, name, callback -> SharedBlockBuilder.create(this, this, featureFlag, name, callback, factory));
     };
 
-    public <T extends Item, P> ItemBuilder<T, P> sharedItem(P parent, @Nonnull SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
-        return sharedEntry(featureFlag, name, callback -> new SharedItemBuilder<>(this, parent, featureFlag, name, callback, factory));
+    public <T extends Item, P> SharedItemBuilder<T, P> sharedItem(P parent, @Nonnull SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
+        return (SharedItemBuilder<T, P>)sharedEntry(featureFlag, name, callback -> new SharedItemBuilder<>(this, parent, featureFlag, name, callback, factory));
     };
 
-    public <T extends Item> ItemBuilder<T, PetrolparkRegistrate> sharedItem(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullBiFunction<Item.Properties, SharedFeatureFlag, T> factory) {
-        return sharedEntry(featureFlag, name, callback -> new SharedItemBuilder<>(this, this, featureFlag, name, callback, properties -> factory.apply(properties, featureFlag)));
+    @SuppressWarnings("unchecked")
+    public <T extends Item> SharedItemBuilder<T, PetrolparkRegistrate> sharedItem(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullBiFunction<Item.Properties, SharedFeatureFlag, T> factory) {
+        return (SharedItemBuilder<T, PetrolparkRegistrate>)sharedEntry(featureFlag, name, callback -> new SharedItemBuilder<>(this, this, featureFlag, name, callback, properties -> factory.apply(properties, featureFlag)));
     };
     
 };

@@ -2,7 +2,7 @@ package com.petrolpark.core.contamination.recipe;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.PetrolparkRecipeSerializers;
 import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
@@ -33,7 +33,7 @@ public class CombineContaminatedItemsRecipe extends CustomRecipe implements IHan
             if (firstStack.isEmpty()) {
                 firstStack = stack;
             } else {
-                if (!ItemHelper.equalIgnoringComponents(stack, firstStack, PetrolparkDataComponents.ORPHAN_CONTAMINANTS)) return false;
+                if (!ItemHelper.equalIgnoringComponents(stack, firstStack, PetrolparkDataComponentTypes.ORPHAN_CONTAMINANTS)) return false;
                 atLeastTwo = true;
             };
         };

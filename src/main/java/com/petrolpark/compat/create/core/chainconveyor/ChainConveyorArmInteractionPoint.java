@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create.core.chainconveyer;
+package com.petrolpark.compat.create.core.chainconveyor;
 
 import java.util.List;
 import java.util.Map;
@@ -8,6 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.compat.create.PetrolparkArmInteractionPointTypes;
 import com.petrolpark.mixin.compat.create.accessor.client.ChainConveyorOBBAccessor;
+import com.petrolpark.util.Pair;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity.ConnectedPort;
@@ -49,7 +50,7 @@ public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
     protected ChainConveyorBlockEntity.ConnectedPort connectedPort;
     protected Vec3 targetPosition = null;
 
-    protected ChainConveyorPackage nextBox = null;
+    protected Pair<ChainConveyorBlockEntity, ChainConveyorPackage> nextConveyorAndBox = null;
 
     /**
      * 
@@ -84,9 +85,8 @@ public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
     };
 
     public boolean inRange(Vec3i armPos) {
-        // if (connectedPort.connection() == null) return armPos.closerThan(chainConveyorPos, ArmBlockEntity.getRange() + 1);
-        // else return Vec3.atCenterOf(chainConveyorPos).add(Vec3.atCenterOf(connectedPort.connection()).scale(connectedPort.chainPosition())).closerThan(Vec3.atCenterOf(armPos), ArmBlockEntity.getRange() + 2f);
-        return true; //TODO
+        if (connectedPort.connection() == null) return armPos.closerThan(chainConveyorPos, ArmBlockEntity.getRange() + 1);
+        else return Vec3.atCenterOf(chainConveyorPos).add(Vec3.atCenterOf(connectedPort.connection()).normalize().scale(connectedPort.chainPosition())).closerThan(Vec3.atCenterOf(armPos), ArmBlockEntity.getRange() + 2f);
     };
 
     @Override
@@ -94,12 +94,12 @@ public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
         if (!(level.getBlockEntity(chainConveyorPos) instanceof ChainConveyorBlockEntity ccbe)) return false;
         if (connectedPort.connection() != null && !ccbe.connections.contains(connectedPort.connection())) return false;
         if (
-            nextBox != null && !(connectedPort.connection() == null 
+            nextConveyorAndBox != null && !(connectedPort.connection() == null 
                 ? ((IChainConveyorBlockEntityDuck)ccbe).getLoopingPackages()
                 : ((IChainConveyorBlockEntityDuck)ccbe).getTravellingPackages().get(connectedPort.connection())
-            ).contains(nextBox)
+            ).contains(nextConveyorAndBox.getSecond())
         ) {
-            nextBox = null;
+            nextConveyorAndBox = null;
             return false;
         };
         return true;
@@ -131,14 +131,7 @@ public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
     public ItemStack insert(ArmBlockEntity armBlockEntity, ItemStack stack, boolean simulate) {
         if (level.getBlockEntity(chainConveyorPos, AllBlockEntityTypes.CHAIN_CONVEYOR.get()).map(ccbe -> {
             if (ccbe.getSpeed() != 0f && ccbe.canAcceptPackagesFor(connectedPort.connection())) {
-                if (!simulate) {
-                    final ChainConveyorPackage box = new ChainConveyorPackage(connectedPort.chainPosition(), stack.copyWithCount(1));
-                    if (connectedPort.connection() == null)
-                        ccbe.addLoopingPackage(box);
-                    else
-                        ccbe.addTravellingPackage(box, connectedPort.connection());
-                };
-                return true;
+                return ChainConveyorItemEvent.canAdd(level, stack, ccbe, connectedPort.connection(), connectedPort.chainPosition(), simulate);
             };
             return false;
         }).orElse(false)) {
@@ -151,10 +144,11 @@ public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
     @Override
     public ItemStack extract(ArmBlockEntity armBlockEntity, int slot, boolean simulate) {
         if (simulate) {
-            return nextBox == null ? ItemStack.EMPTY : nextBox.item;
-        } else {
-            return ItemStack.EMPTY; // Done manually
-        }
+            if (nextConveyorAndBox == null) return ItemStack.EMPTY;
+            final ChainConveyorItemEvent.Remove event = ChainConveyorItemEvent.getRemoved(level, nextConveyorAndBox.getFirst(), connectedPort.connection(), nextConveyorAndBox.getSecond(), true);
+            if (event.isAllowed()) return event.getStack();
+        };
+        return ItemStack.EMPTY; // Non-simulated extraction done manually
     };
 
     @Override
@@ -203,7 +197,7 @@ public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
             for (ArmInteractionPoint point : ((IArmBlockEntityDuck)arm).getInputs()) {
                 if (point instanceof ChainConveyorArmInteractionPoint chainPoint && chainPoint.connectedPort == connectedPort) {
                     ((IArmBlockEntityDuck)arm).setPhase(ArmBlockEntity.Phase.SEARCH_INPUTS);
-                    chainPoint.nextBox = box;
+                    chainPoint.nextConveyorAndBox = Pair.of(ccbe, box);
                     break;
                 };
             };
@@ -219,8 +213,10 @@ public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
             && chainPoint.connectedPort == connectedPort // Check if Arm is targeting this Chain Conveyor bit
             && ((IArmBlockEntityDuck)arm).getChasedPointProgress() == 1f
         ) { 
-            ((IArmBlockEntityDuck)arm).setHeldItem(box.item.copy());
-            chainPoint.nextBox = null;
+            final ChainConveyorItemEvent.Remove event = ChainConveyorItemEvent.getRemoved(ccbe.getLevel(), ccbe, connectedPort.connection(), box, false);
+            if (!event.isAllowed()) return false;
+            ((IArmBlockEntityDuck)arm).setHeldItem(event.getStack());
+            chainPoint.nextConveyorAndBox = null;
             
             // Reset
             ((IArmBlockEntityDuck)arm).setPhase(ArmBlockEntity.Phase.SEARCH_OUTPUTS);

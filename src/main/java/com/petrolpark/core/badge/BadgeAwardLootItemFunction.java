@@ -1,7 +1,7 @@
 package com.petrolpark.core.badge;
 
 import com.petrolpark.PetrolparkAttachmentTypes;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.PetrolparkLootItemFunctions;
 
 import net.minecraft.world.entity.player.Player;
@@ -16,7 +16,7 @@ public class BadgeAwardLootItemFunction implements LootItemFunction {
     @Override
     public ItemStack apply(ItemStack stack, LootContext context) {
         if (context.getParamOrNull(LootContextParams.THIS_ENTITY) instanceof Player player && stack.getItem() instanceof BadgeItem item) {
-            player.getData(PetrolparkAttachmentTypes.BADGES.get()).awardDate(item.badge.get()).ifPresent(date -> stack.set(PetrolparkDataComponents.BADGE_AWARD, new BadgeItem.BadgeAward(player.getUUID(), date.getTime())));
+            player.getData(PetrolparkAttachmentTypes.BADGES.get()).awardDate(item.badge.get()).ifPresent(date -> stack.set(PetrolparkDataComponentTypes.BADGE_AWARD, new BadgeItem.BadgeAward(player.getUUID(), date.getTime())));
         };
         return stack;
     };

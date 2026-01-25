@@ -24,7 +24,7 @@ import net.minecraft.world.phys.Vec3;
 public class ExtrusionScenes {
   
     public static void extrusionDie(SceneBuilder builder, SceneBuildingUtil util) {
-        CreateSceneBuilder scene = new CreateSceneBuilder(builder);
+        final CreateSceneBuilder scene = new CreateSceneBuilder(builder);
         scene.title("extrusion_die", "This text is defined in a language file.");
         scene.configureBasePlate(0, 0, 5);
         scene.showBasePlate();

@@ -1,13 +1,18 @@
 package com.petrolpark.core.registrate;
 
+import java.util.Collections;
+
 import javax.annotation.Nonnull;
 
 import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.compat.SharedFeatureBlockItem;
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.core.data.condition.SharedFeatureEnabledCondition;
+import com.petrolpark.core.registrate.RegistrateConditionalLootTableProvider.ConditionalLootType;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
-import com.tterrag.registrate.builders.ItemBuilder;
+import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
@@ -18,10 +23,11 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
 public class SharedBlockBuilder<T extends Block, P extends PetrolparkRegistrate> extends PetrolparkBlockBuilder<T, P> {
 
-    public static <T extends Block, P extends PetrolparkRegistrate> BlockBuilder<T, P> create(PetrolparkRegistrate owner, P parent, SharedFeatureFlag feature, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory) {
+    public static <T extends Block, P extends PetrolparkRegistrate> BlockBuilder<T, P> create(P owner, P parent, SharedFeatureFlag feature, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory) {
         return new SharedBlockBuilder<>(owner, parent, feature, name, callback, factory, () -> BlockBehaviour.Properties.of()).defaultLoot();
     };
 
@@ -35,7 +41,7 @@ public class SharedBlockBuilder<T extends Block, P extends PetrolparkRegistrate>
     };
 
     @Override
-    public ItemBuilder<BlockItem, BlockBuilder<T, P>> item() {
+    public SharedItemBuilder<BlockItem, BlockBuilder<T, P>> item() {
         return item(SharedFeatureBlockItem.of(featureFlag));
     };
 
@@ -43,28 +49,25 @@ public class SharedBlockBuilder<T extends Block, P extends PetrolparkRegistrate>
      * Copied from {@link BlockBuilder#item()}
      */
     @Override
-    public <I extends Item> ItemBuilder<I, BlockBuilder<T, P>> item(@Nonnull NonNullBiFunction<? super T, net.minecraft.world.item.Item.Properties, ? extends I> factory) {
-        if (featureFlag.enabled()) return petrolparkOwner.<I, BlockBuilder<T, P>>sharedItem(this, featureFlag, getName(), p -> factory.apply(getEntry(), p))
-            // .setData(ProviderType.LANG, NonNullBiConsumer.noop())
-            // .model((ctx, prov) -> 
-            //     getOwner().getDataProvider(ProviderType.BLOCKSTATE)
-            //         .flatMap(p -> p.getExistingVariantBuilder(getEntry()))
-            //         .map(b -> b.getModels().get(b.partialState()))
-            //         .map(BlockStateProvider.ConfiguredModelList::toJSON)
-            //         .filter(JsonElement::isJsonObject)
-            //         .map(j -> j.getAsJsonObject().get("model"))
-            //         .map(JsonElement::getAsString)
-            //         .map(model -> prov.withExistingParent(ctx.getName(), model))
-            //         .orElse(prov.blockItem(asSupplier()))
-            // )
-            ;
-        else return ItemBuilder.create(DummyRegistrate.INSTANCE, this, getName(), petrolparkOwner.new SharedFeatureBuilderCallback(featureFlag), p -> factory.apply(getEntry(), p));
+    public <I extends Item> SharedItemBuilder<I, BlockBuilder<T, P>> item(@Nonnull NonNullBiFunction<? super T, net.minecraft.world.item.Item.Properties, ? extends I> factory) {
+        if (featureFlag.enabled()) return petrolparkOwner.<I, BlockBuilder<T, P>>sharedItem(this, featureFlag, getName(), p -> factory.apply(getEntry(), p));
+        else return new SharedItemBuilder<>(DummyRegistrate.INSTANCE, this, featureFlag, getName(), petrolparkOwner.new SharedFeatureBuilderCallback(featureFlag), p -> factory.apply(getEntry(), p));
     };
 
     @Override
-    public BlockBuilder<T, P> onRegister(@Nonnull NonNullConsumer<? super T> callback) {
-        if (!featureFlag.enabled()) return this;
-        return super.onRegister(callback);
+    public SharedBlockBuilder<T, P> onRegister(@Nonnull NonNullConsumer<? super T> callback) {
+        if (featureFlag.enabled()) super.onRegister(callback);
+        return this;
+    };
+
+    @Override
+    public SharedBlockBuilder<T, P> loot(@Nonnull NonNullBiConsumer<RegistrateBlockLootTables, T> cons) {
+        setData(RegistrateConditionalLootTableProvider.TYPE, (ctx, prov) -> prov.addLootAction(ConditionalLootType.BLOCK, tb -> {
+            if (!ctx.getEntry().getLootTable().equals(BuiltInLootTables.EMPTY)) {
+                cons.accept(tb.withConditions(Collections.singletonList(new SharedFeatureEnabledCondition(featureFlag))), ctx.getEntry());
+            };
+        }));
+        return this;
     };
     
     

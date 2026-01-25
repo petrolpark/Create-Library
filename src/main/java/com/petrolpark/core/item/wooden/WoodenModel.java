@@ -15,9 +15,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.util.WoodHelper;
 import com.petrolpark.util.WoodHelper.Wood;
+import com.petrolpark.util.WoodHelperClient;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -57,7 +58,7 @@ public class WoodenModel extends BakedModelWrapper<BakedModel> {
     };
 
     public BakedModel getModel(Wood wood) {
-        return models.computeIfAbsent(wood, w -> WoodHelper.generateWoodModel(originalModel, w));
+        return models.computeIfAbsent(wood, w -> WoodHelperClient.generateWoodModel(originalModel, w));
     };
     
     @Override
@@ -68,7 +69,7 @@ public class WoodenModel extends BakedModelWrapper<BakedModel> {
 
     @Override
     public List<BakedModel> getRenderPasses(@Nonnull ItemStack stack, boolean fabulous) {
-        return Collections.singletonList(getModel(stack.getOrDefault(PetrolparkDataComponents.WOOD, WoodHelper.OAK)));
+        return Collections.singletonList(getModel(stack.getOrDefault(PetrolparkDataComponentTypes.WOOD, WoodHelper.OAK)));
     };
 
     @Override

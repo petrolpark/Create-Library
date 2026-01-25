@@ -12,6 +12,7 @@ import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 
 public class AgeingCategory extends SimpleConversionCategory<AgeingRecipe> {
 
@@ -20,19 +21,14 @@ public class AgeingCategory extends SimpleConversionCategory<AgeingRecipe> {
     };
 
     @Override
-    public List<ItemStack> getInputs(AgeingRecipe recipe, IFocusGroup focuses) {
-        return streamInputs(recipe, focuses).map(recipe::setDecayProductAndTime).toList();
+    public Ingredient getInput(AgeingRecipe recipe, IFocusGroup focuses) {
+        final List<IFocus<ItemStack>> inputs = focuses.getItemStackFocuses(RecipeIngredientRole.INPUT).toList();
+        return inputs.isEmpty() ? recipe.ingredient() : Ingredient.of(inputs.stream().map(IFocus::getTypedValue).map(ITypedIngredient::getIngredient).map(stack -> stack.copyWithCount(1)).map(ItemDecay::removeAppliedDecay));
     };
 
     @Override
     public List<ItemStack> getOutputs(AgeingRecipe recipe, IFocusGroup focuses) {
-        return streamInputs(recipe, focuses).map(recipe.decayProduct()::get).toList();
-    };
-
-    protected Stream<ItemStack> streamInputs(AgeingRecipe recipe, IFocusGroup focuses) {
-        List<IFocus<ItemStack>> inputs = focuses.getItemStackFocuses(RecipeIngredientRole.INPUT).toList();
-        if (inputs.isEmpty()) return Stream.of(recipe.ingredient().getItems()).map(ItemStack::copy);
-        return inputs.stream().map(IFocus::getTypedValue).map(ITypedIngredient::getIngredient).map(stack -> stack.copyWithCount(1)).map(ItemDecay::removeAppliedDecay);
+        return Stream.of(getInput(recipe, focuses).getItems()).map(recipe.decayProduct()::get).toList();
     };
     
 };

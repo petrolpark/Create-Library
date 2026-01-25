@@ -22,11 +22,13 @@ public interface INamedRecipe {
         return Component.translatable(UNKNOWN_RECIPE_TRANSLATION_KEY);
     };
 
-    @SuppressWarnings("null")
     public static Component getName(RecipeHolder<?> recipeHolder) {
-        Recipe<?> recipe = recipeHolder.value();
-        
-        if (recipe instanceof INamedRecipe namedRecipe) return namedRecipe.getName(recipeHolder.id());
+        return getName(recipeHolder.id(), recipeHolder.value());
+    };
+
+    @SuppressWarnings("null")
+    public static Component getName(ResourceLocation id, Recipe<?> recipe) {
+        if (recipe instanceof INamedRecipe namedRecipe) return namedRecipe.getName(id);
 
         try {
             ItemStack stack = recipe.getResultItem(null);

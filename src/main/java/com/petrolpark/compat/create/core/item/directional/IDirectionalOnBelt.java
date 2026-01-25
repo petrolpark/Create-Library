@@ -2,7 +2,7 @@ package com.petrolpark.compat.create.core.item.directional;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.RequiresCreate;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 
@@ -30,7 +30,7 @@ public interface IDirectionalOnBelt {
      */
     @Nullable
     public default Rotation rotationForPlacement(ItemStack stack) {
-        return stack.getOrDefault(PetrolparkDataComponents.ROTATION_WHILE_FLYING, Rotation.NONE);
+        return stack.getOrDefault(PetrolparkDataComponentTypes.ROTATION_WHILE_FLYING, Rotation.NONE);
     };
 
     /**
@@ -39,6 +39,6 @@ public interface IDirectionalOnBelt {
      * @param launchDirection
      */
     public default void launch(DirectionalTransportedItemStack stack, Direction launchDirection) {
-        stack.stack.set(PetrolparkDataComponents.ROTATION_WHILE_FLYING, stack.rotation);
+        stack.stack.set(PetrolparkDataComponentTypes.ROTATION_WHILE_FLYING, stack.rotation);
     };
 };

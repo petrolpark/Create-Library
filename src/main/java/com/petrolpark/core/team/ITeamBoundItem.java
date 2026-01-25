@@ -3,7 +3,7 @@ package com.petrolpark.core.team;
 import java.util.List;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.core.team.packet.BindTeamItemPacket;
 import com.petrolpark.util.ScreenHelper;
 
@@ -43,12 +43,12 @@ public interface ITeamBoundItem {
     };
 
     public static ITeam getTeam(ItemStack stack, Level level) {
-        return stack.getOrDefault(PetrolparkDataComponents.TEAM_PROVIDER, NoTeam.INSTANCE).provideTeam(level);
+        return stack.getOrDefault(PetrolparkDataComponentTypes.TEAM_PROVIDER, NoTeam.INSTANCE).provideTeam(level);
     };
     
     public default void bind(ITeam.Provider teamProvider, ItemStack stack, Player player) {
         if (stack.getItem() != this) return;
-        if (!isTeamRebindable(player.level(), player, stack) && stack.has(PetrolparkDataComponents.TEAM_PROVIDER)) return;
-        stack.set(PetrolparkDataComponents.TEAM_PROVIDER, teamProvider);
+        if (!isTeamRebindable(player.level(), player, stack) && stack.has(PetrolparkDataComponentTypes.TEAM_PROVIDER)) return;
+        stack.set(PetrolparkDataComponentTypes.TEAM_PROVIDER, teamProvider);
     };
 };

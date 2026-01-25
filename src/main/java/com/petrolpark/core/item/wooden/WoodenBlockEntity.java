@@ -2,7 +2,7 @@ package com.petrolpark.core.item.wooden;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.core.world.block.entity.BlockEntityBase;
 import com.petrolpark.util.WoodHelper;
 import com.petrolpark.util.WoodHelper.Wood;
@@ -39,12 +39,12 @@ public class WoodenBlockEntity extends BlockEntityBase {
     @Override
     protected void collectImplicitComponents(@Nonnull DataComponentMap.Builder components) {
         super.collectImplicitComponents(components);
-        components.set(PetrolparkDataComponents.WOOD, wood);
+        components.set(PetrolparkDataComponentTypes.WOOD, wood);
     };
 
     @Override
     protected void applyImplicitComponents(@Nonnull DataComponentInput componentInput) {
-        wood = componentInput.get(PetrolparkDataComponents.WOOD);
+        wood = componentInput.get(PetrolparkDataComponentTypes.WOOD);
     };
 
     @Override

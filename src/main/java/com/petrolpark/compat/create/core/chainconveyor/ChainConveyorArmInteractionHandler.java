@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create.core.chainconveyer;
+package com.petrolpark.compat.create.core.chainconveyor;
 
 import static com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler.selectedChainPosition;
 import static com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler.selectedConnection;

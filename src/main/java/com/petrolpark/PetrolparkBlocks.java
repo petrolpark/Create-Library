@@ -2,6 +2,9 @@ package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 import static com.petrolpark.core.registrate.PetrolparkTagGen.tagUnrequired;
+import static net.minecraft.world.level.storage.loot.LootPool.lootPool;
+import static net.minecraft.world.level.storage.loot.LootTable.lootTable;
+import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableItem;
 
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.item.decay.drying.rack.DryingRackBlock;
@@ -14,6 +17,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class PetrolparkBlocks {
   
@@ -30,6 +35,16 @@ public class PetrolparkBlocks {
 
     public static final BlockEntry<DryingRackBlock> DRYING_RACK = REGISTRATE.sharedBlock(SharedFeatureFlag.DRYING_RACK, "drying_rack", DryingRackBlock::new)
         .initialProperties(() -> Blocks.OAK_FENCE)
+        .loot((lt, b) -> lt.add(b, lootTable()
+            .withPool(
+                lt.applyExplosionCondition(b, lootPool()
+                    .setRolls(ConstantValue.exactly(1f))
+                    .add(lootTableItem(b).apply(CopyComponentsFunction.copyComponents(CopyComponentsFunction.Source.BLOCK_ENTITY)
+                        .include(PetrolparkDataComponentTypes.WOOD)
+                    ))
+                )
+            ))
+        ).transform(tagUnrequired(BlockTags.MINEABLE_WITH_AXE))
         .item(WoodenBlockItem::new)
         .build()
         .register();

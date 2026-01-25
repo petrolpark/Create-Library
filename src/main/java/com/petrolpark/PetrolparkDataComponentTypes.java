@@ -32,7 +32,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
 
-public class PetrolparkDataComponents {
+public class PetrolparkDataComponentTypes {
     private static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Petrolpark.MOD_ID);
 
     public static final DataComponentType<BadgeItem.BadgeAward> BADGE_AWARD = register("badge_award", builder -> builder

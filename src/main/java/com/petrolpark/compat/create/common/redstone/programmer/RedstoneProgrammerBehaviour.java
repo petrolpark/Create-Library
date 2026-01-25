@@ -153,7 +153,7 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
             if (!simulate) NBTHelper.read(registries, programCodec, tag);
             return true;
         };
-        if (tag.contains("FrequencyFirst") || !tag.contains("FrequencyLast")) {
+        if (tag.contains("First") || !tag.contains("Last")) {
             final Couple<Frequency> frequencies = Couple.create(Frequency.of(ItemStack.parseOptional(registries, tag.getCompound("FrequencyFirst"))), Frequency.of(ItemStack.parseOptional(registries, tag.getCompound("FrequencyLast"))));
             if (program.getChannels().stream().anyMatch(channel -> channel.networkKey.equals(frequencies))) return false;
             if (!simulate) program.addBlankChannel(frequencies);

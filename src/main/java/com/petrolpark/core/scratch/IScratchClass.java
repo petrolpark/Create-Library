@@ -23,7 +23,7 @@ public interface IScratchClass<TYPE> {
 
     public StreamCodec<? super RegistryFriendlyByteBuf, TYPE> streamCodec();
 
-    public <ENVIRONMENT extends IScratchEnvironment> IScratchParameter<ENVIRONMENT, TYPE, ? extends IScratchArgument<ENVIRONMENT, TYPE>> createDefaultParameter(String key);
+    public <ENVIRONMENT extends IScratchEnvironment> IScratchParameter<ENVIRONMENT, TYPE, IScratchArgument<ENVIRONMENT, TYPE>> createDefaultParameter(String key);
 
     public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, TYPE, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass);
 

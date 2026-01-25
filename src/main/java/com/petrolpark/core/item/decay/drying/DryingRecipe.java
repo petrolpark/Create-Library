@@ -28,4 +28,5 @@ public record DryingRecipe(Ingredient ingredient, IDecayProduct decayProduct, De
     public RecipeType<DryingRecipe> getType() {
         return PetrolparkRecipeTypes.DRYING.get();
     };
+
 };

@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.util.ItemHelper;
 
 import io.netty.buffer.ByteBuf;
@@ -43,7 +43,7 @@ public class BadgeItem extends Item {
 
     public static ItemStack of(Player player, Badge badge, Date date) {
         ItemStack stack = new ItemStack(badge.asItem());
-        stack.set(PetrolparkDataComponents.BADGE_AWARD, new BadgeAward(player.getUUID(), date.getTime()));
+        stack.set(PetrolparkDataComponentTypes.BADGE_AWARD, new BadgeAward(player.getUUID(), date.getTime()));
         return stack;
     };
 
@@ -55,7 +55,7 @@ public class BadgeItem extends Item {
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nonnull Item.TooltipContext context, @Nonnull List<Component> tooltipComponents, @Nonnull TooltipFlag isAdvanced) {
         Badge badge = this.badge.get();
-        ItemHelper.getOptional(stack, PetrolparkDataComponents.BADGE_AWARD).ifPresentOrElse(badgeAward -> {
+        ItemHelper.getOptional(stack, PetrolparkDataComponentTypes.BADGE_AWARD).ifPresentOrElse(badgeAward -> {
             tooltipComponents.add(badge.getDescription().copy().setStyle(PRIMARY));
             Level level = context.level();
             if (level != null) tooltipComponents.add(Component.translatable("item.petrolpark.badge.awarded", Optional.ofNullable(level.getPlayerByUUID(badgeAward.playerUUID())).map(Player::getDisplayName).map(Component::copy).orElse(Component.literal("unknown")).setStyle(HIGHLIGHT), Component.literal(df.format(new Date(badgeAward.awardDate()))).setStyle(HIGHLIGHT)).setStyle(PRIMARY));

@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.PetrolparkAttachmentTypes;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.team.ITeamBoundItem;
 
@@ -37,7 +37,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem {
     @Override
     public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.get(PetrolparkDataComponents.SHOP) != null) {
+        if (stack.get(PetrolparkDataComponentTypes.SHOP) != null) {
             InteractionResult result = trySelectTeam(stack, player, level);
             if (result != InteractionResult.PASS) return new InteractionResultHolder<>(result, stack);
         };
@@ -46,7 +46,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem {
 
     @Override
     public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
-        return Optional.ofNullable(stack.get(PetrolparkDataComponents.SHOP))
+        return Optional.ofNullable(stack.get(PetrolparkDataComponentTypes.SHOP))
             .map(Holder::value)
             .filter(shop -> shop.canServe(entity))
             .map(shop -> {
@@ -64,10 +64,10 @@ public class ShopMenuItem extends Item implements ITeamBoundItem {
     @OnlyIn(Dist.CLIENT)
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nonnull TooltipContext context, @Nonnull List<Component> tooltipComponents, @Nonnull TooltipFlag isAdvanced) {
-        Optional.ofNullable(stack.get(PetrolparkDataComponents.SHOP)).ifPresent(shop -> {
+        Optional.ofNullable(stack.get(PetrolparkDataComponentTypes.SHOP)).ifPresent(shop -> {
             Optional.of(ITeamBoundItem.getTeam(stack, context.level()))
                 .filter(Predicate.not(ITeam::isNone))
-                .map(team -> team.get(PetrolparkDataComponents.TEAM_SHOPS))
+                .map(team -> team.get(PetrolparkDataComponentTypes.TEAM_SHOPS))
                 .map(shops -> shops.getName(shop))
                 .or(() -> Optional.of(shop.value().getName()))
                 .ifPresent(name -> tooltipComponents.add(name.copy().withStyle(ChatFormatting.GRAY)));
@@ -77,7 +77,7 @@ public class ShopMenuItem extends Item implements ITeamBoundItem {
     @OnlyIn(Dist.CLIENT)
     @Override
     public Component getTeamSelectionScreenTitle(Level level, Player player, ItemStack stack) {
-        return Component.translatable("item.petrolpark.menu.team_selection", Optional.ofNullable(stack.get(PetrolparkDataComponents.SHOP)).map(Holder::value).map(Shop::getName).orElse(Component.translatable("shop.petrolpark.unknown")));
+        return Component.translatable("item.petrolpark.menu.team_selection", Optional.ofNullable(stack.get(PetrolparkDataComponentTypes.SHOP)).map(Holder::value).map(Shop::getName).orElse(Component.translatable("shop.petrolpark.unknown")));
     };
     
 };

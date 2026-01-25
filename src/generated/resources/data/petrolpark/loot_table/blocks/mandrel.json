@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "mandrel"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

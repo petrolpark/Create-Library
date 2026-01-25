@@ -10,7 +10,7 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
 import net.minecraft.resources.ResourceLocation;
 
-public class PetrolparkPonderScenes {
+public class CreatePonderScenes {
     
     public static void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
 		final PonderSceneRegistrationHelper<ItemProviderEntry<?, ?>> HELPER = helper.withKeyFunction(RegistryEntry::getId);

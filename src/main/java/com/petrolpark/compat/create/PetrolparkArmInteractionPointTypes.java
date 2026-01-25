@@ -1,7 +1,7 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.compat.create.core.chainconveyer.ChainConveyorArmInteractionPoint;
+import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorArmInteractionPoint;
 import com.simibubi.create.api.registry.CreateRegistries;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
 import com.tterrag.registrate.util.entry.RegistryEntry;

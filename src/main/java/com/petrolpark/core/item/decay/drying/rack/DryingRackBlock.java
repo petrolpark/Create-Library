@@ -28,14 +28,13 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class DryingRackBlock extends Block implements EntityBlock {
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 
-    public static final VoxelShaper SHAPE = VoxelShaper.forHorizontalAxis(Shapes.or(Block.box(7f, 14f, 2f, 9f, 16f, 14f), Shapes.or(Block.box(7f, 0f, 0f, 9f, 16f, 2f), Block.box(7f, 0f, 14f, 9f, 16f, 16f))), Axis.Z);
+    public static final VoxelShaper SHAPE = VoxelShaper.forHorizontalAxis(Block.box(7f, 0f, 0f, 9f, 16f, 16f), Axis.Z);
 
     public DryingRackBlock(BlockBehaviour.Properties properties) {
         super(properties);

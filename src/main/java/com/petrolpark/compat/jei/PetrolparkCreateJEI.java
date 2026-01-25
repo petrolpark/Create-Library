@@ -8,6 +8,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.PetrolparkBlocks;
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.SharedFeatureFlag;
@@ -19,6 +20,7 @@ import com.petrolpark.compat.jei.category.AgeingCategory;
 import com.petrolpark.compat.jei.category.CropFertilizingCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
+import com.petrolpark.compat.jei.category.DryingCategory;
 import com.petrolpark.compat.jei.category.ExtrusionCategory;
 import com.petrolpark.compat.jei.category.LiddedBasinCategory;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
@@ -27,6 +29,7 @@ import com.petrolpark.compat.jei.ghost.PetrolparkGhostIngredientHandler;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
 import com.petrolpark.compat.jei.ingredient.BlockStateIngredientType;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
+import com.petrolpark.core.item.decay.drying.DryingRecipe;
 import com.petrolpark.core.recipe.CropFertilizingRecipe;
 import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
 import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
@@ -111,7 +114,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .emptyBackground(120, 125)
             .build("crop_fertilizing", CropFertilizingCategory::new);
 
-        CreateRecipeCategory<?> lidded_basin, extrusion;
+        CreateRecipeCategory<?> lidded_basin, drying, extrusion;
 
         if (SharedFeatureFlag.BASIN_LID.enabled()) lidded_basin = builder(BasinRecipe.class)
             .addTypedRecipes(CreateRecipeTypes.LIDDED_BASIN)
@@ -120,6 +123,13 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .doubleItemIcon(CreateBlocks.BASIN_LID.get(), AllBlocks.BASIN.get())
             .emptyBackground(177, 103)
             .build("lidded_basin", LiddedBasinCategory::new);
+
+        if (SharedFeatureFlag.DRYING_RACK.enabled()) drying = builder(DryingRecipe.class)
+            .addTypedRecipes(PetrolparkRecipeTypes.DRYING::get)
+            .catalyst(PetrolparkBlocks.DRYING_RACK::get)
+            .itemIcon(PetrolparkBlocks.DRYING_RACK.get())
+            .emptyBackground(125, 20)
+            .build("drying", DryingCategory::new);
 
         if (SharedFeatureFlag.EXTRUSION.enabled()) extrusion = builder(ExtrusionRecipe.class)
             .addTypedRecipes(CreateRecipeTypes.EXTRUSION)

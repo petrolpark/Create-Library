@@ -27,6 +27,7 @@ public enum Mods implements StringRepresentable {
     PQUALITY,
 
     // Others
+    ARS_NOUVEAU("ars_nouveau"),
     BIG_CANNONS("createbigcannons"),
     BREWIN_AND_CHEWIN("brewinandchewin"),
     CURIOS,

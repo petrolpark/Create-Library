@@ -13,6 +13,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 
 public abstract class SimpleConversionCategory<R extends Recipe<?>> extends PetrolparkRecipeCategory<R> {
@@ -21,7 +22,7 @@ public abstract class SimpleConversionCategory<R extends Recipe<?>> extends Petr
         super(info, helpers);
     };
 
-    public abstract List<ItemStack> getInputs(R recipe, IFocusGroup focuses);
+    public abstract Ingredient getInput(R recipe, IFocusGroup focuses);
 
     public abstract List<ItemStack> getOutputs(R recipe, IFocusGroup focuses);
 
@@ -29,7 +30,7 @@ public abstract class SimpleConversionCategory<R extends Recipe<?>> extends Petr
     public void setRecipe(@Nonnull IRecipeLayoutBuilder builder, @Nonnull R recipe, @Nonnull IFocusGroup focuses) {
         builder.addSlot(RecipeIngredientRole.INPUT, 2, 2)
             .setBackground(getRenderedSlot(), -1, -1)
-            .addItemStacks(getInputs(recipe, focuses));
+            .addIngredients(getInput(recipe, focuses));
 
         builder.addSlot(RecipeIngredientRole.OUTPUT, 107, 2)
             .setBackground(getRenderedSlot(), -1, -1)

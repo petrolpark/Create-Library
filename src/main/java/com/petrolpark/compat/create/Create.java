@@ -3,10 +3,12 @@ package com.petrolpark.compat.create;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
+import com.petrolpark.compat.create.event.CreateEvents;
 import com.petrolpark.compat.create.event.CreateModEvents;
 import com.petrolpark.config.PetrolparkStressConfig;
 
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
 @RequiresCreate
@@ -42,6 +44,7 @@ public class Create {
 
         // Event Bus Subscribers
         modEventBus.addListener(Create::onRegister);
+        NeoForge.EVENT_BUS.register(CreateEvents.class);
         modEventBus.register(CreateModEvents.class);
         mainEventBus.register(PetrolparkStressConfig.class);
         mainEventBus.register(AbstractRememberPlacerBehaviour.class);

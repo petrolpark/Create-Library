@@ -28,6 +28,7 @@ public class DryingRackBlockEntityRenderer implements BlockEntityRenderer<Drying
         ms.pushPose(); {
             ms.translate(8 / 16f, 8 / 16f, 8 / 16f);
             ms.scale(0.5f, 0.5f, 0.5f);
+            TransformStack.of(ms).rotateYDegrees(90f);
             if (rack.getBlockState().getValue(DryingRackBlock.AXIS) == Axis.X) TransformStack.of(ms).rotateYDegrees(90f);
             itemRenderer.render(stack, PetrolparkItemDisplayContexts.DRYING_RACK, false, ms, bufferSource, packedLight, packedOverlay, itemRenderer.getModel(stack, rack.getLevel(), null, 0));
         }; ms.popPose();

@@ -7,7 +7,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.compat.jei.PetrolparkJEI;
 import com.simibubi.create.compat.Mods;
 
@@ -35,7 +35,7 @@ public class RecipeBookItem extends Item {
         Stream<RecipeHolder<?>> recipes;
         List<ResourceLocation> recipesComponent = stack.get(DataComponents.RECIPES);
         if (recipesComponent != null) recipes = recipesComponent.stream().flatMap(rl -> level.getRecipeManager().byKey(rl).stream()); else recipes = Stream.empty();
-        RecipeReferenceDataComponent recipeReferenceComponent = stack.get(PetrolparkDataComponents.RECIPE_REFERENCE);
+        RecipeReferenceDataComponent recipeReferenceComponent = stack.get(PetrolparkDataComponentTypes.RECIPE_REFERENCE);
         if (recipeReferenceComponent != null) recipes = Stream.concat(recipes, recipeReferenceComponent.getRecipeHolder(level.getRecipeManager()).stream());
         return recipes;
     };
@@ -56,7 +56,7 @@ public class RecipeBookItem extends Item {
     @Override
     public void appendHoverText(@Nonnull ItemStack stack, @Nonnull TooltipContext context, @Nonnull List<Component> tooltipComponents, @Nonnull TooltipFlag tooltipFlag) {
         super.appendHoverText(stack, context, tooltipComponents, tooltipFlag);
-        RecipeReferenceDataComponent recipeReference = stack.get(PetrolparkDataComponents.RECIPE_REFERENCE);
+        RecipeReferenceDataComponent recipeReference = stack.get(PetrolparkDataComponentTypes.RECIPE_REFERENCE);
         Level level = context.level();
         if (level != null && recipeReference != null) {
             if (recipeReference.jeiRecipeTypeId().isPresent() && Mods.JEI.isLoaded()) return;
@@ -73,7 +73,7 @@ public class RecipeBookItem extends Item {
         return Petrolpark.runForDist(() -> () -> {
             Minecraft mc = Minecraft.getInstance();
             ClientPacketListener connection = mc.getConnection();
-            RecipeReferenceDataComponent recipeReference = stack.get(PetrolparkDataComponents.RECIPE_REFERENCE);
+            RecipeReferenceDataComponent recipeReference = stack.get(PetrolparkDataComponentTypes.RECIPE_REFERENCE);
             if (connection == null || recipeReference == null || PetrolparkJEI.JEI_RUNTIME == null) return Optional.empty();
 
             return PetrolparkJEI.RECIPE_BOOK_ITEM_JEI_CATEGORY_CACHE.get(recipeReference, connection.getRecipeManager())

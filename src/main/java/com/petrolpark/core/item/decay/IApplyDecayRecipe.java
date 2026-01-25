@@ -1,11 +1,13 @@
 package com.petrolpark.core.item.decay;
 
+import java.util.stream.Stream;
+
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
 
 import net.minecraft.core.HolderLookup;
@@ -26,6 +28,10 @@ public interface IApplyDecayRecipe extends Recipe<SingleRecipeInput> {
     public IDecayProduct decayProduct();
 
     public DecayTime decayTime();
+
+    public default Stream<ItemStack> streamResults() {
+        return Stream.of(ingredient().getItems()).map(decayProduct()::get);
+    };
 
     public static <R extends IApplyDecayRecipe> ItemStack withAppliedDecayRemoved(Level level, RecipeType<R> recipeType, ItemStack stack) {
         final ItemStack trueStack = ItemDecay.checkDecay(stack);
@@ -69,13 +75,13 @@ public interface IApplyDecayRecipe extends Recipe<SingleRecipeInput> {
      */
     @Override
     public default boolean matches(@Nonnull SingleRecipeInput input, @Nonnull Level level) {
-        IDecayProduct product = input.item().get(PetrolparkDataComponents.DECAY_PRODUCT);
+        IDecayProduct product = input.item().get(PetrolparkDataComponentTypes.DECAY_PRODUCT);
         return ingredient().test(input.item()) && (product == null || product.equals(decayProduct())); // Applicable to Items which aren't currently decaying (to check when putting in the Barrel) or which have this recipe's decay (to check when taking out of the Barrel)
     };
 
     public default ItemStack setDecayProductAndTime(ItemStack stack) {
-        stack.set(PetrolparkDataComponents.DECAY_PRODUCT, decayProduct());
-        stack.set(PetrolparkDataComponents.DECAY_TIME, decayTime());
+        stack.set(PetrolparkDataComponentTypes.DECAY_PRODUCT, decayProduct());
+        stack.set(PetrolparkDataComponentTypes.DECAY_TIME, decayTime());
         return stack;
     };
 

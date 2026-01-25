@@ -12,11 +12,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.petrolpark.PetrolparkRecipeTypes;
-import com.petrolpark.compat.create.core.chainconveyer.ChainConveyorArmInteractionPoint;
-import com.petrolpark.compat.create.core.chainconveyer.IChainConveyorBlockEntityDuck;
+import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorArmInteractionPoint;
+import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorItemEvent;
+import com.petrolpark.compat.create.core.chainconveyor.IChainConveyorBlockEntityDuck;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.item.decay.IApplyDecayRecipe;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
@@ -36,7 +35,6 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
     List<ChainConveyorPackage> loopingPackages;
     @Shadow
     Map<BlockPos, List<ChainConveyorPackage>> travellingPackages;
-
     
     public ChainConveyorBlockEntityMixin(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -76,7 +74,7 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
     private void inDrop(ChainConveyorPackage box, CallbackInfo ci) {
         if (!(box.item.getItem() instanceof PackageItem)) {
             final Vec3 pos = box.worldPosition.subtract(0d, 0.5d, 0d);
-            level.addFreshEntity(new ItemEntity(level, pos.x(), pos.y(), pos.z(), IApplyDecayRecipe.withAppliedDecayRemoved(level, PetrolparkRecipeTypes.DRYING.get(), box.item)));
+            level.addFreshEntity(new ItemEntity(level, pos.x(), pos.y(), pos.z(), ChainConveyorItemEvent.getRemoved(level, (ChainConveyorBlockEntity)(Object)this, null, box, false).getStack()));
             ci.cancel();
         };
     };

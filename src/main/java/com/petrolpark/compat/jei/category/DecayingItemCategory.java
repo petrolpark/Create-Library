@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
 import com.petrolpark.core.item.decay.product.NoDecayProduct;
 
@@ -13,6 +13,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
 
 public class DecayingItemCategory extends SimpleConversionCategory<DecayingItemRecipe> {
@@ -22,8 +23,8 @@ public class DecayingItemCategory extends SimpleConversionCategory<DecayingItemR
     };
 
     @Override
-    public List<ItemStack> getInputs(DecayingItemRecipe recipe, IFocusGroup focuses) {
-        return Collections.singletonList(recipe.decayingItem);
+    public Ingredient getInput(DecayingItemRecipe recipe, IFocusGroup focuses) {
+        return Ingredient.of(recipe.decayingItem);
     };
 
     @Override
@@ -32,7 +33,7 @@ public class DecayingItemCategory extends SimpleConversionCategory<DecayingItemR
     };
 
     public static Optional<DecayingItemRecipe> createRecipe(ItemStack decayingItemStack) {
-        if (decayingItemStack.has(PetrolparkDataComponents.DECAY_PRODUCT) && decayingItemStack.has(PetrolparkDataComponents.DECAY_TIME)) return Optional.of(new DecayingItemRecipe(decayingItemStack));
+        if (decayingItemStack.has(PetrolparkDataComponentTypes.DECAY_PRODUCT) && decayingItemStack.has(PetrolparkDataComponentTypes.DECAY_TIME)) return Optional.of(new DecayingItemRecipe(decayingItemStack));
         return Optional.empty();
     };
 
@@ -44,7 +45,7 @@ public class DecayingItemCategory extends SimpleConversionCategory<DecayingItemR
         public DecayingItemRecipe(ItemStack decayingItem) {
             super("", CraftingBookCategory.MISC, ItemStack.EMPTY, NonNullList.create());
             this.decayingItem = decayingItem;
-            this.resultItem = decayingItem.getOrDefault(PetrolparkDataComponents.DECAY_PRODUCT, NoDecayProduct.INSTANCE).get(decayingItem.copy());
+            this.resultItem = decayingItem.getOrDefault(PetrolparkDataComponentTypes.DECAY_PRODUCT, NoDecayProduct.INSTANCE).get(decayingItem.copy());
         };
 
     };

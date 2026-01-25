@@ -14,7 +14,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.core.recipe.recycling.IRecyclableRecipe;
 import com.petrolpark.core.recipe.recycling.RecyclingManager;
 import com.petrolpark.core.recipe.recycling.RecyclingOutputs;
@@ -45,8 +45,14 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
     public static final Ingredient BUTTON_INGREDIENT = Ingredient.of(ItemTags.WOODEN_BUTTONS);
     public static final Ingredient LOG_INGREDIENT = Ingredient.of(ItemTags.LOGS);
     public static final Ingredient STRIPPED_LOG_INGREDIENT = Ingredient.of(Tags.Items.STRIPPED_LOGS);
+    public static final Ingredient LEAVES_INGREDIENT = Ingredient.fromValues(Stream.of(new Ingredient.TagValue(ItemTags.LEAVES), new Ingredient.TagValue(ItemTags.WART_BLOCKS)));
+    public static final Ingredient SAPLING_INGREDIENT = Ingredient.of(ItemTags.SAPLINGS);
+    public static final Ingredient PRESSURE_PLATE_INGREDIENT = Ingredient.of(ItemTags.WOODEN_PRESSURE_PLATES);
     public static final Ingredient DOOR_INGREDIENT = Ingredient.of(ItemTags.WOODEN_DOORS);
     public static final Ingredient TRAPDOOR_INGREDIENT = Ingredient.of(ItemTags.WOODEN_TRAPDOORS);
+    public static final Ingredient SIGN_INGREDIENT = Ingredient.of(ItemTags.SIGNS);
+    public static final Ingredient HANGING_SIGN_INGREDIENT = Ingredient.of(ItemTags.HANGING_SIGNS);
+    public static final Ingredient BOAT_INGREDIENT = Ingredient.of(ItemTags.BOATS);
 
     protected static final Map<Character, Ingredient> BUILT_IN_INGREDIENTS = new HashMap<>();
     protected static final Map<Ingredient, Function<? super ItemStack, Wood>> WOOD_GETTERS = new HashMap<>();
@@ -59,15 +65,21 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
 
     static {
         register('P', PLANKS_INGREDIENT, WoodHelper::getWoodFromPlanks);
-        register('_', SLAB_INGREDIENT, WoodHelper::getWoodFromSlab);
+        register('s', SLAB_INGREDIENT, WoodHelper::getWoodFromSlab);
         register('S', STAIRS_INGREDIENT, WoodHelper::getWoodFromStairs);
         register('F', FENCE_INGREDIENT, WoodHelper::getWoodFromFence);
         register('G', FENCE_GATE_INGREDIENT, WoodHelper::getWoodFromFenceGate);
-        register('B', BUTTON_INGREDIENT, WoodHelper::getWoodFromButton);
+        register('b', BUTTON_INGREDIENT, WoodHelper::getWoodFromButton);
         register('L', LOG_INGREDIENT, WoodHelper::getWoodFromLog);
-        register('s', STRIPPED_LOG_INGREDIENT, WoodHelper::getWoodFromStrippedLog);
+        register('l', STRIPPED_LOG_INGREDIENT, WoodHelper::getWoodFromStrippedLog);
+        register('E', LEAVES_INGREDIENT, WoodHelper::getWoodFromLeaves);
+        register('A', SAPLING_INGREDIENT, WoodHelper::getWoodFromSapling);
+        register('p', PRESSURE_PLATE_INGREDIENT, WoodHelper::getWoodFromPressurePlate);
         register('D', DOOR_INGREDIENT, WoodHelper::getWoodFromDoor);
         register('T', TRAPDOOR_INGREDIENT, WoodHelper::getWoodFromTrapdoor);
+        register('I', SIGN_INGREDIENT, WoodHelper::getWoodFromSign);
+        register('H', HANGING_SIGN_INGREDIENT, WoodHelper::getWoodFromHangingSign);
+        register('B', BOAT_INGREDIENT, WoodHelper::getWoodFromBoatItem);
     };
 
     @Nullable
@@ -115,7 +127,7 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
             };
         };
         if (!hasWoodIngredient) for (final Ingredient ingredient : existingKeys.values()) {
-            if (ingredient.isSimple() && Stream.of(ingredient.getItems()).allMatch(s -> s.has(PetrolparkDataComponents.WOOD))) hasWoodIngredient = true;
+            if (ingredient.isSimple() && Stream.of(ingredient.getItems()).allMatch(s -> s.has(PetrolparkDataComponentTypes.WOOD))) hasWoodIngredient = true;
         };
         if (!hasWoodIngredient) return DataResult.error(() -> "Invalid pattern: must use at least one built-in wood item symbol");
         return ShapedRecipePattern.unpack(new ShapedRecipePattern.Data(allKeys.build(), patternData.pattern()));
@@ -152,7 +164,7 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
 
     public ItemStack getResult(Wood wood) {
         final ItemStack result = this.result.copy();
-        result.set(PetrolparkDataComponents.WOOD, wood);
+        result.set(PetrolparkDataComponentTypes.WOOD, wood);
         return result;
     };
 
@@ -166,8 +178,8 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
                 if (!ingredient.test(stack)) return ItemStack.EMPTY;
 
                 final Function<? super ItemStack, Wood> woodGetter = WOOD_GETTERS.get(ingredient);
-                if (woodGetter != null || stack.has(PetrolparkDataComponents.WOOD)) {
-                    final Wood thisWood = woodGetter != null ? woodGetter.apply(stack) : stack.get(PetrolparkDataComponents.WOOD);
+                if (woodGetter != null || stack.has(PetrolparkDataComponentTypes.WOOD)) {
+                    final Wood thisWood = woodGetter != null ? woodGetter.apply(stack) : stack.get(PetrolparkDataComponentTypes.WOOD);
                     if (thisWood == null) return ItemStack.EMPTY;
                     if (wood != null) {
                         if (!wood.equals(thisWood)) return ItemStack.EMPTY;
@@ -186,7 +198,7 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
     };
 
     public Stream<Ingredient> streamSpecificIngredientsFor(ItemStack result) {
-        final Wood wood = result.get(PetrolparkDataComponents.WOOD);
+        final Wood wood = result.get(PetrolparkDataComponentTypes.WOOD);
         if (wood == null) return Stream.empty();
         return getIngredients().stream()
             .map(ingredient -> {
@@ -195,9 +207,9 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
                     return Ingredient.of(Stream.of(ingredient.getItems()).filter(stack -> woodGetter.apply(stack).equals(wood)));
                 } else if (ingredient.isSimple()) {
                     return Ingredient.of(Stream.of(ingredient.getItems()).map(stack -> {
-                        if (stack.has(PetrolparkDataComponents.WOOD)) {
+                        if (stack.has(PetrolparkDataComponentTypes.WOOD)) {
                             final ItemStack copy = stack.copy();
-                            copy.set(PetrolparkDataComponents.WOOD, wood);
+                            copy.set(PetrolparkDataComponentTypes.WOOD, wood);
                             return copy;
                         } else return stack;
                     }));

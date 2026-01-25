@@ -3,7 +3,7 @@ package com.petrolpark.core.item.decay;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -24,8 +24,8 @@ public class DecayingItemDecorator implements IItemDecorator {
     @Override
     public boolean render(@Nonnull GuiGraphics guiGraphics, @Nonnull Font font, @Nonnull ItemStack stack, int xOffset, int yOffset) {
         if (!Screen.hasShiftDown()) return false;
-        if (!stack.has(PetrolparkDataComponents.DECAY_TIME)) return false;
-        Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
+        if (!stack.has(PetrolparkDataComponentTypes.DECAY_TIME)) return false;
+        Long creationTime = stack.get(PetrolparkDataComponentTypes.DECAY_START_TIME);
         if (creationTime == null) return false;
         float proportion = 1f + (float)(creationTime - ItemDecay.getGameTime()) / (float)ItemDecay.getLifetimeOrNone(stack);
         proportion = Mth.clamp(proportion, 0f, 1f);

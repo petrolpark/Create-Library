@@ -17,7 +17,7 @@ public class PetrolparkPonderPlugin implements PonderPlugin {
 
     @Override
     public void registerScenes(@Nonnull PonderSceneRegistrationHelper<ResourceLocation> helper) {
-        PetrolparkPonderScenes.register(helper);
+        CreatePonderScenes.register(helper);
     };
     
 };

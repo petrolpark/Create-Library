@@ -33,6 +33,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.data.loading.DatagenModLoader;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 
 @Mod(Petrolpark.MOD_ID)
@@ -56,6 +57,7 @@ public class Petrolpark {
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
 
         initializeSharedFeatures();
+        if (DatagenModLoader.isRunningDataGen()) PetrolparkDatagen.prepareDatagen();
 
         REGISTRATE.registerEventListeners(modEventBus);
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
@@ -72,7 +74,7 @@ public class Petrolpark {
         PetrolparkBlocks.register();
         PetrolparkBogglePatternGeneratorTypes.register();
         PetrolparkCriteriaTriggers.register();
-        PetrolparkDataComponents.register(modEventBus);
+        PetrolparkDataComponentTypes.register(modEventBus);
         PetrolparkDataLoadingConditions.register();
         PetrolparkDataSubPredicates.register();
         PetrolparkDecayProductTypes.register();

@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "torque_limiter"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

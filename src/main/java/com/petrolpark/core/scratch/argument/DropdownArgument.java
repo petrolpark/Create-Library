@@ -25,7 +25,7 @@ public record DropdownArgument<ENVIRONMENT extends IScratchEnvironment, TYPE>(
     };
 
     public static final <ENVIRONMENT extends IScratchEnvironment, TYPE> DropdownParameter<ENVIRONMENT, TYPE> dropdownParameter(String key, DropdownArgument.Entry<? super ENVIRONMENT, TYPE>[] options) {
-        return dropdownParameter(key, List.of(options));
+        return DropdownArgument.<ENVIRONMENT, TYPE>dropdownParameter(key, List.of(options));
     };
 
     @Override

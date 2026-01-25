@@ -1,6 +1,6 @@
 package com.petrolpark.core.recipe.bogglepattern;
 
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredientType;
 import com.petrolpark.util.Lang.IndentedTooltipBuilder;
@@ -11,7 +11,7 @@ public record BogglePatternAdvancedIngredient(BogglePattern pattern) implements 
 
     @Override
     public boolean test(MutableDataComponentHolder stack) {
-        Integer pattern = stack.get(PetrolparkDataComponents.BOGGLE_PATTERN);
+        Integer pattern = stack.get(PetrolparkDataComponentTypes.BOGGLE_PATTERN);
         if (pattern == null) return false;
         return (int)pattern == pattern().getPattern();
     };

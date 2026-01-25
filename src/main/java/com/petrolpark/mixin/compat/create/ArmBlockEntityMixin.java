@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.compat.create.core.chainconveyer.ChainConveyorArmInteractionPoint;
-import com.petrolpark.compat.create.core.chainconveyer.IArmBlockEntityDuck;
+import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorArmInteractionPoint;
+import com.petrolpark.compat.create.core.chainconveyor.IArmBlockEntityDuck;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 

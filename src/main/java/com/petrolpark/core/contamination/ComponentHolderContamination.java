@@ -2,7 +2,7 @@ package com.petrolpark.core.contamination;
 
 import java.util.ArrayList;
 
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 
 import net.minecraft.core.Holder;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
@@ -11,7 +11,7 @@ public abstract class ComponentHolderContamination<OBJECT, OBJECT_STACK extends 
 
     protected ComponentHolderContamination(OBJECT_STACK stack) {
         super(stack);
-        orphanContaminants.addAll(stack.getOrDefault(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, new ArrayList<Holder<Contaminant>>()).stream()
+        orphanContaminants.addAll(stack.getOrDefault(PetrolparkDataComponentTypes.ORPHAN_CONTAMINANTS, new ArrayList<Holder<Contaminant>>()).stream()
             .dropWhile(this::isIntrinsic)
             .toList()
         );
@@ -23,7 +23,7 @@ public abstract class ComponentHolderContamination<OBJECT, OBJECT_STACK extends 
 
     @Override
     public void save() {
-        stack.set(PetrolparkDataComponents.ORPHAN_CONTAMINANTS, getOrphanHolderList());
+        stack.set(PetrolparkDataComponentTypes.ORPHAN_CONTAMINANTS, getOrphanHolderList());
     };
     
 };

@@ -6,7 +6,7 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.PetrolparkLootContextParams;
 import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
@@ -31,7 +31,7 @@ public record GrantShopXPTeamReward(Holder<Shop> shop, NumberProvider amount) im
 
     @Override
     public void reward(ITeam team, LootContext context, float multiplier) {
-        team.getOrDefault(PetrolparkDataComponents.TEAM_SHOPS, new ShopsData()).grantXP(shop, amount.getInt(context));
+        team.getOrDefault(PetrolparkDataComponentTypes.TEAM_SHOPS, new ShopsData()).grantXP(shop, amount.getInt(context));
     };
 
     @Override

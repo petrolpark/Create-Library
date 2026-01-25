@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "petrolpark:drying_rack",
+      "required": false
+    },
+    {
       "id": "petrolpark:mandrel",
       "required": false
     },

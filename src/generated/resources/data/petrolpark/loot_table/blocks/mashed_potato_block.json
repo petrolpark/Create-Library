@@ -1,4 +1,10 @@
 {
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "potato_products"
+    }
+  ],
   "type": "minecraft:block",
   "pools": [
     {

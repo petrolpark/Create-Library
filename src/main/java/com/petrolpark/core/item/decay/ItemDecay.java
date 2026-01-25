@@ -4,7 +4,7 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkDataComponents;
+import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
 import com.petrolpark.core.item.decay.product.NoDecayProduct;
 import com.petrolpark.util.DataComponentHelper;
@@ -51,14 +51,14 @@ public interface ItemDecay {
      */
     public static ItemStack checkDecay(ItemStack stack, UnaryOperator<ItemStack> newDecay) {
         if (stack.isEmpty()) return stack;
-        if (!stack.has(PetrolparkDataComponents.DECAY_TIME) || !stack.has(PetrolparkDataComponents.DECAY_PRODUCT)) return stack;
-        final Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
+        if (!stack.has(PetrolparkDataComponentTypes.DECAY_TIME) || !stack.has(PetrolparkDataComponentTypes.DECAY_PRODUCT)) return stack;
+        final Long creationTime = stack.get(PetrolparkDataComponentTypes.DECAY_START_TIME);
         if (creationTime != null) {
             long timeDead = -getRemainingTime(stack, creationTime);
             if (timeDead >= 0) {
                 ItemStack copy = copyIgnoringDecay(stack);
                 removeAppliedDecay(copy);
-                ItemStack product = stack.getOrDefault(PetrolparkDataComponents.DECAY_PRODUCT, NoDecayProduct.INSTANCE).get(copy);
+                ItemStack product = stack.getOrDefault(PetrolparkDataComponentTypes.DECAY_PRODUCT, NoDecayProduct.INSTANCE).get(copy);
                 product.setCount(stack.getCount());
                 product = newDecay.apply(product);
                 startDecay(product, timeDead);
@@ -75,14 +75,14 @@ public interface ItemDecay {
     };
 
     public static ItemStack removeAppliedDecay(ItemStack stack) {
-        stack.remove(PetrolparkDataComponents.DECAY_START_TIME);
-        DataComponentHelper.revert(stack, PetrolparkDataComponents.DECAY_PRODUCT);
-        DataComponentHelper.revert(stack, PetrolparkDataComponents.DECAY_TIME);
+        stack.remove(PetrolparkDataComponentTypes.DECAY_START_TIME);
+        DataComponentHelper.revert(stack, PetrolparkDataComponentTypes.DECAY_PRODUCT);
+        DataComponentHelper.revert(stack, PetrolparkDataComponentTypes.DECAY_TIME);
         return stack;
     };
 
     public static long getLifetimeOrNone(ItemStack stack) {
-        return stack.getOrDefault(PetrolparkDataComponents.DECAY_TIME, DecayTime.NONE).lifetime();
+        return stack.getOrDefault(PetrolparkDataComponentTypes.DECAY_TIME, DecayTime.NONE).lifetime();
     };
 
     public static long getRemainingTime(ItemStack decayingItemStack, long creationTime) {
@@ -98,23 +98,23 @@ public interface ItemDecay {
     };
 
     public static void startDecay(ItemStack stack, long timeElapsed) {
-        if (stack.has(PetrolparkDataComponents.DECAY_PRODUCT) && stack.has(PetrolparkDataComponents.DECAY_TIME) && !stack.has(PetrolparkDataComponents.DECAY_START_TIME)) stack.set(PetrolparkDataComponents.DECAY_START_TIME, getGameTime() - timeElapsed);
+        if (stack.has(PetrolparkDataComponentTypes.DECAY_PRODUCT) && stack.has(PetrolparkDataComponentTypes.DECAY_TIME) && !stack.has(PetrolparkDataComponentTypes.DECAY_START_TIME)) stack.set(PetrolparkDataComponentTypes.DECAY_START_TIME, getGameTime() - timeElapsed);
     };
 
     public static void extendLifetime(ItemStack decayingItemStack, int additionalLifetime) {
-        if (decayingItemStack.has(PetrolparkDataComponents.DECAY_TIME)) {
-            Long creationTime = decayingItemStack.get(PetrolparkDataComponents.DECAY_START_TIME);
+        if (decayingItemStack.has(PetrolparkDataComponentTypes.DECAY_TIME)) {
+            Long creationTime = decayingItemStack.get(PetrolparkDataComponentTypes.DECAY_START_TIME);
             if (creationTime == null) return; // Hasn't begun decay
             long remainingTime = getRemainingTime(decayingItemStack, creationTime);
             long newLifetime = Math.max(0, additionalLifetime + remainingTime);
-            decayingItemStack.set(PetrolparkDataComponents.DECAY_START_TIME, getGameTime() + newLifetime - getLifetimeOrNone(decayingItemStack));
+            decayingItemStack.set(PetrolparkDataComponentTypes.DECAY_START_TIME, getGameTime() + newLifetime - getLifetimeOrNone(decayingItemStack));
         };
     };
 
     @OnlyIn(Dist.CLIENT)
     public static Optional<Component> getTooltip(ItemStack stack) {
-        return Optional.ofNullable(stack.get(PetrolparkDataComponents.DECAY_TIME)).map(decayTime -> {
-            final Long creationTime = stack.get(PetrolparkDataComponents.DECAY_START_TIME);
+        return Optional.ofNullable(stack.get(PetrolparkDataComponentTypes.DECAY_TIME)).map(decayTime -> {
+            final Long creationTime = stack.get(PetrolparkDataComponentTypes.DECAY_START_TIME);
             long displayedSecondsRemaining;
             if (creationTime != null) {
                 long ticksRemaining = ItemDecay.getRemainingTime(decayTime.lifetime(), (long)creationTime);
