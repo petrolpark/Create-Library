@@ -8,6 +8,7 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.petrolpark.compat.create.core.block.entity.BelowBasinOperatingBlockEntity;
 import com.petrolpark.compat.create.core.block.entity.DirectlyAboveBasinOperatingBlockEntity;
 import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
 import com.petrolpark.mixin.compat.create.accessor.BasinOperatingBlockEntityAccessor;
@@ -39,7 +40,9 @@ public abstract class BasinBlockEntityMixin extends SmartBlockEntity implements 
     )
     @SuppressWarnings("null")
     public Optional<BasinOperatingBlockEntity> wrapGetOperator(Operation<Optional<BasinOperatingBlockEntity>> operation) {
-        return operation.call().or(() -> level.getBlockEntity(getBlockPos().above()) instanceof DirectlyAboveBasinOperatingBlockEntity bobe ? Optional.of(bobe) : Optional.empty());
+        return operation.call()
+            .or(() -> level.getBlockEntity(getBlockPos().above()) instanceof DirectlyAboveBasinOperatingBlockEntity bobe ? Optional.of(bobe) : Optional.empty())
+            .or(() -> level.getBlockEntity(getBlockPos().below()) instanceof BelowBasinOperatingBlockEntity bboe ? Optional.of(bboe) : Optional.empty());
     };
 
     @Override

@@ -36,6 +36,10 @@ public class PetrolparkItems {
         .properties(p -> p
             .food(PetrolparkFoods.BUTTER)
         ).register(),
+    MASHED_POTATO = REGISTRATE.sharedItem(SharedFeatureFlag.MILK_PRODUCTS, "mashed_potato", SharedItem::new)
+        .properties(p -> p
+            .food(PetrolparkFoods.MASHED_POTATO)
+        ).register(),
     MESH = REGISTRATE.sharedItem(SharedFeatureFlag.MESH, "mesh", SharedItem::new)
         .register();
         

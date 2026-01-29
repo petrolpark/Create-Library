@@ -11,9 +11,9 @@
   ],
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "id": "minecraft:baked_potato"
+    "item": "minecraft:baked_potato"
   },
-  "transitionalItem": {
+  "transitional_item": {
     "id": "petrolpark:unprocessed_mashed_potato"
   },
   "sequence": [
@@ -21,7 +21,7 @@
       "type": "create:cutting",
       "ingredients": [
         {
-          "id": "petrolpark:unprocessed_mashed_potato"
+          "item": "petrolpark:unprocessed_mashed_potato"
         }
       ],
       "results": [
@@ -34,7 +34,7 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "id": "petrolpark:unprocessed_mashed_potato"
+          "item": "petrolpark:unprocessed_mashed_potato"
         }
       ],
       "results": [
@@ -47,7 +47,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "id": "petrolpark:unprocessed_mashed_potato"
+          "item": "petrolpark:unprocessed_mashed_potato"
         },
         {
           "tag": "c:foods/butter"
@@ -63,7 +63,7 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "id": "petrolpark:unprocessed_mashed_potato"
+          "item": "petrolpark:unprocessed_mashed_potato"
         }
       ],
       "results": [

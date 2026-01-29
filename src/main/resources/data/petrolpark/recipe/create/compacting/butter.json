@@ -12,11 +12,13 @@
   "type": "create:compacting",
   "ingredients": [
     {
-      "fluidTag": "c:cream",
+      "type": "neoforge:tag",
+      "tag": "c:cream",
       "amount": 400
     },
     {
-      "fluidTag": "c:milk/skimmed",
+      "type": "neoforge:tag",
+      "tag": "c:milk/skimmed",
       "amount": 100
     }
   ],

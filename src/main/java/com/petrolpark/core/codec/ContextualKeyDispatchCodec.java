@@ -30,9 +30,6 @@ public class ContextualKeyDispatchCodec<CONTEXT, K, V> extends ContextualMapCode
         this.encoder = encoder;
     };
 
-    /**
-     * Assumes codec(type(V)) is MapCodec<V>
-     */
     public ContextualKeyDispatchCodec(final String typeKey, final Codec<K> keyCodec, final Function<? super V, ? extends DataResult<? extends K>> type, final Function<? super K, ? extends DataResult<? extends ContextualMapCodec<CONTEXT, ? extends V>>> codec) {
         this(typeKey, keyCodec, type, codec, v -> getCodec(type, codec, v));
     };
