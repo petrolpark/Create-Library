@@ -6,20 +6,26 @@ import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.codec.RecordContextualCodecBuilder;
+import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
-import com.petrolpark.core.scratch.classes.IParseableScratchClass;
+import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.IScratchContext;
 import com.petrolpark.core.scratch.procedure.IScratchContextHolder;
 import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
+import com.petrolpark.core.scratch.symbol.expression.ExpressionAndArguments;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
 public record ExpressionOrLiteralArgument<ENVIRONMENT extends IScratchEnvironment, TYPE> (
     TYPE value,
-    Optional<ExpressionArgument<ENVIRONMENT, TYPE, ?>> expression,
+    Optional<ExpressionArgument<ENVIRONMENT, TYPE>> expression,
     ExpressionOrLiteralParameter<ENVIRONMENT, TYPE> parameter
 ) implements IScratchArgument<ENVIRONMENT, TYPE>, IScratchContextHolder {
+
+    public static <ENVIRONMENT extends IScratchEnvironment> ExpressionOrLiteralArgument<ENVIRONMENT, Long> integerArgument(Long value, ExpressionOrLiteralParameter<ENVIRONMENT, Long> parameter) {
+        return new ExpressionOrLiteralArgument<>(value, Optional.empty(), parameter);
+    };
 
     public static <ENVIRONMENT extends IScratchEnvironment> ExpressionOrLiteralParameter<ENVIRONMENT, Long> integerParameter(String key) {
         return new ExpressionOrLiteralParameter<>(key, PetrolparkScratchClasses.INTEGER.get());
@@ -48,13 +54,15 @@ public record ExpressionOrLiteralArgument<ENVIRONMENT extends IScratchEnvironmen
         expression().ifPresent(expression -> expression.populateContext(contextProvider, context));
     };
 
-    public static final class ExpressionOrLiteralParameter<ENVIRONMENT extends IScratchEnvironment, TYPE> implements IScratchParameter<ENVIRONMENT, TYPE, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> {
+    public static final class ExpressionOrLiteralParameter<ENVIRONMENT extends IScratchEnvironment, TYPE> implements IExpressionScratchParameter<ENVIRONMENT, TYPE, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> {
 
+        private final IScratchClass<TYPE> scratchClass;
         private final ExpressionParameter<ENVIRONMENT, TYPE> expressionParameter;
         private final ContextualCodec<IScratchContextProvider<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> codec;
         private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> streamCodec;
 
-        public ExpressionOrLiteralParameter(String key, IParseableScratchClass<TYPE> scratchClass) {
+        public ExpressionOrLiteralParameter(String key, IScratchClass<TYPE> scratchClass) {
+            this.scratchClass = scratchClass;
             expressionParameter = new ExpressionParameter<>(key, scratchClass);
 
             codec = RecordContextualCodecBuilder.create(instance -> instance.group(
@@ -67,6 +75,15 @@ public record ExpressionOrLiteralArgument<ENVIRONMENT extends IScratchEnvironmen
                 ContextualStreamCodec.optional(expressionParameter.argumentStreamCodec()), ExpressionOrLiteralArgument::expression,
                 (value, expression) -> new ExpressionOrLiteralArgument<>(value, expression, this)
             );
+        };
+
+        public ExpressionOrLiteralArgument<ENVIRONMENT, TYPE> argument(TYPE value) {
+            return new ExpressionOrLiteralArgument<>(value, Optional.empty(), this);
+        };
+
+        @Override
+        public <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionOrLiteralArgument<ENVIRONMENT, TYPE> argument(ExpressionAndArguments<ENVIRONMENT, TYPE, ARGUMENTS> expressionAndArguments) {
+            return new ExpressionOrLiteralArgument<>(scratchClass.fallback(), Optional.of(new ExpressionArgument<>(expressionAndArguments, expressionParameter)), this);
         };
 
         @Override

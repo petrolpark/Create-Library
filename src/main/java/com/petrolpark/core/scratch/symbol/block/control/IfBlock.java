@@ -7,6 +7,7 @@ import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
+import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.ExpressionOrDropdownParameter;
 import com.petrolpark.core.scratch.argument.NestedProcedureArgument;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.ScratchProcedure;
@@ -16,7 +17,7 @@ import com.petrolpark.core.scratch.symbol.block.instance.SimpleNestedProcedureBl
 
 import io.netty.buffer.ByteBuf;
 
-public class IfBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryNestedProcedureBlock<ENVIRONMENT, Boolean, ExpressionOrDropdownArgument<ENVIRONMENT, Boolean>, SimpleNestedProcedureBlockInstance<ENVIRONMENT>, IfBlock<ENVIRONMENT>> {
+public class IfBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryNestedProcedureBlock<ENVIRONMENT, Boolean, ExpressionOrDropdownArgument<ENVIRONMENT, Boolean>, ExpressionOrDropdownParameter<ENVIRONMENT, Boolean>, SimpleNestedProcedureBlockInstance<ENVIRONMENT>, IfBlock<ENVIRONMENT>> {
 
     private final ContextualCodec<ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, SimpleNestedProcedureBlockInstance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, SimpleNestedProcedureBlockInstance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Boolean, ExpressionOrDropdownArgument<ENVIRONMENT, Boolean>>>, SimpleNestedProcedureBlockInstance<ENVIRONMENT>> instanceCodec = SimpleNestedProcedureBlockInstance.codec();
     private final ContextualStreamCodec<ByteBuf, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, SimpleNestedProcedureBlockInstance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, SimpleNestedProcedureBlockInstance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Boolean, ExpressionOrDropdownArgument<ENVIRONMENT, Boolean>>>, SimpleNestedProcedureBlockInstance<ENVIRONMENT>> instanceStreamCodec = SimpleNestedProcedureBlockInstance.streamCodec();

@@ -12,6 +12,7 @@ import com.petrolpark.core.codec.RecordContextualCodecBuilder;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ContextArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
+import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
 import com.petrolpark.core.scratch.argument.NestedProcedureArgument;
 import com.petrolpark.core.scratch.classes.IntegerScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
@@ -25,7 +26,7 @@ import com.petrolpark.core.scratch.symbol.expression.UnaryExpressionType;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 
-public class RepeatBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryNestedProcedureBlock<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>, RepeatBlock.Instance<ENVIRONMENT>, RepeatBlock<ENVIRONMENT>> {
+public class RepeatBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryNestedProcedureBlock<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>, ExpressionOrLiteralParameter<ENVIRONMENT, Long>, RepeatBlock.Instance<ENVIRONMENT>, RepeatBlock<ENVIRONMENT>> {
 
     private final ContextualCodec<ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>>>, RepeatBlock.Instance<ENVIRONMENT>> instanceCodec = RecordContextualCodecBuilder.create(instance -> instance.group(
         ContextualCodec.<ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, RepeatBlock. Instance<ENVIRONMENT>>, NestedProcedureArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ScratchArguments.Just<ENVIRONMENT, Long, ExpressionOrLiteralArgument<ENVIRONMENT, Long>>>, Long>of(Codec.LONG).fieldOf("repeats").forGetter(RepeatBlock.Instance::remainingRepeats),

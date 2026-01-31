@@ -1,17 +1,22 @@
 package com.petrolpark.core.scratch.symbol;
 
-import com.mojang.datafixers.Products.P1;
-import com.mojang.serialization.codecs.RecordCodecBuilder.Instance;
-import com.mojang.serialization.codecs.RecordCodecBuilder.Mu;
+import com.mojang.datafixers.Products;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkScratchClasses;
-import com.petrolpark.core.scratch.IScratchClass;
+import com.petrolpark.core.codec.ContextualCodec;
+import com.petrolpark.core.codec.RecordContextualCodecBuilder;
 import com.petrolpark.core.scratch.ScratchArguments;
+import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 public interface IGenericScratchSymbol<ENVIRONMENT extends IScratchEnvironment, GENERIC_TYPE, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> extends IScratchSymbol<ENVIRONMENT, ARGUMENTS> {
     
-    static <SYMBOL extends IGenericScratchSymbol<?, ?, ?>> P1<Mu<SYMBOL>, IScratchClass<?>> commonCodecFields(Instance<SYMBOL> instance) {
+    static <SYMBOL extends IGenericScratchSymbol<?, ?, ?>> Products.P1<RecordCodecBuilder.Mu<SYMBOL>, IScratchClass<?>> commonCodecFields(RecordCodecBuilder.Instance<SYMBOL> instance) {
         return instance.group(IScratchClass.CODEC.fieldOf("class").forGetter(IGenericScratchSymbol::getGenericScratchClass));
+    };
+
+    static <CONTEXT, SYMBOL extends IGenericScratchSymbol<?, ?, ?>> Products.P1<RecordContextualCodecBuilder.Mu<CONTEXT, SYMBOL>, IScratchClass<?>> commonContextualCodecFields(RecordContextualCodecBuilder.Instance<CONTEXT, SYMBOL> instance) {
+        return instance.group(ContextualCodec.<CONTEXT, IScratchClass<?>>of(IScratchClass.CODEC).fieldOf("class").forGetter(IGenericScratchSymbol::getGenericScratchClass));
     };
 
     public IScratchClass<GENERIC_TYPE> getGenericScratchClass();

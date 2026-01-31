@@ -4,23 +4,14 @@ import static com.petrolpark.core.scratch.ScratchParameters.parameters;
 
 import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.PetrolparkScratchExpressionTypes;
-import com.petrolpark.core.scratch.IScratchClass;
-import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
+import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
+import com.petrolpark.core.scratch.symbol.expression.BinaryGenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
 
-public final class EqualsExpression<TYPE> extends GenericExpression<
-    IScratchEnvironment,
-    TYPE,
-    Boolean,
-    ScratchArguments.And<
-        IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>, ScratchArguments.Just<
-        IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>
-    >>
-> {
+public final class EqualsExpression<TYPE> extends BinaryGenericExpression<IScratchEnvironment, TYPE, Boolean, TYPE, IScratchArgument<IScratchEnvironment, TYPE>, TYPE, IScratchArgument<IScratchEnvironment, TYPE>> {
 
     public static final <TYPE> EqualsExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
         return new EqualsExpression<>(scratchClass);
@@ -34,8 +25,8 @@ public final class EqualsExpression<TYPE> extends GenericExpression<
     };
 
     @Override
-    public Boolean evaluate(IScratchEnvironment environment, ScratchArguments.And<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>, ScratchArguments.Just<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>> arguments) {
-        return arguments.get(environment).equals(arguments.next().get(environment));
+    public Boolean evaluate(IScratchEnvironment environment, TYPE argument1, TYPE argument2) {
+        return argument1.equals(argument2);
     };
 
     @Override

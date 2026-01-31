@@ -3,7 +3,6 @@ package com.petrolpark.core.scratch.classes;
 import java.util.Optional;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
@@ -12,7 +11,12 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public class IntegerScratchClass implements IParseableScratchClass<Long> {
+public class IntegerScratchClass extends SimpleParseableScratchClass<Long> implements IByteBufScratchClass<Long> {
+
+    @Override
+    public Long fallback() {
+        return 0l;
+    };
 
     @Override
     public Codec<Long> codec() {
@@ -30,7 +34,7 @@ public class IntegerScratchClass implements IParseableScratchClass<Long> {
     };
 
     @Override
-    public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, Long, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
+    public <TO_TYPE> Optional<IScratchClass.Caster<Long, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'cast'");
     };

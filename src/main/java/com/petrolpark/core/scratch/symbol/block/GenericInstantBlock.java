@@ -6,9 +6,9 @@ import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualMapCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.codec.RecordContextualCodecBuilder;
-import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
+import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.IGenericScratchSymbol;
 

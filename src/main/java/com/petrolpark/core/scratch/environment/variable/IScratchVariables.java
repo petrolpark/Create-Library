@@ -2,7 +2,9 @@ package com.petrolpark.core.scratch.environment.variable;
 
 import java.util.List;
 
-import com.petrolpark.core.scratch.IScratchClass;
+import com.petrolpark.core.scratch.classes.IScratchClass;
+
+
 
 public interface IScratchVariables {
 

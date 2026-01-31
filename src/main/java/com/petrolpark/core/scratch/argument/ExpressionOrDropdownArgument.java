@@ -8,24 +8,26 @@ import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.codec.RecordContextualCodecBuilder;
-import com.petrolpark.core.scratch.IScratchClass;
+import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
+import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.IScratchContext;
 import com.petrolpark.core.scratch.procedure.IScratchContextHolder;
 import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
+import com.petrolpark.core.scratch.symbol.expression.ExpressionAndArguments;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 
 public record ExpressionOrDropdownArgument<ENVIRONMENT extends IScratchEnvironment, TYPE> (
     int index,
-    Optional<ExpressionArgument<ENVIRONMENT, TYPE, ?>> expression,
+    Optional<ExpressionArgument<ENVIRONMENT, TYPE>> expression,
     ExpressionOrDropdownParameter<ENVIRONMENT, TYPE> parameter
 ) implements IScratchArgument<ENVIRONMENT, TYPE>, IScratchContextHolder {
 
-    public static <ENVIRONMENT extends IScratchEnvironment> ExpressionOrDropdownParameter<ENVIRONMENT, Boolean> booleanParameter(String key) {
+    public static final <ENVIRONMENT extends IScratchEnvironment> ExpressionOrDropdownParameter<ENVIRONMENT, Boolean> booleanParameter(String key) {
         return new ExpressionOrDropdownParameter<>(key, PetrolparkScratchClasses.BOOLEAN.get(), BooleanScratchClass.getValues());
     };
 
@@ -44,7 +46,7 @@ public record ExpressionOrDropdownArgument<ENVIRONMENT extends IScratchEnvironme
         expression().ifPresent(expression -> expression.populateContext(contextProvider, context));
     };
 
-    public static final class ExpressionOrDropdownParameter<ENVIRONMENT extends IScratchEnvironment, TYPE> implements IScratchParameter<ENVIRONMENT, TYPE, ExpressionOrDropdownArgument<ENVIRONMENT, TYPE>> {
+    public static final class ExpressionOrDropdownParameter<ENVIRONMENT extends IScratchEnvironment, TYPE> implements IExpressionScratchParameter<ENVIRONMENT, TYPE, ExpressionOrDropdownArgument<ENVIRONMENT, TYPE>> {
 
         protected final List<DropdownArgument.Entry<? super ENVIRONMENT, TYPE>> values;
 
@@ -66,6 +68,11 @@ public record ExpressionOrDropdownArgument<ENVIRONMENT extends IScratchEnvironme
                 ContextualStreamCodec.optional(expressionParameter.argumentStreamCodec()), ExpressionOrDropdownArgument::expression,
                 (index, expression) -> new ExpressionOrDropdownArgument<>(index, expression, this)
             );
+        };
+
+        @Override
+        public <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionOrDropdownArgument<ENVIRONMENT, TYPE> argument(ExpressionAndArguments<ENVIRONMENT, TYPE, ARGUMENTS> expressionAndArguments) {
+            return new ExpressionOrDropdownArgument<>(0, Optional.of(new ExpressionArgument<>(expressionAndArguments, expressionParameter)), this);
         };
 
         @Override

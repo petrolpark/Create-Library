@@ -54,6 +54,11 @@ public class FinishableMapItemCompressionSequence implements IItemCompressionSeq
     };
 
     @Override
+    public List<ItemStack> getKnownItems() {
+        return allItems;
+    };
+
+    @Override
     public List<ItemStack> getAllItems() {
         if (!finished) throw new IllegalStateException("Cannot access Item Stacks of sequence before building it has been finished.");
         return allItems;

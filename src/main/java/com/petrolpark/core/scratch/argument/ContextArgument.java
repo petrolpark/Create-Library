@@ -118,6 +118,11 @@ public class ContextArgument<ENVIRONMENT extends IScratchEnvironment, CONTEXT ex
         public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ContextArgument<ENVIRONMENT, CONTEXT>> argumentStreamCodec() {
             return streamCodec;
         };
+
+        @Override
+        public String toString() {
+            return "ContextParameter[\"" + key() + "\"]";
+        };
         
     };
 };

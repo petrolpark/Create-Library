@@ -3,8 +3,8 @@ package com.petrolpark.core.scratch.symbol.expression;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
-import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
+import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.IScratchSymbol;
 

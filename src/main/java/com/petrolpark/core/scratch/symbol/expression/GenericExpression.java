@@ -2,13 +2,12 @@ package com.petrolpark.core.scratch.symbol.expression;
 
 import java.util.function.Function;
 
-import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualMapCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.codec.RecordContextualCodecBuilder;
-import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
+import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.IGenericScratchSymbol;
 
@@ -43,10 +42,7 @@ public abstract class GenericExpression<
         public Type(Function<IScratchClass<?>, EXPRESSION> factory) {
             this.factory = factory;
 
-            codec = RecordContextualCodecBuilder.mapCodec(instance -> instance.group(
-                ContextualCodec.<IScratchEnvironment.Type<?>, IScratchClass<?>>of(IScratchClass.CODEC).fieldOf("class").forGetter(GenericExpression::getGenericScratchClass)
-            ).apply(instance, factory));
-
+            codec = RecordContextualCodecBuilder.mapCodec(instance -> IGenericScratchSymbol.commonContextualCodecFields(instance).apply(instance, factory));
             streamCodec = ContextualStreamCodec.of(IScratchClass.STREAM_CODEC.map(factory, GenericExpression::getGenericScratchClass));
         };
 

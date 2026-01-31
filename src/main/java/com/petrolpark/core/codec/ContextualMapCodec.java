@@ -26,6 +26,32 @@ public abstract class ContextualMapCodec<CONTEXT, A> extends CompressorHolder im
         return forGetter((c, o) -> getter.apply(o));
     };
 
+    public static <CONTEXT, A> ContextualMapCodec<CONTEXT, A> of(final MapCodec<A> mapCodec) {
+        return new ContextualMapCodec<CONTEXT,A>() {
+
+            @Override
+            public <T> RecordBuilder<T> encode(A input, CONTEXT context, DynamicOps<T> ops, RecordBuilder<T> prefix) {
+                return mapCodec.encode(input, ops, prefix);
+            };
+
+            @Override
+            public <T> Stream<T> keys(DynamicOps<T> ops) {
+                return mapCodec.keys(ops);
+            };
+
+            @Override
+            public <T> DataResult<A> decode(DynamicOps<T> ops, CONTEXT context, MapLike<T> input) {
+                return mapCodec.decode(ops, input);
+            };
+
+            @Override
+            public String toString() {
+                return mapCodec.toString() + "[contextual]";
+            };
+            
+        };
+    };
+
     public static <CONTEXT, A> ContextualMapCodec<CONTEXT, A> of(final Function<CONTEXT, A> factory) {
         return new ContextualMapCodec<CONTEXT,A>() {
 
@@ -46,7 +72,7 @@ public abstract class ContextualMapCodec<CONTEXT, A> extends CompressorHolder im
             
         };
     };
-
+    
     public static <CONTEXT, A> ContextualMapCodec<CONTEXT, A> of(final ContextualMapEncoder<CONTEXT, A> encoder, final ContextualMapDecoder<CONTEXT, A> decoder) {
         return of(encoder, decoder, () -> "MapCodec[" + encoder + " " + decoder + "]");
     };

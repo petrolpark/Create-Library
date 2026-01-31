@@ -11,5 +11,5 @@ public interface IScratchArgument<ENVIRONMENT extends IScratchEnvironment, TYPE>
      */
     public boolean canEvaluate();
 
-    public IScratchParameter<ENVIRONMENT, TYPE, ? extends IScratchArgument<? super ENVIRONMENT, TYPE>> parameter();
+    public IScratchParameter<? super ENVIRONMENT, TYPE, ? extends IScratchArgument<? super ENVIRONMENT, TYPE>> parameter();
 };

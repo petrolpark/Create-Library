@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract class BlockStatePropertyExpression<TYPE, ARGUMENT extends IScratchArgument<ILevelEnvironment, TYPE>, EXPRESSION extends BlockStatePropertyExpression<TYPE, ARGUMENT, EXPRESSION>> extends TernaryExpressionType<
     ILevelEnvironment,
     TYPE,
-    BlockPos, ExpressionArgument<ILevelEnvironment, BlockPos, ?>,
+    BlockPos, ExpressionArgument<ILevelEnvironment, BlockPos>,
     String, ExpressionOrLiteralArgument<ILevelEnvironment, String>,
     TYPE, ARGUMENT,
     EXPRESSION

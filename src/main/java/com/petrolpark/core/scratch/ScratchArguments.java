@@ -13,6 +13,9 @@ public sealed interface ScratchArguments<ENVIRONMENT extends IScratchEnvironment
     extends ScratchSignature, IScratchContextHolder
     permits ScratchArguments.None, ScratchArguments.More
 {
+    public static <ENVIRONMENT extends IScratchEnvironment> ScratchArguments.None.Builder<ENVIRONMENT> arguments() {
+        return new ScratchArguments.None.Builder<>();
+    };
 
     public static <ENVIRONMENT extends IScratchEnvironment> ScratchArguments<ENVIRONMENT, ?> of(Collection<IScratchArgument<? super ENVIRONMENT, ?>> arguments) {
         if (arguments.isEmpty()) return new ScratchArguments.None<>();

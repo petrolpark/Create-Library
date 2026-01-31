@@ -1,10 +1,11 @@
 package com.petrolpark.core.scratch.classes;
 
+import static com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.booleanParameter;
+
 import java.util.List;
 import java.util.Optional;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.argument.DropdownArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
 import com.petrolpark.core.scratch.argument.IScratchParameter;
@@ -15,14 +16,15 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public class BooleanScratchClass implements IScratchClass<Boolean> {
+public class BooleanScratchClass extends SimpleScratchClass<Boolean> implements IByteBufScratchClass<Boolean> {
 
     public static final DropdownArgument.SimpleEntry<Boolean>
     TRUE = new DropdownArgument.SimpleEntry<>(true, Lang.generic("true")),
     FALSE = new DropdownArgument.SimpleEntry<>(false, Lang.generic("false"));
 
-    public static final <ENVIRONMENT extends IScratchEnvironment> List<DropdownArgument.Entry<? super ENVIRONMENT, Boolean>> getValues() {
-        return List.of(TRUE, FALSE);
+    @Override
+    public Boolean fallback() {
+        return false;
     };
 
     @Override
@@ -35,14 +37,19 @@ public class BooleanScratchClass implements IScratchClass<Boolean> {
         return ByteBufCodecs.BOOL;
     };
 
-    @Override
-    public IScratchParameter<IScratchEnvironment, Boolean, ExpressionOrDropdownArgument<IScratchEnvironment, Boolean>> createDefaultParameter(String key) {
-        return ExpressionOrDropdownArgument.booleanParameter(key);
+    public static final <ENVIRONMENT extends IScratchEnvironment> List<DropdownArgument.Entry<? super ENVIRONMENT, Boolean>> getValues() {
+        return List.of(TRUE, FALSE);
     };
 
     @Override
-    public <ENVIRONMENT extends IScratchEnvironment, TO_TYPE> Optional<Caster<ENVIRONMENT, Boolean, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
-        return Optional.empty();
+    public IScratchParameter<IScratchEnvironment, Boolean, ExpressionOrDropdownArgument<IScratchEnvironment, Boolean>> createDefaultParameter(String key) {
+        return booleanParameter(key);
+    };
+
+    @Override
+    public <TO_TYPE> Optional<IScratchClass.Caster<Boolean, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'cast'");
     };
     
 };

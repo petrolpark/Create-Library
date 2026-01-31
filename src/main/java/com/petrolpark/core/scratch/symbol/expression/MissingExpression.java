@@ -3,9 +3,9 @@ package com.petrolpark.core.scratch.symbol.expression;
 import static com.petrolpark.core.scratch.ScratchParameters.parameters;
 
 import com.petrolpark.PetrolparkScratchExpressionTypes;
-import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchArguments.None;
+import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 public final class MissingExpression<TYPE> extends GenericExpression<IScratchEnvironment, TYPE, TYPE, ScratchArguments.None<IScratchEnvironment>> {

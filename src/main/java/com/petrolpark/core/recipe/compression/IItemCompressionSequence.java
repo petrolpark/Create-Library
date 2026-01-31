@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.math.Fraction;
+import org.jetbrains.annotations.ApiStatus;
 
 import com.petrolpark.util.BigItemStack;
 
@@ -19,6 +20,16 @@ public interface IItemCompressionSequence {
      * @return ItemStack of count {@code 1}
      */
     public ItemStack getBaseItem();
+
+    /**
+     * Get the current List of Item Stacks in this sequence. Not guaranteed to be the entire sequence.
+     * @return Non-{@code null} list of ItemStacks of count {@code 1}.
+     * @see IItemCompressionSequence#getAllItems()
+     */
+    @ApiStatus.Internal
+    default List<ItemStack> getKnownItems() {
+        return getAllItems();
+    };
 
     /**
      * Get the ordered list of all Item (Stacks) in this sequence.

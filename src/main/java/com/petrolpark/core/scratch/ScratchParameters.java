@@ -1,5 +1,7 @@
 package com.petrolpark.core.scratch;
 
+import java.util.stream.Stream;
+
 import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.codec.RecordContextualCodecBuilder;
@@ -15,6 +17,8 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
     extends ScratchSignature
     permits ScratchParameters.None, ScratchParameters.More
 {
+    public Stream<IScratchParameter<ENVIRONMENT, ?, ?>> stream();
+
     public ContextualCodec<IScratchContextProvider<?>, ARGUMENTS> argumentsCodec();
 
     public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ARGUMENTS> argumentsStreamCodec();
@@ -23,11 +27,23 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
         return new ScratchParameters.None.Builder<>();
     };
 
+    public static sealed interface Builder<ENVIRONMENT extends IScratchEnvironment> permits ScratchParameters.None.Builder, ScratchParameters.More.Builder {
+
+        public <TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, PARAMETER extends IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT>> ScratchParameters.More.Builder<ENVIRONMENT> after(PARAMETER parameter);
+
+        public ScratchParameters<ENVIRONMENT, ?> build();
+    };
+
     public static sealed class None<ENVIRONMENT extends IScratchEnvironment> implements ScratchParameters<ENVIRONMENT, ScratchArguments.None<ENVIRONMENT>>, ScratchSignature.None permits ScratchParameters.None.Builder {
 
         private final ScratchArguments.None<ENVIRONMENT> noneArgumentsInstance = new ScratchArguments.None<>();
         private final ContextualCodec<IScratchContextProvider<?>, ScratchArguments.None<ENVIRONMENT>> argumentsCodec = ContextualCodec.unit(noneArgumentsInstance);
         private final ContextualStreamCodec<ByteBuf, IScratchContextProvider<?>, ScratchArguments.None<ENVIRONMENT>> argumentsStreamCodec = ContextualStreamCodec.unit(noneArgumentsInstance);
+
+        @Override
+        public Stream<IScratchParameter<ENVIRONMENT, ?, ?>> stream() {
+            return Stream.empty();
+        };
 
         @Override
         public ContextualCodec<IScratchContextProvider<?>, ScratchArguments.None<ENVIRONMENT>> argumentsCodec() {
@@ -39,12 +55,14 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
             return argumentsStreamCodec;
         };
 
-        public static final class Builder<ENVIRONMENT extends IScratchEnvironment> extends ScratchParameters.None<ENVIRONMENT> {
+        public static final class Builder<ENVIRONMENT extends IScratchEnvironment> extends ScratchParameters.None<ENVIRONMENT> implements ScratchParameters.Builder<ENVIRONMENT> {
 
-            public <TYPE, ARGUMENT extends IScratchArgument<ENVIRONMENT, TYPE>> ScratchParameters.Just.Builder<ENVIRONMENT, TYPE, ARGUMENT> after(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter) {
+            @Override
+            public <TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, PARAMETER extends IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT>> ScratchParameters.Just.Builder<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER> after(PARAMETER parameter) {
                 return new ScratchParameters.Just.Builder<>(parameter);
             };
 
+            @Override
             public ScratchParameters.None<ENVIRONMENT> build() {
                 return new ScratchParameters.None<>();
             };
@@ -53,15 +71,19 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
 
     };
 
-    public static abstract sealed class More<ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, ARGUMENTS extends ScratchArguments.More<ENVIRONMENT, TYPE, ARGUMENT>> 
+    public static abstract sealed class More<ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, PARAMETER extends IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT>, ARGUMENTS extends ScratchArguments.More<ENVIRONMENT, TYPE, ARGUMENT>> 
         implements ScratchParameters<ENVIRONMENT, ARGUMENTS>, ScratchSignature.More<TYPE> 
         permits Just, And 
     {
     
-        protected final IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter;
+        protected final PARAMETER parameter;
 
-        protected More(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter) {
+        protected More(PARAMETER parameter) {
             this.parameter = parameter;
+        };
+
+        public PARAMETER get() {
+            return parameter;
         };
 
         public ContextualCodec<IScratchContextProvider<?>, ARGUMENT> argumentCodec() {
@@ -78,18 +100,25 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
         @Override
         public abstract ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ARGUMENTS> argumentsStreamCodec();
 
+        public static sealed interface Builder<ENVIRONMENT extends IScratchEnvironment> extends ScratchParameters.Builder<ENVIRONMENT> permits ScratchParameters.Just.Builder, ScratchParameters.And.Builder {};
+
     };
 
-    public static sealed class Just<ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>> 
-        extends More<ENVIRONMENT, TYPE, ARGUMENT, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>>
+    public static sealed class Just<ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, PARAMETER extends IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT>> 
+        extends More<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>>
         implements ScratchSignature.Just<TYPE>
         permits ScratchParameters.Just.Builder 
     {
         private final ContextualCodec<IScratchContextProvider<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsCodec = argumentCodec().xmap(ScratchArguments.Just::new, ScratchArguments.Just::argument);
         private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>> argumentsStreamCodec = argumentStreamCodec().map(ScratchArguments.Just::new, ScratchArguments.Just::argument);
 
-        protected Just(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter) {
+        protected Just(PARAMETER parameter) {
             super(parameter);
+        };
+
+        @Override
+        public Stream<IScratchParameter<ENVIRONMENT, ?, ?>> stream() {
+            return Stream.of(parameter);
         };
 
         @Override
@@ -102,17 +131,19 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
             return argumentsStreamCodec;
         };
 
-        public static final class Builder<ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>> extends ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT> {
+        public static final class Builder<ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, PARAMETER extends IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT>> extends ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER> implements ScratchParameters.More.Builder<ENVIRONMENT> {
         
-            protected Builder(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter) {
+            protected Builder(PARAMETER parameter) {
                 super(parameter);
             };
 
-            public <PREVIOUS_TYPE, PREVIOUS_ARGUMENT extends IScratchArgument<? super ENVIRONMENT, PREVIOUS_TYPE>> ScratchParameters.And.Builder<ENVIRONMENT, PREVIOUS_TYPE, PREVIOUS_ARGUMENT, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>, ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT>> after(IScratchParameter<ENVIRONMENT, PREVIOUS_TYPE, PREVIOUS_ARGUMENT> parameter) {
+            @Override
+            public <PREVIOUS_TYPE, PREVIOUS_ARGUMENT extends IScratchArgument<? super ENVIRONMENT, PREVIOUS_TYPE>, PREVIOUS_PARAMETER extends IScratchParameter<ENVIRONMENT, PREVIOUS_TYPE, PREVIOUS_ARGUMENT>> ScratchParameters.And.Builder<ENVIRONMENT, PREVIOUS_TYPE, PREVIOUS_ARGUMENT, PREVIOUS_PARAMETER, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>, ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER>> after(PREVIOUS_PARAMETER parameter) {
                 return new ScratchParameters.And.Builder<>(parameter, build());
             };
 
-            public ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT> build() {
+            @Override
+            public ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER> build() {
                 return new ScratchParameters.Just<>(parameter);
             };
 
@@ -121,8 +152,8 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
     };
 
     public static sealed class And<
-            ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, NEXT_ARGUMENTS extends ScratchArguments.More<ENVIRONMENT, ?, ?>, NEXT extends ScratchParameters.More<ENVIRONMENT, ?, ?, NEXT_ARGUMENTS>
-        > extends More<ENVIRONMENT, TYPE, ARGUMENT, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> 
+            ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, PARAMETER extends IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT>, NEXT_ARGUMENTS extends ScratchArguments.More<ENVIRONMENT, ?, ?>, NEXT extends ScratchParameters.More<ENVIRONMENT, ?, ?, ?, NEXT_ARGUMENTS>
+        > extends More<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>> 
         implements ScratchSignature.And<TYPE, NEXT>
         permits ScratchParameters.And.Builder
     {
@@ -139,9 +170,14 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
             ScratchArguments.And::new
         );
 
-        protected And(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter, NEXT next) {
+        protected And(PARAMETER parameter, NEXT next) {
             super(parameter);
             this.next = next;
+        };
+
+        @Override
+        public Stream<IScratchParameter<ENVIRONMENT, ?, ?>> stream() {
+            return Stream.concat(next.stream(), Stream.<IScratchParameter<ENVIRONMENT, ?, ?>>of(parameter));
         };
 
         @Override
@@ -158,17 +194,19 @@ public sealed interface ScratchParameters<ENVIRONMENT extends IScratchEnvironmen
             return next;
         };
 
-        public static final class Builder<ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, NEXT_ARGUMENTS extends ScratchArguments.More<ENVIRONMENT, ?, ?>, NEXT extends ScratchParameters.More<ENVIRONMENT, ?, ?, NEXT_ARGUMENTS>> extends ScratchParameters.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS, NEXT> {
+        public static final class Builder<ENVIRONMENT extends IScratchEnvironment, TYPE, ARGUMENT extends IScratchArgument<? super ENVIRONMENT, TYPE>, PARAMETER extends IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT>, NEXT_ARGUMENTS extends ScratchArguments.More<ENVIRONMENT, ?, ?>, NEXT extends ScratchParameters.More<ENVIRONMENT, ?, ?, ?, NEXT_ARGUMENTS>> extends ScratchParameters.And<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER, NEXT_ARGUMENTS, NEXT> implements ScratchParameters.More.Builder<ENVIRONMENT> {
         
-            protected Builder(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter, NEXT next) {
+            protected Builder(PARAMETER parameter, NEXT next) {
                 super(parameter, next);
             };
 
-            public <PREVIOUS_TYPE, PREVIOUS_ARGUMENT extends IScratchArgument<? super ENVIRONMENT, PREVIOUS_TYPE>> ScratchParameters.And.Builder<ENVIRONMENT, PREVIOUS_TYPE, PREVIOUS_ARGUMENT, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>, ScratchParameters.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS, NEXT>> after(IScratchParameter<ENVIRONMENT, PREVIOUS_TYPE, PREVIOUS_ARGUMENT> parameter) {
+            @Override
+            public <PREVIOUS_TYPE, PREVIOUS_ARGUMENT extends IScratchArgument<? super ENVIRONMENT, PREVIOUS_TYPE>, PREVIOUS_PARAMETER extends IScratchParameter<ENVIRONMENT, PREVIOUS_TYPE, PREVIOUS_ARGUMENT>> ScratchParameters.And.Builder<ENVIRONMENT, PREVIOUS_TYPE, PREVIOUS_ARGUMENT, PREVIOUS_PARAMETER, ScratchArguments.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS>, ScratchParameters.And<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER, NEXT_ARGUMENTS, NEXT>> after(PREVIOUS_PARAMETER parameter) {
                 return new ScratchParameters.And.Builder<>(parameter, build());
             };
 
-            public ScratchParameters.And<ENVIRONMENT, TYPE, ARGUMENT, NEXT_ARGUMENTS, NEXT> build() {
+            @Override
+            public ScratchParameters.And<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER, NEXT_ARGUMENTS, NEXT> build() {
                 return new ScratchParameters.And<>(parameter, next);
             };
 

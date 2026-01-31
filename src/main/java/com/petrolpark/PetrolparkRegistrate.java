@@ -11,6 +11,8 @@ import com.mojang.serialization.MapCodec;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.badge.Badge;
 import com.petrolpark.core.badge.BadgeRegistrateBuilder;
+import com.petrolpark.core.codec.ContextualMapCodec;
+import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.data.loot.modifier.ILootPoolEntryModifier;
 import com.petrolpark.core.data.loot.modifier.ILootTableModifier;
 import com.petrolpark.core.data.loot.modifier.LootPoolEntryModifierType;
@@ -48,14 +50,18 @@ import com.petrolpark.core.registrate.PetrolparkItemBuilder;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
 import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
 import com.petrolpark.core.registrate.SharedItemBuilder;
-import com.petrolpark.core.scratch.IScratchClass;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
+import com.petrolpark.core.scratch.classes.IScratchClass;
+import com.petrolpark.core.scratch.classes.IScratchClassType;
+import com.petrolpark.core.scratch.classes.ScratchClassType;
+import com.petrolpark.core.scratch.classes.SimpleScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.block.FlexibleEnvironmentScratchBlockType;
 import com.petrolpark.core.scratch.symbol.block.GenericInstantBlock;
 import com.petrolpark.core.scratch.symbol.block.IScratchBlock;
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
+import com.petrolpark.core.scratch.symbol.expression.ScratchExpressionType;
 import com.petrolpark.core.scratch.symbol.expression.SimpleExpressionType;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.trade.ITradeListingReference;
@@ -352,8 +358,12 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     // Simple Registered Objects - Scratch
 
-    public <T, SCRATCH_CLASS extends IScratchClass<T>> RegistryEntry<IScratchClass<?>, SCRATCH_CLASS> scratchClass(String name, NonNullSupplier<SCRATCH_CLASS> factory) {
-        return simple(name, PetrolparkRegistries.Keys.SCRATCH_CLASS, factory);
+    public <SCRATCH_CLASS extends IScratchClass<?>> RegistryEntry<IScratchClassType, ScratchClassType<SCRATCH_CLASS>> scratchClassType(String name, MapCodec<SCRATCH_CLASS> codec, StreamCodec<? super RegistryFriendlyByteBuf, SCRATCH_CLASS> streamCodec) {
+        return simple(name, PetrolparkRegistries.Keys.SCRATCH_CLASS_TYPE, () -> new ScratchClassType<>(codec, streamCodec));
+    };
+
+    public <T, SCRATCH_CLASS extends SimpleScratchClass<T>> RegistryEntry<IScratchClassType, SCRATCH_CLASS> simpleScratchClass(String name, NonNullSupplier<SCRATCH_CLASS> factory) {
+        return simple(name, PetrolparkRegistries.Keys.SCRATCH_CLASS_TYPE, factory);
     };
 
     public <ENVIRONMENT extends IScratchEnvironment, TYPE extends IScratchEnvironment.Type<ENVIRONMENT>> RegistryEntry<IScratchEnvironment.Type<?>, TYPE> scratchEnvironmentType(String name, NonNullSupplier<TYPE> factory) {
@@ -374,6 +384,14 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     public <EXPRESSION extends IScratchExpression<?, ?, ?>, TYPE extends IScratchExpression.Type<EXPRESSION>> RegistryEntry<IScratchExpression.Type<?>, TYPE> scratchExpressionType(String name, NonNullSupplier<TYPE> expressionTypeFactory) {
         return simple(name, PetrolparkRegistries.Keys.SCRATCH_EXPRESSION_TYPE, expressionTypeFactory);
+    };
+
+    public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, ScratchExpressionType<EXPRESSION>> environmentDepedendentScratchExpressionType(String name, ContextualMapCodec<IScratchEnvironment.Type<?>, EXPRESSION> codec, ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchEnvironment.Type<?>, EXPRESSION> streamCodec) {
+        return scratchExpressionType(name, () -> new ScratchExpressionType<>(codec, streamCodec));
+    };
+
+    public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, ScratchExpressionType<EXPRESSION>> scratchExpressionType(String name, MapCodec<EXPRESSION> codec, StreamCodec<? super RegistryFriendlyByteBuf, EXPRESSION> streamCodec) {
+        return scratchExpressionType(name, () -> new ScratchExpressionType<>(codec, streamCodec));
     };
 
     public <EXPRESSION extends GenericExpression<?, ?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<EXPRESSION>> genericScratchExpressionType(String name, Function<IScratchClass<?>, EXPRESSION> expressionFactory) {
