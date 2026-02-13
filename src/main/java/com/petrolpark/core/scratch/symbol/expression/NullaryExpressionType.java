@@ -8,7 +8,7 @@ public abstract class NullaryExpressionType<
     ENVIRONMENT extends IScratchEnvironment,
     RETURN_TYPE,
     EXPRESSION extends NullaryExpressionType<ENVIRONMENT, RETURN_TYPE, EXPRESSION>
-> extends SimpleExpressionType<ENVIRONMENT, RETURN_TYPE, ScratchArguments.None<ENVIRONMENT>, EXPRESSION> {
+> extends SimpleExpressionType<ENVIRONMENT, RETURN_TYPE, ScratchArguments.None<ENVIRONMENT>, ScratchParameters.None<ENVIRONMENT>, EXPRESSION> {
 
     public NullaryExpressionType() {
         super(new ScratchParameters.None<>());

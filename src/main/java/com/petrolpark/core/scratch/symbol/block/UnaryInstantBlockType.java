@@ -8,11 +8,11 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 public abstract class UnaryInstantBlockType<
     ENVIRONMENT extends IScratchEnvironment,
-    TYPE, ARGUMENT extends IScratchArgument<ENVIRONMENT, TYPE>,
-    BLOCK extends UnaryInstantBlockType<ENVIRONMENT, TYPE, ARGUMENT, ?>
-> extends SimpleInstantBlockType<ENVIRONMENT, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>, BLOCK> {
+    TYPE, ARGUMENT extends IScratchArgument<ENVIRONMENT, TYPE>, PARAMETER extends IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT>,
+    BLOCK extends UnaryInstantBlockType<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER, ?>
+> extends SimpleInstantBlockType<ENVIRONMENT, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>, ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER>, BLOCK> {
 
-    protected UnaryInstantBlockType(IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT> parameter) {
+    protected UnaryInstantBlockType(PARAMETER parameter) {
         super(ScratchParameters.<ENVIRONMENT>parameters().after(parameter));
     };
 

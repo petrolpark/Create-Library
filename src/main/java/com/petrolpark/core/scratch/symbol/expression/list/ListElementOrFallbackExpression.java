@@ -8,8 +8,11 @@ import java.util.List;
 
 import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
+import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
+import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
+import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
@@ -18,9 +21,9 @@ import com.petrolpark.core.scratch.symbol.expression.TernaryGenericExpression;
 public final class ListElementOrFallbackExpression<TYPE> extends TernaryGenericExpression<
     IScratchEnvironment,
     TYPE, TYPE,
-    Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>,
-    List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>,
-    TYPE, IScratchArgument<IScratchEnvironment, TYPE>
+    Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>, ExpressionOrLiteralParameter<IScratchEnvironment, Long>,
+    List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>, ExpressionParameter<IScratchEnvironment, List<TYPE>>,
+    TYPE, IScratchArgument<IScratchEnvironment, TYPE>, IScratchParameter<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>
 > {
 
     public static final <TYPE> ListElementOrFallbackExpression<TYPE> create(IScratchClass<TYPE> genericClass) {

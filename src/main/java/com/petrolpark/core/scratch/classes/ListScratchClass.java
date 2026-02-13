@@ -60,8 +60,9 @@ public sealed abstract class ListScratchClass<TYPE, BUFFER extends ByteBuf> exte
     @Override
     public <TO_TYPE> Optional<IScratchClass.Caster<List<TYPE>, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
         if (toClass.equals(getGenericScratchClass())) {
-            final ListElementExpression<TO_TYPE> expression = (ListElementExpression<TO_TYPE>)ListElementExpression.create(getGenericScratchClass());
-            return Optional.of(expression::withArguments);
+            return Optional.of(ListElementExpression.create(getGenericScratchClass())::withArgumentsUnchecked);
+        } else if (toClass.equals(PetrolparkScratchClasses.INTEGER.get())) {
+            
         };
         return Optional.empty();
     };

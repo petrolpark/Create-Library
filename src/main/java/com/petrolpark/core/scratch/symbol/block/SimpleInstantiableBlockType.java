@@ -11,14 +11,15 @@ import io.netty.buffer.ByteBuf;
 public abstract class SimpleInstantiableBlockType<
     ENVIRONMENT extends IScratchEnvironment,
     ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
+    PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>,
     INSTANCE extends IScratchBlockInstance<ENVIRONMENT>,
-    BLOCK extends SimpleInstantiableBlockType<ENVIRONMENT, ARGUMENTS, INSTANCE, ?>
-> extends InstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE> implements IScratchBlock.Type<BLOCK> {
+    BLOCK extends SimpleInstantiableBlockType<ENVIRONMENT, ARGUMENTS, PARAMETERS, INSTANCE, ?>
+> extends InstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, PARAMETERS, INSTANCE> implements IScratchBlock.Type<BLOCK> {
 
     private final ContextualMapCodec<IScratchEnvironment.Type<?>, BLOCK> codec = ContextualMapCodec.unit(self());
     private final ContextualStreamCodec<ByteBuf, IScratchEnvironment.Type<?>, BLOCK> streamCodec = ContextualStreamCodec.unit(self());
 
-    protected SimpleInstantiableBlockType(ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
+    protected SimpleInstantiableBlockType(PARAMETERS parameters) {
         super(parameters);
     };
 

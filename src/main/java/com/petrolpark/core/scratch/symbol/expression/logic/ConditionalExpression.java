@@ -1,22 +1,24 @@
 package com.petrolpark.core.scratch.symbol.expression.logic;
 
 import static com.petrolpark.core.scratch.ScratchParameters.parameters;
-import static com.petrolpark.core.scratch.argument.ExpressionArgument.parameter;
+import static com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.booleanParameter;
 
-import com.petrolpark.PetrolparkScratchClasses;
-import com.petrolpark.core.scratch.argument.ExpressionArgument;
+import com.petrolpark.PetrolparkScratchExpressionTypes;
+import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
+import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.ExpressionOrDropdownParameter;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
+import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
-import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
+import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.TernaryGenericExpression;;
 
 public final class ConditionalExpression<TYPE> extends TernaryGenericExpression<
     IScratchEnvironment,
     TYPE, TYPE,
-    Boolean, ExpressionArgument<IScratchEnvironment, Boolean>,
-    TYPE, IScratchArgument<IScratchEnvironment, TYPE>,
-    TYPE, IScratchArgument<IScratchEnvironment, TYPE>
+    Boolean, ExpressionOrDropdownArgument<IScratchEnvironment, Boolean>, ExpressionOrDropdownParameter<IScratchEnvironment, Boolean>,
+    TYPE, IScratchArgument<IScratchEnvironment, TYPE>, IScratchParameter<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>,
+    TYPE, IScratchArgument<IScratchEnvironment, TYPE>, IScratchParameter<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>
 > {
 
     public static final <TYPE> ConditionalExpression<TYPE> create(IScratchClass<TYPE> genericClass) {
@@ -27,7 +29,7 @@ public final class ConditionalExpression<TYPE> extends TernaryGenericExpression<
         super(genericClass, parameters()
             .after(genericClass.createDefaultParameter("fail"))
             .after(genericClass.createDefaultParameter("pass"))
-            .after(parameter("condition", PetrolparkScratchClasses.BOOLEAN.get()))
+            .after(booleanParameter("condition"))
         );
     };
 
@@ -46,9 +48,8 @@ public final class ConditionalExpression<TYPE> extends TernaryGenericExpression<
     };
 
     @Override
-    public IScratchExpression.Type<ConditionalExpression<TYPE>> getExpressionType() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getExpressionType'");
+    public GenericExpression.Type<ConditionalExpression<?>> getExpressionType() {
+        return PetrolparkScratchExpressionTypes.CONDITIONAL.get();
     };
     
 };

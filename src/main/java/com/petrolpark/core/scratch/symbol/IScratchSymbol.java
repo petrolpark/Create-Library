@@ -8,11 +8,11 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
-public interface IScratchSymbol<ENVIRONMENT extends IScratchEnvironment, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> {
+public interface IScratchSymbol<ENVIRONMENT extends IScratchEnvironment, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>, PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>> {
 
-    public ScratchParameters<ENVIRONMENT, ARGUMENTS> getParameters();
+    public PARAMETERS getParameters();
   
-    public interface Type<SYMBOL extends IScratchSymbol<?, ?>> {
+    public interface Type<SYMBOL extends IScratchSymbol<?, ?, ?>> {
         public ContextualMapCodec<IScratchEnvironment.Type<?>, SYMBOL> codec();
         public ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchEnvironment.Type<?>, SYMBOL> streamCodec();
     };

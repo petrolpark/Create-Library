@@ -6,7 +6,9 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.PetrolparkArmInteractionPointTypes;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.mixin.compat.create.accessor.client.ChainConveyorOBBAccessor;
 import com.petrolpark.util.Pair;
 import com.simibubi.create.AllBlockEntityTypes;
@@ -18,7 +20,9 @@ import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorShape;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPointType;
+import com.simibubi.create.content.logistics.box.PackageItem;
 
+import net.createmod.ponder.api.level.PonderLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.nbt.CompoundTag;
@@ -31,6 +35,10 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.IItemHandler;
 
 public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
+
+    public static final boolean isEnabled() {
+        return SharedFeatureFlag.ARMS_TARGET_CHAIN_CONVEYORS.enabled() && PetrolparkConfigs.server().createArmsTargetChainConveyors.get();
+    };
 
     private static final BlockPos getDummyAnchor(Level level) {
         return new BlockPos(0, level.getMinBuildHeight() - 1, 0);
@@ -131,7 +139,19 @@ public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
     public ItemStack insert(ArmBlockEntity armBlockEntity, ItemStack stack, boolean simulate) {
         if (level.getBlockEntity(chainConveyorPos, AllBlockEntityTypes.CHAIN_CONVEYOR.get()).map(ccbe -> {
             if (ccbe.getSpeed() != 0f && ccbe.canAcceptPackagesFor(connectedPort.connection())) {
-                return ChainConveyorItemEvent.canAdd(level, stack, ccbe, connectedPort.connection(), connectedPort.chainPosition(), simulate);
+                final ChainConveyorPackage box = new ChainConveyorPackage(connectedPort.chainPosition(), stack);
+                if (PackageItem.isPackage(stack)) {
+                    if (!simulate) {
+                        if (connectedPort.connection() == null) {
+                            ccbe.addLoopingPackage(box);
+                        } else {
+                            ccbe.addTravellingPackage(box, connectedPort.connection());
+                        };
+                    };
+                    return true;
+                } else {
+                    return ChainConveyorItemEvent.canAdd(level, stack, ccbe, connectedPort.connection(), connectedPort.chainPosition(), simulate);
+                }
             };
             return false;
         }).orElse(false)) {
@@ -224,7 +244,7 @@ public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
             ((IArmBlockEntityDuck)arm).setChasedPointIndex(-1);
             arm.sendData();
             arm.setChanged();
-            ((IArmBlockEntityDuck)arm).invokeSearchForDestination();
+            if (!(arm.getLevel() instanceof PonderLevel)) ((IArmBlockEntityDuck)arm).invokeSearchForDestination();
 
             return true;
         };

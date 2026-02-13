@@ -16,6 +16,7 @@ public enum SharedFeatureFlag implements StringRepresentable {
     CENTRIFUGE,
     BASIN_LID,
     DRYING_RACK,
+    ARMS_TARGET_CHAIN_CONVEYORS,
     TORQUE_LIMITER,
     MESH,
     EXTRUSION(MESH),

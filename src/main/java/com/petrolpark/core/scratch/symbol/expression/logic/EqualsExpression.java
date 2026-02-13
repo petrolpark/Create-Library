@@ -5,13 +5,19 @@ import static com.petrolpark.core.scratch.ScratchParameters.parameters;
 import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
+import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.BinaryGenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
 
-public final class EqualsExpression<TYPE> extends BinaryGenericExpression<IScratchEnvironment, TYPE, Boolean, TYPE, IScratchArgument<IScratchEnvironment, TYPE>, TYPE, IScratchArgument<IScratchEnvironment, TYPE>> {
+public final class EqualsExpression<TYPE> extends BinaryGenericExpression<
+    IScratchEnvironment,
+    TYPE, Boolean,
+    TYPE, IScratchArgument<IScratchEnvironment, TYPE>, IScratchParameter<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>,
+    TYPE, IScratchArgument<IScratchEnvironment, TYPE>, IScratchParameter<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>
+> {
 
     public static final <TYPE> EqualsExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
         return new EqualsExpression<>(scratchClass);

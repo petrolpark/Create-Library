@@ -8,10 +8,11 @@ import com.petrolpark.core.scratch.symbol.ScratchSymbol;
 public abstract class ScratchExpression<
     ENVIRONMENT extends IScratchEnvironment,
     RETURN_TYPE,
-    ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>
-> extends ScratchSymbol<ENVIRONMENT, ARGUMENTS> implements IScratchExpression<ENVIRONMENT, RETURN_TYPE, ARGUMENTS> {
+    ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
+    PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>
+> extends ScratchSymbol<ENVIRONMENT, ARGUMENTS, PARAMETERS> implements IScratchExpression<ENVIRONMENT, RETURN_TYPE, ARGUMENTS, PARAMETERS> {
 
-    protected ScratchExpression(ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
+    protected ScratchExpression(PARAMETERS parameters) {
         super(parameters);
     };
     

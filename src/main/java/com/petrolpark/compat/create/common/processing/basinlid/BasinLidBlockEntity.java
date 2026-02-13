@@ -37,7 +37,7 @@ public class BasinLidBlockEntity extends DirectlyAboveBasinOperatingBlockEntity 
      */
     public int processingTicksRemaining = -1;
 
-    protected boolean bubbling;
+    public boolean bubbling;
 
     public BasinLidBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);

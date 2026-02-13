@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorArmInteractionPoint;
 import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorItemEvent;
-import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.mixin.compat.create.accessor.client.ArmInteractionPointHandlerAccessor;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainPackageInteractionPacket;
@@ -29,7 +29,7 @@ public class ChainConveyorInteractionHandlerMixin {
         final ClientLevel level = mc.level;
         final LocalPlayer player = mc.player;
         return original 
-            || (PetrolparkConfigs.server().createArmsTargetChainConveyors.get() && ArmInteractionPointHandlerAccessor.getCurrentItem() != null)
+            || (ChainConveyorArmInteractionPoint.isEnabled() && ArmInteractionPointHandlerAccessor.getCurrentItem() != null)
             || (level != null && player != null && ChainConveyorItemEvent.canAddClient(level, player.getMainHandItem()));
     };
 

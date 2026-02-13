@@ -7,10 +7,11 @@ import com.petrolpark.core.scratch.symbol.ScratchSymbol;
 
 public abstract class InstantScratchBlock<
     ENVIRONMENT extends IScratchEnvironment,
-    ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>
-> extends ScratchSymbol<ENVIRONMENT, ARGUMENTS> implements IInstantScratchBlock<ENVIRONMENT, ARGUMENTS> {
+    ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
+    PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>
+> extends ScratchSymbol<ENVIRONMENT, ARGUMENTS, PARAMETERS> implements IInstantScratchBlock<ENVIRONMENT, ARGUMENTS, PARAMETERS> {
 
-    protected InstantScratchBlock(ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
+    protected InstantScratchBlock(PARAMETERS parameters) {
         super(parameters);
     };
     

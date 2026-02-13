@@ -5,10 +5,11 @@ import static com.petrolpark.core.scratch.ScratchParameters.parameters;
 import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchArguments.None;
+import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
-public final class MissingExpression<TYPE> extends GenericExpression<IScratchEnvironment, TYPE, TYPE, ScratchArguments.None<IScratchEnvironment>> {
+public final class MissingExpression<TYPE> extends GenericExpression<IScratchEnvironment, TYPE, TYPE, ScratchArguments.None<IScratchEnvironment>, ScratchParameters.None<IScratchEnvironment>> {
 
     public static final <TYPE> MissingExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
         return new MissingExpression<>(scratchClass);

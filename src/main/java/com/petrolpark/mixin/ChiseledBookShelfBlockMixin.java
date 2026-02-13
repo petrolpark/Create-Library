@@ -42,7 +42,7 @@ public abstract class ChiseledBookShelfBlockMixin extends BaseEntityBlock implem
 
     @Override
     public boolean shouldHighlightConnectedRecipeBookAcceptors(Level level, BlockPos pos, BlockState state) {
-        return PetrolparkConfigs.server().chiseledBookShelfProvidesRecipeBooks.get();
+        return PetrolparkConfigs.server().chiseledBookShelfProvidesRecipeBooks.get() && streamProvidedRecipeBooks(level, pos, state).count() > 0;
     };
     
 };

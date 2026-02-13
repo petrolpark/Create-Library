@@ -1,0 +1,38 @@
+package com.petrolpark.core.scratch.symbol.block;
+
+import com.petrolpark.core.scratch.ScratchArguments;
+import com.petrolpark.core.scratch.ScratchParameters;
+import com.petrolpark.core.scratch.argument.IScratchArgument;
+import com.petrolpark.core.scratch.argument.IScratchParameter;
+import com.petrolpark.core.scratch.classes.IScratchClass;
+import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+
+public abstract class BinaryGenericInstantBlock<
+    ENVIRONMENT extends IScratchEnvironment,
+    GENERIC_TYPE,
+    TYPE_1, ARGUMENT_1 extends IScratchArgument<ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
+    TYPE_2, ARGUMENT_2 extends IScratchArgument<ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>
+> extends GenericInstantBlock<
+    ENVIRONMENT,
+    GENERIC_TYPE,
+    ScratchArguments.And<
+        ENVIRONMENT, TYPE_1, ARGUMENT_1, ScratchArguments.Just<
+        ENVIRONMENT, TYPE_2, ARGUMENT_2
+    >>,
+    ScratchParameters.And<
+        ENVIRONMENT, TYPE_1, ARGUMENT_1, PARAMETER_1, ScratchArguments.Just<ENVIRONMENT, TYPE_2, ARGUMENT_2>, ScratchParameters.Just<
+        ENVIRONMENT, TYPE_2, ARGUMENT_2, PARAMETER_2
+    >>
+> {
+
+    protected BinaryGenericInstantBlock(IScratchClass<GENERIC_TYPE> genericClass, ScratchParameters.And<ENVIRONMENT, TYPE_1, ARGUMENT_1, PARAMETER_1, ScratchArguments.Just<ENVIRONMENT, TYPE_2, ARGUMENT_2>, ScratchParameters.Just<ENVIRONMENT, TYPE_2, ARGUMENT_2, PARAMETER_2>> parameters) {
+        super(genericClass, parameters);
+    };
+    
+    @Override
+    public final void run(ENVIRONMENT environment, ScratchArguments.And<ENVIRONMENT, TYPE_1, ARGUMENT_1, ScratchArguments.Just<ENVIRONMENT, TYPE_2, ARGUMENT_2>> arguments) {
+        run(environment, arguments.get(environment), arguments.next().get(environment));
+    };
+
+    public abstract void run(ENVIRONMENT environment, TYPE_1 argument1, TYPE_2 argument2);
+};

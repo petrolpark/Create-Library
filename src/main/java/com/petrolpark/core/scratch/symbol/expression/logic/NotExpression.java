@@ -1,6 +1,7 @@
 package com.petrolpark.core.scratch.symbol.expression.logic;
 
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
+import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.ExpressionOrDropdownParameter;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
@@ -9,7 +10,7 @@ import com.petrolpark.core.scratch.symbol.expression.UnaryExpressionType;
 public final class NotExpression extends UnaryExpressionType<
     IScratchEnvironment,
     Boolean,
-    Boolean, ExpressionOrDropdownArgument<IScratchEnvironment, Boolean>,
+    Boolean, ExpressionOrDropdownArgument<IScratchEnvironment, Boolean>, ExpressionOrDropdownParameter<IScratchEnvironment, Boolean>,
     NotExpression
 > {
     

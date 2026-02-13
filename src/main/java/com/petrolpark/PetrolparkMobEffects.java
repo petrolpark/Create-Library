@@ -18,7 +18,7 @@ public class PetrolparkMobEffects {
 
     public static final RegistryEntry<MobEffect, MobEffect> MINERS_LUCK = REGISTRATE.simple("miners_luck", Registries.MOB_EFFECT, NonNullSupplier.of(() -> 
         new SimpleMobEffect(MobEffectCategory.BENEFICIAL, 0x4E0B60)
-            .addAttributeModifier(PetrolparkAttributes.ORE_DISCOVERY_CHANCE.getDelegate(), Petrolpark.asResource("effect.miners_luck"), 0.1f, AttributeModifier.Operation.ADD_VALUE)
+            .addAttributeModifier(PetrolparkAttributes.ORE_DISCOVERY_CHANCE.getDelegate(), Petrolpark.asResource("effect.miners_luck"), 0.2f, AttributeModifier.Operation.ADD_VALUE)
     ));
 
     public static final void register() {};

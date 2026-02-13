@@ -4,7 +4,9 @@ import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.i
 
 import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.scratch.argument.DropdownArgument;
+import com.petrolpark.core.scratch.argument.DropdownArgument.DropdownParameter;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
+import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.TernaryExpressionType;
@@ -17,9 +19,9 @@ import net.neoforged.api.distmarker.OnlyIn;
 public class IntegerArithmeticExpression extends TernaryExpressionType<
     IScratchEnvironment,
     Long,
-    Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>,
-    IntegerArithmeticExpression.Operation, DropdownArgument<IScratchEnvironment, IntegerArithmeticExpression.Operation>,
-    Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>,
+    Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>, ExpressionOrLiteralParameter<IScratchEnvironment, Long>,
+    IntegerArithmeticExpression.Operation, DropdownArgument<IScratchEnvironment, IntegerArithmeticExpression.Operation>, DropdownParameter<IScratchEnvironment, IntegerArithmeticExpression.Operation>,
+    Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>, ExpressionOrLiteralParameter<IScratchEnvironment, Long>,
     IntegerArithmeticExpression
 > {
     

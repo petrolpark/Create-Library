@@ -11,6 +11,7 @@ import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.codec.RecordContextualCodecBuilder;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ContextArgument;
+import com.petrolpark.core.scratch.argument.ContextArgument.ContextParameter;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
 import com.petrolpark.core.scratch.argument.NestedProcedureArgument;
@@ -99,7 +100,14 @@ public class RepeatBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryN
 
     };
 
-    public static class RemainingRepeatsExpression<ENVIRONMENT extends IScratchEnvironment> extends UnaryExpressionType<ENVIRONMENT, Long, RepeatBlock.Instance<ENVIRONMENT>, ContextArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, RemainingRepeatsExpression<ENVIRONMENT>> {
+    public static class RemainingRepeatsExpression<
+        ENVIRONMENT extends IScratchEnvironment
+    > extends UnaryExpressionType<
+        ENVIRONMENT, 
+        Long,
+        RepeatBlock.Instance<ENVIRONMENT>, ContextArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ContextParameter<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>,
+        RemainingRepeatsExpression<ENVIRONMENT>
+    > {
 
         protected RemainingRepeatsExpression() {
             super(contextParameter("instance"));
@@ -122,7 +130,13 @@ public class RepeatBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryN
 
     };
 
-    public static class BreakBlock<ENVIRONMENT extends IScratchEnvironment> extends UnaryInstantBlockType<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>, ContextArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, BreakBlock<ENVIRONMENT>> {
+    public static class BreakBlock<
+        ENVIRONMENT extends IScratchEnvironment
+    > extends UnaryInstantBlockType<
+        ENVIRONMENT,
+        RepeatBlock.Instance<ENVIRONMENT>, ContextArgument<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>, ContextParameter<ENVIRONMENT, RepeatBlock.Instance<ENVIRONMENT>>,
+        BreakBlock<ENVIRONMENT>
+    > {
 
         protected BreakBlock() {
             super(contextParameter("instance"));

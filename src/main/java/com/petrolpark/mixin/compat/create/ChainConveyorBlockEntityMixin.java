@@ -15,7 +15,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorArmInteractionPoint;
 import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorItemEvent;
 import com.petrolpark.compat.create.core.chainconveyor.IChainConveyorBlockEntityDuck;
-import com.petrolpark.config.PetrolparkConfigs;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
@@ -51,7 +50,7 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
     @SuppressWarnings("null")
     public void wrapNotifyPortToAnticipiate(ChainConveyorBlockEntity ccbe, BlockPos offset, Operation<Void> original, @Local ChainConveyorPackage box, @Local ChainConveyorBlockEntity.ConnectedPort port) {
         original.call(ccbe, offset);
-        if (PetrolparkConfigs.server().createArmsTargetChainConveyors.get()) level.getBlockEntity(getBlockPos().offset(offset), AllBlockEntityTypes.MECHANICAL_ARM.get()).ifPresent(arm -> ChainConveyorArmInteractionPoint.notifyArmToAnticipate(ccbe, port, arm, box));
+        if (ChainConveyorArmInteractionPoint.isEnabled()) level.getBlockEntity(getBlockPos().offset(offset), AllBlockEntityTypes.MECHANICAL_ARM.get()).ifPresent(arm -> ChainConveyorArmInteractionPoint.notifyArmToAnticipate(ccbe, port, arm, box));
     };
 
     @WrapOperation(
@@ -63,7 +62,7 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
     )
     @SuppressWarnings("null")
     private boolean wrapExportToPort(ChainConveyorBlockEntity ccbe, ChainConveyorPackage box, BlockPos offset, Operation<Boolean> original, @Local ChainConveyorBlockEntity.ConnectedPort port) {
-        return original.call(ccbe, box, offset) || (PetrolparkConfigs.server().createArmsTargetChainConveyors.get() && level.getBlockEntity(getBlockPos().offset(offset), AllBlockEntityTypes.MECHANICAL_ARM.get()).map(arm -> ChainConveyorArmInteractionPoint.exportToArm(ccbe, port, arm, box)).orElse(false));
+        return original.call(ccbe, box, offset) || (ChainConveyorArmInteractionPoint.isEnabled() && level.getBlockEntity(getBlockPos().offset(offset), AllBlockEntityTypes.MECHANICAL_ARM.get()).map(arm -> ChainConveyorArmInteractionPoint.exportToArm(ccbe, port, arm, box)).orElse(false));
     };
 
     @Inject(

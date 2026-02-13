@@ -6,6 +6,7 @@ import com.petrolpark.compat.curios.CuriosClient;
 import com.petrolpark.compat.jei.PetrolparkJEI;
 import com.petrolpark.core.inventory.extended.ExtendedInventoryClientHandler;
 
+import net.createmod.ponder.foundation.PonderIndex;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.common.Mod;
@@ -31,6 +32,8 @@ public class PetrolparkClient {
     };
     
     public static final void clientInit(final FMLClientSetupEvent event) {
+        PonderIndex.addPlugin(new PetrolparkPonderPlugin());
+        
         event.enqueueWork(() -> { // Work which must be done on main thread
             
         });

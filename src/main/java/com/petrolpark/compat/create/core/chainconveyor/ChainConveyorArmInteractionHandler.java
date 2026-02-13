@@ -4,7 +4,6 @@ import static com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorIn
 import static com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler.selectedConnection;
 import static com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler.selectedLift;
 
-import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.mixin.compat.create.accessor.client.ArmInteractionPointHandlerAccessor;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
@@ -29,7 +28,7 @@ public class ChainConveyorArmInteractionHandler {
     
     @SubscribeEvent(priority = EventPriority.HIGH) // Needs to be before Create's ChainConveyorInteractionHandler
     public static final void onRightClickInput(InputEvent.InteractionKeyMappingTriggered event) {
-        if (!PetrolparkConfigs.server().createArmsTargetChainConveyors.get() || selectedLift == null || ArmInteractionPointHandlerAccessor.getCurrentItem() == null) return;
+        if (!ChainConveyorArmInteractionPoint.isEnabled() || selectedLift == null || ArmInteractionPointHandlerAccessor.getCurrentItem() == null) return;
         final Minecraft mc = Minecraft.getInstance();
         if (event.getKeyMapping() != mc.options.keyUse && event.getKeyMapping() != mc.options.keyAttack) return;
 
@@ -72,7 +71,7 @@ public class ChainConveyorArmInteractionHandler {
         final Minecraft mc = Minecraft.getInstance();
         final LocalPlayer player = mc.player;
         if (player == null
-            || !PetrolparkConfigs.server().createArmsTargetChainConveyors.get() 
+            || !ChainConveyorArmInteractionPoint.isEnabled() 
             || !(AllBlocks.MECHANICAL_ARM.isIn(player.getMainHandItem()) || (AllItems.WRENCH.isIn(player.getMainHandItem()) && ArmInteractionPointHandlerAccessor.getLastBlockPos() != -1l))
         ) return;
 
