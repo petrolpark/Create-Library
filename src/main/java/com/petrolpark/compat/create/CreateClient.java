@@ -30,6 +30,6 @@ public class CreateClient {
     };
 
     public static final void clientInit(final FMLClientSetupEvent event) {
-        PonderIndex.addPlugin(new PetrolparkPonderPlugin());
+        PonderIndex.addPlugin(new PetrolparkCreatePonderPlugin());
     };
 };

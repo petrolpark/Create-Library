@@ -71,7 +71,7 @@ public abstract class ArmBlockEntityMixin implements IArmBlockEntityDuck {
         method = "Lcom/simibubi/create/content/kinetics/mechanicalArm/ArmBlockEntity;collectItem()V"
     )
     public void wrapCollectItem(Operation<Void> original) {
-        if (getTargetedInteractionPoint() instanceof ChainConveyorArmInteractionPoint chainPoint && chainPoint.isValid()) return; //TODO check if Item got removed from chain in mean time?
+        if (getTargetedInteractionPoint() instanceof ChainConveyorArmInteractionPoint chainPoint && chainPoint.isValid()) return;
         original.call();
     };
 

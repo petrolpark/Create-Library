@@ -82,7 +82,7 @@ public record ExpressionOrLiteralArgument<ENVIRONMENT extends IScratchEnvironmen
         };
 
         @Override
-        public <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionOrLiteralArgument<ENVIRONMENT, TYPE> argument(ExpressionAndArguments<ENVIRONMENT, TYPE, ARGUMENTS> expressionAndArguments) {
+        public <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionOrLiteralArgument<ENVIRONMENT, TYPE> pass(ExpressionAndArguments<ENVIRONMENT, TYPE, ARGUMENTS> expressionAndArguments) {
             return new ExpressionOrLiteralArgument<>(scratchClass.fallback(), Optional.of(new ExpressionArgument<>(expressionAndArguments, expressionParameter)), this);
         };
 

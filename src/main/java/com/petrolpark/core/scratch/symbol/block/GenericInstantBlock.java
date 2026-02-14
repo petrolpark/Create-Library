@@ -14,11 +14,16 @@ import com.petrolpark.core.scratch.symbol.IGenericScratchSymbol;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 
-public abstract class GenericInstantBlock<ENVIRONMENT extends IScratchEnvironment, GENERIC_TYPE, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> extends InstantScratchBlock<ENVIRONMENT, ARGUMENTS> implements IGenericScratchSymbol<ENVIRONMENT, GENERIC_TYPE, ARGUMENTS> {
+public abstract class GenericInstantBlock<
+    ENVIRONMENT extends IScratchEnvironment,
+    GENERIC_TYPE,
+    ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
+    PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>
+> extends InstantScratchBlock<ENVIRONMENT, ARGUMENTS, PARAMETERS> implements IGenericScratchSymbol<ENVIRONMENT, GENERIC_TYPE, ARGUMENTS, PARAMETERS> {
 
     protected final IScratchClass<GENERIC_TYPE> genericScratchClass;
 
-    protected GenericInstantBlock(IScratchClass<GENERIC_TYPE> genericClass, ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
+    protected GenericInstantBlock(IScratchClass<GENERIC_TYPE> genericClass, PARAMETERS parameters) {
         super(parameters);
         this.genericScratchClass = genericClass;
     };
@@ -28,7 +33,7 @@ public abstract class GenericInstantBlock<ENVIRONMENT extends IScratchEnvironmen
         return genericScratchClass;
     };
 
-    public static class Type<BLOCK extends GenericInstantBlock<?, ?, ?>> implements IScratchBlock.Type<BLOCK> {
+    public static class Type<BLOCK extends GenericInstantBlock<?, ?, ?, ?>> implements IScratchBlock.Type<BLOCK> {
 
         protected final Function<IScratchClass<?>, BLOCK> factory;
 

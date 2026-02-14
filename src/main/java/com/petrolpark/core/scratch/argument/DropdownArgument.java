@@ -1,14 +1,17 @@
 package com.petrolpark.core.scratch.argument;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
 import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
+import com.petrolpark.util.Lang;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -26,6 +29,10 @@ public record DropdownArgument<ENVIRONMENT extends IScratchEnvironment, TYPE>(
 
     public static final <ENVIRONMENT extends IScratchEnvironment, TYPE> DropdownParameter<ENVIRONMENT, TYPE> dropdownParameter(String key, DropdownArgument.Entry<? super ENVIRONMENT, TYPE>[] options) {
         return DropdownArgument.<ENVIRONMENT, TYPE>dropdownParameter(key, List.of(options));
+    };
+
+    public static final <ENVIRONMENT extends IScratchEnvironment> DropdownParameter<ENVIRONMENT, Axis> axisParameter(String key) {
+        return dropdownParameter(key, DropdownArgument.<ENVIRONMENT>getAxisEntries().toList());
     };
 
     @Override
@@ -90,5 +97,10 @@ public record DropdownArgument<ENVIRONMENT extends IScratchEnvironment, TYPE>(
             return name();
         };
     };
+
+    public static final <ENVIRONMENT extends IScratchEnvironment> Stream<DropdownArgument.Entry<? super ENVIRONMENT, Axis>> getAxisEntries() {
+        return Stream.of(Axis.values()).<DropdownArgument.Entry<? super ENVIRONMENT, Axis>>map(axis -> new DropdownArgument.SimpleEntry<>(axis, Lang.axis(axis)));
+    };
     
+
 };

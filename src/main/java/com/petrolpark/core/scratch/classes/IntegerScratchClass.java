@@ -1,9 +1,10 @@
 package com.petrolpark.core.scratch.classes;
 
+import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.integerParameter;
+
 import java.util.Optional;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
@@ -30,7 +31,7 @@ public class IntegerScratchClass extends SimpleParseableScratchClass<Long> imple
 
     @Override
     public ExpressionOrLiteralParameter<IScratchEnvironment, Long> createDefaultParameter(String key) {
-        return ExpressionOrLiteralArgument.integerParameter(key);
+        return integerParameter(key);
     };
 
     @Override

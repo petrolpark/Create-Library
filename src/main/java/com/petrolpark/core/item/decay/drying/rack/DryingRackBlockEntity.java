@@ -51,6 +51,11 @@ public class DryingRackBlockEntity extends WoodenBlockEntity {
         public int getSlotLimit(int slot) {
             return 1;
         };
+
+        @Override
+        protected void onContentsChanged(int slot) {
+            notifyUpdate();
+        };
     };
 
     public DryingRackBlockEntity(BlockEntityType<DryingRackBlockEntity> type, BlockPos pos, BlockState blockState) {

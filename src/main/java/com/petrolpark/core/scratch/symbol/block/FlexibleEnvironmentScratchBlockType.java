@@ -14,7 +14,7 @@ import com.petrolpark.core.scratch.symbol.IScratchSymbol;
 
 import io.netty.buffer.ByteBuf;
 
-public class FlexibleEnvironmentScratchBlockType<BASE_ENVIRONMENT extends IScratchEnvironment, BLOCK extends IScratchBlock<?, ?>> implements IScratchBlock.Type<BLOCK> {
+public class FlexibleEnvironmentScratchBlockType<BASE_ENVIRONMENT extends IScratchEnvironment, BLOCK extends IScratchBlock<?, ?, ?>> implements IScratchBlock.Type<BLOCK> {
 
     protected final Function<IScratchEnvironment.Type<?>, BLOCK> factory;
 
@@ -45,7 +45,7 @@ public class FlexibleEnvironmentScratchBlockType<BASE_ENVIRONMENT extends IScrat
             protected <ACTUAL_ENVIRONMENT extends IScratchEnvironment, T> DataResult<BLOCK> decodeInternal(IScratchEnvironment.Type<ACTUAL_ENVIRONMENT> context) {
                 if (environmentClass.isAssignableFrom(context.getClass())) {
                     final BLOCK block = factory.apply(context);
-                    if (context.allows((IScratchSymbol<? super ACTUAL_ENVIRONMENT, ?>)block)) {
+                    if (context.allows((IScratchSymbol<? super ACTUAL_ENVIRONMENT, ?, ?>)block)) {
                         return DataResult.success(block);
                     } else {
                         return DataResult.error(() -> "Block is not permitted");

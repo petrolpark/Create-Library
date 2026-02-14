@@ -1,10 +1,6 @@
 package com.petrolpark.core.scratch.environment.variable;
 
-import java.util.List;
-
 import com.petrolpark.core.scratch.classes.IScratchClass;
-
-
 
 public interface IScratchVariables {
 
@@ -24,16 +20,4 @@ public interface IScratchVariables {
      * @return Whether the variable exists and was set
      */
     public <TYPE> boolean set(IScratchClass<TYPE> scratchClass, String identifier, TYPE value);
-
-    public <TYPE> void createList(IScratchClass<TYPE> scratchClass, String identifier);
-
-    public <TYPE> boolean hasList(IScratchClass<TYPE> scratchClass, String identifier);
-
-    /**
-     * @param <TYPE>
-     * @param scratchClass
-     * @param identifier
-     * @return Empty List if there is no List by the given identifier
-     */
-    public <TYPE> List<TYPE> getList(IScratchClass<TYPE> scratchClass, String identifier);
 };

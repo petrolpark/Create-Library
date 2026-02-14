@@ -71,7 +71,7 @@ public record ExpressionOrDropdownArgument<ENVIRONMENT extends IScratchEnvironme
         };
 
         @Override
-        public <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionOrDropdownArgument<ENVIRONMENT, TYPE> argument(ExpressionAndArguments<ENVIRONMENT, TYPE, ARGUMENTS> expressionAndArguments) {
+        public <ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>> ExpressionOrDropdownArgument<ENVIRONMENT, TYPE> pass(ExpressionAndArguments<ENVIRONMENT, TYPE, ARGUMENTS> expressionAndArguments) {
             return new ExpressionOrDropdownArgument<>(0, Optional.of(new ExpressionArgument<>(expressionAndArguments, expressionParameter)), this);
         };
 

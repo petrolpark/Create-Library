@@ -8,10 +8,11 @@ import com.petrolpark.core.scratch.symbol.ScratchSymbol;
 public abstract class InstantiableScratchBlock<
     ENVIRONMENT extends IScratchEnvironment,
     ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
+    PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>,
     INSTANCE extends IScratchBlockInstance<ENVIRONMENT>
-> extends ScratchSymbol<ENVIRONMENT, ARGUMENTS> implements IInstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, INSTANCE> {
+> extends ScratchSymbol<ENVIRONMENT, ARGUMENTS, PARAMETERS> implements IInstantiableScratchBlock<ENVIRONMENT, ARGUMENTS, PARAMETERS, INSTANCE> {
 
-    protected InstantiableScratchBlock(ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
+    protected InstantiableScratchBlock(PARAMETERS parameters) {
         super(parameters);
     };
 

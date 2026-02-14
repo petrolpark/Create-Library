@@ -7,7 +7,9 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
+import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
+import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.environment.ILevelEnvironment;
@@ -16,16 +18,16 @@ import com.petrolpark.core.scratch.symbol.expression.TernaryExpressionType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class BlockStatePropertyExpression<TYPE, ARGUMENT extends IScratchArgument<ILevelEnvironment, TYPE>, EXPRESSION extends BlockStatePropertyExpression<TYPE, ARGUMENT, EXPRESSION>> extends TernaryExpressionType<
+public abstract class BlockStatePropertyExpression<TYPE, ARGUMENT extends IScratchArgument<ILevelEnvironment, TYPE>, PARAMETER extends IScratchParameter<ILevelEnvironment, TYPE, ARGUMENT>, EXPRESSION extends BlockStatePropertyExpression<TYPE, ARGUMENT, PARAMETER, EXPRESSION>> extends TernaryExpressionType<
     ILevelEnvironment,
     TYPE,
-    BlockPos, ExpressionArgument<ILevelEnvironment, BlockPos>,
-    String, ExpressionOrLiteralArgument<ILevelEnvironment, String>,
-    TYPE, ARGUMENT,
+    BlockPos, ExpressionArgument<ILevelEnvironment, BlockPos>, ExpressionParameter<ILevelEnvironment, BlockPos>,
+    String, ExpressionOrLiteralArgument<ILevelEnvironment, String>, ExpressionOrLiteralParameter<ILevelEnvironment, String>,
+    TYPE, ARGUMENT, PARAMETER,
     EXPRESSION
 > {
 
-    protected BlockStatePropertyExpression(IScratchParameter<ILevelEnvironment, TYPE, ARGUMENT> fallbackParameter) {
+    protected BlockStatePropertyExpression(PARAMETER fallbackParameter) {
         super(parameter("position", PetrolparkScratchClasses.BLOCK_POS.get()), stringParameter("property"), fallbackParameter);
     };
 

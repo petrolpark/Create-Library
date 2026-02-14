@@ -7,8 +7,7 @@ import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.petrolpark.core.scratch.argument.DropdownArgument;
-import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
-import com.petrolpark.core.scratch.argument.IScratchParameter;
+import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.ExpressionOrDropdownParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.util.Lang;
 
@@ -19,6 +18,7 @@ import net.minecraft.network.codec.StreamCodec;
 public class BooleanScratchClass extends SimpleScratchClass<Boolean> implements IByteBufScratchClass<Boolean> {
 
     public static final DropdownArgument.SimpleEntry<Boolean>
+    
     TRUE = new DropdownArgument.SimpleEntry<>(true, Lang.generic("true")),
     FALSE = new DropdownArgument.SimpleEntry<>(false, Lang.generic("false"));
 
@@ -42,7 +42,7 @@ public class BooleanScratchClass extends SimpleScratchClass<Boolean> implements 
     };
 
     @Override
-    public IScratchParameter<IScratchEnvironment, Boolean, ExpressionOrDropdownArgument<IScratchEnvironment, Boolean>> createDefaultParameter(String key) {
+    public ExpressionOrDropdownParameter<IScratchEnvironment, Boolean> createDefaultParameter(String key) {
         return booleanParameter(key);
     };
 

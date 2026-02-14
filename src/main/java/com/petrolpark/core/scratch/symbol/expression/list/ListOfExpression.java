@@ -21,7 +21,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public class ListOfExpression<TYPE, ARGUMENTS extends ScratchArguments<IScratchEnvironment, ?>> extends GenericExpression<IScratchEnvironment, TYPE, List<TYPE>, ARGUMENTS> {
+public class ListOfExpression<TYPE, ARGUMENTS extends ScratchArguments<IScratchEnvironment, ?>> extends GenericExpression<IScratchEnvironment, TYPE, List<TYPE>, ARGUMENTS, ScratchParameters<IScratchEnvironment, ARGUMENTS>> {
 
     public static final MapCodec<ListOfExpression<?, ?>> CODEC = RecordCodecBuilder.mapCodec(instance -> 
         IGenericScratchSymbol.commonCodecFields(instance)

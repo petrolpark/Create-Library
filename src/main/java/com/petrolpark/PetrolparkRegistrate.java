@@ -370,35 +370,35 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, PetrolparkRegistries.Keys.SCRATCH_ENVIRONMENT_TYPE, factory);
     };
 
-    public <BLOCK extends IScratchBlock<?, ?>, TYPE extends IScratchBlock.Type<BLOCK>> RegistryEntry<IScratchBlock.Type<?>, TYPE> scratchBlockType(String name, NonNullSupplier<TYPE> factory) {
+    public <BLOCK extends IScratchBlock<?, ?, ?>, TYPE extends IScratchBlock.Type<BLOCK>> RegistryEntry<IScratchBlock.Type<?>, TYPE> scratchBlockType(String name, NonNullSupplier<TYPE> factory) {
         return simple(name, PetrolparkRegistries.Keys.SCRATCH_BLOCK_TYPE, factory);
     };
 
-    public <BLOCK extends GenericInstantBlock<?, ?, ?>> RegistryEntry<IScratchBlock.Type<?>, GenericInstantBlock.Type<BLOCK>> genericScratchBlockType(String name, Function<IScratchClass<?>, BLOCK> blockFactory) {
+    public <BLOCK extends GenericInstantBlock<?, ?, ?, ?>> RegistryEntry<IScratchBlock.Type<?>, GenericInstantBlock.Type<BLOCK>> genericScratchBlockType(String name, Function<IScratchClass<?>, BLOCK> blockFactory) {
         return scratchBlockType(name, () -> new GenericInstantBlock.Type<>(blockFactory));
     };
 
-    public <BASE_ENVIRONMENT extends IScratchEnvironment, BLOCK extends IScratchBlock<?, ?>> RegistryEntry<IScratchBlock.Type<?>, FlexibleEnvironmentScratchBlockType<BASE_ENVIRONMENT, BLOCK>> flexibleEnvironmentScratchBlockType(String name, Class<BASE_ENVIRONMENT> environmentClass, Function<IScratchEnvironment.Type<?>, BLOCK> factory) {
+    public <BASE_ENVIRONMENT extends IScratchEnvironment, BLOCK extends IScratchBlock<?, ?, ?>> RegistryEntry<IScratchBlock.Type<?>, FlexibleEnvironmentScratchBlockType<BASE_ENVIRONMENT, BLOCK>> flexibleEnvironmentScratchBlockType(String name, Class<BASE_ENVIRONMENT> environmentClass, Function<IScratchEnvironment.Type<?>, BLOCK> factory) {
         return scratchBlockType(name, () -> new FlexibleEnvironmentScratchBlockType<>(environmentClass, factory));
     };
 
-    public <EXPRESSION extends IScratchExpression<?, ?, ?>, TYPE extends IScratchExpression.Type<EXPRESSION>> RegistryEntry<IScratchExpression.Type<?>, TYPE> scratchExpressionType(String name, NonNullSupplier<TYPE> expressionTypeFactory) {
+    public <EXPRESSION extends IScratchExpression<?, ?, ?, ?>, TYPE extends IScratchExpression.Type<EXPRESSION>> RegistryEntry<IScratchExpression.Type<?>, TYPE> scratchExpressionType(String name, NonNullSupplier<TYPE> expressionTypeFactory) {
         return simple(name, PetrolparkRegistries.Keys.SCRATCH_EXPRESSION_TYPE, expressionTypeFactory);
     };
 
-    public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, ScratchExpressionType<EXPRESSION>> environmentDepedendentScratchExpressionType(String name, ContextualMapCodec<IScratchEnvironment.Type<?>, EXPRESSION> codec, ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchEnvironment.Type<?>, EXPRESSION> streamCodec) {
+    public <EXPRESSION extends IScratchExpression<?, ?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, ScratchExpressionType<EXPRESSION>> environmentDepedendentScratchExpressionType(String name, ContextualMapCodec<IScratchEnvironment.Type<?>, EXPRESSION> codec, ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchEnvironment.Type<?>, EXPRESSION> streamCodec) {
         return scratchExpressionType(name, () -> new ScratchExpressionType<>(codec, streamCodec));
     };
 
-    public <EXPRESSION extends IScratchExpression<?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, ScratchExpressionType<EXPRESSION>> scratchExpressionType(String name, MapCodec<EXPRESSION> codec, StreamCodec<? super RegistryFriendlyByteBuf, EXPRESSION> streamCodec) {
+    public <EXPRESSION extends IScratchExpression<?, ?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, ScratchExpressionType<EXPRESSION>> scratchExpressionType(String name, MapCodec<EXPRESSION> codec, StreamCodec<? super RegistryFriendlyByteBuf, EXPRESSION> streamCodec) {
         return scratchExpressionType(name, () -> new ScratchExpressionType<>(codec, streamCodec));
     };
 
-    public <EXPRESSION extends GenericExpression<?, ?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<EXPRESSION>> genericScratchExpressionType(String name, Function<IScratchClass<?>, EXPRESSION> expressionFactory) {
+    public <EXPRESSION extends GenericExpression<?, ?, ?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<EXPRESSION>> genericScratchExpressionType(String name, Function<IScratchClass<?>, EXPRESSION> expressionFactory) {
         return scratchExpressionType(name, () -> new GenericExpression.Type<>(expressionFactory));
     };
 
-    public <TYPE extends SimpleExpressionType<?, ?, ?, TYPE>> RegistryEntry<IScratchExpression.Type<?>, TYPE> booleanScratchExpression(String name, Function<BooleanScratchClass, TYPE> expressionFactory) {
+    public <TYPE extends SimpleExpressionType<?, ?, ?, ?, TYPE>> RegistryEntry<IScratchExpression.Type<?>, TYPE> booleanScratchExpression(String name, Function<BooleanScratchClass, TYPE> expressionFactory) {
         return scratchExpressionType(name, () -> expressionFactory.apply(PetrolparkScratchClasses.BOOLEAN.get()));
     };
     

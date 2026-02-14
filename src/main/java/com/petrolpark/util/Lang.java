@@ -18,6 +18,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
@@ -103,6 +104,10 @@ public class Lang {
 
     public static Component rarity(Rarity rarity) {
         return generic("rarity."+rarity.getSerializedName());
+    };
+
+    public static Component axis(Axis axis) {
+        return generic("axis."+axis.getName());
     };
 
     public static Component direction(Direction direction) {

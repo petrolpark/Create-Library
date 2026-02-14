@@ -1,10 +1,13 @@
 package com.petrolpark.core.scratch.symbol.expression.list;
 
+import static com.petrolpark.core.scratch.ScratchParameters.parameters;
+import static com.petrolpark.core.scratch.argument.ExpressionArgument.listParameter;
+import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.integerParameter;
+
 import java.util.List;
 
 import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.ScratchArguments;
-import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
@@ -20,26 +23,19 @@ import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
 public final class ListElementExpression<TYPE> extends BinaryGenericExpression<
     IScratchEnvironment,
     TYPE, TYPE,
-    Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>,
-    List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>
+    Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>, ExpressionOrLiteralParameter<IScratchEnvironment, Long>,
+    List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>, ExpressionParameter<IScratchEnvironment, List<TYPE>>
 > {
 
     public static final <TYPE> ListElementExpression<TYPE> create(IScratchClass<TYPE> genericClass) {
         return new ListElementExpression<>(genericClass);
     };
 
-    protected final ScratchParameters.And<IScratchEnvironment, Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>, ExpressionOrLiteralParameter<IScratchEnvironment, Long>, ScratchArguments.Just<IScratchEnvironment, List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>>, ScratchParameters.Just<IScratchEnvironment, List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>, ExpressionParameter<IScratchEnvironment, List<TYPE>>>> parameters;
-
     protected ListElementExpression(IScratchClass<TYPE> genericClass) {
-        this(genericClass, ScratchParameters.<IScratchEnvironment>parameters()
-            .after(ExpressionArgument.listParameter("list", genericClass))
-            .after(ExpressionOrLiteralArgument.integerParameter("index"))
+        super(genericClass, parameters()
+            .after(listParameter("list", genericClass))
+            .after(integerParameter("index"))
         );
-    };
-
-    protected ListElementExpression(IScratchClass<TYPE> genericClass, ScratchParameters.And<IScratchEnvironment, Long, ExpressionOrLiteralArgument<IScratchEnvironment, Long>, ExpressionOrLiteralParameter<IScratchEnvironment, Long>, ScratchArguments.Just<IScratchEnvironment, List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>>, ScratchParameters.Just<IScratchEnvironment, List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>, ExpressionParameter<IScratchEnvironment, List<TYPE>>>> parameters) {
-        super(genericClass, parameters);
-        this.parameters = parameters;
     };
 
     @Override
@@ -59,11 +55,16 @@ public final class ListElementExpression<TYPE> extends BinaryGenericExpression<
     };
 
     public <ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> ARGUMENT withArguments(IExpressionScratchParameter<IScratchEnvironment, TYPE, ARGUMENT> parameter, ExpressionAndArguments<IScratchEnvironment, List<TYPE>, ?> expressionAndArguments) {
-        return parameter.argument(this, ScratchArguments.arguments()
-            .after(parameters.next().get().argument(expressionAndArguments))
-            .after(parameters.get().argument(0l))
+        return parameter.pass(this, ScratchArguments.arguments()
+            .after(getParameters().next().get().pass(expressionAndArguments))
+            .after(getParameters().get().argument(0l))
             .build()
         );
+    };
+
+    @SuppressWarnings("unchecked")
+    public <TO_TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TO_TYPE>> ARGUMENT withArgumentsUnchecked(IExpressionScratchParameter<IScratchEnvironment, TO_TYPE, ARGUMENT> parameter, ExpressionAndArguments<IScratchEnvironment, List<TYPE>, ?> expressionAndArguments) {
+        return ((ListElementExpression<TO_TYPE>)this).withArguments(parameter, expressionAndArguments.uncheckedCast());
     };
     
 };

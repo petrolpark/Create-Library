@@ -21,9 +21,18 @@ public abstract class UnaryNestedProcedureBlock<
     TYPE, ARGUMENT extends IScratchArgument<ENVIRONMENT, TYPE>, PARAMETER extends IScratchParameter<ENVIRONMENT, TYPE, ARGUMENT>,
     INSTANCE extends NestedProcedureBlockInstance<ENVIRONMENT, INSTANCE>,
     BLOCK extends UnaryNestedProcedureBlock<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER, INSTANCE, ?>
-> extends InstantiableScratchBlock<ENVIRONMENT, ScratchArguments.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>>, INSTANCE> {
- 
-    private final ScratchParameters.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, NestedProcedureParameter<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>, ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER>> parameters;
+> extends InstantiableScratchBlock<
+    ENVIRONMENT,
+    ScratchArguments.And<
+        ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<
+        ENVIRONMENT, TYPE, ARGUMENT
+    >>,
+    ScratchParameters.And<
+        ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, NestedProcedureParameter<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>, ScratchParameters.Just<
+        ENVIRONMENT, TYPE, ARGUMENT, PARAMETER
+    >>,
+    INSTANCE
+> {
 
     protected UnaryNestedProcedureBlock(PARAMETER parameter) {
         this(ScratchParameters.<ENVIRONMENT>parameters()
@@ -34,7 +43,6 @@ public abstract class UnaryNestedProcedureBlock<
 
     private UnaryNestedProcedureBlock(ScratchParameters.And<ENVIRONMENT, ScratchProcedure<ENVIRONMENT, INSTANCE>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>, NestedProcedureParameter<ENVIRONMENT, INSTANCE>, ScratchArguments.Just<ENVIRONMENT, TYPE, ARGUMENT>, ScratchParameters.Just<ENVIRONMENT, TYPE, ARGUMENT, PARAMETER>> parameters) {
         super(parameters);
-        this.parameters = parameters;
     };
 
     protected ContextualCodec<IScratchContextProvider<?>, NestedProcedureArgument<ENVIRONMENT, INSTANCE>> procedureArgumentCodec() {

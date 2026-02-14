@@ -17,12 +17,13 @@ public abstract class GenericExpression<
     ENVIRONMENT extends IScratchEnvironment,
     GENERIC_TYPE,
     RETURN_TYPE,
-    ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>
-> extends ScratchExpression<ENVIRONMENT, RETURN_TYPE, ARGUMENTS> implements IGenericScratchSymbol<ENVIRONMENT, GENERIC_TYPE, ARGUMENTS> {
+    ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>,
+    PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>
+> extends ScratchExpression<ENVIRONMENT, RETURN_TYPE, ARGUMENTS, PARAMETERS> implements IGenericScratchSymbol<ENVIRONMENT, GENERIC_TYPE, ARGUMENTS, PARAMETERS> {
 
     protected final IScratchClass<GENERIC_TYPE> genericClass;
 
-    protected GenericExpression(IScratchClass<GENERIC_TYPE> genericClass, ScratchParameters<ENVIRONMENT, ARGUMENTS> parameters) {
+    protected GenericExpression(IScratchClass<GENERIC_TYPE> genericClass, PARAMETERS parameters) {
         super(parameters);
         this.genericClass = genericClass;
     };
@@ -32,7 +33,7 @@ public abstract class GenericExpression<
         return genericClass;
     };
 
-    public static class Type<EXPRESSION extends GenericExpression<?, ?, ?, ?>> implements IScratchExpression.Type<EXPRESSION> {
+    public static class Type<EXPRESSION extends GenericExpression<?, ?, ?, ?, ?>> implements IScratchExpression.Type<EXPRESSION> {
 
         protected final Function<IScratchClass<?>, EXPRESSION> factory;
 

@@ -9,15 +9,15 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 public abstract class TernaryExpressionType<
     ENVIRONMENT extends IScratchEnvironment,
     RETURN_TYPE,
-    TYPE_1, ARGUMENT_1 extends IScratchArgument<ENVIRONMENT, TYPE_1>,
-    TYPE_2, ARGUMENT_2 extends IScratchArgument<ENVIRONMENT, TYPE_2>,
-    TYPE_3, ARGUMENT_3 extends IScratchArgument<ENVIRONMENT, TYPE_3>,
+    TYPE_1, ARGUMENT_1 extends IScratchArgument<ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
+    TYPE_2, ARGUMENT_2 extends IScratchArgument<ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>,
+    TYPE_3, ARGUMENT_3 extends IScratchArgument<ENVIRONMENT, TYPE_3>, PARAMETER_3 extends IScratchParameter<ENVIRONMENT, TYPE_3, ARGUMENT_3>,
     EXPRESSION extends TernaryExpressionType<
         ENVIRONMENT,
         RETURN_TYPE,
-        TYPE_1, ARGUMENT_1,
-        TYPE_2, ARGUMENT_2,
-        TYPE_3, ARGUMENT_3,
+        TYPE_1, ARGUMENT_1, PARAMETER_1,
+        TYPE_2, ARGUMENT_2, PARAMETER_2,
+        TYPE_3, ARGUMENT_3, PARAMETER_3,
         EXPRESSION
     >
 > extends SimpleExpressionType<
@@ -27,10 +27,16 @@ public abstract class TernaryExpressionType<
         ENVIRONMENT, TYPE_1, ARGUMENT_1, ScratchArguments.And<
         ENVIRONMENT, TYPE_2, ARGUMENT_2, ScratchArguments.Just<
         ENVIRONMENT, TYPE_3, ARGUMENT_3
-    >>>, EXPRESSION
+    >>>,
+    ScratchParameters.And<
+        ENVIRONMENT, TYPE_1, ARGUMENT_1, PARAMETER_1, ScratchArguments.And<ENVIRONMENT, TYPE_2, ARGUMENT_2, ScratchArguments.Just<ENVIRONMENT, TYPE_3, ARGUMENT_3>>, ScratchParameters.And<
+        ENVIRONMENT, TYPE_2, ARGUMENT_2, PARAMETER_2, ScratchArguments.Just<ENVIRONMENT, TYPE_3, ARGUMENT_3>, ScratchParameters.Just<
+        ENVIRONMENT, TYPE_3, ARGUMENT_3, PARAMETER_3
+    >>>,
+    EXPRESSION
 > {
 
-    protected TernaryExpressionType(IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1> parameter1, IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2> parameter2, IScratchParameter<ENVIRONMENT, TYPE_3, ARGUMENT_3> parameter3) {
+    protected TernaryExpressionType(PARAMETER_1 parameter1, PARAMETER_2 parameter2, PARAMETER_3 parameter3) {
         super(ScratchParameters.<ENVIRONMENT>parameters().after(parameter3).after(parameter2).after(parameter1));
     };
 
