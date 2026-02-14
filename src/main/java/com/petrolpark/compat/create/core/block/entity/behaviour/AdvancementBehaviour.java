@@ -27,9 +27,9 @@ public class AdvancementBehaviour extends AbstractRememberPlacerBehaviour {
     @Override
     public boolean shouldRememberPlacer(Player player) {
         if (!(player.level() instanceof ServerLevel level) || !(player instanceof ServerPlayer serverPlayer)) return false;
-        Holder<BlockEntityType<?>> holder = blockEntity.getType().builtInRegistryHolder();
+        final Holder<BlockEntityType<?>> holder = blockEntity.getType().builtInRegistryHolder();
         if (holder == null) return false;
-        List<ResourceLocation> advancementLocations = holder.getData(PetrolparkDataMapTypes.BLOCK_ENTITY_ADVANCEMENTS);
+        final List<ResourceLocation> advancementLocations = holder.getData(PetrolparkDataMapTypes.BLOCK_ENTITY_ADVANCEMENTS);
         if (advancementLocations == null) return false;
         return advancementLocations.stream()
             .map(level.getServer().getAdvancements()::get)

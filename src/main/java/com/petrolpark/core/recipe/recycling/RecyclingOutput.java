@@ -7,6 +7,7 @@ import com.petrolpark.util.BigItemStack;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 
@@ -26,7 +27,7 @@ public final class RecyclingOutput {
     /**
      * {@link ItemStack#getCount() Count} is ignored.
      */
-    protected ItemStack item;
+    protected final ItemStack item;
     protected double expectedCount;
 
     public RecyclingOutput(ItemStack stack) {
@@ -42,11 +43,11 @@ public final class RecyclingOutput {
         this(bigStack.getSingleItemStack(), bigStack.getCount());
     };
 
-    protected ItemStack getItem() {
+    public ItemStack getItem() {
         return item;
     };
 
-    protected double getExpectedCount() {
+    public double getExpectedCount() {
         return expectedCount;
     };
 
@@ -63,8 +64,12 @@ public final class RecyclingOutput {
         return new RecyclingOutput(item.copy(), expectedCount);
     };
 
+    public BigItemStack getMaxStack(double multiplier) {
+        return new BigItemStack(item, Mth.ceil(expectedCount * multiplier));
+    };
+
     public BigItemStack rollStack(double multiplier, RandomSource random) {
-        int amount = (int)(expectedCount * multiplier);
+        final int amount = (int)(expectedCount * multiplier);
         return new BigItemStack(item, amount + random.nextFloat() > expectedCount * multiplier - (float)amount ? 1 : 0);
     };
 

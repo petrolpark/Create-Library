@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
+import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationRecipe;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
@@ -28,7 +29,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo {
 
-    //CENTRIFUGATION(CentrifugationRecipe::new),
+    CENTRIFUGATION(CentrifugationRecipe::new),
     EXTRUSION(ExtrusionRecipe.Serializer::new),
     LIDDED_BASIN(LiddedBasinRecipe.Serializer::new),
     MANDREL(MandrelRecipe.Serializer::new),
@@ -49,7 +50,7 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
      * @param <R> Type of the Advanced Processing Recipe
      * @param processingFactory
      */
-    <R extends AdvancedProcessingRecipe> CreateRecipeTypes(ProcessingRecipe.Factory<AdvancedProcessingRecipeParams, R> processingFactory) {
+    <R extends AdvancedProcessingRecipe<?>> CreateRecipeTypes(ProcessingRecipe.Factory<AdvancedProcessingRecipeParams, R> processingFactory) {
         this(() -> new AdvancedProcessingRecipe.Serializer<>(processingFactory));
     };
 
@@ -61,7 +62,7 @@ public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo
         type = typeObject;
     };
 
-    <R extends AdvancedProcessingRecipe> CreateRecipeTypes(ProcessingRecipe.Factory<AdvancedProcessingRecipeParams, R> processingFactory, Supplier<RecipeType<?>> typeSupplier) {
+    <R extends AdvancedProcessingRecipe<?>> CreateRecipeTypes(ProcessingRecipe.Factory<AdvancedProcessingRecipeParams, R> processingFactory, Supplier<RecipeType<?>> typeSupplier) {
         this(() -> new AdvancedProcessingRecipe.Serializer<>(processingFactory), typeSupplier);
     };
 

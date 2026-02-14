@@ -1,10 +1,14 @@
 package com.petrolpark.util;
 
+import java.util.List;
 import java.util.Optional;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -15,6 +19,21 @@ public class AdvancementHelper {
     public static final <T> boolean test(Optional<T> predicate, T object) {
         if (predicate.isEmpty()) return true;
         return predicate.get().equals(object);
+    };
+
+    public static final boolean testItems(List<ItemPredicate> itemPredicates, List<ItemStack> items) {
+        if (itemPredicates.isEmpty()) {
+            return true;
+        } else {
+            final List<ItemPredicate> list = new ObjectArrayList<>(itemPredicates);
+
+            for (final ItemStack stack : items) {
+                if (list.isEmpty()) return true;
+                list.removeIf(predicate -> predicate.test(stack));
+            };
+
+            return list.isEmpty();
+        }
     };
     
     public static final boolean testBlock(Optional<Holder<Block>> blockPredicate, BlockState state) {

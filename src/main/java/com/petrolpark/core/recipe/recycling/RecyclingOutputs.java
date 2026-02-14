@@ -120,6 +120,14 @@ public class RecyclingOutputs extends LinkedList<RecyclingOutput> {
         };
     };
 
+    public List<ItemStack> getAllPossibleStacks() {
+        return stream()
+            .map(output -> output.getMaxStack(expectationMultiplier))
+            .map(BigItemStack::getAsStacks)
+            .flatMap(List::stream)
+            .toList();
+    };
+
     public List<ItemStack> rollStacks(RandomSource randomSource) {
         return stream()
             .map(output -> output.rollStack(expectationMultiplier, randomSource))
