@@ -42,9 +42,19 @@ public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlock
         .add(0, 12, 0, 16, 16, 16)
         .build();
 
+    public static boolean canConnectTo(BlockAndTintGetter world, BlockPos neighbourPos, BlockState neighbour, Direction direction) {
+        return FluidPipeBlock.canConnectTo(world, neighbourPos, neighbour, direction) && !(world.getBlockState(neighbourPos).getBlock() instanceof CentrifugeBlock);
+    };
+
     public CentrifugeBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        registerDefaultState(defaultBlockState().setValue(ProperWaterloggedBlock.WATERLOGGED, false));
+        registerDefaultState(defaultBlockState()
+            .setValue(BlockStateProperties.NORTH, false)
+            .setValue(BlockStateProperties.EAST, false)
+            .setValue(BlockStateProperties.SOUTH, false)
+            .setValue(BlockStateProperties.WEST, false)
+            .setValue(ProperWaterloggedBlock.WATERLOGGED, false)
+        );
     };
 
     @Override
@@ -75,8 +85,10 @@ public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlock
 
     @Override
     protected BlockState updateShape(@Nonnull BlockState state, @Nonnull Direction direction, @Nonnull BlockState neighborState, @Nonnull LevelAccessor level, @Nonnull BlockPos pos, @Nonnull BlockPos neighborPos) {
+        state = super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+        if (direction.getAxis().isHorizontal()) state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), canConnectTo(level, neighborPos, neighborState, direction));
         updateWater(level, state, pos);
-        return super.updateShape(state, direction, neighborState, level, pos, neighborPos).setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), FluidPipeBlock.canConnectTo(level, neighborPos, neighborState, direction));
+        return state;
     };
 
     @Override
@@ -87,7 +99,7 @@ public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlock
 
     public BlockState blockStateWithConnections(BlockAndTintGetter level, BlockPos pos, BlockState state) {
         for (Direction direction : Iterate.horizontalDirections) {
-            state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), FluidPipeBlock.canConnectTo(level, pos.relative(direction), level.getBlockState(pos.relative(direction)), direction));
+            state = state.setValue(PipeBlock.PROPERTY_BY_DIRECTION.get(direction), canConnectTo(level, pos.relative(direction), level.getBlockState(pos.relative(direction)), direction));
         };
         return state;
     };

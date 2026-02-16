@@ -120,7 +120,7 @@ public class RecyclingOutputs extends LinkedList<RecyclingOutput> {
         };
     };
 
-    public List<ItemStack> getAllPossibleStacks() {
+    public List<ItemStack> getMaxPossibleStacks() {
         return stream()
             .map(output -> output.getMaxStack(expectationMultiplier))
             .map(BigItemStack::getAsStacks)

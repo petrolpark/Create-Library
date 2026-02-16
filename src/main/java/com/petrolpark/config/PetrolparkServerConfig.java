@@ -1,17 +1,15 @@
 package com.petrolpark.config;
 
-import java.util.function.Supplier;
-
-import org.jetbrains.annotations.ApiStatus;
+import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.Mods;
+import com.simibubi.create.api.stress.BlockStressValues;
 
 import net.createmod.catnip.config.ConfigBase;
-import net.neoforged.bus.api.Event;
-import net.neoforged.neoforge.common.NeoForge;
 
 public class PetrolparkServerConfig extends ConfigBase {
 
     public PetrolparkServerConfig() {
-        NeoForge.EVENT_BUS.post(new AdditionalEvent());
+        Mods.CREATE.executeIfInstalled(() -> this::createConfigs);
     };
 
     public final ConfigBool syncChiseledBookshelves = b(true, "syncChiseledBookshelves", "Chiseled Bookshelves broadcast their data to clients");
@@ -41,6 +39,9 @@ public class PetrolparkServerConfig extends ConfigBase {
         public final ConfigGroup create = group(1, "create");
             public final ConfigBool createArmsTargetChainConveyors = b(false, "armsTargetChainConveyors", "[Must be enabled by a dependent]", "Whether Mechanical Arms can take from and place on Chain Conveyors");
             public final ConfigBool createChainConveyorDrying = b(true, "chainConveyorDrying", "Whether Drying Recipes can be done on Chain Conveyors");
+            public final ConfigGroup centrifuge = group(2, "centrifuge");
+                public final ConfigInt centrifugeTankCapacity = i(2000, 0, Integer.MAX_VALUE, "Capacity of each Centrifuge tank");
+                public final ConfigBool potionCentrifugation = b(true, "Centrifuges can separate Potions into their Ingredients");
             public final ConfigGroup createContamination = group(2, "contamination");
                 public final ConfigFloat createFluidContaminantWeight = f(100f, 0f, Float.MAX_VALUE, "fluidWeight", "How many mB of Fluid should be considered to be equal to one Item when weighting preserved Contaminants in any Recipes involving Fluids", "Set to 0 to not count the Contaminants of input Fluids. Contaminants will still propagate to output Fluids.");
                 public final ConfigBool createBasinRecipesPropagateContaminants = b(true, "propagateBasin", "Recipes done in a Basin will propagate the Contaminants of the input to the outputs");
@@ -55,14 +56,13 @@ public class PetrolparkServerConfig extends ConfigBase {
     @Override
     public String getName() {
         return "Server";
-    };
+    }
 
-    @ApiStatus.Internal
-    class AdditionalEvent extends Event {
-
-        public <T extends ConfigBase> T nested(int depth, Supplier<T> constructor, String... comment) {
-            return PetrolparkServerConfig.this.nested(depth, constructor, comment);
-        };
+    @RequiresCreate
+    private final void createConfigs() {
+        final PetrolparkStressConfig stress = nested(0, PetrolparkStressConfig::new);
+		BlockStressValues.CAPACITIES.registerProvider(stress::getCapacity);
+		BlockStressValues.IMPACTS.registerProvider(stress::getImpact);
     };
     
 };

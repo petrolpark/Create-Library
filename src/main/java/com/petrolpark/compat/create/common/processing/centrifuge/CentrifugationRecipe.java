@@ -27,6 +27,11 @@ public class CentrifugationRecipe extends AdvancedProcessingRecipe<RecipeInput> 
     };
 
     @Override
+    protected boolean canSpecifyDuration() {
+        return true;
+    };
+
+    @Override
     protected int getMaxInputCount() {
         return 64;
     };

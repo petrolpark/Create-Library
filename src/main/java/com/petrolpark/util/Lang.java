@@ -13,6 +13,8 @@ import java.util.stream.Stream;
 
 import org.spongepowered.include.com.google.common.base.Strings;
 
+import com.petrolpark.Petrolpark;
+
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -84,6 +86,10 @@ public class Lang {
         } while (namedElements < elements.length);
         list = extendedList;
         return list;
+    };
+
+    public static final MutableComponent translate(String keyEnd) {
+        return Component.translatable(Petrolpark.MOD_ID + "." + keyEnd);
     };
 
     public static final String genericTranslationKey(String keyEnd) {

@@ -21,7 +21,7 @@ public class AdvancedProcessingRecipeParams extends ProcessingRecipeParams {
 
     public static final MapCodec<AdvancedProcessingRecipeParams> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
 		codec(AdvancedProcessingRecipeParams::new).forGetter(Function.identity()),
-        Codec.BOOL.fieldOf("book_required").forGetter(AdvancedProcessingRecipeParams::isBookRequired),
+        Codec.BOOL.optionalFieldOf("book_required", false).forGetter(AdvancedProcessingRecipeParams::isBookRequired),
 		RegistryCodecs.homogeneousList(Registries.BIOME).optionalFieldOf("biomes").forGetter(AdvancedProcessingRecipeParams::allowedBiomes),
         ResourceLocation.CODEC.optionalFieldOf("first_time_lucky_key").forGetter(AdvancedProcessingRecipeParams::firstTimeLuckyKey)
 	).apply(instance, (params, bookRequired, allowedBiomes, firstTimeLuckyKey) -> {

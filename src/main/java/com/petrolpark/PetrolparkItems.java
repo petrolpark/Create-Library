@@ -14,6 +14,7 @@ import net.minecraft.world.item.Rarity;
 
 public class PetrolparkItems {
 
+    // Temp
     public static final ItemEntry<WoodenItem> ROLLING_PIN = REGISTRATE.item("rolling_pin", WoodenItem::new)    
         .register();
     
@@ -36,7 +37,7 @@ public class PetrolparkItems {
         .properties(p -> p
             .food(PetrolparkFoods.BUTTER)
         ).register(),
-    MASHED_POTATO = REGISTRATE.sharedItem(SharedFeatureFlag.MILK_PRODUCTS, "mashed_potato", SharedItem::new)
+    MASHED_POTATO = REGISTRATE.sharedItem(SharedFeatureFlag.POTATO_PRODUCTS, "mashed_potato", SharedItem::new)
         .properties(p -> p
             .food(PetrolparkFoods.MASHED_POTATO)
         ).register(),

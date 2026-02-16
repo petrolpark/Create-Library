@@ -44,7 +44,7 @@ public final class RecyclingOutput {
     };
 
     public ItemStack getItem() {
-        return item;
+        return item.copyWithCount(1);
     };
 
     public double getExpectedCount() {

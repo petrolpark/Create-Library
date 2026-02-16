@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkDataComponentTypes;
+import com.petrolpark.PetrolparkItems;
 import com.petrolpark.compat.jei.PetrolparkJEI;
 import com.simibubi.create.compat.Mods;
 
@@ -31,13 +32,19 @@ import net.minecraft.world.level.Level;
 
 public class RecipeBookItem extends Item {
 
-    public static Stream<RecipeHolder<?>> streamProvidedRecipes(Level level, ItemStack stack) {
+    public static final Stream<RecipeHolder<?>> streamProvidedRecipes(Level level, ItemStack stack) {
         Stream<RecipeHolder<?>> recipes;
         List<ResourceLocation> recipesComponent = stack.get(DataComponents.RECIPES);
         if (recipesComponent != null) recipes = recipesComponent.stream().flatMap(rl -> level.getRecipeManager().byKey(rl).stream()); else recipes = Stream.empty();
         RecipeReferenceDataComponent recipeReferenceComponent = stack.get(PetrolparkDataComponentTypes.RECIPE_REFERENCE);
         if (recipeReferenceComponent != null) recipes = Stream.concat(recipes, recipeReferenceComponent.getRecipeHolder(level.getRecipeManager()).stream());
         return recipes;
+    };
+
+    public static final ItemStack of(RecipeHolder<?> rh, ResourceLocation jeiRecipeTypeId) {
+        final ItemStack book = PetrolparkItems.RECIPE_BOOK.asStack();
+        book.set(PetrolparkDataComponentTypes.RECIPE_REFERENCE, new RecipeReferenceDataComponent(rh.id(), Optional.ofNullable(jeiRecipeTypeId)));
+        return book;
     };
 
     public RecipeBookItem(Properties properties) {

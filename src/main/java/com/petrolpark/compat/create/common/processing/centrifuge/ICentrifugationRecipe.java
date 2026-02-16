@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import com.petrolpark.PetrolparkCriteriaTriggers;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AdvancementBehaviour;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.recipe.DummyCraftingContainer;
@@ -34,7 +35,10 @@ public interface ICentrifugationRecipe {
 
     public int getProcessingDuration();
 
-    public List<ItemStack> getRollableResultsAsItemStacks();
+	/**
+	 * @see ICentrifugationRecipe#rollLuckyResults(SmartBlockEntity, RandomSource)
+	 */
+    public List<ProcessingOutput> getRollableResults();
     
     public List<ItemStack> rollLuckyResults(SmartBlockEntity blockEntity, RandomSource random);
 
@@ -54,8 +58,8 @@ public interface ICentrifugationRecipe {
         if (availableItems == null || availableFluids == null) return false;
 
         boolean filterMatched = centrifuge.filter.test(getDenseOutputFluid()) || centrifuge.filter.test(getLightOutputFluid());
-        if (!filterMatched) for (final ItemStack result : getRollableResultsAsItemStacks()) {
-            if (centrifuge.filter.test(result)) {
+        if (!filterMatched) for (final ProcessingOutput result : getRollableResults()) {
+            if (centrifuge.filter.test(result.getStack())) {
                 filterMatched = true;
                 break;
             };

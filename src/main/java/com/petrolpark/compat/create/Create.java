@@ -5,8 +5,12 @@ import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
 import com.petrolpark.compat.create.event.CreateEvents;
 import com.petrolpark.compat.create.event.CreateModEvents;
-import com.petrolpark.config.PetrolparkStressConfig;
+import com.simibubi.create.foundation.item.ItemDescription;
+import com.simibubi.create.foundation.item.KineticStats;
+import com.simibubi.create.foundation.item.TooltipModifier;
 
+import net.createmod.catnip.lang.FontHelper;
+import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.RegisterEvent;
@@ -46,12 +50,17 @@ public class Create {
         modEventBus.addListener(Create::onRegister);
         NeoForge.EVENT_BUS.register(CreateEvents.class);
         modEventBus.register(CreateModEvents.class);
-        mainEventBus.register(PetrolparkStressConfig.class);
         mainEventBus.register(AbstractRememberPlacerBehaviour.class);
         mainEventBus.register(EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER);
     };
 
     private static final void onRegister(final RegisterEvent event) {
         PetrolparkItemAttributeTypes.init();
+    };
+
+    public static final void registerTooltip(Item item) {
+        final TooltipModifier modifier = new ItemDescription.Modifier(item, FontHelper.Palette.STANDARD_CREATE)
+			.andThen(TooltipModifier.mapNull(KineticStats.create(item)));
+	    TooltipModifier.REGISTRY.register(item, modifier);
     };
 };

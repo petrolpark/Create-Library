@@ -14,9 +14,13 @@ import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateBlocks;
 import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationRecipe;
+import com.petrolpark.compat.create.common.processing.centrifuge.PotionCentrifugation;
+import com.petrolpark.compat.create.common.processing.centrifuge.PotionCentrifugation.PotionCentrifugationRecipe;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerScreen;
 import com.petrolpark.compat.jei.category.AgeingCategory;
+import com.petrolpark.compat.jei.category.CentrifugationCategory;
 import com.petrolpark.compat.jei.category.CropFertilizingCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
@@ -28,6 +32,7 @@ import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.compat.jei.ghost.PetrolparkGhostIngredientHandler;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
 import com.petrolpark.compat.jei.ingredient.BlockStateIngredientType;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.item.decay.drying.DryingRecipe;
 import com.petrolpark.core.recipe.CropFertilizingRecipe;
@@ -50,6 +55,8 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
+import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.item.component.ResolvableProfile;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Recipe;
@@ -69,7 +76,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
 
     int itemDecayRecipeCount = 0;
 
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"null", "unused"})
     private void loadCategories(IJeiHelpers helpers) {
         ALL_CATEGORIES.clear();
 
@@ -114,15 +121,24 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .emptyBackground(120, 125)
             .build("crop_fertilizing", CropFertilizingCategory::new);
 
-        CreateRecipeCategory<?> lidded_basin, drying, extrusion;
+        CreateRecipeCategory<?> centrifugation, potion_centrifugation, drying, extrusion, lidded_basin;
 
-        if (SharedFeatureFlag.BASIN_LID.enabled()) lidded_basin = builder(BasinRecipe.class)
-            .addTypedRecipes(CreateRecipeTypes.LIDDED_BASIN)
-            .catalyst(CreateBlocks.BASIN_LID::get)
-            .catalyst(AllBlocks.BASIN::get)
-            .doubleItemIcon(CreateBlocks.BASIN_LID.get(), AllBlocks.BASIN.get())
-            .emptyBackground(177, 103)
-            .build("lidded_basin", LiddedBasinCategory::new);
+        if (SharedFeatureFlag.CENTRIFUGE.enabled()) {
+
+            centrifugation = builder(CentrifugationRecipe.class)
+                .addTypedRecipes(CreateRecipeTypes.CENTRIFUGATION)
+                .catalyst(CreateBlocks.CENTRIFUGE::get)
+                .itemIcon(CreateBlocks.CENTRIFUGE)
+                .emptyBackground(120, 115)
+                .build("centrifugation", CentrifugationCategory::new);
+
+            if (PetrolparkConfigs.server().potionCentrifugation.get()) potion_centrifugation = builder(PotionCentrifugationRecipe.class)
+                .addRecipes(PotionCentrifugation.streamAllRecipes(Minecraft.getInstance().getConnection().potionBrewing())::toList)
+                .catalyst(CreateBlocks.CENTRIFUGE::get)
+                .doubleItemIcon(CreateBlocks.CENTRIFUGE::asStack, () -> PotionContents.createItemStack(Items.POTION, Potions.HEALING))
+                .emptyBackground(120, 115)
+                .build("potion_centrifugation", CentrifugationCategory::new);
+        };
 
         if (SharedFeatureFlag.DRYING_RACK.enabled()) drying = builder(DryingRecipe.class)
             .addTypedRecipes(PetrolparkRecipeTypes.DRYING::get)
@@ -137,6 +153,14 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .itemIcon(CreateBlocks.EXTRUSION_DIE.get())
             .emptyBackground(177, 55)
             .build("extrusion", ExtrusionCategory::new);
+
+        if (SharedFeatureFlag.BASIN_LID.enabled()) lidded_basin = builder(BasinRecipe.class)
+            .addTypedRecipes(CreateRecipeTypes.LIDDED_BASIN)
+            .catalyst(CreateBlocks.BASIN_LID::get)
+            .catalyst(AllBlocks.BASIN::get)
+            .doubleItemIcon(CreateBlocks.BASIN_LID.get(), AllBlocks.BASIN.get())
+            .emptyBackground(177, 103)
+            .build("lidded_basin", LiddedBasinCategory::new);
     };
 
     @Override

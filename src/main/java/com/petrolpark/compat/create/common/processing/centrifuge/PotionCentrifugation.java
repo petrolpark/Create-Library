@@ -1,21 +1,28 @@
 package com.petrolpark.compat.create.common.processing.centrifuge;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
 import com.mojang.datafixers.util.Either;
+import com.petrolpark.Petrolpark;
+import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.util.CreateRecyclingHelper;
+import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.recipe.recycling.RecyclingManager;
 import com.petrolpark.core.recipe.recycling.RecyclingOutputs;
 import com.simibubi.create.AllDataComponents;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.content.fluids.potion.PotionFluid.BottleType;
 import com.simibubi.create.content.fluids.potion.PotionFluidHandler;
+import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
 import net.minecraft.core.Holder;
@@ -32,11 +39,11 @@ import net.minecraft.world.item.alchemy.PotionBrewing;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.DataComponentFluidIngredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
@@ -44,6 +51,7 @@ import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 public class PotionCentrifugation {
 
     protected static final Map<BottleType, Map<Holder<Potion>, PotionCentrifugationRecipe>> RECIPES = new HashMap<>();
+    private static boolean initialized = false;
 
     public static final void createAllRecipes(PotionBrewing brewing) {
         RECIPES.clear();
@@ -69,6 +77,18 @@ public class PotionCentrifugation {
                 RecyclingManager.getInverse(mix.ingredient())
             ))
         );
+        initialized = true;
+    };
+
+    public static final Stream<RecipeHolder<PotionCentrifugationRecipe>> streamAllRecipes(PotionBrewing brewing) {
+        if (!initialized) createAllRecipes(brewing);
+        id = 0;
+        return RECIPES.values().stream().map(Map::values).flatMap(Collection::stream).map(r -> new RecipeHolder<>(Petrolpark.asResource("potion_separation_" + nextId()), r));
+    };
+
+    private static int id = 0;
+    private static final int nextId() {
+        return id++;
     };
 
     protected static final PotionCentrifugationRecipe create(NonNullList<Ingredient> ingredients, FluidStack from, FluidStack to, Item item) {
@@ -91,11 +111,12 @@ public class PotionCentrifugation {
         return Optional.ofNullable(get(bottleType).get(potion));
     };
     
-    @SubscribeEvent
+    @SuppressWarnings("null")
     public static final void onCentrifugation(CentrifugationEvent event) {
-        //TODO config
+        if (!PetrolparkConfigs.server().potionCentrifugation.get()) return;
+        if (!initialized) createAllRecipes(event.getCentrifuge().getLevel().potionBrewing());
         final FluidStack input = event.getCentrifuge().getInputStack();
-        if (AllFluids.POTION.is(input)) {
+        if (input.getFluid().isSame(AllFluids.POTION.get())) {
             final BottleType bottleType = input.get(AllDataComponents.POTION_FLUID_BOTTLE_TYPE);
             final PotionContents potionContents = input.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY);
             if (bottleType != null && potionContents.potion().isPresent() && potionContents.customColor().isEmpty() && potionContents.customEffects().isEmpty())
@@ -104,7 +125,7 @@ public class PotionCentrifugation {
         
     };
 
-    public static record PotionCentrifugationRecipe(NonNullList<Ingredient> ingredients, SizedFluidIngredient fluidIngredient, Either<ItemStack, RecyclingOutputs> result, FluidStack lightOutput) implements Recipe<RecipeInput>, ICentrifugationRecipe {
+    public static record PotionCentrifugationRecipe(NonNullList<Ingredient> ingredients, SizedFluidIngredient fluidIngredient, Either<ItemStack, RecyclingOutputs> result, FluidStack denseOutput) implements Recipe<RecipeInput>, ICentrifugationRecipe {
 
         @Override
         public NonNullList<Ingredient> getIngredients() {
@@ -118,12 +139,12 @@ public class PotionCentrifugation {
 
         @Override
         public int getProcessingDuration() {
-            return 200; //TODO config
+            return 200;
         };
 
         @Override
-        public List<ItemStack> getRollableResultsAsItemStacks() {
-            return result().map(Collections::singletonList, RecyclingOutputs::getAllPossibleStacks);
+        public List<ProcessingOutput> getRollableResults() {
+            return result().map(stack -> Collections.singletonList(new ProcessingOutput(stack, 1f)), CreateRecyclingHelper::asProcessingOutputs);
         };
 
         @Override
@@ -138,13 +159,13 @@ public class PotionCentrifugation {
 
         @Override
         public FluidStack getDenseOutputFluid() {
-            return FluidStack.EMPTY;
+            return denseOutput();
         };
 
         @Override
         public FluidStack getLightOutputFluid() {
-            return lightOutput();
-        }
+            return FluidStack.EMPTY;
+        };
 
         @Override
         public boolean matches(@Nonnull RecipeInput input, @Nonnull Level level) {
@@ -174,8 +195,7 @@ public class PotionCentrifugation {
 
         @Override
         public RecipeType<?> getType() {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'getType'");
+            return CreateRecipeTypes.CENTRIFUGATION.getType(); //TODO check if not dodgy
         };
 
     };

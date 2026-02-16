@@ -32,8 +32,9 @@ public class SharedCreateBlockEntityBuilder<T extends BlockEntity, P> extends Cr
     };
 
     @Override
-    public BlockEntityBuilder<T, P> renderer(@Nonnull NonNullSupplier<NonNullFunction<BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>>> renderer) {
-        if (featureFlag.enabled()) return super.renderer(renderer);
+    public SharedCreateBlockEntityBuilder<T, P> renderer(@Nonnull NonNullSupplier<NonNullFunction<BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>>> renderer) {
+        if (featureFlag.enabled())
+            super.renderer(renderer);
         return this;
     };
 

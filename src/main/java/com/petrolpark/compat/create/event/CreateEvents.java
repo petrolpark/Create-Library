@@ -1,6 +1,8 @@
 package com.petrolpark.compat.create.event;
 
 import com.petrolpark.PetrolparkRecipeTypes;
+import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationEvent;
+import com.petrolpark.compat.create.common.processing.centrifuge.PotionCentrifugation;
 import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorItemEvent;
 import com.petrolpark.core.item.decay.IApplyDecayRecipe;
 
@@ -24,5 +26,10 @@ public class CreateEvents {
     @SubscribeEvent
     public static final void onChainConveyorAddItemClient(ChainConveyorItemEvent.AddClient event) {
         event.or(!event.level.getRecipeManager().getRecipesFor(PetrolparkRecipeTypes.DRYING.get(), new SingleRecipeInput(event.stack), event.level).isEmpty());
+    };
+
+    @SubscribeEvent
+    public static final void onCentrifugation(CentrifugationEvent event) {
+        PotionCentrifugation.onCentrifugation(event);
     };
 };

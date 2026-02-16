@@ -57,13 +57,11 @@ public class Petrolpark {
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
 
         initializeSharedFeatures();
+        
         if (DatagenModLoader.isRunningDataGen()) PetrolparkDatagen.prepareDatagen();
 
         REGISTRATE.registerEventListeners(modEventBus);
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
-
-        // Config
-        PetrolparkConfigs.register(ModLoadingContext.get(), modContainer);
 
         // Registration
         Badges.register();
@@ -107,12 +105,15 @@ public class Petrolpark {
         if (Mods.JEI.isLoading()) NeoForge.EVENT_BUS.register(ITickableCategory.ClientEvents.class);
         Mods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, NeoForge.EVENT_BUS));
         Mods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, NeoForge.EVENT_BUS));
+
+        // Config
+        PetrolparkConfigs.register(ModLoadingContext.get(), modContainer);
     };
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
         return new SharedFeatureFlag[]{};
-        //return new SharedFeatureFlag[]{SharedFeatureFlag.DRYING_RACK, SharedFeatureFlag.ARMS_TARGET_CHAIN_CONVEYORS};
+        //return new SharedFeatureFlag[]{SharedFeatureFlag.CENTRIFUGE, SharedFeatureFlag.MILK_PRODUCTS};
     };
 
     private void init(final FMLCommonSetupEvent event) {

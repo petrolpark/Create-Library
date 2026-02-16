@@ -17,6 +17,7 @@ import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlock;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlock;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockItem;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlock;
+import com.petrolpark.config.PetrolparkStressConfig;
 import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.ModelGen;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -42,7 +43,9 @@ public class CreateBlocks {
         .initialProperties(SharedProperties::copperMetal)
         .properties(BlockBehaviour.Properties::noOcclusion)
         .transform(pickaxeOnly())
+        .transform(PetrolparkStressConfig.setImpact(2f))
         .item()
+        .onRegister(Create::registerTooltip)
         .build()
         .register();
 

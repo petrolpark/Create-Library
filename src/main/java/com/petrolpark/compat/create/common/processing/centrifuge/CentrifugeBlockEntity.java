@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import com.petrolpark.compat.create.CreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AdvancementBehaviour;
+import com.petrolpark.compat.create.util.PetrolparkCreateLang;
 import com.petrolpark.core.recipe.RecipeHelper;
 import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
 import com.simibubi.create.content.fluids.FluidFX;
@@ -14,15 +15,19 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.fluid.SmartFluidTankBehaviour;
 import com.simibubi.create.foundation.fluid.CombinedTankWrapper;
+import com.simibubi.create.foundation.item.ItemHelper;
 import com.simibubi.create.foundation.recipe.RecipeFinder;
+import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.math.VecHelper;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -43,10 +48,11 @@ import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipeBookAcceptorBlockEntity {
 
-    protected final FilteringBehaviour filter = new FilteringBehaviour(this, new CentrifugeValueBox()).forRecipes();
+    protected FilteringBehaviour filter;
     protected final ItemStackHandler inventory = new ItemStackHandler(8);
     protected SmartFluidTankBehaviour inputTank, denseOutputTank, lightOutputTank;
     protected IFluidHandler verticalFluidCapability;
+    protected IFluidHandler overallFluidCapability;
 
     protected int timer = -1;
 
@@ -61,16 +67,17 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
         behaviours.add(new AdvancementBehaviour(this));
-        behaviours.add(filter);
+        behaviours.add(filter = new FilteringBehaviour(this, new CentrifugeValueBox()).forRecipes());
         behaviours.add(inputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.INPUT, this, 1, getEachTankCapacity(), true)
             .whenFluidUpdates(this::onFluidStackChanged));
-        behaviours.add(denseOutputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, getEachTankCapacity(), true)
+        denseOutputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, getEachTankCapacity(), true)
             .forbidInsertion()
-            .whenFluidUpdates(this::onFluidStackChanged));
+            .whenFluidUpdates(this::onFluidStackChanged);
         behaviours.add(lightOutputTank = new SmartFluidTankBehaviour(SmartFluidTankBehaviour.OUTPUT, this, 1, getEachTankCapacity(), true)
             .forbidInsertion()
             .whenFluidUpdates(this::onFluidStackChanged));
         verticalFluidCapability = new CombinedTankWrapper(inputTank.getCapability(), lightOutputTank.getCapability());
+        overallFluidCapability = new CombinedTankWrapper(inputTank.getCapability(), denseOutputTank.getCapability(), lightOutputTank.getCapability());
     };
 
     public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
@@ -88,6 +95,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
     };
 
     public IFluidHandler getFluidHandler(Direction face) {
+        if (face == null) return overallFluidCapability;
         if (face.getAxis().isVertical()) return verticalFluidCapability;
         return denseOutputTank.getCapability();
     };
@@ -112,11 +120,16 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
                 spawnParticles();
                 return;
             };
-            if (timer <= 0) process();
+            if (timer <= 0) {
+                process();
+                timer = 0;
+            };
             sendData();
             return;
+        } else if (timer < 0) {
+            timer++;
+            return;
         };
-        if (inputTank.isEmpty()) return; // Don't do anything more if input Tank is empty
 
         if (lastRecipe == null || !lastRecipe.apply(this, true)) { // If the Recipe has changed
             final List<ICentrifugationRecipe> possibleRecipes = getMatchingRecipes();
@@ -128,7 +141,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
         };
 
         if (lastRecipe == null) {
-            timer = 100; // If we have no Recipe, don't try checking again for another 100 ticks
+            timer = -100; // If we have no Recipe, don't try checking again for another 100 ticks
         } else {
             timer = lastRecipe.getProcessingDuration();
         };
@@ -158,6 +171,12 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
             NeoForge.EVENT_BUS.post(new CentrifugationEvent(this)).recipes.stream()
         ).filter(r -> r.apply(this, true))
         .toList();
+    };
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        ItemHelper.dropContents(level, getBlockPos(), inventory);
     };
 
     public boolean acceptOutputs(List<ItemStack> outputItems, FluidStack denseOutputFluid, FluidStack lightOutputFluid, boolean simulate) {
@@ -196,6 +215,8 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
         return tank.getPrimaryHandler().getCapacity() <= tank.getPrimaryHandler().getFluidAmount();
     };
 
+    protected Vec3 particleOffset = Vec3.ZERO;
+
     @SuppressWarnings("null")
     public void spawnParticles() {
         final FluidStack fluidStack = inputTank.getPrimaryHandler().getFluid();
@@ -205,7 +226,7 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
 
         final ParticleOptions particleOptions = FluidFX.getFluidParticle(fluidStack);
         final float angle = random.nextFloat() * 360;
-        Vec3 offset = new Vec3(0, 0, 0.7f);
+        Vec3 offset = particleOffset.add(0, 0, 0.7f);
         offset = VecHelper.rotate(offset, angle, Axis.Y);
         Vec3 target = VecHelper.rotate(offset, getSpeed() > 0 ? 25 : -25, Axis.Y);
 
@@ -216,14 +237,22 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
 
     @Override
     protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        // TODO Auto-generated method stub
         super.read(compound, registries, clientPacket);
+        timer = compound.getInt("Time");
+        inventory.deserializeNBT(registries, compound.getCompound("Items"));
+
+        denseOutputTank.read(compound.getCompound("DenseOutputTank"), registries, clientPacket);
     };
 
     @Override
     protected void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        // TODO Auto-generated method stub
         super.write(compound, registries, clientPacket);
+        compound.putInt("Time", timer);
+        compound.put("Items", inventory.serializeNBT(registries));
+
+        final CompoundTag denseOutputTag = new CompoundTag();
+        denseOutputTank.write(denseOutputTag, registries, clientPacket);
+        compound.put("DenseOutputTank", denseOutputTag);
     };
 
     @Override
@@ -232,11 +261,64 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
         super.invalidate();
     };
 
+    @Override
+	public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+		PetrolparkCreateLang.translate("gui.goggles.centrifuge")
+			.forGoggles(tooltip);
+            
+		boolean innerChamberEmpty = inputTank.isEmpty() && lightOutputTank.isEmpty();
+
+        for (int slot = 0; slot < inventory.getSlots(); slot++) if (!inventory.getStackInSlot(slot).isEmpty()) {
+            innerChamberEmpty = false;
+            break;
+        };
+
+        if (!innerChamberEmpty) PetrolparkCreateLang.translate("gui.goggles.centrifuge.inner")
+            .forGoggles(tooltip);
+
+		for (int slot = 0; slot < inventory.getSlots(); slot++) {
+			ItemStack stackInSlot = inventory.getStackInSlot(slot);
+			if (stackInSlot.isEmpty()) continue;
+			CreateLang.text("")
+				.add(Component.translatable(stackInSlot.getDescriptionId()).withStyle(ChatFormatting.GRAY))
+				.add(CreateLang.text(" x" + stackInSlot.getCount()).style(ChatFormatting.GREEN))
+				.forGoggles(tooltip, 1);
+		};
+
+        if (!inputTank.isEmpty()) addFluidToTooltip(getInputStack(), tooltip);
+        if (!lightOutputTank.isEmpty()) addFluidToTooltip(lightOutputTank.getPrimaryHandler().getFluid(), tooltip);
+
+        if (!denseOutputTank.isEmpty()) {
+            PetrolparkCreateLang.translate("gui.goggles.centrifuge.outer")
+                .forGoggles(tooltip);
+            addFluidToTooltip(denseOutputTank.getPrimaryHandler().getFluid(), tooltip);
+        };
+
+		if (innerChamberEmpty && denseOutputTank.isEmpty()) {
+            tooltip.remove(0);
+        } else {
+            tooltip.add(Component.literal(""));
+        };
+
+		return (!innerChamberEmpty || !denseOutputTank.isEmpty()) | super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+	};
+
+    protected void addFluidToTooltip(FluidStack fluidStack, List<Component> tooltip) {
+        CreateLang.text("")
+            .add(CreateLang.fluidName(fluidStack)
+                .add(CreateLang.text(" "))
+                .style(ChatFormatting.GRAY)
+                .add(CreateLang.number(fluidStack.getAmount())
+                    .add(CreateLang.translate("generic.unit.millibuckets"))
+                    .style(ChatFormatting.BLUE)))
+            .forGoggles(tooltip, 1);
+    };
+
     static class CentrifugeValueBox extends ValueBoxTransform.Sided {
 
         @Override
 		protected Vec3 getSouthLocation() {
-			return VecHelper.voxelSpace(8d, 12d, 16.05d);
+			return VecHelper.voxelSpace(8d, 14d, 16.05d);
 		};
 
         @Override

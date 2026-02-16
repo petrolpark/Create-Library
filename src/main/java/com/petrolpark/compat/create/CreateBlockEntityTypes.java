@@ -31,7 +31,7 @@ public class CreateBlockEntityTypes {
         .register();
 
     public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = sharedBlockEntity(SharedFeatureFlag.CENTRIFUGE, "centrifuge", CentrifugeBlockEntity::new)
-        .visual(() -> SingleAxisRotatingVisual.of(PetrolparkPartialModels.CENTRIFUGE_COG), false)
+        .visual(() -> SingleAxisRotatingVisual.of(PetrolparkPartialModels.CENTRIFUGE_COG), true)
         .validBlock(CreateBlocks.CENTRIFUGE)
         .renderer(() -> CentrifugeRenderer::new)
         .register();

@@ -1,6 +1,8 @@
 package com.petrolpark.compat.create.event;
 
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateRegistries;
+import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlockEntity;
 import com.petrolpark.compat.create.core.dough.DoughCut;
 
@@ -18,5 +20,10 @@ public class CreateModEvents {
     @SubscribeEvent
     public static final void registerCapabilities(RegisterCapabilitiesEvent event) {
         MandrelBlockEntity.registerCapabilities(event);
+    };
+
+    @SubscribeEvent
+    public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
+        if (SharedFeatureFlag.CENTRIFUGE.enabled()) CentrifugeBlockEntity.onRegisterCapabilities(event);
     };
 };
