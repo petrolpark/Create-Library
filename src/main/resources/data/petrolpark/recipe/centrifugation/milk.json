@@ -1,0 +1,34 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "milk_products"
+        }
+    ],
+    "type": "petrolpark:centrifugation",
+    "ingredients": [
+        {
+            "type": "neoforge:difference",
+            "base": {
+                "type": "neoforge:tag",
+                "tag": "c:milk"
+            },
+            "subtracted": {
+                "type": "neoforge:single",
+                "fluid": "petrolpark:skimmed_milk"
+            },
+            "amount": 1000
+        }
+    ],
+    "results": [
+        {
+            "id": "petrolpark:cream",
+            "amount": 500
+        },
+        {
+            "id": "petrolpark:skimmed_milk",
+            "amount": 500
+        }
+    ],
+    "processing_time": 500
+}

@@ -22,13 +22,13 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 
-public abstract class AdvancedProcessingRecipe extends ProcessingRecipe<RecipeWrapper, AdvancedProcessingRecipeParams> implements IBookRequiredRecipe, IBiomeSpecificRecipe, IFTLProcessingRecipe<AdvancedProcessingRecipe> {
+public abstract class AdvancedProcessingRecipe<I extends RecipeInput> extends ProcessingRecipe<I, AdvancedProcessingRecipeParams> implements IBookRequiredRecipe, IBiomeSpecificRecipe, IFTLProcessingRecipe<AdvancedProcessingRecipe<I>> {
 
     protected final boolean bookRequired;
     protected final Optional<HolderSet<Biome>> allowedBiomes;
@@ -59,7 +59,7 @@ public abstract class AdvancedProcessingRecipe extends ProcessingRecipe<RecipeWr
     };
 
     @Override
-    public AdvancedProcessingRecipe getAsRecipe() {
+    public AdvancedProcessingRecipe<I> getAsRecipe() {
         return this;
     };
 
@@ -81,7 +81,7 @@ public abstract class AdvancedProcessingRecipe extends ProcessingRecipe<RecipeWr
         return super.rollResults(random);
     };
 
-    public static class Serializer<R extends AdvancedProcessingRecipe> implements RecipeSerializer<R> {
+    public static class Serializer<R extends AdvancedProcessingRecipe<?>> implements RecipeSerializer<R> {
         
 		private final MapCodec<R> codec;
 		private final StreamCodec<RegistryFriendlyByteBuf, R> streamCodec;

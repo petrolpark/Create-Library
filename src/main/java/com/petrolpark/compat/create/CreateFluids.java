@@ -22,7 +22,7 @@ public class CreateFluids {
     
     CREAM = sharedSingleTextureVirtualFluid(SharedFeatureFlag.MILK_PRODUCTS, "cream")
         .register(),
-    SKIMMED_MILK = sharedColoredWaterFluid(SharedFeatureFlag.MILK_PRODUCTS, "skimmed_milk", 0xFF000000)
+    SKIMMED_MILK = sharedColoredWaterFluid(SharedFeatureFlag.MILK_PRODUCTS, "skimmed_milk", 0x80FFFFFF)
         .register();
 
     private static FluidBuilder<VirtualFluid, PetrolparkRegistrate> sharedColoredWaterFluid(SharedFeatureFlag featureFlag, String name, int color) {

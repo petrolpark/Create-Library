@@ -9,6 +9,7 @@ public class PetrolparkPartialModels {
     public static final PartialModel
 
     MANDREL_SHAFT = block("mandrel/shaft"),
+    CENTRIFUGE_COG = block("centrifuge/cog"),
 
     // Deployer
     DEPLOYER_HAND_PAPER = block("deployer/hand_paper"),

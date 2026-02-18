@@ -10,7 +10,6 @@ import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
-import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.infrastructure.config.CStress;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
@@ -21,7 +20,6 @@ import net.createmod.catnip.config.ConfigBase;
 import net.createmod.catnip.registry.RegisteredObjectsHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
 
@@ -41,12 +39,12 @@ public class PetrolparkStressConfig extends ConfigBase {
 	public void registerAll(@Nonnull ModConfigSpec.Builder builder) {
 		builder.comment(".", Comments.su, Comments.impact)
 			.push("impact");
-		DEFAULT_IMPACTS.forEach((id, value) -> this.impacts.put(id, builder.define(id.getPath(), value)));
+		DEFAULT_IMPACTS.forEach((id, value) -> impacts.put(id, builder.define(id.getPath(), value)));
 		builder.pop();
 
 		builder.comment(".", Comments.su, Comments.capacity)
 			.push("capacity");
-		DEFAULT_CAPACITIES.forEach((id, value) -> this.capacities.put(id, builder.define(id.getPath(), value)));
+		DEFAULT_CAPACITIES.forEach((id, value) -> capacities.put(id, builder.define(id.getPath(), value)));
 		builder.pop();
 	};
 
@@ -57,15 +55,15 @@ public class PetrolparkStressConfig extends ConfigBase {
 
 	@Nullable
 	public DoubleSupplier getImpact(Block block) {
-		ResourceLocation id = RegisteredObjectsHelper.getKeyOrThrow(block);
-		ConfigValue<Double> value = this.impacts.get(id);
+		final ResourceLocation id = RegisteredObjectsHelper.getKeyOrThrow(block);
+		final ConfigValue<Double> value = this.impacts.get(id);
 		return value == null ? null : value::get;
 	};
 
 	@Nullable
 	public DoubleSupplier getCapacity(Block block) {
-		ResourceLocation id = RegisteredObjectsHelper.getKeyOrThrow(block);
-		ConfigValue<Double> value = this.capacities.get(id);
+		final ResourceLocation id = RegisteredObjectsHelper.getKeyOrThrow(block);
+		final ConfigValue<Double> value = this.capacities.get(id);
 		return value == null ? null : value::get;
 	};
 
@@ -76,7 +74,7 @@ public class PetrolparkStressConfig extends ConfigBase {
 	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> setImpact(double value) {
 		return builder -> {
 			assertFromPetrolparkLibrary(builder);
-			ResourceLocation id = Petrolpark.asResource(builder.getName());
+			final ResourceLocation id = Petrolpark.asResource(builder.getName());
 			DEFAULT_IMPACTS.put(id, value);
 			return builder;
 		};
@@ -85,7 +83,7 @@ public class PetrolparkStressConfig extends ConfigBase {
 	public static <B extends Block, P> NonNullUnaryOperator<BlockBuilder<B, P>> setCapacity(double value) {
 		return builder -> {
 			assertFromPetrolparkLibrary(builder);
-			ResourceLocation id = Petrolpark.asResource(builder.getName());
+			final ResourceLocation id = Petrolpark.asResource(builder.getName());
 			DEFAULT_CAPACITIES.put(id, value);
 			return builder;
 		};
@@ -93,7 +91,7 @@ public class PetrolparkStressConfig extends ConfigBase {
 
 	private static void assertFromPetrolparkLibrary(BlockBuilder<?, ?> builder) {
 		if (!builder.getOwner().getModid().equals(Petrolpark.MOD_ID)) {
-			throw new IllegalStateException("Non-Petrolpark blocks cannot be added to Create's config.");
+			throw new IllegalStateException("Non-Petrolpark blocks cannot be added to Petrolpark's config.");
 		};
 	};
 
@@ -101,13 +99,6 @@ public class PetrolparkStressConfig extends ConfigBase {
 		static String su = "[in Stress Units]";
 		static String impact = "Individual coefficients of stress impact of kinetic blocks.";
 		static String capacity = "Individual stress capacities of kinetic blocks.";
-	};
-
-	@SubscribeEvent
-	public static final void onAddAdditionalConfig(PetrolparkServerConfig.AdditionalEvent event) {
-		PetrolparkStressConfig stress = event.nested(0, PetrolparkStressConfig::new);
-		BlockStressValues.CAPACITIES.registerProvider(stress::getCapacity);
-		BlockStressValues.IMPACTS.registerProvider(stress::getImpact);
 	};
     
 };

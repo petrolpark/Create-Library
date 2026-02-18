@@ -1,0 +1,44 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "petrolpark:block/centrifuge/block"
+      }
+    },
+    {
+      "apply": {
+        "model": "petrolpark:block/centrifuge/hatch"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "petrolpark:block/centrifuge/hatch",
+        "y": 90
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "petrolpark:block/centrifuge/hatch",
+        "y": 180
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "petrolpark:block/centrifuge/hatch",
+        "y": 270
+      },
+      "when": {
+        "west": "true"
+      }
+    }
+  ]
+}

@@ -11,11 +11,13 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlock;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlock;
+import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeBlock;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionDieBlock;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlock;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlock;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockItem;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlock;
+import com.petrolpark.config.PetrolparkStressConfig;
 import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.ModelGen;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -34,6 +36,16 @@ public class CreateBlocks {
         .blockstate(BlockStateGen.horizontalBlockProvider(false))
         .transform(pickaxeOnly())
         .item()
+        .build()
+        .register();
+
+    public static final BlockEntry<CentrifugeBlock> CENTRIFUGE = REGISTRATE.sharedBlock(SharedFeatureFlag.CENTRIFUGE, "centrifuge", CentrifugeBlock::new)
+        .initialProperties(SharedProperties::copperMetal)
+        .properties(BlockBehaviour.Properties::noOcclusion)
+        .transform(pickaxeOnly())
+        .transform(PetrolparkStressConfig.setImpact(2f))
+        .item()
+        .onRegister(Create::registerTooltip)
         .build()
         .register();
 
