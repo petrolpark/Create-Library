@@ -237,6 +237,10 @@
     "petrolpark.generic.wood.planks_regex": "^(.*?)\\s+の板材$",
     "petrolpark.generic.wood.unknown": "未知の木材",
 
+    "petrolpark.gui.goggles.centrifuge": "遠心分離機の内容物",
+    "petrolpark.gui.goggles.centrifuge.inner": "内槽",
+    "petrolpark.gui.goggles.centrifuge.outer": "外槽",
+    
     "petrolpark.key.hotbar.10": "ホットバースロット 10",
     "petrolpark.key.hotbar.11": "ホットバースロット 11",
     "petrolpark.key.hotbar.12": "ホットバースロット 12",
@@ -261,6 +265,12 @@
     "petrolpark.ponder.basin_lid.text_1": "鉢と鉢の蓋を組み合わせることで、一部のレシピを自動化できます",
     "petrolpark.ponder.basin_lid.text_2": "一部のレシピには、ブレイズバーナーによる加熱が必要です",
     "petrolpark.ponder.basin_lid.text_3": "2つのレシピが競合する場合は、フィルタースロットを使用して制限できます",
+    "petrolpark.ponder.centrifuge.header": "遠心分離機による分離",
+    "petrolpark.ponder.centrifuge.text_1": "遠心分離機は、特定のアイテムや流体を分離できます",
+    "petrolpark.ponder.centrifuge.text_2": "流体を上部または下部からポンプで注入します",
+    "petrolpark.ponder.centrifuge.text_3": "比重の重い流体は外槽へ飛ばされ、側面から抽出できるようになります",
+    "petrolpark.ponder.centrifuge.text_4": "軽い流体やアイテムは内槽に残り、上部または下部から抽出できます",
+    "petrolpark.ponder.centrifuge.text_5": "アイテムは側面から抽出することも可能です",
     "petrolpark.ponder.drying.header": "乾燥ラックでのアイテム乾燥",
     "petrolpark.ponder.drying.text_1": "一部のアイテムは右クリックすることで吊るすことができます",
     "petrolpark.ponder.drying.text_2": "しばらく時間が経過した後、再度右クリックすることでアイテムを回収できます",
@@ -293,13 +303,16 @@
 
     "petrolpark.recipe.ageing": "熟成",
     "petrolpark.recipe.biome_specific": "以下のバイオームで行う必要があります:",
+    "petrolpark.recipe.book_required": "レシピ本が必要です！",
+    "petrolpark.recipe.centrifugation": "遠心分離",
     "petrolpark.recipe.crop_fertilizing": "作物の施肥",
     "petrolpark.recipe.drying": "乾燥",
     "petrolpark.recipe.extrusion": "押し出し加工",
     "petrolpark.recipe.item_decay": "アイテムの腐敗",
     "petrolpark.recipe.lidded_basin": "蓋つき鉢",
     "petrolpark.recipe.manual_crafting": "手動のみのクラフト",
-
+    "petrolpark.recipe.potion_centrifugation": "ポーション遠心分離",
+    
     "petrolpark.tube.connect_another": "別の %1$s を設置して接続します",
     "petrolpark.tube.title": "    %1$s %2$s を建設中",
     "petrolpark.tube.control.build": "    [%1$s] 建設",
