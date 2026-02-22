@@ -6,16 +6,17 @@ import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchArguments.None;
 import com.petrolpark.core.scratch.ScratchParameters;
+import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
-public final class MissingExpression<TYPE> extends GenericExpression<IScratchEnvironment, TYPE, TYPE, ScratchArguments.None<IScratchEnvironment>, ScratchParameters.None<IScratchEnvironment>> {
+public final class MissingExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends GenericExpression<IScratchEnvironment, TYPE, ARGUMENT, TYPE, ScratchArguments.None<IScratchEnvironment>, ScratchParameters.None<IScratchEnvironment>> {
 
-    public static final <TYPE> MissingExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
+    public static final <TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> MissingExpression<TYPE, ARGUMENT> create(IScratchClass<TYPE, ARGUMENT> scratchClass) {
         return new MissingExpression<>(scratchClass);
     };
 
-    protected MissingExpression(IScratchClass<TYPE> genericClass) {
+    protected MissingExpression(IScratchClass<TYPE, ARGUMENT> genericClass) {
         super(genericClass, parameters());
     };
 
@@ -30,7 +31,7 @@ public final class MissingExpression<TYPE> extends GenericExpression<IScratchEnv
     };
 
     @Override
-    public IScratchClass<TYPE> getReturnClass() {
+    public IScratchClass<TYPE, ARGUMENT> getReturnClass() {
         return getGenericScratchClass();
     };
 

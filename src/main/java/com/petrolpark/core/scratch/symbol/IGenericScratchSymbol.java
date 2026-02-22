@@ -7,20 +7,21 @@ import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.codec.RecordContextualCodecBuilder;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
+import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
-public interface IGenericScratchSymbol<ENVIRONMENT extends IScratchEnvironment, GENERIC_TYPE, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>, PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>> extends IScratchSymbol<ENVIRONMENT, ARGUMENTS, PARAMETERS> {
+public interface IGenericScratchSymbol<ENVIRONMENT extends IScratchEnvironment, GENERIC_TYPE, GENERIC_ARGUMENT extends IScratchArgument<IScratchEnvironment, GENERIC_TYPE>, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>, PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>> extends IScratchSymbol<ENVIRONMENT, ARGUMENTS, PARAMETERS> {
     
-    static <SYMBOL extends IGenericScratchSymbol<?, ?, ?, ?>> Products.P1<RecordCodecBuilder.Mu<SYMBOL>, IScratchClass<?>> commonCodecFields(RecordCodecBuilder.Instance<SYMBOL> instance) {
+    static <SYMBOL extends IGenericScratchSymbol<?, ?, ?, ?, ?>> Products.P1<RecordCodecBuilder.Mu<SYMBOL>, IScratchClass<?, ?>> commonCodecFields(RecordCodecBuilder.Instance<SYMBOL> instance) {
         return instance.group(IScratchClass.CODEC.fieldOf("class").forGetter(IGenericScratchSymbol::getGenericScratchClass));
     };
 
-    static <CONTEXT, SYMBOL extends IGenericScratchSymbol<?, ?, ?, ?>> Products.P1<RecordContextualCodecBuilder.Mu<CONTEXT, SYMBOL>, IScratchClass<?>> commonContextualCodecFields(RecordContextualCodecBuilder.Instance<CONTEXT, SYMBOL> instance) {
-        return instance.group(ContextualCodec.<CONTEXT, IScratchClass<?>>of(IScratchClass.CODEC).fieldOf("class").forGetter(IGenericScratchSymbol::getGenericScratchClass));
+    static <CONTEXT, SYMBOL extends IGenericScratchSymbol<?, ?, ?, ?, ?>> Products.P1<RecordContextualCodecBuilder.Mu<CONTEXT, SYMBOL>, IScratchClass<?, ?>> commonContextualCodecFields(RecordContextualCodecBuilder.Instance<CONTEXT, SYMBOL> instance) {
+        return instance.group(ContextualCodec.<CONTEXT, IScratchClass<?, ?>>of(IScratchClass.CODEC).fieldOf("class").forGetter(IGenericScratchSymbol::getGenericScratchClass));
     };
 
-    public IScratchClass<GENERIC_TYPE> getGenericScratchClass();
+    public IScratchClass<GENERIC_TYPE, GENERIC_ARGUMENT> getGenericScratchClass();
 
     @Override
     public default boolean canEvaluate(ARGUMENTS arguments) {

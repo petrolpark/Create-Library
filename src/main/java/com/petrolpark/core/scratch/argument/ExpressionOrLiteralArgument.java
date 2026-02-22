@@ -56,12 +56,12 @@ public record ExpressionOrLiteralArgument<ENVIRONMENT extends IScratchEnvironmen
 
     public static final class ExpressionOrLiteralParameter<ENVIRONMENT extends IScratchEnvironment, TYPE> implements IExpressionScratchParameter<ENVIRONMENT, TYPE, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> {
 
-        private final IScratchClass<TYPE> scratchClass;
+        private final IScratchClass<TYPE, ?> scratchClass;
         private final ExpressionParameter<ENVIRONMENT, TYPE> expressionParameter;
         private final ContextualCodec<IScratchContextProvider<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> codec;
         private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ExpressionOrLiteralArgument<ENVIRONMENT, TYPE>> streamCodec;
 
-        public ExpressionOrLiteralParameter(String key, IScratchClass<TYPE> scratchClass) {
+        public ExpressionOrLiteralParameter(String key, IScratchClass<TYPE, ?> scratchClass) {
             this.scratchClass = scratchClass;
             expressionParameter = new ExpressionParameter<>(key, scratchClass);
 

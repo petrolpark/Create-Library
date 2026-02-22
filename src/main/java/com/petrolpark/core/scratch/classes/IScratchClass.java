@@ -14,16 +14,16 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public interface IScratchClass<TYPE> {
+public interface IScratchClass<TYPE, DEFAULT_ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> {
     
     /**
      * Use {@link IScratchClass#CODEC} instead.
      */
-    static Codec<IScratchClass<?>> TYPED_CODEC = PetrolparkRegistries.SCRATCH_CLASSES.byNameCodec().dispatch(IScratchClass::getType, IScratchClassType::scratchClassCodec);
+    static Codec<IScratchClass<?, ?>> TYPED_CODEC = PetrolparkRegistries.SCRATCH_CLASSES.byNameCodec().dispatch(IScratchClass::getType, IScratchClassType::scratchClassCodec);
 
-    public static StreamCodec<RegistryFriendlyByteBuf, IScratchClass<?>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.SCRATCH_CLASS_TYPE).dispatch(IScratchClass::getType, IScratchClassType::scratchClassStreamCodec);
+    public static StreamCodec<RegistryFriendlyByteBuf, IScratchClass<?, ?>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.SCRATCH_CLASS_TYPE).dispatch(IScratchClass::getType, IScratchClassType::scratchClassStreamCodec);
 
-    public static Codec<IScratchClass<?>> CODEC = Codec.lazyInitialized(() -> TYPED_CODEC);
+    public static Codec<IScratchClass<?, ?>> CODEC = Codec.lazyInitialized(() -> TYPED_CODEC);
 
     public Codec<TYPE> codec();
 
@@ -33,11 +33,11 @@ public interface IScratchClass<TYPE> {
     
     public IScratchClassType getType();
 
-    public ISyncedScratchClass<TYPE> asSynced();
+    public ISyncedScratchClass<TYPE, DEFAULT_ARGUMENT> asSynced();
 
-    public <ENVIRONMENT extends IScratchEnvironment> IScratchParameter<ENVIRONMENT, TYPE, ? extends IScratchArgument<ENVIRONMENT, TYPE>> createDefaultParameter(String key);
+    public <ENVIRONMENT extends IScratchEnvironment> IScratchParameter<ENVIRONMENT, TYPE, DEFAULT_ARGUMENT> createDefaultParameter(String key);
 
-    public <TO_TYPE> Optional<IScratchClass.Caster<TYPE, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass);
+    public <TO_TYPE> Optional<IScratchClass.Caster<TYPE, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass);
 
     @FunctionalInterface
     public static interface Caster<FROM_TYPE, TO_TYPE> {

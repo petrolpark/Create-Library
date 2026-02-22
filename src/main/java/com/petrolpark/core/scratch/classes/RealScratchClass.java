@@ -11,7 +11,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public class RealScratchClass extends SimpleParseableScratchClass<Double> implements IByteBufScratchClass<Double> {
+public class RealScratchClass extends SimpleParseableScratchClass<Double, ExpressionOrLiteralArgument<IScratchEnvironment, Double>> implements IByteBufScratchClass<Double, ExpressionOrLiteralArgument<IScratchEnvironment, Double>> {
 
     @Override
     public Double fallback() {
@@ -34,7 +34,7 @@ public class RealScratchClass extends SimpleParseableScratchClass<Double> implem
     };
 
     @Override
-    public <TO_TYPE> Optional<IScratchClass.Caster<Double, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
+    public <TO_TYPE> Optional<IScratchClass.Caster<Double, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'cast'");
     };

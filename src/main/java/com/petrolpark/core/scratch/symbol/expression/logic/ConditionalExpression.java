@@ -13,19 +13,20 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.TernaryGenericExpression;;
 
-public final class ConditionalExpression<TYPE> extends TernaryGenericExpression<
+public final class ConditionalExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends TernaryGenericExpression<
     IScratchEnvironment,
-    TYPE, TYPE,
+    TYPE, ARGUMENT,
+    TYPE,
     Boolean, ExpressionOrDropdownArgument<IScratchEnvironment, Boolean>, ExpressionOrDropdownParameter<IScratchEnvironment, Boolean>,
-    TYPE, IScratchArgument<IScratchEnvironment, TYPE>, IScratchParameter<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>,
-    TYPE, IScratchArgument<IScratchEnvironment, TYPE>, IScratchParameter<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>
+    TYPE, ARGUMENT, IScratchParameter<IScratchEnvironment, TYPE, ARGUMENT>,
+    TYPE, ARGUMENT, IScratchParameter<IScratchEnvironment, TYPE, ARGUMENT>
 > {
 
-    public static final <TYPE> ConditionalExpression<TYPE> create(IScratchClass<TYPE> genericClass) {
+    public static final <TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> ConditionalExpression<TYPE, ARGUMENT> create(IScratchClass<TYPE, ARGUMENT> genericClass) {
         return new ConditionalExpression<>(genericClass);
     };
 
-    protected ConditionalExpression(IScratchClass<TYPE> genericClass) {
+    protected ConditionalExpression(IScratchClass<TYPE, ARGUMENT> genericClass) {
         super(genericClass, parameters()
             .after(genericClass.createDefaultParameter("fail"))
             .after(genericClass.createDefaultParameter("pass"))
@@ -43,12 +44,12 @@ public final class ConditionalExpression<TYPE> extends TernaryGenericExpression<
     };
 
     @Override
-    public IScratchClass<TYPE> getReturnClass() {
+    public IScratchClass<TYPE, ARGUMENT> getReturnClass() {
         return getGenericScratchClass();
     };
 
     @Override
-    public GenericExpression.Type<ConditionalExpression<?>> getExpressionType() {
+    public GenericExpression.Type<ConditionalExpression<?, ?>> getExpressionType() {
         return PetrolparkScratchExpressionTypes.CONDITIONAL.get();
     };
     

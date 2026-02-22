@@ -1,7 +1,5 @@
 package com.petrolpark.core.scratch.classes;
 
-import static com.petrolpark.core.scratch.argument.ExpressionArgument.parameter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +8,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkScratchClasses;
+import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.list.ListElementExpression;
@@ -20,23 +19,23 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public sealed abstract class ListScratchClass<TYPE, BUFFER extends ByteBuf> extends GenericScratchClass<List<TYPE>, TYPE> {
+public sealed abstract class ListScratchClass<TYPE, BUFFER extends ByteBuf> extends GenericScratchClass<List<TYPE>, TYPE, ExpressionArgument<IScratchEnvironment, List<TYPE>>> {
 
     public static final MapCodec<ListScratchClass<?, ?>> CODEC = RecordCodecBuilder.mapCodec(instance -> commonCodecFields(instance).apply(instance, ListScratchClass::create));
     public static final StreamCodec<RegistryFriendlyByteBuf, ListScratchClass<?, ?>> STREAM_CODEC = StreamCodec.composite(IScratchClass.STREAM_CODEC, ListScratchClass::getGenericScratchClass, ListScratchClass::create);
 
-    public static final <TYPE> ListScratchClass<TYPE, ?> create(IScratchClass<TYPE> scratchClass) {
+    public static final <TYPE> ListScratchClass<TYPE, ?> create(IScratchClass<TYPE, ?> scratchClass) {
         return switch (scratchClass.asSynced()) {
-            case IByteBufScratchClass<TYPE> sc -> new ListByteBufScratchClass<>(sc);
-            case IFriendlyByteBufScratchClass<TYPE> sc -> new ListFriendlyByteBufScratchClass<>(sc);
-            case IRegistryFriendlyByteBufScratchClass<TYPE> sc -> new ListRegistryFriendlyByteBufScratchClass<>(sc);
+            case IByteBufScratchClass<TYPE, ?> sc -> new ListByteBufScratchClass<>(sc);
+            case IFriendlyByteBufScratchClass<TYPE, ?> sc -> new ListFriendlyByteBufScratchClass<>(sc);
+            case IRegistryFriendlyByteBufScratchClass<TYPE, ?> sc -> new ListRegistryFriendlyByteBufScratchClass<>(sc);
         };
     };
 
     protected final Codec<List<TYPE>> codec;
     protected final StreamCodec<BUFFER, List<TYPE>> streamCodec;
 
-    protected ListScratchClass(ISyncedScratchClass<TYPE> genericScratchClass, StreamCodec<BUFFER, List<TYPE>> streamCodec) {
+    protected ListScratchClass(ISyncedScratchClass<TYPE, ?> genericScratchClass, StreamCodec<BUFFER, List<TYPE>> streamCodec) {
         super(genericScratchClass);
         codec = genericScratchClass.codec().listOf();
         this.streamCodec = streamCodec;
@@ -54,11 +53,11 @@ public sealed abstract class ListScratchClass<TYPE, BUFFER extends ByteBuf> exte
 
     @Override
     public ExpressionParameter<IScratchEnvironment, List<TYPE>> createDefaultParameter(String key) {
-        return parameter(key, this);
+        return ExpressionArgument.parameter(key, this);
     };
 
     @Override
-    public <TO_TYPE> Optional<IScratchClass.Caster<List<TYPE>, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
+    public <TO_TYPE> Optional<IScratchClass.Caster<List<TYPE>, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass) {
         if (toClass.equals(getGenericScratchClass())) {
             return Optional.of(ListElementExpression.create(getGenericScratchClass())::withArgumentsUnchecked);
         } else if (toClass.equals(PetrolparkScratchClasses.INTEGER.get())) {
@@ -72,9 +71,9 @@ public sealed abstract class ListScratchClass<TYPE, BUFFER extends ByteBuf> exte
         return PetrolparkScratchClasses.LIST.get();
     };
 
-    public static final class ListByteBufScratchClass<TYPE> extends ListScratchClass<TYPE, ByteBuf> implements IByteBufScratchClass<List<TYPE>> {
+    public static final class ListByteBufScratchClass<TYPE> extends ListScratchClass<TYPE, ByteBuf> implements IByteBufScratchClass<List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>> {
 
-        protected ListByteBufScratchClass(IByteBufScratchClass<TYPE> networkScratchClass) {
+        protected ListByteBufScratchClass(IByteBufScratchClass<TYPE, ?> networkScratchClass) {
             super(networkScratchClass, networkScratchClass.streamCodec().apply(ByteBufCodecs.list()));
         };
 
@@ -85,9 +84,9 @@ public sealed abstract class ListScratchClass<TYPE, BUFFER extends ByteBuf> exte
 
     };
 
-    public static final class ListFriendlyByteBufScratchClass<TYPE> extends ListScratchClass<TYPE, FriendlyByteBuf> implements IFriendlyByteBufScratchClass<List<TYPE>> {
+    public static final class ListFriendlyByteBufScratchClass<TYPE> extends ListScratchClass<TYPE, FriendlyByteBuf> implements IFriendlyByteBufScratchClass<List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>> {
 
-        protected ListFriendlyByteBufScratchClass(IFriendlyByteBufScratchClass<TYPE> networkScratchClass) {
+        protected ListFriendlyByteBufScratchClass(IFriendlyByteBufScratchClass<TYPE, ?> networkScratchClass) {
             super(networkScratchClass, networkScratchClass.streamCodec().apply(ByteBufCodecs.list()));
         };
 
@@ -98,9 +97,9 @@ public sealed abstract class ListScratchClass<TYPE, BUFFER extends ByteBuf> exte
 
     };
 
-    public static final class ListRegistryFriendlyByteBufScratchClass<TYPE> extends ListScratchClass<TYPE, RegistryFriendlyByteBuf> implements IRegistryFriendlyByteBufScratchClass<List<TYPE>> {
+    public static final class ListRegistryFriendlyByteBufScratchClass<TYPE> extends ListScratchClass<TYPE, RegistryFriendlyByteBuf> implements IRegistryFriendlyByteBufScratchClass<List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>> {
 
-        protected ListRegistryFriendlyByteBufScratchClass(IRegistryFriendlyByteBufScratchClass<TYPE> networkScratchClass) {
+        protected ListRegistryFriendlyByteBufScratchClass(IRegistryFriendlyByteBufScratchClass<TYPE, ?> networkScratchClass) {
             super(networkScratchClass, networkScratchClass.streamCodec().apply(ByteBufCodecs.list()));
         };
 

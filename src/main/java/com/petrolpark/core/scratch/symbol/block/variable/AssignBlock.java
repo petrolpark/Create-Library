@@ -9,23 +9,24 @@ import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.argument.VariableArgument;
 import com.petrolpark.core.scratch.argument.VariableArgument.VariableParameter;
 import com.petrolpark.core.scratch.classes.IScratchClass;
+import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.environment.variable.IVariableScratchEnvironment;
 import com.petrolpark.core.scratch.environment.variable.ScratchVariableIdentifier;
 import com.petrolpark.core.scratch.symbol.block.BinaryGenericInstantBlock;
 import com.petrolpark.core.scratch.symbol.block.IScratchBlock;
 
-public class AssignBlock<TYPE> extends BinaryGenericInstantBlock<
+public class AssignBlock<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends BinaryGenericInstantBlock<
     IVariableScratchEnvironment,
-    TYPE,
+    TYPE, ARGUMENT,
     ScratchVariableIdentifier, VariableArgument, VariableParameter,
-    TYPE, IScratchArgument<IVariableScratchEnvironment, TYPE>, IScratchParameter<IVariableScratchEnvironment, TYPE, IScratchArgument<IVariableScratchEnvironment, TYPE>>
+    TYPE, ARGUMENT, IScratchParameter<IVariableScratchEnvironment, TYPE, ARGUMENT>
 > {
 
-    public static final <TYPE> AssignBlock<TYPE> create(IScratchClass<TYPE> scratchClass) {
+    public static final <TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> AssignBlock<TYPE, ARGUMENT> create(IScratchClass<TYPE, ARGUMENT> scratchClass) {
         return new AssignBlock<>(scratchClass);  
     };
 
-    protected AssignBlock(IScratchClass<TYPE> genericClass) {
+    protected AssignBlock(IScratchClass<TYPE, ARGUMENT> genericClass) {
         super(genericClass, ScratchParameters.<IVariableScratchEnvironment>parameters()
             .after(genericClass.createDefaultParameter("value"))
             .after(variable("identifier"))

@@ -33,11 +33,11 @@ public record ExpressionArgument<
     implements IScratchArgument<ENVIRONMENT, TYPE>, IScratchContextHolder 
 {
 
-    public static final <ENVIRONMENT extends IScratchEnvironment, TYPE> ExpressionParameter<ENVIRONMENT, TYPE> parameter(String key, IScratchClass<TYPE> scratchClass) {
+    public static final <ENVIRONMENT extends IScratchEnvironment, TYPE> ExpressionParameter<ENVIRONMENT, TYPE> parameter(String key, IScratchClass<TYPE, ?> scratchClass) {
         return new ExpressionParameter<>(key, scratchClass);
     };
 
-    public static final <TYPE> ExpressionParameter<IScratchEnvironment, List<TYPE>> listParameter(String key, IScratchClass<TYPE> scratchClass) {
+    public static final <TYPE> ExpressionParameter<IScratchEnvironment, List<TYPE>> listParameter(String key, IScratchClass<TYPE, ?> scratchClass) {
         return ListScratchClass.create(scratchClass).createDefaultParameter(key);
     };
 
@@ -65,7 +65,7 @@ public record ExpressionArgument<
         private static final String ARGUMENTS_KEY = "arguments";
 
         private final String key;
-        private final IScratchClass<TYPE> scratchClass;
+        private final IScratchClass<TYPE, ?> scratchClass;
 
         private final ContextualMapCodec<IScratchContextProvider<?>, ExpressionArgument<ENVIRONMENT, TYPE>> mapCodec = new ContextualMapCodec<>() {
 
@@ -137,11 +137,11 @@ public record ExpressionArgument<
             value.expression().getParameters().argumentsStreamCodec().encode(buffer, context, value.arguments());
         };
 
-        protected static <ENVIRONMENT extends IScratchEnvironment, TYPE> ExpressionParameter<ENVIRONMENT, TYPE> create(String key, IScratchClass<TYPE> scratchClass) {
+        protected static <ENVIRONMENT extends IScratchEnvironment, TYPE> ExpressionParameter<ENVIRONMENT, TYPE> create(String key, IScratchClass<TYPE, ?> scratchClass) {
             return new ExpressionParameter<>(key, scratchClass);
         };
 
-        protected ExpressionParameter(String key, IScratchClass<TYPE> scratchClass) {
+        protected ExpressionParameter(String key, IScratchClass<TYPE, ?> scratchClass) {
             this.key = key;
             this.scratchClass = scratchClass;
         };

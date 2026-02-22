@@ -25,27 +25,27 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 
 public class PetrolparkScratchExpressionTypes {
 
-    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<MissingExpression<?>>> MISSING = REGISTRATE.genericScratchExpressionType("missing", MissingExpression::create);
+    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<MissingExpression<?, ?>>> MISSING = REGISTRATE.genericScratchExpressionType("missing", MissingExpression::create);
 
     // List
 
-    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<ListElementExpression<?>>> LIST_ELEMENT = REGISTRATE.genericScratchExpressionType("list_element", ListElementExpression::create);
-    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<ListElementOrFallbackExpression<?>>> LIST_ELEMENT_OR_FALLBACK = REGISTRATE.genericScratchExpressionType("list_element_or_fallback", ListElementOrFallbackExpression::create);
-    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<ListLengthExpression<?>>> LIST_LENGTH = REGISTRATE.genericScratchExpressionType("list_length", ListLengthExpression::create);
-    public static final RegistryEntry<IScratchExpression.Type<?>, ScratchExpressionType<ListOfExpression<?, ?>>> LIST_OF = REGISTRATE.scratchExpressionType("list_of", ListOfExpression.CODEC, ListOfExpression.STREAM_CODEC);
+    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<ListElementExpression<?, ?>>> LIST_ELEMENT = REGISTRATE.genericScratchExpressionType("list_element", ListElementExpression::create);
+    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<ListElementOrFallbackExpression<?, ?>>> LIST_ELEMENT_OR_FALLBACK = REGISTRATE.genericScratchExpressionType("list_element_or_fallback", ListElementOrFallbackExpression::create);
+    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<ListLengthExpression<?, ?>>> LIST_LENGTH = REGISTRATE.genericScratchExpressionType("list_length", ListLengthExpression::create);
+    public static final RegistryEntry<IScratchExpression.Type<?>, ScratchExpressionType<ListOfExpression<?, ?, ?>>> LIST_OF = REGISTRATE.scratchExpressionType("list_of", ListOfExpression.CODEC, ListOfExpression.STREAM_CODEC);
 
     // Logic
 
     public static final RegistryEntry<IScratchExpression.Type<?>, AndExpression> AND = REGISTRATE.booleanScratchExpression("and", AndExpression::new);
-    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<ConditionalExpression<?>>> CONDITIONAL = REGISTRATE.genericScratchExpressionType("conditional", ConditionalExpression::create);
-    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<EqualsExpression<?>>> EQUALS = REGISTRATE.genericScratchExpressionType("equals", EqualsExpression::create);
+    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<ConditionalExpression<?, ?>>> CONDITIONAL = REGISTRATE.genericScratchExpressionType("conditional", ConditionalExpression::create);
+    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<EqualsExpression<?, ?>>> EQUALS = REGISTRATE.genericScratchExpressionType("equals", EqualsExpression::create);
     public static final RegistryEntry<IScratchExpression.Type<?>, NotExpression> NOT = REGISTRATE.booleanScratchExpression("not", NotExpression::new);
     public static final RegistryEntry<IScratchExpression.Type<?>, OrExpression> OR = REGISTRATE.booleanScratchExpression("or", OrExpression::new);
     public static final RegistryEntry<IScratchExpression.Type<?>, XorExpression> XOR = REGISTRATE.booleanScratchExpression("xor", XorExpression::new);
 
     // Variables
 
-    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<QueryVariableExpression<?>>> QUERY = REGISTRATE.genericScratchExpressionType("query", QueryVariableExpression::create);
+    public static final RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<QueryVariableExpression<?, ?>>> QUERY = REGISTRATE.genericScratchExpressionType("query", QueryVariableExpression::create);
 
     // Math
 

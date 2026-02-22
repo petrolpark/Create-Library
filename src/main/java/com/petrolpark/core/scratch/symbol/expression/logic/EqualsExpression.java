@@ -12,21 +12,23 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.BinaryGenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.IScratchExpression;
 
-public final class EqualsExpression<TYPE> extends BinaryGenericExpression<
+public final class EqualsExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends BinaryGenericExpression<
     IScratchEnvironment,
-    TYPE, Boolean,
-    TYPE, IScratchArgument<IScratchEnvironment, TYPE>, IScratchParameter<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>,
-    TYPE, IScratchArgument<IScratchEnvironment, TYPE>, IScratchParameter<IScratchEnvironment, TYPE, IScratchArgument<IScratchEnvironment, TYPE>>
+    TYPE, ARGUMENT,
+    Boolean,
+    TYPE, ARGUMENT, IScratchParameter<IScratchEnvironment, TYPE, ARGUMENT>,
+    TYPE, ARGUMENT, IScratchParameter<IScratchEnvironment, TYPE, ARGUMENT>
 > {
 
-    public static final <TYPE> EqualsExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
+    public static final <TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> EqualsExpression<TYPE, ARGUMENT> create(IScratchClass<TYPE, ARGUMENT> scratchClass) {
         return new EqualsExpression<>(scratchClass);
     };
 
-    protected EqualsExpression(IScratchClass<TYPE> genericClass) {
+    protected EqualsExpression(IScratchClass<TYPE, ARGUMENT> genericClass) {
         super(genericClass, parameters()
             .after(genericClass.createDefaultParameter("value2"))
             .after(genericClass.createDefaultParameter("value1"))
+            .build()
         );
     };
 
@@ -41,7 +43,7 @@ public final class EqualsExpression<TYPE> extends BinaryGenericExpression<
     };
 
     @Override
-    public IScratchExpression.Type<EqualsExpression<?>> getExpressionType() {
+    public IScratchExpression.Type<EqualsExpression<?, ?>> getExpressionType() {
         return PetrolparkScratchExpressionTypes.EQUALS.get();
     };
     

@@ -33,7 +33,7 @@ import net.neoforged.neoforge.items.IItemHandler;
 
 public interface ICentrifugationRecipe {
 
-	public NonNullList<Ingredient> getIngredients();
+	public NonNullList<Ingredient> getCentrifugationIngredients();
 
 	public NonNullList<SizedFluidIngredient> getFluidIngredients();
 
@@ -81,7 +81,7 @@ public interface ICentrifugationRecipe {
 			final int[] extractedFluidsFromTank = new int[availableFluids.getTanks()];
 
             Ingredients:
-			for (final Ingredient ingredient : getIngredients()) {
+			for (final Ingredient ingredient : getCentrifugationIngredients()) {
 				for (int slot = 0; slot < availableItems.getSlots(); slot++) {
 					if (simulate && availableItems.getStackInSlot(slot).getCount() <= extractedItemsFromSlot[slot]) continue;
 					final ItemStack extracted = availableItems.extractItem(slot, 1, true);

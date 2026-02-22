@@ -358,11 +358,11 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     // Simple Registered Objects - Scratch
 
-    public <SCRATCH_CLASS extends IScratchClass<?>> RegistryEntry<IScratchClassType, ScratchClassType<SCRATCH_CLASS>> scratchClassType(String name, MapCodec<SCRATCH_CLASS> codec, StreamCodec<? super RegistryFriendlyByteBuf, SCRATCH_CLASS> streamCodec) {
+    public <SCRATCH_CLASS extends IScratchClass<?, ?>> RegistryEntry<IScratchClassType, ScratchClassType<SCRATCH_CLASS>> scratchClassType(String name, MapCodec<SCRATCH_CLASS> codec, StreamCodec<? super RegistryFriendlyByteBuf, SCRATCH_CLASS> streamCodec) {
         return simple(name, PetrolparkRegistries.Keys.SCRATCH_CLASS_TYPE, () -> new ScratchClassType<>(codec, streamCodec));
     };
 
-    public <T, SCRATCH_CLASS extends SimpleScratchClass<T>> RegistryEntry<IScratchClassType, SCRATCH_CLASS> simpleScratchClass(String name, NonNullSupplier<SCRATCH_CLASS> factory) {
+    public <TYPE, SCRATCH_CLASS extends SimpleScratchClass<TYPE, ?>> RegistryEntry<IScratchClassType, SCRATCH_CLASS> simpleScratchClass(String name, NonNullSupplier<SCRATCH_CLASS> factory) {
         return simple(name, PetrolparkRegistries.Keys.SCRATCH_CLASS_TYPE, factory);
     };
 
@@ -374,7 +374,7 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return simple(name, PetrolparkRegistries.Keys.SCRATCH_BLOCK_TYPE, factory);
     };
 
-    public <BLOCK extends GenericInstantBlock<?, ?, ?, ?>> RegistryEntry<IScratchBlock.Type<?>, GenericInstantBlock.Type<BLOCK>> genericScratchBlockType(String name, Function<IScratchClass<?>, BLOCK> blockFactory) {
+    public <BLOCK extends GenericInstantBlock<?, ?, ?, ?, ?>> RegistryEntry<IScratchBlock.Type<?>, GenericInstantBlock.Type<BLOCK>> genericScratchBlockType(String name, Function<IScratchClass<?, ?>, BLOCK> blockFactory) {
         return scratchBlockType(name, () -> new GenericInstantBlock.Type<>(blockFactory));
     };
 
@@ -394,7 +394,7 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return scratchExpressionType(name, () -> new ScratchExpressionType<>(codec, streamCodec));
     };
 
-    public <EXPRESSION extends GenericExpression<?, ?, ?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<EXPRESSION>> genericScratchExpressionType(String name, Function<IScratchClass<?>, EXPRESSION> expressionFactory) {
+    public <EXPRESSION extends GenericExpression<?, ?, ?, ?, ?, ?>> RegistryEntry<IScratchExpression.Type<?>, GenericExpression.Type<EXPRESSION>> genericScratchExpressionType(String name, Function<IScratchClass<?, ?>, EXPRESSION> expressionFactory) {
         return scratchExpressionType(name, () -> new GenericExpression.Type<>(expressionFactory));
     };
 

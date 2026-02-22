@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
 import com.petrolpark.core.scratch.argument.DropdownArgument;
+import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.ExpressionOrDropdownParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.util.Lang;
@@ -14,7 +15,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Direction;
 import net.minecraft.network.codec.StreamCodec;
 
-public class DirectionScratchClass extends SimpleScratchClass<Direction> implements IByteBufScratchClass<Direction> {
+public class DirectionScratchClass extends SimpleScratchClass<Direction, ExpressionOrDropdownArgument<IScratchEnvironment, Direction>> implements IByteBufScratchClass<Direction, ExpressionOrDropdownArgument<IScratchEnvironment, Direction>> {
 
     public static final List<DropdownArgument.Entry<? super IScratchEnvironment, Direction>> VALUES = Stream.of(Direction.values()).<DropdownArgument.Entry<? super IScratchEnvironment, Direction>>map(direction -> new DropdownArgument.SimpleEntry<>(direction, Lang.direction(direction))).toList();
 
@@ -39,7 +40,7 @@ public class DirectionScratchClass extends SimpleScratchClass<Direction> impleme
     };
 
     @Override
-    public <TO_TYPE> Optional<IScratchClass.Caster<Direction, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
+    public <TO_TYPE> Optional<IScratchClass.Caster<Direction, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'cast'");
     };

@@ -9,12 +9,14 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 public abstract class BinaryGenericExpression<
     ENVIRONMENT extends IScratchEnvironment,
-    GENERIC_TYPE, RETURN_TYPE,
-    TYPE_1, ARGUMENT_1 extends IScratchArgument<ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
-    TYPE_2, ARGUMENT_2 extends IScratchArgument<ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>
+    GENERIC_TYPE, GENERIC_ARGUMENT extends IScratchArgument<IScratchEnvironment, GENERIC_TYPE>,
+    RETURN_TYPE,
+    TYPE_1, ARGUMENT_1 extends IScratchArgument<? super ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
+    TYPE_2, ARGUMENT_2 extends IScratchArgument<? super ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>
 > extends GenericExpression<
     ENVIRONMENT,
-    GENERIC_TYPE, RETURN_TYPE,
+    GENERIC_TYPE, GENERIC_ARGUMENT,
+    RETURN_TYPE,
     ScratchArguments.And<
         ENVIRONMENT, TYPE_1, ARGUMENT_1, ScratchArguments.Just<
         ENVIRONMENT, TYPE_2, ARGUMENT_2
@@ -25,7 +27,7 @@ public abstract class BinaryGenericExpression<
     >>
 > {
 
-    protected BinaryGenericExpression(IScratchClass<GENERIC_TYPE> genericClass, ScratchParameters.And<ENVIRONMENT, TYPE_1, ARGUMENT_1, PARAMETER_1, ScratchArguments.Just<ENVIRONMENT, TYPE_2, ARGUMENT_2>, ScratchParameters.Just<ENVIRONMENT, TYPE_2, ARGUMENT_2, PARAMETER_2>> parameters) {
+    protected BinaryGenericExpression(IScratchClass<GENERIC_TYPE, GENERIC_ARGUMENT> genericClass, ScratchParameters.And<ENVIRONMENT, TYPE_1, ARGUMENT_1, PARAMETER_1, ScratchArguments.Just<ENVIRONMENT, TYPE_2, ARGUMENT_2>, ScratchParameters.Just<ENVIRONMENT, TYPE_2, ARGUMENT_2, PARAMETER_2>> parameters) {
         super(genericClass, parameters);
     };
 

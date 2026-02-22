@@ -9,13 +9,15 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 public abstract class TernaryGenericExpression<
     ENVIRONMENT extends IScratchEnvironment,
-    GENERIC_TYPE, RETURN_TYPE,
-    TYPE_1, ARGUMENT_1 extends IScratchArgument<ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
-    TYPE_2, ARGUMENT_2 extends IScratchArgument<ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>,
-    TYPE_3, ARGUMENT_3 extends IScratchArgument<ENVIRONMENT, TYPE_3>, PARAMETER_3 extends IScratchParameter<ENVIRONMENT, TYPE_3, ARGUMENT_3>
+    GENERIC_TYPE, GENERIC_ARGUMENT extends IScratchArgument<IScratchEnvironment, GENERIC_TYPE>,
+    RETURN_TYPE,
+    TYPE_1, ARGUMENT_1 extends IScratchArgument<? super ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
+    TYPE_2, ARGUMENT_2 extends IScratchArgument<? super ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>,
+    TYPE_3, ARGUMENT_3 extends IScratchArgument<? super ENVIRONMENT, TYPE_3>, PARAMETER_3 extends IScratchParameter<ENVIRONMENT, TYPE_3, ARGUMENT_3>
 > extends GenericExpression<
     ENVIRONMENT,
-    GENERIC_TYPE, RETURN_TYPE,
+    GENERIC_TYPE, GENERIC_ARGUMENT,
+    RETURN_TYPE,
     ScratchArguments.And<
         ENVIRONMENT, TYPE_1, ARGUMENT_1, ScratchArguments.And<
         ENVIRONMENT, TYPE_2, ARGUMENT_2, ScratchArguments.Just<
@@ -28,7 +30,7 @@ public abstract class TernaryGenericExpression<
     >>>
 > {
 
-    protected TernaryGenericExpression(IScratchClass<GENERIC_TYPE> genericClass, ScratchParameters.And<ENVIRONMENT, TYPE_1, ARGUMENT_1, PARAMETER_1, ScratchArguments.And<ENVIRONMENT, TYPE_2, ARGUMENT_2, ScratchArguments.Just<ENVIRONMENT, TYPE_3, ARGUMENT_3>>, ScratchParameters.And<ENVIRONMENT, TYPE_2, ARGUMENT_2, PARAMETER_2, ScratchArguments.Just<ENVIRONMENT, TYPE_3, ARGUMENT_3>, ScratchParameters.Just<ENVIRONMENT, TYPE_3, ARGUMENT_3, PARAMETER_3>>> parameters) {
+    protected TernaryGenericExpression(IScratchClass<GENERIC_TYPE, GENERIC_ARGUMENT> genericClass, ScratchParameters.And<ENVIRONMENT, TYPE_1, ARGUMENT_1, PARAMETER_1, ScratchArguments.And<ENVIRONMENT, TYPE_2, ARGUMENT_2, ScratchArguments.Just<ENVIRONMENT, TYPE_3, ARGUMENT_3>>, ScratchParameters.And<ENVIRONMENT, TYPE_2, ARGUMENT_2, PARAMETER_2, ScratchArguments.Just<ENVIRONMENT, TYPE_3, ARGUMENT_3>, ScratchParameters.Just<ENVIRONMENT, TYPE_3, ARGUMENT_3, PARAMETER_3>>> parameters) {
         super(genericClass, parameters);
     };
 

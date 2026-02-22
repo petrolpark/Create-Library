@@ -9,9 +9,9 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 public abstract class TernaryExpressionType<
     ENVIRONMENT extends IScratchEnvironment,
     RETURN_TYPE,
-    TYPE_1, ARGUMENT_1 extends IScratchArgument<ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
-    TYPE_2, ARGUMENT_2 extends IScratchArgument<ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>,
-    TYPE_3, ARGUMENT_3 extends IScratchArgument<ENVIRONMENT, TYPE_3>, PARAMETER_3 extends IScratchParameter<ENVIRONMENT, TYPE_3, ARGUMENT_3>,
+    TYPE_1, ARGUMENT_1 extends IScratchArgument<? super ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
+    TYPE_2, ARGUMENT_2 extends IScratchArgument<? super ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>,
+    TYPE_3, ARGUMENT_3 extends IScratchArgument<? super ENVIRONMENT, TYPE_3>, PARAMETER_3 extends IScratchParameter<ENVIRONMENT, TYPE_3, ARGUMENT_3>,
     EXPRESSION extends TernaryExpressionType<
         ENVIRONMENT,
         RETURN_TYPE,
