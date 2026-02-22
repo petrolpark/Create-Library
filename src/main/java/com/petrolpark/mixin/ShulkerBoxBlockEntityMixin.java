@@ -15,6 +15,7 @@ import com.petrolpark.contamination.GenericContamination;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.RandomizableContainerBlockEntity;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
@@ -62,7 +63,8 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
         at = @At("HEAD")
     )
     public void inSaveAdditional(CompoundTag tag, CallbackInfo ci) {
-        tag.put("Contamination", contamination.writeNBT(getLevel().registryAccess()));
+        final Level level = getLevel();
+        tag.put("Contamination", level == null ? contamination.writeNBT() : contamination.writeNBT(getLevel().registryAccess()));
     };
     
 };
