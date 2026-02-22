@@ -53,7 +53,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
         at = @At("RETURN"),
         remap = false
     )
-    public void inAddBehaviours(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
+    public void petrolpark$addFirstTimeLuckyRecipeBehaviour(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
         behaviours.add(new FTLRecipesBehaviour(this, rh -> rh.value().getType() == AllRecipeTypes.MILLING.getType()));
     };
 
@@ -65,7 +65,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
         at = @At("HEAD"),
         remap = false
     )
-    public void inProcessStart(CallbackInfo ci) {
+    public void petrolpark$storeInputItem(CallbackInfo ci) {
         lastItemProcessed = inputInv.getStackInSlot(0).copy();
     };
 
@@ -82,7 +82,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
         remap = false
     )
     @SuppressWarnings("unchecked")
-    public List<ItemStack> wrapRollResults(MillingRecipe recipe, RandomSource random, Operation<List<ItemStack>> original) {
+    public List<ItemStack> petrolpark$advancedRecipeFeatures(MillingRecipe recipe, RandomSource random, Operation<List<ItemStack>> original) {
         List<ItemStack> results;
 
         if (recipe instanceof IFTLProcessingRecipe ftlr) {

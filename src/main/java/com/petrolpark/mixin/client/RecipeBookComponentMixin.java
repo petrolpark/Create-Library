@@ -32,7 +32,7 @@ public abstract class RecipeBookComponentMixin {
             target = "Lnet/minecraft/client/gui/screens/recipebook/RecipeBookComponent;width:I"
         )
     )
-    public void inInitVisuals(CallbackInfo ci) {
+    public void petrolpark$moveRecipeBookComponent(CallbackInfo ci) {
         if (!widthTooNarrow && ExtendedInventory.enabled()) xOffset += - PetrolparkClient.EXTENDED_INVENTORY_HANDLER.getLeftmostX() + ExtendedInventoryClientHandler.INVENTORY_SPACING;
     };
 };

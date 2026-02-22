@@ -32,7 +32,7 @@ public abstract class SlotMixin {
     @WrapMethod(
         method = "Lnet/minecraft/world/inventory/Slot;onTake(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;)V"
     )
-    public void wrapOnTake(Player player, ItemStack stack, Operation<Void> operation) {
+    public void petrolpark$removeAppliedDecay(Player player, ItemStack stack, Operation<Void> operation) {
         if (AgeingContainerWrapper.isAgeingContainer(container)) IApplyDecayRecipe.withAppliedDecayRemoved(player.level(), PetrolparkRecipeTypes.AGEING.get(), stack);
         operation.call(player, stack);
     };

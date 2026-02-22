@@ -25,7 +25,7 @@ public class ClientLevelMixin {
             ordinal = 0
         )
     )
-    public int wrapGetColor(ColorResolver colorResolver, Biome biome, double x, double z, Operation<Integer> original, BlockPos pos, ColorResolver colorResolverAgain) {
+    public int petrolpark$postBlendedBlockColorEvent(ColorResolver colorResolver, Biome biome, double x, double z, Operation<Integer> original, BlockPos pos, ColorResolver colorResolverAgain) {
         return NeoForge.EVENT_BUS.post(new BlendedBlockColorEvent((ClientLevel)(Object)this, pos.immutable(), biome, colorResolver, original.call(colorResolver, biome, x, z))).getColor();
     };
     
@@ -37,7 +37,7 @@ public class ClientLevelMixin {
             ordinal = 1
         )
     )
-    public int wrapGetColor(ColorResolver colorResolver, Biome biome, double x, double z, Operation<Integer> original, @Local BlockPos.MutableBlockPos pos) {
+    public int petrolpark$postBlendedBlockColorEvent(ColorResolver colorResolver, Biome biome, double x, double z, Operation<Integer> original, @Local BlockPos.MutableBlockPos pos) {
         return NeoForge.EVENT_BUS.post(new BlendedBlockColorEvent((ClientLevel)(Object)this, pos.immutable(), biome, colorResolver, original.call(colorResolver, biome, x, z))).getColor();
     };
 };

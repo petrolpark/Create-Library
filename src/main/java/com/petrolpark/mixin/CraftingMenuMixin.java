@@ -64,7 +64,7 @@ public class CraftingMenuMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void inSlotChangedCraftingGrid(
+    private static void petrolpark$propagateContaminantsAndStartDecay(
         AbstractContainerMenu menu,
         Level level,
         Player player,
@@ -93,7 +93,7 @@ public class CraftingMenuMixin {
             target = "Lnet/minecraft/world/item/crafting/RecipeManager;getRecipeFor"
         )
     )
-    private static Optional<RecipeHolder<CraftingRecipe>> modifyRecipe(Optional<RecipeHolder<CraftingRecipe>> original, AbstractContainerMenu menu, Level level, Player player, CraftingContainer craftSlots, ResultContainer resultSlots, @Nullable RecipeHolder<CraftingRecipe> lastRecipe) {
+    private static Optional<RecipeHolder<CraftingRecipe>> petrolpark$addBookRequiredRecipes(Optional<RecipeHolder<CraftingRecipe>> original, AbstractContainerMenu menu, Level level, Player player, CraftingContainer craftSlots, ResultContainer resultSlots, @Nullable RecipeHolder<CraftingRecipe> lastRecipe) {
         ServerPlayer serverPlayer = (ServerPlayer)player;
         return original.or(() -> level.getRecipeManager()
             .getRecipeFor(PetrolparkRecipeTypes.CRAFTING_BOOK_REQUIRED.get(), craftSlots.asCraftInput(), level)

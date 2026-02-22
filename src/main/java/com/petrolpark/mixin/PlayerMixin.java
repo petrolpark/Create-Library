@@ -37,7 +37,7 @@ public abstract class PlayerMixin extends LivingEntity {
         method = "<init>",
         at = @At("RETURN")
     )
-    public void inInit(Level level, BlockPos pos, float yRot, GameProfile gameProfile, CallbackInfo ci) {
+    public void petrolpark$addExtendedInventory(Level level, BlockPos pos, float yRot, GameProfile gameProfile, CallbackInfo ci) {
         if (ExtendedInventory.enabled(level.enabledFeatures())) {
             ExtendedInventory extendedInv = new ExtendedInventory((Player)(Object)this);
             inventory = extendedInv;
@@ -54,13 +54,13 @@ public abstract class PlayerMixin extends LivingEntity {
     @WrapMethod(
         method = "setItemSlot"
     )
-    public void inSetItemSlot(EquipmentSlot slot, ItemStack stack, Operation<Void> original) {
+    public void petrolpark$setExtendedInventoryMainhand(EquipmentSlot slot, ItemStack stack, Operation<Void> original) {
         if (slot == EquipmentSlot.MAINHAND) {
-            Optional<ExtendedInventory> invOp = ExtendedInventory.get((Player)(Object)this);
+            final Optional<ExtendedInventory> invOp = ExtendedInventory.get((Player)(Object)this);
             if (invOp.isPresent()) {
                 verifyEquippedItem(stack);
-                ExtendedInventory inv = invOp.get();
-                ItemStack oldStack = inv.getItem(inv.selected);
+                final ExtendedInventory inv = invOp.get();
+                final ItemStack oldStack = inv.getItem(inv.selected);
                 inv.setItem(inv.selected, stack);
                 onEquipItem(slot, oldStack, stack);
             };

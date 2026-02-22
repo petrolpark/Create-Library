@@ -22,7 +22,7 @@ public class PetrolparkScratchBlockTypes {
 
     // Variable Manipulation
 
-    public static final RegistryEntry<IScratchBlock.Type<?>, GenericInstantBlock.Type<AssignBlock<?>>> ASSIGN = REGISTRATE.genericScratchBlockType("assign", AssignBlock::create);
+    public static final RegistryEntry<IScratchBlock.Type<?>, GenericInstantBlock.Type<AssignBlock<?, ?>>> ASSIGN = REGISTRATE.genericScratchBlockType("assign", AssignBlock::create);
 
     public static final void register() {};
 };

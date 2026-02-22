@@ -24,7 +24,7 @@ public abstract class ShapedRecipeMixin implements IHandleContaminationMyselfRec
         method = "Lnet/minecraft/world/item/crafting/ShapedRecipe;assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;",
         at = @At("RETURN")
     )
-    public ItemStack modifyAssemble(ItemStack output, CraftingInput input, HolderLookup.Provider registries) {
+    public ItemStack petrolpark$propagateContaminantsAndStartDecay(ItemStack output, CraftingInput input, HolderLookup.Provider registries) {
         ItemDecay.startDecay(output);
         if (PetrolparkConfigs.server().shapedCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(input.items().stream(), output);
         return output;

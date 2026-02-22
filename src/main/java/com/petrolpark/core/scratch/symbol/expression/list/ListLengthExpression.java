@@ -9,27 +9,29 @@ import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
+import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.classes.IScratchClass;
+import com.petrolpark.core.scratch.classes.IntegerScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.UnaryGenericExpression;
 
-public final class ListLengthExpression<TYPE> extends UnaryGenericExpression<
+public final class ListLengthExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends UnaryGenericExpression<
     IScratchEnvironment,
-    TYPE, Long,
+    TYPE, ARGUMENT, Long,
     List<TYPE>, ExpressionArgument<IScratchEnvironment, List<TYPE>>, ExpressionParameter<IScratchEnvironment, List<TYPE>>
 > {
 
-    public static final <TYPE> ListLengthExpression<TYPE> create(IScratchClass<TYPE> scratchClass) {
+    public static final <TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> ListLengthExpression<TYPE, ARGUMENT> create(IScratchClass<TYPE, ARGUMENT> scratchClass) {
         return new ListLengthExpression<>(scratchClass);
     };
 
-    protected ListLengthExpression(IScratchClass<TYPE> genericClass) {
+    protected ListLengthExpression(IScratchClass<TYPE, ARGUMENT> genericClass) {
         super(genericClass, parameters().after(listParameter("list", genericClass)).build());
     };
 
     @Override
-    public IScratchClass<Long> getReturnClass() {
+    public IntegerScratchClass getReturnClass() {
         return PetrolparkScratchClasses.INTEGER.get();
     };
 

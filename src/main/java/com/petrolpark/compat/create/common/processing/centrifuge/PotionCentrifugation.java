@@ -128,6 +128,11 @@ public class PotionCentrifugation {
     public static record PotionCentrifugationRecipe(NonNullList<Ingredient> ingredients, SizedFluidIngredient fluidIngredient, Either<ItemStack, RecyclingOutputs> result, FluidStack denseOutput) implements Recipe<RecipeInput>, ICentrifugationRecipe {
 
         @Override
+        public NonNullList<Ingredient> getCentrifugationIngredients() {
+            return ingredients();
+        };
+
+        @Override
         public NonNullList<Ingredient> getIngredients() {
             return ingredients();
         };

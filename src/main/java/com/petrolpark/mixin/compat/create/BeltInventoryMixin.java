@@ -16,7 +16,7 @@ public abstract class BeltInventoryMixin {
         method = "Lcom/simibubi/create/content/kinetics/belt/transport/BeltInventory;insert(Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;)V",
         remap = false
     )
-    public void wrapInsert(TransportedItemStack stack, Operation<Void> original) {
+    public void petrolpark$makeDirectionalStack(TransportedItemStack stack, Operation<Void> original) {
         if (!(stack instanceof DirectionalTransportedItemStack) && stack.stack.getItem() instanceof IDirectionalOnBelt directionalItem) {
             stack = directionalItem.makeDirectionalTransportedItemStack(stack);
         };

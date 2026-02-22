@@ -47,7 +47,7 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
         method = "<init>",
         at = @At("RETURN")
     )
-    public void inInit(CallbackInfo ci) {
+    public void petrolpark$createContamination(CallbackInfo ci) {
         getContamination();
     };
 
@@ -55,7 +55,7 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
         method = "loadFromTag",
         at = @At("HEAD")
     )
-    public void inLoadFromTag(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
+    public void petrolpark$loadContamination(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
         contamination = new GenericContamination().readNBT(tag.get("Contamination"), levelRegistry);
     };
 
@@ -63,7 +63,7 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
         method = "saveAdditional",
         at = @At("HEAD")
     )
-    public void inSaveAdditional(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
+    public void petrolpark$saveContamination(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
         tag.put("Contamination", getContamination().writeNBT(levelRegistry));
     };
     

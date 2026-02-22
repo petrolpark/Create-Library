@@ -25,7 +25,7 @@ public class ItemStackMixin implements IItemStackDuck {
         method = "copy",
         at = @At("RETURN")
     )
-    public ItemStack modifyCopy(ItemStack itemStack) {
+    public ItemStack petrolpark$startDecay(ItemStack itemStack) {
         return ItemDecay.checkDecay(itemStack);
     };
 
@@ -38,7 +38,7 @@ public class ItemStackMixin implements IItemStackDuck {
     @WrapMethod(
         method = "isSameItemSameComponents"
     )
-    private static boolean modifyIsSameItemSameComponents(ItemStack stack, ItemStack otherStack, Operation<Boolean> original) {
+    private static boolean petrolpark$checkDecay(ItemStack stack, ItemStack otherStack, Operation<Boolean> original) {
         return original.call(stack, otherStack) || ItemHelper.equalIgnoringComponents(stack, otherStack);
     };
 

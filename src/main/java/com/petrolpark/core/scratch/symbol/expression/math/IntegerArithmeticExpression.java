@@ -7,7 +7,7 @@ import com.petrolpark.core.scratch.argument.DropdownArgument;
 import com.petrolpark.core.scratch.argument.DropdownArgument.DropdownParameter;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
-import com.petrolpark.core.scratch.classes.IScratchClass;
+import com.petrolpark.core.scratch.classes.IntegerScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.TernaryExpressionType;
 import com.petrolpark.util.Lang;
@@ -30,7 +30,7 @@ public class IntegerArithmeticExpression extends TernaryExpressionType<
     };
 
     @Override
-    public IScratchClass<Long> getReturnClass() {
+    public IntegerScratchClass getReturnClass() {
         return PetrolparkScratchClasses.INTEGER.get();
     };
 

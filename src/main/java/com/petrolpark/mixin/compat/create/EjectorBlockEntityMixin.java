@@ -30,7 +30,7 @@ public abstract class EjectorBlockEntityMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void inLaunchItemHeld(CallbackInfo ci, ItemStack heldItemStack, Direction funnelFacing) {
+    public void petrolpark$launchDirectional(CallbackInfo ci, ItemStack heldItemStack, Direction funnelFacing) {
         TransportedItemStack stack = ((DepotBehaviourAccessor)getDepotBehaviour()).getHeldItem();
         if (stack instanceof DirectionalTransportedItemStack directionalStack && directionalStack.stack.getItem() instanceof IDirectionalOnBelt item) item.launch(directionalStack, funnelFacing.getOpposite());
     };

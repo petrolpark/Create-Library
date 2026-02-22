@@ -33,7 +33,7 @@ public class CrafterMenuMixin {
             target = "getPotentialResults"
         )
     )
-    public Optional<RecipeHolder<CraftingRecipe>> modifyGetPotentialResults(Optional<RecipeHolder<CraftingRecipe>> original) {
+    public Optional<RecipeHolder<CraftingRecipe>> petrolpark$addBookRequiredRecipes(Optional<RecipeHolder<CraftingRecipe>> original) {
         if (!(container instanceof BlockEntity be)) return original;
         return original.or(() -> player.level().getRecipeManager()
             .getRecipeFor(PetrolparkRecipeTypes.CRAFTING_BOOK_REQUIRED.get(), container.asCraftInput(), player.level())

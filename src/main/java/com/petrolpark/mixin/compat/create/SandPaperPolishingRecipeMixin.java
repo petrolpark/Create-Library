@@ -21,7 +21,7 @@ public class SandPaperPolishingRecipeMixin {
         at = @At("RETURN"),
         remap = false
     )
-    private static ItemStack modifyApplyPolish(ItemStack original, Level world, Vec3 position, ItemStack stack, ItemStack sandPaperStack) {
+    private static ItemStack petrolpark$propagateContaminantsAndStartDecay(ItemStack original, Level world, Vec3 position, ItemStack stack, ItemStack sandPaperStack) {
         ItemDecay.startDecay(original);
         if (PetrolparkConfigs.server().createSandingRecipesPropagateContaminants.get()) ItemContamination.get(original).contaminateAll(ItemContamination.get(stack).streamAllContaminants());
         return original;

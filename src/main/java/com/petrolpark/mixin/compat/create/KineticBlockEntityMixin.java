@@ -30,7 +30,7 @@ public abstract class KineticBlockEntityMixin extends SmartBlockEntity {
         at = @At("HEAD"),
         remap = false
     )
-    public void inAddBehaviours(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
+    public void petrolpark$addContaminationBehaviour(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
         if (PetrolparkTags.BlockEntityTypes.CONTAMINABLE_KINETIC.matches(getType())) behaviours.add(new ContaminationBehaviour(this));
     };
 };

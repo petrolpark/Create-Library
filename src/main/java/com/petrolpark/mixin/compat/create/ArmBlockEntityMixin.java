@@ -47,7 +47,7 @@ public abstract class ArmBlockEntityMixin implements IArmBlockEntityDuck {
             ordinal = 0
         )
     )
-    protected void inInitInteractionPointsHead(CallbackInfo ci) {
+    protected void petrolpark$deregisterChainConveyorPoints(CallbackInfo ci) {
         ChainConveyorArmInteractionPoint.deregisterAll((ArmBlockEntity)(Object)this);
     };
 
@@ -55,7 +55,7 @@ public abstract class ArmBlockEntityMixin implements IArmBlockEntityDuck {
         method = "Lcom/simibubi/create/content/kinetics/mechanicalArm/ArmBlockEntity;initInteractionPoints()V",
         at = @At("RETURN")
     )
-    protected void inInitInteractionPointsTail(CallbackInfo ci) {
+    protected void petrolpark$registerChainConveyorPoints(CallbackInfo ci) {
         ChainConveyorArmInteractionPoint.registerAll((ArmBlockEntity)(Object)this);
     };
 
@@ -63,14 +63,14 @@ public abstract class ArmBlockEntityMixin implements IArmBlockEntityDuck {
         method = "Lcom/simibubi/create/content/kinetics/mechanicalArm/ArmBlockEntity;destroy()V",
         at = @At("HEAD")
     )
-    public void inDestroy(CallbackInfo ci) {
+    public void petrolpark$destroyChainConveyorPoints(CallbackInfo ci) {
         ChainConveyorArmInteractionPoint.deregisterAll((ArmBlockEntity)(Object)this);
     }
 
     @WrapMethod(
         method = "Lcom/simibubi/create/content/kinetics/mechanicalArm/ArmBlockEntity;collectItem()V"
     )
-    public void wrapCollectItem(Operation<Void> original) {
+    public void petrolpark$dontCollectChainConveyorItem(Operation<Void> original) {
         if (getTargetedInteractionPoint() instanceof ChainConveyorArmInteractionPoint chainPoint && chainPoint.isValid()) return;
         original.call();
     };

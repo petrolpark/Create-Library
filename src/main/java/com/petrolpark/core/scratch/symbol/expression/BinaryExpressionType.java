@@ -9,8 +9,8 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 public abstract class BinaryExpressionType<
     ENVIRONMENT extends IScratchEnvironment,
     RETURN_TYPE,
-    TYPE_1, ARGUMENT_1 extends IScratchArgument<ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
-    TYPE_2, ARGUMENT_2 extends IScratchArgument<ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>,
+    TYPE_1, ARGUMENT_1 extends IScratchArgument<? super ENVIRONMENT, TYPE_1>, PARAMETER_1 extends IScratchParameter<ENVIRONMENT, TYPE_1, ARGUMENT_1>,
+    TYPE_2, ARGUMENT_2 extends IScratchArgument<? super ENVIRONMENT, TYPE_2>, PARAMETER_2 extends IScratchParameter<ENVIRONMENT, TYPE_2, ARGUMENT_2>,
     EXPRESSION extends BinaryExpressionType<
         ENVIRONMENT,
         RETURN_TYPE,

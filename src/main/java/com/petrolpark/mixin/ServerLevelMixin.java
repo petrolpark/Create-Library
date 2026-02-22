@@ -43,7 +43,7 @@ public abstract class ServerLevelMixin extends Level {
         method = "tickChunk",
         at = @At("HEAD")
     )
-    public void inTickChunkStart(LevelChunk chunk, int randomTickSpeed, CallbackInfo ci) {
+    public void petrolpark$postChunkTickEventPre(LevelChunk chunk, int randomTickSpeed, CallbackInfo ci) {
         NeoForge.EVENT_BUS.post(new ChunkTickEvent.Pre(chunk, randomTickSpeed));
     };
 
@@ -51,7 +51,7 @@ public abstract class ServerLevelMixin extends Level {
         method = "tickChunk",
         at = @At("TAIL")
     )
-    public void inTickChunkEnd(LevelChunk chunk, int randomTickSpeed, CallbackInfo ci) {
+    public void petrolpark$postChunkTickEventPost(LevelChunk chunk, int randomTickSpeed, CallbackInfo ci) {
         NeoForge.EVENT_BUS.post(new ChunkTickEvent.Post(chunk, randomTickSpeed));
     };
 
@@ -62,7 +62,7 @@ public abstract class ServerLevelMixin extends Level {
             target = "Lnet/minecraft/world/level/block/Block;handlePrecipitation(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/biome/Biome$Precipitation;)V"
         )
     )
-    public void inTickPrecipitation(Block block, BlockState state, Level level, BlockPos motionBlockingTopPos, Biome.Precipitation precipitation, Operation<Void> original, BlockPos randomPos) {
+    public void petrolpark$postPrecipitationEvent(Block block, BlockState state, Level level, BlockPos motionBlockingTopPos, Biome.Precipitation precipitation, Operation<Void> original, BlockPos randomPos) {
         // Top motion-blocking block, so excludes plants etc.
         final HandlePrecipitationEvent event = new HandlePrecipitationEvent(level, motionBlockingTopPos, state, precipitation);
         NeoForge.EVENT_BUS.post(event);

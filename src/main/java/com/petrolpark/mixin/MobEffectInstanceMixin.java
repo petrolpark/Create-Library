@@ -63,7 +63,7 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
         method = "onEffectAdded",
         at = @At("TAIL")
     )
-    private void inEffectAdded(LivingEntity entity, CallbackInfo ignored) {
+    private void petrolpark$initShaderEffects(LivingEntity entity, CallbackInfo ignored) {
         if (entity instanceof ServerPlayer player) {
             PacketDistributor.sendToPlayer(player, new SyncMobEffectTotalDurationPacket(petrolpark$totalDuration, effect));
             if (effect.value() instanceof IShaderEffect) PacketDistributor.sendToPlayer(player, new InitEffectShaderPacket(effect));
@@ -74,7 +74,7 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
         method = "save",
         at = @At("RETURN")
     )
-    private Tag modifySaveData(Tag original) {
+    private Tag petrolpark$addInitialDurationToTag(Tag original) {
         CompoundTag nbt = (CompoundTag)original;
         nbt.putInt(TOTAL_DURATION_TAG_KEY, this.petrolpark$getTotalDuration());
         return nbt;
@@ -84,7 +84,7 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
         method = "load",
         at = @At("RETURN")
     )
-    private static MobEffectInstance modifyLoadData(MobEffectInstance original, CompoundTag nbt) {
+    private static MobEffectInstance petrolpark$readAdditionalDurationFromTag(MobEffectInstance original, CompoundTag nbt) {
         if (original != null) {
             ((IMobEffectInstanceMixin)original).petrolpark$setTotalDuration(nbt.getInt(TOTAL_DURATION_TAG_KEY));
         };
@@ -96,7 +96,7 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
         at = @At("TAIL"),
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    private void inUpdate(MobEffectInstance other, CallbackInfoReturnable<Boolean> cir, boolean flag) {
+    private void petrolpark$setOtherEffectTotalDuration(MobEffectInstance other, CallbackInfoReturnable<Boolean> cir, boolean flag) {
         if (flag) {
             if (isInfiniteDuration()) return;
             if (other.isInfiniteDuration()) petrolpark$setTotalDuration(MobEffectInstance.INFINITE_DURATION);

@@ -54,7 +54,7 @@ public record ExpressionOrDropdownArgument<ENVIRONMENT extends IScratchEnvironme
         private final ContextualCodec<IScratchContextProvider<?>, ExpressionOrDropdownArgument<ENVIRONMENT, TYPE>> codec;
         private final ContextualStreamCodec<? super RegistryFriendlyByteBuf, IScratchContextProvider<?>, ExpressionOrDropdownArgument<ENVIRONMENT, TYPE>> streamCodec;
 
-        public ExpressionOrDropdownParameter(String key, IScratchClass<TYPE> scratchClass, List<DropdownArgument.Entry<? super ENVIRONMENT, TYPE>> values) {
+        public ExpressionOrDropdownParameter(String key, IScratchClass<TYPE, ?> scratchClass, List<DropdownArgument.Entry<? super ENVIRONMENT, TYPE>> values) {
             this.values = values;
             expressionParameter = new ExpressionParameter<>(key, scratchClass);
 

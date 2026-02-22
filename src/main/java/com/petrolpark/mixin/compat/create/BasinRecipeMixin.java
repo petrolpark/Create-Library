@@ -64,7 +64,7 @@ public class BasinRecipeMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    private static void inApplyPropagateContaminants(
+    private static void petrolpark$propagateContaminants(
         BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir,
         boolean isBasinRecipe, IItemHandler availableItems, IFluidHandler availableFluids, BlazeBurnerBlock.HeatLevel heat,
         List<ItemStack> recipeOutputItems, List<FluidStack> recipeOutputFluids,
@@ -110,7 +110,7 @@ public class BasinRecipeMixin {
         remap = false
     )
     @SuppressWarnings("unchecked")
-    private static final List<ItemStack> wrapRollResults(BasinRecipe basinRecipe, RandomSource random, Operation<List<ItemStack>> original, BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
+    private static final List<ItemStack> petrolpark$getLuckyResults(BasinRecipe basinRecipe, RandomSource random, Operation<List<ItemStack>> original, BasinBlockEntity basin, Recipe<?> recipe, boolean test) {
         if (basinRecipe instanceof IFTLProcessingRecipe ftlRecipe) return ftlRecipe.rollLuckyResults(basin, random);
         return original.call(basinRecipe, random);
     };

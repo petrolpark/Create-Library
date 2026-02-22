@@ -42,10 +42,10 @@ public abstract class MechanicalCrafterBlockEntityMixin extends KineticBlockEnti
         ),
         remap = false
     )
-    public ItemStack wrapTryToApplyRecipe(Level world, GroupedItems items, Operation<ItemStack> original) {
+    public ItemStack petrolpark$advancedRecipeChecks(Level world, GroupedItems items, Operation<ItemStack> original) {
         ItemStack result = original.call(world, items);
         if (result == null) {
-            MechanicalCraftingInput craftingInput = MechanicalCraftingInput.of(items);
+            final MechanicalCraftingInput craftingInput = MechanicalCraftingInput.of(items);
             result = world.getRecipeManager().getRecipeFor(PetrolparkRecipeTypes.CRAFTING_BOOK_REQUIRED.get(), craftingInput, world)
                 .or(() -> CreateRecipeTypes.RECIPE_BOOK_MECHANICAL_CRAFTING.find(craftingInput, world))
                 .filter(rh -> RecipeHelper.isValidAt(rh, world, getBlockPos()))

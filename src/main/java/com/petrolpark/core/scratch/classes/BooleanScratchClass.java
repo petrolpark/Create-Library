@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.petrolpark.core.scratch.argument.DropdownArgument;
+import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.ExpressionOrDropdownParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.util.Lang;
@@ -15,7 +16,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 
-public class BooleanScratchClass extends SimpleScratchClass<Boolean> implements IByteBufScratchClass<Boolean> {
+public class BooleanScratchClass extends SimpleScratchClass<Boolean, ExpressionOrDropdownArgument<IScratchEnvironment, Boolean>> implements IByteBufScratchClass<Boolean, ExpressionOrDropdownArgument<IScratchEnvironment, Boolean>> {
 
     public static final DropdownArgument.SimpleEntry<Boolean>
     
@@ -47,7 +48,7 @@ public class BooleanScratchClass extends SimpleScratchClass<Boolean> implements 
     };
 
     @Override
-    public <TO_TYPE> Optional<IScratchClass.Caster<Boolean, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
+    public <TO_TYPE> Optional<IScratchClass.Caster<Boolean, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'cast'");
     };

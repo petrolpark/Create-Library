@@ -51,7 +51,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
         method = "Lnet/minecraft/client/gui/screens/inventory/CreativeModeInventoryScreen;render(Lnet/minecraft/client/gui/GuiGraphics;IIF)V",
         at = @At("RETURN")
     )
-    public void inRender(GuiGraphics graphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+    public void petrolpark$renderCustomTabs(GuiGraphics graphics, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
         if (getSelectedTab() instanceof CustomTab tab) {
             int offset = getMenu().getRowIndexForScroll(getScrollOffs());
             PoseStack ms = graphics.pose();
@@ -85,7 +85,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
             target = "Lnet/minecraft/core/NonNullList;size()I"
         )
     )
-    public int wrapSlotListSize(NonNullList<Slot> slots, Operation<Integer> original) {
+    public int petrolpark$dontAddExtendedInventorySlots(NonNullList<Slot> slots, Operation<Integer> original) {
         return 46;
     };
 
@@ -101,7 +101,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
             ordinal = 0
         )
     )
-    public void inSelectTab(CreativeModeTab tab, CallbackInfo ci) {
+    public void petrolpark$addExtendedInventorySlots(CreativeModeTab tab, CallbackInfo ci) {
         Minecraft mc = getMinecraft();
         if (mc == null) return;
         LocalPlayer player = mc.player;
@@ -131,7 +131,7 @@ public abstract class CreativeModeInventoryScreenMixin extends EffectRenderingIn
         method = "Lnet/minecraft/client/gui/screens/inventory/CreativeModeInventoryScreen;slotClicked",
         at = @At("HEAD")
     )
-    protected void inSlotClicked(@Nullable Slot slot, int slotId, int mouseButton, ClickType type, CallbackInfo ci) {
+    protected void petrolpark$addItemsToExtendedInventorySlots(@Nullable Slot slot, int slotId, int mouseButton, ClickType type, CallbackInfo ci) {
         Minecraft mc = getMinecraft();
         if (mc == null) return;
         LocalPlayer player = mc.player;

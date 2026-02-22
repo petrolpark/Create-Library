@@ -30,7 +30,7 @@ public interface IScratchExpression<
 
     public RETURN_TYPE evaluate(ENVIRONMENT environment, ARGUMENTS arguments);
 
-    public IScratchClass<RETURN_TYPE> getReturnClass();
+    public IScratchClass<RETURN_TYPE, ?> getReturnClass();
 
     public IScratchExpression.Type<?> getExpressionType();
 

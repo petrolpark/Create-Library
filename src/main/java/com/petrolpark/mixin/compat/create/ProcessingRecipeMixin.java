@@ -20,7 +20,7 @@ public class ProcessingRecipeMixin {
         at = @At("RETURN"),
         remap = false
     )
-    public List<ItemStack> modifyRollResults(List<ItemStack> original, List<ProcessingOutput> rollableResults) {
+    public List<ItemStack> petrolpark$startDecay(List<ItemStack> original, List<ProcessingOutput> rollableResults) {
         original.forEach(s -> ItemDecay.startDecay(s, 0));
         return original;
     };

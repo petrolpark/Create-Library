@@ -3,12 +3,14 @@ package com.petrolpark.core.scratch.classes;
 import java.util.Optional;
 
 import com.mojang.serialization.Codec;
+import com.petrolpark.core.scratch.argument.ExpressionArgument;
+import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.codec.StreamCodec;
 
-public class BlockPosScratchClass extends ExpressionDefaultParameterSimpleScratchClass<BlockPos> implements IByteBufScratchClass<BlockPos> {
+public class BlockPosScratchClass extends ExpressionDefaultParameterSimpleScratchClass<BlockPos> implements IByteBufScratchClass<BlockPos, ExpressionArgument<IScratchEnvironment, BlockPos>> {
 
     @Override
     public BlockPos fallback() {
@@ -26,7 +28,7 @@ public class BlockPosScratchClass extends ExpressionDefaultParameterSimpleScratc
     };
 
     @Override
-    public <TO_TYPE> Optional<IScratchClass.Caster<BlockPos, TO_TYPE>> cast(IScratchClass<TO_TYPE> toClass) {
+    public <TO_TYPE> Optional<IScratchClass.Caster<BlockPos, TO_TYPE>> cast(IScratchClass<TO_TYPE, ?> toClass) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'cast'");
     };

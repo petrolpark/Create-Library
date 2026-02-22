@@ -24,7 +24,7 @@ public class ServerPlayerGameModeMixin {
             target = "Lnet/minecraft/server/level/ServerPlayerGameMode;isCreative()Z"
         )
     )
-    private boolean dontRevertItemStack(boolean original, ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult) {
+    private boolean petrolpark$dontRevertItemStack(boolean original, ServerPlayer player, Level level, ItemStack stack, InteractionHand hand, BlockHitResult hitResult) {
         return original && !(stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IPickUpPutDownBlock);
     };
 };

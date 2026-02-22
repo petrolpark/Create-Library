@@ -5,7 +5,7 @@ import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.i
 import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
-import com.petrolpark.core.scratch.classes.IScratchClass;
+import com.petrolpark.core.scratch.classes.BlockPosScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.TernaryExpressionType;
 
@@ -25,7 +25,7 @@ public final class BlockPosExpression extends TernaryExpressionType<
     };
 
     @Override
-    public IScratchClass<BlockPos> getReturnClass() {
+    public BlockPosScratchClass getReturnClass() {
         return PetrolparkScratchClasses.BLOCK_POS.get();
     };
 

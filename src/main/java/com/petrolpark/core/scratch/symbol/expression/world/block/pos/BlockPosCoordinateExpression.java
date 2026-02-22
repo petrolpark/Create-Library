@@ -7,7 +7,7 @@ import com.petrolpark.core.scratch.argument.DropdownArgument;
 import com.petrolpark.core.scratch.argument.DropdownArgument.DropdownParameter;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
-import com.petrolpark.core.scratch.classes.IScratchClass;
+import com.petrolpark.core.scratch.classes.IntegerScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.BinaryExpressionType;
 
@@ -27,7 +27,7 @@ public final class BlockPosCoordinateExpression extends BinaryExpressionType<
     };
 
     @Override
-    public IScratchClass<Long> getReturnClass() {
+    public IntegerScratchClass getReturnClass() {
         return PetrolparkScratchClasses.INTEGER.get();
     };
 

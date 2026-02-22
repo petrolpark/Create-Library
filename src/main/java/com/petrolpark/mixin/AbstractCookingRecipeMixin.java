@@ -18,8 +18,8 @@ public class AbstractCookingRecipeMixin {
     @WrapMethod(
         method = "Lnet/minecraft/world/item/crafting/AbstractCookingRecipe;assemble(Lnet/minecraft/world/item/crafting/SingleRecipeInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;"
     )
-    public ItemStack wrapAssemble(SingleRecipeInput input, HolderLookup.Provider registries, Operation<ItemStack> original) {
-        ItemStack result = original.call(input, registries);
+    public ItemStack petrolpark$propagateContaminants(SingleRecipeInput input, HolderLookup.Provider registries, Operation<ItemStack> original) {
+        final ItemStack result = original.call(input, registries);
         if (PetrolparkConfigs.server().cookingPropagatesContaminants.get()) ItemContamination.get(result).contaminateAll(ItemContamination.get(input.item()).streamAllContaminants());
         return result;
     };

@@ -40,10 +40,10 @@ public abstract class ServerGamePacketListenerImplMixin implements ServerGamePac
         ),
         cancellable = true
     )
-    public void inHandleSetCarriedItem(ServerboundSetCarriedItemPacket packet, CallbackInfo ci) {
-        Optional<ExtendedInventory> invOp = ExtendedInventory.get(player);
+    public void petrolpark$setExtendedInventoryCarriedItem(ServerboundSetCarriedItemPacket packet, CallbackInfo ci) {
+        final Optional<ExtendedInventory> invOp = ExtendedInventory.get(player);
         if (invOp.isEmpty()) return;
-        ExtendedInventory inv = invOp.get();
+        final ExtendedInventory inv = invOp.get();
         if (inv.isFullHotbarSlot(packet.getSlot())) {
             if (player.getInventory().selected != packet.getSlot() && player.getUsedItemHand() == InteractionHand.MAIN_HAND) {
                 player.stopUsingItem();
@@ -65,7 +65,7 @@ public abstract class ServerGamePacketListenerImplMixin implements ServerGamePac
         locals = LocalCapture.CAPTURE_FAILSOFT,
         cancellable = true
     )
-    public void inHandleSetCreativeModeSlot(ServerboundSetCreativeModeSlotPacket packet, CallbackInfo ci, boolean flag, ItemStack itemstack, CustomData customData) {
+    public void petrolpark$setExtendedInventoryCreativeModeSlot(ServerboundSetCreativeModeSlotPacket packet, CallbackInfo ci, boolean flag, ItemStack itemstack, CustomData customData) {
         if (packet.slotNum() >= 1 && packet.slotNum() < player.inventoryMenu.slots.size() && (itemstack.isEmpty() || itemstack.getDamageValue() >= 0 && !itemstack.isEmpty())) {
             player.inventoryMenu.getSlot(packet.slotNum()).setByPlayer(itemstack);
             player.inventoryMenu.broadcastChanges();

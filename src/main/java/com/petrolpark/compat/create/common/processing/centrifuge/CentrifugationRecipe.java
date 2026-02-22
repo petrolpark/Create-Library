@@ -9,8 +9,10 @@ import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -49,6 +51,16 @@ public class CentrifugationRecipe extends AdvancedProcessingRecipe<RecipeInput> 
     @Override
     protected int getMaxFluidOutputCount() {
         return 2;
+    };
+
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(@Nonnull RecipeInput input) {
+        return super.getRemainingItems(input);
+    };
+
+    @Override
+    public NonNullList<Ingredient> getCentrifugationIngredients() {
+        return getIngredients();
     };
 
     @Override

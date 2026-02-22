@@ -44,8 +44,6 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
     @Shadow
     public ProcessingInventory inventory;
 
-    //TODO get the player in the controller block entity
-
     public CrushingWheelControllerBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
         throw new AssertionError();
@@ -56,7 +54,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         at = @At("RETURN"),
         remap = false
     )
-    public void inAddBehaviours(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
+    public void petrolpark$addFirstTimeLuckyRecipeBehaviour(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
         behaviours.add(new FTLRecipesBehaviour(this, rh -> rh.value() instanceof AbstractCrushingRecipe));
     };
 
@@ -65,7 +63,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         at = @At("HEAD"),
         remap = false
     )
-    public void inApplyRecipeStart(CallbackInfo ci) {
+    public void petrolpark$storeProcessedItem(CallbackInfo ci) {
         lastItemProcessed = inventory.getStackInSlot(0).copy();
     };
 
@@ -77,7 +75,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         )
     )
     @SuppressWarnings("unchecked")
-    public List<ItemStack> wrapRollResults(StandardProcessingRecipe<RecipeWrapper> recipe, RandomSource random, Operation<List<ItemStack>> original) {
+    public List<ItemStack> petrolpark$getLuckyResults(StandardProcessingRecipe<RecipeWrapper> recipe, RandomSource random, Operation<List<ItemStack>> original) {
         if (recipe instanceof IFTLProcessingRecipe ftlr) return ftlr.rollLuckyResults(this, random);
         else return original.call(recipe, random);
     };
@@ -88,7 +86,7 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void inApplyRecipeEnd(CallbackInfo ci, Optional<RecipeHolder<StandardProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> list) {
+    public void petrolpark$propagateContaminants(CallbackInfo ci, Optional<RecipeHolder<StandardProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> list) {
         list.forEach(ItemDecay::startDecay);
         if (PetrolparkConfigs.server().createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
             IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);

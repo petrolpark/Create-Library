@@ -17,7 +17,7 @@ public class ForgePluginFinderMixin {
     @WrapMethod(
         method = "Lmezz/jei/neoforge/startup/ForgePluginFinder;getModPlugins()Ljava/util/List;"
     )
-    private static List<IModPlugin> wrapGetModPlugins(Operation<List<IModPlugin>> original) {
+    private static List<IModPlugin> petrolpark$addCreateDependentJEIPlugin(Operation<List<IModPlugin>> original) {
         List<IModPlugin> plugins = original.call();
         plugins.add(new PetrolparkCreateJEI());
         return plugins;

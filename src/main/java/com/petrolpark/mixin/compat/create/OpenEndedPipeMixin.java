@@ -29,7 +29,7 @@ public abstract class OpenEndedPipeMixin {
         cancellable = true,
         remap = false
     )
-    private void inProvideFluidToSpace(FluidStack stack, boolean simulate, CallbackInfoReturnable<Boolean> cir) {
+    private void petrolpark$provideCustomBlockStateFluid(FluidStack stack, boolean simulate, CallbackInfoReturnable<Boolean> cir) {
         if (
             world != null
             && world.isLoaded(outputPos)
