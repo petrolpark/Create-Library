@@ -24,7 +24,7 @@ public abstract class ShapelessRecipeMixin implements IHandleContaminationMyself
         method = "Lnet/minecraft/world/item/crafting/ShapelessRecipe;assemble(Lnet/minecraft/world/item/crafting/CraftingInput;Lnet/minecraft/core/HolderLookup$Provider;)Lnet/minecraft/world/item/ItemStack;",
         at = @At("RETURN")
     )
-    public ItemStack modifyAssemble(ItemStack original, CraftingInput input, HolderLookup.Provider registries) {
+    public ItemStack petrolpark$propagateContaminantsAndStartDecay(ItemStack original, CraftingInput input, HolderLookup.Provider registries) {
         ItemDecay.startDecay(original);
         if (PetrolparkConfigs.server().shapelessCraftingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(input.items().stream(), original);
         return original;

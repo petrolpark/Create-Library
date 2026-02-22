@@ -24,7 +24,7 @@ public class KineticBlockMixin {
         method = "Lcom/simibubi/create/content/kinetics/base/KineticBlock;setPlacedBy(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;)V",
         at = @At("HEAD")
     )
-    public void inSetPlacedBy(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, CallbackInfo ci) {
+    public void petrolpark$setContaminantsFromItem(Level worldIn, BlockPos pos, BlockState state, LivingEntity placer, ItemStack stack, CallbackInfo ci) {
         Optional.ofNullable(BlockEntityBehaviour.get(worldIn, pos, ContaminationBehaviour.TYPE)).ifPresent(behaviour -> behaviour.setFromItem(stack));
     };
 };

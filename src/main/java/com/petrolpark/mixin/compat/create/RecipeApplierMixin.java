@@ -24,7 +24,7 @@ public class RecipeApplierMixin {
         at = @At("RETURN"),
         remap = false
     )
-    private static List<ItemStack> modifyApplyRecipeOn(List<ItemStack> original, Level level, ItemStack stackIn, Recipe<?> recipe, boolean returnProcessingRemainder) {
+    private static List<ItemStack> petrolpark$propagateContaminantsAndStartDecay(List<ItemStack> original, Level level, ItemStack stackIn, Recipe<?> recipe, boolean returnProcessingRemainder) {
         if (PetrolparkConfigs.server().createOtherRecipesPropagateContaminants.get()) {
             IContamination<?, ?> inputContamination = ItemContamination.get(stackIn);
             original.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));

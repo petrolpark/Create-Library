@@ -31,8 +31,8 @@ public class CrushingWheelControllerBlockMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    private static void inUpdateSpeed(BlockState state, LevelAccessor level, BlockPos pos, CrushingWheelControllerBlockEntity be, CallbackInfo ci, Direction var4[], int var5, int var6, Direction d, BlockState neighbour, BlockEntity adjBE, CrushingWheelBlockEntity cwbe) {
-        FTLRecipesBehaviour behaviour = cwbe.getBehaviour(FTLRecipesBehaviour.TYPE);
+    private static void petrolpark$passPlayerToController(BlockState state, LevelAccessor level, BlockPos pos, CrushingWheelControllerBlockEntity be, CallbackInfo ci, Direction var4[], int var5, int var6, Direction d, BlockState neighbour, BlockEntity adjBE, CrushingWheelBlockEntity cwbe) {
+        final FTLRecipesBehaviour behaviour = cwbe.getBehaviour(FTLRecipesBehaviour.TYPE);
         if (behaviour != null) AbstractRememberPlacerBehaviour.setPlacedBy(be, behaviour.getPlayer());
     };
 };

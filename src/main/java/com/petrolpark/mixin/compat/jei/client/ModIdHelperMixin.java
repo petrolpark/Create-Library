@@ -34,7 +34,7 @@ public abstract class ModIdHelperMixin implements IModIdHelper {
         )
     )
     @SuppressWarnings("rawtypes")
-    public String wrapGetDisplayModId(IIngredientHelper instance, Object ingredient, Operation<String> original) {
+    public String petrolpark$getSharedFeatureModIds(IIngredientHelper instance, Object ingredient, Operation<String> original) {
         if (ingredient instanceof ItemStack stack && stack.getItem() instanceof ISharedFeature sharedFeature) {
             SharedFeatureFlag featureFlag = sharedFeature.getSharedFeatureFlag();
             if (featureFlag.enabled()) return SHARED_FEATURE_ID_KEY + DELIMITER + featureFlag.streamUsers().map(Mods::getId).collect(Collectors.joining(DELIMITER));
@@ -45,7 +45,7 @@ public abstract class ModIdHelperMixin implements IModIdHelper {
     @WrapMethod(
         method = "Lmezz/jei/library/helpers/ModIdHelper;getModNameForModId(Ljava/lang/String;)Ljava/lang/String;"
     )
-    public String wrapGetModNameForModId(String modid, Operation<String> operation) {
+    public String petrolpark$formatSharedFeatureModIds(String modid, Operation<String> operation) {
         String[] split = modid.split(DELIMITER);
         if (split.length > 1 && split[0].equals(SHARED_FEATURE_ID_KEY)) {
             return Lang.shortList(Stream.of(Arrays.copyOfRange(split, 1, split.length))

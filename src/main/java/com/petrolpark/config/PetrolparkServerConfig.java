@@ -42,6 +42,7 @@ public class PetrolparkServerConfig extends ConfigBase {
             public final ConfigGroup centrifuge = group(2, "centrifuge");
                 public final ConfigInt centrifugeTankCapacity = i(2000, 0, Integer.MAX_VALUE, "Capacity of each Centrifuge tank");
                 public final ConfigBool potionCentrifugation = b(true, "Centrifuges can separate Potions into their Ingredients");
+                public final ConfigBool centrifugePropagatesContaminants = b(true, "propagateContaminants", "Centrifugation Recipes will propagate the Contaminants of the inputs to the outputs");
             public final ConfigGroup createContamination = group(2, "contamination");
                 public final ConfigFloat createFluidContaminantWeight = f(100f, 0f, Float.MAX_VALUE, "fluidWeight", "How many mB of Fluid should be considered to be equal to one Item when weighting preserved Contaminants in any Recipes involving Fluids", "Set to 0 to not count the Contaminants of input Fluids. Contaminants will still propagate to output Fluids.");
                 public final ConfigBool createBasinRecipesPropagateContaminants = b(true, "propagateBasin", "Recipes done in a Basin will propagate the Contaminants of the input to the outputs");

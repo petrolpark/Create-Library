@@ -24,7 +24,7 @@ public class SharedDepotBlockMethodsMixin {
         index = 0,
         remap = false
     )
-    private static TransportedItemStack modifyHeldItem(TransportedItemStack transported) {
+    private static TransportedItemStack petrolpark$makeDirectionalItem(TransportedItemStack transported) {
         if (transported.stack.getItem() instanceof IDirectionalOnBelt directionalItem) return directionalItem.makeDirectionalTransportedItemStack(transported);
         return transported;
     };

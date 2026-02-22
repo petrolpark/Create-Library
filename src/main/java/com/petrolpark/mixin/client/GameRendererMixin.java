@@ -44,7 +44,7 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
         ),
         cancellable = true
     )
-    private void inBobHurt(PoseStack ms, float partialTicks, CallbackInfo ci) {
+    private void petrolpark$numbnessCancelsBobbing(PoseStack ms, float partialTicks, CallbackInfo ci) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.getCameraEntity() instanceof LivingEntity livingEntity && livingEntity.hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate())) ci.cancel();
     };
@@ -56,7 +56,7 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
             target = "Lcom/mojang/blaze3d/pipeline/RenderTarget;bindWrite(Z)V"
         )
     )
-    public void inRender(DeltaTracker deltaTracker, boolean renderLevel, CallbackInfo ci) {
+    public void petrolpark$updateUniforms(DeltaTracker deltaTracker, boolean renderLevel, CallbackInfo ci) {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 

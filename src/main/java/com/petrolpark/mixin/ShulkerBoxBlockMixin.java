@@ -20,7 +20,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.ShulkerBoxBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ShulkerBoxBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -45,10 +44,9 @@ public abstract class ShulkerBoxBlockMixin extends BaseEntityBlock {
         method = "getDrops",
         at = @At("RETURN")
     )
-    public List<ItemStack> modifyGetDrops(List<ItemStack> original, BlockState state, LootParams.Builder params) {
-        BlockEntity be = params.getOptionalParameter(LootContextParams.BLOCK_ENTITY);
-        if (be instanceof ShulkerBoxBlockEntity shulkerBox) {
-            GenericContamination contamination = ((IShulkerBoxBlockEntityDuck)shulkerBox).getContamination();
+    public List<ItemStack> petrolpark$contaminateDroppedItem(List<ItemStack> original, BlockState state, LootParams.Builder params) {
+        if (params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ShulkerBoxBlockEntity shulkerBox) {
+            final GenericContamination contamination = ((IShulkerBoxBlockEntityDuck)shulkerBox).getContamination();
             original.stream().filter(s -> s.getItem() instanceof BlockItem b && b.getBlock() == this).map(ItemContamination::get).forEach(contam -> contam.contaminateAll(contamination.streamOrphanExtrinsicContaminants()));
         };
         return original;

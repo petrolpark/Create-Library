@@ -36,7 +36,7 @@ public abstract class MinecraftMixin {
             target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;handleCreativeModeItemAdd(Lnet/minecraft/world/item/ItemStack;I)V"
         )
     )
-    private void redirectHandleCreativeModeItemAdd(MultiPlayerGameMode gameMode, ItemStack stack, int slotID, Operation<Void> original) {
+    private void petrolpark$addItemsToExtendedInventorySlots(MultiPlayerGameMode gameMode, ItemStack stack, int slotID, Operation<Void> original) {
         Optional<ExtendedInventory> invOp = ExtendedInventory.get(player);
         if (invOp.isPresent()) {
             ExtendedInventory inv = invOp.get();

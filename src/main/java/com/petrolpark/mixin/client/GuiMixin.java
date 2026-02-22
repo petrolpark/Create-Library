@@ -46,7 +46,7 @@ public abstract class GuiMixin {
         ),
         index = 1
     )
-    private int modifyOffhandItemOffset(GuiGraphics graphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, int seed) {
+    private int petrolpark$moveOffhandItem(GuiGraphics graphics, int x, int y, DeltaTracker deltaTracker, Player player, ItemStack stack, int seed) {
         if (stack == player.getOffhandItem()) { // If we're rendering the offhand Item
             Optional<ExtendedInventory> invOp = ExtendedInventory.get(player);
             if (invOp.isEmpty()) return x;
@@ -76,7 +76,7 @@ public abstract class GuiMixin {
         ),
         index = 1
     )
-    private int modifyOffhandBackgroundOffsetX(ResourceLocation atlasLocation, int x, int y, int width, int height) {
+    private int petrolpark$moveOffhandBackground(ResourceLocation atlasLocation, int x, int y, int width, int height) {
         if (atlasLocation == Gui.HOTBAR_OFFHAND_LEFT_SPRITE || atlasLocation == Gui.HOTBAR_OFFHAND_RIGHT_SPRITE) { // If we're rendering the offhand background
             Optional<ExtendedInventory> invOp = ExtendedInventory.get(getCameraPlayer());
             if (invOp.isEmpty()) return x;
@@ -98,7 +98,7 @@ public abstract class GuiMixin {
         ),
         index = 10   
     )
-    private boolean modifyRenderHighlight(boolean renderHighlight) {
+    private boolean petrolpark$numbnessCancelsHeartFlashing(boolean renderHighlight) {
         return renderHighlight && !getCameraPlayer().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate());
     };
 };

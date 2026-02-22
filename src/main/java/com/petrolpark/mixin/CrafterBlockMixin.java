@@ -36,7 +36,7 @@ public abstract class CrafterBlockMixin extends BaseEntityBlock implements IReci
             target = "getPotentialResults"
         )
     )
-    public Optional<RecipeHolder<CraftingRecipe>> modifyGetPotentialResults(Optional<RecipeHolder<CraftingRecipe>> original, BlockState state, ServerLevel level, BlockPos pos) {
+    public Optional<RecipeHolder<CraftingRecipe>> petrolpark$addBookRequiredRecipes(Optional<RecipeHolder<CraftingRecipe>> original, BlockState state, ServerLevel level, BlockPos pos) {
         if (!(level.getBlockEntity(pos) instanceof CrafterBlockEntity crafter)) return original;
         return original.or(() -> level.getRecipeManager()
             .getRecipeFor(PetrolparkRecipeTypes.CRAFTING_BOOK_REQUIRED.get(), crafter.asCraftInput(), level)

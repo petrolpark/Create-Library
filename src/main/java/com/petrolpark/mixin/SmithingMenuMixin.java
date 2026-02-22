@@ -45,7 +45,7 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    public void inCreateResult(CallbackInfo ci, SmithingRecipeInput smithingrecipeinput, List<SmithingRecipe> list, RecipeHolder<SmithingRecipe> recipeHolder, ItemStack result) {
+    public void petrolpark$propagateContaminantsAndStartDecay(CallbackInfo ci, SmithingRecipeInput smithingrecipeinput, List<SmithingRecipe> list, RecipeHolder<SmithingRecipe> recipeHolder, ItemStack result) {
         if (PetrolparkConfigs.server().smithingPropagatesContaminants.get()) {
             ItemContamination.perpetuateSingle(Stream.of(inputSlots.getItem(1), inputSlots.getItem(2)), result);
         };

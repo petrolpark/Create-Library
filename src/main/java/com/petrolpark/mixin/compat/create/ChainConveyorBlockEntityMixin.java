@@ -48,7 +48,7 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
         )
     )
     @SuppressWarnings("null")
-    public void wrapNotifyPortToAnticipiate(ChainConveyorBlockEntity ccbe, BlockPos offset, Operation<Void> original, @Local ChainConveyorPackage box, @Local ChainConveyorBlockEntity.ConnectedPort port) {
+    public void petrolpark$notifyArmToAnticipate(ChainConveyorBlockEntity ccbe, BlockPos offset, Operation<Void> original, @Local ChainConveyorPackage box, @Local ChainConveyorBlockEntity.ConnectedPort port) {
         original.call(ccbe, offset);
         if (ChainConveyorArmInteractionPoint.isEnabled()) level.getBlockEntity(getBlockPos().offset(offset), AllBlockEntityTypes.MECHANICAL_ARM.get()).ifPresent(arm -> ChainConveyorArmInteractionPoint.notifyArmToAnticipate(ccbe, port, arm, box));
     };
@@ -61,7 +61,7 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
         )
     )
     @SuppressWarnings("null")
-    private boolean wrapExportToPort(ChainConveyorBlockEntity ccbe, ChainConveyorPackage box, BlockPos offset, Operation<Boolean> original, @Local ChainConveyorBlockEntity.ConnectedPort port) {
+    private boolean petrolpark$exportToArm(ChainConveyorBlockEntity ccbe, ChainConveyorPackage box, BlockPos offset, Operation<Boolean> original, @Local ChainConveyorBlockEntity.ConnectedPort port) {
         return original.call(ccbe, box, offset) || (ChainConveyorArmInteractionPoint.isEnabled() && level.getBlockEntity(getBlockPos().offset(offset), AllBlockEntityTypes.MECHANICAL_ARM.get()).map(arm -> ChainConveyorArmInteractionPoint.exportToArm(ccbe, port, arm, box)).orElse(false));
     };
 
@@ -70,7 +70,7 @@ public abstract class ChainConveyorBlockEntityMixin extends KineticBlockEntity i
         at = @At("HEAD")
     )
     @SuppressWarnings("null")
-    private void inDrop(ChainConveyorPackage box, CallbackInfo ci) {
+    private void petrolpark$dropNonBox(ChainConveyorPackage box, CallbackInfo ci) {
         if (!(box.item.getItem() instanceof PackageItem)) {
             final Vec3 pos = box.worldPosition.subtract(0d, 0.5d, 0d);
             level.addFreshEntity(new ItemEntity(level, pos.x(), pos.y(), pos.z(), ChainConveyorItemEvent.getRemoved(level, (ChainConveyorBlockEntity)(Object)this, null, box, false).getStack()));

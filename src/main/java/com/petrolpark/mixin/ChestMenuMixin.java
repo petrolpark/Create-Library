@@ -36,8 +36,8 @@ public abstract class ChestMenuMixin extends AbstractContainerMenu {
             target = "Lnet/minecraft/world/inventory/Slot;getItem()Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    public ItemStack wrapGetItem(Slot instance, Operation<ItemStack> original) {
-        Level level;
+    public ItemStack petrolpark$removeAppliedDecay(Slot instance, Operation<ItemStack> original) {
+        final Level level;
         if (instance.container instanceof BarrelBlockEntity barrel) level = barrel.getLevel();
         else if (instance.container instanceof AgeingContainerWrapper ageingContainer && AgeingContainerWrapper.ageingInVanillaBarrelsEnabled()) level = ageingContainer.getLevel();
         else return original.call(instance);

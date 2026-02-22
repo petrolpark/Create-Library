@@ -30,7 +30,7 @@ public abstract class CrushingWheelBlockEntityMixin extends KineticBlockEntity {
         at = @At("RETURN"),
         remap = false
     )
-    public void inAddBehaviours(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
+    public void petrolpark$addFirstTimeLuckyRecipeBehaviour(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
         behaviours.add(new FTLRecipesBehaviour(this, rh -> rh.value() instanceof AbstractCrushingRecipe));
     };
 };

@@ -23,7 +23,7 @@ public abstract class DepotBehaviourMixin {
         method = "insert(Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;Z)Lnet/minecraft/world/item/ItemStack;",
         remap = false
     )
-    public ItemStack inInsert(TransportedItemStack heldItem, boolean simulate, Operation<ItemStack> original) {
+    public ItemStack petrolpark$insertDirectional(TransportedItemStack heldItem, boolean simulate, Operation<ItemStack> original) {
         if (!(heldItem instanceof DirectionalTransportedItemStack) && heldItem.stack.getItem() instanceof IDirectionalOnBelt directionalItem) {
             heldItem = directionalItem.makeDirectionalTransportedItemStack(heldItem);
         };
@@ -36,7 +36,7 @@ public abstract class DepotBehaviourMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void inTick(TransportedItemStack heldItem, CallbackInfoReturnable<Boolean> ci, float diff) {
+    public void petrolpark$refreshDirectionalStackAngle(TransportedItemStack heldItem, CallbackInfoReturnable<Boolean> ci, float diff) {
         if (heldItem instanceof DirectionalTransportedItemStack directionalStack) directionalStack.refreshAngle();
     };
 

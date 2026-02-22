@@ -30,7 +30,7 @@ public abstract class ChainPackageInteractionPacketMixin {
             target = "Lnet/minecraft/world/item/ItemStack;copy()Lnet/minecraft/world/item/ItemStack;"
         )
     )
-    protected ItemStack wrapCopy(ItemStack stack, ServerPlayer player, ChainConveyorBlockEntity ccbe) {
+    protected ItemStack petrolpark$removeProperly(ItemStack stack, ServerPlayer player, ChainConveyorBlockEntity ccbe) {
         return removingPackage ? ChainConveyorItemEvent.getRemoved(player.level(), stack, ccbe, selectedConnection, chainPosition, false).getStack() : ChainConveyorItemEvent.getAdded(player.level(), stack.copyWithCount(1), ccbe, selectedConnection, chainPosition, false).getStack();
     };
 };

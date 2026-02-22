@@ -22,7 +22,7 @@ public class MultiPlayerGameModeMixin {
             target = "Lnet/minecraft/world/level/GameType;isCreative()Z"
         )
     )
-    private boolean dontRevertItemStack(boolean original, LocalPlayer player, InteractionHand hand, BlockHitResult result) {
+    private boolean petrolpark$dontRevertItemStack(boolean original, LocalPlayer player, InteractionHand hand, BlockHitResult result) {
         return original && !(player.getItemInHand(hand).getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof IPickUpPutDownBlock);
     };
 };

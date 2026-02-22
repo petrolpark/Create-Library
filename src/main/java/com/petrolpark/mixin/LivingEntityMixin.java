@@ -40,7 +40,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
             target = "Lnet/minecraft/world/entity/WalkAnimationState;setSpeed(F)V"
         )
     )
-    protected boolean wrapSetSpeedServer(WalkAnimationState walkAnimation, float speed) {
+    protected boolean petrolpark$numbnessCancelsLimbSwing(WalkAnimationState walkAnimation, float speed) {
         return !self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate());
     };
 
@@ -51,7 +51,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
     @WrapMethod(
         method = "setLastHurtByMob"
     )
-    public void wrapSetLastHurtByMob(LivingEntity livingEntity, Operation<Void> original) {
+    public void petrolpark$numbnessForgetsAttacker(LivingEntity livingEntity, Operation<Void> original) {
         if (!self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate()) || livingEntity == null) original.call(livingEntity);
     };
 
@@ -61,7 +61,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
     @WrapMethod(
         method = "playHurtSound"
     )
-    protected void wrapPlayHurtSound(DamageSource source, Operation<Void> original) {
+    protected void petrolpark$numbnessCancelsHurtSound(DamageSource source, Operation<Void> original) {
         if (!self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate())) original.call(source);
     };
 
@@ -71,7 +71,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
     @WrapMethod(
         method = "getLastDamageSource"
     )
-    protected DamageSource wrapGetLastDamageSource(Operation<DamageSource> original) {
+    protected DamageSource petrolpark$numbnessForgetsDamageSource(Operation<DamageSource> original) {
         if (self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate())) lastDamageSource = null;
         return original.call();
     };
@@ -87,7 +87,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
             target = "Lnet/minecraft/world/entity/WalkAnimationState;setSpeed(F)V"
         )
     )
-    protected boolean wrapSetSpeedClient(WalkAnimationState walkAnimation, float speed) {
+    protected boolean petrolpark$numbnessCancelsLimbSwingClient(WalkAnimationState walkAnimation, float speed) {
         return !self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate());
     };
 
@@ -101,7 +101,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
             target = "playSound"
         )
     )
-    protected boolean wrapPlaySound(LivingEntity livingEntity, SoundEvent soundEvent, float pitch, float volume) {
+    protected boolean petrolpark$numbnessCancelsHurtSound(LivingEntity livingEntity, SoundEvent soundEvent, float pitch, float volume) {
         return !self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate());
     };
 };

@@ -29,7 +29,7 @@ public abstract class GhostItemMenuMixin extends MenuBase<Object> {
         at = @At("HEAD"),
         cancellable = true
     )
-    public void inClicked(int slotId, int dragType, ClickType clickTypeIn, Player player, CallbackInfo ci) {
+    public void petrolpark$checkNotExtendedInventory(int slotId, int dragType, ClickType clickTypeIn, Player player, CallbackInfo ci) {
         if (slotId >= 0 && slots.get(slotId).container == player.getInventory()) {
             super.clicked(slotId, dragType, clickTypeIn, player);
             ci.cancel();
@@ -41,7 +41,7 @@ public abstract class GhostItemMenuMixin extends MenuBase<Object> {
         at = @At("HEAD"),
         cancellable = true
     )
-    public void inQuickMoveStack(Player playerIn, int index, CallbackInfoReturnable<ItemStack> cir) {
+    public void petrolpark$checkNotExtendedInventory(Player playerIn, int index, CallbackInfoReturnable<ItemStack> cir) {
         if (index >= 0 && slots.get(index).container == player.getInventory() && index >= 36) {
             cir.setReturnValue(ItemStack.EMPTY);
         };

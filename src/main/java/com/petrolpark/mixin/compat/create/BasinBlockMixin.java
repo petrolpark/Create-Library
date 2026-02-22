@@ -4,6 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.petrolpark.compat.create.core.block.entity.BelowBasinOperatingBlockEntity;
 import com.petrolpark.compat.create.core.block.entity.DirectlyAboveBasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlock;
 
@@ -24,8 +25,8 @@ public abstract class BasinBlockMixin extends Block {
         method = "Lcom/simibubi/create/content/processing/basin/BasinBlock;canSurvive(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;)Z",
         remap = false
     )
-    public boolean wrapCanSurvive(BlockState state, LevelReader world, BlockPos pos, Operation<Boolean> operation) {
-        return operation.call(state, world, pos) || world.getBlockEntity(pos.above()) instanceof DirectlyAboveBasinOperatingBlockEntity;
+    public boolean petrolpark$checkOtherOperators(BlockState state, LevelReader world, BlockPos pos, Operation<Boolean> operation) {
+        return operation.call(state, world, pos) || world.getBlockEntity(pos.above()) instanceof DirectlyAboveBasinOperatingBlockEntity || world.getBlockEntity(pos.below()) instanceof BelowBasinOperatingBlockEntity;
     };
     
 };

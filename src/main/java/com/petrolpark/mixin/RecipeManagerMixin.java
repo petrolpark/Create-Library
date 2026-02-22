@@ -36,7 +36,7 @@ public class RecipeManagerMixin {
         ),
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
-    private static void inApply(Map<ResourceLocation, JsonElement> object, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo ci, ImmutableMultimap.Builder<RecipeType<?>, RecipeHolder<?>> byTypeBuilder, ImmutableMap.Builder<ResourceLocation, RecipeHolder<?>> byIdBuilder, RegistryOps<JsonElement> registryOps, Iterator<Map.Entry<ResourceLocation, JsonElement>> iterator, Map.Entry<ResourceLocation, JsonElement> entry, ResourceLocation recipeId, Optional<WithConditions<Recipe<?>>> decoded) {
+    private static void petrolpark$addCompatRecipes(Map<ResourceLocation, JsonElement> object, ResourceManager resourceManager, ProfilerFiller profiler, CallbackInfo ci, ImmutableMultimap.Builder<RecipeType<?>, RecipeHolder<?>> byTypeBuilder, ImmutableMap.Builder<ResourceLocation, RecipeHolder<?>> byIdBuilder, RegistryOps<JsonElement> registryOps, Iterator<Map.Entry<ResourceLocation, JsonElement>> iterator, Map.Entry<ResourceLocation, JsonElement> entry, ResourceLocation recipeId, Optional<WithConditions<Recipe<?>>> decoded) {
         if (decoded.isPresent()) Petrolpark.COMPAT_RECIPES.addCompatRecipes(byTypeBuilder, byIdBuilder, registryOps, recipeId, entry.getValue());
     };
 };

@@ -22,7 +22,7 @@ public class TransportedItemStackMixin {
         method = "Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;read(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/HolderLookup$Provider;)Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;",
         remap = false
     )
-    private static TransportedItemStack wrapRead(CompoundTag nbt, HolderLookup.Provider registries, Operation<TransportedItemStack> original) {
+    private static TransportedItemStack petrolpark$readDirectional(CompoundTag nbt, HolderLookup.Provider registries, Operation<TransportedItemStack> original) {
         TransportedItemStack stack = original.call(nbt, registries);
         if (stack.stack.getItem() instanceof IDirectionalOnBelt directionalItem) {
             DirectionalTransportedItemStack directionalStack = directionalItem.makeDirectionalTransportedItemStack(stack);

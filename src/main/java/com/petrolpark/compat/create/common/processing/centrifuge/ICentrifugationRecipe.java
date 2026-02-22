@@ -2,11 +2,14 @@ package com.petrolpark.compat.create.common.processing.centrifuge;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
 import com.petrolpark.PetrolparkCriteriaTriggers;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AdvancementBehaviour;
+import com.petrolpark.config.PetrolparkConfigs;
+import com.petrolpark.core.contamination.IContamination;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -21,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeInput;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -67,6 +71,8 @@ public interface ICentrifugationRecipe {
         if (!filterMatched) return false;
 
         final List<ItemStack> recipeOutputItems = new ArrayList<>();
+		final FluidStack denseOutputFluid = getDenseOutputFluid().copy();
+		final FluidStack lightOutputFluid = getLightOutputFluid().copy();
 
         for (boolean simulate : Iterate.trueAndFalse) {
             if (!simulate && test) return true;
@@ -110,12 +116,29 @@ public interface ICentrifugationRecipe {
 			};
 
 			if (simulate) {
+
 				final CraftingInput remainderInput = new DummyCraftingContainer(availableItems, extractedItemsFromSlot).asCraftInput();
                 recipeOutputItems.addAll(rollLuckyResults(centrifuge, centrifuge.getLevel().random));
                 for (ItemStack stack : getRemainingItems(remainderInput)) if (!stack.isEmpty()) recipeOutputItems.add(stack);
+
+				if (PetrolparkConfigs.server().centrifugePropagatesContaminants.get()) {
+					final ItemStack[] itemInputs = new ItemStack[availableItems.getSlots()];
+					for (int slot = 0; slot < availableItems.getSlots(); slot++) {
+						itemInputs[slot] = availableItems.getStackInSlot(slot).copyWithCount(extractedItemsFromSlot[slot]);
+					};
+					final FluidStack[] fluidInputs = new FluidStack[availableFluids.getTanks()];
+					for (int tank = 0; tank < availableFluids.getTanks(); tank++) {
+						FluidStack stack = availableFluids.getFluidInTank(tank).copy();
+						if (!stack.isEmpty()) stack.setAmount(extractedFluidsFromTank[tank]);
+						fluidInputs[tank] = stack;
+					};
+
+					final Level level = centrifuge.getLevel();
+					if (level != null) IContamination.perpetuate(Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfigs.server().createFluidContaminantWeight.get(), recipeOutputItems.stream(), Stream.of(denseOutputFluid, lightOutputFluid).dropWhile(FluidStack::isEmpty));
+				};
 			};
 
-			if (!centrifuge.acceptOutputs(recipeOutputItems, getDenseOutputFluid(), getLightOutputFluid(), simulate)) return false;
+			if (!centrifuge.acceptOutputs(recipeOutputItems, denseOutputFluid, lightOutputFluid, simulate)) return false;
         };
 
         if (!test) BlockEntityBehaviour.get(centrifuge, AdvancementBehaviour.TYPE).award(PetrolparkCriteriaTriggers.CENTRIFUGE.get().trigger(recipeOutputItems, getDenseOutputFluid(), getLightOutputFluid()));

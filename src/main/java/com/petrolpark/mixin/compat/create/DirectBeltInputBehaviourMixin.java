@@ -19,7 +19,7 @@ public class DirectBeltInputBehaviourMixin {
         method = "Lcom/simibubi/create/content/kinetics/belt/behaviour/DirectBeltInputBehaviour;handleInsertion(Lcom/simibubi/create/content/kinetics/belt/transport/TransportedItemStack;Lnet/minecraft/core/Direction;Z)Lnet/minecraft/world/item/ItemStack;",
         remap = false
     )
-    public ItemStack inHandleInsertion(TransportedItemStack stack, Direction side, boolean simulate, Operation<ItemStack> original) {
+    public ItemStack petrolpark$insertDirectional(TransportedItemStack stack, Direction side, boolean simulate, Operation<ItemStack> original) {
         if (!(stack instanceof DirectionalTransportedItemStack) && stack.stack.getItem() instanceof IDirectionalOnBelt directionalItem) { // If not already cast to a Directional transported stack
            stack = directionalItem.makeDirectionalTransportedItemStack(stack);
         };

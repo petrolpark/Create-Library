@@ -44,7 +44,7 @@ public abstract class SawBlockEntityMixin extends BlockBreakingKineticBlockEntit
         at = @At("HEAD"),
         remap = false
     )
-    public void inApplyRecipeStart(CallbackInfo ci) {
+    public void petrolpark$storeInputItem(CallbackInfo ci) {
         petrolpark$lastItemProcessed = inventory.getStackInSlot(0);
     };
 
@@ -54,7 +54,7 @@ public abstract class SawBlockEntityMixin extends BlockBreakingKineticBlockEntit
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void inApplyRecipeEnd(CallbackInfo ci, ItemStack input, List<? extends Recipe<?>> recipes) {
+    public void petrolpark$propagateContaminantsAndStartDecay(CallbackInfo ci, ItemStack input, List<? extends Recipe<?>> recipes) {
         if (recipes.isEmpty()) return;
         IContamination<?, ?> inputContamination = ItemContamination.get(petrolpark$lastItemProcessed);
         for (int slot = 0; slot < inventory.getSlots(); slot++) {

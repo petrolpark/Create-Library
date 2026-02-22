@@ -39,7 +39,7 @@ public abstract class BasinBlockEntityMixin extends SmartBlockEntity implements 
         remap = false
     )
     @SuppressWarnings("null")
-    public Optional<BasinOperatingBlockEntity> wrapGetOperator(Operation<Optional<BasinOperatingBlockEntity>> operation) {
+    public Optional<BasinOperatingBlockEntity> petrolpark$getOtherOperators(Operation<Optional<BasinOperatingBlockEntity>> operation) {
         return operation.call()
             .or(() -> level.getBlockEntity(getBlockPos().above()) instanceof DirectlyAboveBasinOperatingBlockEntity bobe ? Optional.of(bobe) : Optional.empty())
             .or(() -> level.getBlockEntity(getBlockPos().below()) instanceof BelowBasinOperatingBlockEntity bboe ? Optional.of(bboe) : Optional.empty());

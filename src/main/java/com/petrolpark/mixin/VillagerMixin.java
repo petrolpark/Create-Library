@@ -26,7 +26,7 @@ public abstract class VillagerMixin extends AbstractVillager {
         method = "updateSpecialPrices",
         at = @At("TAIL")
     )
-    private void inUpdateSpecialPrices(Player player, CallbackInfo ci) {
+    private void petrolpark$postSpecialPricesEvent(Player player, CallbackInfo ci) {
         NeoForge.EVENT_BUS.post(new VillagerUpdateSpecialPricesEvent(player, (Villager)(Object)this));
     };
 };
