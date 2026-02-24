@@ -2,6 +2,7 @@ package com.petrolpark.compat.create.core.block.entity;
 
 import java.util.Optional;
 
+import com.petrolpark.core.recipe.RecipeHelper;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 
@@ -24,6 +25,12 @@ public abstract class DirectlyAboveBasinOperatingBlockEntity extends BasinOperat
         if (level == null) return Optional.empty();
         if (level.getBlockEntity(getBlockPos().below()) instanceof BasinBlockEntity basinBE) return Optional.of(basinBE);
         return Optional.empty();
+    };
+
+    @Override
+    protected void applyBasinRecipe() {
+        if (!RecipeHelper.isValidAt(null, level, worldPosition))
+        super.applyBasinRecipe();
     };
     
 };
