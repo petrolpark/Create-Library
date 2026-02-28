@@ -43,6 +43,17 @@ public abstract class AdvancedProcessingRecipe<I extends RecipeInput> extends Pr
         firstTimeLuckyKey = params.firstTimeLuckyKey();
     };
 
+    public boolean canSpecifyBookRequired() {
+        return true;
+    };
+
+    @Override
+    public List<String> validate() {
+        final List<String> errors = super.validate();
+        if (bookRequired && !canSpecifyBookRequired()) errors.add("Recipe specified that a Recipe Book is required. This type of Recipe cannot require a Recipe Book");
+        return errors;
+    };
+
     @Override
     public boolean isBookRequired(Level level) {
         return bookRequired;

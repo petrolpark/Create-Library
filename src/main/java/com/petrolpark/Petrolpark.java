@@ -90,6 +90,7 @@ public class Petrolpark {
         PetrolparkRecipeSerializers.register();
         PetrolparkRecipeTypes.register();
         IPetrolparkRecipeTypes.register(modEventBus);
+        PetrolparkRegistrateProviderTypes.register();
         PetrolparkRewardGeneratorTypes.register();
         PetrolparkRewardTypes.register();
         PetrolparkTeamProviderTypes.register();

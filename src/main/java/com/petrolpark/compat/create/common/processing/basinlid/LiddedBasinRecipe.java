@@ -1,7 +1,6 @@
 package com.petrolpark.compat.create.common.processing.basinlid;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
@@ -10,27 +9,23 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.core.recipe.AdvancedBasinRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
-import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 
-import net.minecraft.core.HolderSet;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.level.biome.Biome;
 
-public class LiddedBasinRecipe extends BasinRecipe {
+public class LiddedBasinRecipe extends AdvancedBasinRecipe {
 
     public static final MapCodec<LiddedBasinRecipe> CODEC = ProcessingRecipe.codec(LiddedBasinRecipe::new, LiddedBasinRecipe.Params.CODEC);
     public static final StreamCodec<RegistryFriendlyByteBuf, LiddedBasinRecipe> STREAM_CODEC = ProcessingRecipe.streamCodec(LiddedBasinRecipe::new, LiddedBasinRecipe.Params.STREAM_CODEC);
 
-    protected final Optional<HolderSet<Biome>> allowedBiomes;
-    protected final Optional<ResourceLocation> firstTimeLuckyKey;
     public final boolean bubbles;
 
     public static final LiddedBasinRecipe.Builder builder() {
@@ -44,8 +39,6 @@ public class LiddedBasinRecipe extends BasinRecipe {
     protected LiddedBasinRecipe(ProcessingRecipeParams params) {
         super(CreateRecipeTypes.LIDDED_BASIN, params);
         if (params instanceof LiddedBasinRecipe.Params properParams) {
-            allowedBiomes = properParams.allowedBiomes();
-            firstTimeLuckyKey = properParams.firstTimeLuckyKey();
             bubbles = properParams.bubbles();
         } else {
             throw new IllegalStateException("Not Lidded Basin Recipe Params");

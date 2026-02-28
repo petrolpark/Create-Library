@@ -20,7 +20,6 @@ import com.google.gson.JsonParser;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkAttachmentTypes;
 import com.petrolpark.PetrolparkCriteriaTriggers;
-import com.petrolpark.compat.Mods;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -32,9 +31,8 @@ public class BadgeHandler {
 
     public static final String VERSION_UUID = "fae762ea-6650-4cce-830a-3c05bd20e042";
 
-    public static final String GET_BADGES_URL = "https://us-central1.gcp.data.mongodb-api.com/app/destroybadges-qojlw/endpoint/GetBadgesByMinecraftUUID";
-
-    public static final String EARLY_BIRD_URL = "https://us-central1.gcp.data.mongodb-api.com/app/destroybadges-qojlw/endpoint/AddEarlyBirdToMinecraftUUID";
+    public static final String GET_BADGES_URL = "https://badges.petrolpark.co.uk/minecraft/get_badges_of_uuid";
+    public static final String EARLY_BIRD_URL = "https://badges.petrolpark.co.uk/minecraft/try_add_early_bird_to_uuid";
     
     public static void getAndAddBadges(ServerPlayer player) {
         HttpClient client = HttpClient.newHttpClient();
@@ -104,11 +102,11 @@ public class BadgeHandler {
         if (!event.getEntity().level().isClientSide() && event.getEntity() instanceof ServerPlayer sp) fetchAndAddBadgesIncludingEarlyBird(sp);
     };
 
-    private static boolean isEarlyBirdViable() {
-        return Mods.PQUALITY.isLoaded();
+    private static final boolean isEarlyBirdViable() {
+        return false;
     };
 
-    private static String getFormattedUUID(ServerPlayer player) {
+    private static final String getFormattedUUID(ServerPlayer player) {
         return player.getGameProfile().getId().toString().replace("-", "");
     };
     

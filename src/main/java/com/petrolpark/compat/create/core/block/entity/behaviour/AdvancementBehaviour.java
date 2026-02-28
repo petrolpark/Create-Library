@@ -10,13 +10,20 @@ import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 
 import net.minecraft.advancements.AdvancementProgress;
 import net.minecraft.core.Holder;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 
 public class AdvancementBehaviour extends AbstractRememberPlacerBehaviour {
+
+    public static final void award(Level level, CompoundTag blockEntityData, Consumer<ServerPlayer> trigger) {
+        if (level.isClientSide()) return;
+        if (getPlayer(level, blockEntityData) instanceof ServerPlayer player && player != null) trigger.accept(player);
+    };
 
     public static final BehaviourType<AdvancementBehaviour> TYPE = new BehaviourType<>();
 

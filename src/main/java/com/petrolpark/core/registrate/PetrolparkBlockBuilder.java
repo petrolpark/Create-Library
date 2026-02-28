@@ -1,19 +1,25 @@
 package com.petrolpark.core.registrate;
 
+import java.util.Optional;
+
 import javax.annotation.Nonnull;
 
+import com.google.gson.JsonElement;
 import com.petrolpark.PetrolparkRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.builders.ItemBuilder;
+import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
 
 /**
  * {@link BlockBuilder} without any default datagen
@@ -31,6 +37,25 @@ public class PetrolparkBlockBuilder<T extends Block, P> extends BlockBuilder<T, 
     @Override
     public <I extends Item> ItemBuilder<I, BlockBuilder<T, P>> item(@Nonnull NonNullBiFunction<? super T, Properties, ? extends I> factory) {
         return getOwner().<I, BlockBuilder<T, P>> item(this, getName(), p -> factory.apply(getEntry(), p));
+    };
+
+    public static final <T extends Block, P> ItemBuilder<BlockItem, BlockBuilder<T, P>> defaultBlockItem(BlockBuilder<T, P> builder) {
+        return builder.getOwner()
+            .item(builder, builder.getName(), p -> new BlockItem(builder.getEntry(), p))
+            .model((ctx, prov) -> {
+                final Optional<String> model = builder.getOwner().getDataProvider(ProviderType.BLOCKSTATE)
+                    .flatMap(p -> p.getExistingVariantBuilder(builder.getEntry()))
+                    .map(b -> b.getModels().get(b.partialState()))
+                    .map(BlockStateProvider.ConfiguredModelList::toJSON)
+                    .filter(JsonElement::isJsonObject)
+                    .map(j -> j.getAsJsonObject().get("model"))
+                    .map(JsonElement::getAsString);
+                if (model.isPresent()) {
+                    prov.withExistingParent(ctx.getName(), model.get());
+                } else {
+                    prov.blockItem(builder.asSupplier());
+                }
+            });
     };
     
 };

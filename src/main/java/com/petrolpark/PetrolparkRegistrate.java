@@ -50,6 +50,7 @@ import com.petrolpark.core.registrate.PetrolparkItemBuilder;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
 import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
 import com.petrolpark.core.registrate.SharedItemBuilder;
+import com.petrolpark.core.registrate.WoodSetEntry;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.classes.IScratchClassType;
@@ -94,6 +95,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
 import net.minecraft.world.item.ItemStack;
@@ -105,7 +107,10 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.SimpleCraftingRecipeSerializer;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.grower.TreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.block.state.properties.WoodType;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
@@ -150,7 +155,15 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 		return (BadgeRegistrateBuilder<T, PetrolparkRegistrate>) entry(name, c -> BadgeRegistrateBuilder.create(this, this, name, c, factory));
 	};
 
+    public WoodSetEntry.Builder<PetrolparkRegistrate> woodSet(WoodType woodType, TreeGrower treeGrower, Boat.Type boatType) {
+        return new WoodSetEntry.Builder<PetrolparkRegistrate>(this, woodType, treeGrower, boatType);
+    };
+
     // Simple registered objects
+
+    public <B extends BlockEntity, T extends BlockEntityType<B>> RegistryEntry<BlockEntityType<?>, T> blockEntityType(String name, NonNullSupplier<T> factory) {
+        return simple(name, Registries.BLOCK_ENTITY_TYPE, factory);
+    };
 
     public <C extends ICondition> RegistryEntry<MapCodec<? extends ICondition>, MapCodec<C>> dataLoadingCondition(String name, MapCodec<C> codec) {
         return simple(name, NeoForgeRegistries.Keys.CONDITION_CODECS, () -> codec);
