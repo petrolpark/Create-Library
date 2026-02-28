@@ -5,6 +5,7 @@
     "refmap": "petrolpark.refmap.json",
     "plugin": "com.petrolpark.mixin.plugin.PetrolparkMixinPlugin",
     "mixins": [
+        "accessor.DataMapProviderBuilderAccessor",
         "compat.create.accessor.BasinOperatingBlockEntityAccessor",
         "compat.create.accessor.DepotBehaviourAccessor",
         "compat.create.ArmBlockEntityMixin",

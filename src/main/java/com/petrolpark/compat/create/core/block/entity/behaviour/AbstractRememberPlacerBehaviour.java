@@ -23,9 +23,14 @@ import net.neoforged.neoforge.event.level.BlockEvent.EntityPlaceEvent;
 public abstract class AbstractRememberPlacerBehaviour extends BlockEntityBehaviour {
 
     @SubscribeEvent
-    public static void onPlaceBlock(EntityPlaceEvent event) {
+    public static final void onPlaceBlock(EntityPlaceEvent event) {
         // Remember-placer behaviours for non-Petrolpark block entities - as the adding of this behaviour is deferred, simply placing the block won't do.
         if (event.getEntity() instanceof LivingEntity player) setPlacedBy(player.level(), event.getPos(), player);
+    };
+
+    @Nullable
+    public static final Player getPlayer(Level level, CompoundTag blockEntityData) {
+        return blockEntityData.contains("Owner") ? level.getPlayerByUUID(blockEntityData.getUUID("Owner")) : null;
     };
 
     private UUID playerUUID;
