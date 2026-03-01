@@ -1,7 +1,7 @@
 package com.petrolpark.compat.create.common.processing.meshbasin;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.core.recipe.AdvancedBasinRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
@@ -22,7 +22,7 @@ public class JuicingRecipe extends AdvancedBasinRecipe {
     };
 
     protected JuicingRecipe(AdvancedProcessingRecipeParams params) {
-        super(CreateRecipeTypes.JUICING, params);
+        super(PetrolparkCreateRecipeTypes.JUICING, params);
     };
 
     @Override

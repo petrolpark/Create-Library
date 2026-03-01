@@ -4,7 +4,7 @@
             "type": "neoforge:not",
             "value": {
                 "type": "petrolpark:fluid_tag_empty",
-                "tag": "c:cooking_oils"
+                "tag": "c:oil/cooking"
             }
         },
         {
@@ -20,7 +20,7 @@
         {
             "type": "neoforge:tag",
             "amount": 250,
-            "tag": "c:cooking_oils"
+            "tag": "c:oil/cooking"
         }
     ],
     "results": [
@@ -28,5 +28,6 @@
             "id": "petrolpark:fries"
         }
     ],
-    "processing_time": 200
+    "processing_time": 200,
+    "heat_requirement": "heated"
 }

@@ -5,7 +5,7 @@ import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.compat.create.CreateMenuTypes;
+import com.petrolpark.compat.create.PetrolparkCreateMenuTypes;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgram.Channel;
 import com.petrolpark.compat.jei.ghost.IConditionalGhostSlot;
 import com.petrolpark.config.PetrolparkConfigs;
@@ -52,7 +52,7 @@ public class RedstoneProgrammerMenu extends GhostItemMenu<RedstoneProgram> {
     };
 
     public static RedstoneProgrammerMenu create(int id, Inventory inv, RedstoneProgram program) {
-        return new RedstoneProgrammerMenu(CreateMenuTypes.REDSTONE_PROGRAMMER.get(), id, inv, program);
+        return new RedstoneProgrammerMenu(PetrolparkCreateMenuTypes.REDSTONE_PROGRAMMER.get(), id, inv, program);
     };
 
     @Override

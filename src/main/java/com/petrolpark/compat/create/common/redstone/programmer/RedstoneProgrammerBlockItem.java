@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import com.mojang.serialization.Codec;
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.CreateDataComponentTypes;
+import com.petrolpark.compat.create.PetrolparkCreateDataComponentTypes;
 import com.petrolpark.core.world.block.IPickUpPutDownBlock;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
@@ -75,7 +75,7 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
             getProgram(stack, level, player).ifPresent(program -> {
                 if (!level.isClientSide()) program.load(); // This is a set so we're safe to repeatedly load
                 program.tick();
-                stack.set(CreateDataComponentTypes.REDSTONE_PROGRAM, program);
+                stack.set(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM, program);
             });
         };
     };
@@ -101,24 +101,24 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
         if (!(stack.getItem() instanceof RedstoneProgrammerBlockItem) || player == null) return Optional.empty();
 
         final UUID uuid;
-        if (stack.has(CreateDataComponentTypes.REDSTONE_PROGRAM_UUID)) {
-            uuid = stack.get(CreateDataComponentTypes.REDSTONE_PROGRAM_UUID);
+        if (stack.has(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM_UUID)) {
+            uuid = stack.get(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM_UUID);
         } else {
             uuid = UUID.randomUUID();
-            stack.set(CreateDataComponentTypes.REDSTONE_PROGRAM_UUID, uuid);
+            stack.set(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM_UUID, uuid);
         };
 
         final ItemStackRedstoneProgram program;
 
         if (level.isClientSide()) {
-            if (stack.has(CreateDataComponentTypes.REDSTONE_PROGRAM)) {
-                program = stack.get(CreateDataComponentTypes.REDSTONE_PROGRAM);
+            if (stack.has(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM)) {
+                program = stack.get(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM);
             } else {
                 program = new ItemStackRedstoneProgram();
             };
         } else {
             program = RedstoneProgrammerItemHandler.PROGRAMS.get(level).computeIfAbsent(uuid, u -> {
-                if (stack.has(CreateDataComponentTypes.REDSTONE_PROGRAM)) return stack.get(CreateDataComponentTypes.REDSTONE_PROGRAM);
+                if (stack.has(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM)) return stack.get(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM);
                 return new ItemStackRedstoneProgram();
             });
         };

@@ -1,10 +1,11 @@
 package com.petrolpark;
 
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.create.CreateClient;
-import com.petrolpark.compat.curios.CuriosClient;
+import com.petrolpark.compat.create.PetrolparkCreateClient;
+import com.petrolpark.compat.curios.PetrolparkCuriosClient;
 import com.petrolpark.compat.jei.PetrolparkJEI;
 import com.petrolpark.core.inventory.extended.ExtendedInventoryClientHandler;
+import com.petrolpark.util.WoodHelperClient;
 
 import net.createmod.ponder.foundation.PonderIndex;
 import net.neoforged.api.distmarker.Dist;
@@ -21,9 +22,11 @@ public class PetrolparkClient {
     public PetrolparkClient(IEventBus modEventBus) {
 		clientCtor(modEventBus, NeoForge.EVENT_BUS);
 
-        Mods.CREATE.executeIfInstalled(() -> () -> CreateClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
-        Mods.CURIOS.executeIfInstalled(() -> () -> CuriosClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
+        Mods.CREATE.executeIfInstalled(() -> () -> PetrolparkCreateClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
+        Mods.CURIOS.executeIfInstalled(() -> () -> PetrolparkCuriosClient.clientCtor(modEventBus, NeoForge.EVENT_BUS));
         Mods.JEI.executeIfInstalled(() -> () -> PetrolparkJEI.ctor(modEventBus, NeoForge.EVENT_BUS));
+
+        WoodHelperClient.init();
 	};
 
     public final void clientCtor(IEventBus modEventBus, IEventBus neoEventBus) {

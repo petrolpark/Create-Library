@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.PetrolparkRecipeTypes;
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.core.recipe.RecipeHelper;
 import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
@@ -47,7 +47,7 @@ public abstract class MechanicalCrafterBlockEntityMixin extends KineticBlockEnti
         if (result == null) {
             final MechanicalCraftingInput craftingInput = MechanicalCraftingInput.of(items);
             result = world.getRecipeManager().getRecipeFor(PetrolparkRecipeTypes.CRAFTING_BOOK_REQUIRED.get(), craftingInput, world)
-                .or(() -> CreateRecipeTypes.RECIPE_BOOK_MECHANICAL_CRAFTING.find(craftingInput, world))
+                .or(() -> PetrolparkCreateRecipeTypes.RECIPE_BOOK_MECHANICAL_CRAFTING.find(craftingInput, world))
                 .filter(rh -> RecipeHelper.isValidAt(rh, world, getBlockPos()))
                 .map(rh -> rh.value().assemble(craftingInput, world.registryAccess()))
                 .orElse(null);

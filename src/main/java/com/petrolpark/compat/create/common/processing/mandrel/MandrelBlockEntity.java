@@ -6,8 +6,8 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -52,7 +52,7 @@ public class MandrelBlockEntity extends KineticBlockEntity {
 
     public static void registerCapabilities(RegisterCapabilitiesEvent event) {
         if (SharedFeatureFlag.MANDREL.enabled())
-		    event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CreateBlockEntityTypes.MANDREL.get(), (be, context) -> be.capability);
+		    event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PetrolparkCreateBlockEntityTypes.MANDREL.get(), (be, context) -> be.capability);
 	};
 
     @Override
@@ -81,7 +81,7 @@ public class MandrelBlockEntity extends KineticBlockEntity {
 
         SingleRecipeInput recipeInput = new SingleRecipeInput(inputInv.getStackInSlot(0));
         if (lastRecipe == null || !lastRecipe.matches(recipeInput, level)) {
-            Optional<RecipeHolder<MandrelRecipe>> recipe = level.getRecipeManager().getRecipeFor(CreateRecipeTypes.MANDREL.getType(), recipeInput, level);
+            Optional<RecipeHolder<MandrelRecipe>> recipe = level.getRecipeManager().getRecipeFor(PetrolparkCreateRecipeTypes.MANDREL.getType(), recipeInput, level);
 			if (!recipe.isPresent()) {
 				timer = 100; // Wait a few seconds to try again
 				sendData();
@@ -138,7 +138,7 @@ public class MandrelBlockEntity extends KineticBlockEntity {
         if (level == null) return;
 
 		if (lastRecipe == null || !lastRecipe.matches(inventoryIn, level)) {
-			Optional<RecipeHolder<MandrelRecipe>> recipe = level.getRecipeManager().getRecipeFor(CreateRecipeTypes.MANDREL.getType(), inventoryIn, level);
+			Optional<RecipeHolder<MandrelRecipe>> recipe = level.getRecipeManager().getRecipeFor(PetrolparkCreateRecipeTypes.MANDREL.getType(), inventoryIn, level);
 			if (!recipe.isPresent()) return;
 			lastRecipe = recipe.get().value();
 		};
@@ -163,7 +163,7 @@ public class MandrelBlockEntity extends KineticBlockEntity {
         if (level == null) return false;
         SingleRecipeInput input = new SingleRecipeInput(stack);
 		if (lastRecipe != null && lastRecipe.matches(input, level)) return true;
-		return level.getRecipeManager().getRecipeFor(CreateRecipeTypes.MANDREL.getType(), input, level).isPresent();
+		return level.getRecipeManager().getRecipeFor(PetrolparkCreateRecipeTypes.MANDREL.getType(), input, level).isPresent();
 	};
 
     @Override

@@ -1,8 +1,11 @@
 package com.petrolpark.core.item.wooden;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -15,6 +18,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkDataComponentTypes;
+import com.petrolpark.PetrolparkRecipeSerializers;
 import com.petrolpark.core.recipe.recycling.IRecyclableRecipe;
 import com.petrolpark.core.recipe.recycling.RecyclingManager;
 import com.petrolpark.core.recipe.recycling.RecyclingOutputs;
@@ -57,6 +61,10 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
     protected static final Map<Character, Ingredient> BUILT_IN_INGREDIENTS = new HashMap<>();
     protected static final Map<Ingredient, Function<? super ItemStack, Wood>> WOOD_GETTERS = new HashMap<>();
 
+    public static final Set<Map.Entry<Ingredient, Function<? super ItemStack, Wood>>> woodGetterEntries() {
+        return WOOD_GETTERS.entrySet();
+    };
+
     public static final void register(Character character, Ingredient ingredient, Function<? super ItemStack, Wood> woodGetter) {
         if (!ingredient.isSimple()) throw new IllegalArgumentException("Built-in ingredients must be simple");
         BUILT_IN_INGREDIENTS.put(character, ingredient);
@@ -84,6 +92,7 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
 
     @Nullable
     public static final Wood getWood(ItemStack stack) {
+        if (stack.has(PetrolparkDataComponentTypes.WOOD)) return stack.get(PetrolparkDataComponentTypes.WOOD);
         for (final Map.Entry<Ingredient, Function<? super ItemStack, Wood>> entry : WOOD_GETTERS.entrySet()) {
             if (entry.getKey().test(stack)) return entry.getValue().apply(stack);
         };
@@ -200,12 +209,30 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
     public Stream<Ingredient> streamSpecificIngredientsFor(ItemStack result) {
         final Wood wood = result.get(PetrolparkDataComponentTypes.WOOD);
         if (wood == null) return Stream.empty();
+        return streamSpecificIngredientsFor(wood);
+    };
+
+    public Stream<Ingredient> streamSpecificIngredientsFor(Wood wood) {
         return getIngredients().stream()
             .map(ingredient -> {
                 final Function<? super ItemStack, Wood> woodGetter = WOOD_GETTERS.get(ingredient);
                 if (woodGetter != null) {
                     return Ingredient.of(Stream.of(ingredient.getItems()).filter(stack -> woodGetter.apply(stack).equals(wood)));
                 } else if (ingredient.isSimple()) {
+
+                    boolean isLikelyToBeWoodIngredient = false;
+                    List<ItemStack> ingredients = new ArrayList<>();
+                    for (ItemStack stack : ingredient.getItems()) {
+                        Wood stackWood = getWood(stack);
+                        if (stackWood == null) continue;
+                        isLikelyToBeWoodIngredient = true;
+                        if (wood.equals(stackWood)) {
+                            ingredients.add(stack);
+                        };
+                    };
+
+                    if (isLikelyToBeWoodIngredient) return Ingredient.of(ingredients.stream());
+
                     return Ingredient.of(Stream.of(ingredient.getItems()).map(stack -> {
                         if (stack.has(PetrolparkDataComponentTypes.WOOD)) {
                             final ItemStack copy = stack.copy();
@@ -219,9 +246,18 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
             });
     };
 
+    public Stream<ItemStack> streamSpecificStacksFor(Wood wood) {
+        return streamSpecificIngredientsFor(wood).map(ingredient -> ingredient.getItems()[0]);
+    };
+
     @Override
     public Optional<RecyclingOutputs> getRecyclingOutputs(Level level, ItemStack stack) {
         return Optional.of(streamSpecificIngredientsFor(stack).map(RecyclingManager::getInverse).collect(RecyclingOutputs.COLLECTOR)).filter(RecyclingOutputs::hasOutputs);
+    };
+
+    @Override
+    public WoodCraftingShapedRecipe.Serializer getSerializer() {
+        return PetrolparkRecipeSerializers.WOOD_CRAFTING_SHAPED.get();
     };
 
     public static class Serializer implements RecipeSerializer<WoodCraftingShapedRecipe> {

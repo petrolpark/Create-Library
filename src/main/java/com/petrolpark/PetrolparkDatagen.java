@@ -34,6 +34,9 @@ public class PetrolparkDatagen {
 
         generator.addProvider(event.includeServer(), new AdvancementProvider(output, lookupProvider, existingFileHelper, Collections.singletonList(new BadgeDataProvider())));
         generator.addProvider(event.includeServer(), new LootTableProvider(output, Collections.emptySet(), Collections.singletonList(new LootTableProvider.SubProviderEntry(BadgeDataProvider::new, LootContextParamSets.ADVANCEMENT_REWARD)), lookupProvider));
+        
         generator.addProvider(event.includeServer(), new UnrequiredTagsProvider<>(output, Registries.BLOCK, lookupProvider, existingFileHelper, PetrolparkTagGen.UNREQUIRED_BLOCKS));
+        generator.addProvider(event.includeServer(), new UnrequiredTagsProvider<>(output, Registries.ITEM, lookupProvider, existingFileHelper, PetrolparkTagGen.UNREQUIRED_ITEMS));
+        generator.addProvider(event.includeServer(), new UnrequiredTagsProvider<>(output, Registries.FLUID, lookupProvider, existingFileHelper, PetrolparkTagGen.UNREQUIRED_FLUIDS));
     };
 };

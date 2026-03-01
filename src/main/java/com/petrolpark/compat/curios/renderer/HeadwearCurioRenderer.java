@@ -2,7 +2,7 @@ package com.petrolpark.compat.curios.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.petrolpark.compat.curios.CuriosSetup.HeadwearCurioRenderInfo;
+import com.petrolpark.compat.curios.PetrolparkCuriosSetup.HeadwearCurioRenderInfo;
 import com.simibubi.create.compat.curios.GogglesCurioRenderer;
 
 import net.minecraft.client.Minecraft;

@@ -1,9 +1,8 @@
 package com.petrolpark.event;
 
-import com.petrolpark.core.contamination.Contaminant;
-import com.petrolpark.core.contamination.IContamination;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
+import com.petrolpark.util.Lang;
 
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -22,9 +21,7 @@ public class ClientEvents {
 
         // Item Contamination
         if (event.getEntity() == null) return; // Don't populate the Intrinsics map before the world has been loaded, as the Tags have not been loaded
-        IContamination<?, ?> contamination = ItemContamination.get(event.getItemStack());
-        contamination.streamShownContaminants().map(Contaminant::getNameColored).forEach(event.getToolTip()::add);
-        contamination.streamShownAbsentContaminants().map(Contaminant::getAbsentNameColored).forEach(event.getToolTip()::add);
+        Lang.addContaminants(event.getToolTip()::add, ItemContamination.get(event.getItemStack()));
     };
 
     public static boolean isGameActive() {

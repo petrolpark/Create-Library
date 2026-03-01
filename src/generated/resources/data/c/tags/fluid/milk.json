@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "petrolpark:skimmed_milk",
+      "required": false
+    },
+    {
+      "id": "petrolpark:flowing_skimmed_milk",
+      "required": false
+    }
+  ]
+}

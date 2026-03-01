@@ -1,6 +1,6 @@
 package com.petrolpark.compat.create.common.redstone.programmer;
 
-import com.petrolpark.compat.create.CreatePackets;
+import com.petrolpark.compat.create.PetrolparkCreatePackets;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerMenu.DummyRedstoneProgram;
 import com.petrolpark.core.actionrecord.ActionRecordEntryResult;
 import com.petrolpark.core.actionrecord.packet.recordable.RecordablePacketPayload;
@@ -19,7 +19,7 @@ public record ChangeRedstoneProgrammerPowerPacket(boolean powered) implements Cl
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return CreatePackets.CHANGE_REDSTONE_PROGRAMMER_POWER;
+        return PetrolparkCreatePackets.CHANGE_REDSTONE_PROGRAMMER_POWER;
     };
 
     @Override

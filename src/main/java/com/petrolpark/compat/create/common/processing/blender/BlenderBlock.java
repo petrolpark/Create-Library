@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.simpleRelays.ICogWheel;
@@ -76,7 +76,7 @@ public class BlenderBlock extends KineticBlock implements IBE<BlenderBlockEntity
 
     @Override
     public BlockEntityType<? extends BlenderBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.BLENDER.get();
+        return PetrolparkCreateBlockEntityTypes.BLENDER.get();
     };
 
     @Override

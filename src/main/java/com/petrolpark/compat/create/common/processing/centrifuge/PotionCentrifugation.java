@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.datafixers.util.Either;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.util.CreateRecyclingHelper;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.recipe.recycling.RecyclingManager;
@@ -200,7 +200,7 @@ public class PotionCentrifugation {
 
         @Override
         public RecipeType<?> getType() {
-            return CreateRecipeTypes.CENTRIFUGATION.getType(); //TODO check if not dodgy
+            return PetrolparkCreateRecipeTypes.CENTRIFUGATION.getType(); //TODO check if not dodgy
         };
 
     };

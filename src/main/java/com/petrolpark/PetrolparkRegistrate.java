@@ -452,9 +452,13 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     public <T extends Item, P> SharedItemBuilder<T, P> sharedItem(P parent, @Nonnull SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
         return (SharedItemBuilder<T, P>)sharedEntry(featureFlag, name, callback -> new SharedItemBuilder<>(this, parent, featureFlag, name, callback, factory));
     };
+
+    public <T extends Item> SharedItemBuilder<T, PetrolparkRegistrate> sharedItem(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
+        return sharedItem(this, featureFlag, name, factory);
+    };
     
     public <T extends Item> SharedItemBuilder<T, PetrolparkRegistrate> sharedItem(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullBiFunction<Item.Properties, SharedFeatureFlag, T> factory) {
-        return sharedItem(this, featureFlag, name, properties -> factory.apply(properties, featureFlag));
+        return sharedItem(featureFlag, name, properties -> factory.apply(properties, featureFlag));
     };
     
 };

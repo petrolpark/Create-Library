@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.common.processing.mandrel.animation.IMandrelAnimation;
 
 import net.minecraft.core.HolderLookup;
@@ -55,12 +55,12 @@ public record MandrelRecipe(Ingredient ingredient, ItemStack result, IMandrelAni
 
     @Override
     public RecipeSerializer<MandrelRecipe> getSerializer() {
-        return CreateRecipeTypes.MANDREL.getSerializer();
+        return PetrolparkCreateRecipeTypes.MANDREL.getSerializer();
     };
 
     @Override
     public RecipeType<MandrelRecipe> getType() {
-        return CreateRecipeTypes.MANDREL.getType();
+        return PetrolparkCreateRecipeTypes.MANDREL.getType();
     };
 
     public static class Serializer implements RecipeSerializer<MandrelRecipe> {

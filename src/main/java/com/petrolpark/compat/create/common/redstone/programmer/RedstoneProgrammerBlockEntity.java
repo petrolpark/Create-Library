@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.compat.create.CreateDataComponentTypes;
+import com.petrolpark.compat.create.PetrolparkCreateDataComponentTypes;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockItem.ItemStackRedstoneProgram;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -32,13 +32,13 @@ public class RedstoneProgrammerBlockEntity extends SmartBlockEntity {
     @Override
     protected void collectImplicitComponents(@Nonnull DataComponentMap.Builder components) {
         super.collectImplicitComponents(components);
-        components.set(CreateDataComponentTypes.REDSTONE_PROGRAM, new ItemStackRedstoneProgram().copyFrom(programmer.program));
+        components.set(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM, new ItemStackRedstoneProgram().copyFrom(programmer.program));
     };
 
     @Override
     protected void applyImplicitComponents(@Nonnull DataComponentInput componentInput) {
         super.applyImplicitComponents(componentInput);
-        Optional.ofNullable(componentInput.get(CreateDataComponentTypes.REDSTONE_PROGRAM)).ifPresent(program -> {
+        Optional.ofNullable(componentInput.get(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM)).ifPresent(program -> {
             program.unload();
             programmer.program.copyFrom(program);
             programmer.program.load();

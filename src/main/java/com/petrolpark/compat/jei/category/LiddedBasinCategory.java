@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
@@ -45,7 +45,7 @@ public class LiddedBasinCategory extends SmallBasinCategory<LiddedBasinRecipe> {
                 .scale(scale)
                 .render(graphics);
 
-            blockElement(CreateBlocks.BASIN_LID.getDefaultState())
+            blockElement(PetrolparkCreateBlocks.BASIN_LID.getDefaultState())
                 .atLocal(0, -1, 0)
                 .scale(scale)
                 .render(graphics);

@@ -3,7 +3,7 @@ package com.petrolpark.compat.create.common.processing.basinlid;
 import java.util.Optional;
 
 import com.petrolpark.PetrolparkParticleTypes;
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.core.block.entity.basin.DirectlyAboveBasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
@@ -87,7 +87,7 @@ public class BasinLidBlockEntity extends DirectlyAboveBasinOperatingBlockEntity 
 
     @Override
     protected boolean matchStaticFilters(RecipeHolder<? extends Recipe<?>> recipe) {
-        return recipe.value().getType() == CreateRecipeTypes.LIDDED_BASIN.getType();
+        return recipe.value().getType() == PetrolparkCreateRecipeTypes.LIDDED_BASIN.getType();
     };
 
     @Override

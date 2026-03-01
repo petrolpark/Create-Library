@@ -12,8 +12,8 @@ import com.mojang.logging.LogUtils;
 import com.petrolpark.compat.GetPetrolparkSharedFeatures;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.Create;
-import com.petrolpark.compat.curios.Curios;
+import com.petrolpark.compat.create.PetrolparkCreate;
+import com.petrolpark.compat.curios.PetrolparkCurios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.badge.Badges;
@@ -104,8 +104,8 @@ public class Petrolpark {
 
         // Compat
         if (Mods.JEI.isLoading()) NeoForge.EVENT_BUS.register(ITickableCategory.ClientEvents.class);
-        Mods.CREATE.executeIfInstalled(() -> () -> Create.ctor(modEventBus, NeoForge.EVENT_BUS));
-        Mods.CURIOS.executeIfInstalled(() -> () -> Curios.ctor(modEventBus, NeoForge.EVENT_BUS));
+        Mods.CREATE.executeIfInstalled(() -> () -> PetrolparkCreate.ctor(modEventBus, NeoForge.EVENT_BUS));
+        Mods.CURIOS.executeIfInstalled(() -> () -> PetrolparkCurios.ctor(modEventBus, NeoForge.EVENT_BUS));
 
         // Config
         PetrolparkConfigs.register(ModLoadingContext.get(), modContainer);
@@ -114,7 +114,7 @@ public class Petrolpark {
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
         //return new SharedFeatureFlag[]{};
-        return new SharedFeatureFlag[]{SharedFeatureFlag.MESH_BASIN, SharedFeatureFlag.BASIN_LID, SharedFeatureFlag.BLENDER, SharedFeatureFlag.BLOOD};
+        return new SharedFeatureFlag[]{SharedFeatureFlag.MESH_BASIN, SharedFeatureFlag.BASIN_LID, SharedFeatureFlag.BLENDER, SharedFeatureFlag.FRIES, SharedFeatureFlag.SUNFLOWER_OIL, SharedFeatureFlag.ROLLING_PIN};
     };
 
     private void init(final FMLCommonSetupEvent event) {

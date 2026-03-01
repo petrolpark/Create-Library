@@ -2,7 +2,7 @@ package com.petrolpark.compat.create.common.processing.meshbasin;
 
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.processing.basin.BasinBlock;
 
@@ -33,7 +33,7 @@ public class MeshBasinBlock extends BasinBlock implements ISharedFeature {
 
     @Override
     public BlockEntityType<MeshBasinBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.MESH_BASIN.get();
+        return PetrolparkCreateBlockEntityTypes.MESH_BASIN.get();
     };
 
     @Override

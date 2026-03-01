@@ -2,7 +2,7 @@ package com.petrolpark.compat.create.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.petrolpark.compat.create.CreateClient;
+import com.petrolpark.compat.create.PetrolparkCreateClient;
 import com.petrolpark.event.ClientEvents;
 
 import net.createmod.catnip.animation.AnimationTickHolder;
@@ -19,7 +19,7 @@ public class CreateClientEvents {
     @SubscribeEvent
     public static void onTick(ClientTickEvent.Pre event) {
         if (!ClientEvents.isGameActive()) return;
-        CreateClient.OUTLINER.tickOutlines();
+        PetrolparkCreateClient.OUTLINER.tickOutlines();
     };
 
     @SubscribeEvent
@@ -33,7 +33,7 @@ public class CreateClientEvents {
         Minecraft mc = Minecraft.getInstance();
 		Vec3 camera = mc.gameRenderer.getMainCamera().getPosition();
 
-        CreateClient.OUTLINER.renderOutlines(ms, buffer, camera, partialTicks);
+        PetrolparkCreateClient.OUTLINER.renderOutlines(ms, buffer, camera, partialTicks);
 
         buffer.draw();
 		RenderSystem.enableCull();

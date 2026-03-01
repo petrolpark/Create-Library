@@ -3,7 +3,8 @@ package com.petrolpark;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 import static com.petrolpark.PetrolparkTags.commonBlockTag;
 import static com.petrolpark.PetrolparkTags.commonItemTag;
-import static com.petrolpark.core.registrate.PetrolparkTagGen.tagUnrequired;
+import static com.petrolpark.core.registrate.PetrolparkTagGen.tagBlockUnrequired;
+import static com.petrolpark.core.registrate.PetrolparkTagGen.tagItemUnrequired;
 import static net.minecraft.world.level.storage.loot.LootPool.lootPool;
 import static net.minecraft.world.level.storage.loot.LootTable.lootTable;
 import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableItem;
@@ -11,6 +12,7 @@ import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableI
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.item.decay.drying.rack.DryingRackBlock;
 import com.petrolpark.core.item.wooden.WoodenBlockItem;
+import com.petrolpark.core.registrate.PetrolparkBlockBuilder;
 import com.petrolpark.core.scratch.world.block.ProgrammingBlock;
 import com.petrolpark.core.world.block.SharedBlock;
 import com.petrolpark.core.world.block.SharedRotatedPillarBlock;
@@ -34,10 +36,11 @@ public class PetrolparkBlocks {
             .mapColor(MapColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
             .strength(0.2f)
-        ).transform(tagUnrequired(BlockTags.MINEABLE_WITH_HOE))
-        .tag(Tags.Blocks.STORAGE_BLOCKS, commonBlockTag("storage_blocks/mashed_potato"))
-        .item()
-        .tag(Tags.Items.STORAGE_BLOCKS, commonItemTag("storage_blocks/mashed_potato"))
+        ).defaultLoot()
+        .defaultBlockstate()
+        .transform(tagBlockUnrequired(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_HOE, Tags.Blocks.STORAGE_BLOCKS, commonBlockTag("storage_blocks/mashed_potato")))
+        .transform(PetrolparkBlockBuilder::defaultBlockItem)
+        .transform(tagItemUnrequired(Tags.Items.STORAGE_BLOCKS, commonItemTag("storage_blocks/mashed_potato")))
         .build()
         .register();
 
@@ -52,7 +55,7 @@ public class PetrolparkBlocks {
                     ))
                 )
             ))
-        ).transform(tagUnrequired(BlockTags.MINEABLE_WITH_AXE))
+        ).transform(tagBlockUnrequired(BlockTags.MINEABLE_WITH_AXE))
         .item(WoodenBlockItem::new)
         .build()
         .register();
@@ -72,8 +75,8 @@ public class PetrolparkBlocks {
             LootItem.lootTableItem(PetrolparkItems.RAW_FRIES)
                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(5f)))
         ))).blockstate((ctx, prov) -> prov.axisBlock(ctx.get()))
-        .tag(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_HOE)
-        .item()
+        .transform(tagBlockUnrequired(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_HOE))
+        .transform(PetrolparkBlockBuilder::defaultBlockItem)
         .build()
         .register();
 

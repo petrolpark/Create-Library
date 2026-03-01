@@ -5,7 +5,7 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
@@ -120,7 +120,7 @@ public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlock
 
     @Override
     public BlockEntityType<CentrifugeBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.CENTRIFUGE.get();
+        return PetrolparkCreateBlockEntityTypes.CENTRIFUGE.get();
     };
 
     @Override

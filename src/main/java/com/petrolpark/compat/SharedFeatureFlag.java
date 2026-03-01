@@ -25,6 +25,7 @@ public enum SharedFeatureFlag implements StringRepresentable {
     MESH,
     PROGRAMMING_BLOCK,
     REDSTONE_PROGRAMMER,
+    ROLLING_PIN,
     SUNFLOWER_OIL,
     SPRING,
     TORQUE_LIMITER,

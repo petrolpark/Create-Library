@@ -8,10 +8,10 @@ import java.util.Optional;
 
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
-import com.petrolpark.compat.create.CreateDamageSources;
-import com.petrolpark.compat.create.CreateFluids;
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateDamageSources;
+import com.petrolpark.compat.create.PetrolparkCreateFluids;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.block.entity.basin.BelowBasinOperatingBlockEntity;
 import com.petrolpark.core.world.entity.EntityFallOnEvent;
 import com.simibubi.create.AllBlocks;
@@ -77,7 +77,7 @@ public class BlenderBlockEntity extends BelowBasinOperatingBlockEntity {
 
         if (!level.isClientSide() && !hurtingEntities.isEmpty() && getSpeed() != 0f && (aboveState.isAir() || getBasin().isPresent())) {
             final Iterator<WeakReference<LivingEntity>> iterator = hurtingEntities.iterator();
-            final DamageSource damageSource = CreateDamageSources.blender(level);
+            final DamageSource damageSource = PetrolparkCreateDamageSources.blender(level);
             float damage = Mth.clamp(Mth.abs(getSpeed()) / 64f, 0.125f, 5f);
             while (iterator.hasNext()) {
                 final LivingEntity entity = iterator.next().get();
@@ -87,7 +87,7 @@ public class BlenderBlockEntity extends BelowBasinOperatingBlockEntity {
                 };
                 if (entity.hurt(damageSource, damage) && SharedFeatureFlag.BLOOD.enabled() && !PetrolparkTags.EntityTypes.DOESNT_BLEED.matches(entity)) getBasin()
                     .flatMap(be -> Optional.ofNullable(level.getCapability(Capabilities.FluidHandler.BLOCK, be.getBlockPos(), be.getBlockState(), be, null)))
-                    .ifPresent(handler -> handler.fill(new FluidStack(CreateFluids.BLOOD.get(), (int)(damage * 5)), FluidAction.EXECUTE));
+                    .ifPresent(handler -> handler.fill(new FluidStack(PetrolparkCreateFluids.BLOOD.get(), (int)(damage * 5)), FluidAction.EXECUTE));
             };
         };
 
@@ -104,7 +104,7 @@ public class BlenderBlockEntity extends BelowBasinOperatingBlockEntity {
 
     public static final void onEntityFallOn(EntityFallOnEvent event) {
         if (!event.getLevel().isClientSide() && event.getEntity() instanceof LivingEntity livingEntity && AllBlocks.BASIN.has(event.getLevel().getBlockState(livingEntity.blockPosition()))) {
-            event.getLevel().getBlockEntity(event.getPos(), CreateBlockEntityTypes.BLENDER.get()).ifPresent(be -> be.addHurtingEntity(livingEntity));
+            event.getLevel().getBlockEntity(event.getPos(), PetrolparkCreateBlockEntityTypes.BLENDER.get()).ifPresent(be -> be.addHurtingEntity(livingEntity));
         };
     };
 
@@ -146,7 +146,7 @@ public class BlenderBlockEntity extends BelowBasinOperatingBlockEntity {
 
     @Override
     protected boolean matchStaticFilters(RecipeHolder<? extends Recipe<?>> recipe) {
-        return recipe.value().getType() == CreateRecipeTypes.BLENDING.getType();
+        return recipe.value().getType() == PetrolparkCreateRecipeTypes.BLENDING.getType();
     };
 
     @Override

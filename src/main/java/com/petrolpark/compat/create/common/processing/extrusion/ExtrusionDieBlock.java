@@ -5,8 +5,8 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
-import com.petrolpark.compat.create.CreateDamageSources;
+import com.petrolpark.compat.create.PetrolparkCreateDamageSources;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
@@ -66,7 +66,7 @@ public class ExtrusionDieBlock extends RotatedPillarBlock implements IBE<Extrusi
                 double d0 = Math.abs(entity.getX() - entity.xOld);
                 double d1 = Math.abs(entity.getZ() - entity.zOld);
                 if (d0 >= (double)0.003f || d1 >= (double)0.003f) {
-                    entity.hurt(CreateDamageSources.extrusionDie(level), 3f);
+                    entity.hurt(PetrolparkCreateDamageSources.extrusionDie(level), 3f);
                 };
             };
         };
@@ -79,7 +79,7 @@ public class ExtrusionDieBlock extends RotatedPillarBlock implements IBE<Extrusi
 
     @Override
     public BlockEntityType<? extends ExtrusionDieBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.EXTRUSION_DIE.get();
+        return PetrolparkCreateBlockEntityTypes.EXTRUSION_DIE.get();
     };
 
     @Override

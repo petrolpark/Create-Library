@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.client.particle.ParticleEngine;
@@ -17,9 +17,9 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientBlockExtensions;
-import net.neoforged.api.distmarker.Dist;
 
 @RequiresCreate
 public class TubeStructuralBlock extends Block implements IBE<TubeStructuralBlockEntity> {
@@ -51,7 +51,7 @@ public class TubeStructuralBlock extends Block implements IBE<TubeStructuralBloc
 
     @Override
     public BlockEntityType<? extends TubeStructuralBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.TUBE_STRUCTURE.get();
+        return PetrolparkCreateBlockEntityTypes.TUBE_STRUCTURE.get();
     };
 
     @OnlyIn(Dist.CLIENT)

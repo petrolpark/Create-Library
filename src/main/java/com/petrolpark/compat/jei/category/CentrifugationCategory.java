@@ -10,7 +10,7 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.PetrolparkPartialModels;
 import com.petrolpark.compat.create.common.processing.centrifuge.ICentrifugationRecipe;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
@@ -123,7 +123,7 @@ public class CentrifugationCategory<R extends Recipe<?> & ICentrifugationRecipe>
                 .scale(scale)
                 .render(graphics);
 
-            blockElement(CreateBlocks.CENTRIFUGE.getDefaultState())
+            blockElement(PetrolparkCreateBlocks.CENTRIFUGE.getDefaultState())
                 .atLocal(0, 0, 0)
                 .scale(scale)
                 .render(graphics);

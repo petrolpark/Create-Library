@@ -8,7 +8,7 @@ import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.PetrolparkKeys;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.CreateClient;
+import com.petrolpark.compat.create.PetrolparkCreateClient;
 import com.petrolpark.util.BlockFace;
 import com.petrolpark.util.Lang;
 import com.petrolpark.util.Pair;
@@ -103,11 +103,11 @@ public class ClientTubePlacementHandler {
         for (int i = 0; i < spline.getPoints().size() - 1; i++) {
             Vec3 point = spline.getPoints().get(i);
             Vec3 tangent = spline.getTangents().get(i);
-            CreateClient.OUTLINER.showLine(Pair.of(point, tangent), point, spline.getPoints().get(i+1)).colored(color);
+            PetrolparkCreateClient.OUTLINER.showLine(Pair.of(point, tangent), point, spline.getPoints().get(i+1)).colored(color);
         };
 
         // Render blocking Blocks and decide if the Tube is being blocked
-        spline.checkBlocked(mc.level, pos -> CreateClient.OUTLINER.chaseAABB(Pair.of("blocking_tube", pos), new AABB(pos)).colored(0xFF_E64D80));
+        spline.checkBlocked(mc.level, pos -> PetrolparkCreateClient.OUTLINER.chaseAABB(Pair.of("blocking_tube", pos), new AABB(pos)).colored(0xFF_E64D80));
 
         // Check there are enough Items
         canAfford = spline.checkCanAfford(mc.player, currentStack.getItem(), tubeBlock);
@@ -124,7 +124,7 @@ public class ClientTubePlacementHandler {
         // Render Control Points
         for (int i = 0; i < controlPointBoxes.size(); i++) {
             AABB controlPointBox = controlPointBoxes.get(i);
-            CreateClient.OUTLINER.showBox(Pair.of("control_point", i), controlPointBox.inflate(i == targetedControlPoint ? 1 / 16d : 0d), 2).colored(color);
+            PetrolparkCreateClient.OUTLINER.showBox(Pair.of("control_point", i), controlPointBox.inflate(i == targetedControlPoint ? 1 / 16d : 0d), 2).colored(color);
         };
 
         // Show message

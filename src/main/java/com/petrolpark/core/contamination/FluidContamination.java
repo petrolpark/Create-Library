@@ -7,7 +7,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 
 public class FluidContamination extends ComponentHolderContamination<Fluid, FluidStack> {
 
-    public static IContamination<?, ?> get(FluidStack stack) {
+    public static final IContamination<?, ?> get(FluidStack stack) {
         if (!Contaminables.FLUID.isContaminableStack(stack)) return new FluidContamination(stack);
         return IncontaminableContamination.INSTANCE;
     };

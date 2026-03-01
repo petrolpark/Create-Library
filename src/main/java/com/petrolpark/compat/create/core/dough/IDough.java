@@ -4,7 +4,7 @@ import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.CreateRegistries;
+import com.petrolpark.compat.create.PetrolparkCreateRegistries;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -17,12 +17,12 @@ public interface IDough<DOUGH extends IDough<DOUGH>> {
     /**
      * Use {@link IDough#CODEC} instead.
      */
-    static final Codec<IDough<?>> TYPED_CODEC = CreateRegistries.DOUGH_TYPES.byNameCodec()
+    static final Codec<IDough<?>> TYPED_CODEC = PetrolparkCreateRegistries.DOUGH_TYPES.byNameCodec()
         .dispatch(IDough::getType, IDoughType::codec);
 
     public static final Codec<IDough<?>> CODEC = Codec.lazyInitialized(() -> TYPED_CODEC);
 
-    static final StreamCodec<RegistryFriendlyByteBuf, IDough<?>> STREAM_CODEC = ByteBufCodecs.registry(CreateRegistries.Keys.DOUGH_TYPE)
+    static final StreamCodec<RegistryFriendlyByteBuf, IDough<?>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkCreateRegistries.Keys.DOUGH_TYPE)
         .dispatch(IDough::getType, IDoughType::streamCodec);
     
     public boolean canBeCut();

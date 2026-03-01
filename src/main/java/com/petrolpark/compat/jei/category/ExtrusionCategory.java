@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.jei.JEIBlockRenderer;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
@@ -45,7 +45,7 @@ public class ExtrusionCategory extends PetrolparkRecipeCategory<ExtrusionRecipe>
         PoseStack ms = graphics.pose();
         ms.pushPose();
         ms.translate(72, 27, 0);
-        blockRenderer.renderBlock(CreateBlocks.EXTRUSION_DIE.getDefaultState().setValue(BlockStateProperties.AXIS, Axis.Z), graphics, 24);
+        blockRenderer.renderBlock(PetrolparkCreateBlocks.EXTRUSION_DIE.getDefaultState().setValue(BlockStateProperties.AXIS, Axis.Z), graphics, 24);
         ms.popPose();;
     };
     

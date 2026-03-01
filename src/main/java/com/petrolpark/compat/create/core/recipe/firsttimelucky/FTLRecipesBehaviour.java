@@ -3,7 +3,7 @@ package com.petrolpark.compat.create.core.recipe.firsttimelucky;
 import java.util.function.Predicate;
 
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.CreateAttachmentTypes;
+import com.petrolpark.compat.create.PetrolparkCreateAttachmentTypes;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
@@ -37,7 +37,7 @@ public class FTLRecipesBehaviour extends AbstractRememberPlacerBehaviour {
         return !RecipeFinder.get(recipeCacheKey, getWorld(), recipeFilter.and(
             rh -> rh.value() instanceof IFTLProcessingRecipe recipe
             && recipe.getFirstTimeLuckyKey().isPresent()
-            && !placer.getData(CreateAttachmentTypes.FTL_RECIPES).contains(recipe.getFirstTimeLuckyKey().get())
+            && !placer.getData(PetrolparkCreateAttachmentTypes.FTL_RECIPES).contains(recipe.getFirstTimeLuckyKey().get())
         )).isEmpty();
     };
 

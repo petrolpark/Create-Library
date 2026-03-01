@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.common.processing.meshbasin.DeepFryingRecipe;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 
@@ -38,7 +38,7 @@ public class DeepFryingCategory extends SmallBasinCategory<DeepFryingRecipe> {
             matrixStack.mulPose(Axis.YP.rotationDegrees(22.5f));
             int scale = 23;
 
-            blockElement(CreateBlocks.MESH_BASIN.getDefaultState())
+            blockElement(PetrolparkCreateBlocks.MESH_BASIN.getDefaultState())
                 .atLocal(0, 0, 0)
                 .scale(scale)
                 .render(graphics);

@@ -1,6 +1,6 @@
 package com.petrolpark.compat.create.common.redstone.programmer;
 
-import com.petrolpark.compat.create.CreatePackets;
+import com.petrolpark.compat.create.PetrolparkCreatePackets;
 import com.petrolpark.core.actionrecord.ActionRecordEntryResult;
 import com.petrolpark.core.actionrecord.packet.recordable.RecordablePacketPayload;
 
@@ -19,7 +19,7 @@ public final class RefreshRedstoneProgrammerScreenPacket implements ClientboundP
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return CreatePackets.REFRESH_REDSTONE_PROGRAMMER_SCREEN;
+        return PetrolparkCreatePackets.REFRESH_REDSTONE_PROGRAMMER_SCREEN;
     };
 
     @Override

@@ -1,6 +1,6 @@
 package com.petrolpark.compat.create.common.redstone.programmer;
 
-import com.petrolpark.compat.create.CreatePackets;
+import com.petrolpark.compat.create.PetrolparkCreatePackets;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerMenu.DummyRedstoneProgram;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.actionrecord.ActionRecordEntryResult;
@@ -20,7 +20,7 @@ public record SetRedstoneProgramPacket(RedstoneProgram program) implements Serve
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return CreatePackets.SET_REDSTONE_PROGRAM;
+        return PetrolparkCreatePackets.SET_REDSTONE_PROGRAM;
     };
 
     @Override

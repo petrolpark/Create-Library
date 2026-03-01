@@ -10,6 +10,8 @@ import static com.petrolpark.util.WoodHelper.getTrapdoorBlockOrOak;
 import java.util.Map;
 import java.util.function.UnaryOperator;
 
+import javax.annotation.Nullable;
+
 import com.petrolpark.client.rendering.BakedModelHelper;
 import com.petrolpark.util.WoodHelper.Wood;
 
@@ -41,7 +43,9 @@ public class WoodHelperClient {
     DOOR_BOTTOM_TEMPLATE = new StitchedSprite(ResourceLocation.withDefaultNamespace("block/oak_door_bottom")),
     TRAPDOOR_TEMPLATE = new StitchedSprite(ResourceLocation.withDefaultNamespace("block/oak_trapdoor"));
 
+    @Nullable
     public static final BakedModel generateWoodModel(BakedModel template, Wood wood) {
+        if (PLANKS_TEMPLATE.get() == null) return null; // Not loaded yet
 		if (wood == null || OAK.equals(wood)) return BakedModelHelper.swapSprites(template, UnaryOperator.identity());
 
 		final BlockState logState = getLogBlockOrOak(wood).defaultBlockState();
@@ -61,4 +65,6 @@ public class WoodHelperClient {
 
 		return BakedModelHelper.swapSprites(template, map::get);
 	};
+
+    public static final void init() {};
 };

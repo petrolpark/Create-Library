@@ -2,7 +2,7 @@ package com.petrolpark.compat.create.common.processing.mandrel.animation;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
-import com.petrolpark.compat.create.CreateRegistries;
+import com.petrolpark.compat.create.PetrolparkCreateRegistries;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlockEntity;
 
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -17,13 +17,13 @@ public interface IMandrelAnimation {
     /**
      * Use {@link IMandrelAnimation#CODEC} instead.
      */
-    static final Codec<IMandrelAnimation> TYPED_CODEC = CreateRegistries.MANDREL_ANIMATION_TYPES
+    static final Codec<IMandrelAnimation> TYPED_CODEC = PetrolparkCreateRegistries.MANDREL_ANIMATION_TYPES
         .byNameCodec()
         .dispatch(IMandrelAnimation::getType, MandrelAnimationType::codec);
 
     public static final Codec<IMandrelAnimation> CODEC = Codec.lazyInitialized(() -> TYPED_CODEC);
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, IMandrelAnimation> STREAM_CODEC = ByteBufCodecs.registry(CreateRegistries.Keys.MANDREL_ANIMATION_TYPE)
+    public static final StreamCodec<RegistryFriendlyByteBuf, IMandrelAnimation> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkCreateRegistries.Keys.MANDREL_ANIMATION_TYPE)
         .dispatch(IMandrelAnimation::getType, MandrelAnimationType::streamCodec);
 
     /**

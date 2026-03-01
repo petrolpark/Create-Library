@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.CreateShapes;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
@@ -126,7 +126,7 @@ public class MandrelBlock extends HorizontalKineticBlock implements IBE<MandrelB
 
     @Override
     public BlockEntityType<? extends MandrelBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.MANDREL.get();
+        return PetrolparkCreateBlockEntityTypes.MANDREL.get();
     };
 
 	@Override

@@ -3,8 +3,8 @@ package com.petrolpark.compat.create.common.processing.meshbasin;
 import java.util.List;
 import java.util.Optional;
 
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.block.entity.basin.AdvancedBasinOperatingBlockEntity;
 import com.petrolpark.compat.create.core.block.entity.basin.IDifferentBasinBlockEntity;
 import com.petrolpark.compat.create.core.recipe.AdvancedBasinRecipe;
@@ -53,8 +53,8 @@ public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferent
     };
 
     public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CreateBlockEntityTypes.MESH_BASIN.get(), MeshBasinBlockEntity::getItemCapability);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CreateBlockEntityTypes.MESH_BASIN.get(), (be, context) -> be.fluidCapability);
+		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PetrolparkCreateBlockEntityTypes.MESH_BASIN.get(), MeshBasinBlockEntity::getItemCapability);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PetrolparkCreateBlockEntityTypes.MESH_BASIN.get(), (be, context) -> be.fluidCapability);
 	};
     
     protected IItemHandlerModifiable getItemCapability(Direction direction) {
@@ -142,7 +142,7 @@ public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferent
     };
 
     public boolean matchStaticFiltersForSelfProcessing(RecipeHolder<?> rh) {
-        return rh.value().getType() == CreateRecipeTypes.DEEP_FRYING.getType();
+        return rh.value().getType() == PetrolparkCreateRecipeTypes.DEEP_FRYING.getType();
     };
 
     public void renderParticles() {

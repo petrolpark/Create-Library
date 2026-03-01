@@ -20,7 +20,7 @@ public class SharedItemBuilder<T extends Item, P> extends PetrolparkItemBuilder<
         super(owner, parent, name, callback, factory);
         this.featureFlag = featureFlag;
     };
-
+    
     @Override
     public ItemBuilder<T, P> onRegister(@Nonnull NonNullConsumer<? super T> callback) {
         if (featureFlag == null || !featureFlag.enabled()) return this;

@@ -8,7 +8,7 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.core.recipe.AdvancedBasinRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
@@ -37,7 +37,7 @@ public class LiddedBasinRecipe extends AdvancedBasinRecipe {
     };
 
     protected LiddedBasinRecipe(ProcessingRecipeParams params) {
-        super(CreateRecipeTypes.LIDDED_BASIN, params);
+        super(PetrolparkCreateRecipeTypes.LIDDED_BASIN, params);
         if (params instanceof LiddedBasinRecipe.Params properParams) {
             bubbles = properParams.bubbles();
         } else {

@@ -5,7 +5,7 @@
             "values": [
                 {
                     "type": "petrolpark:fluid_tag_empty",
-                    "tag": "c:cooking_oils"
+                    "tag": "c:oil/cooking"
                 },
                 {
                     "type": "neoforge:not",
@@ -22,6 +22,9 @@
     "ingredient": {
         "item": "petrolpark:raw_fries"
     },
-    "result": "petrolpark:fries",
+    "result": {
+        "id": "petrolpark:fries"
+    },
+    "experience": 0.35,
     "cookingtime": 200
 }

@@ -1,7 +1,7 @@
 package com.petrolpark.compat.create.core.tube;
 
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.CreatePackets;
+import com.petrolpark.compat.create.PetrolparkCreatePackets;
 import com.petrolpark.core.actionrecord.packet.recordable.AlwaysEnterRecordablePacketPayload;
 import com.petrolpark.util.ItemHelper;
 
@@ -61,7 +61,7 @@ public class BuildTubePacket implements ServerboundPacketPayload, AlwaysEnterRec
 
     @Override
     public PacketTypeProvider getTypeProvider() {
-        return CreatePackets.BUILD_TUBE;
+        return PetrolparkCreatePackets.BUILD_TUBE;
     };
 
     @Override

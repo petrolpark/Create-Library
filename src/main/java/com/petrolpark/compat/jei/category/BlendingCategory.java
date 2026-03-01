@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.PetrolparkPartialModels;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.BasinCategory;
@@ -57,7 +57,7 @@ public class BlendingCategory extends BasinCategory {
                 .scale(scale)
                 .render(graphics);
 
-            blockElement(CreateBlocks.BLENDER.getDefaultState())
+            blockElement(PetrolparkCreateBlocks.BLENDER.getDefaultState())
                 .atLocal(0, 0, 0)
                 .scale(scale)
                 .render(graphics);

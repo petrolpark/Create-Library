@@ -8,8 +8,8 @@ import java.util.function.BiConsumer;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.util.BigItemStack;
 import com.petrolpark.util.BlockFace;
 import com.petrolpark.util.ItemHelper;
@@ -101,7 +101,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         this.spline = spline;
         middleControlPoints = getSpline().getMiddleControlPoints();
         for (BlockPos pos : getSpline().getBlockedPositions()) {
-            getWorld().setBlock(pos, CreateBlocks.TUBE_STRUCTURE.getDefaultState(), 3);
+            getWorld().setBlock(pos, PetrolparkCreateBlocks.TUBE_STRUCTURE.getDefaultState(), 3);
         };
         initializationTicks = 3; // Delay to link structural blocks to the controller
         get(getWorld(), otherEndPos).ifPresent(tube -> {
@@ -216,7 +216,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         if (initializationTicks > 0) {
             initializationTicks--;
             if (controller && initializationTicks == 1 && getSpline() != null) for (BlockPos pos : getSpline().getBlockedPositions()) {
-                getWorld().getBlockEntity(pos, CreateBlockEntityTypes.TUBE_STRUCTURE.get()).ifPresent(be -> be.setController(getPos()));
+                getWorld().getBlockEntity(pos, PetrolparkCreateBlockEntityTypes.TUBE_STRUCTURE.get()).ifPresent(be -> be.setController(getPos()));
             };
             tubeBlockEntity.invalidateTubeRenderBoundingBox();
         };

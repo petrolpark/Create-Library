@@ -229,7 +229,7 @@ public class ChainConveyorScenes {
 		scene.world().modifyBlockEntity(conv2, ChainConveyorBlockEntity.class, be -> be.addTravellingPackage(new ChainConveyorPackage(5.462394f, wetSponge), conv1.subtract(conv2)));
 		scene.idle(50);
 		scene.world().modifyBlockEntity(conv1, ChainConveyorBlockEntity.class, be -> {
-			be.getLoopingPackages().removeFirst();
+			be.getLoopingPackages().remove(0);
 			be.addTravellingPackage(new ChainConveyorPackage(0f, new ItemStack(Items.SPONGE)), conv2.subtract(conv1));
 		});
 		scene.idle(10);

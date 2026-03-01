@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgram.Channel;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgram.PlayMode;
 import com.petrolpark.compat.jei.ghost.IConditionalGhostSlot;
@@ -557,7 +557,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
     };
 
     public static final MutableComponent translate(String suffix) {
-        return Component.translatable(CreateBlocks.REDSTONE_PROGRAMMER.get().getDescriptionId() + "." + suffix);
+        return Component.translatable(PetrolparkCreateBlocks.REDSTONE_PROGRAMMER.get().getDescriptionId() + "." + suffix);
     };
 
     private final void enableScissor(GuiGraphics graphics, Rect2i rect) {
