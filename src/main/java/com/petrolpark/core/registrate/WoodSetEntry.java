@@ -141,8 +141,14 @@ public record WoodSetEntry(
             final TagKey<Block> logsBlockTag = TagKey.create(Registries.BLOCK, logsTagId);
             final TagKey<Item> logsItemTag = TagKey.create(Registries.ITEM, logsTagId);
 
-            registrate.addDataGenerator(ProviderType.BLOCK_TAGS, prov -> prov.addTag(BlockTags.LOGS_THAT_BURN).addTag(logsBlockTag));
-            registrate.addDataGenerator(ProviderType.ITEM_TAGS, prov -> prov.addTag(ItemTags.LOGS_THAT_BURN).addTag(logsItemTag));
+            registrate
+                .addDataGenerator(ProviderType.BLOCK_TAGS, prov -> prov.addTag(BlockTags.LOGS_THAT_BURN).addTag(logsBlockTag))
+                .addDataGenerator(ProviderType.ITEM_TAGS, prov -> prov.addTag(ItemTags.LOGS_THAT_BURN).addTag(logsItemTag))
+                .addDataGenerator(ProviderType.LANG, prov -> {
+                    final String name = englishName + " Logs";
+                    prov.addTag(() -> logsBlockTag, name);
+                    prov.addTag(() -> logsItemTag, name);
+                });
 
             final ResourceLocation logId = ResourceLocation.fromNamespaceAndPath(registrate.getModid(), woodName + "_log");
             final ResourceLocation logTextureId = logId.withPrefix("block/");

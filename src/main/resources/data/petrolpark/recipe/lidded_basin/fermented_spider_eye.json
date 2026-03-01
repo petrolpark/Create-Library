@@ -1,0 +1,20 @@
+{
+  "type": "petrolpark:lidded_basin",
+  "ingredients": [
+  {
+    "item": "minecraft:sugar"
+  },
+  {
+    "item": "minecraft:spider_eye"
+  },
+  {
+    "item": "minecraft:brown_mushroom"
+  }
+  ],
+  "results": [
+    {
+      "id": "minecraft:fermented_spider_eye"
+    }
+  ],
+  "processing_time": 200
+}

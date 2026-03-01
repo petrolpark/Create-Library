@@ -11,6 +11,10 @@
     {
       "id": "petrolpark:redstone_programmer",
       "required": false
+    },
+    {
+      "id": "petrolpark:blender",
+      "required": false
     }
   ]
 }

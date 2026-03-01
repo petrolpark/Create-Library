@@ -12,6 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.petrolpark.compat.create.core.block.entity.basin.IDifferentBasinBlockEntity;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.IContamination;
@@ -32,27 +33,18 @@ import net.neoforged.neoforge.items.IItemHandler;
 
 @Mixin(BasinRecipe.class)
 public class BasinRecipeMixin {
+
+    @Inject(
+        method = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;Z)Z",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private static final void petrolpark$cancelIfWrongBasin(BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir) {
+        if (basin instanceof IDifferentBasinBlockEntity differentBasin && !differentBasin.matchStaticFilters(recipe)) cir.setReturnValue(false);
+    };
     
     /**
      * Start {@link ItemDecay} and propagate Contaminants in Basin Recipes.
-     * @param basin
-     * @param recipe
-     * @param test
-     * @param cir
-     * @param isBasinRecipe
-     * @param availableItems
-     * @param availableFluids
-     * @param heat
-     * @param recipeOutputItems
-     * @param recipeOutputFluids
-     * @param ingredients
-     * @param fluidIngredients
-     * @param trueAndFalse
-     * @param i1
-     * @param i2
-     * @param simulate
-     * @param extractedItemsFromSlot
-     * @param extractedFluidsFromTank
      */
     @Inject(
         method = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;Z)Z",
@@ -64,7 +56,7 @@ public class BasinRecipeMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    private static void petrolpark$propagateContaminants(
+    private static final void petrolpark$propagateContaminants(
         BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir,
         boolean isBasinRecipe, IItemHandler availableItems, IFluidHandler availableFluids, BlazeBurnerBlock.HeatLevel heat,
         List<ItemStack> recipeOutputItems, List<FluidStack> recipeOutputFluids,

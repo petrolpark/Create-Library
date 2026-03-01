@@ -1,0 +1,14 @@
+{
+    "type": "petrolpark:blending",
+    "ingredients": [
+    {
+      "item": "minecraft:diamond"
+    }
+  ],
+  "results": [
+    {
+      "id": "minecraft:coal"
+    }
+  ],
+  "processing_time": 200
+}

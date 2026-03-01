@@ -13,7 +13,7 @@
   ],
   "key": {
     "S": {
-      "tag": "forge:string"
+      "tag": "c:string"
     }
   },
   "result": {

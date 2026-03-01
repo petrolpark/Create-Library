@@ -37,8 +37,8 @@ public interface IBookRequiredRecipe extends INamedRecipe {
         acceptorPositions.add(pos);
         
         while (!acceptorPositions.isEmpty()) {
-            BlockPos acceptorPos = acceptorPositions.poll();
-            BlockState acceptorState = level.getBlockState(acceptorPos);
+            final BlockPos acceptorPos = acceptorPositions.poll();
+            final BlockState acceptorState = level.getBlockState(acceptorPos);
             if (!isRecipeBookAcceptor(level, acceptorPos, acceptorState)) continue;
             if (checkedAcceptorPositions.add(acceptorPos)) {
                 for (Direction face : Direction.values()) {

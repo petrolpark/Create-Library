@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create.core.block.entity;
+package com.petrolpark.compat.create.core.block.entity.basin;
 
 import java.util.Optional;
 
@@ -12,9 +12,9 @@ import net.minecraft.world.level.block.state.BlockState;
 /**
  * A {@link BasinOperatingBlockEntity} which works directly above the Basin rather than two Blocks above it.
  */
-public abstract class BelowBasinOperatingBlockEntity extends BasinOperatingBlockEntity {
+public abstract class DirectlyAboveBasinOperatingBlockEntity extends AdvancedBasinOperatingBlockEntity {
 
-    public BelowBasinOperatingBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
+    public DirectlyAboveBasinOperatingBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
     };
 
@@ -22,7 +22,7 @@ public abstract class BelowBasinOperatingBlockEntity extends BasinOperatingBlock
     @SuppressWarnings("null") // We already checked level is not null
     protected Optional<BasinBlockEntity> getBasin() {
         if (level == null) return Optional.empty();
-        if (level.getBlockEntity(getBlockPos().above()) instanceof BasinBlockEntity basinBE) return Optional.of(basinBE);
+        if (level.getBlockEntity(getBlockPos().below()) instanceof BasinBlockEntity basinBE) return Optional.of(basinBE);
         return Optional.empty();
     };
     

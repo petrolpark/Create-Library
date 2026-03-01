@@ -4,8 +4,8 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.compat.create.core.block.entity.BelowBasinOperatingBlockEntity;
-import com.petrolpark.compat.create.core.block.entity.DirectlyAboveBasinOperatingBlockEntity;
+import com.petrolpark.compat.create.core.block.entity.basin.BelowBasinOperatingBlockEntity;
+import com.petrolpark.compat.create.core.block.entity.basin.DirectlyAboveBasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlock;
 
 import net.minecraft.core.BlockPos;

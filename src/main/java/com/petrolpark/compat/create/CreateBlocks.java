@@ -3,6 +3,7 @@ package com.petrolpark.compat.create;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 import static com.petrolpark.core.registrate.PetrolparkTagGen.axeOrPickaxe;
 import static com.petrolpark.core.registrate.PetrolparkTagGen.pickaxeOnly;
+import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
 import static net.minecraft.world.level.storage.loot.LootPool.lootPool;
 import static net.minecraft.world.level.storage.loot.LootTable.lootTable;
 import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableItem;
@@ -11,13 +12,17 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlock;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlock;
+import com.petrolpark.compat.create.common.processing.blender.BlenderBlock;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeBlock;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionDieBlock;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlock;
+import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinBlock;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlock;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockItem;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlock;
 import com.petrolpark.config.PetrolparkStressConfig;
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.content.processing.basin.BasinMovementBehaviour;
 import com.simibubi.create.foundation.data.BlockStateGen;
 import com.simibubi.create.foundation.data.ModelGen;
 import com.simibubi.create.foundation.data.SharedProperties;
@@ -36,6 +41,17 @@ public class CreateBlocks {
         .blockstate(BlockStateGen.horizontalBlockProvider(false))
         .transform(pickaxeOnly())
         .item()
+        .build()
+        .register();
+
+    public static final BlockEntry<BlenderBlock> BLENDER = REGISTRATE.sharedBlock(SharedFeatureFlag.BLENDER, "blender", BlenderBlock::new)
+        .initialProperties(AllBlocks.BASIN)
+        .properties(p -> p
+            .noOcclusion()
+        ).transform(axeOrPickaxe())
+        .transform(PetrolparkStressConfig.setImpact(2f))
+        .item()
+        .onRegister(Create::registerTooltip)
         .build()
         .register();
 
@@ -63,6 +79,14 @@ public class CreateBlocks {
         .transform(axeOrPickaxe())
         .item()
         .transform(ModelGen.customItemModel())
+        .register();
+
+    public static final BlockEntry<MeshBasinBlock> MESH_BASIN = REGISTRATE.sharedBlock(SharedFeatureFlag.MESH_BASIN, "mesh_basin", MeshBasinBlock::new)
+        .initialProperties(SharedProperties::copperMetal)
+        .transform(pickaxeOnly())
+        .onRegister(movementBehaviour(new BasinMovementBehaviour()))
+        .item()
+        .build()
         .register();
     
     public static final BlockEntry<TubeStructuralBlock> TUBE_STRUCTURE = REGISTRATE.block("tube", TubeStructuralBlock::new)

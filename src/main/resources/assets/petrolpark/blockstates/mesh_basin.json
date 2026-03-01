@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "petrolpark:block/mesh_basin/block"
+    },
+    "facing=north": {
+      "model": "petrolpark:block/mesh_basin/block_directional",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "petrolpark:block/mesh_basin/block_directional"
+    },
+    "facing=west": {
+      "model": "petrolpark:block/mesh_basin/block_directional",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "petrolpark:block/mesh_basin/block_directional",
+      "y": 270
+    }
+  }
+}

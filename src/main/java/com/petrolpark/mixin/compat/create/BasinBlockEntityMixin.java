@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.compat.create.core.block.entity.BelowBasinOperatingBlockEntity;
-import com.petrolpark.compat.create.core.block.entity.DirectlyAboveBasinOperatingBlockEntity;
+import com.petrolpark.compat.create.core.block.entity.basin.BelowBasinOperatingBlockEntity;
+import com.petrolpark.compat.create.core.block.entity.basin.DirectlyAboveBasinOperatingBlockEntity;
 import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
 import com.petrolpark.mixin.compat.create.accessor.BasinOperatingBlockEntityAccessor;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -52,6 +52,6 @@ public abstract class BasinBlockEntityMixin extends SmartBlockEntity implements 
 
     @Override
     public boolean acceptsRecipeBook(RecipeHolder<?> recipeHolder) {
-        return getOperator().map(be -> ((BasinOperatingBlockEntityAccessor)be).matchStaticFilters(recipeHolder)).orElse(recipeHolder.value() instanceof BasinRecipe);
+        return getOperator().map(be -> ((BasinOperatingBlockEntityAccessor)be).callMatchStaticFilters(recipeHolder)).orElse(recipeHolder.value() instanceof BasinRecipe);
     };
 };

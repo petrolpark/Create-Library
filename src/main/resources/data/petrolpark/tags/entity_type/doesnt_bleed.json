@@ -1,0 +1,14 @@
+{
+    "values": [
+        "minecraft:allay",
+        "minecraft:blaze",
+        "minecraft:breeze",
+        "minecraft:ghast",
+        "minecraft:magma_cube",
+        "minecraft:shulker",
+        "#minecraft:skeletons",
+        "minecraft:slime",
+        "minecraft:vex",
+        "minecraft:wither"
+    ]
+}

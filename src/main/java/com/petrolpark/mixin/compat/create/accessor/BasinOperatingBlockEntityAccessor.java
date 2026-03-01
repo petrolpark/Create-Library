@@ -12,8 +12,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 public interface BasinOperatingBlockEntityAccessor {
     
     @Invoker(
-        value = "matchStaticFilters",
         remap = false
     )
-    public boolean matchStaticFilters(RecipeHolder<? extends Recipe<?>> recipeHolder);
+    public boolean callMatchStaticFilters(RecipeHolder<? extends Recipe<?>> recipeHolder);
 };

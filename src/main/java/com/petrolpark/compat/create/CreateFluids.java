@@ -20,6 +20,8 @@ public class CreateFluids {
 
     public static final FluidEntry<VirtualFluid>
     
+    BLOOD = sharedSingleTextureVirtualFluid(SharedFeatureFlag.BLOOD, "blood")
+        .register(),
     CREAM = sharedSingleTextureVirtualFluid(SharedFeatureFlag.MILK_PRODUCTS, "cream")
         .register(),
     SKIMMED_MILK = sharedColoredWaterFluid(SharedFeatureFlag.MILK_PRODUCTS, "skimmed_milk", 0x80FFFFFF)

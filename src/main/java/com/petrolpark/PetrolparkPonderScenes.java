@@ -15,10 +15,10 @@ public class PetrolparkPonderScenes {
     public static final void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         final PonderSceneRegistrationHelper<RegistryEntry<?, ?>> itemProviderHelper = helper.withKeyFunction(RegistryEntry::getId);
 
-        if (SharedFeatureFlag.DRYING_RACK.enabled()) itemProviderHelper.addStoryBoard(PetrolparkBlocks.DRYING_RACK, "processing/drying", DryingRackScenes::dryingRack);
-        if (Mods.CREATE.isLoaded()) itemProviderHelper.addStoryBoard(PetrolparkBlocks.DRYING_RACK, "processing/drying_chain_conveyor", ChainConveyorScenes::drying);
+        if (SharedFeatureFlag.DRYING_RACK.enabled()) itemProviderHelper.addStoryBoard(PetrolparkBlocks.DRYING_RACK, "processing/drying/rack", DryingRackScenes::dryingRack);
+        if (Mods.CREATE.isLoaded()) itemProviderHelper.addStoryBoard(PetrolparkBlocks.DRYING_RACK, "processing/drying/chain_conveyor", ChainConveyorScenes::drying);
 
-        itemProviderHelper.addStoryBoard(PetrolparkItems.RECIPE_BOOK, "processing/recipe_book", RecipeBookScenes::recipeBook);
-        if (Mods.CREATE.isLoaded()) itemProviderHelper.addStoryBoard(PetrolparkItems.RECIPE_BOOK, "processing/recipe_book_create", RecipeBookScenes::create);
+        itemProviderHelper.addStoryBoard(PetrolparkItems.RECIPE_BOOK, "recipe_book/vanilla", RecipeBookScenes::recipeBook);
+        if (Mods.CREATE.isLoaded()) itemProviderHelper.addStoryBoard(PetrolparkItems.RECIPE_BOOK, "recipe_book/create", RecipeBookScenes::create);
     };
 };

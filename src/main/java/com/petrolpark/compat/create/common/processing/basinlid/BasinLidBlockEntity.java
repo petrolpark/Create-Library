@@ -1,12 +1,10 @@
 package com.petrolpark.compat.create.common.processing.basinlid;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.petrolpark.PetrolparkParticleTypes;
 import com.petrolpark.compat.create.CreateRecipeTypes;
-import com.petrolpark.compat.create.core.block.entity.DirectlyAboveBasinOperatingBlockEntity;
-import com.simibubi.create.content.processing.basin.BasinBlockEntity;
+import com.petrolpark.compat.create.core.block.entity.basin.DirectlyAboveBasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 
 import net.createmod.catnip.math.AngleHelper;
@@ -28,7 +26,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 public class BasinLidBlockEntity extends DirectlyAboveBasinOperatingBlockEntity {
 
-    protected final Object recipeCacheKey = new Object();
+    protected Object recipeCacheKey = new Object();
 
     /**
      * <p>{@code -1} waiting for a matching Recipe
@@ -46,7 +44,7 @@ public class BasinLidBlockEntity extends DirectlyAboveBasinOperatingBlockEntity 
     @Override
     public void tick() {
         super.tick();
-        Level level = getLevel();
+        final Level level = getLevel();
         if (level != null && processingTicksRemaining > 0) {
             if (level.isClientSide()) renderParticles();
             if (processingTicksRemaining % 20 == 0) level.playSound(null, worldPosition, SoundEvents.BUBBLE_COLUMN_WHIRLPOOL_AMBIENT, SoundSource.BLOCKS, 0.75f, 0.5f);
@@ -62,22 +60,6 @@ public class BasinLidBlockEntity extends DirectlyAboveBasinOperatingBlockEntity 
     @Override
     protected boolean isRunning() {
         return processingTicksRemaining > 0;
-    };
-
-    @Override
-    protected boolean updateBasin() {
-		if (isRunning()) return true;
-        Level level = getLevel();
-		if (level == null || level.isClientSide()) return true;
-		Optional<BasinBlockEntity> basin = getBasin();
-		if (!basin.filter(BasinBlockEntity::canContinueProcessing).isPresent()) return true;
-
-		List<Recipe<?>> recipes = getMatchingRecipes();
-		if (recipes.isEmpty()) return true;
-		currentRecipe = recipes.get(0);
-		startProcessingBasin();
-		sendData();
-		return true;
     };
 
     @Override
@@ -113,6 +95,11 @@ public class BasinLidBlockEntity extends DirectlyAboveBasinOperatingBlockEntity 
         return recipeCacheKey;
     };
 
+    @Override
+    public void updateRecipeCacheKey() {
+        recipeCacheKey = new Object();
+    };
+
     public static final Vec3 PARTICLE_OFFSET = new Vec3(-5 / 16d, 9 / 16d, 0d);
 
     @OnlyIn(Dist.CLIENT)
@@ -136,10 +123,6 @@ public class BasinLidBlockEntity extends DirectlyAboveBasinOperatingBlockEntity 
         compound.putBoolean("Bubbling", bubbling);
 		super.write(compound, registries, clientPacket);
 	};
-
-    protected Optional<ProcessingRecipe<?, ?>> getCurrentProcessingRecipe() {
-        return currentRecipe instanceof ProcessingRecipe pr ? Optional.of(pr) : Optional.empty();
-    };
 
     protected Optional<LiddedBasinRecipe> getCurrentLiddedBasinRecipe() {
         return getCurrentProcessingRecipe().map(r -> r instanceof LiddedBasinRecipe lbr ? lbr : null);

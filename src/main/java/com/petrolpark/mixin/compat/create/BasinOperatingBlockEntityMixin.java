@@ -6,10 +6,12 @@ import java.util.function.Consumer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
+import com.petrolpark.compat.create.core.block.entity.basin.AdvancedBasinOperatingBlockEntity;
 import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.simple.DeferralBehaviour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.crafting.Recipe;
@@ -20,6 +22,9 @@ import net.minecraft.world.level.block.state.BlockState;
 
 @Mixin(BasinOperatingBlockEntity.class)
 public abstract class BasinOperatingBlockEntityMixin extends KineticBlockEntity implements IRecipeBookAcceptorBlockEntity {
+
+    @Shadow
+    public DeferralBehaviour basinChecker;
 
     @Shadow
     abstract Optional<BasinBlockEntity> getBasin();
@@ -35,6 +40,12 @@ public abstract class BasinOperatingBlockEntityMixin extends KineticBlockEntity 
     @Override
     public void addProxyRecipeBookAcceptorPositions(Consumer<BlockPos> posAdder) {
         getBasin().map(BlockEntity::getBlockPos).ifPresent(posAdder);
+    };
+
+    @Override
+    public void onAvailableRecipesChanged() {
+        if ((Object)this instanceof AdvancedBasinOperatingBlockEntity advancedOperator) advancedOperator.updateRecipeCacheKey();
+        basinChecker.scheduleUpdate();
     };
 
     @Override

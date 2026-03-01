@@ -13,5 +13,7 @@ public interface IRecipeBookAcceptorBlockEntity {
      */
     public default void addProxyRecipeBookAcceptorPositions(Consumer<BlockPos> posAdder) {};
 
+    public default void onAvailableRecipesChanged() {};
+
     public boolean acceptsRecipeBook(RecipeHolder<?> recipeHolder);
 };
