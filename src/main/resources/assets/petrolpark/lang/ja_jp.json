@@ -32,11 +32,13 @@
     "biome.petrolpark.unknown": "未知のバイオーム",
 
     "block.petrolpark.basin_lid": "鉢の蓋",
+    "block.petrolpark.blender": "ブレンダー",
     "block.petrolpark.centrifuge": "遠心分離機",
     "block.petrolpark.drying_rack": "乾燥ラック",
     "block.petrolpark.extrusion_die": "押し出し金型",
     "block.petrolpark.mandrel": "芯棒",
     "block.petrolpark.mashed_potato_block": "マッシュポテトブロック",
+    "block.petrolpark.mesh_basin": "メッシュの鉢",
     "block.petrolpark.redstone_programmer": "レッドストーンプログラマー",
     "block.petrolpark.redstone_programmer.add_bar": "小節を追加",
     "block.petrolpark.redstone_programmer.add_bar.hint": "シフトクリックで1ノート単位を追加",
@@ -84,6 +86,7 @@
 
     "curios.identifier.petrolpark_badge": "バッジ",
 
+    "death.attack.petrolpark.blender": "%1$s はミルクシェイクにされてしまった",
     "death.attack.petrolpark.extrusion_die": "%1$s は金型に押し出された",
 
     "effect.petrolpark.numbness": "麻痺",
@@ -91,6 +94,7 @@
     "effect.petrolpark.miners_luck": "採掘者の幸運",
     "effect.petrolpark.miners_luck.description": "採掘中に鉱脈を見つける確率が上昇します。",
 
+    "fluid.petrolpark.blood": "血液",
     "fluid.petrolpark.cream": "クリーム",
     "fluid.petrolpark.skimmed_milk": "脱脂乳",
 
@@ -281,6 +285,10 @@
     "petrolpark.ponder.extrusion_die.header": "押し出し金型によるブロックの押し出し加工",
     "petrolpark.ponder.extrusion_die.text_1": "押出し金型にブロックを押し込むと、ブロックを変形させることができます",
     "petrolpark.ponder.extrusion_die.text_2": "押出し金型は静止している必要があります",
+    "petrolpark.ponder.juicing.header": "メカニカルプレスとメッシュの鉢による搾汁(ジュース作り)",
+    "petrolpark.ponder.juicing.text_1": "メッシュの鉢に入れたアイテムをプレスすると、中の液体が絞り出され「ジュース」になります",
+    "petrolpark.ponder.juicing.text_2": "一部のレシピには、ブレイズバーナーによる加熱が必要です",
+    "petrolpark.ponder.juicing.text_3": "2つのレシピが競合する場合は、フィルタースロットを使用して制限できます",
     "petrolpark.ponder.mechanical_arm_chain_conveyor.header": "メカニカルアームによるチェーンコンベアへの搬入",
     "petrolpark.ponder.mechanical_arm_chain_conveyor.text_1": "メカニカルアームを持った状態でチェーンを右クリックすると、搬入・搬出先として設定できます",
     "petrolpark.ponder.mechanical_arm_chain_conveyor.text_2": "アームの回転速度が不足していると、アイテムの回収に失敗することがあります",
@@ -303,12 +311,15 @@
 
     "petrolpark.recipe.ageing": "熟成",
     "petrolpark.recipe.biome_specific": "以下のバイオームで行う必要があります:",
+    "petrolpark.recipe.blending": "混合",
     "petrolpark.recipe.book_required": "レシピ本が必要です！",
     "petrolpark.recipe.centrifugation": "遠心分離",
     "petrolpark.recipe.crop_fertilizing": "作物の施肥",
+    "petrolpark.recipe.deep_frying": "揚げ物",
     "petrolpark.recipe.drying": "乾燥",
     "petrolpark.recipe.extrusion": "押し出し加工",
     "petrolpark.recipe.item_decay": "アイテムの腐敗",
+    "petrolpark.recipe.juicing": "搾汁",
     "petrolpark.recipe.lidded_basin": "蓋つき鉢",
     "petrolpark.recipe.manual_crafting": "手動のみのクラフト",
     "petrolpark.recipe.potion_centrifugation": "ポーション遠心分離",
