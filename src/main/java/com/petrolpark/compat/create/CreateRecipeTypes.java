@@ -7,9 +7,12 @@ import javax.annotation.Nullable;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
+import com.petrolpark.compat.create.common.processing.blender.BlendingRecipe;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationRecipe;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRecipe;
+import com.petrolpark.compat.create.common.processing.meshbasin.DeepFryingRecipe;
+import com.petrolpark.compat.create.common.processing.meshbasin.JuicingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.petrolpark.compat.create.core.recipe.RecipeBookMechanicalCraftingRecipe;
@@ -29,8 +32,11 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public enum CreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo {
 
+    BLENDING(BlendingRecipe.Serializer::new),
     CENTRIFUGATION(CentrifugationRecipe::new),
     EXTRUSION(ExtrusionRecipe.Serializer::new),
+    DEEP_FRYING(DeepFryingRecipe.Serializer::new),
+    JUICING(JuicingRecipe.Serializer::new),
     LIDDED_BASIN(LiddedBasinRecipe.Serializer::new),
     MANDREL(MandrelRecipe.Serializer::new),
     //FIRST_TIME_LUCKY_MILLING(FTLMillingRecipe::new, AllRecipeTypes.MILLING::getType),

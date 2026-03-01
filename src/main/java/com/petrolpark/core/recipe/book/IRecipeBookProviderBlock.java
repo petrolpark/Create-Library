@@ -43,6 +43,16 @@ public interface IRecipeBookProviderBlock {
         return provisions;
     };
 
+    public static void updateAvailableRecipes(Level level, BlockPos pos, BlockState state) {
+        if (state.getBlock() instanceof IRecipeBookProviderBlock providerBlock) providerBlock.getRecipeBookProvisions(level, pos, state).stream()
+            .map(Pair::getFirst)
+            .forEach(acceptorPos -> {
+                final BlockState acceptorState = level.getBlockState(acceptorPos);
+                if (acceptorState.getBlock() instanceof IRecipeBookAcceptorBlock acceptorBlock) acceptorBlock.onAvailableRecipesChanged(level, acceptorPos, acceptorState);
+                if (level.getBlockEntity(acceptorPos) instanceof IRecipeBookAcceptorBlockEntity acceptorBE) acceptorBE.onAvailableRecipesChanged();
+            });
+    };
+
     public static enum ProvisionType {
         CAN_PROVIDE,
         PROVIDES

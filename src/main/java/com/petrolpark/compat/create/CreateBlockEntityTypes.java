@@ -8,11 +8,16 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlockEntity;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlockEntity;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlockEntity;
+import com.petrolpark.compat.create.common.processing.blender.BlenderBlockEntity;
+import com.petrolpark.compat.create.common.processing.blender.BlenderRenderer;
+import com.petrolpark.compat.create.common.processing.blender.BlenderVisual;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeBlockEntity;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeRenderer;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionDieBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRenderer;
+import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinBlockEntity;
+import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinRenderer;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockEntity;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockEntityRenderer;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlockEntity;
@@ -30,6 +35,12 @@ public class CreateBlockEntityTypes {
         .validBlock(CreateBlocks.BASIN_LID)
         .register();
 
+    public static final BlockEntityEntry<BlenderBlockEntity> BLENDER = sharedBlockEntity(SharedFeatureFlag.BLENDER, "blender", BlenderBlockEntity::new)
+        .visual(() -> BlenderVisual::new)
+        .validBlock(CreateBlocks.BLENDER)
+        .renderer(() -> BlenderRenderer::new)
+        .register();
+
     public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = sharedBlockEntity(SharedFeatureFlag.CENTRIFUGE, "centrifuge", CentrifugeBlockEntity::new)
         .visual(() -> SingleAxisRotatingVisual.of(PetrolparkPartialModels.CENTRIFUGE_COG), true)
         .validBlock(CreateBlocks.CENTRIFUGE)
@@ -43,6 +54,11 @@ public class CreateBlockEntityTypes {
     public static final BlockEntityEntry<MandrelBlockEntity> MANDREL = sharedBlockEntity(SharedFeatureFlag.MANDREL, "mandrel", MandrelBlockEntity::new)
         .validBlock(CreateBlocks.MANDREL)
         .renderer(() -> MandrelRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<MeshBasinBlockEntity> MESH_BASIN = sharedBlockEntity(SharedFeatureFlag.MESH_BASIN, "mesh_basin", MeshBasinBlockEntity::new)
+        .validBlock(CreateBlocks.MESH_BASIN)
+        .renderer(() -> MeshBasinRenderer::new)
         .register();
 
     public static final BlockEntityEntry<RedstoneProgrammerBlockEntity> REDSTONE_PROGRAMMER = sharedBlockEntity(SharedFeatureFlag.REDSTONE_PROGRAMMER, "redstone_programmer", RedstoneProgrammerBlockEntity::new)

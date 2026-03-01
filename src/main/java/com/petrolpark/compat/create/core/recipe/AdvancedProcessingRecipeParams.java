@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
@@ -31,8 +32,12 @@ public class AdvancedProcessingRecipeParams extends ProcessingRecipeParams {
 		return params;
 	}));
 
+    public static final MapCodec<ProcessingRecipeParams> UNADVANCED_CODEC = CODEC.flatXmap(DataResult::success, params -> params instanceof AdvancedProcessingRecipeParams properParams ? DataResult.success(properParams) : DataResult.error(() -> "Not Advanced Recipe Params"));
+
     public static final StreamCodec<RegistryFriendlyByteBuf, AdvancedProcessingRecipeParams> STREAM_CODEC = streamCodec(AdvancedProcessingRecipeParams::new);
     
+    public static final StreamCodec<RegistryFriendlyByteBuf, ProcessingRecipeParams> UNADVANCED_STREAM_CODEC = streamCodec(AdvancedProcessingRecipeParams::new);
+
     protected boolean bookRequired = false;
     protected Optional<HolderSet<Biome>> allowedBiomes = Optional.empty();
     protected Optional<ResourceLocation> firstTimeLuckyKey = Optional.empty();

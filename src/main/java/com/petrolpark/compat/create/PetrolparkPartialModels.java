@@ -23,7 +23,11 @@ public class PetrolparkPartialModels {
     REDSTONE_PROGRAMMER_TRANSMITTER_POWERED = block("redstone_programmer/transmitter_powered"),
 
     // Chain Conveyor
-    CHAIN_CONVEYOR_HOOK = block("chain_conveyor_hook")
+    CHAIN_CONVEYOR_HOOK = block("chain_conveyor_hook"),
+
+    // Blender
+    BLENDER_COG = block("blender/inner"),
+    BLENDER_BLADES = block("blender/blades")
     ;
 
     private static PartialModel block(String path) {

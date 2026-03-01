@@ -32,11 +32,13 @@
     "biome.petrolpark.unknown": "Unknown Biome",
 
     "block.petrolpark.basin_lid": "Basin Lid",
+    "block.petrolpark.blender": "Blender",
     "block.petrolpark.centrifuge": "Centrifuge",
     "block.petrolpark.drying_rack": "Drying Rack",
     "block.petrolpark.extrusion_die": "Extrusion Die",
     "block.petrolpark.mandrel": "Mandrel",
     "block.petrolpark.mashed_potato_block": "Block of Mashed Potato",
+    "block.petrolpark.mesh_basin": "Mesh Basin",
     "block.petrolpark.redstone_programmer": "Redstone Programmer",
     "block.petrolpark.redstone_programmer.add_bar": "Add bar",
     "block.petrolpark.redstone_programmer.add_bar.hint": "Shift-click to add a single note",
@@ -84,6 +86,7 @@
 
     "curios.identifier.petrolpark_badge": "Badge",
 
+    "death.attack.petrolpark.blender": "%1$s was made into a milkshake",
     "death.attack.petrolpark.extrusion_die": "%1$s extrusion died",
 
     "effect.petrolpark.numbness": "Numbness",
@@ -91,6 +94,7 @@
     "effect.petrolpark.miners_luck": "Miners' Luck",
     "effect.petrolpark.miners_luck.description": "Greater chance of finding ore patches while mining.",
 
+    "fluid.petrolpark.blood": "Blood",
     "fluid.petrolpark.cream": "Cream",
     "fluid.petrolpark.skimmed_milk": "Skimmed Milk",
 
@@ -281,6 +285,10 @@
     "petrolpark.ponder.extrusion_die.header": "Extruding blocks with the Extrusion Die",
     "petrolpark.ponder.extrusion_die.text_1": "The Extrusion Die can transform some blocks when they are pushed through it",
     "petrolpark.ponder.extrusion_die.text_2": "The Extrusion Die must remain static",
+    "petrolpark.ponder.juicing.header": "Juicing items with the Mechanical Press and Mesh Basin",
+    "petrolpark.ponder.juicing.text_1": "Pressing items held in a Mesh Basin will squeeze out any fluids, \"juicing\" them",
+    "petrolpark.ponder.juicing.text_2": "Some recipes may require the heat of a Blaze Burner",
+    "petrolpark.ponder.juicing.text_3": "The filter slot can be used in case two recipes are conflicting",
     "petrolpark.ponder.mechanical_arm_chain_conveyor.header": "Putting Items on Chains Conveyors with Mechanical Arms",
     "petrolpark.ponder.mechanical_arm_chain_conveyor.text_1": "Right-Click a Chain with a Mechanical Arm to add it as an in- or output",
     "petrolpark.ponder.mechanical_arm_chain_conveyor.text_2": "If the Arm does not have enough Rotational Input speed, it may miss items",
@@ -303,12 +311,15 @@
 
     "petrolpark.recipe.ageing": "Ageing",
     "petrolpark.recipe.biome_specific": "Must be done in:",
+    "petrolpark.recipe.blending": "Blending",
     "petrolpark.recipe.book_required": "Requires Recipe Book!",
     "petrolpark.recipe.centrifugation": "Centrifugation",
     "petrolpark.recipe.crop_fertilizing": "Crop Fertilizing",
+    "petrolpark.recipe.deep_frying": "Deep Frying",
     "petrolpark.recipe.drying": "Drying",
     "petrolpark.recipe.extrusion": "Extrusion",
     "petrolpark.recipe.item_decay": "Item Decay",
+    "petrolpark.recipe.juicing": "Juicing",
     "petrolpark.recipe.lidded_basin": "Lidded Basin",
     "petrolpark.recipe.manual_crafting": "Manual-Only Crafting",
     "petrolpark.recipe.potion_centrifugation": "Potion Centrifugation",

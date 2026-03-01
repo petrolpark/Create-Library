@@ -14,18 +14,23 @@ import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateBlocks;
 import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationRecipe;
 import com.petrolpark.compat.create.common.processing.centrifuge.PotionCentrifugation;
 import com.petrolpark.compat.create.common.processing.centrifuge.PotionCentrifugation.PotionCentrifugationRecipe;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
+import com.petrolpark.compat.create.common.processing.meshbasin.DeepFryingRecipe;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerScreen;
 import com.petrolpark.compat.jei.category.AgeingCategory;
+import com.petrolpark.compat.jei.category.BlendingCategory;
 import com.petrolpark.compat.jei.category.CentrifugationCategory;
 import com.petrolpark.compat.jei.category.CropFertilizingCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
+import com.petrolpark.compat.jei.category.DeepFryingCategory;
 import com.petrolpark.compat.jei.category.DryingCategory;
 import com.petrolpark.compat.jei.category.ExtrusionCategory;
+import com.petrolpark.compat.jei.category.JuicingCategory;
 import com.petrolpark.compat.jei.category.LiddedBasinCategory;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
@@ -121,7 +126,18 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .emptyBackground(120, 125)
             .build("crop_fertilizing", CropFertilizingCategory::new);
 
-        CreateRecipeCategory<?> centrifugation, potion_centrifugation, drying, extrusion, lidded_basin;
+        CreateRecipeCategory<?> blending, centrifugation, potionCentrifugation, deepFrying, juicing, drying, extrusion, lidded_basin;
+
+        if (SharedFeatureFlag.BLENDER.enabled()) {
+
+            blending = builder(BasinRecipe.class)
+                .addTypedRecipes(CreateRecipeTypes.BLENDING)
+                .catalyst(CreateBlocks.BLENDER::get)
+                .catalyst(AllBlocks.BASIN::get)
+                .itemIcon(CreateBlocks.BLENDER)
+                .emptyBackground(177, 85)
+                .build("blending", BlendingCategory::new);
+        };
 
         if (SharedFeatureFlag.CENTRIFUGE.enabled()) {
 
@@ -132,12 +148,30 @@ public class PetrolparkCreateJEI implements IModPlugin {
                 .emptyBackground(120, 115)
                 .build("centrifugation", CentrifugationCategory::new);
 
-            if (PetrolparkConfigs.server().potionCentrifugation.get()) potion_centrifugation = builder(PotionCentrifugationRecipe.class)
+            if (PetrolparkConfigs.server().potionCentrifugation.get()) potionCentrifugation = builder(PotionCentrifugationRecipe.class)
                 .addRecipes(PotionCentrifugation.streamAllRecipes(Minecraft.getInstance().getConnection().potionBrewing())::toList)
                 .catalyst(CreateBlocks.CENTRIFUGE::get)
                 .doubleItemIcon(CreateBlocks.CENTRIFUGE::asStack, () -> PotionContents.createItemStack(Items.POTION, Potions.HEALING))
                 .emptyBackground(120, 115)
                 .build("potion_centrifugation", CentrifugationCategory::new);
+        };
+
+        if (SharedFeatureFlag.MESH_BASIN.enabled()) {
+
+            deepFrying = builder(DeepFryingRecipe.class)
+                .addTypedRecipes(CreateRecipeTypes.DEEP_FRYING)
+                .catalyst(CreateBlocks.MESH_BASIN::get)
+                .itemIcon(CreateBlocks.MESH_BASIN.get())
+                .emptyBackground(177, 81)
+                .build("deep_frying", DeepFryingCategory::new);
+
+            juicing = builder(BasinRecipe.class)
+                .addTypedRecipes(CreateRecipeTypes.JUICING)
+                .catalyst(AllBlocks.MECHANICAL_PRESS::get)
+                .catalyst(CreateBlocks.MESH_BASIN::get)
+                .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), CreateBlocks.MESH_BASIN.get())
+				.emptyBackground(177, 103)
+				.build("juicing", JuicingCategory::new);
         };
 
         if (SharedFeatureFlag.DRYING_RACK.enabled()) drying = builder(DryingRecipe.class)
@@ -154,12 +188,12 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .emptyBackground(177, 55)
             .build("extrusion", ExtrusionCategory::new);
 
-        if (SharedFeatureFlag.BASIN_LID.enabled()) lidded_basin = builder(BasinRecipe.class)
+        if (SharedFeatureFlag.BASIN_LID.enabled()) lidded_basin = builder(LiddedBasinRecipe.class)
             .addTypedRecipes(CreateRecipeTypes.LIDDED_BASIN)
             .catalyst(CreateBlocks.BASIN_LID::get)
             .catalyst(AllBlocks.BASIN::get)
             .doubleItemIcon(CreateBlocks.BASIN_LID.get(), AllBlocks.BASIN.get())
-            .emptyBackground(177, 103)
+            .emptyBackground(177, 81)
             .build("lidded_basin", LiddedBasinCategory::new);
     };
 

@@ -11,6 +11,7 @@ import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -33,7 +34,7 @@ public abstract class PetrolparkRecipeCategory<T extends Recipe<?>> extends Crea
 		CreateRecipeCategory<T> create(CreateRecipeCategory.Info<T> info, IJeiHelpers helpers);
 	};
 
-    public static void addOptionalRequiredBiomeSlot(IRecipeLayoutBuilder builder, Recipe<?> recipe, int x, int y) {
+    public static final void addOptionalRequiredBiomeSlot(IRecipeLayoutBuilder builder, Recipe<?> recipe, int x, int y) {
         if (!(recipe instanceof IBiomeSpecificRecipe biomeRecipe)) return;
         if (biomeRecipe.getAllowedBiomes().map(HolderSet::size).orElse(0) != 0) builder.addSlot(RecipeIngredientRole.RENDER_ONLY, x, y)
             .setBackground(getRenderedSlot(), -1, -1)
@@ -41,13 +42,17 @@ public abstract class PetrolparkRecipeCategory<T extends Recipe<?>> extends Crea
             .addRichTooltipCallback(BiomeSpecificTooltipHelper.getAllowedBiomeList(biomeRecipe)); 
     };
 
-    public void addOptionalRecipeBookSlot(IRecipeLayoutBuilder builder, RecipeHolder<?> recipeHolder, int x, int y) {
+    public final void addOptionalRecipeBookSlot(IRecipeLayoutBuilder builder, RecipeHolder<?> recipeHolder, int x, int y) {
+        addOptionalRecipeBookSlot(getRecipeType(), builder, recipeHolder, x, y);
+    };
+
+    public static final void addOptionalRecipeBookSlot(RecipeType<?> recipeType, IRecipeLayoutBuilder builder, RecipeHolder<?> recipeHolder, int x, int y) {
         final Minecraft mc = Minecraft.getInstance();
         final ClientLevel level = mc.level;
         if (!(recipeHolder.value() instanceof IBookRequiredRecipe bookRecipe) || level == null || !bookRecipe.isBookRequired(level)) return;
         builder.addInputSlot(x, y)
             .setBackground(getRenderedSlot(), -1, -1)
-            .addItemStack(RecipeBookItem.of(recipeHolder, getRecipeType().getUid()))
+            .addItemStack(RecipeBookItem.of(recipeHolder, recipeType.getUid()))
             .addRichTooltipCallback((view, tooltip) -> tooltip.add(Lang.translate("recipe.book_required").withStyle(ChatFormatting.GOLD)));
     };;
 

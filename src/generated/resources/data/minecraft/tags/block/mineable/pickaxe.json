@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "petrolpark:centrifuge",
+      "required": false
+    },
+    {
       "id": "petrolpark:extrusion_die",
       "required": false
     },
@@ -13,7 +17,15 @@
       "required": false
     },
     {
+      "id": "petrolpark:mesh_basin",
+      "required": false
+    },
+    {
       "id": "petrolpark:redstone_programmer",
+      "required": false
+    },
+    {
+      "id": "petrolpark:blender",
       "required": false
     }
   ]

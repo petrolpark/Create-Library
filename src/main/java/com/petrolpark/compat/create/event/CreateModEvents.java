@@ -4,6 +4,7 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateRegistries;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlockEntity;
+import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinBlockEntity;
 import com.petrolpark.compat.create.core.dough.DoughCut;
 
 import net.neoforged.bus.api.SubscribeEvent;
@@ -25,5 +26,6 @@ public class CreateModEvents {
     @SubscribeEvent
     public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
         if (SharedFeatureFlag.CENTRIFUGE.enabled()) CentrifugeBlockEntity.onRegisterCapabilities(event);
+        if (SharedFeatureFlag.MESH_BASIN.enabled()) MeshBasinBlockEntity.onRegisterCapabilities(event);
     };
 };

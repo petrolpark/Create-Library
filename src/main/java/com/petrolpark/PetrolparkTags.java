@@ -11,6 +11,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -95,6 +97,26 @@ public class PetrolparkTags {
 
         public boolean matches(BlockEntityType<?> blockEntityType) {
             return PetrolparkRegistries.getHolder(BuiltInRegistries.BLOCK_ENTITY_TYPE, blockEntityType).orElseThrow().is(tag);
+        };
+    };
+
+    public enum EntityTypes {
+
+        DOESNT_BLEED,
+        ;
+
+        public final TagKey<EntityType<?>> tag;
+
+        EntityTypes() {
+            tag = TagKey.create(Registries.ENTITY_TYPE, Petrolpark.asResource(Lang.asId(name())));
+        };
+
+        public boolean matches(EntityType<?> entityType) {
+            return entityType.is(tag);
+        };
+
+        public boolean matches(Entity entity) {
+            return matches(entity.getType());
         };
     };
 
