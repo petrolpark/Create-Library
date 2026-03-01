@@ -37,12 +37,20 @@ public class PetrolparkItems {
         .properties(p -> p
             .food(PetrolparkFoods.BUTTER)
         ).register(),
+    FRIES = REGISTRATE.sharedItem(SharedFeatureFlag.FRIES, "fries", SharedItem::new)
+        .properties(p -> p
+            .food(PetrolparkFoods.FRIES)
+        ).register(),
     MASHED_POTATO = REGISTRATE.sharedItem(SharedFeatureFlag.POTATO_PRODUCTS, "mashed_potato", SharedItem::new)
         .properties(p -> p
             .food(PetrolparkFoods.MASHED_POTATO)
         ).register(),
     MESH = REGISTRATE.sharedItem(SharedFeatureFlag.MESH, "mesh", SharedItem::new)
-        .register();
+        .register(),
+    RAW_FRIES = REGISTRATE.sharedItem(SharedFeatureFlag.FRIES, "raw_fries", SharedItem::new)
+        .properties(p -> p
+            .food(PetrolparkFoods.RAW_FRIES)
+        ).register();
         
 
     public static final void register() {};

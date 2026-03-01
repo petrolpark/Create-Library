@@ -1,0 +1,13 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "fries"
+        }
+    ],
+    "type": "petrolpark:extrusion",
+    "inputs": "#c:storage_blocks/mashed_potato",
+    "output": {
+        "Name": "petrolpark:raw_fries_block"
+    }
+}

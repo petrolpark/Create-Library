@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.CreateShapes;
 import com.petrolpark.core.world.block.IPickUpPutDownBlock;
@@ -34,7 +36,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class RedstoneProgrammerBlock extends HorizontalDirectionalBlock implements IBE<RedstoneProgrammerBlockEntity>, IWrenchable, ProperWaterloggedBlock, IPickUpPutDownBlock {
+public class RedstoneProgrammerBlock extends HorizontalDirectionalBlock implements IBE<RedstoneProgrammerBlockEntity>, IWrenchable, ProperWaterloggedBlock, IPickUpPutDownBlock, ISharedFeature {
 
     public static final MapCodec<RedstoneProgrammerBlock> CODEC = HorizontalDirectionalBlock.simpleCodec(RedstoneProgrammerBlock::new);
 
@@ -134,6 +136,11 @@ public class RedstoneProgrammerBlock extends HorizontalDirectionalBlock implemen
     @Override
     public BlockEntityType<RedstoneProgrammerBlockEntity> getBlockEntityType() {
         return CreateBlockEntityTypes.REDSTONE_PROGRAMMER.get();
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.REDSTONE_PROGRAMMER;
     };
     
 };

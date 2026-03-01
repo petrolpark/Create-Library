@@ -3,6 +3,8 @@ package com.petrolpark.compat.create.common.processing.extrusion;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateBlockEntityTypes;
 import com.petrolpark.compat.create.CreateDamageSources;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
@@ -28,7 +30,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class ExtrusionDieBlock extends RotatedPillarBlock implements IBE<ExtrusionDieBlockEntity>, IWrenchable {
+public class ExtrusionDieBlock extends RotatedPillarBlock implements IBE<ExtrusionDieBlockEntity>, IWrenchable, ISharedFeature {
 
     public static final VoxelShaper SHAPE = new AllShapes.Builder(Block.box(0, 0, 7, 16, 16, 9)).forDirectional(Direction.SOUTH);
 
@@ -78,6 +80,11 @@ public class ExtrusionDieBlock extends RotatedPillarBlock implements IBE<Extrusi
     @Override
     public BlockEntityType<? extends ExtrusionDieBlockEntity> getBlockEntityType() {
         return CreateBlockEntityTypes.EXTRUSION_DIE.get();
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.EXTRUSION;
     };
 
 };

@@ -1,0 +1,27 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "neoforge:or",
+            "values": [
+                {
+                    "type": "petrolpark:fluid_tag_empty",
+                    "tag": "c:cooking_oils"
+                },
+                {
+                    "type": "neoforge:not",
+                    "value": {
+                        "type": "petrolpark:feature_enabled",
+                        "feature": "mesh_basin"
+                    }
+                }
+            ]
+        }
+
+    ],
+    "type": "minecraft:campfire_cooking",
+    "ingredient": {
+        "item": "petrolpark:raw_fries"
+    },
+    "result": "petrolpark:fries",
+    "cookingtime": 200
+}

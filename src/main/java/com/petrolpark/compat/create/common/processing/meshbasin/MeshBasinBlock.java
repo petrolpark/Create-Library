@@ -1,5 +1,7 @@
 package com.petrolpark.compat.create.common.processing.meshbasin;
 
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateBlockEntityTypes;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.processing.basin.BasinBlock;
@@ -13,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class MeshBasinBlock extends BasinBlock {
+public class MeshBasinBlock extends BasinBlock implements ISharedFeature {
 
     public static final VoxelShape SHAPE = new AllShapes.Builder(Block.box(0d, 2d, 0d, 16d, 16d, 16d))
         .erase(2d, 8d, 2d, 14d, 16d, 14d)
@@ -32,6 +34,11 @@ public class MeshBasinBlock extends BasinBlock {
     @Override
     public BlockEntityType<MeshBasinBlockEntity> getBlockEntityType() {
         return CreateBlockEntityTypes.MESH_BASIN.get();
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.MESH_BASIN;
     };
     
 };

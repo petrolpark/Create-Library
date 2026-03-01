@@ -7,6 +7,7 @@ import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.util.Lang;
 
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import snownee.jade.api.callback.JadeItemModNameCallback;
 
@@ -14,7 +15,11 @@ public class SharedFeatureItemModNameCallback implements JadeItemModNameCallback
 
     @Override
     public @Nullable String gatherItemModName(ItemStack stack) {
-        if (stack.getItem() instanceof ISharedFeature sharedFeature) {
+        ISharedFeature sharedFeature = null;
+        if (stack.getItem() instanceof ISharedFeature itemSharedFeature) sharedFeature = itemSharedFeature;
+        else if (stack.getItem() instanceof BlockItem blockItem && blockItem.getBlock() instanceof ISharedFeature blockSharedFeature) sharedFeature = blockSharedFeature;
+
+        if (sharedFeature != null) {
             SharedFeatureFlag featureFlag = sharedFeature.getSharedFeatureFlag();
             if (featureFlag.enabled()) return Lang.shortList(featureFlag.streamUsers().map(Mods::getName).toArray(i -> new String[i]));
         };

@@ -445,13 +445,16 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return (SharedBlockBuilder<T, PetrolparkRegistrate>)sharedEntry(featureFlag, name, callback -> SharedBlockBuilder.create(this, this, featureFlag, name, callback, factory));
     };
 
+    public <T extends Block> SharedBlockBuilder<T, PetrolparkRegistrate> sharedBlock(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullBiFunction<BlockBehaviour.Properties, SharedFeatureFlag, T> factory) {
+        return sharedBlock(featureFlag, name, properties -> factory.apply(properties, featureFlag));
+    };
+
     public <T extends Item, P> SharedItemBuilder<T, P> sharedItem(P parent, @Nonnull SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
         return (SharedItemBuilder<T, P>)sharedEntry(featureFlag, name, callback -> new SharedItemBuilder<>(this, parent, featureFlag, name, callback, factory));
     };
-
-    @SuppressWarnings("unchecked")
+    
     public <T extends Item> SharedItemBuilder<T, PetrolparkRegistrate> sharedItem(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullBiFunction<Item.Properties, SharedFeatureFlag, T> factory) {
-        return (SharedItemBuilder<T, PetrolparkRegistrate>)sharedEntry(featureFlag, name, callback -> new SharedItemBuilder<>(this, this, featureFlag, name, callback, properties -> factory.apply(properties, featureFlag)));
+        return sharedItem(this, featureFlag, name, properties -> factory.apply(properties, featureFlag));
     };
     
 };

@@ -24,6 +24,8 @@ public class CreateFluids {
         .register(),
     CREAM = sharedSingleTextureVirtualFluid(SharedFeatureFlag.MILK_PRODUCTS, "cream")
         .register(),
+    SUNFLOWER_OIL = sharedColoredWaterFluid(SharedFeatureFlag.SUNFLOWER_OIL, "sunflower_oil", 0xEFE864)
+        .register(),
     SKIMMED_MILK = sharedColoredWaterFluid(SharedFeatureFlag.MILK_PRODUCTS, "skimmed_milk", 0x80FFFFFF)
         .register();
 

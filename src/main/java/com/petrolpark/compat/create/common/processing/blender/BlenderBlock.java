@@ -2,6 +2,8 @@ package com.petrolpark.compat.create.common.processing.blender;
 
 import javax.annotation.Nonnull;
 
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.CreateBlockEntityTypes;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
@@ -23,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BlenderBlock extends KineticBlock implements IBE<BlenderBlockEntity>, ICogWheel {
+public class BlenderBlock extends KineticBlock implements IBE<BlenderBlockEntity>, ICogWheel, ISharedFeature {
 
     public static final VoxelShape SHAPE = new AllShapes.Builder(Block.box(0d, 0d, 0d, 16d, 5d, 16d))
         .add(2d, 5d, 2d, 14d, 11d, 14d)
@@ -75,6 +77,11 @@ public class BlenderBlock extends KineticBlock implements IBE<BlenderBlockEntity
     @Override
     public BlockEntityType<? extends BlenderBlockEntity> getBlockEntityType() {
         return CreateBlockEntityTypes.BLENDER.get();
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.BLENDER;
     };
     
 };
