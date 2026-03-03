@@ -30,7 +30,7 @@ public abstract class RecipeCategoryTabMixin {
     )
     public String petrolpark$getSharedFeatureModIds(IModIdHelper instance, String modid, Operation<String> original) {
         if (Petrolpark.MOD_ID.equals(modid) && category instanceof ISharedFeature sharedCategory) {
-            return Lang.shortList(sharedCategory.getSharedFeatureFlag().streamUsers().map(original::call).map(Component::literal).toList(), 100).getString();
-        } else return original.call(modid);
+            return Lang.shortList(sharedCategory.getSharedFeatureFlag().streamUsers().map(id -> original.call(instance, id)).map(Component::literal).toList(), 100).getString();
+        } else return original.call(instance, modid);
     };
 };
