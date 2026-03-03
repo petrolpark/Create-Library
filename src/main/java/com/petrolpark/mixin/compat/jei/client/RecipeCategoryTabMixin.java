@@ -13,7 +13,6 @@ import com.petrolpark.util.Lang;
 import mezz.jei.api.helpers.IModIdHelper;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.gui.recipes.RecipeCategoryTab;
-import net.minecraft.network.chat.Component;
 
 @Mixin(RecipeCategoryTab.class)
 public abstract class RecipeCategoryTabMixin {
@@ -30,7 +29,7 @@ public abstract class RecipeCategoryTabMixin {
     )
     public String petrolpark$getSharedFeatureModIds(IModIdHelper instance, String modid, Operation<String> original) {
         if (Petrolpark.MOD_ID.equals(modid) && category instanceof ISharedFeature sharedCategory) {
-            return Lang.shortList(sharedCategory.getSharedFeatureFlag().streamUsers().map(id -> original.call(instance, id)).map(Component::literal).toList(), 100).getString();
+            return Lang.shortList(sharedCategory.getSharedFeatureFlag().streamUsers().map(id -> original.call(instance, id)).toArray(String[]::new));
         } else return original.call(instance, modid);
     };
 };
