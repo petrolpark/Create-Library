@@ -114,7 +114,7 @@ public class Petrolpark {
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
         //return new SharedFeatureFlag[]{};
-        return new SharedFeatureFlag[]{SharedFeatureFlag.MESH_BASIN, SharedFeatureFlag.BASIN_LID, SharedFeatureFlag.BLENDER, SharedFeatureFlag.FRIES, SharedFeatureFlag.SUNFLOWER_OIL, SharedFeatureFlag.ROLLING_PIN};
+        return new SharedFeatureFlag[]{SharedFeatureFlag.MESH_BASIN, SharedFeatureFlag.BASIN_LID, SharedFeatureFlag.BLENDER, SharedFeatureFlag.FRIES, SharedFeatureFlag.SUNFLOWER_OIL, SharedFeatureFlag.ROLLING_PIN, SharedFeatureFlag.BLOOD};
     };
 
     private void init(final FMLCommonSetupEvent event) {

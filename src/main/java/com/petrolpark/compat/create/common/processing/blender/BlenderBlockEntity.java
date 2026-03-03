@@ -8,10 +8,10 @@ import java.util.Optional;
 
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.PetrolparkCreateDamageSources;
 import com.petrolpark.compat.create.PetrolparkCreateFluids;
 import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
-import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.block.entity.basin.BelowBasinOperatingBlockEntity;
 import com.petrolpark.core.world.entity.EntityFallOnEvent;
 import com.simibubi.create.AllBlocks;
@@ -44,6 +44,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler.FluidAction;
 
@@ -87,7 +88,7 @@ public class BlenderBlockEntity extends BelowBasinOperatingBlockEntity {
                 };
                 if (entity.hurt(damageSource, damage) && SharedFeatureFlag.BLOOD.enabled() && !PetrolparkTags.EntityTypes.DOESNT_BLEED.matches(entity)) getBasin()
                     .flatMap(be -> Optional.ofNullable(level.getCapability(Capabilities.FluidHandler.BLOCK, be.getBlockPos(), be.getBlockState(), be, null)))
-                    .ifPresent(handler -> handler.fill(new FluidStack(PetrolparkCreateFluids.BLOOD.get(), (int)(damage * 5)), FluidAction.EXECUTE));
+                    .ifPresent(handler -> handler.fill(new FluidStack(PetrolparkCreateFluids.BLOOD.get().getSource(), (int)(damage * 5)), FluidAction.EXECUTE));
             };
         };
 
@@ -118,6 +119,14 @@ public class BlenderBlockEntity extends BelowBasinOperatingBlockEntity {
     };
 
     @Override
+    protected boolean updateBasin() {
+        final Recipe<?> oldRecipe = currentRecipe;
+        boolean update = super.updateBasin();
+        if (currentRecipe != null && currentRecipe != oldRecipe) currentRecipe = NeoForge.EVENT_BUS.post(new BlenderRecipeEvent.Convert(currentRecipe)).getConverted().orElse(currentRecipe);
+        return update;
+    };
+
+    @Override
     protected boolean isRunning() {
         return processingTicksRemaining > 0;
     };
@@ -145,8 +154,9 @@ public class BlenderBlockEntity extends BelowBasinOperatingBlockEntity {
 	};
 
     @Override
-    protected boolean matchStaticFilters(RecipeHolder<? extends Recipe<?>> recipe) {
-        return recipe.value().getType() == PetrolparkCreateRecipeTypes.BLENDING.getType();
+    protected boolean matchStaticFilters(RecipeHolder<? extends Recipe<?>> recipeHolder) {
+        return recipeHolder.value().getType() == PetrolparkCreateRecipeTypes.BLENDING.getType()
+            || NeoForge.EVENT_BUS.post(new BlenderRecipeEvent.IsPossible(recipeHolder.value())).isPossible();
     };
 
     @Override
@@ -196,7 +206,7 @@ public class BlenderBlockEntity extends BelowBasinOperatingBlockEntity {
 		Vec3 target = VecHelper.rotate(offset, getSpeed() > 0 ? 25 : -25, Axis.Y).add(0, .25f, 0);
 		Vec3 center = offset.add(VecHelper.getCenterOf(worldPosition));
 		target = VecHelper.offsetRandomly(target.subtract(offset), level.random, 1 / 128f);
-		level.addParticle(data, center.x, center.y - 1.75f, center.z, target.x, target.y, target.z);
+		level.addParticle(data, center.x, center.y + 1.25f, center.z, target.x, target.y, target.z);
 	};
 
     @Override

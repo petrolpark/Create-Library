@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllPartialModels;
@@ -23,7 +25,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-public class JuicingCategory extends BasinCategory {
+public class JuicingCategory extends BasinCategory implements ISharedFeature {
 
     private final AnimatedJuicer juicer = new AnimatedJuicer();
     private final AnimatedBlazeBurner heater = new AnimatedBlazeBurner();
@@ -93,6 +95,11 @@ public class JuicingCategory extends BasinCategory {
             if (cycle < 20f) return -1f + (1f - ((20f - cycle) / 5f));
             return 0;
         };
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.MESH_BASIN;
     };
     
 };

@@ -23,7 +23,7 @@ public class PetrolparkCreateFluids {
 
     public static final FluidEntry<VirtualFluid>
     
-    BLOOD = sharedColoredWaterFluid(SharedFeatureFlag.BLOOD, "blood", 0xFFBA0B0B)
+    BLOOD = sharedColoredWaterFluid(SharedFeatureFlag.BLOOD, "blood", 0xFFD10000)
         .transform(tagFlowingFluidUnrequired(commonFluidTag("blood")))
         .register(),
     CREAM = sharedSingleTextureVirtualFluid(SharedFeatureFlag.MILK_PRODUCTS, "cream")

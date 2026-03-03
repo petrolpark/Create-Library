@@ -88,6 +88,7 @@
         "compat.jei.client.CreateRecipeCategoryMixin",
         "compat.jei.client.ForgePluginFinderMixin",
         "compat.jei.client.ModIdHelperMixin",
+        "compat.jei.client.RecipeCategoryTabMixin",
         "client.ClientLevelMixin",
         "client.CreativeModeInventoryScreenMixin",
         "client.GameRendererMixin",

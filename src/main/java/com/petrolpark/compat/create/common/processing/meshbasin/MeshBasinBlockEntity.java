@@ -3,8 +3,8 @@ package com.petrolpark.compat.create.common.processing.meshbasin;
 import java.util.List;
 import java.util.Optional;
 
-import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.core.block.entity.basin.AdvancedBasinOperatingBlockEntity;
 import com.petrolpark.compat.create.core.block.entity.basin.IDifferentBasinBlockEntity;
 import com.petrolpark.compat.create.core.recipe.AdvancedBasinRecipe;
@@ -21,6 +21,7 @@ import com.simibubi.create.foundation.item.SmartInventory;
 
 import net.createmod.catnip.data.IntAttached;
 import net.createmod.catnip.math.VecHelper;
+import net.createmod.ponder.api.level.PonderLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -40,6 +41,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
 public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferentBasinBlockEntity, IRecipeBookAcceptorBlockEntity {
@@ -54,11 +56,15 @@ public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferent
 
     public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
 		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PetrolparkCreateBlockEntityTypes.MESH_BASIN.get(), MeshBasinBlockEntity::getItemCapability);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PetrolparkCreateBlockEntityTypes.MESH_BASIN.get(), (be, context) -> be.fluidCapability);
+		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PetrolparkCreateBlockEntityTypes.MESH_BASIN.get(), MeshBasinBlockEntity::getFluidCapability);
 	};
     
-    protected IItemHandlerModifiable getItemCapability(Direction direction) {
+    public IItemHandlerModifiable getItemCapability(Direction direction) {
         return itemCapability;
+    };
+
+    public IFluidHandler getFluidCapability(Direction direction) {
+        return fluidCapability;
     };
 
     protected List<IntAttached<ItemStack>> getVisualizedOutputItems() {
@@ -71,7 +77,7 @@ public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferent
 
         if (level != null && level.isClientSide() && isSelfRunning()) renderParticles();
 
-        if (getBasinOperator().isPresent()) {
+        if (getBasinOperator().isPresent() && !(level instanceof PonderLevel)) {
             selfProcessingTicksRemaining = -1;
             currentSelfRecipe = null;
         };

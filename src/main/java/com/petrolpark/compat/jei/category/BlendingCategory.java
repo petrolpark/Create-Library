@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.PetrolparkPartialModels;
 import com.simibubi.create.AllBlocks;
@@ -18,7 +20,7 @@ import mezz.jei.api.recipe.IFocusGroup;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.crafting.RecipeHolder;
 
-public class BlendingCategory extends BasinCategory {
+public class BlendingCategory extends BasinCategory implements ISharedFeature {
 
     private final AnimatedBlender blender = new AnimatedBlender();
 
@@ -69,6 +71,11 @@ public class BlendingCategory extends BasinCategory {
 
             matrixStack.popPose();
         }
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.BLENDER;
     };
     
 };

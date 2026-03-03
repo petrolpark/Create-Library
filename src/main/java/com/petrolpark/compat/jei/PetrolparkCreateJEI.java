@@ -33,6 +33,7 @@ import com.petrolpark.compat.jei.category.ExtrusionCategory;
 import com.petrolpark.compat.jei.category.JuicingCategory;
 import com.petrolpark.compat.jei.category.LiddedBasinCategory;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
+import com.petrolpark.compat.jei.category.MysteriousConversionCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
 import com.petrolpark.compat.jei.category.extension.WoodCraftingCategoryExtension;
 import com.petrolpark.compat.jei.ghost.PetrolparkGhostIngredientHandler;
@@ -43,13 +44,16 @@ import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.item.decay.drying.DryingRecipe;
 import com.petrolpark.core.item.wooden.WoodCraftingShapedRecipe;
 import com.petrolpark.core.recipe.CropFertilizingRecipe;
+import com.petrolpark.core.recipe.ExampleRecipe;
 import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
 import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
+import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import mezz.jei.api.IModPlugin;
+import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
@@ -59,6 +63,7 @@ import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -97,7 +102,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .emptyBackground(125, 20)
             .build("ageing", AgeingCategory::new),
 
-        manual_crafting = builder(CraftingRecipe.class)
+        manualCrafting = builder(CraftingRecipe.class)
             .addTypedRecipesIf(() -> RecipeType.CRAFTING, rh -> rh.value() instanceof ManualOnlyCraftingRecipe)
             .catalyst(() -> Blocks.CRAFTING_TABLE)
             .doubleItemIcon(
@@ -112,7 +117,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .emptyBackground(116, 56)
             .build("manual_crafting", ManualOnlyCategory::new),
 
-        item_decay = builder(DecayingItemRecipe.class)
+        itemDecay = builder(DecayingItemRecipe.class)
             .addRecipes(helpers.getIngredientManager().getAllItemStacks().stream()
                 .map(DecayingItemCategory::createRecipe)
                 .filter(Optional::isPresent)
@@ -123,11 +128,21 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .emptyBackground(125, 20)
             .build("item_decay", DecayingItemCategory::new),
 
-        crop_fertilizing = builder(CropFertilizingRecipe.class)
+        cropFertilizing = builder(CropFertilizingRecipe.class)
             .addTypedRecipes(PetrolparkRecipeTypes.CROP_FERTILIZING::get)
             .itemIcon(Items.BONE_MEAL)
             .emptyBackground(120, 125)
-            .build("crop_fertilizing", CropFertilizingCategory::new);
+            .build("crop_fertilizing", CropFertilizingCategory::new),
+
+        mysteriousConversion = builder(ExampleRecipe.class)
+				.addRecipes(() -> MysteriousConversionCategory.RECIPES)
+				.icon(new IDrawable() {
+                    @Override public int getWidth() { return 16; };
+                    @Override public int getHeight() { return 16; };
+                    @Override public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) { AllGuiTextures.JEI_QUESTION_MARK.render(guiGraphics, xOffset + 2, yOffset); }
+                })
+				.emptyBackground(177, 50)
+				.build("mysterious_conversion", MysteriousConversionCategory::new);
 
         CreateRecipeCategory<?> blending, centrifugation, potionCentrifugation, deepFrying, juicing, drying, extrusion, lidded_basin;
 

@@ -33,6 +33,7 @@ import com.petrolpark.core.data.reward.team.ITeamReward;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
 import com.petrolpark.core.item.decay.product.DecayProductType;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
+import com.petrolpark.core.recipe.SharedRecipeType;
 import com.petrolpark.core.recipe.bogglepattern.generator.BogglePatternGeneratorType;
 import com.petrolpark.core.recipe.bogglepattern.generator.IBogglePatternGenerator;
 import com.petrolpark.core.recipe.ingredient.advanced.FluidAdvancedIngredient;
@@ -459,6 +460,10 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     
     public <T extends Item> SharedItemBuilder<T, PetrolparkRegistrate> sharedItem(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullBiFunction<Item.Properties, SharedFeatureFlag, T> factory) {
         return sharedItem(featureFlag, name, properties -> factory.apply(properties, featureFlag));
+    };
+
+    public <I extends RecipeInput, R extends Recipe<? extends I>> RegistryEntry<RecipeType<?>, SharedRecipeType<R>> sharedRecipeType(SharedFeatureFlag featureFlag, String name) {
+        return simple(name, Registries.RECIPE_TYPE, () -> new SharedRecipeType<>(ResourceLocation.fromNamespaceAndPath(getModid(), name), featureFlag));
     };
     
 };

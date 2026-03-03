@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.jei.JEIBlockRenderer;
@@ -19,7 +21,7 @@ import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 
 @RequiresCreate
-public class ExtrusionCategory extends PetrolparkRecipeCategory<ExtrusionRecipe> {
+public class ExtrusionCategory extends PetrolparkRecipeCategory<ExtrusionRecipe> implements ISharedFeature {
 
     private static final JEIBlockRenderer blockRenderer = new JEIBlockRenderer();
 
@@ -47,6 +49,11 @@ public class ExtrusionCategory extends PetrolparkRecipeCategory<ExtrusionRecipe>
         ms.translate(72, 27, 0);
         blockRenderer.renderBlock(PetrolparkCreateBlocks.EXTRUSION_DIE.getDefaultState().setValue(BlockStateProperties.AXIS, Axis.Z), graphics, 24);
         ms.popPose();;
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.EXTRUSION;
     };
     
 };
