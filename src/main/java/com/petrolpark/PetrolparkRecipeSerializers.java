@@ -8,6 +8,7 @@ import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.item.decay.drying.DryingRecipe;
 import com.petrolpark.core.item.wooden.WoodCraftingShapedRecipe;
 import com.petrolpark.core.recipe.CropFertilizingRecipe;
+import com.petrolpark.core.recipe.ExampleRecipe;
 import com.petrolpark.core.recipe.book.RecipeBookDuplicationRecipe;
 import com.petrolpark.core.recipe.crafting.BookRequiredCraftingRecipe;
 import com.petrolpark.core.recipe.crafting.WrappedCraftingRecipe;
@@ -23,6 +24,7 @@ public class PetrolparkRecipeSerializers {
 
     public static final RegistryEntry<RecipeSerializer<?>, RecipeSerializer<AgeingRecipe>> AGEING = REGISTRATE.recipeSerializer("ageing", AgeingRecipe.CODEC, AgeingRecipe.STREAM_CODEC);
     public static final RegistryEntry<RecipeSerializer<?>, RecipeSerializer<DryingRecipe>> DRYING = REGISTRATE.recipeSerializer("drying", DryingRecipe.CODEC, DryingRecipe.STREAM_CODEC);
+    public static final RegistryEntry<RecipeSerializer<?>, RecipeSerializer<ExampleRecipe>> EXAMPLE = REGISTRATE.recipeSerializer("example", ExampleRecipe.CODEC, ExampleRecipe.STREAM_CODEC);
     public static final RegistryEntry<RecipeSerializer<?>, RecipeSerializer<CropFertilizingRecipe>> CROP_FERTILIZING = REGISTRATE.recipeSerializer("crop_fertilizing", CropFertilizingRecipe.CODEC, CropFertilizingRecipe.STREAM_CODEC); 
     public static final RegistryEntry<RecipeSerializer<?>, WoodCraftingShapedRecipe.Serializer> WOOD_CRAFTING_SHAPED = REGISTRATE.recipeSerializer("wood_crafting_shaped", WoodCraftingShapedRecipe.Serializer::new);
     public static final RegistryEntry<RecipeSerializer<?>, RecipeSerializer<BookRequiredCraftingRecipe>> CRAFTING_BOOK_REQUIRED = REGISTRATE.recipeSerializer("crafting_book_required", WrappedCraftingRecipe.serializer(BookRequiredCraftingRecipe::new));

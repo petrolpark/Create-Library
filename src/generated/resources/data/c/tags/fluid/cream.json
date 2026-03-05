@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "petrolpark:cream",
+      "required": false
+    },
+    {
+      "id": "petrolpark:flowing_cream",
+      "required": false
+    }
+  ]
+}

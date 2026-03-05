@@ -1,6 +1,6 @@
 package com.petrolpark.compat.curios.renderer;
 
-import com.petrolpark.compat.curios.CuriosSetup;
+import com.petrolpark.compat.curios.PetrolparkCuriosSetup;
 import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
@@ -18,21 +18,21 @@ public class CuriosRenderers {
 	public static void register() {
 		Minecraft mc = Minecraft.getInstance();
 
-		CuriosSetup.RENDERED_ON_HEAD.forEach((item, info) -> {
+		PetrolparkCuriosSetup.RENDERED_ON_HEAD.forEach((item, info) -> {
 			CuriosRendererRegistry.register(item.asSupplier().get(), () -> new HeadwearCurioRenderer(mc.getEntityModels().bakeLayer(getLayer(item)), info));
 		});
 
-		CuriosSetup.BADGES.forEach(item -> {
+		PetrolparkCuriosSetup.BADGES.forEach(item -> {
 			CuriosRendererRegistry.register(item.get(), () -> new BadgeCurioRenderer(mc.getEntityModels().bakeLayer(getBadgeLayer(item))));
 		});
 	};
 
 	public static void onLayerRegister(final EntityRenderersEvent.RegisterLayerDefinitions event) {
-		CuriosSetup.RENDERED_ON_HEAD.forEach((item, info) -> {
+		PetrolparkCuriosSetup.RENDERED_ON_HEAD.forEach((item, info) -> {
 			event.registerLayerDefinition(getLayer(item), () -> LayerDefinition.create(HeadwearCurioRenderer.mesh(), 1, 1));
 		});
 
-		CuriosSetup.BADGES.forEach(item -> {
+		PetrolparkCuriosSetup.BADGES.forEach(item -> {
 			event.registerLayerDefinition(getBadgeLayer(item), () -> LayerDefinition.create(BadgeCurioRenderer.mesh(), 1, 1));
 		});
 	};

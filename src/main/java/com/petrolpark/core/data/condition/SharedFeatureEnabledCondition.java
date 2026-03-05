@@ -3,6 +3,7 @@ package com.petrolpark.core.data.condition;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.PetrolparkDataLoadingConditions;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.util.CodecHelper;
 
@@ -19,7 +20,7 @@ public record SharedFeatureEnabledCondition(SharedFeatureFlag featureFlag) imple
 
     @Override
     public MapCodec<? extends ICondition> codec() {
-        return CODEC;
+        return PetrolparkDataLoadingConditions.FEATURE_ENABLED.get();
     };
     
 };

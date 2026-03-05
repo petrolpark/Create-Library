@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column_horizontal",
+  "textures": {
+    "end": "petrolpark:block/raw_fries_block_end",
+    "side": "petrolpark:block/raw_fries_block_side"
+  }
+}

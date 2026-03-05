@@ -4,8 +4,8 @@ import java.util.stream.Stream;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.CreateAdvancedIngredientTypes;
-import com.petrolpark.compat.create.CreateTags;
+import com.petrolpark.compat.create.PetrolparkCreateTags;
+import com.petrolpark.compat.create.PetrolparkCreateAdvancedIngredientTypes;
 import com.petrolpark.util.CodecHelper;
 import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 import com.simibubi.create.api.registry.CreateRegistries;
@@ -44,7 +44,7 @@ public record CreateItemAttributeAdvancedIngredient(ItemAttribute attribute) imp
 
     @Override
     public INamedAdvancedIngredientType<ItemStack> getType() {
-        return CreateAdvancedIngredientTypes.ITEM_ATTRIBUTE.get();
+        return PetrolparkCreateAdvancedIngredientTypes.ITEM_ATTRIBUTE.get();
     };
 
     public static record Type(String translationKey) implements INamedAdvancedIngredientType<ItemStack> {
@@ -62,9 +62,9 @@ public record CreateItemAttributeAdvancedIngredient(ItemAttribute attribute) imp
         @Override
         public Stream<CreateItemAttributeAdvancedIngredient> streamApplicableIngredients(Level level, ItemStack stack) {
             return level.registryAccess().lookupOrThrow(CreateRegistries.ITEM_ATTRIBUTE_TYPE)
-                .getOrThrow(CreateTags.ItemAttributes.LEVEL_INDEPDENDENT.tag)
+                .getOrThrow(PetrolparkCreateTags.ItemAttributes.LEVEL_INDEPDENDENT.tag)
                 .stream()
-                .filter(CreateTags.ItemAttributes.NOT_FOR_INGREDIENTS::matches)
+                .filter(PetrolparkCreateTags.ItemAttributes.NOT_FOR_INGREDIENTS::matches)
                 .map(Holder::value)
                 .flatMap(iat -> iat.getAllAttributes(stack, level).stream())
                 .map(CreateItemAttributeAdvancedIngredient::new);

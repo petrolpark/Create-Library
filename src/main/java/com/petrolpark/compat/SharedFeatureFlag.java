@@ -12,7 +12,10 @@ import com.petrolpark.util.Lang;
 import net.minecraft.util.StringRepresentable;
 
 public enum SharedFeatureFlag implements StringRepresentable {
+
+    NONE,
     
+    // independent
     ARMS_TARGET_CHAIN_CONVEYORS,
     BASIN_LID,
     BLENDER,
@@ -22,15 +25,20 @@ public enum SharedFeatureFlag implements StringRepresentable {
     MESH,
     PROGRAMMING_BLOCK,
     REDSTONE_PROGRAMMER,
+    ROLLING_PIN,
     SUNFLOWER_OIL,
     SPRING,
     TORQUE_LIMITER,
 
+    // first-order dependent 
     EXTRUSION(MESH),
     MANDREL(SPRING),
     MESH_BASIN(MESH),
     MILK_PRODUCTS(CENTRIFUGE), // Butter, Skimmed Milk and Cream
-    POTATO_PRODUCTS(MILK_PRODUCTS, EXTRUSION), // Mashed Potato, Fries
+    POTATO_PRODUCTS(MILK_PRODUCTS, EXTRUSION),
+
+    // second-order dependent
+    FRIES(POTATO_PRODUCTS, EXTRUSION)
     ;
 
     public static final Codec<SharedFeatureFlag> CODEC = StringRepresentable.fromEnum(SharedFeatureFlag::values);

@@ -35,6 +35,7 @@ import net.minecraft.world.level.block.CeilingHangingSignBlock;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.FenceBlock;
 import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.LeavesBlock;
 import net.minecraft.world.level.block.PressurePlateBlock;
@@ -157,6 +158,8 @@ public record WoodSetEntry(
             final ResourceLocation planksId = ResourceLocation.fromNamespaceAndPath(registrate.getModid(), woodName + "_planks");
             final ResourceLocation planksTextureId = planksId.withPrefix("block/");
 
+            final FireBlock fire = (FireBlock)Blocks.FIRE;
+
             final BlockEntry<RotatedPillarBlock> strippedLog = registrate.block(strippedLogId.getPath(), RotatedPillarBlock::new)
                 .lang("Stripped " + englishName + " Log")
                 .defaultLoot()
@@ -170,6 +173,7 @@ public record WoodSetEntry(
                 .properties(p -> p
                     .mapColor(planksMapColor)
                 ).tag(Tags.Blocks.STRIPPED_LOGS, logsBlockTag)
+                .onRegister(block -> fire.setFlammable(block, 5, 5))
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(Tags.Items.STRIPPED_LOGS, logsItemTag)
                 .build()
@@ -184,6 +188,7 @@ public record WoodSetEntry(
                     .mapColor(planksMapColor)
                 ).tag(Tags.Blocks.STRIPPED_WOODS, logsBlockTag)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.woodFromLogs(prov, ctx.get(), strippedLog))
+                .onRegister(block -> fire.setFlammable(block, 5, 5))
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(Tags.Items.STRIPPED_WOODS, logsItemTag)
                 .build()
@@ -202,6 +207,7 @@ public record WoodSetEntry(
                 .properties(p -> p
                     .mapColor(state -> state.getValue(RotatedPillarBlock.AXIS) == Direction.Axis.Y ? planksMapColor : logMapColor)
                 ).tag(logsBlockTag)
+                .onRegister(block -> fire.setFlammable(block, 5, 5))
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(logsItemTag)
                 .build()
@@ -215,9 +221,10 @@ public record WoodSetEntry(
                 .properties(p -> p
                     .mapColor(logMapColor)
                 ).tag(logsBlockTag)
-                .recipe((ctx, prov) -> RegistrateRecipeProvider.woodFromLogs(prov, ctx.get(), log))
+                .onRegister(block -> fire.setFlammable(block, 5, 5))
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(logsItemTag)
+                .recipe((ctx, prov) -> RegistrateRecipeProvider.woodFromLogs(prov, ctx.get(), log))
                 .build()
                 .register();
 
@@ -240,6 +247,7 @@ public record WoodSetEntry(
                         prov.simpleBlock(ctx.getEntry());
                     };
                 }).tag(BlockTags.PLANKS)
+                .onRegister(block -> fire.setFlammable(block, 5, 20))
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(ItemTags.PLANKS)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.planksFromLogs(prov, ctx.get(), logsItemTag, 4))
@@ -277,6 +285,7 @@ public record WoodSetEntry(
                 .loot((lt, b) -> lt.add(b, lt.createLeavesDrops(b, sapling.get(), new float[]{0.05f, 0.0625f, 0.083333336f, 0.1f})))
                 .defaultBlockstate()
                 .tag(BlockTags.LEAVES)
+                .onRegister(block -> fire.setFlammable(block, 30, 60))
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(ItemTags.LEAVES)
                 .compostable(0.3f)
@@ -291,6 +300,7 @@ public record WoodSetEntry(
                 .properties(p -> p
                     .mapColor(planksMapColor)
                 ).tag(BlockTags.WOODEN_SLABS)
+                .onRegister(block -> fire.setFlammable(block, 5, 20))
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(ItemTags.WOODEN_SLABS)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.slabBuilder(RecipeCategory.BUILDING_BLOCKS, ctx.get(), Ingredient.of(planks))
@@ -308,6 +318,7 @@ public record WoodSetEntry(
                 .properties(p -> p
                     .mapColor(planksMapColor)
                 ).tag(BlockTags.WOODEN_STAIRS)
+                .onRegister(block -> fire.setFlammable(block, 5, 20))
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(ItemTags.WOODEN_STAIRS)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.stairBuilder(ctx.get(), Ingredient.of(planks))
@@ -325,6 +336,7 @@ public record WoodSetEntry(
                 .properties(p -> p
                     .mapColor(planksMapColor)
                 ).tag(BlockTags.WOODEN_FENCES)
+                .onRegister(block -> fire.setFlammable(block, 5, 20))
                 .item()
                 .model((ctx, prov) -> prov.fenceInventory(woodName + "_fence", planksTextureId))
                 .tag(ItemTags.WOODEN_FENCES)
@@ -343,6 +355,7 @@ public record WoodSetEntry(
                 .properties(p -> p
                     .mapColor(planksMapColor)
                 ).tag(BlockTags.FENCE_GATES, Tags.Blocks.FENCE_GATES_WOODEN)
+                .onRegister(block -> fire.setFlammable(block, 5, 20))
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(ItemTags.FENCE_GATES, Tags.Items.FENCE_GATES_WOODEN)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.fenceGateBuilder(ctx.get(), Ingredient.of(planks))

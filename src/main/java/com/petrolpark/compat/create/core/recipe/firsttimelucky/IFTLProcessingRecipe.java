@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.CreateAttachmentTypes;
+import com.petrolpark.compat.create.PetrolparkCreateAttachmentTypes;
 import com.petrolpark.core.data.ResourceLocationSet;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
@@ -30,7 +30,7 @@ public interface IFTLProcessingRecipe<T extends ProcessingRecipe<?, ?>> {
         ProcessingRecipe<?, ?> recipe = getAsRecipe();
         Optional<ResourceLocation> key = getFirstTimeLuckyKey();
         if (key.isEmpty() || player == null) return recipe.rollResults(random);
-        ResourceLocationSet plfr = player.getData(CreateAttachmentTypes.FTL_RECIPES);
+        ResourceLocationSet plfr = player.getData(PetrolparkCreateAttachmentTypes.FTL_RECIPES);
         if (plfr.add(key.get())) return recipe.getRollableResults().stream().map(ProcessingOutput::getStack).toList(); // Only guarantee 100% success the first time
         return recipe.rollResults(random);
     };

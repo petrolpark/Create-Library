@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.petrolpark.core.recipe.IBiomeSpecificRecipe;
+import com.petrolpark.util.Lang;
 
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import net.minecraft.ChatFormatting;
@@ -18,21 +19,22 @@ import net.minecraft.world.level.biome.Biome;
 
 public class BiomeSpecificTooltipHelper {
 
-    public static Stream<Biome> getAllBiomes(IBiomeSpecificRecipe recipe) {
+    public static final Stream<Biome> getAllBiomes(IBiomeSpecificRecipe recipe) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) return Stream.empty();
         return recipe.getAllowedBiomes().map(op -> op.stream().map(Holder::value)).orElse(Stream.empty());
     };
     
-    public static IRecipeSlotRichTooltipCallback getAllowedBiomeList(IBiomeSpecificRecipe recipe) {
+    public static final IRecipeSlotRichTooltipCallback getAllowedBiomeList(IBiomeSpecificRecipe recipe) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) return (view, tooltip) -> {};
         RegistryAccess registryAccess = level.registryAccess();
         List<ResourceLocation> biomes = getAllBiomes(recipe).map(biome -> registryAccess.registryOrThrow(Registries.BIOME).getKey(biome)).toList();
         return (view, tooltip) -> {
-            tooltip.add(Component.translatable("petrolpark.recipe.biome_specific").withStyle(ChatFormatting.WHITE));
+            if (!biomes.isEmpty()) tooltip.add(Component.EMPTY);
+            tooltip.add(Lang.translate("recipe.biome_specific").withStyle(ChatFormatting.WHITE));
             biomes.forEach(biome -> tooltip.add(Component.translatable(biome.toLanguageKey("biome")).withStyle(ChatFormatting.GRAY)));
         };
     };

@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.compat.create.CreateRecipeTypes;
+import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -20,7 +20,7 @@ import net.neoforged.neoforge.fluids.FluidStack;
 public class CentrifugationRecipe extends AdvancedProcessingRecipe<RecipeInput> implements ICentrifugationRecipe {
 
     public CentrifugationRecipe(AdvancedProcessingRecipeParams params) {
-        super(CreateRecipeTypes.CENTRIFUGATION, params);
+        super(PetrolparkCreateRecipeTypes.CENTRIFUGATION, params);
     };
 
     @Override

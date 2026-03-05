@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.BinaryOperator;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collector;
@@ -14,7 +15,10 @@ import java.util.stream.Stream;
 import org.spongepowered.include.com.google.common.base.Strings;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.contamination.IContamination;
 
+import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -86,6 +90,28 @@ public class Lang {
         } while (namedElements < elements.length);
         list = extendedList;
         return list;
+    };
+
+    public static final void addContaminants(Consumer<Component> tooltip, IContamination<?, ?> contamination) {
+        addContaminants(tooltip, contamination, false);
+    };
+
+    public static final void addContaminants(Consumer<Component> tooltip, IContamination<?, ?> contamination, boolean addBlankLine) {
+        final List<Component> contaminantComponents = Stream.concat(contamination.streamShownContaminants().map(Contaminant::getNameColored), contamination.streamShownIfAbsentContaminants().map(Contaminant::getAbsentNameColored)).toList();
+        if (contaminantComponents.isEmpty()) return;
+        if (addBlankLine) tooltip.accept(Component.literal(" "));
+        contaminantComponents.forEach(tooltip);
+    };
+
+    public static final LangBuilder appendContaminants(LangBuilder builder, IContamination<?, ?> contamination) {
+        final List<Component> contaminantComponents = Stream.concat(contamination.streamShownContaminants().map(Contaminant::getNameColored), contamination.streamShownIfAbsentContaminants().map(Contaminant::getAbsentNameColored)).toList();
+        if (contaminantComponents.isEmpty()) return builder;
+        builder.add(Component.literal(" ("));
+        for (int i = 0; i < contaminantComponents.size(); i++) {
+            builder.add(contaminantComponents.get(i));
+            if (i != contaminantComponents.size() - 1) builder.add(Component.literal(", "));
+        };
+        return builder.add(Component.literal(")"));
     };
 
     public static final MutableComponent translate(String keyEnd) {

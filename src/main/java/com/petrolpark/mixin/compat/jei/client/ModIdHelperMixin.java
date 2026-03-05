@@ -50,7 +50,7 @@ public abstract class ModIdHelperMixin implements IModIdHelper {
         if (split.length > 1 && split[0].equals(SHARED_FEATURE_ID_KEY)) {
             return Lang.shortList(Stream.of(Arrays.copyOfRange(split, 1, split.length))
                 .map(operation::call)
-                .toArray(i -> new String[i]));
+                .toArray(String[]::new));
         };
         return operation.call(modid);
     };

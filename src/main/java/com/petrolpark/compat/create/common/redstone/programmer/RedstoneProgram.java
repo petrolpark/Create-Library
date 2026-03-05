@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.PetrolparkIcon;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerMenu.DummyRedstoneProgram;
 import com.petrolpark.config.PetrolparkConfigs;
@@ -477,7 +477,7 @@ public abstract class RedstoneProgram {
         PlayMode(boolean pausesWhenFinished, boolean powerRequired, PetrolparkIcon icon) {
             this.pausesWhenFinished = pausesWhenFinished;
             this.powerRequired = powerRequired;
-            this.description = Component.translatable(Util.makeDescriptionId("block", CreateBlocks.REDSTONE_PROGRAMMER.getId()) + ".mode." + Lang.asId(name()));
+            this.description = Component.translatable(Util.makeDescriptionId("block", PetrolparkCreateBlocks.REDSTONE_PROGRAMMER.getId()) + ".mode." + Lang.asId(name()));
             this.icon = icon;
         };
 

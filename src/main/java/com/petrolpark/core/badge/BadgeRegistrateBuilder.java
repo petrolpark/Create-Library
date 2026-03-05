@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 
 import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.compat.curios.CuriosSetup;
+import com.petrolpark.compat.curios.PetrolparkCuriosSetup;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.providers.ProviderType;
@@ -41,7 +41,7 @@ public class BadgeRegistrateBuilder<T extends Badge, P> extends AbstractBuilder<
             .setData(ProviderType.ITEM_MODEL, (c, p) -> {})
             .register();
 
-        CuriosSetup.BADGES.add(item);
+        PetrolparkCuriosSetup.BADGES.add(item);
     };
 
     public BadgeRegistrateBuilder<T, P> duplicationIngredient(Supplier<Ingredient> ingredient) {

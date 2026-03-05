@@ -3,7 +3,9 @@ package com.petrolpark.compat.create.common.processing.centrifuge;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.fluids.pipes.FluidPipeBlock;
@@ -35,7 +37,7 @@ import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlockEntity>, ICogWheel, ProperWaterloggedBlock {
+public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlockEntity>, ICogWheel, ProperWaterloggedBlock, ISharedFeature {
 
     public static final VoxelShape SHAPE = new AllShapes.Builder(Block.box(0, 0, 0, 16, 4, 16))
         .add(2, 4, 2, 14, 12, 14)
@@ -118,12 +120,17 @@ public class CentrifugeBlock extends KineticBlock implements IBE<CentrifugeBlock
 
     @Override
     public BlockEntityType<CentrifugeBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.CENTRIFUGE.get();
+        return PetrolparkCreateBlockEntityTypes.CENTRIFUGE.get();
     };
 
     @Override
     public Class<CentrifugeBlockEntity> getBlockEntityClass() {
         return CentrifugeBlockEntity.class;
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.CENTRIFUGE;
     };
     
 };

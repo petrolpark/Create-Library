@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "petrolpark:flowing_blood",
+      "required": false
+    },
+    {
+      "id": "petrolpark:blood",
+      "required": false
+    }
+  ]
+}

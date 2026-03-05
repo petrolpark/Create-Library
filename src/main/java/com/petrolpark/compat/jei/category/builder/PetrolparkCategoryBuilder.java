@@ -147,6 +147,15 @@ public class PetrolparkCategoryBuilder<R extends Recipe<?>, C extends Petrolpark
     };
 
     /**
+     * @param icon
+     * @return This Category builder
+     */
+    public C icon(IDrawable icon) {
+        this.icon = icon;
+        return self();
+    };
+
+    /**
      * Sets the given Item as the icon for this Category.
      * @param item Typically this will be the machine required for this Type of Recipe
      * @return This Category Builder

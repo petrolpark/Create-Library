@@ -65,9 +65,8 @@ public class WoodHelper {
     };
 
     public static final Stream<Wood> streamAllWoods() {
-        return StreamSupport.stream(BuiltInRegistries.BLOCK.getTagOrEmpty(BlockTags.PLANKS)
-            .spliterator(), false
-            ).map(Holder::value)
+        return StreamSupport.stream(BuiltInRegistries.BLOCK.getTagOrEmpty(BlockTags.PLANKS).spliterator(), false)
+            .map(Holder::value)
             .map(WoodHelper::getWoodFromPlanksBlock);
     };
 
@@ -208,7 +207,7 @@ public class WoodHelper {
     public static final Block getPlanksBlockOrOak(Wood wood) {
         return getPlanksBlock(wood).orElse(Blocks.OAK_PLANKS);
     };
-
+    
     @Nullable
     public static final Wood getWoodFromPlanks(Object planks) {
         return getWoodFromPlanksBlock(BlockHelper.getBlock(planks));

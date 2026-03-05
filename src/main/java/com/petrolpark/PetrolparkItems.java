@@ -1,26 +1,35 @@
 package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
+import static com.petrolpark.PetrolparkTags.commonItemTag;
+import static com.petrolpark.core.registrate.PetrolparkTagGen.tagItemUnrequired;
 
 import com.petrolpark.common.item.shulkerbelt.ShulkerBeltItem;
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.core.dough.RollingPinItem;
 import com.petrolpark.core.item.SharedItem;
-import com.petrolpark.core.item.wooden.WoodenItem;
 import com.petrolpark.core.recipe.book.RecipeBookItem;
 import com.petrolpark.core.shop.ShopMenuItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
+import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Rarity;
+import net.neoforged.neoforge.common.Tags;
 
 public class PetrolparkItems {
 
     // Temp
-    public static final ItemEntry<WoodenItem> ROLLING_PIN = REGISTRATE.item("rolling_pin", WoodenItem::new)    
+    public static final ItemEntry<RollingPinItem> ROLLING_PIN = REGISTRATE.sharedItem(SharedFeatureFlag.ROLLING_PIN, "rolling_pin", RollingPinItem::new)    
         .register();
     
-    public static final ItemEntry<ShopMenuItem> MENU = REGISTRATE.item("menu", ShopMenuItem::new).register();
+    public static final ItemEntry<ShopMenuItem> MENU = REGISTRATE.item("menu", ShopMenuItem::new)
+        .defaultModel()
+        .register();
 
-    public static final ItemEntry<RecipeBookItem> RECIPE_BOOK = REGISTRATE.item("recipe_book", RecipeBookItem::new).register();
+    public static final ItemEntry<RecipeBookItem> RECIPE_BOOK = REGISTRATE.item("recipe_book", RecipeBookItem::new)
+        .defaultModel()
+        .transform(tagItemUnrequired(ItemTags.BOOKSHELF_BOOKS))
+        .register();
 
     public static final ItemEntry<ShulkerBeltItem> SHULKER_BELT = REGISTRATE.item("shulker_belt", ShulkerBeltItem::new)
         .properties(p -> p
@@ -36,12 +45,29 @@ public class PetrolparkItems {
     BUTTER = REGISTRATE.sharedItem(SharedFeatureFlag.MILK_PRODUCTS, "butter", SharedItem::new)
         .properties(p -> p
             .food(PetrolparkFoods.BUTTER)
-        ).register(),
+        ).defaultModel()
+        .transform(tagItemUnrequired(Tags.Items.FOODS, commonItemTag("foods/butter")))
+        .register(),
+    FRIES = REGISTRATE.sharedItem(SharedFeatureFlag.FRIES, "fries", SharedItem::new)
+        .properties(p -> p
+            .food(PetrolparkFoods.FRIES)
+        ).defaultModel()
+        .transform(tagItemUnrequired(Tags.Items.FOODS, commonItemTag("foods/fries")))
+        .register(),
     MASHED_POTATO = REGISTRATE.sharedItem(SharedFeatureFlag.POTATO_PRODUCTS, "mashed_potato", SharedItem::new)
         .properties(p -> p
             .food(PetrolparkFoods.MASHED_POTATO)
-        ).register(),
+        ).transform(tagItemUnrequired(Tags.Items.FOODS, commonItemTag("foods/mashed_potato")))
+        .defaultModel()
+        .register(),
     MESH = REGISTRATE.sharedItem(SharedFeatureFlag.MESH, "mesh", SharedItem::new)
+        .defaultModel()
+        .register(),
+    RAW_FRIES = REGISTRATE.sharedItem(SharedFeatureFlag.FRIES, "raw_fries", SharedItem::new)
+        .properties(p -> p
+            .food(PetrolparkFoods.RAW_FRIES)
+        ).defaultModel()
+        .transform(tagItemUnrequired(Tags.Items.FOODS))
         .register();
         
 

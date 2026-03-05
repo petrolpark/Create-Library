@@ -2,7 +2,9 @@ package com.petrolpark.compat.create.common.processing.mandrel;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.CreateShapes;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
@@ -30,7 +32,7 @@ import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
-public class MandrelBlock extends HorizontalKineticBlock implements IBE<MandrelBlockEntity> {
+public class MandrelBlock extends HorizontalKineticBlock implements IBE<MandrelBlockEntity>, ISharedFeature {
 
     public static final VoxelShaper SHAPE = CreateShapes.shape(0d, 0d, 0d, 16d, 5d, 16d)
         .add(0d, 5d, 12d, 16d, 16d, 16d)
@@ -124,7 +126,12 @@ public class MandrelBlock extends HorizontalKineticBlock implements IBE<MandrelB
 
     @Override
     public BlockEntityType<? extends MandrelBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.MANDREL.get();
+        return PetrolparkCreateBlockEntityTypes.MANDREL.get();
     };
+
+	@Override
+	public SharedFeatureFlag getSharedFeatureFlag() {
+		return SharedFeatureFlag.MANDREL;
+	};
     
 };

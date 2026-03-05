@@ -2,7 +2,7 @@ package com.petrolpark.compat.create.common.kinetics.torquelimiter;
 
 import java.util.Optional;
 
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.simibubi.create.api.contraption.BlockMovementChecks;
 import com.simibubi.create.api.contraption.BlockMovementChecks.CheckResult;
 import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
@@ -29,7 +29,7 @@ public class TorqueLimiterInputBlock extends DirectionalKineticBlock implements 
     };
 
     public static final Optional<TorqueLimiterOutputBlockEntity> getOutput(LevelReader level, BlockPos pos, BlockState state) {
-        return level.getBlockEntity(pos.relative(state.getValue(FACING)), CreateBlockEntityTypes.TORQUE_LIMITER_OUTPUT.get());
+        return level.getBlockEntity(pos.relative(state.getValue(FACING)), PetrolparkCreateBlockEntityTypes.TORQUE_LIMITER_OUTPUT.get());
     };
 
     @Override
@@ -54,7 +54,7 @@ public class TorqueLimiterInputBlock extends DirectionalKineticBlock implements 
 
     @Override
     public BlockEntityType<? extends TorqueLimiterInputBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.TORQUE_LIMITER_INPUT.get();
+        return PetrolparkCreateBlockEntityTypes.TORQUE_LIMITER_INPUT.get();
     };
 
     public static CheckResult isOutputAttached(BlockState state, Level world, BlockPos pos, Direction direction) {

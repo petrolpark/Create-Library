@@ -4,6 +4,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.petrolpark.PetrolparkBlockEntityTypes;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
 
 import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
@@ -30,7 +32,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class DryingRackBlock extends Block implements EntityBlock {
+public class DryingRackBlock extends Block implements EntityBlock, ISharedFeature {
 
     public static final EnumProperty<Axis> AXIS = BlockStateProperties.HORIZONTAL_AXIS;
 
@@ -96,6 +98,11 @@ public class DryingRackBlock extends Block implements EntityBlock {
     @Override
     protected BlockState rotate(@Nonnull BlockState state, @Nonnull Rotation rotation) {
         return state.setValue(AXIS, rotation.rotate(Direction.get(AxisDirection.POSITIVE, state.getValue(AXIS))).getAxis());
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.DRYING_RACK;
     };
     
 };

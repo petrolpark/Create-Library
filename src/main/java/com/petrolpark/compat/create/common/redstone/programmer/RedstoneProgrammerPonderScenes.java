@@ -1,6 +1,6 @@
 package com.petrolpark.compat.create.common.redstone.programmer;
 
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.redstone.link.RedstoneLinkBlock;
 
@@ -37,7 +37,7 @@ public class RedstoneProgrammerPonderScenes {
 
         scene.idle(20);
         Vec3 linkVec = util.vector().blockSurface(util.grid().at(2, 3, 3), Direction.SOUTH).add(0, 0, -3 / 16f);
-        scene.overlay().showControls(linkVec, Pointing.DOWN, 80).rightClick().withItem(CreateBlocks.REDSTONE_PROGRAMMER.asStack());
+        scene.overlay().showControls(linkVec, Pointing.DOWN, 80).rightClick().withItem(PetrolparkCreateBlocks.REDSTONE_PROGRAMMER.asStack());
         scene.overlay().showText(80)
             .text("Click on a Redstone Link with a Redstone Programmer to add that channel to the Programmer.")
             .pointAt(util.vector().blockSurface(util.grid().at(2, 2, 3), Direction.UP))
@@ -54,7 +54,7 @@ public class RedstoneProgrammerPonderScenes {
             .pointAt(placementPos)
             .attachKeyFrame();
         scene.idle(20);
-        scene.overlay().showControls(placementPos, Pointing.DOWN, 40).rightClick().whileSneaking().withItem(CreateBlocks.REDSTONE_PROGRAMMER.asStack());
+        scene.overlay().showControls(placementPos, Pointing.DOWN, 40).rightClick().whileSneaking().withItem(PetrolparkCreateBlocks.REDSTONE_PROGRAMMER.asStack());
         scene.idle(40);
         scene.world().showSection(util.select().position(2, 1, 1), Direction.DOWN);
         scene.idle(80);

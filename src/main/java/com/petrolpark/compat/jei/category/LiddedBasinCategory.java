@@ -4,7 +4,9 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
@@ -14,7 +16,7 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class LiddedBasinCategory extends SmallBasinCategory<LiddedBasinRecipe> {
+public class LiddedBasinCategory extends SmallBasinCategory<LiddedBasinRecipe> implements ISharedFeature {
 
     private final AnimatedLiddedBasin basin = new AnimatedLiddedBasin();
 
@@ -45,7 +47,7 @@ public class LiddedBasinCategory extends SmallBasinCategory<LiddedBasinRecipe> {
                 .scale(scale)
                 .render(graphics);
 
-            blockElement(CreateBlocks.BASIN_LID.getDefaultState())
+            blockElement(PetrolparkCreateBlocks.BASIN_LID.getDefaultState())
                 .atLocal(0, -1, 0)
                 .scale(scale)
                 .render(graphics);
@@ -53,6 +55,11 @@ public class LiddedBasinCategory extends SmallBasinCategory<LiddedBasinRecipe> {
             matrixStack.popPose();
         };
 
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.BASIN_LID;
     };
     
 };

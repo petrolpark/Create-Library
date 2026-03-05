@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "petrolpark:fries",
+      "required": false
+    },
+    {
+      "id": "petrolpark:mashed_potato",
+      "required": false
+    },
+    {
+      "id": "petrolpark:raw_fries",
+      "required": false
+    },
+    {
+      "id": "petrolpark:butter",
+      "required": false
+    }
+  ]
+}

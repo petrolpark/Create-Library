@@ -10,7 +10,9 @@ import org.apache.commons.lang3.mutable.MutableInt;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
-import com.petrolpark.compat.create.CreateBlocks;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.PetrolparkPartialModels;
 import com.petrolpark.compat.create.common.processing.centrifuge.ICentrifugationRecipe;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
@@ -32,7 +34,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
-public class CentrifugationCategory<R extends Recipe<?> & ICentrifugationRecipe> extends PetrolparkRecipeCategory<R> {
+public class CentrifugationCategory<R extends Recipe<?> & ICentrifugationRecipe> extends PetrolparkRecipeCategory<R> implements ISharedFeature {
 
     private static final AnimatedCentrifuge centrifuge = new AnimatedCentrifuge();
 
@@ -123,7 +125,7 @@ public class CentrifugationCategory<R extends Recipe<?> & ICentrifugationRecipe>
                 .scale(scale)
                 .render(graphics);
 
-            blockElement(CreateBlocks.CENTRIFUGE.getDefaultState())
+            blockElement(PetrolparkCreateBlocks.CENTRIFUGE.getDefaultState())
                 .atLocal(0, 0, 0)
                 .scale(scale)
                 .render(graphics);
@@ -132,4 +134,8 @@ public class CentrifugationCategory<R extends Recipe<?> & ICentrifugationRecipe>
         };
     };
     
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.CENTRIFUGE;
+    }
 };

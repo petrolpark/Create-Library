@@ -4,7 +4,7 @@ import java.util.Optional;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.petrolpark.compat.create.CreateCriterionTriggers;
+import com.petrolpark.compat.create.PetrolparkCreateCriterionTriggers;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AdvancementBehaviour;
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
@@ -97,7 +97,7 @@ public class ExtrusionMovementBehaviour implements MovementBehaviour {
                 context.contraption.getBlocks().put(context.localPos, new StructureBlockInfo(context.localPos, extrudedBlockState, null)); // Replace the Block in the Contraption now the Extrusion is complete
                 if (!context.world.isClientSide()) {
                     AdvancementBehaviour advancementBehaviour = BlockEntityBehaviour.get(context.world, diePos, AdvancementBehaviour.TYPE);
-                    if (advancementBehaviour != null) advancementBehaviour.award(CreateCriterionTriggers.EXTRUSION.get().trigger(extrusionRecipeHolder, context.state, extrudedBlockState));
+                    if (advancementBehaviour != null) advancementBehaviour.award(PetrolparkCreateCriterionTriggers.EXTRUSION.get().trigger(extrusionRecipeHolder, context.state, extrudedBlockState));
                 };
                 data.putBoolean(EXTRUDED_TAG_KEY, true);
             };

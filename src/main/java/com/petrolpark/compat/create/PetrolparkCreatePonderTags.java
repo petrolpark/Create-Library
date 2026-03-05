@@ -19,12 +19,12 @@ public class PetrolparkCreatePonderTags {
             .add(AllBlocks.CHAIN_CONVEYOR);
 
         if (SharedFeatureFlag.BLENDER.enabled()) registrateHelper.addToTag(AllCreatePonderTags.KINETIC_APPLIANCES)
-            .add(CreateBlocks.BLENDER);
+            .add(PetrolparkCreateBlocks.BLENDER);
 
         if (SharedFeatureFlag.DRYING_RACK.enabled()) registrateHelper.addToTag(AllCreatePonderTags.ARM_TARGETS)
             .add(PetrolparkBlocks.DRYING_RACK);
 
         if (SharedFeatureFlag.MESH_BASIN.enabled()) registrateHelper.addToTag(AllCreatePonderTags.ARM_TARGETS)
-            .add(CreateBlocks.MESH_BASIN);
+            .add(PetrolparkCreateBlocks.MESH_BASIN);
     };
 };

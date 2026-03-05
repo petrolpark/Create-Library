@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "petrolpark:block/mashed_potato_block"
+  }
+}

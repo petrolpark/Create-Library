@@ -3,7 +3,7 @@ package com.petrolpark.compat.create.common.processing.centrifuge;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AdvancementBehaviour;
 import com.petrolpark.compat.create.util.PetrolparkCreateLang;
 import com.petrolpark.core.recipe.RecipeHelper;
@@ -81,8 +81,8 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
     };
 
     public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, CreateBlockEntityTypes.CENTRIFUGE.get(), CentrifugeBlockEntity::getItemHandler);
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, CreateBlockEntityTypes.CENTRIFUGE.get(), CentrifugeBlockEntity::getFluidHandler);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PetrolparkCreateBlockEntityTypes.CENTRIFUGE.get(), CentrifugeBlockEntity::getItemHandler);
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PetrolparkCreateBlockEntityTypes.CENTRIFUGE.get(), CentrifugeBlockEntity::getFluidHandler);
     };
 
     @Override

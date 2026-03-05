@@ -1,7 +1,7 @@
 package com.petrolpark.compat.create.event;
 
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.CreateRegistries;
+import com.petrolpark.compat.create.PetrolparkCreateRegistries;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlockEntity;
 import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinBlockEntity;
@@ -15,7 +15,7 @@ public class CreateModEvents {
 
     @SubscribeEvent
     public static final void onDatapackRegistry(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(CreateRegistries.Keys.DOUGH_CUT, DoughCut.DIRECT_CODEC, DoughCut.DIRECT_CODEC);
+        event.dataPackRegistry(PetrolparkCreateRegistries.Keys.DOUGH_CUT, DoughCut.DIRECT_CODEC, DoughCut.DIRECT_CODEC);
     };
     
     @SubscribeEvent

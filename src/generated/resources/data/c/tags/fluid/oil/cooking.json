@@ -1,0 +1,12 @@
+{
+  "values": [
+    {
+      "id": "petrolpark:flowing_sunflower_oil",
+      "required": false
+    },
+    {
+      "id": "petrolpark:sunflower_oil",
+      "required": false
+    }
+  ]
+}

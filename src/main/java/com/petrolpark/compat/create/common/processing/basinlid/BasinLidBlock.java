@@ -4,7 +4,9 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.compat.create.CreateBlockEntityTypes;
+import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.CreateShapes;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.ProperWaterloggedBlock;
@@ -26,7 +28,7 @@ import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
-public class BasinLidBlock extends HorizontalDirectionalBlock implements IBE<BasinLidBlockEntity>, ProperWaterloggedBlock {
+public class BasinLidBlock extends HorizontalDirectionalBlock implements IBE<BasinLidBlockEntity>, ProperWaterloggedBlock, ISharedFeature {
 
     public static final MapCodec<BasinLidBlock> CODEC = simpleCodec(BasinLidBlock::new);
 
@@ -88,12 +90,17 @@ public class BasinLidBlock extends HorizontalDirectionalBlock implements IBE<Bas
 
     @Override
     public BlockEntityType<? extends BasinLidBlockEntity> getBlockEntityType() {
-        return CreateBlockEntityTypes.BASIN_LID.get();
+        return PetrolparkCreateBlockEntityTypes.BASIN_LID.get();
     };
 
     @Override
     protected boolean isPathfindable(@Nonnull BlockState state, @Nonnull PathComputationType pathComputationType) {
         return false;
+    };
+
+    @Override
+    public SharedFeatureFlag getSharedFeatureFlag() {
+        return SharedFeatureFlag.BASIN_LID;
     };
     
 };
