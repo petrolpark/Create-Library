@@ -46,6 +46,7 @@ import com.petrolpark.core.recipe.ingredient.advanced.ItemAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.NamedAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
+import com.petrolpark.core.registrate.MobEffectBuilder;
 import com.petrolpark.core.registrate.PetrolparkBlockBuilder;
 import com.petrolpark.core.registrate.PetrolparkItemBuilder;
 import com.petrolpark.core.registrate.SharedBlockBuilder;
@@ -68,6 +69,7 @@ import com.petrolpark.core.scratch.symbol.expression.SimpleExpressionType;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.trade.ITradeListingReference;
 import com.tterrag.registrate.AbstractRegistrate;
+import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
@@ -94,6 +96,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -146,6 +149,14 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     @Override
     public <T extends Item, P> ItemBuilder<T, P> item(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<Properties, T> factory) {
         return entry(name, callback -> PetrolparkItemBuilder.create(this, parent, name, callback, factory));
+    };
+
+    public <T extends MobEffect> MobEffectBuilder<T, PetrolparkRegistrate> mobEffect(@Nonnull String name, @Nonnull MobEffectBuilder.Factory<T> factory) {
+        return mobEffect(this, name, factory);
+    };
+
+    public <T extends MobEffect, P> MobEffectBuilder<T, P> mobEffect(@Nonnull P parent, @Nonnull String name, @Nonnull MobEffectBuilder.Factory<T> factory) {
+        return entry(name, callback -> new MobEffectBuilder<>(this, parent, name, callback, factory));
     };
 
     public BadgeRegistrateBuilder<Badge, PetrolparkRegistrate> badge(String name) {
@@ -434,8 +445,8 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     };
 
-    public <R, T extends R, P, BUILDER extends Builder<R, T, P, BUILDER>> BUILDER sharedEntry(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BuilderCallback, BUILDER> factory) {
-        return factory.apply(new SharedFeatureBuilderCallback(featureFlag));
+    public <R, T extends R, P, BUILDER extends AbstractBuilder<R, T, P, BUILDER>> BUILDER sharedEntry(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BuilderCallback, BUILDER> factory) {
+        return factory.apply(new SharedFeatureBuilderCallback(featureFlag)).asOptional();
     };
 
     public <T extends BlockEntity> BlockEntityBuilder<T, PetrolparkRegistrate> sharedBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {

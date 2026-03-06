@@ -8,6 +8,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.ISharedFeature;
+import com.petrolpark.compat.Mods;
 import com.petrolpark.util.Lang;
 
 import mezz.jei.api.helpers.IModIdHelper;
@@ -29,7 +30,7 @@ public abstract class RecipeCategoryTabMixin {
     )
     public String petrolpark$getSharedFeatureModIds(IModIdHelper instance, String modid, Operation<String> original) {
         if (Petrolpark.MOD_ID.equals(modid) && category instanceof ISharedFeature sharedCategory) {
-            return Lang.shortList(sharedCategory.getSharedFeatureFlag().streamUsers().map(id -> original.call(instance, id)).toArray(String[]::new));
+            return Lang.shortList(sharedCategory.getSharedFeatureFlag().streamUsers().map(Mods::getId).map(id -> original.call(instance, id)).toArray(String[]::new));
         } else return original.call(instance, modid);
     };
 };

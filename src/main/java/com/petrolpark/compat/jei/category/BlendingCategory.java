@@ -10,6 +10,7 @@ import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.PetrolparkPartialModels;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.BasinCategory;
+import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 
@@ -24,7 +25,7 @@ public class BlendingCategory extends BasinCategory implements ISharedFeature {
 
     private final AnimatedBlender blender = new AnimatedBlender();
 
-    public BlendingCategory(Info<BasinRecipe> info, IJeiHelpers helpers) {
+    public BlendingCategory(CreateRecipeCategory.Info<BasinRecipe> info, IJeiHelpers helpers) {
         super(info, false);
     };
 

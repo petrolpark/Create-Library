@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.PetrolparkMobEffects;
+import com.petrolpark.PetrolparkTags;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -40,8 +40,8 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
             target = "Lnet/minecraft/world/entity/WalkAnimationState;setSpeed(F)V"
         )
     )
-    protected boolean petrolpark$numbnessCancelsLimbSwing(WalkAnimationState walkAnimation, float speed) {
-        return !self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate());
+    protected boolean petrolpark$effectsCancelLimbSwing(WalkAnimationState walkAnimation, float speed) {
+        return !self().getActiveEffects().stream().anyMatch(PetrolparkTags.MobEffects.CANCELS_HURT_EFFECTS::matches);
     };
 
     /**
@@ -51,8 +51,15 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
     @WrapMethod(
         method = "setLastHurtByMob"
     )
-    public void petrolpark$numbnessForgetsAttacker(LivingEntity livingEntity, Operation<Void> original) {
-        if (!self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate()) || livingEntity == null) original.call(livingEntity);
+    public void petrolpark$effectsForgetAttacker(LivingEntity livingEntity, Operation<Void> original) {
+        if (
+            self().getActiveEffects().stream().anyMatch(PetrolparkTags.MobEffects.PREVENTS_AGGRAVATING::matches)
+            || (livingEntity != null && livingEntity.getActiveEffects().stream().anyMatch(PetrolparkTags.MobEffects.PREVENTS_AGGRAVATING_OTHERS::matches))
+        ) {
+            original.call((LivingEntity)null);
+        } else {
+            original.call(livingEntity);
+        };
     };
 
     /**
@@ -61,8 +68,8 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
     @WrapMethod(
         method = "playHurtSound"
     )
-    protected void petrolpark$numbnessCancelsHurtSound(DamageSource source, Operation<Void> original) {
-        if (!self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate())) original.call(source);
+    protected void petrolpark$effectsCancelHurtSound(DamageSource source, Operation<Void> original) {
+        if (!self().getActiveEffects().stream().anyMatch(PetrolparkTags.MobEffects.CANCELS_HURT_EFFECTS::matches)) original.call(source);
     };
 
     /**
@@ -71,8 +78,13 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
     @WrapMethod(
         method = "getLastDamageSource"
     )
-    protected DamageSource petrolpark$numbnessForgetsDamageSource(Operation<DamageSource> original) {
-        if (self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate())) lastDamageSource = null;
+    protected DamageSource petrolpark$effectsForgetDamageSource(Operation<DamageSource> original) {
+        if (
+            self().getActiveEffects().stream().anyMatch(PetrolparkTags.MobEffects.PREVENTS_AGGRAVATING::matches)
+            || (lastDamageSource != null && lastDamageSource.getEntity() instanceof LivingEntity livingEntity && livingEntity.getActiveEffects().stream().anyMatch(PetrolparkTags.MobEffects.PREVENTS_AGGRAVATING_OTHERS::matches))
+        ) {
+            lastDamageSource = null;
+        };
         return original.call();
     };
 
@@ -87,8 +99,8 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
             target = "Lnet/minecraft/world/entity/WalkAnimationState;setSpeed(F)V"
         )
     )
-    protected boolean petrolpark$numbnessCancelsLimbSwingClient(WalkAnimationState walkAnimation, float speed) {
-        return !self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate());
+    protected boolean petrolpark$effectsCancelLimbSwingClient(WalkAnimationState walkAnimation, float speed) {
+        return !self().getActiveEffects().stream().anyMatch(PetrolparkTags.MobEffects.CANCELS_HURT_EFFECTS::matches);
     };
 
     /**
@@ -101,7 +113,7 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
             target = "playSound"
         )
     )
-    protected boolean petrolpark$numbnessCancelsHurtSound(LivingEntity livingEntity, SoundEvent soundEvent, float pitch, float volume) {
-        return !self().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate());
+    protected boolean petrolpark$effectsCancelHurtSound(LivingEntity livingEntity, SoundEvent soundEvent, float pitch, float volume) {
+        return !self().getActiveEffects().stream().anyMatch(PetrolparkTags.MobEffects.CANCELS_HURT_EFFECTS::matches);
     };
 };

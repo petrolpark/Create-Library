@@ -261,10 +261,10 @@ public record WoodSetEntry(
                 .initialProperties(() -> Blocks.OAK_SAPLING)
                 .lang(englishName + " Sapling")
                 .defaultLoot()
-                .blockstate((ctx, prov) -> prov.simpleBlock(ctx.get(), prov.models().cross(saplingLoc.getPath(), saplingTextureLoc)))
+                .blockstate((ctx, prov) -> prov.simpleBlock(ctx.get(), prov.models().cross(saplingLoc.getPath(), saplingTextureLoc).renderType("cutout")))
                 .tag(BlockTags.SAPLINGS)
                 .item()
-                .model((ctx, prov) -> prov.generated(ctx, saplingTextureLoc).renderType("cutout"))
+                .model((ctx, prov) -> prov.generated(ctx, saplingTextureLoc))
                 .tag(ItemTags.SAPLINGS)
                 .build()
                 .register();

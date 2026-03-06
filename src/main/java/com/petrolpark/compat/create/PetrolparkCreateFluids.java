@@ -2,7 +2,6 @@ package com.petrolpark.compat.create;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 import static com.petrolpark.PetrolparkTags.commonFluidTag;
-import static com.petrolpark.core.registrate.PetrolparkTagGen.tagFlowingFluidUnrequired;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistrate;
@@ -24,16 +23,16 @@ public class PetrolparkCreateFluids {
     public static final FluidEntry<VirtualFluid>
     
     BLOOD = sharedColoredWaterFluid(SharedFeatureFlag.BLOOD, "blood", 0xFFD10000)
-        .transform(tagFlowingFluidUnrequired(commonFluidTag("blood")))
+        .tag(commonFluidTag("blood"))
         .register(),
     CREAM = sharedSingleTextureVirtualFluid(SharedFeatureFlag.MILK_PRODUCTS, "cream")
-        .transform(tagFlowingFluidUnrequired(commonFluidTag("cream")))
+        .tag(commonFluidTag("cream"))
         .register(),
     SUNFLOWER_OIL = sharedColoredWaterFluid(SharedFeatureFlag.SUNFLOWER_OIL, "sunflower_oil", 0x80EFE864)
-        .transform(tagFlowingFluidUnrequired(commonFluidTag("oil"), commonFluidTag("oil/cooking"), commonFluidTag("oil/sunflower")))
+        .tag(commonFluidTag("oil"), commonFluidTag("oil/cooking"), commonFluidTag("oil/sunflower"))
         .register(),
     SKIMMED_MILK = sharedColoredWaterFluid(SharedFeatureFlag.MILK_PRODUCTS, "skimmed_milk", 0x80FFFFFF)
-        .transform(tagFlowingFluidUnrequired(Tags.Fluids.MILK, commonFluidTag("milk/skimmed")))
+        .tag(Tags.Fluids.MILK, commonFluidTag("milk/skimmed"))
         .register();
 
     private static FluidBuilder<VirtualFluid, PetrolparkRegistrate> sharedColoredWaterFluid(SharedFeatureFlag featureFlag, String name, int color) {
@@ -49,7 +48,7 @@ public class PetrolparkCreateFluids {
     };
 
     public static final <T extends BaseFlowingFluid> FluidBuilder<T, PetrolparkRegistrate> sharedVirtualFluid(SharedFeatureFlag featureFlag, String name, ResourceLocation stillTexture, ResourceLocation flowingTexture, FluidBuilder.FluidTypeFactory typeFactory, NonNullFunction<BaseFlowingFluid.Properties, T> sourceFactory, NonNullFunction<BaseFlowingFluid.Properties, T> flowingFactory) {
-		return REGISTRATE.sharedEntry(featureFlag, name, c -> new VirtualFluidBuilder<>(REGISTRATE, REGISTRATE, name, c, stillTexture, flowingTexture, typeFactory, sourceFactory, flowingFactory));
+		return REGISTRATE.sharedEntry(featureFlag, name, c -> new VirtualFluidBuilder<>(REGISTRATE, REGISTRATE, name, c, stillTexture, flowingTexture, typeFactory, sourceFactory, flowingFactory)).asOptional();
 	};
     
     public static final void register() {};

@@ -3,8 +3,6 @@ package com.petrolpark;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 import static com.petrolpark.PetrolparkTags.commonBlockTag;
 import static com.petrolpark.PetrolparkTags.commonItemTag;
-import static com.petrolpark.core.registrate.PetrolparkTagGen.tagBlockUnrequired;
-import static com.petrolpark.core.registrate.PetrolparkTagGen.tagItemUnrequired;
 import static net.minecraft.world.level.storage.loot.LootPool.lootPool;
 import static net.minecraft.world.level.storage.loot.LootTable.lootTable;
 import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableItem;
@@ -38,9 +36,9 @@ public class PetrolparkBlocks {
             .strength(0.2f)
         ).defaultLoot()
         .defaultBlockstate()
-        .transform(tagBlockUnrequired(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_HOE, Tags.Blocks.STORAGE_BLOCKS, commonBlockTag("storage_blocks/mashed_potato")))
+        .tag(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_HOE, Tags.Blocks.STORAGE_BLOCKS, commonBlockTag("storage_blocks/mashed_potato"))
         .transform(PetrolparkBlockBuilder::defaultBlockItem)
-        .transform(tagItemUnrequired(Tags.Items.STORAGE_BLOCKS, commonItemTag("storage_blocks/mashed_potato")))
+        .tag(Tags.Items.STORAGE_BLOCKS, commonItemTag("storage_blocks/mashed_potato"))
         .build()
         .register();
 
@@ -55,7 +53,7 @@ public class PetrolparkBlocks {
                     ))
                 )
             ))
-        ).transform(tagBlockUnrequired(BlockTags.MINEABLE_WITH_AXE))
+        ).tag(BlockTags.MINEABLE_WITH_AXE)
         .item(WoodenBlockItem::new)
         .build()
         .register();
@@ -75,7 +73,7 @@ public class PetrolparkBlocks {
             LootItem.lootTableItem(PetrolparkItems.RAW_FRIES)
                 .apply(SetItemCountFunction.setCount(ConstantValue.exactly(5f)))
         ))).blockstate((ctx, prov) -> prov.axisBlock(ctx.get()))
-        .transform(tagBlockUnrequired(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_HOE))
+        .tag(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_HOE)
         .transform(PetrolparkBlockBuilder::defaultBlockItem)
         .build()
         .register();
