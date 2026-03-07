@@ -4,9 +4,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.petrolpark.PetrolparkAttributes;
 import com.petrolpark.PetrolparkTags;
 
 import net.minecraft.sounds.SoundEvent;
@@ -15,6 +17,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.WalkAnimationState;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.extensions.ILivingEntityExtension;
@@ -115,5 +118,13 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
     )
     protected boolean petrolpark$effectsCancelHurtSound(LivingEntity livingEntity, SoundEvent soundEvent, float pitch, float volume) {
         return !self().getActiveEffects().stream().anyMatch(PetrolparkTags.MobEffects.CANCELS_HURT_EFFECTS::matches);
+    };
+
+    @ModifyReturnValue(
+        method = "createLivingAttributes",
+        at = @At("RETURN")
+    )
+    private static AttributeSupplier.Builder petrolpark$addFrictionAttribute(AttributeSupplier.Builder builder) {
+        return builder.add(PetrolparkAttributes.SLIPPERINESS.getDelegate());
     };
 };

@@ -3,7 +3,6 @@ package com.petrolpark.compat.create.common.processing.centrifuge;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AdvancementBehaviour;
 import com.petrolpark.compat.create.util.PetrolparkCreateLang;
 import com.petrolpark.core.recipe.RecipeHelper;
@@ -36,8 +35,6 @@ import net.minecraft.world.level.block.PipeBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -78,11 +75,6 @@ public class CentrifugeBlockEntity extends KineticBlockEntity implements IRecipe
             .whenFluidUpdates(this::onFluidStackChanged));
         verticalFluidCapability = new CombinedTankWrapper(inputTank.getCapability(), lightOutputTank.getCapability());
         overallFluidCapability = new CombinedTankWrapper(inputTank.getCapability(), denseOutputTank.getCapability(), lightOutputTank.getCapability());
-    };
-
-    public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PetrolparkCreateBlockEntityTypes.CENTRIFUGE.get(), CentrifugeBlockEntity::getItemHandler);
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PetrolparkCreateBlockEntityTypes.CENTRIFUGE.get(), CentrifugeBlockEntity::getFluidHandler);
     };
 
     @Override

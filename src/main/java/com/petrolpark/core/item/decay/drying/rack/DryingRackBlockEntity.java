@@ -3,9 +3,7 @@ package com.petrolpark.core.item.decay.drying.rack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.PetrolparkBlockEntityTypes;
 import com.petrolpark.PetrolparkRecipeTypes;
-import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.item.decay.IApplyDecayRecipe;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.core.item.wooden.WoodenBlockEntity;
@@ -19,13 +17,8 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
-@EventBusSubscriber
 public class DryingRackBlockEntity extends WoodenBlockEntity {
 
     public final ItemStackHandler inv = new ItemStackHandler() {
@@ -81,11 +74,6 @@ public class DryingRackBlockEntity extends WoodenBlockEntity {
     protected void write(CompoundTag tag, Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
         tag.put("Inventory", inv.serializeNBT(registries));
-    };
-
-    @SubscribeEvent
-    public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        if (SharedFeatureFlag.DRYING_RACK.enabled()) event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PetrolparkBlockEntityTypes.DRYING_RACK.get(), DryingRackBlockEntity::getItemHandler);
     };
     
 };

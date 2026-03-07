@@ -1,11 +1,11 @@
 {
   "values": [
     {
-      "id": "petrolpark:cream",
+      "id": "petrolpark:flowing_cream",
       "required": false
     },
     {
-      "id": "petrolpark:flowing_cream",
+      "id": "petrolpark:cream",
       "required": false
     }
   ]

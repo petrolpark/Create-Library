@@ -5,6 +5,7 @@
     "refmap": "petrolpark.refmap.json",
     "plugin": "com.petrolpark.mixin.plugin.PetrolparkMixinPlugin",
     "mixins": [
+        "accessor.AbstractBuilderAccessor",
         "compat.create.accessor.BasinBlockEntityAccessor",
         "compat.create.accessor.BasinOperatingBlockEntityAccessor",
         "compat.create.accessor.DepotBehaviourAccessor",
@@ -49,7 +50,9 @@
         "CraftingMenuMixin",
         "CraftingTableBlockMixin",
         "EntityMixin",
+        "FluidBuilderMixin",
         "FluidTankMixin",
+        "IBlockStateExtensionMixin",
         "ItemStackMixin",
         "LivingEntityMixin",
         "MobEffectInstanceMixin",

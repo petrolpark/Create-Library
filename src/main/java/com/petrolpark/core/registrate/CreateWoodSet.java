@@ -5,6 +5,7 @@ import java.util.function.Supplier;
 
 import com.google.common.base.Suppliers;
 import com.petrolpark.RequiresCreate;
+import com.petrolpark.core.registrate.builder.PetrolparkBlockBuilder;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.decoration.palettes.ConnectedGlassPaneBlock;
 import com.simibubi.create.content.decoration.palettes.WindowBlock;

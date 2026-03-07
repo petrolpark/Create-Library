@@ -1,0 +1,16 @@
+{
+  "values": [
+    {
+      "id": "petrolpark:blood_bucket",
+      "required": false
+    },
+    {
+      "id": "petrolpark:cream_bucket",
+      "required": false
+    },
+    {
+      "id": "petrolpark:skimmed_milk_bucket",
+      "required": false
+    }
+  ]
+}

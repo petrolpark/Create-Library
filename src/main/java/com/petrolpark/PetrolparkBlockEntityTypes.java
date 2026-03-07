@@ -12,6 +12,7 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 public class PetrolparkBlockEntityTypes {
 
     public static final BlockEntityEntry<DryingRackBlockEntity> DRYING_RACK = REGISTRATE.sharedBlockEntity(SharedFeatureFlag.DRYING_RACK, "drying_rack", DryingRackBlockEntity::new)
+        .registerItemCapability(DryingRackBlockEntity::getItemHandler)
         .validBlock(PetrolparkBlocks.DRYING_RACK)
         .renderer(() -> DryingRackBlockEntityRenderer::new)
         .register();

@@ -77,6 +77,7 @@ public class PotionCentrifugation {
                 RecyclingManager.getInverse(mix.ingredient())
             ))
         );
+        //TODO recipes
         initialized = true;
     };
 
@@ -100,7 +101,17 @@ public class PotionCentrifugation {
     };
 
     protected static final PotionCentrifugationRecipe create(FluidStack from, FluidStack to, RecyclingOutputs outputs) {
-        return new PotionCentrifugationRecipe(NonNullList.create(), new SizedFluidIngredient(DataComponentFluidIngredient.of(false, from), 1000), Either.right(outputs), to);
+        return new PotionCentrifugationRecipe(
+            NonNullList.of(Ingredient.of(), outputs.getMaxPossibleStacks().stream()
+                .map(ItemStack::getCraftingRemainingItem)
+                .dropWhile(ItemStack::isEmpty)
+                .map(Ingredient::of)
+                .toArray(Ingredient[]::new)
+            ),
+            new SizedFluidIngredient(DataComponentFluidIngredient.of(false, from), 1000),
+            Either.right(outputs),
+            to
+        );
     };
 
     protected static final Map<Holder<Potion>, PotionCentrifugationRecipe> get(BottleType bottleType) {

@@ -1,6 +1,10 @@
 {
   "values": [
     {
+      "id": "petrolpark:butter",
+      "required": false
+    },
+    {
       "id": "petrolpark:fries",
       "required": false
     },
@@ -10,10 +14,6 @@
     },
     {
       "id": "petrolpark:raw_fries",
-      "required": false
-    },
-    {
-      "id": "petrolpark:butter",
       "required": false
     }
   ]

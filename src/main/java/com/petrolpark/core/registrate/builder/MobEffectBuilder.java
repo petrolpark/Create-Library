@@ -1,33 +1,42 @@
-package com.petrolpark.core.registrate;
+package com.petrolpark.core.registrate.builder;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.PetrolparkRegistrateProviderTypes;
-import com.tterrag.registrate.AbstractRegistrate;
+import com.petrolpark.core.registrate.MobEffectEntry;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.providers.ProviderType;
+import com.tterrag.registrate.util.entry.RegistryEntry;
+import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 import com.tterrag.registrate.util.nullness.NonnullType;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<MobEffect, T, P, MobEffectBuilder<T, P>> {
+
+    protected final PetrolparkRegistrate petrolparkOwner;
 
     protected final Factory<T> factory;
 
     protected MobEffectCategory category = MobEffectCategory.NEUTRAL;
     protected int color = 0xFF000000;
-    protected NonNullUnaryOperator<T> mobEffectCallback = NonNullUnaryOperator.identity();
+    protected NonNullBiConsumer<T, ResourceLocation> mobEffectCallback = (e, id) -> {};
 
-    public MobEffectBuilder(AbstractRegistrate<?> owner, P parent, String name, BuilderCallback callback, Factory<T> factory) {
+    public MobEffectBuilder(PetrolparkRegistrate owner, P parent, String name, BuilderCallback callback, Factory<T> factory) {
         super(owner, parent, name, callback, Registries.MOB_EFFECT);
+        this.petrolparkOwner = owner;
         this.factory = factory;
     };
 
@@ -41,7 +50,7 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
         return this;
     };
 
-    public MobEffectBuilder<T, P> attributes(NonNullUnaryOperator<T> function) {
+    public MobEffectBuilder<T, P> attributes(NonNullBiConsumer<T, ResourceLocation> function) {
         this.mobEffectCallback = function;
         return this;
     };
@@ -60,11 +69,15 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
     };
 
     public PotionBuilder<MobEffectBuilder<T, P>> potion(int duration) {
-        return potion(getName(), b -> b.duration(duration));
+        return potion(b -> b.duration(duration));
+    };
+
+    public PotionBuilder<MobEffectBuilder<T, P>> potion(NonNullUnaryOperator<MobEffectBuilder.Instance> builderTransformer) {
+        return potion(getName(), builderTransformer);
     };
 
     public PotionBuilder<MobEffectBuilder<T, P>> potion(String potionName, NonNullUnaryOperator<MobEffectBuilder.Instance> builderTransformer) {
-        return getOwner().entry(getName(), callback -> PotionBuilder.create(getOwner(), this, potionName, getName(), callback))
+        return getOwner().entry(getName(), callback -> PotionBuilder.create(petrolparkOwner, this, potionName, getName(), callback))
             .effect(builderTransformer.apply(new MobEffectBuilder.Instance(() -> get().getDelegate())));
     };
 
@@ -75,7 +88,19 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
 
     @Override
     protected @NonnullType T createEntry() {
-        return mobEffectCallback.apply(factory.create(category, color));
+        final T mobEffect = factory.create(category, color);
+        mobEffectCallback.accept(mobEffect, ResourceLocation.fromNamespaceAndPath(getOwner().getModid(), "effect." + getName()));
+        return mobEffect;
+    };
+
+    @Override
+    protected RegistryEntry<MobEffect, T> createEntryWrapper(@Nonnull DeferredHolder<MobEffect, T> delegate) {
+        return new MobEffectEntry<>(getOwner(), delegate);
+    };
+
+    @Override
+    public MobEffectEntry<T> register() {
+        return (MobEffectEntry<T>) super.register();
     };
 
     @FunctionalInterface

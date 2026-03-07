@@ -1,8 +1,5 @@
 {
   "values": [
-    {
-      "id": "petrolpark:recipe_book",
-      "required": false
-    }
+    "petrolpark:recipe_book"
   ]
 }

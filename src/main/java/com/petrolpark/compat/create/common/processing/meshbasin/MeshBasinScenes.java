@@ -51,8 +51,8 @@ public class MeshBasinScenes {
         final ItemStack friedStack = new ItemStack(fried);
 
         scene.world().modifyBlockEntity(basin, MeshBasinBlockEntity.class, be -> {
-            be.getItemCapability(null).insertItem(0, toFryStack, false);
-            be.getFluidCapability(null).fill(fryingFluid.get().copy(), FluidAction.EXECUTE);
+            be.getItemHandler(null).insertItem(0, toFryStack, false);
+            be.getFluidHandler(null).fill(fryingFluid.get().copy(), FluidAction.EXECUTE);
         });
 
         scene.showBasePlate();
@@ -75,8 +75,8 @@ public class MeshBasinScenes {
         scene.world().modifyBlockEntity(basin, MeshBasinBlockEntity.class, be -> be.selfProcessingTicksRemaining = 100);
         scene.idle(100);
         scene.world().modifyBlockEntity(basin, MeshBasinBlockEntity.class, be -> {
-            be.getItemCapability(null).setStackInSlot(0, friedStack);
-            be.getFluidCapability(null).drain(1000, FluidAction.EXECUTE);
+            be.getItemHandler(null).setStackInSlot(0, friedStack);
+            be.getFluidHandler(null).drain(1000, FluidAction.EXECUTE);
         });
         scene.idle(10);
         scene.overlay().showControls(util.vector().topOf(basin), Pointing.DOWN, 30)
@@ -104,7 +104,7 @@ public class MeshBasinScenes {
         final ItemStack toJuiceStack = new ItemStack(toJuice);
 
         scene.world().modifyBlockEntity(basin, MeshBasinBlockEntity.class, be -> {
-            be.getItemCapability(null).insertItem(0, toJuiceStack, false);
+            be.getItemHandler(null).insertItem(0, toJuiceStack, false);
         });
 
 		scene.showBasePlate();
@@ -140,8 +140,8 @@ public class MeshBasinScenes {
             pte.getPressingBehaviour().makeCompactingParticleEffect(util.vector().centerOf(basin), toJuiceStack)
         );
         scene.world().modifyBlockEntity(basin, MeshBasinBlockEntity.class, be -> {
-            be.getItemCapability(null).extractItem(0, 1, false);
-            be.getFluidCapability(null).fill(juicedFluid.get().copy(), FluidAction.EXECUTE);
+            be.getItemHandler(null).extractItem(0, 1, false);
+            be.getFluidHandler(null).fill(juicedFluid.get().copy(), FluidAction.EXECUTE);
         });
         scene.idle(40);
         scene.world().showSection(util.select().fromTo(2, 1, 1, 3, 2, 5), Direction.WEST);

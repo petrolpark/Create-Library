@@ -1,4 +1,4 @@
-package com.petrolpark.core.registrate;
+package com.petrolpark.core.registrate.builder;
 
 import javax.annotation.Nonnull;
 
@@ -14,8 +14,10 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider.Context;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 
-public class SharedBlockEntityBuilder<T extends BlockEntity, P> extends BlockEntityBuilder<T, P> {
+public class SharedBlockEntityBuilder<T extends BlockEntity, P> extends PetrolparkBlockEntityBuilder<T, P> {
 
     public final SharedFeatureFlag featureFlag;
 
@@ -30,15 +32,21 @@ public class SharedBlockEntityBuilder<T extends BlockEntity, P> extends BlockEnt
     };
 
     @Override
-    public BlockEntityBuilder<T, P> renderer(@Nonnull NonNullSupplier<NonNullFunction<Context, BlockEntityRenderer<? super T>>> renderer) {
-        if (featureFlag.enabled()) return super.renderer(renderer);
+    public <CAP, CTX> SharedBlockEntityBuilder<T, P> registerCapability(BlockCapability<CAP, CTX> capability, ICapabilityProvider<T, CTX, CAP> provider) {
+        if (featureFlag.enabled()) super.registerCapability(capability, provider);
         return this;
     };
 
     @Override
-    public BlockEntityBuilder<T, P> onRegister(@Nonnull NonNullConsumer<? super BlockEntityType<T>> callback) {
-        if (!featureFlag.enabled()) return this;
-        return super.onRegister(callback);
+    public SharedBlockEntityBuilder<T, P> renderer(@Nonnull NonNullSupplier<NonNullFunction<Context, BlockEntityRenderer<? super T>>> renderer) {
+        if (featureFlag.enabled()) super.renderer(renderer);
+        return this;
+    };
+
+    @Override
+    public SharedBlockEntityBuilder<T, P> onRegister(@Nonnull NonNullConsumer<? super BlockEntityType<T>> callback) {
+        if (featureFlag.enabled()) super.onRegister(callback);
+        return this;
     };
     
 };

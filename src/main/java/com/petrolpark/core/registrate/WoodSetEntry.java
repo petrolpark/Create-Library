@@ -3,6 +3,7 @@ package com.petrolpark.core.registrate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.petrolpark.core.registrate.builder.PetrolparkBlockBuilder;
 import com.petrolpark.core.world.block.LogBlock;
 import com.petrolpark.util.BlockStateProviderHelper;
 import com.tterrag.registrate.AbstractRegistrate;

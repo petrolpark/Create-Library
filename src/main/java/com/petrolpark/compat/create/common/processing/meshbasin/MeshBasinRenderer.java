@@ -44,7 +44,7 @@ public class MeshBasinRenderer extends BasinRenderer {
 		final RandomSource r = RandomSource.create(pos.hashCode());
 		Vec3 baseVector = new Vec3(0.125f, 0.5f, 0);
 
-		IItemHandlerModifiable inv = meshBasin.getItemCapability(null);
+		IItemHandlerModifiable inv = meshBasin.getItemHandler(null);
 		if (inv == null) inv = new ItemStackHandler();
 
 		int itemCount = 0;

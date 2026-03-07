@@ -3,7 +3,6 @@ package com.petrolpark.compat.create.common.processing.meshbasin;
 import java.util.List;
 import java.util.Optional;
 
-import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
 import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.core.block.entity.basin.AdvancedBasinOperatingBlockEntity;
 import com.petrolpark.compat.create.core.block.entity.basin.IDifferentBasinBlockEntity;
@@ -39,8 +38,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.capabilities.Capabilities;
-import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
 
@@ -53,17 +50,12 @@ public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferent
     public MeshBasinBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
     };
-
-    public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-		event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PetrolparkCreateBlockEntityTypes.MESH_BASIN.get(), MeshBasinBlockEntity::getItemCapability);
-		event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PetrolparkCreateBlockEntityTypes.MESH_BASIN.get(), MeshBasinBlockEntity::getFluidCapability);
-	};
     
-    public IItemHandlerModifiable getItemCapability(Direction direction) {
+    public IItemHandlerModifiable getItemHandler(Direction direction) {
         return itemCapability;
     };
 
-    public IFluidHandler getFluidCapability(Direction direction) {
+    public IFluidHandler getFluidHandler(Direction direction) {
         return fluidCapability;
     };
 
