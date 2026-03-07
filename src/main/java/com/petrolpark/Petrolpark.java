@@ -76,6 +76,7 @@ public class Petrolpark {
         PetrolparkDataLoadingConditions.register();
         PetrolparkDataSubPredicates.register();
         PetrolparkDecayProductTypes.register();
+        PetrolparkFeatureTypes.register();
         PetrolparkGlobalLootModifierSerializers.register();
         PetrolparkIngredientRandomizerTypes.register();
         PetrolparkIngredientTypes.register();

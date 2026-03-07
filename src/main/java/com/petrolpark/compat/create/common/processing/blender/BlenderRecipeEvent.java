@@ -8,10 +8,14 @@ import net.neoforged.bus.api.ICancellableEvent;
 
 public abstract class BlenderRecipeEvent extends Event implements ICancellableEvent {
     
-    protected final Recipe<?> recipeHolder;
+    protected final Recipe<?> recipe;
 
-    public BlenderRecipeEvent(Recipe<?> recipeHolder) {
-        this.recipeHolder = recipeHolder;
+    public BlenderRecipeEvent(Recipe<?> recipe) {
+        this.recipe = recipe;
+    };
+
+    public Recipe<?> getRecipe() {
+        return recipe;
     };
 
     /**

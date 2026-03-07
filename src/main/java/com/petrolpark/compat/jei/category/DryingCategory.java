@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import com.petrolpark.PetrolparkBlocks;
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.config.PetrolparkConfigs;
@@ -36,7 +37,7 @@ public class DryingCategory extends SimpleConversionCategory<DryingRecipe> imple
 
     @Override
     public void registerCatalysts(@Nonnull IRecipeCatalystRegistration registration) {
-        if (PetrolparkConfigs.server().createChainConveyorDrying.get()) registration.addRecipeCatalysts(type, AllBlocks.CHAIN_CONVEYOR, Blocks.CHAIN);
+        if (PetrolparkConfigs.server().createChainConveyorDrying.get()) registration.addRecipeCatalysts(type, PetrolparkBlocks.DRYING_RACK, AllBlocks.CHAIN_CONVEYOR, Blocks.CHAIN);
     };
 
     @Override

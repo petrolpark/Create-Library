@@ -204,7 +204,13 @@ public class PetrolparkTags {
 
     public enum MobEffects {
 
+        /**
+         * Cancels panicked limb swing and sound
+         */
+        CANCELS_HURT_EFFECTS,
         CAUSES_INFERTILITY,
+        PREVENTS_AGGRAVATING,
+        PREVENTS_AGGRAVATING_OTHERS,
         ;
 
         public final TagKey<MobEffect> tag;

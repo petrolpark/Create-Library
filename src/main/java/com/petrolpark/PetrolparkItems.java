@@ -2,7 +2,6 @@ package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 import static com.petrolpark.PetrolparkTags.commonItemTag;
-import static com.petrolpark.core.registrate.PetrolparkTagGen.tagItemUnrequired;
 
 import com.petrolpark.common.item.shulkerbelt.ShulkerBeltItem;
 import com.petrolpark.compat.SharedFeatureFlag;
@@ -28,7 +27,7 @@ public class PetrolparkItems {
 
     public static final ItemEntry<RecipeBookItem> RECIPE_BOOK = REGISTRATE.item("recipe_book", RecipeBookItem::new)
         .defaultModel()
-        .transform(tagItemUnrequired(ItemTags.BOOKSHELF_BOOKS))
+        .tag(ItemTags.BOOKSHELF_BOOKS)
         .register();
 
     public static final ItemEntry<ShulkerBeltItem> SHULKER_BELT = REGISTRATE.item("shulker_belt", ShulkerBeltItem::new)
@@ -46,18 +45,18 @@ public class PetrolparkItems {
         .properties(p -> p
             .food(PetrolparkFoods.BUTTER)
         ).defaultModel()
-        .transform(tagItemUnrequired(Tags.Items.FOODS, commonItemTag("foods/butter")))
+        .tag(Tags.Items.FOODS, commonItemTag("foods/butter"))
         .register(),
     FRIES = REGISTRATE.sharedItem(SharedFeatureFlag.FRIES, "fries", SharedItem::new)
         .properties(p -> p
             .food(PetrolparkFoods.FRIES)
         ).defaultModel()
-        .transform(tagItemUnrequired(Tags.Items.FOODS, commonItemTag("foods/fries")))
+        .tag(Tags.Items.FOODS, commonItemTag("foods/fries"))
         .register(),
     MASHED_POTATO = REGISTRATE.sharedItem(SharedFeatureFlag.POTATO_PRODUCTS, "mashed_potato", SharedItem::new)
         .properties(p -> p
             .food(PetrolparkFoods.MASHED_POTATO)
-        ).transform(tagItemUnrequired(Tags.Items.FOODS, commonItemTag("foods/mashed_potato")))
+        ).tag(Tags.Items.FOODS, commonItemTag("foods/mashed_potato"))
         .defaultModel()
         .register(),
     MESH = REGISTRATE.sharedItem(SharedFeatureFlag.MESH, "mesh", SharedItem::new)
@@ -67,7 +66,7 @@ public class PetrolparkItems {
         .properties(p -> p
             .food(PetrolparkFoods.RAW_FRIES)
         ).defaultModel()
-        .transform(tagItemUnrequired(Tags.Items.FOODS))
+        .tag(Tags.Items.FOODS)
         .register();
         
 

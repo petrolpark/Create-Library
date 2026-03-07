@@ -28,7 +28,9 @@ import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 public class SharedBlockBuilder<T extends Block, P extends PetrolparkRegistrate> extends PetrolparkBlockBuilder<T, P> {
 
     public static <T extends Block, P extends PetrolparkRegistrate> BlockBuilder<T, P> create(P owner, P parent, SharedFeatureFlag feature, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory) {
-        return new SharedBlockBuilder<>(owner, parent, feature, name, callback, factory, () -> BlockBehaviour.Properties.of()).defaultLoot();
+        return new SharedBlockBuilder<>(owner, parent, feature, name, callback, factory, () -> BlockBehaviour.Properties.of())
+            .asOptional()
+            .defaultLoot();
     };
 
     private final PetrolparkRegistrate petrolparkOwner;

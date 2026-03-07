@@ -20,7 +20,8 @@ public class SharedBlockEntityBuilder<T extends BlockEntity, P> extends BlockEnt
     public final SharedFeatureFlag featureFlag;
 
     public static <T extends BlockEntity, P> BlockEntityBuilder<T, P> create(AbstractRegistrate<?> owner, P parent, SharedFeatureFlag flag, String name, BuilderCallback callback, BlockEntityFactory<T> factory) {
-        return new SharedBlockEntityBuilder<>(owner, parent, flag, name, callback, factory);
+        return new SharedBlockEntityBuilder<>(owner, parent, flag, name, callback, factory)
+            .asOptional();
     };
 
     protected SharedBlockEntityBuilder(AbstractRegistrate<?> owner, P parent, SharedFeatureFlag featureFlag, String name, BuilderCallback callback, BlockEntityFactory<T> factory) {
