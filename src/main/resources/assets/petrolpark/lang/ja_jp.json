@@ -1,4 +1,5 @@
 {
+    "attribute.petrolpark.generic.slipperiness": "滑りやすさ",
     "attribute.petrolpark.player.extra_hotbar_slots": "ホットバーの追加スロット",
     "attribute.petrolpark.player.extra_inventory_size": "インベントリの追加容量",
     "attribute.petrolpark.player.ore_discovery_chance": "鉱石発見率",
@@ -90,10 +91,12 @@
     "death.attack.petrolpark.blender": "%1$s はミルクシェイクにされてしまった",
     "death.attack.petrolpark.extrusion_die": "%1$s は金型に押し出された",
 
-    "effect.petrolpark.numbness": "麻痺",
-    "effect.petrolpark.numbness.description": "Mobは他のMobからダメージを受けても気づかず、反応しません。",
     "effect.petrolpark.miners_luck": "採掘者の幸運",
-    "effect.petrolpark.miners_luck.description": "採掘中に鉱脈を見つける確率が上昇します。",
+    "effect.petrolpark.miners_luck.description": "採掘中に鉱脈を見つける確率が上昇します",
+    "effect.petrolpark.numbness": "麻痺",
+    "effect.petrolpark.numbness.description": "Mobは他のMobからダメージを受けても気づかず、反応しません",
+    "effect.petrolpark.slipping": "スリップ",
+    "effect.petrolpark.slipping.description": "氷の上にいるかのように滑りまわります",
 
     "fluid.petrolpark.blood": "血液",
     "fluid.petrolpark.cream": "クリーム",
@@ -125,9 +128,16 @@
     "advanced_ingredient.petrolpark.tag": "次のタグを持つ: %1$s",
     "advanced_ingredient.petrolpark.tag.inverse": "次のタグを持たない: %1$s",
 
+    "item.minecraft.lingering_potion.effect.petrolpark.slipping": "スリップの残留ポーション",
+    "item.minecraft.potion.effect.petrolpark.slipping": "スリップのポーション",
+    "item.minecraft.splash_potion.effect.petrolpark.slipping": "スリップのスプラッシュポーション",
+    "item.minecraft.tipped_arrow.effect.petrolpark.slipping": "スリップの矢",
+    
     "item.petrolpark.badge.awarded": "%2$s に %1$s に授与",
     "item.petrolpark.badge.unknown": "これは本物のバッジではありません...",
+    "item.petrolpark.blood_bucket": "血液入りバケツ",
     "item.petrolpark.butter": "バタースティック",
+    "item.petrolpark.cream_bucket": "クリーム入りバケツ",
     "item.petrolpark.decaying_item.remaining": "%1$s で腐敗",
     "item.petrolpark.drying_item.remaining": "%1$s で乾燥",
     "item.petrolpark.fries": "フライドポテト",
@@ -138,6 +148,8 @@
     "item.petrolpark.raw_fries": "未調理のフライドポテト",
     "item.petrolpark.recipe_book": "レシピ本",
     "item.petrolpark.shulker_belt": "シュルカーベルト",
+    "item.petrolpark.skimmed_milk_bucket": "脱脂乳入りバケツ",
+    "item.petrolpark.sunflower_oil_bottle": "ひまわり油入り瓶",
     "item.petrolpark.unprocessed_mashed_potato": "未完成のマッシュポテト",
 
     "item.petrolpark.rolling_pin": "%1$s の麺棒",
