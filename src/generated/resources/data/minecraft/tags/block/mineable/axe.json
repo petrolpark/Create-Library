@@ -5,15 +5,15 @@
       "required": false
     },
     {
+      "id": "petrolpark:blender",
+      "required": false
+    },
+    {
       "id": "petrolpark:mandrel",
       "required": false
     },
     {
       "id": "petrolpark:redstone_programmer",
-      "required": false
-    },
-    {
-      "id": "petrolpark:blender",
       "required": false
     }
   ]

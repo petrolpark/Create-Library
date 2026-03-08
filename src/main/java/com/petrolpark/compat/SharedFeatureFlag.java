@@ -26,7 +26,7 @@ public enum SharedFeatureFlag implements StringRepresentable {
     PROGRAMMING_BLOCK,
     REDSTONE_PROGRAMMER,
     ROLLING_PIN,
-    SUNFLOWER_OIL,
+    SLIPPING,
     SPRING,
     TORQUE_LIMITER,
 
@@ -36,6 +36,7 @@ public enum SharedFeatureFlag implements StringRepresentable {
     MESH_BASIN(MESH),
     MILK_PRODUCTS(CENTRIFUGE), // Butter, Skimmed Milk and Cream
     POTATO_PRODUCTS(MILK_PRODUCTS, EXTRUSION),
+    SUNFLOWER_OIL(SLIPPING),
 
     // second-order dependent
     FRIES(POTATO_PRODUCTS, EXTRUSION)

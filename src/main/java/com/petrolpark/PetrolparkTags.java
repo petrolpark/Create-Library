@@ -150,6 +150,7 @@ public class PetrolparkTags {
 
         INCONTAMINABLE,
         CONTAMINABLE_BLOCKS,
+        SLIPPING_POTION_INGREDIENTS,
         ;
 
         public final TagKey<Item> tag;

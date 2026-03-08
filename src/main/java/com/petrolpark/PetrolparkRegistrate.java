@@ -46,13 +46,15 @@ import com.petrolpark.core.recipe.ingredient.advanced.ItemAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.NamedAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizer;
 import com.petrolpark.core.recipe.ingredient.randomizer.IngredientRandomizerType;
-import com.petrolpark.core.registrate.MobEffectBuilder;
-import com.petrolpark.core.registrate.PetrolparkBlockBuilder;
-import com.petrolpark.core.registrate.PetrolparkItemBuilder;
-import com.petrolpark.core.registrate.SharedBlockBuilder;
-import com.petrolpark.core.registrate.SharedBlockEntityBuilder;
-import com.petrolpark.core.registrate.SharedItemBuilder;
 import com.petrolpark.core.registrate.WoodSetEntry;
+import com.petrolpark.core.registrate.builder.MobEffectBuilder;
+import com.petrolpark.core.registrate.builder.PetrolparkBlockBuilder;
+import com.petrolpark.core.registrate.builder.PetrolparkBlockEntityBuilder;
+import com.petrolpark.core.registrate.builder.PetrolparkItemBuilder;
+import com.petrolpark.core.registrate.builder.SharedBlockBuilder;
+import com.petrolpark.core.registrate.builder.SharedBlockEntityBuilder;
+import com.petrolpark.core.registrate.builder.SharedItemBuilder;
+import com.petrolpark.core.registrate.builder.SharedMobEffectBuilder;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.classes.IScratchClassType;
@@ -70,12 +72,9 @@ import com.petrolpark.core.team.ITeam;
 import com.petrolpark.core.trade.ITradeListingReference;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.AbstractBuilder;
-import com.tterrag.registrate.builders.BlockBuilder;
-import com.tterrag.registrate.builders.BlockEntityBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
 import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.builders.BuilderCallback;
-import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
@@ -142,13 +141,23 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     // Builders
 
     @Override
-    public <T extends Block, P> BlockBuilder<T, P> block(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
-        return entry(name, callback -> PetrolparkBlockBuilder.create(this, parent, name, callback, factory));
+    public <T extends Block, P> PetrolparkBlockBuilder<T, P> block(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
+        return (PetrolparkBlockBuilder<T, P>)entry(name, callback -> PetrolparkBlockBuilder.create(this, parent, name, callback, factory));
     };
 
     @Override
-    public <T extends Item, P> ItemBuilder<T, P> item(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<Properties, T> factory) {
-        return entry(name, callback -> PetrolparkItemBuilder.create(this, parent, name, callback, factory));
+    public <T extends Item, P> PetrolparkItemBuilder<T, P> item(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<Properties, T> factory) {
+        return (PetrolparkItemBuilder<T, P>)entry(name, callback -> PetrolparkItemBuilder.create(this, parent, name, callback, factory));
+    };
+
+    @Override
+    public <T extends BlockEntity> PetrolparkBlockEntityBuilder<T, PetrolparkRegistrate> blockEntity(@Nonnull String name, @Nonnull BlockEntityFactory<T> factory) {
+        return blockEntity(self(), name, factory);
+    };
+
+    @Override
+    public <T extends BlockEntity, P> PetrolparkBlockEntityBuilder<T, P> blockEntity(@Nonnull P parent, @Nonnull String name, @Nonnull BlockEntityFactory<T> factory) {
+        return (PetrolparkBlockEntityBuilder<T, P>)entry(name, callback -> PetrolparkBlockEntityBuilder.create(this, parent, name, callback, factory));
     };
 
     public <T extends MobEffect> MobEffectBuilder<T, PetrolparkRegistrate> mobEffect(@Nonnull String name, @Nonnull MobEffectBuilder.Factory<T> factory) {
@@ -449,8 +458,8 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
         return factory.apply(new SharedFeatureBuilderCallback(featureFlag)).asOptional();
     };
 
-    public <T extends BlockEntity> BlockEntityBuilder<T, PetrolparkRegistrate> sharedBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {
-        return sharedEntry(featureFlag, name, callback -> SharedBlockEntityBuilder.create(this, this, featureFlag, name, callback, factory));
+    public <T extends BlockEntity> SharedBlockEntityBuilder<T, PetrolparkRegistrate> sharedBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {
+        return (SharedBlockEntityBuilder<T, PetrolparkRegistrate>)sharedEntry(featureFlag, name, callback -> SharedBlockEntityBuilder.create(this, this, featureFlag, name, callback, factory));
     };
 
     public <T extends Block, P> SharedBlockBuilder<T, PetrolparkRegistrate> sharedBlock(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
@@ -471,6 +480,10 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     
     public <T extends Item> SharedItemBuilder<T, PetrolparkRegistrate> sharedItem(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullBiFunction<Item.Properties, SharedFeatureFlag, T> factory) {
         return sharedItem(featureFlag, name, properties -> factory.apply(properties, featureFlag));
+    };
+
+    public <T extends MobEffect> SharedMobEffectBuilder<T, PetrolparkRegistrate> sharedMobEffect(@Nonnull SharedFeatureFlag featureFlag, String name, MobEffectBuilder.Factory<T> factory) {
+        return (SharedMobEffectBuilder<T, PetrolparkRegistrate>)sharedEntry(featureFlag, name, callback -> SharedMobEffectBuilder.create(this, this, featureFlag, name, callback, factory));
     };
 
     public <I extends RecipeInput, R extends Recipe<? extends I>> RegistryEntry<RecipeType<?>, SharedRecipeType<R>> sharedRecipeType(SharedFeatureFlag featureFlag, String name) {

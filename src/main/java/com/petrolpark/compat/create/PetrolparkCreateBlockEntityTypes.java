@@ -21,7 +21,7 @@ import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinRendere
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockEntity;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockEntityRenderer;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlockEntity;
-import com.petrolpark.core.registrate.SharedCreateBlockEntityBuilder;
+import com.petrolpark.core.registrate.builder.SharedCreateBlockEntityBuilder;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
@@ -42,6 +42,8 @@ public class PetrolparkCreateBlockEntityTypes {
         .register();
 
     public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = sharedBlockEntity(SharedFeatureFlag.CENTRIFUGE, "centrifuge", CentrifugeBlockEntity::new)
+        .registerItemCapability(CentrifugeBlockEntity::getItemHandler)
+        .registerFluidCapability(CentrifugeBlockEntity::getFluidHandler)
         .visual(() -> SingleAxisRotatingVisual.of(PetrolparkPartialModels.CENTRIFUGE_COG), true)
         .validBlock(PetrolparkCreateBlocks.CENTRIFUGE)
         .renderer(() -> CentrifugeRenderer::new)
@@ -57,6 +59,8 @@ public class PetrolparkCreateBlockEntityTypes {
         .register();
 
     public static final BlockEntityEntry<MeshBasinBlockEntity> MESH_BASIN = sharedBlockEntity(SharedFeatureFlag.MESH_BASIN, "mesh_basin", MeshBasinBlockEntity::new)
+        .registerItemCapability(MeshBasinBlockEntity::getItemHandler)
+        .registerFluidCapability(MeshBasinBlockEntity::getFluidHandler)
         .validBlock(PetrolparkCreateBlocks.MESH_BASIN)
         .renderer(() -> MeshBasinRenderer::new)
         .register();

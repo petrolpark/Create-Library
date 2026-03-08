@@ -8,6 +8,7 @@ import com.mojang.serialization.MapCodec;
 import com.petrolpark.core.data.predicate.entity.ChargedCreeperEntitySubPredicate;
 import com.petrolpark.core.data.predicate.entity.ColorEntitySubPredicate;
 import com.petrolpark.core.data.predicate.entity.HorseMarkingsEntitySubPredicate;
+import com.petrolpark.core.data.predicate.entity.IsNeutralPredicate;
 import com.petrolpark.core.data.predicate.entity.OrEntitySubPredicate;
 import com.petrolpark.core.data.predicate.entity.PermissionsEntitySubPredicate;
 import com.petrolpark.core.data.predicate.entity.VillagerProfessionEntitySubPredicate;
@@ -31,6 +32,7 @@ public class PetrolparkDataSubPredicates {
     ENTITY_COLOR = REGISTRATE.entitySubPredicateType("color", ColorEntitySubPredicate.CODEC),
     ENTITY_CHARGED_CREEPER = REGISTRATE.entitySubPredicateType("charged_creeper", ChargedCreeperEntitySubPredicate.CODEC),
     ENTITY_HORSE_MARKINGS = REGISTRATE.entitySubPredicateType("horse_markings", HorseMarkingsEntitySubPredicate.CODEC),
+    ENTITY_NEUTRAL = REGISTRATE.entitySubPredicateType("is_neutral", IsNeutralPredicate.CODEC),
     ENTITY_OR = REGISTRATE.entitySubPredicateType("or", OrEntitySubPredicate.CODEC),
     ENTITY_PANDA = REGISTRATE.entityVariantPredicateType("panda", Panda.Gene.CODEC, e -> e instanceof Panda panda ? Optional.of(panda.getMainGene()) : Optional.empty()),
     ENTITY_PERMISSIONS = REGISTRATE.entitySubPredicateType("permissions", PermissionsEntitySubPredicate.CODEC),

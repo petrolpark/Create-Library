@@ -1,6 +1,14 @@
 {
   "values": [
     {
+      "id": "petrolpark:basin_lid",
+      "required": false
+    },
+    {
+      "id": "petrolpark:blender",
+      "required": false
+    },
+    {
       "id": "petrolpark:centrifuge",
       "required": false
     },
@@ -13,19 +21,11 @@
       "required": false
     },
     {
-      "id": "petrolpark:basin_lid",
-      "required": false
-    },
-    {
       "id": "petrolpark:mesh_basin",
       "required": false
     },
     {
       "id": "petrolpark:redstone_programmer",
-      "required": false
-    },
-    {
-      "id": "petrolpark:blender",
       "required": false
     }
   ]

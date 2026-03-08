@@ -1,4 +1,4 @@
-package com.petrolpark.core.registrate;
+package com.petrolpark.core.registrate.builder;
 
 import java.util.Optional;
 
@@ -40,8 +40,8 @@ public class PetrolparkBlockBuilder<T extends Block, P> extends BlockBuilder<T, 
     };
 
     public static final <T extends Block, P> ItemBuilder<BlockItem, BlockBuilder<T, P>> defaultBlockItem(BlockBuilder<T, P> builder) {
-        return builder.getOwner()
-            .item(builder, builder.getName(), p -> new BlockItem(builder.getEntry(), p))
+        return builder
+            .item(BlockItem::new)
             .model((ctx, prov) -> {
                 final Optional<String> model = builder.getOwner().getDataProvider(ProviderType.BLOCKSTATE)
                     .flatMap(p -> p.getExistingVariantBuilder(builder.getEntry()))

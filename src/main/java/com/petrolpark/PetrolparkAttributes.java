@@ -16,6 +16,11 @@ public class PetrolparkAttributes {
     
     public static final RegistryEntry<Attribute, Attribute>
 
+    SLIPPERINESS = REGISTRATE.attribute("generic.slipperiness", () -> new RangedAttribute("attribute.petrolpark.generic.slipperiness", 1d, 0d, 2048d)
+        .setSyncable(true)
+        .setSentiment(Attribute.Sentiment.NEUTRAL)
+    ),
+
     EXTRA_HOTBAR_SLOTS = REGISTRATE.attribute("player.extra_hotbar_slots", () -> new RangedAttribute("attribute.petrolpark.player.extra_hotbar_slots", 0d, 0d, 32d)
         .setSyncable(true)
         .setSentiment(Attribute.Sentiment.POSITIVE)
@@ -26,7 +31,7 @@ public class PetrolparkAttributes {
         .setSentiment(Attribute.Sentiment.POSITIVE)
     ),
 
-    ORE_DISCOVERY_CHANCE = REGISTRATE.attribute("ore_discovery_chance", () -> new RangedAttribute("attribute.player.ore_discovery_chance", 0d, 0d, 1d)
+    ORE_DISCOVERY_CHANCE = REGISTRATE.attribute("player.ore_discovery_chance", () -> new RangedAttribute("attribute.petrolpark.player.ore_discovery_chance", 0d, 0d, 1d)
         .setSentiment(Attribute.Sentiment.POSITIVE)
     );
 

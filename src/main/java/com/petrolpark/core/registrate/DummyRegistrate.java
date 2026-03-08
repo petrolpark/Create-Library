@@ -9,7 +9,7 @@ import com.tterrag.registrate.util.nullness.NonNullConsumer;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
-public class DummyRegistrate extends PetrolparkRegistrate {
+public final class DummyRegistrate extends PetrolparkRegistrate {
 
     public static final DummyRegistrate INSTANCE = new DummyRegistrate(Petrolpark.MOD_ID);
 

@@ -4,12 +4,13 @@ import net.createmod.catnip.config.ConfigBase;
 
 public class PetrolparkCommonConfig extends ConfigBase {
 
+    public final ConfigBool glassBottleFluidCapability = b(true, "glassBottleFluidCapability", "Add NeoForge Fluid Capability to Glass Bottle items, making them act more like Buckets", "[May override other mods' functionality]");
+
     // Compat
     public final ConfigGroup compatibility = group(0, "compatibility");
-
-    // Brewin n Chewin
-    public final ConfigGroup brewinAndChewin = group(1, "brewinAndChewin");
-    public final ConfigBool brewinAndChewinFermentingInLiddedBasin = b(true, "fermentingInLiddedBasin", "Some Fermenting/Pouring Recipes are possible in Lidded Basins and Spouts, if enabled.");
+        // Brewin n Chewin
+        public final ConfigGroup brewinAndChewin = group(1, "brewinAndChewin");
+        public final ConfigBool brewinAndChewinFermentingInLiddedBasin = b(true, "fermentingInLiddedBasin", "Some Fermenting/Pouring Recipes are possible in Lidded Basins and Spouts, if enabled.");
 
     @Override
     public String getName() {

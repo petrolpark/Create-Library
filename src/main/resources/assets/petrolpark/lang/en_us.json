@@ -1,4 +1,5 @@
 {
+    "attribute.petrolpark.generic.slipperiness": "Slipperiness",
     "attribute.petrolpark.player.extra_hotbar_slots": "Extra Hotbar Slots",
     "attribute.petrolpark.player.extra_inventory_size": "Extra Inventory Size",
     "attribute.petrolpark.player.ore_discovery_chance": "Ore Discovery Chance",
@@ -90,10 +91,12 @@
     "death.attack.petrolpark.blender": "%1$s was made into a milkshake",
     "death.attack.petrolpark.extrusion_die": "%1$s extrusion died",
 
-    "effect.petrolpark.numbness": "Numbness",
-    "effect.petrolpark.numbness.description": "Mobs will not notice or respond to being damaged.",
     "effect.petrolpark.miners_luck": "Miners' Luck",
-    "effect.petrolpark.miners_luck.description": "Greater chance of finding ore patches while mining.",
+    "effect.petrolpark.miners_luck.description": "Greater chance of finding ore patches while mining",
+    "effect.petrolpark.numbness": "Numbness",
+    "effect.petrolpark.numbness.description": "Mobs will not notice or respond to being damaged",
+    "effect.petrolpark.slipping": "Slipping",
+    "effect.petrolpark.slipping.description": "Slide around as if on ice",
 
     "fluid.petrolpark.blood": "Blood",
     "fluid.petrolpark.cream": "Cream",
@@ -125,9 +128,16 @@
     "advanced_ingredient.petrolpark.tag": "Tagged: %1$s",
     "advanced_ingredient.petrolpark.tag.inverse": "Not Tagged: %1$s",
 
+    "item.minecraft.lingering_potion.effect.petrolpark.slipping": "Lingering Potion of Slipping",
+    "item.minecraft.potion.effect.petrolpark.slipping": "Potion of Slipping",
+    "item.minecraft.splash_potion.effect.petrolpark.slipping": "Splash Potion of Slipping",
+    "item.minecraft.tipped_arrow.effect.petrolpark.slipping": "Arrow of Slipping",
+
     "item.petrolpark.badge.awarded": "Awarded to %1$s on %2$s",
     "item.petrolpark.badge.unknown": "This isn't a real Badge...",
+    "item.petrolpark.blood_bucket": "Blood Bucket",
     "item.petrolpark.butter": "Stick of Butter",
+    "item.petrolpark.cream_bucket": "Cream Bucket",
     "item.petrolpark.decaying_item.remaining": "Decays in %1$s",
     "item.petrolpark.drying_item.remaining": "Dries in %1$s",
     "item.petrolpark.fries": "Fries",
@@ -138,6 +148,8 @@
     "item.petrolpark.raw_fries": "Raw Fries",
     "item.petrolpark.recipe_book": "Recipe Book",
     "item.petrolpark.shulker_belt": "Shulker Belt",
+    "item.petrolpark.skimmed_milk_bucket": "Skimmed Milk Bucket",
+    "item.petrolpark.sunflower_oil_bottle": "Sunflower Oil Bottle",
     "item.petrolpark.unprocessed_mashed_potato": "Unfinished Mashed Potato",
 
     "item.petrolpark.rolling_pin": "%1$s Rolling Pin",

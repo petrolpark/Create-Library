@@ -1,4 +1,4 @@
-package com.petrolpark.core.registrate;
+package com.petrolpark.core.registrate.builder;
 
 import javax.annotation.Nonnull;
 
@@ -16,9 +16,11 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.neoforged.neoforge.capabilities.BlockCapability;
+import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 
 @RequiresCreate
-public class SharedCreateBlockEntityBuilder<T extends BlockEntity, P> extends CreateBlockEntityBuilder<T, P> {
+public class SharedCreateBlockEntityBuilder<T extends BlockEntity, P> extends CreateBlockEntityBuilder<T, P> implements IPetrolparkBlockEntityBuilder<T, P, SharedCreateBlockEntityBuilder<T, P>> {
 
     public final SharedFeatureFlag featureFlag;
 
@@ -34,9 +36,14 @@ public class SharedCreateBlockEntityBuilder<T extends BlockEntity, P> extends Cr
     };
 
     @Override
+    public <CAP, CTX> SharedCreateBlockEntityBuilder<T, P> registerCapability(BlockCapability<CAP, CTX> capability, ICapabilityProvider<T, CTX, CAP> provider) {
+        if (featureFlag.enabled()) IPetrolparkBlockEntityBuilder.super.registerCapability(capability, provider);
+        return this;
+    };
+
+    @Override
     public SharedCreateBlockEntityBuilder<T, P> renderer(@Nonnull NonNullSupplier<NonNullFunction<BlockEntityRendererProvider.Context, BlockEntityRenderer<? super T>>> renderer) {
-        if (featureFlag.enabled())
-            super.renderer(renderer);
+        if (featureFlag.enabled()) super.renderer(renderer);
         return this;
     };
 
@@ -49,6 +56,16 @@ public class SharedCreateBlockEntityBuilder<T extends BlockEntity, P> extends Cr
     @Override
     protected void registerVisualizer() {
         if (featureFlag.enabled()) super.registerVisualizer();
+    };
+
+    @Override
+    public SharedCreateBlockEntityBuilder<T, P> self() {
+        return this;
+    };
+
+    @Override
+    public BlockEntityType<T> getEntry() {
+        return super.getEntry();
     };
     
 };

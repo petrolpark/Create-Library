@@ -1,6 +1,10 @@
 {
     "neoforge:conditions": [
         {
+            "type": "petrolpark:feature_enabled",
+            "feature": "fries"
+        },
+        {
             "type": "neoforge:not",
             "value": {
                 "type": "petrolpark:fluid_tag_empty",

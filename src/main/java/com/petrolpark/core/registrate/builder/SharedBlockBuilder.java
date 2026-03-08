@@ -1,4 +1,4 @@
-package com.petrolpark.core.registrate;
+package com.petrolpark.core.registrate.builder;
 
 import java.util.Collections;
 
@@ -8,6 +8,8 @@ import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.compat.SharedFeatureBlockItem;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.data.condition.SharedFeatureEnabledCondition;
+import com.petrolpark.core.registrate.DummyRegistrate;
+import com.petrolpark.core.registrate.RegistrateConditionalLootTableProvider;
 import com.petrolpark.core.registrate.RegistrateConditionalLootTableProvider.ConditionalLootType;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;

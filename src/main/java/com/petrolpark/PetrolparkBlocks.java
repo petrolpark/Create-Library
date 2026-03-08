@@ -10,7 +10,7 @@ import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableI
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.item.decay.drying.rack.DryingRackBlock;
 import com.petrolpark.core.item.wooden.WoodenBlockItem;
-import com.petrolpark.core.registrate.PetrolparkBlockBuilder;
+import com.petrolpark.core.registrate.builder.PetrolparkBlockBuilder;
 import com.petrolpark.core.scratch.world.block.ProgrammingBlock;
 import com.petrolpark.core.world.block.SharedBlock;
 import com.petrolpark.core.world.block.SharedRotatedPillarBlock;
