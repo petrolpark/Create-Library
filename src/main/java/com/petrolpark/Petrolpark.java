@@ -114,7 +114,7 @@ public class Petrolpark {
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
-        return new SharedFeatureFlag[]{SharedFeatureFlag.MILK_PRODUCTS, SharedFeatureFlag.SUNFLOWER_OIL, SharedFeatureFlag.BLOOD};
+        return new SharedFeatureFlag[]{SharedFeatureFlag.ROLLING_PIN};
     };
 
     private void init(final FMLCommonSetupEvent event) {

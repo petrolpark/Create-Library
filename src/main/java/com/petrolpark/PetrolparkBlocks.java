@@ -34,7 +34,7 @@ public class PetrolparkBlocks {
             .mapColor(MapColor.COLOR_YELLOW)
             .sound(SoundType.SLIME_BLOCK)
             .strength(0.2f)
-        ).defaultLoot()
+        ).loot((lt, b) -> lt.dropSelf(b))
         .defaultBlockstate()
         .tag(BlockTags.MINEABLE_WITH_SHOVEL, BlockTags.MINEABLE_WITH_HOE, Tags.Blocks.STORAGE_BLOCKS, commonBlockTag("storage_blocks/mashed_potato"))
         .transform(PetrolparkBlockBuilder::defaultBlockItem)

@@ -28,6 +28,10 @@ import net.neoforged.neoforge.client.model.data.ModelData;
  */
 public class BakedModelHelper {
 
+	public static final BakedQuad copyWithSprite(BakedQuad quad, TextureAtlasSprite sprite) {
+		return new BakedQuad(quad.getVertices(), quad.getTintIndex(), quad.getDirection(), sprite, quad.isShade(), quad.hasAmbientOcclusion());
+	};
+
 	@SuppressWarnings("null")
 	public static final TextureAtlasSprite getSpriteOnSide(BlockState state, Direction side) {
 		final BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);

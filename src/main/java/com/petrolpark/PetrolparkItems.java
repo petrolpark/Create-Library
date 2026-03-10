@@ -5,7 +5,7 @@ import static com.petrolpark.PetrolparkTags.commonItemTag;
 
 import com.petrolpark.common.item.shulkerbelt.ShulkerBeltItem;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.core.dough.RollingPinItem;
+import com.petrolpark.compat.create.core.dough.rollingpin.RollingPinItem;
 import com.petrolpark.core.item.SharedItem;
 import com.petrolpark.core.recipe.book.RecipeBookItem;
 import com.petrolpark.core.shop.ShopMenuItem;
@@ -17,9 +17,10 @@ import net.neoforged.neoforge.common.Tags;
 
 public class PetrolparkItems {
 
-    // Temp
     public static final ItemEntry<RollingPinItem> ROLLING_PIN = REGISTRATE.sharedItem(SharedFeatureFlag.ROLLING_PIN, "rolling_pin", RollingPinItem::new)    
-        .register();
+        .properties(p -> p
+            .stacksTo(1)
+        ).register();
     
     public static final ItemEntry<ShopMenuItem> MENU = REGISTRATE.item("menu", ShopMenuItem::new)
         .defaultModel()

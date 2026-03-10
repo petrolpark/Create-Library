@@ -20,6 +20,8 @@ import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinBlockEn
 import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinRenderer;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockEntity;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockEntityRenderer;
+import com.petrolpark.compat.create.core.dough.DoughBlockEntity;
+import com.petrolpark.compat.create.core.dough.DoughBlockEntityRenderer;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlockEntity;
 import com.petrolpark.core.registrate.builder.SharedCreateBlockEntityBuilder;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
@@ -47,6 +49,11 @@ public class PetrolparkCreateBlockEntityTypes {
         .visual(() -> SingleAxisRotatingVisual.of(PetrolparkPartialModels.CENTRIFUGE_COG), true)
         .validBlock(PetrolparkCreateBlocks.CENTRIFUGE)
         .renderer(() -> CentrifugeRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<DoughBlockEntity> DOUGH = REGISTRATE.blockEntity("dough", DoughBlockEntity::new)
+        .validBlock(PetrolparkCreateBlocks.DOUGH)
+        .renderer(() -> DoughBlockEntityRenderer::new)
         .register();
 
     public static final BlockEntityEntry<ExtrusionDieBlockEntity> EXTRUSION_DIE = sharedBlockEntity(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlockEntity::new)

@@ -19,6 +19,8 @@ import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlock;
 import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinBlock;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlock;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerBlockItem;
+import com.petrolpark.compat.create.core.dough.DoughBlock;
+import com.petrolpark.compat.create.core.dough.DoughItem;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlock;
 import com.petrolpark.config.PetrolparkStressConfig;
 import com.simibubi.create.AllBlocks;
@@ -65,6 +67,17 @@ public class PetrolparkCreateBlocks {
         .item()
         .onRegister(PetrolparkCreate::registerTooltip)
         .build()
+        .register();
+
+    public static final BlockEntry<DoughBlock> DOUGH = REGISTRATE.block("dough", DoughBlock::new)
+        .properties(p -> p
+            .noOcclusion()
+            .instabreak()
+        ).color(() -> () -> DoughBlock::getColor) // For particles
+        .item(DoughItem::new)
+        .properties(p -> p
+            .stacksTo(1)
+        ).build()
         .register();
 
     public static final BlockEntry<ExtrusionDieBlock> EXTRUSION_DIE = REGISTRATE.sharedBlock(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlock::new)

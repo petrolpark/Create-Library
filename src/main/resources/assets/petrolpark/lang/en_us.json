@@ -35,6 +35,7 @@
     "block.petrolpark.basin_lid": "Basin Lid",
     "block.petrolpark.blender": "Blender",
     "block.petrolpark.centrifuge": "Centrifuge",
+    "block.petrolpark.dough": "Dough",
     "block.petrolpark.drying_rack": "Drying Rack",
     "block.petrolpark.extrusion_die": "Extrusion Die",
     "block.petrolpark.mandrel": "Mandrel",
@@ -90,6 +91,8 @@
 
     "death.attack.petrolpark.blender": "%1$s was made into a milkshake",
     "death.attack.petrolpark.extrusion_die": "%1$s extrusion died",
+
+    "dough.petrolpark.pasta_dough": "test dough",
 
     "effect.petrolpark.miners_luck": "Miners' Luck",
     "effect.petrolpark.miners_luck.description": "Greater chance of finding ore patches while mining",

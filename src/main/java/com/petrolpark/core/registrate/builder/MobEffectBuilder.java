@@ -68,15 +68,15 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
         return this;
     };
 
-    public PotionBuilder<MobEffectBuilder<T, P>> potion(int duration) {
+    public PotionBuilder<? extends MobEffectBuilder<T, P>> potion(int duration) {
         return potion(b -> b.duration(duration));
     };
 
-    public PotionBuilder<MobEffectBuilder<T, P>> potion(NonNullUnaryOperator<MobEffectBuilder.Instance> builderTransformer) {
+    public PotionBuilder<? extends MobEffectBuilder<T, P>> potion(NonNullUnaryOperator<MobEffectBuilder.Instance> builderTransformer) {
         return potion(getName(), builderTransformer);
     };
 
-    public PotionBuilder<MobEffectBuilder<T, P>> potion(String potionName, NonNullUnaryOperator<MobEffectBuilder.Instance> builderTransformer) {
+    public PotionBuilder<? extends MobEffectBuilder<T, P>> potion(String potionName, NonNullUnaryOperator<MobEffectBuilder.Instance> builderTransformer) {
         return getOwner().entry(getName(), callback -> PotionBuilder.create(petrolparkOwner, this, potionName, getName(), callback))
             .effect(builderTransformer.apply(new MobEffectBuilder.Instance(() -> get().getDelegate())));
     };

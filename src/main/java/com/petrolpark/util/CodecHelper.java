@@ -22,6 +22,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.netty.buffer.ByteBuf;
+import net.createmod.catnip.codecs.stream.CatnipStreamCodecBuilders;
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.registries.Registries;
@@ -32,7 +33,9 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.animal.horse.Markings;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.properties.WoodType;
+import net.neoforged.neoforge.common.util.TriState;
 
 public class CodecHelper {
 
@@ -365,4 +368,8 @@ public class CodecHelper {
     public static final StreamCodec<ByteBuf, WoodType> WOOD_TYPE_STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(WoodType.TYPES::get, WoodType::name);
 
     public static final Codec<Markings> HORSE_MARKINGS_CODEC = Codec.stringResolver(markings -> Lang.asId(markings.name()), name -> Stream.of(Markings.values()).filter(markings -> Lang.asId(markings.name()).equals(name)).findFirst().orElse(null));
+
+    public static final StreamCodec<ByteBuf, TriState> TRI_STATE_STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(TriState.class);
+
+    public static final StreamCodec<ByteBuf, Rotation> ROTATION_STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(Rotation.class);
 };

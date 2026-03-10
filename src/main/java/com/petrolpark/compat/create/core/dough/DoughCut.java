@@ -7,6 +7,9 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.compat.create.PetrolparkCreateRegistries;
 
 import net.minecraft.core.Holder;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFileCodec;
 
 @ApiStatus.Experimental
@@ -18,4 +21,6 @@ public record DoughCut(int pattern, float area) {
     ).apply(instance, DoughCut::new));
 
     public static final Codec<Holder<DoughCut>> CODEC = RegistryFileCodec.create(PetrolparkCreateRegistries.Keys.DOUGH_CUT, DIRECT_CODEC);
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, Holder<DoughCut>> STREAM_CODEC = ByteBufCodecs.holderRegistry(PetrolparkCreateRegistries.Keys.DOUGH_CUT);
 };
