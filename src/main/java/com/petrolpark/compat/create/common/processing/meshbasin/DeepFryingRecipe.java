@@ -3,12 +3,14 @@ package com.petrolpark.compat.create.common.processing.meshbasin;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.core.recipe.AdvancedBasinRecipe;
+import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
 public class DeepFryingRecipe extends AdvancedBasinRecipe {
@@ -28,6 +30,10 @@ public class DeepFryingRecipe extends AdvancedBasinRecipe {
     @Override
     public boolean isForMeshBasin() {
         return true;
+    };
+
+    public static final AdvancedProcessingRecipe.BasinBuilder<DeepFryingRecipe> builder(ResourceLocation id) {
+        return new AdvancedProcessingRecipe.BasinBuilder<>(DeepFryingRecipe::create, id);
     };
 
     public static class Serializer implements RecipeSerializer<DeepFryingRecipe> {

@@ -13,6 +13,8 @@ import com.petrolpark.core.recipe.INamedRecipe;
 import com.petrolpark.core.recipe.book.IBookRequiredRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
+import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
 import net.minecraft.core.HolderSet;
@@ -90,6 +92,76 @@ public abstract class AdvancedProcessingRecipe<I extends RecipeInput> extends Pr
     @Deprecated
     public List<ItemStack> rollResults(@Nonnull RandomSource random) {
         return super.rollResults(random);
+    };
+
+    public static class Builder<R extends AdvancedProcessingRecipe<?>> extends ProcessingRecipeBuilder<AdvancedProcessingRecipeParams, R, AdvancedProcessingRecipe.Builder<R>> {
+
+        public Builder(ProcessingRecipe.Factory<AdvancedProcessingRecipeParams, R> factory, ResourceLocation recipeId) {
+            super(factory, recipeId);
+        };
+
+        public AdvancedProcessingRecipe.Builder<R> requireRecipeBook() {
+            params.bookRequired = true;
+            return this;
+        };
+
+        public AdvancedProcessingRecipe.Builder<R> requireBiome(HolderSet<Biome> biomes) {
+            params.allowedBiomes = Optional.of(biomes);
+            return this;
+        };
+
+        public AdvancedProcessingRecipe.Builder<R> withFirstTimeLuckyKey(ResourceLocation key) {
+            params.firstTimeLuckyKey = Optional.of(key);
+            return this;
+        };
+
+        @Override
+        protected AdvancedProcessingRecipeParams createParams() {
+            return new AdvancedProcessingRecipeParams();
+        };
+
+        @Override
+        public Builder<R> self() {
+            return this;
+        };
+
+    };
+
+    public static class BasinBuilder<R extends AdvancedBasinRecipe> extends ProcessingRecipeBuilder<ProcessingRecipeParams, R, AdvancedProcessingRecipe.BasinBuilder<R>> {
+
+        public BasinBuilder(ProcessingRecipe.Factory<ProcessingRecipeParams, R> factory, ResourceLocation recipeId) {
+            super(factory, recipeId);
+        };
+
+        public AdvancedProcessingRecipe.BasinBuilder<R> requireRecipeBook() {
+            advancedParams().bookRequired = true;
+            return this;
+        };
+
+        public AdvancedProcessingRecipe.BasinBuilder<R> requireBiome(HolderSet<Biome> biomes) {
+            advancedParams().allowedBiomes = Optional.of(biomes);
+            return this;
+        };
+
+        public AdvancedProcessingRecipe.BasinBuilder<R> withFirstTimeLuckyKey(ResourceLocation key) {
+            advancedParams().firstTimeLuckyKey = Optional.of(key);
+            return this;
+        };
+
+        protected AdvancedProcessingRecipeParams advancedParams() {
+            return (AdvancedProcessingRecipeParams)params;
+        };
+
+        @Override
+        protected AdvancedProcessingRecipeParams createParams() {
+            return new AdvancedProcessingRecipeParams();
+        };
+
+        @Override
+        public AdvancedProcessingRecipe.BasinBuilder<R> self() {
+            return this;
+        };
+
     };
 
     public static class Serializer<R extends AdvancedProcessingRecipe<?>> implements RecipeSerializer<R> {

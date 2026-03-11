@@ -10,6 +10,7 @@ import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
 import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -76,6 +77,10 @@ public class CentrifugationRecipe extends AdvancedProcessingRecipe<RecipeInput> 
     @Override
     public FluidStack getLightOutputFluid() {
         return getFluidResults().size() >= 2 ? getFluidResults().get(1) : FluidStack.EMPTY;
+    };
+
+    public static final AdvancedProcessingRecipe.Builder<CentrifugationRecipe> builder(ResourceLocation id) {
+        return new AdvancedProcessingRecipe.Builder<>(CentrifugationRecipe::new, id);
     };
     
 };

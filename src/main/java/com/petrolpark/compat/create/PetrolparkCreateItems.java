@@ -15,12 +15,14 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.world.item.BucketItem;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 
 public class PetrolparkCreateItems {
 
     public static final ItemEntry<BucketItem>
     
     BLOOD_BUCKET = REGISTRATE.sharedItem(SharedFeatureFlag.BLOOD, "blood_bucket", p -> new BucketItem(PetrolparkCreateFluids.BLOOD.get(), p))
+        // Capability automatically registered
         .defaultModel()
         .tag(Tags.Items.BUCKETS, commonItemTag("buckets/blood"))
         .register();
@@ -28,6 +30,7 @@ public class PetrolparkCreateItems {
     public static final ItemEntry<MilkCurativeBucketItem>
         
     CREAM_BUCKET = REGISTRATE.sharedItem(SharedFeatureFlag.MILK_PRODUCTS, "cream_bucket", p -> new MilkCurativeBucketItem(PetrolparkCreateFluids.CREAM.get(), p))
+        .capability(Capabilities.FluidHandler.ITEM, (stack, v) -> new FluidBucketWrapper(stack))
         .defaultModel()
         .properties(p -> p
             .food(PetrolparkFoods.CREAM)
@@ -35,6 +38,7 @@ public class PetrolparkCreateItems {
         .register(),
 
     SKIMMED_MILK_BUCKET = REGISTRATE.sharedItem(SharedFeatureFlag.MILK_PRODUCTS, "skimmed_milk_bucket", p -> new MilkCurativeBucketItem(PetrolparkCreateFluids.SKIMMED_MILK.get(), p))
+        .capability(Capabilities.FluidHandler.ITEM, (stack, v) -> new FluidBucketWrapper(stack))
         .defaultModel()
         .tag(Tags.Items.BUCKETS, Tags.Items.BUCKETS_MILK, commonItemTag("buckets/milk/skimmed"))
         .register();

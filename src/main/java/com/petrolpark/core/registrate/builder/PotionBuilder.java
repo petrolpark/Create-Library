@@ -92,18 +92,18 @@ public class PotionBuilder<P> extends AbstractBuilder<Potion, Potion, P, PotionB
         return this;
     };
 
-    public PotionBuilder<? extends PotionBuilder<P>> potion(String name, String potionName) {
+    public PotionBuilder<PotionBuilder<P>> potion(String name, String potionName) {
         return getOwner().entry(name, callback -> create(petrolparkOwner, this, name, potionName, callback));
     };
 
-    public PotionBuilder<? extends PotionBuilder<P>> defaultLong(float durationMultiplier) {
+    public PotionBuilder<PotionBuilder<P>> defaultLong(float durationMultiplier) {
         return potion("long_" + getName(), potionName)
             .effect(effectInstanceBuilders.stream().map(b -> b.copy()
                 .duration((int)(b.duration() * durationMultiplier))
             )).recipe((r, b, e) -> b.addMix(get().getDelegate(), Items.REDSTONE, e.getDelegate()));
     };
 
-    public PotionBuilder<? extends PotionBuilder<P>> defaultStrong() {
+    public PotionBuilder<PotionBuilder<P>> defaultStrong() {
         return potion("strong_" + getName(), potionName)
             .effect(effectInstanceBuilders.stream().map(b -> b.copy()
                 .amplifier(b.amplifier() + 1)

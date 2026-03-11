@@ -146,6 +146,11 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
     };
 
     @Override
+    public <T extends Item> PetrolparkItemBuilder<T, PetrolparkRegistrate> item(@Nonnull String name, @Nonnull NonNullFunction<Properties, T> factory) {
+        return item(this, name, factory);
+    };
+
+    @Override
     public <T extends Item, P> PetrolparkItemBuilder<T, P> item(@Nonnull P parent, @Nonnull String name, @Nonnull NonNullFunction<Properties, T> factory) {
         return (PetrolparkItemBuilder<T, P>)entry(name, callback -> PetrolparkItemBuilder.create(this, parent, name, callback, factory));
     };
