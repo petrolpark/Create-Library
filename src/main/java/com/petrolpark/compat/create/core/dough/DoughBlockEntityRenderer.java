@@ -17,7 +17,7 @@ public class DoughBlockEntityRenderer implements BlockEntityRenderer<DoughBlockE
 
     @Override
     public void render(@Nonnull DoughBlockEntity be, float partialTicks, @Nonnull PoseStack ms, @Nonnull MultiBufferSource bufferSource, int light, int overlay) {
-        be.renderingData.render(partialTicks, ms, bufferSource.getBuffer(RenderType.SOLID), light);
+        be.renderingData.render(be.getBlockState(), partialTicks, ms, bufferSource.getBuffer(RenderType.SOLID), light);
     };
     
 };

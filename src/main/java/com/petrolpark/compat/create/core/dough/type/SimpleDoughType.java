@@ -1,6 +1,8 @@
-package com.petrolpark.compat.create.core.dough;
+package com.petrolpark.compat.create.core.dough.type;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.compat.create.core.dough.IDough;
+import com.petrolpark.compat.create.core.dough.IDoughType;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;

@@ -42,6 +42,7 @@ public class PetrolparkCreate {
         PetrolparkCreateItems.register();
         PetrolparkCreateMenuTypes.register();
         PetrolparkCreatePackets.register();
+        PetrolparkDoughToppingTypes.register();
     
         PetrolparkArmInteractionPointTypes.register();
         PetrolparkMandrelAnimationTypes.register();

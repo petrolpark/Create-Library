@@ -1,17 +1,24 @@
 package com.petrolpark.compat.create.core.dough;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Maps;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.Petrolpark;
+import com.petrolpark.client.rendering.PetrolparkBakedModelHelper;
+import com.simibubi.create.foundation.model.BakedModelHelper;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -23,14 +30,19 @@ import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.resources.model.SimpleBakedModel;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.RenderTypeGroup;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
@@ -42,29 +54,55 @@ import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 @EventBusSubscriber(Dist.CLIENT)
 public class DoughModel extends BakedModelWrapper<BakedModel> {
 
-    public static final ModelProperty<DoughRenderingData> DOUGH_PROPERTY = new ModelProperty<>();
+    public static final ModelProperty<DoughRenderer> DOUGH_PROPERTY = new ModelProperty<>();
 
     public DoughModel(BakedModel originalModel) {
         super(originalModel);
     };
+    
+    public BakedModel getOriginalModel() {
+        return originalModel;
+    };
 
+    @SuppressWarnings("null")
+    public SimpleBakedModel getShaped(AABB aabb, TextureAtlasSprite sprite, RandomSource rand) {
+        final Map<Direction, List<BakedQuad>> culledQuads = Maps.newEnumMap(Direction.class);
+        final List<BakedQuad> quads = new ArrayList<>();
+        for (final Direction side : Iterate.directions) {
+            culledQuads.put(side, Collections.emptyList());
+            for (final BakedQuad quad : super.getQuads(null, side, rand)) {
+                quads.add(PetrolparkBakedModelHelper.copyWithGeometryAndSprite(quad,
+                    BakedModelHelper.cropAndMove(quad.getVertices(), quad.getSprite(), aabb, Vec3.ZERO),
+                    sprite
+                ));
+            };
+        };
+        return new SimpleBakedModel(quads, culledQuads, useAmbientOcclusion(), usesBlockLight(), isGui3d(), getParticleIcon(), getTransforms(), getOverrides(), RenderTypeGroup.EMPTY);
+    };
+
+    /**
+     * Returns empty List.
+     * Rendering is handled by {@link DoughRenderer}.
+     */
     @Override
     public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand, @Nonnull ModelData extraData,  @Nullable RenderType renderType) {
-        // final DoughRenderingData data = extraData.get(DOUGH_PROPERTY);
-        // if (data == null) return Collections.emptyList();
-        // final List<BakedQuad> baseQuads = super.getQuads(state, side, rand, extraData, renderType);
-
-        // final AABB bb = new AABB((1 - data.data.width()), 0d, 0, 0, 0, 0);
-
-        // for (final BakedQuad quad : baseQuads) {
-
-        // };
         return Collections.emptyList();
     };
 
     @Override
+    public boolean isCustomRenderer() {
+        return true;
+    };
+
+    @Override
+    public DoughModel applyTransform(@Nonnull ItemDisplayContext cameraTransformType, @Nonnull PoseStack poseStack, boolean applyLeftHandTransform) {
+        super.applyTransform(cameraTransformType, poseStack, applyLeftHandTransform);
+        return this;
+    };
+
+    @Override
     public TextureAtlasSprite getParticleIcon(@Nonnull ModelData data) {
-        final DoughRenderingData renderingData = data.get(DOUGH_PROPERTY);
+        final DoughRenderer renderingData = data.get(DOUGH_PROPERTY);
         return renderingData == null || renderingData.data == null ? super.getParticleIcon(data) : Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(renderingData.data.dough().textureLocation());
     };
 

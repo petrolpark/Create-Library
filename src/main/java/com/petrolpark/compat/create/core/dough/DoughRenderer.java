@@ -3,18 +3,23 @@ package com.petrolpark.compat.create.core.dough;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 
-import net.createmod.catnip.data.Iterate;
-import net.createmod.catnip.render.FluidRenderHelper;
+import net.createmod.catnip.platform.CatnipServices;
+import net.createmod.catnip.render.SuperBufferFactory;
+import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.core.Direction;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
-public class DoughRenderingData {
+public class DoughRenderer {
 
     public static final float WIDTH_UNIT = 4 / 16f;
     public static final float THICKNESS_UNIT = 1 / 16f;
@@ -28,17 +33,27 @@ public class DoughRenderingData {
     public float rollingProgress = 1f;
     public float oldRollingProgress = 1f;
 
+    @OnlyIn(Dist.CLIENT)
+    protected SuperByteBuffer cachedBuffer = null;
+
     public void update(DoughData data) {
         this.data = data;
+        CatnipServices.PLATFORM.executeOnClientOnly(() -> this::refreshBuffer);
     };
 
-    public DoughRenderingData setFrom(DoughData data) {
+    public DoughRenderer setFrom(DoughData data) {
         this.data = data;
         if (data == null) return this;
         oldWidth = data.width();
         oldLength = data.length();
         oldThickness = data.thickness();
+        CatnipServices.PLATFORM.executeOnClientOnly(() -> this::refreshBuffer);
         return this;
+    };
+
+    @OnlyIn(Dist.CLIENT)
+    protected void refreshBuffer() {
+        cachedBuffer = null;
     };
 
     public void tick(Level level) {
@@ -71,44 +86,42 @@ public class DoughRenderingData {
         return Mth.lerp(getRollingProgress(partialTicks), (float)oldThickness, (float)data.thickness()) * THICKNESS_UNIT;
     };
 
+    public AABB getAABB(float partialTicks) {
+        final float width = getWidth(partialTicks), length = getLength(partialTicks);
+        return new AABB((1f - width) / 2f, 0f, (1f - length) / 2f, (1f + width) / 2f, getThickness(partialTicks), (1f + length) / 2f);
+    };
+
     @OnlyIn(Dist.CLIENT)
-    public void render(float partialTicks, PoseStack ms, VertexConsumer builder, int light) {
+    public void render(BlockState baseState, float partialTicks, PoseStack ms, VertexConsumer builder, int light) {
         if (data == null) return;
+        final Minecraft mc = Minecraft.getInstance();
+        final ClientLevel level = mc.level;
+        if (level == null || !(mc.getBlockRenderer().getBlockModel(baseState) instanceof DoughModel baseModel)) return;
 
-        final TextureAtlasSprite doughTex = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(data.dough().textureLocation());
+        final TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(data.dough().textureLocation());
         final int color = data.dough().tint();
-
-        final float
-        width = getWidth(partialTicks),
-        length = getLength(partialTicks),
-        xMin = (1f - width) / 2f,
-        yMin = 0f,
-        zMin = (1f - length) / 2f,
-        xMax = xMin + width,
-        yMax = getThickness(partialTicks),
-        zMax = zMin + length;
 
         if (data.decoration().isEmpty()) {
 
-            light = (light & 0xF00000);
+            if (cachedBuffer == null || rollingProgress < 1f) {
 
-            ms.pushPose();
+                final BakedModel scaledModel = baseModel.getShaped(getAABB(partialTicks), sprite, level.getRandom());
 
-            for (final Direction side : Iterate.directions) {
-
-                boolean positive = side.getAxisDirection() == Direction.AxisDirection.POSITIVE;
-                if (side.getAxis().isHorizontal()) {
-                    if (side.getAxis() == Direction.Axis.X) {
-                        FluidRenderHelper.renderStillTiledFace(side, zMin, yMin, zMax, yMax, positive ? xMax : xMin, builder, ms, light, color, doughTex);
-                    } else {
-                        FluidRenderHelper.renderStillTiledFace(side, xMin, yMin, xMax, yMax, positive ? zMax : zMin, builder, ms, light, color, doughTex);
-                    }
+                if (rollingProgress < 1f) {
+                    SuperBufferFactory.getInstance().createForBlock(scaledModel, Blocks.AIR.defaultBlockState())
+                        .light(light)
+                        .color(color)
+                        .renderInto(ms, builder);
+                    return;
                 } else {
-                    FluidRenderHelper.renderStillTiledFace(side, xMin, zMin, xMax, zMax, positive ? yMax : yMin, builder, ms, light, color, doughTex);
-                };
-            }
+                    cachedBuffer = SuperBufferFactory.getInstance().createForBlock(scaledModel, Blocks.AIR.defaultBlockState());
+                }
+            };
 
-            ms.popPose();
+            cachedBuffer
+                .light(light)
+                .color(color)
+                .renderInto(ms, builder);
         };
         
     };

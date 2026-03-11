@@ -1,7 +1,7 @@
 {
     "variants": {
       "": {
-        "model": "petrolpark:block/dough"
+        "model": "petrolpark:item/dough"
       }
     }
   }

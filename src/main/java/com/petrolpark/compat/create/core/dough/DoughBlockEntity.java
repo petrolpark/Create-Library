@@ -34,7 +34,7 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
     protected VoxelShape shape = null;
 
     // Client stuff
-    protected final DoughRenderingData renderingData = new DoughRenderingData();
+    protected final DoughRenderer renderingData = new DoughRenderer();
 
     protected DoughBlockEntity(DoughData data) {
         this(PetrolparkCreateBlockEntityTypes.DOUGH.get(), BlockPos.ZERO, PetrolparkCreateBlocks.DOUGH.getDefaultState());
@@ -63,7 +63,7 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
 
     public Optional<VoxelShape> getVoxelShape() {
         if (shape == null && doughData != null) {
-            final float width = doughData.width() * DoughRenderingData.WIDTH_UNIT, length = doughData.length() * DoughRenderingData.WIDTH_UNIT;
+            final float width = doughData.width() * DoughRenderer.WIDTH_UNIT, length = doughData.length() * DoughRenderer.WIDTH_UNIT;
             shape = Block.box((1f - width) * 8f, 0f, (1f - length) * 8f, (1f + width) * 8f, doughData.thickness(), (1f + length) * 8f);
         };
         return Optional.ofNullable(shape);

@@ -23,6 +23,7 @@ public class RollingPinItemRenderer implements IClientItemExtensions {
     @Override
     public boolean applyForgeHandTransform(@Nonnull PoseStack ms, @Nonnull LocalPlayer player, @Nonnull HumanoidArm arm, @Nonnull ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
         if (player.getUseItemRemainingTicks() <= 0) return false;
+        
         final float useTime = itemInHand.getUseDuration(player) - player.getUseItemRemainingTicks() + partialTick - 1f;
 
         final float movedToMiddle = Math.min(useTime, 4f) / 4f;
@@ -30,8 +31,7 @@ public class RollingPinItemRenderer implements IClientItemExtensions {
         TransformStack.of(ms)
             .translate(0.32f * movedToMiddle * (arm == HumanoidArm.RIGHT ? -1f : 1f), -0.8f * movedToMiddle, 0f)
             .rotateZDegrees(90f * movedToMiddle * (arm == HumanoidArm.RIGHT ? 1f : -1f))
-            .translateZ(Mth.sin(rolling * Mth.PI) * -0.5f)
-        ;
+            .translateZ(Mth.sin(rolling * Mth.PI) * -0.5f);
 
         return false;
     };

@@ -9,6 +9,7 @@ import java.util.function.UnaryOperator;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import com.simibubi.create.foundation.model.BakedQuadHelper;
 
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.render.SpriteShiftEntry;
@@ -26,10 +27,17 @@ import net.neoforged.neoforge.client.model.data.ModelData;
 /**
  * Copied from {@link com.simibubi.create.foundation.model.BakedModelHelper Create source code}.
  */
-public class BakedModelHelper {
+public class PetrolparkBakedModelHelper {
 
-	public static final BakedQuad copyWithSprite(BakedQuad quad, TextureAtlasSprite sprite) {
-		return new BakedQuad(quad.getVertices(), quad.getTintIndex(), quad.getDirection(), sprite, quad.isShade(), quad.hasAmbientOcclusion());
+	public static final BakedQuad copyWithGeometryAndSprite(BakedQuad quad, int[] vertexData, TextureAtlasSprite sprite) {
+		final TextureAtlasSprite oldSprite = quad.getSprite();
+		for (int vertex = 0; vertex < 4; vertex++) {
+			float u = BakedQuadHelper.getU(vertexData, vertex);
+			float v = BakedQuadHelper.getV(vertexData, vertex);
+			BakedQuadHelper.setU(vertexData, vertex, sprite.getU(SpriteShiftEntry.getUnInterpolatedU(oldSprite, u)));
+			BakedQuadHelper.setV(vertexData, vertex, sprite.getV(SpriteShiftEntry.getUnInterpolatedV(oldSprite, v)));
+		};
+		return new BakedQuad(vertexData, quad.getTintIndex(), quad.getDirection(), sprite, quad.isShade(), quad.hasAmbientOcclusion());
 	};
 
 	@SuppressWarnings("null")

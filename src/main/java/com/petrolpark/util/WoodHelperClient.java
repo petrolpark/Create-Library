@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.client.rendering.BakedModelHelper;
+import com.petrolpark.client.rendering.PetrolparkBakedModelHelper;
 import com.petrolpark.util.WoodHelper.Wood;
 
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;
@@ -46,24 +46,24 @@ public class WoodHelperClient {
     @Nullable
     public static final BakedModel generateWoodModel(BakedModel template, Wood wood) {
         if (PLANKS_TEMPLATE.get() == null) return null; // Not loaded yet
-		if (wood == null || OAK.equals(wood)) return BakedModelHelper.swapSprites(template, UnaryOperator.identity());
+		if (wood == null || OAK.equals(wood)) return PetrolparkBakedModelHelper.swapSprites(template, UnaryOperator.identity());
 
 		final BlockState logState = getLogBlockOrOak(wood).defaultBlockState();
         final BlockState strippedLogState = getStrippedLogBlockOrOak(wood).defaultBlockState();
         final BlockState doorBottomState = getDoorBlockOrOak(wood).defaultBlockState();
 
 		final Map<TextureAtlasSprite, TextureAtlasSprite> map = new Reference2ReferenceOpenHashMap<>();
-		map.put(PLANKS_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(getPlanksBlockOrOak(wood).defaultBlockState(), Direction.UP));
-		map.put(LOG_SIDE_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(logState, Direction.SOUTH));
-		map.put(LOG_TOP_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(logState, Direction.UP));
-        map.put(STRIPPED_LOG_SIDE_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(strippedLogState, Direction.SOUTH));
-		map.put(STRIPPED_LOG_TOP_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(strippedLogState, Direction.UP));
-        map.put(LEAVES_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(Blocks.OAK_LEAVES.defaultBlockState(), Direction.UP));
-        map.put(DOOR_BOTTOM_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(doorBottomState, Direction.SOUTH));
-        map.put(DOOR_TOP_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(doorBottomState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), Direction.SOUTH));
-        map.put(TRAPDOOR_TEMPLATE.get(), BakedModelHelper.getSpriteOnSide(getTrapdoorBlockOrOak(wood).defaultBlockState(), Direction.UP));
+		map.put(PLANKS_TEMPLATE.get(), PetrolparkBakedModelHelper.getSpriteOnSide(getPlanksBlockOrOak(wood).defaultBlockState(), Direction.UP));
+		map.put(LOG_SIDE_TEMPLATE.get(), PetrolparkBakedModelHelper.getSpriteOnSide(logState, Direction.SOUTH));
+		map.put(LOG_TOP_TEMPLATE.get(), PetrolparkBakedModelHelper.getSpriteOnSide(logState, Direction.UP));
+        map.put(STRIPPED_LOG_SIDE_TEMPLATE.get(), PetrolparkBakedModelHelper.getSpriteOnSide(strippedLogState, Direction.SOUTH));
+		map.put(STRIPPED_LOG_TOP_TEMPLATE.get(), PetrolparkBakedModelHelper.getSpriteOnSide(strippedLogState, Direction.UP));
+        map.put(LEAVES_TEMPLATE.get(), PetrolparkBakedModelHelper.getSpriteOnSide(Blocks.OAK_LEAVES.defaultBlockState(), Direction.UP));
+        map.put(DOOR_BOTTOM_TEMPLATE.get(), PetrolparkBakedModelHelper.getSpriteOnSide(doorBottomState, Direction.SOUTH));
+        map.put(DOOR_TOP_TEMPLATE.get(), PetrolparkBakedModelHelper.getSpriteOnSide(doorBottomState.setValue(DoorBlock.HALF, DoubleBlockHalf.UPPER), Direction.SOUTH));
+        map.put(TRAPDOOR_TEMPLATE.get(), PetrolparkBakedModelHelper.getSpriteOnSide(getTrapdoorBlockOrOak(wood).defaultBlockState(), Direction.UP));
 
-		return BakedModelHelper.swapSprites(template, map::get);
+		return PetrolparkBakedModelHelper.swapSprites(template, map::get);
 	};
 
     public static final void init() {};

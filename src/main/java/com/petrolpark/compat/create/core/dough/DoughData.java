@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.compat.create.PetrolparkCreateDataComponentTypes;
+import com.petrolpark.compat.create.core.dough.topping.IDoughTopping;
 import com.petrolpark.util.CodecHelper;
 import com.petrolpark.util.Neither;
 
@@ -104,10 +105,16 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
         public static final Codec<DoughData.Toppings> CODEC = CodecHelper.singleField(DoughData.Toppings.Entry.CODEC.listOf(), "toppings", DoughData.Toppings::toppings, DoughData.Toppings::new);
         public static final StreamCodec<RegistryFriendlyByteBuf, DoughData.Toppings> STREAM_CODEC = DoughData.Toppings.Entry.STREAM_CODEC.apply(ByteBufCodecs.list()).map(DoughData.Toppings::new, DoughData.Toppings::toppings);
     
-        public record Entry() {
+        public record Entry(Holder<IDoughTopping> topping) {
         
-            public static final Codec<DoughData.Toppings.Entry> CODEC = Codec.unit(Entry::new); //TODO
-            public static final StreamCodec<RegistryFriendlyByteBuf, DoughData.Toppings.Entry> STREAM_CODEC = StreamCodec.unit(new Entry()); //TODO
+            public static final Codec<DoughData.Toppings.Entry> CODEC = RecordCodecBuilder.create(instance -> instance.group(
+                IDoughTopping.CODEC.fieldOf("topping").forGetter(DoughData.Toppings.Entry::topping)
+            ).apply(instance, DoughData.Toppings.Entry::new));
+
+            public static final StreamCodec<RegistryFriendlyByteBuf, DoughData.Toppings.Entry> STREAM_CODEC = StreamCodec.composite(
+                IDoughTopping.STREAM_CODEC, DoughData.Toppings.Entry::topping,
+                DoughData.Toppings.Entry::new
+            );
         };
     };
 };

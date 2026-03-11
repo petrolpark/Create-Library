@@ -9,7 +9,7 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.minecraft.world.item.ItemStack;
 
-public class PetrolparkCreateAdvancedIngredientTypes {
+public class  PetrolparkCreateAdvancedIngredientTypes {
 
     public static final RegistryEntry<IAdvancedIngredientType<? super ItemStack>, INamedAdvancedIngredientType<ItemStack>> 
 
