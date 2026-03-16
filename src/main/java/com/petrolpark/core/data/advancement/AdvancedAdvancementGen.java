@@ -1,11 +1,16 @@
 package com.petrolpark.core.data.advancement;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
@@ -13,6 +18,8 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
 import com.petrolpark.PetrolparkDataMapTypes;
 import com.petrolpark.core.world.block.entity.BlockEntityTypeTagProvider;
 
@@ -27,12 +34,15 @@ import net.minecraft.advancements.DisplayInfo;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.DataGenerator;
+import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -48,24 +58,30 @@ public abstract class AdvancedAdvancementGen implements AdvancementProvider.Adva
 
     protected final Map<TagKey<BlockEntityType<?>>, List<ResourceKey<BlockEntityType<?>>>> blockEntityTypeTags = new HashMap<>();
 
+    protected final PackOutput packOutput;
+    protected final ExistingFileHelper existingFileHelper;
+
     protected final BlockEntityTypeTagProvider blockEntityTypeTagProvider;
     protected final DataMapProvider dataMapProvider;
     protected final LanguageProvider langProvider;
 
     protected AdvancedAdvancementGen(GatherDataEvent event, String modid) {
         final DataGenerator generator = event.getGenerator();
-		final PackOutput output = generator.getPackOutput();
+		packOutput = generator.getPackOutput();
 		final CompletableFuture<HolderLookup.Provider> lookupProvider = event.getLookupProvider();
         final ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
 
         this.modid = modid;
-        blockEntityTypeTagProvider = new AdvancementBlockEntityTypeTagProvider(output, lookupProvider, modid, existingFileHelper);
-        dataMapProvider = new AdvancementDataMapProvider(output, lookupProvider);
-        langProvider = new AdvancementLangProvider(output, modid);
+        this.existingFileHelper = event.getExistingFileHelper();
+        blockEntityTypeTagProvider = new AdvancementBlockEntityTypeTagProvider(packOutput, lookupProvider, modid, existingFileHelper);
+        dataMapProvider = new AdvancementDataMapProvider(packOutput, lookupProvider);
+        langProvider = new AdvancementLangProvider(packOutput, modid);
     };
     
-    protected AdvancedAdvancementGen(String modid, BlockEntityTypeTagProvider blockEntityTypeTagProvider, DataMapProvider dataMapProvider, LanguageProvider langProvider) {
+    protected AdvancedAdvancementGen(String modid, PackOutput packOutput, ExistingFileHelper existingFileHelper, BlockEntityTypeTagProvider blockEntityTypeTagProvider, DataMapProvider dataMapProvider, LanguageProvider langProvider) {
         this.modid = modid;
+        this.packOutput = packOutput;
+        this.existingFileHelper = existingFileHelper;
         this.blockEntityTypeTagProvider = blockEntityTypeTagProvider;
         this.dataMapProvider = dataMapProvider;
         this.langProvider = langProvider;
@@ -110,12 +126,35 @@ public abstract class AdvancedAdvancementGen implements AdvancementProvider.Adva
 
     class AdvancementLangProvider extends LanguageProvider {
 
+        private final Map<String, String> data = new TreeMap<>(); // Duplicate of private field
+
         public AdvancementLangProvider(PackOutput output, String modid) {
             super(output, modid, "en_us");
         };
 
         @Override
+        public CompletableFuture<?> run(@Nonnull CachedOutput cache) {
+            final Path path = packOutput.getOutputFolder(PackOutput.Target.RESOURCE_PACK).resolve(modid).resolve("lang").resolve("en_us.json");
+
+            try (BufferedReader reader = Files.newBufferedReader(path)) { // If the file already exists, add to it
+                
+                final JsonObject json = GsonHelper.parse(reader);
+                data.forEach(json::addProperty);
+                return DataProvider.saveStable(cache, json, path);
+
+            } catch (IOException | JsonParseException e) {
+                return super.run(cache);
+            }
+        };
+
+        @Override
         protected void addTranslations() {};
+
+        @Override
+        public void add(@Nonnull String key, @Nonnull String value) {
+            super.add(key, value);
+            data.put(key, value);
+        };
 
     };
 

@@ -2,6 +2,7 @@ package com.petrolpark.compat.create.core.recipe;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
@@ -11,13 +12,16 @@ import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRec
 import com.petrolpark.core.recipe.IBiomeSpecificRecipe;
 import com.petrolpark.core.recipe.INamedRecipe;
 import com.petrolpark.core.recipe.book.IBookRequiredRecipe;
+import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.HolderSet;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
@@ -185,5 +189,13 @@ public abstract class AdvancedProcessingRecipe<I extends RecipeInput> extends Pr
 		};
 
 	};
+
+    public static abstract class Gen<R extends AdvancedProcessingRecipe<?>> extends ProcessingRecipeGen<AdvancedProcessingRecipeParams, R, AdvancedProcessingRecipe.Builder<R>> {
+
+        public Gen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, String defaultNamespace) {
+            super(output, registries, defaultNamespace);
+        };
+
+    };
     
 };

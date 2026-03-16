@@ -1,15 +1,20 @@
 package com.petrolpark.compat.create.common.processing.centrifuge;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nonnull;
 
 import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
+import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.NonNullList;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
@@ -81,6 +86,27 @@ public class CentrifugationRecipe extends AdvancedProcessingRecipe<RecipeInput> 
 
     public static final AdvancedProcessingRecipe.Builder<CentrifugationRecipe> builder(ResourceLocation id) {
         return new AdvancedProcessingRecipe.Builder<>(CentrifugationRecipe::new, id);
+    };
+
+    /**
+     * The base class for Centrifugation recipe generation.
+     * Addons should extend this and use the {@link ProcessingRecipeGen#create} methods to make recipes.
+     */
+    public static abstract class Gen extends AdvancedProcessingRecipe.Gen<CentrifugationRecipe> {
+      
+        public Gen(PackOutput output, CompletableFuture<Provider> registries, String defaultNamespace) {
+            super(output, registries, defaultNamespace);
+        };
+
+        @Override
+        protected IRecipeTypeInfo getRecipeType() {
+            return PetrolparkCreateRecipeTypes.CENTRIFUGATION;
+        };
+
+        @Override
+        protected Builder<CentrifugationRecipe> getBuilder(ResourceLocation id) {
+            return builder(id);
+        };
     };
     
 };

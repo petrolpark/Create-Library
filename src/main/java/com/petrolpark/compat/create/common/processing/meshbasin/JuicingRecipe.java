@@ -1,13 +1,19 @@
 package com.petrolpark.compat.create.common.processing.meshbasin;
 
+import java.util.concurrent.CompletableFuture;
+
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
 import com.petrolpark.compat.create.core.recipe.AdvancedBasinRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
+import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
+import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
+import net.minecraft.core.HolderLookup.Provider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
@@ -46,6 +52,28 @@ public class JuicingRecipe extends AdvancedBasinRecipe {
         @Override
         public StreamCodec<RegistryFriendlyByteBuf, JuicingRecipe> streamCodec() {
             return STREAM_CODEC;
+        };
+
+    };
+
+    /**
+     * The base class for Juicing recipe generation.
+     * Addons should extend this and use the {@link ProcessingRecipeGen#create} methods to make recipes.
+     */
+    public static abstract class Gen extends AdvancedBasinRecipe.Gen<JuicingRecipe> {
+
+        public Gen(PackOutput output, CompletableFuture<Provider> registries, String defaultNamespace) {
+            super(output, registries, defaultNamespace);
+        };
+
+        @Override
+        protected IRecipeTypeInfo getRecipeType() {
+            return PetrolparkCreateRecipeTypes.JUICING;
+        };
+
+        @Override
+        protected AdvancedProcessingRecipe.BasinBuilder<JuicingRecipe> getBuilder(ResourceLocation id) {
+            return builder(id);
         };
 
     };

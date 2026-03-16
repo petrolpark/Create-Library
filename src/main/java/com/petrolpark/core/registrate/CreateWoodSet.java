@@ -84,7 +84,7 @@ public class CreateWoodSet {
         noSideModelProvider = getPaneModelProvider(paneModelPrefix, "noside", textureLoc, planksTextureLocSup),
         noSideAltModelProvider = getPaneModelProvider(paneModelPrefix, "noside_alt", textureLoc, planksTextureLocSup);
 
-        registrate.block(paneLoc.getPath(), ConnectedGlassPaneBlock::new)
+        final BlockEntry<ConnectedGlassPaneBlock> pane = registrate.block(paneLoc.getPath(), ConnectedGlassPaneBlock::new)
 			.initialProperties(() -> Blocks.GLASS_PANE)
 			.properties(p -> p
                 .mapColor(woodSet.planksMapColor())
@@ -110,6 +110,9 @@ public class CreateWoodSet {
                 .save(prov)
 			).build()
             .register();
+
+        woodSet.additionalEntries().add(window);
+        woodSet.additionalEntries().add(pane);
     };
 
     public static final boolean never(BlockState p_235436_0_, BlockGetter p_235436_1_, BlockPos p_235436_2_) {

@@ -1,11 +1,13 @@
 package com.petrolpark.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.IntConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -15,6 +17,8 @@ import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.PetrolparkDataComponentTypes;
+import com.petrolpark.client.creativemodetab.CustomTab.ITabEntry;
 import com.petrolpark.compat.Mods;
 import com.simibubi.create.content.kinetics.waterwheel.WaterWheelRenderer;
 
@@ -30,9 +34,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
@@ -543,6 +549,33 @@ public class WoodHelper {
     @Nullable
     public static final Wood getWoodFromBoatItem(ItemStack boatItem) {
         return getWoodFromSuffixedItem(boatItem.getItem(), "boat");
+    };
+
+    public static class WoodenItemTabEntry implements ITabEntry {
+
+        final ItemLike item;
+
+        public WoodenItemTabEntry(ItemLike item) {
+            this.item = item;
+        };
+
+        @Override
+        public void addItems(List<ItemStack> stacks, ItemDisplayParameters parameters, IntConsumer specialRenderLocation) {
+            getAll().forEach(stacks::add);
+        };
+
+        @Override
+        public Collection<ItemStack> getItemsToAddToSearch(ItemDisplayParameters parameters) {
+            return getAll().toList();
+        };
+
+        public Stream<ItemStack> getAll() {
+            return streamAllWoods().map(wood -> {
+                final ItemStack stack = new ItemStack(item);
+                stack.set(PetrolparkDataComponentTypes.WOOD, wood);
+                return stack;
+            });
+        };
     };
 
 

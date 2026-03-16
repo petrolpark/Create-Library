@@ -1,8 +1,12 @@
 package com.petrolpark.core.registrate;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.function.IntConsumer;
+import java.util.stream.Stream;
 
+import com.petrolpark.client.creativemodetab.CustomTab.ITabEntry;
 import com.petrolpark.core.registrate.builder.PetrolparkBlockBuilder;
 import com.petrolpark.core.world.block.LogBlock;
 import com.petrolpark.util.BlockStateProviderHelper;
@@ -12,6 +16,7 @@ import com.tterrag.registrate.providers.RegistrateRecipeProvider;
 import com.tterrag.registrate.util.OneTimeEventReceiver;
 import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
+import com.tterrag.registrate.util.entry.ItemProviderEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 
@@ -25,8 +30,10 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.BoatItem;
+import net.minecraft.world.item.CreativeModeTab.ItemDisplayParameters;
 import net.minecraft.world.item.HangingSignItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SignItem;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
@@ -70,8 +77,9 @@ public record WoodSetEntry(
     BlockEntry<PressurePlateBlock> pressurePlate, BlockEntry<ButtonBlock> button, BlockEntry<DoorBlock> door, BlockEntry<TrapDoorBlock> trapdoor,
     BlockEntry<StandingSignBlock> standingSign, BlockEntry<WallSignBlock> wallSign, ItemEntry<SignItem> signItem, BlockEntry<CeilingHangingSignBlock> ceilingHangingSign, BlockEntry<WallHangingSignBlock> wallHangingSign, ItemEntry<HangingSignItem> hangingSignItem,
     //TODO shelf
-    ItemEntry<BoatItem> boat, ItemEntry<BoatItem> chestBoat
-) {
+    ItemEntry<BoatItem> boat, ItemEntry<BoatItem> chestBoat,
+    List<ItemProviderEntry<?, ?>> additionalEntries
+) implements ITabEntry {
     
     public static class Builder<REGISTRATE extends AbstractRegistrate<?>> {
 
@@ -534,12 +542,32 @@ public record WoodSetEntry(
                 slab, stairs, fence, fenceGate,
                 pressurePlate, button, door, trapdoor,
                 standingSign, wallSign, signItem, ceilingHangingSign, wallHangingSign, hangingSignItem,
-                boat, chestBoat
+                boat, chestBoat,
+                new ArrayList<>()
             );
 
             registerCallbacks.forEach(callback -> callback.accept(registrate, setEntry));
 
             return setEntry;
         };
+    };
+
+    public Stream<ItemProviderEntry<?, ?>> streamItemEntries() {
+        return Stream.concat(Stream.of(
+            log(), wood(), strippedLog(), strippedWood(), planks(), stairs(), slab(), fence(), fenceGate(), door(), trapdoor(), button(), // Building blocks
+            leaves(), sapling(), // Natural blocks
+            signItem(), hangingSignItem(), // Functional blocks
+            boat(), chestBoat() // Tools & utilities
+        ), additionalEntries().stream()); // Any others
+    };
+
+    @Override
+    public void addItems(List<ItemStack> stacks, ItemDisplayParameters parameters, IntConsumer specialRenderLocation) {
+        stacks.addAll(streamItemEntries().map(ItemProviderEntry::asStack).toList());
+    };
+
+    @Override
+    public Collection<ItemStack> getItemsToAddToSearch(ItemDisplayParameters parameters) {
+        return streamItemEntries().map(ItemProviderEntry::asStack).toList();
     };
 };

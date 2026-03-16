@@ -33,7 +33,7 @@ public class CustomTab extends CreativeModeTab {
      */
     public final Map<Integer, ITabEntry> renderedEntries;
 
-    protected CustomTab(Builder builder) {
+    protected CustomTab(CustomTab.Builder builder) {
         super(builder);
         entries = ImmutableList.copyOf(builder.entries);
         renderedEntries = new HashMap<>();
@@ -81,14 +81,6 @@ public class CustomTab extends CreativeModeTab {
     public static interface ITabEntry {
 
         /**
-         * How many contiguous slots this entry occupies
-         * @return
-         */
-        public default int getSize() {
-            return 1;
-        };
-
-        /**
          * Whether this entry should begin on a new line
          * @return
          */
@@ -104,7 +96,6 @@ public class CustomTab extends CreativeModeTab {
         public default void addItems(List<ItemStack> stacks, ItemDisplayParameters parameters, IntConsumer specialRenderLocation) {
             if (newLine()) stacks.addAll(Collections.nCopies(((9 - (stacks.size() % 9)) % 9), ItemStack.EMPTY));
             if (hasSpecialRendering()) specialRenderLocation.accept(stacks.size());
-            stacks.addAll(Collections.nCopies(getSize(), ItemStack.EMPTY));
         };
 
         public default boolean hasSpecialRendering() {
@@ -122,11 +113,6 @@ public class CustomTab extends CreativeModeTab {
         public static final ITabEntry LINE_BREAK = new ITabEntry() {
 
             @Override
-            public int getSize() {
-                return 0;
-            };
-
-            @Override
             public boolean newLine() {
                 return true;
             };
@@ -135,11 +121,11 @@ public class CustomTab extends CreativeModeTab {
         /**
          * A simple ItemStack, like in a normal {@link CreativeModeTab}.
          */
-        public static class Item implements ITabEntry {
+        public static class SingleItem implements ITabEntry {
 
             public final Supplier<ItemStack> stack;
 
-            public Item(Supplier<ItemStack> stack) {
+            public SingleItem(Supplier<ItemStack> stack) {
                 this.stack = stack;
             };
 
@@ -156,46 +142,6 @@ public class CustomTab extends CreativeModeTab {
         };
 
         /**
-         * Add an ItemStack to this {@link CustomTab}, but only add it to the search bar if the condition passes.
-         */
-        public static class ConditionalItem extends Item {
-
-            public final Supplier<Boolean> condition;
-
-            public ConditionalItem(Supplier<ItemStack> stack, Supplier<Boolean> condition) {
-                super(stack);
-                this.condition = condition;
-            };
-
-            @Override
-            public void addItems(List<ItemStack> stacks, ItemDisplayParameters parameters, IntConsumer specialRenderLocation) {
-                if (condition.get()) super.addItems(stacks, parameters, specialRenderLocation);
-            };
-
-            @Override
-            public Collection<ItemStack> getItemsToAddToSearch(ItemDisplayParameters parameters) {
-                if (!condition.get()) return Collections.emptySet();
-                return super.getItemsToAddToSearch(parameters);
-            };
-
-        };
-
-        /**
-         * Add an ItemStack to this {@link CustomTab}, but do not add it to the search bar, as it is already there.
-         */
-        public static class DuplicateItem extends Item {
-
-            public DuplicateItem(Supplier<ItemStack> stack) {
-                super(stack);
-            };
-
-            @Override
-            public Collection<ItemStack> getItemsToAddToSearch(ItemDisplayParameters parameters) {
-                return Collections.emptyList();
-            };
-        };
-
-        /**
          * Add a caption that takes up a whole row in this {@link CustomTab}.
          */
         public static class Subheading implements ITabEntry {
@@ -205,15 +151,16 @@ public class CustomTab extends CreativeModeTab {
             public Subheading(Component subheading) {
                 this.subheading = subheading;
             };
-
-            @Override
-            public int getSize() {
-                return 9;
-            };
             
             @Override
             public boolean newLine() {
                 return true;
+            };
+
+            @Override
+            public void addItems(List<ItemStack> stacks, ItemDisplayParameters parameters, IntConsumer specialRenderLocation) {
+                ITabEntry.super.addItems(stacks, parameters, specialRenderLocation);
+                for (int i = 0; i < 9; i++) stacks.add(ItemStack.EMPTY);
             };
 
             @Override

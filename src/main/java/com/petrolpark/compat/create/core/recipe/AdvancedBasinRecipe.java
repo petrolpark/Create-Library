@@ -1,18 +1,22 @@
 package com.petrolpark.compat.create.core.recipe;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Stream;
 
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.core.recipe.IBiomeSpecificRecipe;
 import com.petrolpark.core.recipe.INamedRecipe;
 import com.petrolpark.core.recipe.book.IBookRequiredRecipe;
+import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.HolderSet;
+import net.minecraft.data.PackOutput;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
@@ -70,5 +74,13 @@ public class AdvancedBasinRecipe extends BasinRecipe implements IBiomeSpecificRe
     @Override
     public boolean isBookRequired(Level level) {
         return bookRequired;
+    };
+
+    public static abstract class Gen<R extends AdvancedBasinRecipe> extends ProcessingRecipeGen<ProcessingRecipeParams, R, AdvancedProcessingRecipe.BasinBuilder<R>> {
+
+        public Gen(PackOutput output, CompletableFuture<Provider> registries, String defaultNamespace) {
+            super(output, registries, defaultNamespace);
+        };
+
     };
 };
