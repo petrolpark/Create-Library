@@ -114,7 +114,7 @@ public class Petrolpark {
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
-        return new SharedFeatureFlag[]{SharedFeatureFlag.ROLLING_PIN};
+        return new SharedFeatureFlag[]{};
     };
 
     private void init(final FMLCommonSetupEvent event) {

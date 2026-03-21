@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -54,5 +57,10 @@ public class AdvancementHelper {
     public static final boolean testFluid(Optional<FluidIngredient> fluidPredicate, FluidStack fluid) {
         if (fluidPredicate.isEmpty()) return true;
         return fluidPredicate.get().test(fluid);
+    };
+
+    public static final boolean testEntity(ServerPlayer player, Optional<EntityPredicate> entityPredicate, Entity entity) {
+        if (entityPredicate.isEmpty()) return true;
+        return entityPredicate.get().matches(player, entity);
     };
 };

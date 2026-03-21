@@ -4,6 +4,7 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidScenes;
 import com.petrolpark.compat.create.common.processing.blender.BlenderScenes;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeScenes;
+import com.petrolpark.compat.create.common.processing.crushingWheel.CrushingWheelScenes;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionScenes;
 import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinScenes;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerPonderScenes;
@@ -41,6 +42,9 @@ public class PetrolparkCreatePonderScenes {
 
 		if (SharedFeatureFlag.CENTRIFUGE.enabled()) itemProviderHelper.forComponents(PetrolparkCreateBlocks.CENTRIFUGE)
 			.addStoryBoard("processing/centrifuge", CentrifugeScenes::centrifuge);
+
+		itemProviderHelper.forComponents(AllBlocks.CRUSHING_WHEEL)
+			.addStoryBoard("processing/crushing_wheel_filtering", CrushingWheelScenes::filtering);
 			
 		if (SharedFeatureFlag.EXTRUSION.enabled()) itemProviderHelper.forComponents(PetrolparkCreateBlocks.EXTRUSION_DIE)
 			.addStoryBoard("processing/extrusion", ExtrusionScenes::extrusionDie, AllCreatePonderTags.CONTRAPTION_ACTOR);

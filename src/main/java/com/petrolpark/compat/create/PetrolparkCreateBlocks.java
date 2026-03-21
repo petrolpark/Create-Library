@@ -14,6 +14,7 @@ import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterO
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlock;
 import com.petrolpark.compat.create.common.processing.blender.BlenderBlock;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeBlock;
+import com.petrolpark.compat.create.common.processing.crushingWheel.EncasedCrushingWheelControllerBlock;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionDieBlock;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlock;
 import com.petrolpark.compat.create.common.processing.meshbasin.MeshBasinBlock;
@@ -78,6 +79,10 @@ public class PetrolparkCreateBlocks {
         .properties(p -> p
             .stacksTo(1)
         ).build()
+        .register();
+
+    public static final BlockEntry<EncasedCrushingWheelControllerBlock> ENCASED_CRUSHING_WHEEL_CONTROLLER = REGISTRATE.block("encased_crushing_wheel_controller", EncasedCrushingWheelControllerBlock::new)
+        .initialProperties(AllBlocks.CRUSHING_WHEEL_CONTROLLER)
         .register();
 
     public static final BlockEntry<ExtrusionDieBlock> EXTRUSION_DIE = REGISTRATE.sharedBlock(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlock::new)

@@ -39,7 +39,7 @@ public class PotionBuilder<P> extends AbstractBuilder<Potion, Potion, P, PotionB
     protected final PetrolparkRegistrate petrolparkOwner;
 
     protected final String potionName;
-    protected final List<MobEffectBuilder.Instance> effectInstanceBuilders = new ArrayList<>();
+    protected final List<MobEffectBuilder.MobEffectInstanceBuilder> effectInstanceBuilders = new ArrayList<>();
 
     protected PotionBuilder(PetrolparkRegistrate owner, P parent, String name, String potionName, BuilderCallback callback) {
         super(owner, parent, name, callback, Registries.POTION);
@@ -68,13 +68,13 @@ public class PotionBuilder<P> extends AbstractBuilder<Potion, Potion, P, PotionB
         });
     };
 
-    public PotionBuilder<P> effect(Stream<MobEffectBuilder.Instance> instanceBuilders) {
+    public PotionBuilder<P> effect(Stream<MobEffectBuilder.MobEffectInstanceBuilder> instanceBuilders) {
         instanceBuilders.forEach(effectInstanceBuilders::add);
         return this;
     };
 
-    public PotionBuilder<P> effect(MobEffectBuilder.Instance ... instanceBuilders) {
-        for (MobEffectBuilder.Instance builder : instanceBuilders) effectInstanceBuilders.add(builder);
+    public PotionBuilder<P> effect(MobEffectBuilder.MobEffectInstanceBuilder ... instanceBuilders) {
+        for (MobEffectBuilder.MobEffectInstanceBuilder builder : instanceBuilders) effectInstanceBuilders.add(builder);
         return this;
     };
 
@@ -113,7 +113,7 @@ public class PotionBuilder<P> extends AbstractBuilder<Potion, Potion, P, PotionB
 
     @Override
     protected @NonnullType Potion createEntry() {
-        return new Potion(getOwner().getModid() + "." + potionName, effectInstanceBuilders.stream().map(MobEffectBuilder.Instance::build).toArray(MobEffectInstance[]::new));
+        return new Potion(getOwner().getModid() + "." + potionName, effectInstanceBuilders.stream().map(MobEffectBuilder.MobEffectInstanceBuilder::build).toArray(MobEffectInstance[]::new));
     };
     
 };

@@ -72,13 +72,13 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
         return potion(b -> b.duration(duration));
     };
 
-    public PotionBuilder<? extends MobEffectBuilder<T, P>> potion(NonNullUnaryOperator<MobEffectBuilder.Instance> builderTransformer) {
+    public PotionBuilder<? extends MobEffectBuilder<T, P>> potion(NonNullUnaryOperator<MobEffectBuilder.MobEffectInstanceBuilder> builderTransformer) {
         return potion(getName(), builderTransformer);
     };
 
-    public PotionBuilder<? extends MobEffectBuilder<T, P>> potion(String potionName, NonNullUnaryOperator<MobEffectBuilder.Instance> builderTransformer) {
+    public PotionBuilder<? extends MobEffectBuilder<T, P>> potion(String potionName, NonNullUnaryOperator<MobEffectBuilder.MobEffectInstanceBuilder> builderTransformer) {
         return getOwner().entry(getName(), callback -> PotionBuilder.create(petrolparkOwner, this, potionName, getName(), callback))
-            .effect(builderTransformer.apply(new MobEffectBuilder.Instance(() -> get().getDelegate())));
+            .effect(builderTransformer.apply(new MobEffectBuilder.MobEffectInstanceBuilder(() -> get().getDelegate())));
     };
 
     @SafeVarargs
@@ -109,7 +109,7 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
         public T create(MobEffectCategory category, int color);
     };
 
-    public static class Instance {
+    public static class MobEffectInstanceBuilder {
 
         protected final NonNullSupplier<Holder<MobEffect>> effect;
         protected int duration = 600;
@@ -117,18 +117,18 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
         protected boolean ambient = false;
         protected boolean visible = true;
         protected boolean showIcon = true;
-        protected @Nullable MobEffectBuilder.Instance hidden = null;
+        protected @Nullable MobEffectBuilder.MobEffectInstanceBuilder hidden = null;
 
-        public Instance(MobEffectBuilder.Instance builder) {
+        public MobEffectInstanceBuilder(MobEffectBuilder.MobEffectInstanceBuilder builder) {
             this(builder.effect);
             copyFrom(builder);
         };
 
-        public Instance(NonNullSupplier<Holder<MobEffect>> effect) {
+        public MobEffectInstanceBuilder(NonNullSupplier<Holder<MobEffect>> effect) {
             this.effect = effect;
         };
 
-        public Instance copyFrom(Instance builder) {
+        public MobEffectInstanceBuilder copyFrom(MobEffectInstanceBuilder builder) {
             this.duration = builder.duration;
             this.amplifier = builder.amplifier;
             this.ambient = builder.ambient;
@@ -146,7 +146,7 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
             return duration;
         };
 
-        public MobEffectBuilder.Instance duration(int duration) {
+        public MobEffectBuilder.MobEffectInstanceBuilder duration(int duration) {
             this.duration = duration;
             return this;
         };
@@ -155,7 +155,7 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
             return amplifier;
         };
 
-        public MobEffectBuilder.Instance amplifier(int amplifier) {
+        public MobEffectBuilder.MobEffectInstanceBuilder amplifier(int amplifier) {
             this.amplifier = amplifier;
             return this;
         };
@@ -164,7 +164,7 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
             return ambient;
         };
 
-        public MobEffectBuilder.Instance ambient(boolean ambient) {
+        public MobEffectBuilder.MobEffectInstanceBuilder ambient(boolean ambient) {
             this.ambient = ambient;
             return this;
         };
@@ -173,7 +173,7 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
             return visible;
         };
 
-        public MobEffectBuilder.Instance visible(boolean visible) {
+        public MobEffectBuilder.MobEffectInstanceBuilder visible(boolean visible) {
             this.visible = visible;
             return this;
         };
@@ -182,22 +182,22 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
             return showIcon;
         };
 
-        public MobEffectBuilder.Instance showIcon(boolean showIcon) {
+        public MobEffectBuilder.MobEffectInstanceBuilder showIcon(boolean showIcon) {
             this.showIcon = showIcon;
             return this;
         };
 
-        public MobEffectBuilder.Instance hidden() {
+        public MobEffectBuilder.MobEffectInstanceBuilder hidden() {
             return hidden;
         };
 
-        public MobEffectBuilder.Instance hidden(Instance hidden) {
+        public MobEffectBuilder.MobEffectInstanceBuilder hidden(MobEffectInstanceBuilder hidden) {
             this.hidden = hidden;
             return this;
         };
 
-        public MobEffectBuilder.Instance copy() {
-            return new MobEffectBuilder.Instance(effect()).copyFrom(this);
+        public MobEffectBuilder.MobEffectInstanceBuilder copy() {
+            return new MobEffectBuilder.MobEffectInstanceBuilder(effect()).copyFrom(this);
         };
 
         public MobEffectInstance build() {

@@ -1,8 +1,19 @@
 {
-  "damage": 4,
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "potato_products"
+    }
+  ],
+  "damage": 8,
+  "knockback": 1.5,
   "items": "#c:storage_blocks/mashed_potato",
+  "on_block_hit": {
+    "type": "create:place_block_on_ground",
+    "block": "petrolpark:mashed_potato_block"
+  },
   "velocity_multiplier": 0.8,
-  "reload_ticks": 5,
+  "reload_ticks": 15,
   "sticky": true,
   "render_mode": {
     "type": "create:tumble"

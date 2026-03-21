@@ -28,9 +28,9 @@ public class SharedMobEffectBuilder<T extends MobEffect, P> extends MobEffectBui
     };
 
     @Override
-    public PotionBuilder<SharedMobEffectBuilder<T, P>> potion(String potionName, NonNullUnaryOperator<Instance> builderTransformer) {
+    public PotionBuilder<SharedMobEffectBuilder<T, P>> potion(String potionName, NonNullUnaryOperator<MobEffectInstanceBuilder> builderTransformer) {
         return petrolparkOwner.sharedEntry(featureFlag, getName(), callback -> SharedPotionBuilder.create(petrolparkOwner, this, featureFlag, potionName, getName(), callback))
-            .effect(builderTransformer.apply(new MobEffectBuilder.Instance(() -> get().getDelegate())));
+            .effect(builderTransformer.apply(new MobEffectBuilder.MobEffectInstanceBuilder(() -> get().getDelegate())));
     };
     
 };

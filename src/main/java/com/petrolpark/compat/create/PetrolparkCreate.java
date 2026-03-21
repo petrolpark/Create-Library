@@ -12,6 +12,7 @@ import com.simibubi.create.foundation.item.TooltipModifier;
 import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.world.item.Item;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.RegisterEvent;
 
@@ -48,6 +49,7 @@ public class PetrolparkCreate {
         PetrolparkArmInteractionPointTypes.register();
         PetrolparkMandrelAnimationTypes.register();
         PetrolparkMovementChecks.register();
+        PetrolparkOpenPipeEffectHandlers.register();
 
         // Event Bus Subscribers
         modEventBus.addListener(PetrolparkCreate::onRegister);
@@ -55,6 +57,10 @@ public class PetrolparkCreate {
         modEventBus.register(CreateModEvents.class);
         mainEventBus.register(AbstractRememberPlacerBehaviour.class);
         mainEventBus.register(EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER);
+    };
+
+    public static final void init(final FMLCommonSetupEvent event) {
+        
     };
 
     private static final void onRegister(final RegisterEvent event) {

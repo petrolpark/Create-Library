@@ -2,6 +2,7 @@ package com.petrolpark.core.registrate;
 
 import java.util.function.Supplier;
 
+import com.petrolpark.core.registrate.builder.MobEffectBuilder;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
@@ -13,6 +14,10 @@ public class MobEffectEntry<T extends MobEffect> extends RegistryEntry<MobEffect
 
     public MobEffectEntry(AbstractRegistrate<?> owner, DeferredHolder<MobEffect, T> key) {
         super(owner, key);
+    };
+
+    public MobEffectBuilder.MobEffectInstanceBuilder asInstance() {
+        return new MobEffectBuilder.MobEffectInstanceBuilder(this::getDelegate);
     };
 
     public MobEffectInstance asInstance(int duration, int amplifier) {

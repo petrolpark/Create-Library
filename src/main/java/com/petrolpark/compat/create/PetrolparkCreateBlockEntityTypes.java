@@ -13,6 +13,7 @@ import com.petrolpark.compat.create.common.processing.blender.BlenderRenderer;
 import com.petrolpark.compat.create.common.processing.blender.BlenderVisual;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeBlockEntity;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeRenderer;
+import com.petrolpark.compat.create.common.processing.crushingWheel.EncasedCrushingWheelControllerBlockEntity;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionDieBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelBlockEntity;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRenderer;
@@ -25,6 +26,7 @@ import com.petrolpark.compat.create.core.dough.DoughBlockEntityRenderer;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlockEntity;
 import com.petrolpark.core.registrate.builder.SharedCreateBlockEntityBuilder;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
+import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
@@ -54,6 +56,11 @@ public class PetrolparkCreateBlockEntityTypes {
     public static final BlockEntityEntry<DoughBlockEntity> DOUGH = REGISTRATE.blockEntity("dough", DoughBlockEntity::new)
         .validBlock(PetrolparkCreateBlocks.DOUGH)
         .renderer(() -> DoughBlockEntityRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<EncasedCrushingWheelControllerBlockEntity> ENCASED_CRUSHING_WHEEL_CONTROLLER = REGISTRATE.blockEntity("encased_crushing_wheel_controller", EncasedCrushingWheelControllerBlockEntity::new)
+        .validBlock(PetrolparkCreateBlocks.ENCASED_CRUSHING_WHEEL_CONTROLLER)
+        .renderer(() -> SmartBlockEntityRenderer::new)
         .register();
 
     public static final BlockEntityEntry<ExtrusionDieBlockEntity> EXTRUSION_DIE = sharedBlockEntity(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlockEntity::new)

@@ -144,6 +144,10 @@ public class PetrolparkTags {
         public static final TagKey<Fluid> common(String path) {
             return TagKey.create(Registries.FLUID, ResourceLocation.fromNamespaceAndPath("c", path));
         };
+
+        public static final TagKey<Fluid>
+
+        COOKING_OILS = commonFluidTag("oil/cooking");
     };
 
     public enum Items {

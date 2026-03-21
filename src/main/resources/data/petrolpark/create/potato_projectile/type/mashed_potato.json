@@ -1,5 +1,11 @@
 {
-  "damage": 1,
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "potato_products"
+    }
+  ],
+  "damage": 3,
   "items": "#c:foods/mashed_potato",
   "velocity_multiplier": 0.8,
   "reload_ticks": 3,

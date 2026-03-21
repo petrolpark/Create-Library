@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "fries"
+    }
+  ],
+  "damage": 4,
+  "knockback": 0.2,
+  "items": [
+    "petrolpark:fries",
+    "petrolpark:raw_fries"
+  ],
+  "velocity_multiplier": 1.2,
+  "reload_ticks": 10,
+  "sticky": true,
+  "render_mode": {
+    "type": "create:toward_motion",
+    "spin": 1.0,
+    "sprite_angle_offset": 180
+  }
+}

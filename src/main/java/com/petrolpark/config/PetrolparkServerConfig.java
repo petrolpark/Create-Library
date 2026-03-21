@@ -37,6 +37,7 @@ public class PetrolparkServerConfig extends ConfigBase {
     public final ConfigGroup compatibility = group(0, "compatibility");
         // Create
         public final ConfigGroup create = group(1, "create");
+            public final ConfigBool createEncasedCrushingWheels = b(true, "Crushing Wheels can be encased in Brass Casing, allowing a Recipe filter to be set");
             public final ConfigBool createArmsTargetChainConveyors = b(false, "armsTargetChainConveyors", "[Must be enabled by a dependent]", "Whether Mechanical Arms can take from and place on Chain Conveyors");
             public final ConfigBool createChainConveyorDrying = b(true, "chainConveyorDrying", "Whether Drying Recipes can be done on Chain Conveyors");
             public final ConfigGroup centrifuge = group(2, "centrifuge");

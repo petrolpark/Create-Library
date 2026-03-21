@@ -5,6 +5,7 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.processing.blender.BlenderBlockEntity;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationEvent;
 import com.petrolpark.compat.create.common.processing.centrifuge.PotionCentrifugation;
+import com.petrolpark.compat.create.common.processing.crushingWheel.EncasedCrushingWheelControllerBlock;
 import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorItemEvent;
 import com.petrolpark.core.item.decay.IApplyDecayRecipe;
 import com.petrolpark.core.world.entity.EntityFallOnEvent;
@@ -12,6 +13,7 @@ import com.petrolpark.core.world.entity.EntityFallOnEvent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 
 public class CreateEvents {
     
@@ -39,5 +41,10 @@ public class CreateEvents {
     @SubscribeEvent
     public static final void onEntityFallOn(EntityFallOnEvent event) {
         if (SharedFeatureFlag.BLENDER.enabled()) BlenderBlockEntity.onEntityFallOn(event);
+    };
+
+    @SubscribeEvent
+    public static final void onUseItem(UseItemOnBlockEvent event) {
+        EncasedCrushingWheelControllerBlock.onItemUsed(event);
     };
 };

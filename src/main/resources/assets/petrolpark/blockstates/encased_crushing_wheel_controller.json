@@ -1,0 +1,50 @@
+{
+    "variants": {
+        "facing=north,axis_along_first=false": {
+            "model": "petrolpark:block/encased_crushing_wheel_vertical",
+            "y": 90
+        },
+        "facing=south,axis_along_first=false": {
+            "model": "petrolpark:block/encased_crushing_wheel_vertical",
+            "y": 90
+        },
+        "facing=east,axis_along_first=false": {
+            "model": "petrolpark:block/encased_crushing_wheel",
+            "x": 90,
+            "y": 90
+        },
+        "facing=west,axis_along_first=false": {
+            "model": "petrolpark:block/encased_crushing_wheel",
+            "x": 90,
+            "y": 90
+        },
+        "facing=up,axis_along_first=false": {
+            "model": "petrolpark:block/encased_crushing_wheel",
+            "y": 90
+        },
+        "facing=down,axis_along_first=false": {
+            "model": "petrolpark:block/encased_crushing_wheel",
+            "y": 90
+        },
+        "facing=north,axis_along_first=true": {
+            "model": "petrolpark:block/encased_crushing_wheel",
+            "x": 90
+        },
+        "facing=south,axis_along_first=true": {
+            "model": "petrolpark:block/encased_crushing_wheel",
+            "x": 90
+        },
+        "facing=east,axis_along_first=true": {
+            "model": "petrolpark:block/encased_crushing_wheel_vertical"
+        },
+        "facing=west,axis_along_first=true": {
+            "model": "petrolpark:block/encased_crushing_wheel_vertical"
+        },
+        "facing=up,axis_along_first=true": {
+            "model": "petrolpark:block/encased_crushing_wheel"
+        },
+        "facing=down,axis_along_first=true": {
+            "model": "petrolpark:block/encased_crushing_wheel"
+        }
+    }
+}

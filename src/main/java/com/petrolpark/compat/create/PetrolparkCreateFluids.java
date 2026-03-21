@@ -5,6 +5,7 @@ import static com.petrolpark.PetrolparkTags.commonFluidTag;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.PetrolparkTags;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.fluid.ColoredFluidType;
 import com.petrolpark.core.world.fluid.VirtualFluidWithContainer;
@@ -34,7 +35,7 @@ public class PetrolparkCreateFluids {
         .register(),
 
     SUNFLOWER_OIL = sharedColoredWaterContainerFluid(SharedFeatureFlag.SUNFLOWER_OIL, "sunflower_oil", 0x80EFE864, PetrolparkCreateItems.SUNFLOWER_OIL_BOTTLE)
-        .tag(commonFluidTag("oil"), commonFluidTag("oil/cooking"), commonFluidTag("oil/sunflower"))
+        .tag(commonFluidTag("oil"), PetrolparkTags.Fluids.COOKING_OILS, commonFluidTag("oil/sunflower"))
         .register();
 
     // private static FluidBuilder<VirtualFluid, PetrolparkRegistrate> sharedColoredWaterFluid(SharedFeatureFlag featureFlag, String name, int color) {
