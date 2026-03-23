@@ -30,6 +30,7 @@ public class DrinkableBucketItem extends BucketItem {
 
     @Override
     public ItemStack finishUsingItem(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull LivingEntity entityLiving) {
+        super.finishUsingItem(stack, level, entityLiving); // Eat food
         if (entityLiving instanceof ServerPlayer serverplayer) {
             CriteriaTriggers.CONSUME_ITEM.trigger(serverplayer, stack);
             serverplayer.awardStat(Stats.ITEM_USED.get(this));

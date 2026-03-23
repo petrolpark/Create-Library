@@ -44,7 +44,7 @@ public class EncasedCrushingWheelControllerBlockEntity extends CrushingWheelCont
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
         super.addBehaviours(behaviours);
-        behaviours.add(filtering = new FilteringBehaviour(this, new CrushingWheelValueBox()));
+        behaviours.add(filtering = new FilteringBehaviour(this, new CrushingWheelValueBox()).forRecipes());
     };
 
     @Override

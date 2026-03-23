@@ -6,8 +6,10 @@ import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import com.petrolpark.compat.create.PetrolparkCreateCriterionTriggers;
 import com.petrolpark.util.AdvancementHelper;
 
+import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.ItemPredicate;
@@ -33,6 +35,10 @@ public class PotatoCannonHitCriterionTrigger extends SimpleCriterionTrigger<Pota
         boolean matches(ServerPlayer player, ItemStack projectile, Entity target) {
             return AdvancementHelper.testItems(projectile(), Collections.singletonList(projectile))
                 && AdvancementHelper.testEntity(player, target(), target);
+        };
+
+        public static final Criterion<PotatoCannonHitCriterionTrigger.Instance> potatoCannonHit(Optional<ContextAwarePredicate> player, List<ItemPredicate> projectile, Optional<EntityPredicate> target) {
+            return PetrolparkCreateCriterionTriggers.POTATO_CANNON_HIT.get().createCriterion(new PotatoCannonHitCriterionTrigger.Instance(player, projectile, target));
         };
     };
 

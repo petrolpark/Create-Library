@@ -16,6 +16,9 @@ public class PetrolparkAttributes {
     
     public static final RegistryEntry<Attribute, Attribute>
 
+    /**
+     * Temporary until 26.1
+     */
     SLIPPERINESS = REGISTRATE.attribute("generic.slipperiness", () -> new RangedAttribute("attribute.petrolpark.generic.slipperiness", 1d, 0d, 2048d)
         .setSyncable(true)
         .setSentiment(Attribute.Sentiment.NEUTRAL)

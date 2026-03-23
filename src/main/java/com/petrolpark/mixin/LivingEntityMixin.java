@@ -125,6 +125,6 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
         at = @At("RETURN")
     )
     private static AttributeSupplier.Builder petrolpark$addFrictionAttribute(AttributeSupplier.Builder builder) {
-        return builder.add(PetrolparkAttributes.SLIPPERINESS.getDelegate());
+        return builder.add(PetrolparkAttributes.SLIPPERINESS);
     };
 };
