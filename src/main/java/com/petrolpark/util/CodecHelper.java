@@ -32,6 +32,7 @@ import net.minecraft.network.VarInt;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.animal.horse.Markings;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -336,6 +337,8 @@ public class CodecHelper {
             };
         };
     };
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, Item> ITEM_STREAM_CODEC = ByteBufCodecs.registry(Registries.ITEM);
 
     public static final Codec<JsonElement> JSON_ELEMENT_CODEC = new Codec<>() {
 

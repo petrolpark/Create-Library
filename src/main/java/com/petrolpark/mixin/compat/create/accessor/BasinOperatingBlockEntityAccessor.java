@@ -1,6 +1,7 @@
 package com.petrolpark.mixin.compat.create.accessor;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.gen.Accessor;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
@@ -15,4 +16,10 @@ public interface BasinOperatingBlockEntityAccessor {
         remap = false
     )
     public boolean callMatchStaticFilters(RecipeHolder<? extends Recipe<?>> recipeHolder);
+
+    @Accessor(
+        value = "currentRecipe",
+        remap = false
+    )
+    public Recipe<?> getCurrentRecipe();
 };
