@@ -3,7 +3,6 @@ package com.petrolpark.core.data.reward.entity;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.core.data.reward.team.ITeamReward;
-import com.petrolpark.core.team.GatherTeamProvidersEvent;
 import com.petrolpark.core.team.ITeam;
 import com.petrolpark.util.CodecHelper;
 import com.petrolpark.util.Lang.IndentedTooltipBuilder;
@@ -11,10 +10,17 @@ import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.neoforged.neoforge.common.NeoForge;
 
 /**
+ * <p>{@code petrolpark:}</p>
  * Issue a {@link ITeamReward} to all {@link ITeam}s of which the Player is a part.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code reward} - {@link ITeamReward} to award to all {@link ITeams}
+ * </ul>
+ * 
+ * @author petrolpark
  */
 public record AllTeamsPlayerReward(ITeamReward reward) implements IPlayerReward {
 
@@ -22,20 +28,20 @@ public record AllTeamsPlayerReward(ITeamReward reward) implements IPlayerReward 
 
     @Override
     public void rewardPlayer(Player player, LootContext context, float multiplier) {
-        GatherTeamProvidersEvent event = new GatherTeamProvidersEvent(player);
-        NeoForge.EVENT_BUS.post(event);
-        event.getTeamsUnmodifiable(context.getLevel()).forEach(team -> reward.reward(team, context, multiplier));
+        ITeam.streamAll(player).forEach(team -> reward().reward(team, context, multiplier));
     };
 
     @Override
     public void render(GuiGraphics graphics) {
-        reward.render(graphics);
+        reward().render(graphics);
     };
 
     @Override
     public void addToDescription(IndentedTooltipBuilder builder) {
-        // TODO Auto-generated method stub
-        
+        builder.add(translateSimple())
+            .indent();
+        reward().addToDescription(builder);
+        builder.unindent();
     };
 
     @Override

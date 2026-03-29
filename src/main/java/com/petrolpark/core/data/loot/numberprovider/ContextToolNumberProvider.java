@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.PetrolparkLootContextParams;
 import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
 import com.petrolpark.util.CodecHelper;
@@ -16,6 +17,18 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 
+/**
+ * <p>{@code petrolpark:tool_property}</p>
+ * 
+ * Get a {@link ItemStackNumberProvider} value of the {@link PetrolparkLootContextParams#TOOL Item Stack tool provided} in the {@link LootContext}.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code value} - An {@link ItemStackNumberProvider} to call on the tool Item Stack
+ * </ul>
+ * 
+ * @author petrolpark
+ */
 public record ContextToolNumberProvider(ItemStackNumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<ContextToolNumberProvider> CODEC = CodecHelper.singleFieldMap(ItemStackNumberProvider.CODEC, "value", ContextToolNumberProvider::value, ContextToolNumberProvider::new);

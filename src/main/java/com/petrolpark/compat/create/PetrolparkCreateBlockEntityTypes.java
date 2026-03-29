@@ -5,6 +5,9 @@ import static com.petrolpark.Petrolpark.REGISTRATE;
 import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.common.kinetics.VerticalBearingRenderer;
+import com.petrolpark.compat.create.common.kinetics.VerticalBearingVisual;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillBearingBlockEntity;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlockEntity;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlockEntity;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlockEntity;
@@ -65,6 +68,12 @@ public class PetrolparkCreateBlockEntityTypes {
 
     public static final BlockEntityEntry<ExtrusionDieBlockEntity> EXTRUSION_DIE = sharedBlockEntity(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlockEntity::new)
         .validBlock(PetrolparkCreateBlocks.EXTRUSION_DIE)
+        .register();
+
+    public static final BlockEntityEntry<HorseMillBearingBlockEntity> HORSE_MILL_BEARING = sharedBlockEntity(SharedFeatureFlag.HORSE_MILL, "horse_mill_bearing", HorseMillBearingBlockEntity::new)
+        .visual(() -> VerticalBearingVisual::new)
+        .validBlock(PetrolparkCreateBlocks.HORSE_MILL_BEARING)
+        .renderer(() -> VerticalBearingRenderer::new)
         .register();
 
     public static final BlockEntityEntry<MandrelBlockEntity> MANDREL = sharedBlockEntity(SharedFeatureFlag.MANDREL, "mandrel", MandrelBlockEntity::new)

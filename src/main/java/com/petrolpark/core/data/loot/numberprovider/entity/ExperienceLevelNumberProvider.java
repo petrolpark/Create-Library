@@ -1,5 +1,7 @@
 package com.petrolpark.core.data.loot.numberprovider.entity;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 
@@ -7,6 +9,14 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 
+/**
+ * <p>{@code petrolpark:experience_level}</p>
+ * 
+ * {@link Player#experienceLevel Get the Experience level of a Player}, or {@code 0} if not a player. No arguments. 
+ * 
+ * @author petrolpark
+ */
+@ParametersAreNonnullByDefault
 public class ExperienceLevelNumberProvider implements EntityNumberProvider {
 
     @Override
@@ -21,7 +31,7 @@ public class ExperienceLevelNumberProvider implements EntityNumberProvider {
     };
 
     @Override
-    public LootEntityNumberProviderType getType() {
+    public LootEntityNumberProviderType getEntityNumberProviderType() {
         return PetrolparkNumberProviderTypes.EXPERIENCE_LEVEL.get();
     };
     

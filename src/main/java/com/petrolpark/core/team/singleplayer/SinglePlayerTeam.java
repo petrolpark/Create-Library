@@ -36,7 +36,8 @@ import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 
 /**
- * The {@link ITeam} consiting of a single Player.
+ * The {@link ITeam} consisting of a single Player.
+ * All Players always {@link ITeam#streamAll(Player) belong} to an instance of a Team like this.
  */
 public class SinglePlayerTeam extends AbstractTeam {
 
@@ -67,7 +68,7 @@ public class SinglePlayerTeam extends AbstractTeam {
     };
 
     @Override
-    public boolean isMember(Player player) {
+    public boolean isMember(@Nonnull Player player) {
         return player.equals(this.player);
     };
 
@@ -88,7 +89,7 @@ public class SinglePlayerTeam extends AbstractTeam {
     };
 
     @Override
-    public boolean isAdmin(Player player) {
+    public boolean isAdmin(@Nonnull Player player) {
         return true;
     };
 
@@ -103,7 +104,7 @@ public class SinglePlayerTeam extends AbstractTeam {
     };
 
     @Override
-    public void renderIcon(GuiGraphics graphics) {
+    public void renderIcon(@Nonnull GuiGraphics graphics) {
         Minecraft mc = Minecraft.getInstance();
         if (player == null) return;
         PlayerFaceRenderer.draw(graphics, mc.getSkinManager().getInsecureSkin(player.getGameProfile()), 0, 0, 16);
@@ -120,7 +121,7 @@ public class SinglePlayerTeam extends AbstractTeam {
         public static final StreamCodec<FriendlyByteBuf, Provider> STREAM_CODEC = StreamCodec.composite(UUIDUtil.STREAM_CODEC, Provider::playerUUID, Provider::new);
 
         @Override
-        public ITeam provideTeam(Level level) {
+        public ITeam provideTeam(@Nonnull Level level) {
             Player player = level.getPlayerByUUID(playerUUID);
             if (player != null) return player.getData(PetrolparkAttachmentTypes.SINGLE_PLAYER_TEAM_COMPONENTS.get());
             return NoTeam.INSTANCE;

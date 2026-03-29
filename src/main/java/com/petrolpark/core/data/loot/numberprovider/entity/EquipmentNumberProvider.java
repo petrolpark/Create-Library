@@ -2,9 +2,12 @@ package com.petrolpark.core.data.loot.numberprovider.entity;
 
 import java.util.Set;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkNumberProviderTypes;
+import com.petrolpark.core.data.loot.numberprovider.ContextToolNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
 
@@ -15,6 +18,22 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 
+/**
+ * <p>{@code petrolpark:equipment}</p>
+ * 
+ * Get a {@link ItemStackNumberProvider value} of an equipped Item.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code slot} - Any {@link EquipmentSlot#getName() Equipment Slot name}
+ * <li> {@code value} - An {@link ItemStackNumberProvider} to call on the equipped Item Stack
+ * </ul>
+ * 
+ * @author petrolpark
+ * 
+ * @see ContextToolNumberProvider Getting the value from the mainhand Item directly from the LootContext
+ */
+@ParametersAreNonnullByDefault
 public record EquipmentNumberProvider(EquipmentSlot slot, ItemStackNumberProvider value) implements EntityNumberProvider {
 
     public static final MapCodec<EquipmentNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -45,7 +64,7 @@ public record EquipmentNumberProvider(EquipmentSlot slot, ItemStackNumberProvide
     };
 
     @Override
-    public LootEntityNumberProviderType getType() {
+    public LootEntityNumberProviderType getEntityNumberProviderType() {
         return PetrolparkNumberProviderTypes.EQUIPMENT.get();
     };
     

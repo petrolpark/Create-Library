@@ -16,6 +16,18 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 
+/**
+ * <p>{@code petrolpark:team_property}</p>
+ * 
+ * Get a {@link TeamNumberProvider} value of the {@link PetrolparkLootContextParams#TEAM Team provided} in the {@link LootContext}.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code value} - A {@link TeamNumberProvider} to call on the {@link ITeam} 
+ * </ul>
+ * 
+ * @author petrolpark
+ */
 public record ContextTeamNumberProvider(TeamNumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<ContextTeamNumberProvider> CODEC = CodecHelper.singleFieldMap(TeamNumberProvider.CODEC, "value", ContextTeamNumberProvider::value, ContextTeamNumberProvider::new);

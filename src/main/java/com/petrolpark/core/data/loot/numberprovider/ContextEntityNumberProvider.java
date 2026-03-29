@@ -16,6 +16,19 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 
+/**
+ * <p>{@code petrolpark:entity_property}</p>
+ * 
+ * Get a {@link EntityNumberProvider} value of an Entity provided in the {@link LootContext}.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code target} - An {@link IEntityTarget} specifying which Entity in the {@link LootContext}
+ * <li> {@code value} - An {@link EntityNumberProvider} to call on that Entity 
+ * </ul>
+ * 
+ * @author petrolpark
+ */
 public record ContextEntityNumberProvider(IEntityTarget target, EntityNumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<ContextEntityNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

@@ -16,7 +16,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 public interface ILootTableAccessor {
 
     static <FINDER extends ILootTableAccessor> Products.P1<RecordCodecBuilder.Mu<FINDER>, Either<ResourceKey<LootTable>, LootTable>> lootTableField(RecordCodecBuilder.Instance<FINDER> instance) {
-        return instance.group(Codec.either(ResourceKey.codec(Registries.LOOT_TABLE), LootTable.DIRECT_CODEC).fieldOf("lootTable").forGetter(ILootTableAccessor::lootTable));
+        return instance.group(Codec.either(ResourceKey.codec(Registries.LOOT_TABLE), LootTable.DIRECT_CODEC).fieldOf("loot_table").forGetter(ILootTableAccessor::lootTable));
     };
     
     Either<ResourceKey<LootTable>, LootTable> lootTable();

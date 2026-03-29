@@ -17,6 +17,7 @@ import com.petrolpark.core.data.loot.modifier.ILootPoolEntryModifier;
 import com.petrolpark.core.data.loot.modifier.ILootTableModifier;
 import com.petrolpark.core.data.loot.modifier.LootPoolEntryModifierType;
 import com.petrolpark.core.data.loot.modifier.LootTableModifierType;
+import com.petrolpark.core.data.loot.numberprovider.FunctionNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.entity.EntityNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.entity.LootEntityNumberProviderType;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
@@ -247,6 +248,12 @@ public class PetrolparkRegistrate extends AbstractRegistrate<PetrolparkRegistrat
 
     public <T extends LootItemFunction> RegistryEntry<LootItemFunctionType<?>, LootItemFunctionType<T>> lootItemFunctionType(String name, MapCodec<T> codec) {
         return simple(name, Registries.LOOT_FUNCTION_TYPE, () -> new LootItemFunctionType<>(codec));
+    };
+
+    public RegistryEntry<LootNumberProviderType, LootNumberProviderType> functionLootNumberProviderType(String name, FunctionNumberProvider.Factory<?> constructor) {
+        final LootNumberProviderType type = new LootNumberProviderType(FunctionNumberProvider.codec(constructor));
+        FunctionNumberProvider.register(type, constructor);
+        return simple(name, Registries.LOOT_NUMBER_PROVIDER_TYPE, () -> type);
     };
 
     public RegistryEntry<LootNumberProviderType, LootNumberProviderType> lootNumberProviderType(String name, MapCodec<? extends NumberProvider> codec) {

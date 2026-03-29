@@ -13,6 +13,18 @@ import com.petrolpark.util.CodecHelper;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 
+/**
+ * <p>{@code petrolpark:direct}</p>
+ * 
+ * Generates exactly the given {@link IReward}s.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code rewards} - A single or list of {@link IReward}s to "generate"
+ * </ul>
+ * 
+ * @author petrolpark
+ */
 public record DirectRewardGenerator(List<IReward> rewards) implements IRewardGenerator {
 
     public static final MapCodec<DirectRewardGenerator> CODEC = CodecHelper.singleFieldMap(IReward.LIST_CODEC, "rewards", DirectRewardGenerator::rewards, DirectRewardGenerator::new);

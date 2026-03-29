@@ -11,7 +11,12 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.neoforged.neoforge.common.MutableDataComponentHolder;
 
+/**
+ * Implementation of {@link ITeam} which implements {@link MutableDataComponentHolder Data Component} manipulation,
+ * but not anything to do with {@link ITeam#isMember(net.minecraft.world.entity.player.Player) membership} of the Team itself.
+ */
 public abstract class AbstractTeam implements ITeam {
     
     protected final PatchedDataComponentMap components;
@@ -38,6 +43,11 @@ public abstract class AbstractTeam implements ITeam {
         return false;
     };
 
+    /**
+     * Called if any {@link AbstractTeam#set(DataComponentType, Object) Data Components} <em>actually</em> change.
+     * Use this to sync changes to the clients of {@link ITeam#isMember(net.minecraft.world.entity.player.Player) members} of this Team.
+     * @param patch
+     */
     public abstract void setChanged(DataComponentPatch patch);
 
     @Override

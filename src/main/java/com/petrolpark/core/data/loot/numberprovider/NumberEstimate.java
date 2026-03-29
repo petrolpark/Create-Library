@@ -133,6 +133,8 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
 
     public abstract NumberEstimate or(NumberEstimate estimate);
 
+    public abstract IntStream streamPossibleInts();
+
     public boolean unknown() {
         return this == UNKNOWN;
     };
@@ -214,6 +216,11 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
             if (estimate instanceof Range range) return range.or(this);
             else if (estimate instanceof Exact exact) return ranged(Math.min(value, exact.value), Math.max(value, exact.value), approximate || estimate.approximate);
             else return UNKNOWN;
+        };
+
+        @Override
+        public IntStream streamPossibleInts() {
+            return IntStream.of((int)value);
         };
 
     };
@@ -306,6 +313,12 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
                 return ranged(Math.min(min, range.min), Math.max(max, range.max), approximate || estimate.approximate);
             } else return UNKNOWN;
         };
+
+        @Override
+        public IntStream streamPossibleInts() {
+            if (min == Float.NaN || max == Float.NaN) return IntStream.empty();
+            return IntStream.range((int)min(), (int)max());
+        };
     };
 
     public static final class Unknown extends NumberEstimate {
@@ -370,6 +383,11 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         @Override
         public NumberEstimate or(NumberEstimate estimate) {
             return UNKNOWN;
+        };
+
+        @Override
+        public IntStream streamPossibleInts() {
+            return IntStream.empty();
         };
 
     };

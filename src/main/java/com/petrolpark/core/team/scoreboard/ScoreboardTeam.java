@@ -3,6 +3,8 @@ package com.petrolpark.core.team.scoreboard;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.annotation.Nonnull;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
@@ -32,6 +34,9 @@ import net.minecraft.world.scores.PlayerTeam;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+/**
+ * {@link ITeam} wrapping vanilla's {@link PlayerTeam Scoreboard Teams}.
+ */
 public class ScoreboardTeam extends AbstractTeam {
 
     public final Level level;
@@ -57,7 +62,7 @@ public class ScoreboardTeam extends AbstractTeam {
     };
 
     @Override
-    public boolean isMember(Player player) {
+    public boolean isMember(@Nonnull Player player) {
         return player.getTeam() == team;
     };
 
@@ -80,7 +85,7 @@ public class ScoreboardTeam extends AbstractTeam {
     };
 
     @Override
-    public boolean isAdmin(Player player) {
+    public boolean isAdmin(@Nonnull Player player) {
         return player.hasPermissions(2);
     };
 
@@ -95,7 +100,7 @@ public class ScoreboardTeam extends AbstractTeam {
     };
 
     @Override
-    public void renderIcon(GuiGraphics graphics) {
+    public void renderIcon(@Nonnull GuiGraphics graphics) {
         Integer color = team.getColor().getColor();
         RenderSystem.disableBlend();
         PoseStack ms = graphics.pose();
@@ -131,7 +136,7 @@ public class ScoreboardTeam extends AbstractTeam {
         public static final StreamCodec<FriendlyByteBuf, Provider> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.STRING_UTF8, Provider::teamName, Provider::new);
 
         @Override
-        public ITeam provideTeam(Level level) {
+        public ITeam provideTeam(@Nonnull Level level) {
             return Petrolpark.SCOREBOARD_TEAMS.get(level, teamName).orElse(NoTeam.INSTANCE);
         };
 

@@ -14,6 +14,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 
+/**
+ * <p>{@code petrolpark:give_item}</p>
+ * 
+ * Give a single Item Stack to an Entity by putting it into its Inventory or dropping it.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code item} - {@link ItemStack} to give to the recipient
+ * </ul>
+ * 
+ * @author petrolpark
+ */
 public class GiveItemEntityReward extends AbstractGiveItemsEntityReward {
 
     public static final MapCodec<GiveItemEntityReward> CODEC = RecordCodecBuilder.mapCodec(instance ->

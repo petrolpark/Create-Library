@@ -15,6 +15,22 @@ import net.minecraft.world.level.storage.loot.providers.number.LootNumberProvide
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
+/**
+ * <p>{@code petrolpark:sigmoid}</p>
+ * 
+ * Get the output of a sigmoid whose inputs are other {@link NumberProvider}s.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code shallowness} - A {@link NumberProvider}
+ * <li> {@code midpoint} - A {@link NumberProvider}
+ * <li> {@code value} - A {@link NumberProvider}
+ * </ul>
+ * 
+ * The output is then {@code 1 / (1 + exp((midpoint - value) / shallowness))}.
+ * 
+ * @author petrolpark
+ */
 public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider midpoint, NumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<SigmoidNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

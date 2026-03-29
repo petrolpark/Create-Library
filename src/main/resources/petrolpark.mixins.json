@@ -8,6 +8,7 @@
         "accessor.AbstractBuilderAccessor",
         "compat.create.accessor.BasinBlockEntityAccessor",
         "compat.create.accessor.BasinOperatingBlockEntityAccessor",
+        "compat.create.accessor.ContraptionAccessor",
         "compat.create.accessor.DepotBehaviourAccessor",
         "compat.create.ArmBlockEntityMixin",
         "compat.create.BasinBlockEntityMixin",

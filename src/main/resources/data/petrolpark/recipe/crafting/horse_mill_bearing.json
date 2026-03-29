@@ -1,0 +1,28 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "horse_mill"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "B",
+        "C",
+        "I"
+    ],
+    "key": {
+        "B": {
+            "tag": "minecraft:wooden_slabs"
+        },
+        "C": {
+            "tag": "minecraft:planks"
+        },
+        "I": {
+            "item": "create:shaft"
+        }
+    },
+    "result": {
+        "id": "petrolpark:horse_mill_bearing"
+    }
+}
