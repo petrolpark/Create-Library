@@ -38,6 +38,7 @@ public class PetrolparkCreate {
         PetrolparkCreateCriterionTriggers.register();
         PetrolparkCreateDataComponentTypes.register(modEventBus);
         PetrolparkCreateDoughTypes.register();
+        PetrolparkCreateEntityTypes.register();
         PetrolparkCreateFluids.register();
         PetrolparkCreateGlobalLootModifierSerializers.register();
         PetrolparkCreateItems.register();

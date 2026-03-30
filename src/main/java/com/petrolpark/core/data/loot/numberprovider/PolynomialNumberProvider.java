@@ -13,6 +13,19 @@ import net.minecraft.world.level.storage.loot.providers.number.LootNumberProvide
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
+/**
+ * <p>{@code petrolpark:polynomial}</p>
+ * 
+ * Get the value of a polynomial whose input and coefficients are other {@link NumberProvider}s.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code value} - A {@link NumberProvider} to act as input ("x") to the polynomial
+ * <li> {@code coefficients} - A list of {@link NumberProvider}s which are the ascending ordered coefficients of the polynomial, including the constant
+ * </ul>
+ * 
+ * @author petrolpark
+ */
 public record PolynomialNumberProvider(NumberProvider value, List<NumberProvider> coefficients) implements IEstimableNumberProvider {
 
     public static final MapCodec<PolynomialNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -27,6 +40,18 @@ public record PolynomialNumberProvider(NumberProvider value, List<NumberProvider
         int power = 0;
         for (NumberProvider coeff : coefficients()) {
             total += coeff.getFloat(lootContext) * Math.pow(value, power);
+            power++;
+        };
+        return total;
+    };
+
+    @Override
+    public int getInt(@Nonnull LootContext lootContext) {
+        int total = 0;
+        int value = value().getInt(lootContext);
+        int power = 0;
+        for (NumberProvider coeff : coefficients()) {
+            total += coeff.getInt(lootContext) * (int)Math.pow(value, power);
             power++;
         };
         return total;

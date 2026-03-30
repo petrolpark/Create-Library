@@ -8,6 +8,8 @@ import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkNumberProviderTypes;
+import com.petrolpark.core.data.loot.numberprovider.entity.EntityPredicateNumberProvider;
+import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
@@ -16,6 +18,23 @@ import net.minecraft.world.level.storage.loot.providers.number.LootNumberProvide
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
+/**
+ * <p>{@code petrolpark:conditional}</p>
+ * 
+ * Choose between two {@link NumberProvider}s based on whether a {@link LootItemCondition} passes.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code condition} - {@link LootItemCondition} to test
+ * <li> {@code pass} - {@link NumberProvider} to call if the condition is met
+ * <li> {@code fail} - {@link NumberProvider} to call if the condition is not met
+ * </ul>
+ * 
+ * @author petrolpark
+ * 
+ * @see EntityPredicateNumberProvider Entity equivalent
+ * @see ItemStackNumberProvider Item Stack equivalent
+ */
 public record ConditionalNumberProvider(LootItemCondition condition, NumberProvider pass, NumberProvider fail) implements IEstimableNumberProvider {
 
     public static final MapCodec<ConditionalNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

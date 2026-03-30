@@ -15,6 +15,9 @@ import net.minecraft.world.level.storage.loot.LootContext.EntityTarget;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 
+/**
+ * Extension of vanilla {@link EntityTarget} allowing reference to any Entity {@link LootContextParam}.
+ */
 public interface IEntityTarget extends StringRepresentable {
     
     public static final Map<ResourceLocation, LootContextParam<? extends Entity>> CUSTOM = new HashMap<>();

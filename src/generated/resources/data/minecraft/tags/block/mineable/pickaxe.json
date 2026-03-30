@@ -17,6 +17,10 @@
       "required": false
     },
     {
+      "id": "petrolpark:horse_mill_bearing",
+      "required": false
+    },
+    {
       "id": "petrolpark:mandrel",
       "required": false
     },

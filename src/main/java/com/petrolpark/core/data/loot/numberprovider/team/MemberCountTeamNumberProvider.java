@@ -6,11 +6,18 @@ import com.petrolpark.core.team.ITeam;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 
-public class MembersTeamNumberProvider implements TeamNumberProvider {
+/**
+ * <p>{@code petrolpark:member_count}</p>
+ * 
+ * {@link ITeam#memberCount() Get the number of members} of the {@link ITeam}. No arguments.
+ * 
+ * @author petrolpark
+ */
+public class MemberCountTeamNumberProvider implements TeamNumberProvider {
 
     @Override
     public float getFloat(ITeam team, LootContext context) {
-        return team.streamMemberUsernames().count();
+        return team.memberCount();
     };
 
     @Override
@@ -19,7 +26,7 @@ public class MembersTeamNumberProvider implements TeamNumberProvider {
     };
 
     @Override
-    public LootTeamNumberProviderType getType() {
+    public LootTeamNumberProviderType getTeamNumberProviderType() {
         return PetrolparkNumberProviderTypes.MEMBER_COUNT.get();
     };
     

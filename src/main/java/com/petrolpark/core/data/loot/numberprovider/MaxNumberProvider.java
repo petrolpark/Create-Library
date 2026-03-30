@@ -2,6 +2,7 @@ package com.petrolpark.core.data.loot.numberprovider;
 
 import java.util.List;
 import java.util.stream.DoubleStream;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.petrolpark.PetrolparkNumberProviderTypes;
@@ -10,6 +11,18 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 
+/**
+ * <p>{@code petrolpark:max}</p>
+ * 
+ * Get the maximum of several other {@link NumberProvider}s.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code values} - List of {@link NumberProvider}s to maximize 
+ * </ul>
+ * 
+ * @author petrolpark
+ */
 public class MaxNumberProvider extends FunctionNumberProvider {
 
     public MaxNumberProvider(List<NumberProvider> children) {
@@ -17,8 +30,13 @@ public class MaxNumberProvider extends FunctionNumberProvider {
     };
 
     @Override
-    public float apply(LootContext lootContext, DoubleStream childResults) {
+    public float applyFloat(LootContext lootContext, DoubleStream childResults) {
         return (float)childResults.max().orElse(0f);
+    };
+
+    @Override
+    public int applyInt(LootContext lootContext, IntStream childResults) {
+        return childResults.max().orElse(0);
     };
 
     @Override

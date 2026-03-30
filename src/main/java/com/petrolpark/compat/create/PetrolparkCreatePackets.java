@@ -1,6 +1,7 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillContraptionHarnessMappingPacket;
 import com.petrolpark.compat.create.common.redstone.programmer.ChangeRedstoneProgrammerPowerPacket;
 import com.petrolpark.compat.create.common.redstone.programmer.RefreshRedstoneProgrammerScreenPacket;
 import com.petrolpark.compat.create.common.redstone.programmer.SetRedstoneProgramPacket;
@@ -26,12 +27,13 @@ public enum PetrolparkCreatePackets implements PacketTypeProvider, ICustomPacket
 
 	// Server -> client
 	CHANGE_REDSTONE_PROGRAMMER_POWER(ChangeRedstoneProgrammerPowerPacket.class, ChangeRedstoneProgrammerPowerPacket.STREAM_CODEC),
+	HORSE_MILL_CONTRAPTION_HARNESS_MAPPING(HorseMillContraptionHarnessMappingPacket.class, HorseMillContraptionHarnessMappingPacket.STREAM_CODEC),
 	REFRESH_REDSTONE_PROGRAMMER_SCREEN(RefreshRedstoneProgrammerScreenPacket.class, RefreshRedstoneProgrammerScreenPacket.STREAM_CODEC),
 	;
 
     private final CatnipPacketRegistry.PacketType<?> type;
 
-	<T extends BasePacketPayload & RecordablePacketPayload> PetrolparkCreatePackets(Class<T> clazz, StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
+	<T extends BasePacketPayload> PetrolparkCreatePackets(Class<T> clazz, StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
 		type = new CatnipPacketRegistry.PacketType<>(
 			new CustomPacketPayload.Type<>(Petrolpark.asResource(name().toLowerCase())),
 			clazz, codec

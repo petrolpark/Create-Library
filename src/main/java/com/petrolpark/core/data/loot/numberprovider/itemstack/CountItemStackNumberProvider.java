@@ -6,6 +6,13 @@ import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 
+/**
+ * <p>{@code petrolpark:count}</p>
+ * 
+ * {@link ItemStack#getCount Get the count of the Item Stack.} No arguments.
+ * 
+ * @author petrolpark
+ */
 public class CountItemStackNumberProvider implements ItemStackNumberProvider {
 
     @Override
@@ -24,7 +31,7 @@ public class CountItemStackNumberProvider implements ItemStackNumberProvider {
     };
 
     @Override
-    public LootItemStackNumberProviderType getType() {
+    public LootItemStackNumberProviderType getItemStackNumberProviderType() {
         return PetrolparkNumberProviderTypes.COUNT.get();
     };
     

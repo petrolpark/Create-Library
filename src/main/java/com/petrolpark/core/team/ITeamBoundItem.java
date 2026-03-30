@@ -5,6 +5,7 @@ import java.util.List;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.core.team.packet.BindTeamItemPacket;
+import com.petrolpark.core.team.singleplayer.SinglePlayerTeam;
 import com.petrolpark.util.ScreenHelper;
 
 import net.minecraft.network.chat.Component;
@@ -16,15 +17,31 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.NeoForge;
 
+/**
+ * An Item which can be linked to a {@link ITeam}.
+ * @see <a href="https://github.com/petrolpark/Create-Library/wiki/Teams#accessing-teams">Usage</a>
+ */
 public interface ITeamBoundItem {
 
-    public static final String TEAM_TAG_KEY = "Team";
-
+    /**
+     * 
+     * @param level
+     * @param player
+     * @param stack
+     */
     public boolean isTeamRebindable(Level level, Player player, ItemStack stack);
 
     @OnlyIn(Dist.CLIENT)
     public Component getTeamSelectionScreenTitle(Level level, Player player, ItemStack stack);
 
+    /**
+     * Attempt to Bind a {@link ITeam} to the given Item Stack.
+     * If the Player is a member of only one Team (typically, their {@link SinglePlayerTeam}), this is bound instantly.
+     * If the Player is a member of multiple Teams, a menu is opened, allowing them to select one. Once a selection has been made, the chosen Team will be bound to the Item Stack in the Players main hand (hopefully still the same one).
+     * @param stack
+     * @param player
+     * @param level
+     */
     public default InteractionResult trySelectTeam(ItemStack stack, Player player, Level level) {
         if (!getTeam(stack, level).isNone() && !isTeamRebindable(level, player, stack)) return InteractionResult.PASS;
         GatherTeamProvidersEvent event = new GatherTeamProvidersEvent(player);

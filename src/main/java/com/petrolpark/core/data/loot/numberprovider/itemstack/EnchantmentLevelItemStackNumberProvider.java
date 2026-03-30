@@ -10,6 +10,17 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.storage.loot.LootContext;
 
+/**
+ * <p>{@code petrolpark:enchantment_level}</p>
+ * 
+ * Get the level of the given Enchantment ({@code 0} if the Item Stack does not have that Enchantment).
+ * 
+ * <ul>
+ * <li> {@code enchantment} - The ID of the Enchantment
+ * </ul>
+ * 
+ * @author petrolpark
+ */
 public record EnchantmentLevelItemStackNumberProvider(Holder<Enchantment> enchantment) implements ItemStackNumberProvider {
 
     public static final MapCodec<EnchantmentLevelItemStackNumberProvider> CODEC = CodecHelper.singleFieldMap(Enchantment.CODEC, "enchantment", EnchantmentLevelItemStackNumberProvider::enchantment, EnchantmentLevelItemStackNumberProvider::new);
@@ -30,7 +41,7 @@ public record EnchantmentLevelItemStackNumberProvider(Holder<Enchantment> enchan
     };
 
     @Override
-    public LootItemStackNumberProviderType getType() {
+    public LootItemStackNumberProviderType getItemStackNumberProviderType() {
         return PetrolparkNumberProviderTypes.ENCHANTMENT_LEVEL.get();
     };
     

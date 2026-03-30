@@ -9,6 +9,8 @@ import static net.minecraft.world.level.storage.loot.LootTable.lootTable;
 import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableItem;
 
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessBlock;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillBearingBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlock;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlock;
@@ -25,6 +27,8 @@ import com.petrolpark.compat.create.core.dough.DoughItem;
 import com.petrolpark.compat.create.core.tube.TubeStructuralBlock;
 import com.petrolpark.config.PetrolparkStressConfig;
 import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllTags.AllBlockTags;
+import com.simibubi.create.api.stress.BlockStressValues;
 import com.simibubi.create.content.processing.basin.BasinMovementBehaviour;
 import com.simibubi.create.foundation.data.AssetLookup;
 import com.simibubi.create.foundation.data.BlockStateGen;
@@ -33,6 +37,7 @@ import com.simibubi.create.foundation.data.SharedProperties;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -89,6 +94,22 @@ public class PetrolparkCreateBlocks {
         .initialProperties(SharedProperties::softMetal)
         .properties(BlockBehaviour.Properties::noCollission)
         .transform(pickaxeOnly())
+        .item()
+        .build()
+        .register();
+
+    public static final BlockEntry<HarnessBlock> HARNESS = REGISTRATE.sharedBlock(SharedFeatureFlag.HORSE_MILL, "harness", HarnessBlock::new)
+        .item()
+        .build()
+        .register();
+    
+    public static final BlockEntry<HorseMillBearingBlock> HORSE_MILL_BEARING = REGISTRATE.sharedBlock(SharedFeatureFlag.HORSE_MILL, "horse_mill_bearing", HorseMillBearingBlock::new)
+        .transform(axeOrPickaxe())
+        .properties(p -> p
+            .noOcclusion()
+            .mapColor(MapColor.PODZOL)
+        ).onRegister(BlockStressValues.setGeneratorSpeed(16, true))
+        .tag(AllBlockTags.SAFE_NBT.tag)
         .item()
         .build()
         .register();

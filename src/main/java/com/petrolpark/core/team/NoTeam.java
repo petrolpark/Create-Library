@@ -3,6 +3,7 @@ package com.petrolpark.core.team;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -18,6 +19,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 
+@ParametersAreNonnullByDefault
 public final class NoTeam implements ITeam, ITeam.Provider {
 
     public static final NoTeam INSTANCE = new NoTeam();

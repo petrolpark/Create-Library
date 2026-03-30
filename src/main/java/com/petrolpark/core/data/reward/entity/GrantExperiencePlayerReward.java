@@ -1,33 +1,47 @@
 package com.petrolpark.core.data.reward.entity;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.util.CodecHelper;
 import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 /**
- * Give a Player some XP.
+ * <p>{@code petrolpark:grant_experience}</p>
+ * 
+ * Give a Player some XP, or do nothing if they are a non-Player Entity.
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code amount} - A {@link NumberProvider} for the amount of experience 
+ * </ul>
+ * 
+ * @author petrolpark
  */
 public record GrantExperiencePlayerReward(NumberProvider amount) implements IPlayerReward {
+
+    public static final ResourceLocation EXPERIENCE_ORBS_TEXTURE = Petrolpark.asResource("items/experience_orbs");
 
     public static final MapCodec<GrantExperiencePlayerReward> CODEC = CodecHelper.singleFieldMap(NumberProviders.CODEC, "amount", GrantExperiencePlayerReward::amount, GrantExperiencePlayerReward::new);
 
     @Override
     public void rewardPlayer(Player player, LootContext context, float multiplier) {
-        player.giveExperiencePoints(amount.getInt(context));
+        player.giveExperiencePoints((int)(amount.getFloat(context) * multiplier));
     };
 
     @Override
     public void render(GuiGraphics graphics) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'render'");
+        graphics.blit(0, 0, 0, 16, 16, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(EXPERIENCE_ORBS_TEXTURE));
     };
 
     @Override

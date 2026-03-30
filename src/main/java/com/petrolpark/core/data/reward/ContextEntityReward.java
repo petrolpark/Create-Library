@@ -50,8 +50,9 @@ public record ContextEntityReward(IEntityTarget target, IEntityReward reward) im
 
     @Override
     public void addToDescription(IndentedTooltipBuilder builder) {
-        builder.add(translateSimple(target.getName()));
-        builder.indent();
+        builder
+            .add(translateSimple(target.getName()))
+            .indent();
         reward().addToDescription(builder);
         builder.unindent();
     };

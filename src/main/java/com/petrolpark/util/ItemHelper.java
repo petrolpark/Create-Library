@@ -19,6 +19,9 @@ import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
@@ -84,5 +87,17 @@ public class ItemHelper {
         } else {
             stacks.forEach(entity::spawnAtLocation);
         };
+    };
+
+    /**
+     * Very crude prediction of what a Loot Table might give
+     * @param lootTable
+     */
+    public static final Stream<ItemStack> streamPossibleItems(LootTable lootTable) {
+        return lootTable.pools.stream().flatMap(pool -> pool.entries.stream()).flatMap(entry -> {
+            if (entry instanceof LootItem lootItem) return Stream.of(new ItemStack(lootItem.item));
+            if (entry instanceof NestedLootTable nestedTable) return nestedTable.contents.right().stream().flatMap(ItemHelper::streamPossibleItems);
+            return Stream.empty();
+        });
     };
 };

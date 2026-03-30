@@ -1,0 +1,9 @@
+{
+    "values": {
+        "#petrolpark:has_cow_horse_mill_properties": {
+            "position_offset": [0.0, 0.0, 0.0],
+            "max_speed": 0.2,
+            "stress_capacity": 256
+        }
+    }
+}

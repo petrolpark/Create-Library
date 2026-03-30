@@ -11,6 +11,18 @@ import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
 
+/**
+ * <p>{@code petrolpark:unlock_trade}</p>
+ * 
+ * Adds a {@link MerchantOffer Trade} to the Entity (if they are a {@link Merchant}).
+ * 
+ * Arguments:
+ * <ul>
+ * <li> {@code trade} - The {@link MerchantOffer} to add to the recipient
+ * </ul>
+ * 
+ * @author petrolpark
+ */
 public record UnlockTradeEntityReward(MerchantOffer trade) implements IEntityReward {
 
     public static final MapCodec<UnlockTradeEntityReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
