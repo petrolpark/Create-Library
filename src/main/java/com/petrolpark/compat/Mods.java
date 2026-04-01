@@ -32,6 +32,7 @@ public enum Mods implements StringRepresentable {
     BREWIN_AND_CHEWIN("brewinandchewin"),
     CURIOS,
     JEI,
+    OBESE_CROPS,
     TFMG,
     YOUKAIS_HOMECOMING("youkaishomecoming"),
     ;

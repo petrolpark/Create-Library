@@ -2,12 +2,13 @@ package com.petrolpark.compat.create.common.kinetics.horseMill;
 
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.contraptions.AssemblyException;
-import com.simibubi.create.content.contraptions.bearing.BearingBlock;
+import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
 import com.simibubi.create.content.contraptions.bearing.MechanicalBearingBlockEntity;
 import com.simibubi.create.content.contraptions.bearing.WindmillBearingBlockEntity;
 import com.simibubi.create.foundation.advancement.AllAdvancements;
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
@@ -32,6 +33,14 @@ public class HorseMillBearingBlockEntity extends WindmillBearingBlockEntity {
 		return new HorseMillBearingBlockEntity.Slot();
 	};
 
+	public boolean isRunning() {
+		return running;
+	};
+
+	public void assembleNextTick() {
+		assembleNextTick = true;	
+	};
+
 	/**
 	 * Copied from {@link MechanicalBearingBlockEntity#assemble Create source code}.
 	 */
@@ -40,7 +49,7 @@ public class HorseMillBearingBlockEntity extends WindmillBearingBlockEntity {
         final Level level = getLevel();
         if (level == null || !(level.getBlockState(worldPosition).getBlock() instanceof HorseMillBearingBlock)) return;
 
-		final Direction direction = getBlockState().getValue(BearingBlock.FACING);
+		final Direction direction = getBlockState().getValue(HorseMillBearingBlock.FACING);
 		final HorseMillContraption contraption = new HorseMillContraption(direction);
 
 		try {
@@ -71,11 +80,28 @@ public class HorseMillBearingBlockEntity extends WindmillBearingBlockEntity {
 		updateGeneratedRotation();
     };
 
+	@Override
+	@SuppressWarnings("null")
+	public void attach(ControlledContraptionEntity contraptionEntity) {
+		if (!(contraptionEntity instanceof HorseMillContraptionEntity)) return;
+		if (!getBlockState().hasProperty(HorseMillBearingBlock.FACING)) return;
+
+		movedContraption = contraptionEntity;
+		setChanged();
+
+		final BlockPos anchor = getBlockPos().relative(getBlockState().getValue(HorseMillBearingBlock.FACING));
+		movedContraption.setPos(anchor.getX(), anchor.getY(), anchor.getZ());
+		if (!getLevel().isClientSide()) {
+			running = true;
+			sendData();
+		};
+	};
+
 	class Slot extends ValueBoxTransform.Sided {
 
 		@Override
 		protected Vec3 getSouthLocation() {
-			return new Vec3(8d, getBlockState().getValue(HorseMillBearingBlock.FACING) == Direction.UP ? 6d : 10d, 15.5d);
+			return VecHelper.voxelSpace(8d, getBlockState().getValue(HorseMillBearingBlock.FACING) == Direction.UP ? 6d : 10d, 15.5d);
 		};
 
 		@Override

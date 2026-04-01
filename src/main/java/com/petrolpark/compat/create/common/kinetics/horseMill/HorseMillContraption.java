@@ -10,9 +10,12 @@ import java.util.UUID;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.petrolpark.compat.create.PetrolparkCreateContraptionTypes;
 import com.petrolpark.mixin.compat.create.accessor.ContraptionAccessor;
+import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.AssemblyException;
+import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.contraptions.bearing.BearingContraption;
 
@@ -31,6 +34,8 @@ public class HorseMillContraption extends BearingContraption {
 
     protected List<BlockPos> harnesses = new ArrayList<>();
 	protected Map<UUID, Integer> harnessMapping = new HashMap<>();
+
+    public HorseMillContraption() {};
     
     public HorseMillContraption(Direction facing) {
         super(false, facing);
@@ -43,7 +48,7 @@ public class HorseMillContraption extends BearingContraption {
         if (!(contraptionEntity instanceof HorseMillContraptionEntity horseMillContraptionEntity)) return;
 
         for (BlockPos harnessPos : getHarnesses()) {
-			final Entity passenger = getInitialPassengers().get(harnessPos);
+			final Entity passenger = initialPassengers().get(harnessPos);
 			if (passenger == null) continue;
 			final int harnessIndex = getHarnesses().indexOf(harnessPos);
 			if (harnessIndex == -1) continue;
@@ -66,7 +71,7 @@ public class HorseMillContraption extends BearingContraption {
 		if (!harnessEntities.isEmpty()) {
 		    final HarnessEntity harness = harnessEntities.get(0);
 			List<Entity> passengers = harness.getPassengers();
-			if (!passengers.isEmpty()) getInitialPassengers().put(local, passengers.get(0));
+			if (!passengers.isEmpty()) initialPassengers().put(local, passengers.get(0));
 		};
 	};
 
@@ -139,7 +144,12 @@ public class HorseMillContraption extends BearingContraption {
         return harnesses;
     };
 
-    protected Map<BlockPos, Entity> getInitialPassengers() {
-        return ((ContraptionAccessor)this).getInitialPassengers();
+    protected Map<BlockPos, Entity> initialPassengers() {
+        return ((ContraptionAccessor)(Contraption)this).getInitialPassengers();
+    };
+
+    @Override
+    public ContraptionType getType() {
+        return PetrolparkCreateContraptionTypes.HORSE_MILL.get();
     };
 };

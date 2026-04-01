@@ -6,6 +6,7 @@ import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -22,14 +23,24 @@ public class HarnessEntity extends SeatEntity {
 
     @Override
     public void tick() {
-        if (level().isClientSide()) return;
         final BlockState state = level().getBlockState(blockPosition());
-        final float angle = AngleHelper.horizontalAngle(getDirection());
-        for (Entity passenger : getPassengers()) {
-            passenger.setYRot(angle);
-            passenger.setYBodyRot(angle);
+        if (state.getBlock() instanceof HarnessBlock) {
+            final float angle = AngleHelper.horizontalAngle(state.getValue(HarnessBlock.FACING));
+            for (Entity entity : getPassengers()) {
+                if (!(entity instanceof LivingEntity living)) continue;
+                if (level().isClientSide()) {
+                    living.lerpTo(0, 0, 0, 0, 0, 0);
+                    living.lerpHeadTo(0, 0);
+                    living.setYRot(angle);
+                    living.setXRot(0);
+                    living.yBodyRot = angle;
+                    living.yHeadRot = angle;
+                } else {
+                    living.setYRot(angle);
+                };
+            };
+            if (isVehicle()) return;
         };
-		if (isVehicle() && state.getBlock() instanceof HarnessBlock) return;
 		discard();
     };
     

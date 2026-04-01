@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.Property;
 
 public class BlockHelper {
     
@@ -56,6 +57,17 @@ public class BlockHelper {
             if (potentialItem instanceof BlockItem blockItem) return blockItem.getBlock();
             else return null;
         }
+    };
+
+    public static final <T extends Comparable<T>> BlockState copyUnchecked(BlockState base, BlockState toCopy, Property<T> property) {
+        return base.setValue(property, toCopy.getValue(property));
+    };
+
+    public static final BlockState copyAll(BlockState base, BlockState toCopy) {
+        for (Property<?> property : toCopy.getProperties()) {
+            if (base.hasProperty(property)) base = copyUnchecked(base, toCopy, property);
+        };
+        return base;
     };
 
 
