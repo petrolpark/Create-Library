@@ -135,14 +135,20 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .build("crop_fertilizing", CropFertilizingCategory::new),
 
         mysteriousConversion = builder(ExampleRecipe.class)
-				.addRecipes(() -> MysteriousConversionCategory.RECIPES)
-				.icon(new IDrawable() {
-                    @Override public int getWidth() { return 16; };
-                    @Override public int getHeight() { return 16; };
-                    @Override public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) { AllGuiTextures.JEI_QUESTION_MARK.render(guiGraphics, xOffset + 2, yOffset); }
-                })
-				.emptyBackground(177, 50)
-				.build("mysterious_conversion", MysteriousConversionCategory::new);
+            .addRecipes(() -> MysteriousConversionCategory.RECIPES)
+            .icon(new IDrawable() {
+                @Override public int getWidth() { return 16; };
+                @Override public int getHeight() { return 16; };
+                @Override public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) { AllGuiTextures.JEI_QUESTION_MARK.render(guiGraphics, xOffset + 2, yOffset); }
+            })
+            .emptyBackground(177, 50)
+            .build("mysterious_conversion", MysteriousConversionCategory::new);
+
+        //TEMP
+        // goldConversion = builder(ExampleRecipe.class)
+        //     .addRecipes(() -> GoldHelper.streamAllConversions(helpers.getIngredientManager().getAllIngredients(VanillaTypes.ITEM_STACK), Minecraft.getInstance().level).toList())
+        //     .emptyBackground(122, 20)
+        //     .build("gold_conversion", ItemsExampleCategory::new);
 
         CreateRecipeCategory<?> blending, centrifugation, potionCentrifugation, deepFrying, juicing, drying, extrusion, lidded_basin;
 

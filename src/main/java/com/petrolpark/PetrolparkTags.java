@@ -154,6 +154,7 @@ public class PetrolparkTags {
 
         INCONTAMINABLE,
         CONTAMINABLE_BLOCKS,
+        CANNOT_CONVERT_TO_GOLD,
         SLIPPING_POTION_INGREDIENTS,
         ;
 

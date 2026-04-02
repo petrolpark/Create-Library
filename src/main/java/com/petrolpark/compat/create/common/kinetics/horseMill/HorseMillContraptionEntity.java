@@ -19,7 +19,7 @@ public class HorseMillContraptionEntity extends ControlledContraptionEntity {
         super(type, world);
     };
 
-    public static final HorseMillContraptionEntity create(Level world, IControlContraption controller, Contraption contraption) {
+    public static final HorseMillContraptionEntity create(Level world, IControlContraption controller, HorseMillContraption contraption) {
 		final HorseMillContraptionEntity entity = new HorseMillContraptionEntity(PetrolparkCreateEntityTypes.HORSE_MILL_CONTRAPTION.get(), world);
 		entity.controllerPos = controller.getBlockPosition();
 		entity.setContraption(contraption);

@@ -35,6 +35,7 @@ public class PetrolparkCreate {
         PetrolparkCreateBlockEntityTypes.register();
         PetrolparkCreateBlocks.register();
         PetrolparkCreateCompatRecipeDeserializers.register();
+        PetrolparkCreateContraptionTypes.register();
         PetrolparkCreateCriterionTriggers.register();
         PetrolparkCreateDataComponentTypes.register(modEventBus);
         PetrolparkCreateDoughTypes.register();

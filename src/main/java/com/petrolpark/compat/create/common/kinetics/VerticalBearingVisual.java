@@ -46,7 +46,7 @@ public class VerticalBearingVisual<B extends KineticBlockEntity & IBearingBlockE
     @Override
 	public void beginFrame(DynamicVisual.Context ctx) {
 		float interpolatedAngle = blockEntity.getInterpolatedAngle(ctx.partialTick() - 1);
-		Quaternionf rot = Axis.YN.rotationDegrees(interpolatedAngle);
+		Quaternionf rot = Axis.YP.rotationDegrees(interpolatedAngle);
 
 		rot.mul(blockOrientation);
 
