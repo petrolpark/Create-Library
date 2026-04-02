@@ -103,6 +103,8 @@
     "effect.petrolpark.slipping": "スリップ",
     "effect.petrolpark.slipping.description": "氷の上にいるかのように滑りまわります",
 
+    "entity.petrolpark.horse_mill_contraption": "ホースミル",
+    
     "fluid.petrolpark.blood": "血液",
     "fluid.petrolpark.cream": "クリーム",
     "fluid.petrolpark.skimmed_milk": "脱脂乳",
