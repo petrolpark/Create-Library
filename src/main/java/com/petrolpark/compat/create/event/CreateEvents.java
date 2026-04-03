@@ -11,7 +11,7 @@ import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorItemEvent;
 import com.petrolpark.core.item.decay.IApplyDecayRecipe;
 import com.petrolpark.core.world.entity.EntityFallOnEvent;
 import com.petrolpark.util.Conversion;
-import com.petrolpark.util.GoldHelper.RegisterGoldItemStackConversionEvent;
+import com.petrolpark.util.GoldHelper.RegisterGoldItemConversionEvent;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.AllTags.AllItemTags;
 
@@ -23,7 +23,7 @@ import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
 public class CreateEvents {
 
     @SubscribeEvent
-    public static final void onRegisterGoldItemStackConversions(RegisterGoldItemStackConversionEvent event) {
+    public static final void onRegisterGoldItemConversions(RegisterGoldItemConversionEvent event) {
         event.register(Petrolpark.asResource("plates"), Conversion.convertTaggedItem(AllItemTags.PLATES.tag, AllItems.GOLDEN_SHEET), 1000);
         event.register(Petrolpark.asResource("crushed_ores"), Conversion.convertTaggedItem(AllItemTags.CRUSHED_RAW_MATERIALS.tag, AllItems.CRUSHED_GOLD), 1000);
     };

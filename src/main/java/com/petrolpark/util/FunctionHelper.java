@@ -27,4 +27,11 @@ public class FunctionHelper {
             }
         };
     };
+
+    public static final <T> Supplier<T> withFallback(Supplier<T> delegate, Supplier<T> fallback) {
+        return () -> {
+            T value = delegate.get();
+            return value == null ? fallback.get() : value;
+        };
+    };
 };

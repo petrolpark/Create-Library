@@ -53,10 +53,22 @@ public class PetrolparkTags {
 
     public enum Blocks {
 
+        CANNOT_CONVERT_TO_GOLD
         ;
+
+        protected final TagKey<Block> tag;
+
+        Blocks() {
+            tag = TagKey.create(Registries.BLOCK, Petrolpark.asResource(Lang.asId(name())));
+        };
 
         public static final TagKey<Block> common(String path) {
             return TagKey.create(Registries.BLOCK, ResourceLocation.fromNamespaceAndPath("c", path));
+        };
+
+        @SuppressWarnings("deprecation")
+        public boolean matches(Block block) {
+            return block.builtInRegistryHolder().is(tag);
         };
     };
 
@@ -154,7 +166,6 @@ public class PetrolparkTags {
 
         INCONTAMINABLE,
         CONTAMINABLE_BLOCKS,
-        CANNOT_CONVERT_TO_GOLD,
         SLIPPING_POTION_INGREDIENTS,
         ;
 

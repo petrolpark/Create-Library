@@ -103,7 +103,8 @@ repositories {
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" } // ForgeConfigAPIPort
     maven { url = "https://maven.blamejared.com" } // JEI
     maven { url = "https://maven.theillusivec4.top/" } // Curios
-    exclusiveContent { // Destroy, Petrol's Parts
+    maven { url = "https://maven.teamresourceful.com/repository/maven-public/" } // Chipped
+    exclusiveContent { // Destroy, Petrol's Parts, Supplementaries
         forRepository {
             maven {
                 name = "Modrinth"
@@ -118,25 +119,34 @@ repositories {
 
 dependencies {
 
+    // HARD DEPENDENCIES
+
     // Registrate (bundled with Petrolpark's Library)
     jarJar(implementation("com.tterrag.registrate:Registrate:${registrate_version}"))
-    // Ponder/Flywhel
+    // Ponder/Flywhel (also bundled)
     jarJar(implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}"))
     jarJar(runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"))
+
+    // SOFT DEPENDENCIES
 
     // Create & Ponder
     implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") { transitive = false }
     compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
-
     // JEI
     implementation("mezz.jei:jei-${minecraft_version}-neoforge:${jei_version}")
-
     // Curios
     compileOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}:api")
     runtimeOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}")
-
     // Jade
     implementation("maven.modrinth:jade:15.10.0+neoforge")
+
+    // TESTING ONLY
+
+    // Supplementaries
+    runtimeOnly("maven.modrinth:moonlight:1.21-2.29.24-neoforge")
+    runtimeOnly("maven.modrinth:supplementaries:1.21-3.5.27-neoforge")
+    // Chipped
+    runtimeOnly("earth.terrarium.chipped:chipped-neoforge-${minecraft_version}:${chipped_version}")
 }
 
 jar {

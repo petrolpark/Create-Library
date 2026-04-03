@@ -30,6 +30,7 @@ import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecip
 import com.petrolpark.compat.jei.category.DeepFryingCategory;
 import com.petrolpark.compat.jei.category.DryingCategory;
 import com.petrolpark.compat.jei.category.ExtrusionCategory;
+import com.petrolpark.compat.jei.category.ItemsExampleCategory;
 import com.petrolpark.compat.jei.category.JuicingCategory;
 import com.petrolpark.compat.jei.category.LiddedBasinCategory;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
@@ -47,12 +48,14 @@ import com.petrolpark.core.recipe.CropFertilizingRecipe;
 import com.petrolpark.core.recipe.ExampleRecipe;
 import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
 import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
+import com.petrolpark.util.GoldHelper;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
 import mezz.jei.api.IModPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.category.IRecipeCategory;
@@ -142,13 +145,13 @@ public class PetrolparkCreateJEI implements IModPlugin {
                 @Override public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) { AllGuiTextures.JEI_QUESTION_MARK.render(guiGraphics, xOffset + 2, yOffset); }
             })
             .emptyBackground(177, 50)
-            .build("mysterious_conversion", MysteriousConversionCategory::new);
+            .build("mysterious_conversion", MysteriousConversionCategory::new),
 
         //TEMP
-        // goldConversion = builder(ExampleRecipe.class)
-        //     .addRecipes(() -> GoldHelper.streamAllConversions(helpers.getIngredientManager().getAllIngredients(VanillaTypes.ITEM_STACK), Minecraft.getInstance().level).toList())
-        //     .emptyBackground(122, 20)
-        //     .build("gold_conversion", ItemsExampleCategory::new);
+        goldConversion = builder(ExampleRecipe.class)
+            .addRecipes(() -> GoldHelper.streamAllConversions(helpers.getIngredientManager().getAllIngredients(VanillaTypes.ITEM_STACK), Minecraft.getInstance().level).toList())
+            .emptyBackground(122, 20)
+            .build("gold_conversion", ItemsExampleCategory::new);
 
         CreateRecipeCategory<?> blending, centrifugation, potionCentrifugation, deepFrying, juicing, drying, extrusion, lidded_basin;
 
