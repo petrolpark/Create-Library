@@ -21,6 +21,11 @@ public class PetrolparkMobEffects {
         .tag(PetrolparkTags.MobEffects.CANCELS_HURT_EFFECTS.tag, PetrolparkTags.MobEffects.PREVENTS_AGGRAVATING.tag)
         .register();
 
+    public static final MobEffectEntry<SimpleMobEffect> MIDAS_TOUCH = REGISTRATE.sharedMobEffect(SharedFeatureFlag.GOLD_CONVERSION, "midas_touch", SimpleMobEffect::new)
+        .category(MobEffectCategory.NEUTRAL)
+        .color(0xFFD700)
+        .register();
+
     public static final MobEffectEntry<SimpleMobEffect> MINERS_LUCK = REGISTRATE.mobEffect("miners_luck", SimpleMobEffect::new)
         .category(MobEffectCategory.BENEFICIAL)
         .color(0x4E0B60)

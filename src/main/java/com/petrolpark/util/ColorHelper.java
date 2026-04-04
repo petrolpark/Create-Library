@@ -1,5 +1,7 @@
 package com.petrolpark.util;
 
+import java.util.Optional;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
@@ -13,6 +15,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
 
@@ -86,21 +89,44 @@ public class ColorHelper {
     public static final @Nullable DyeColor getColor(LivingEntity entity) {
         if (entity instanceof Sheep sheep) return sheep.getColor();
         if (entity instanceof Shulker shulker) return shulker.getColor();
-        final EntityColorEvent event = new EntityColorEvent(entity);
+        final GetEntityColorEvent event = new GetEntityColorEvent(entity);
         NeoForge.EVENT_BUS.post(event);
         return event.getColor();
     };
 
-    public static final class EntityColorEvent extends LivingEvent {
+    public static final void setColor(LivingEntity entity, @Nullable DyeColor color) {
+        if (entity instanceof Sheep sheep && color != null) sheep.setColor(color);
+        if (entity instanceof Shulker shulker) shulker.setVariant(Optional.ofNullable(color));
+        final SetEntityColorEvent event = new SetEntityColorEvent(entity, color);
+        NeoForge.EVENT_BUS.post(event);
+    };
+
+    public static final class GetEntityColorEvent extends LivingEvent {
 
         @Nullable
         protected DyeColor color;
 
-        public EntityColorEvent(LivingEntity entity) {
+        public GetEntityColorEvent(LivingEntity entity) {
             super(entity);
         };
 
         public void setColor(@Nullable DyeColor color) {
+            this.color = color;
+        };
+
+        public @Nullable DyeColor getColor() {
+            return color;
+        };
+
+    };
+
+    public static final class SetEntityColorEvent extends LivingEvent implements ICancellableEvent {
+
+        @Nullable
+        protected final DyeColor color;
+
+        public SetEntityColorEvent(LivingEntity entity, DyeColor color) {
+            super(entity);
             this.color = color;
         };
 

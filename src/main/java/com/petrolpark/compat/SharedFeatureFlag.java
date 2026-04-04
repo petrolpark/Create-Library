@@ -22,6 +22,7 @@ public enum SharedFeatureFlag implements StringRepresentable {
     BLOOD,
     CENTRIFUGE,
     DRYING_RACK,
+    GOLD_CONVERSION,
     HORSE_MILL,
     MESH,
     PROGRAMMING_BLOCK,

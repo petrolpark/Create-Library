@@ -3,6 +3,7 @@ package com.petrolpark.util;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Predicate;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import com.petrolpark.core.item.decay.ItemDecay;
@@ -12,8 +13,11 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
@@ -86,6 +90,22 @@ public class ItemHelper {
             stacks.forEach(player.getInventory()::placeItemBackInInventory);
         } else {
             stacks.forEach(entity::spawnAtLocation);
+        };
+    };
+
+    public static final void modifyItems(LivingEntity livingEntity, UnaryOperator<ItemStack> function) {
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            if (livingEntity.hasItemInSlot(slot)) livingEntity.setItemSlot(slot, function.apply(livingEntity.getItemBySlot(slot)));
+        };
+        Container inv = null;
+        if (livingEntity instanceof InventoryCarrier inventoryCarrier) inv = inventoryCarrier.getInventory();
+        if (livingEntity instanceof Player otherPlayer) inv = otherPlayer.getInventory();
+        if (inv != null) {
+            for (int slot = 0; slot < inv.getContainerSize(); slot++) {
+                final ItemStack stack = inv.getItem(slot);
+                if (stack.isEmpty()) continue;
+                inv.setItem(slot, function.apply(stack));
+            };
         };
     };
 

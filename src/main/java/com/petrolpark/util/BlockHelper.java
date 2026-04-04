@@ -55,7 +55,7 @@ public class BlockHelper {
     };
 
     public static final boolean equals(BlockState s1, BlockState s2) {
-        return s1.getBlock() == s1.getBlock() && s1.getValues().equals(s2.getValues());
+        return s1.getBlock() == s2.getBlock() && s1.getValues().equals(s2.getValues());
     };
 
     @Nullable

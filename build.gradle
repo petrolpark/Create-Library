@@ -142,9 +142,9 @@ dependencies {
 
     // TESTING ONLY
 
-    // Supplementaries
-    runtimeOnly("maven.modrinth:moonlight:1.21-2.29.24-neoforge")
-    runtimeOnly("maven.modrinth:supplementaries:1.21-3.5.27-neoforge")
+    // Quark
+    implementation("maven.modrinth:zeta:1.1-39")
+    implementation("maven.modrinth:quark:4.1-476")
     // Chipped
     runtimeOnly("earth.terrarium.chipped:chipped-neoforge-${minecraft_version}:${chipped_version}")
 }

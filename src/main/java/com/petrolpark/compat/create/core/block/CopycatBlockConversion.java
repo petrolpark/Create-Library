@@ -16,7 +16,7 @@ public record CopycatBlockConversion(BlockStateConversion blockConversion) imple
         return object.entityOp().map(be -> be instanceof CopycatBlockEntity cbe ? cbe : null)
             .<ConversionResult<BlockStateAndEntity>>map(be -> {
                 final BlockStateAndEntity material = BlockStateAndEntity.of(be.getMaterial());
-                final BlockStateAndEntity converted = blockConversion().convert(level, material, player).object();
+                final BlockStateAndEntity converted = blockConversion().convert(level, material, player).value();
                 if (!converted.equals(material)) {
                     be.setMaterial(converted.state());
                     return finish(object);

@@ -10,6 +10,7 @@ import com.petrolpark.util.Conversion;
 import com.petrolpark.util.GoldHelper.RegisterGoldBlockConversionEvent;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.properties.WoodType;
@@ -22,6 +23,7 @@ public class ChippedConversions {
     @SubscribeEvent
     public static final void onRegisterGoldBlockConversions(RegisterGoldBlockConversionEvent event) {
         if (!CHIPPED.isLoaded()) return;
+        priorityOffset = 0;
 
         // Chipped built-in Blocks - always correct
         vanilla(event, Blocks.MELON, "golden_melon");
@@ -40,11 +42,13 @@ public class ChippedConversions {
         prefix(event, "shuttered");
         prefix(event, "stacked");
         for (String wood : WoodType.TYPES.keySet()) {
+            if (wood.contains(":")) continue; // Non-vanilla
             String leaves = wood + "_leaves";
             vanilla(event, leaves, "golden_" + leaves);
             palette(event, leaves);
             String trapdoor = wood + "_trapdoor";
             vanilla(event, trapdoor, "golden_barred_" + trapdoor); // Lower priority than Supplementaries trapdoor
+            palette(event, trapdoor);
         };
         vanilla(event, Blocks.PUMPKIN, "goldkin");
         chipped(event, "goldkin", "autumkin", "dewkin", "end_pumpkin", "end_pumpkin_purple", "kabotchkin", "nether_pumpkin", "overgrown_lumpkin", "pimpkin", "rosekin");
@@ -52,10 +56,10 @@ public class ChippedConversions {
         vanilla(event, Blocks.BARREL, "gold_barrel");
         palette(event, "barrel", "gold_barrel");
         palette(event, "crate", "gold_barrel");
-        register(event, "bricks", Conversion.convertBlockIdRegex(CHIPPED.getId(), ".+bricks$", get("raw_gold_block_bricks")), 1000); // Overriden by any other "*_bricks"
+        register(event, "bricks", Conversion.convertBlockIdRegexStrict(CHIPPED.getId(), ".+bricks$", get("raw_gold_block_bricks")), 1000); // Overriden by any other "*_bricks"
         rawSuffix(event, "mini_tiles", Blocks.DARK_PRISMARINE);
-        register(event, "bricks", Conversion.convertBlockIdRegex(CHIPPED.getId(), ".+pillar$", get("raw_gold_block_pillar")), 1000); // Overriden by any other "*_pillar"
-        rawSuffix(event, "pillar_top");
+        register(event, "bricks", Conversion.convertBlockIdRegexStrict(CHIPPED.getId(), ".+pillar$", get("raw_gold_block_pillar")), 1000); // Overriden by any other "*_pillar"
+        rawSuffix(event, "pillar_top", Blocks.POLISHED_BASALT);
         rawSuffix(event, "scales");
         rawPrefix(event, "angry");
         rawCircumfix(event, "blank", "carving");
@@ -96,7 +100,7 @@ public class ChippedConversions {
         rawCircumfix(event, "tiny", "bricks"); // Overriden by Tiny Layered * Bricks
         rawCircumfix(event, "tiny_layered", "bricks");
         rawCircumfix(event, "tiny_layered", "slabs");
-        rawPrefix(event, "trodden");
+        rawPrefix(event, "trodden", Blocks.BASALT);
         rawPrefix(event, "unamused");
         rawPrefix(event, "vertical_cut");
         rawCircumfix(event, "vertical_disordered", "bricks");
@@ -115,10 +119,14 @@ public class ChippedConversions {
         rawCircumfix(event, "curly", "pillar");
         rawCircumfix(event, "fine", "pillar");
         rawCircumfix(event, "ornate", "pillar");
-        rawCircumfix(event, "simple", "pillar");
+        rawCircumfix(event, "simple", "pillar", Blocks.QUARTZ_PILLAR);
         rawCircumfix(event, "massive", "bricks");
 
         // Guesses for other mods
+        register(event, "other_bricks", Conversion.convertBlockIdRegexStrict(".*_bricks$", get("raw_gold_block_bricks")), 1500); // Overridden by Quark Raw Gold Block Bricks
+        register(event, "other_tiles", Conversion.convertBlockIdRegexStrict(".*_tiles?$", get("tiled_raw_gold_block")), 2500);
+        register(event, "other_pillars", Conversion.convertBlockSameClass(get("simple_raw_gold_block_pillar")), 2000);
+        register(event, "other_leaves", Conversion.convertTaggedBlock(BlockTags.LEAVES, get("golden_oak_leaves")), 2000);
     };
 
     private static int priorityOffset = 0;
@@ -146,7 +154,7 @@ public class ChippedConversions {
     };
 
     private static final void palette(RegisterGoldBlockConversionEvent event, String palette, String goldName) {
-        register(event, palette + "_whole_palette", Conversion.convertBlockIdRegex(CHIPPED.getId(), ".+" + palette, get("golden_" + palette)), 2500);
+        register(event, palette + "_whole_palette", Conversion.convertBlockIdRegexStrict(CHIPPED.getId(), ".+" + palette, get("golden_" + palette)), 2500);
     };
 
     private static final void palette(RegisterGoldBlockConversionEvent event, String palette) {
@@ -155,7 +163,7 @@ public class ChippedConversions {
 
     private static final void regex(RegisterGoldBlockConversionEvent event, String name, String regex, String goldName, Block ... vanillaBlocks) {
         final Supplier<Block> gold = get(goldName);
-        register(event, name, Conversion.convertBlockIdRegex(CHIPPED.getId(), regex, gold), 2500);
+        register(event, name, Conversion.convertBlockIdRegexStrict(CHIPPED.getId(), regex, gold), 2500);
         for (Block block : vanillaBlocks) {
             register(event, block.getDescriptionId().split("\\.")[2], Conversion.convertBlock(() -> block, gold), 3000);
         };

@@ -1,5 +1,6 @@
 package com.petrolpark;
 
+import com.petrolpark.compat.Mods;
 import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.util.Lang;
 
@@ -70,6 +71,8 @@ public class PetrolparkTags {
         public boolean matches(Block block) {
             return block.builtInRegistryHolder().is(tag);
         };
+
+        public static final TagKey<Block> VERTICAL_SLABS = TagKey.create(Registries.BLOCK, Mods.QUARK.asResource("vertical_slabs"));
     };
 
     public enum Contaminants {

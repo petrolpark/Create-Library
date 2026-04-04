@@ -57,8 +57,9 @@ public record BlockStateAndEntity(BlockState state, @Nullable BlockEntity entity
     public final boolean equals(Object arg0) {
         if (this == arg0) return true;
         if (!(arg0 instanceof BlockStateAndEntity other)) return false;
-        return BlockHelper.equals(state(), other.state()) && hasEntity()
+        return BlockHelper.equals(state(), other.state()) && (hasEntity()
             ? other.hasEntity() && entity().equals(other.entity())
-            : !other.hasEntity();
+            : !other.hasEntity()
+        );
     };
 };
