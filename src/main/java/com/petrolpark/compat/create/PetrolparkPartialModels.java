@@ -27,7 +27,10 @@ public class PetrolparkPartialModels {
 
     // Blender
     BLENDER_COG = block("blender/inner"),
-    BLENDER_BLADES = block("blender/blades")
+    BLENDER_BLADES = block("blender/blades"),
+
+    // Harness
+    COW_HARNESS = block("harness/cow")
     ;
 
     private static PartialModel block(String path) {

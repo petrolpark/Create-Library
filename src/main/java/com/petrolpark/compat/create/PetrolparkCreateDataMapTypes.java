@@ -15,7 +15,8 @@ public class PetrolparkCreateDataMapTypes {
             Petrolpark.asResource("horse_mill_properties"),
             Registries.ENTITY_TYPE,
             HorseMillProperties.CODEC
-        ).build();
+        ).synced(HorseMillProperties.CODEC, true)
+        .build();
 
     public static final void onRegisterDataMapTypes(RegisterDataMapTypesEvent event) {
         event.register(HORSE_MILL_PROPERTIES);

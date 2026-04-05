@@ -105,7 +105,8 @@
     "effect.petrolpark.slipping": "Slipping",
     "effect.petrolpark.slipping.description": "Slide around as if on ice",
 
-    "entity.petrolpark.horse_mill_contraption": "Horse Mill",
+    "entity.petrolpark.harness": "Harness",
+    "entity.petrolpark.horse_mill_contraption": "Horse Mill Contraption",
 
     "fluid.petrolpark.blood": "Blood",
     "fluid.petrolpark.cream": "Cream",
