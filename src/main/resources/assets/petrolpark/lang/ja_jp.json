@@ -95,7 +95,9 @@
     "death.attack.petrolpark.extrusion_die": "%1$s は金型に押し出された",
 
     "dough.petrolpark.pasta_dough": "テスト用の生地",
-    
+
+    "effect.petrolpark.midas_touch": "黄金の指先",
+    "effect.petrolpark.midas_touch.description": "触れるもの全てが金に変わります",
     "effect.petrolpark.miners_luck": "採掘者の幸運",
     "effect.petrolpark.miners_luck.description": "採掘中に鉱脈を見つける確率が上昇します",
     "effect.petrolpark.numbness": "麻痺",
@@ -103,7 +105,8 @@
     "effect.petrolpark.slipping": "スリップ",
     "effect.petrolpark.slipping.description": "氷の上にいるかのように滑りまわります",
 
-    "entity.petrolpark.horse_mill_contraption": "ホースミル",
+    "entity.petrolpark.harness": "ハーネス",
+    "entity.petrolpark.horse_mill_contraption": "ホースミルからくり",
     
     "fluid.petrolpark.blood": "血液",
     "fluid.petrolpark.cream": "クリーム",
