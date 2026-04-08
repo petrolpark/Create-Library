@@ -3,6 +3,8 @@ package com.petrolpark.util;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import com.google.common.collect.BiMap;
@@ -17,6 +19,7 @@ public class DyeHelper {
     private static final Map<Block, BiMap<DyeColor, Block>> DYED_BLOCKS = new HashMap<>();
 
     public static final boolean isDyed(Block block) {
+        populatedDyedBlocks();
         return DYED_BLOCKS.containsKey(block);
     };
 
@@ -34,10 +37,14 @@ public class DyeHelper {
     public static final void populatedDyedBlocks() {
         if (!DYED_BLOCKS.isEmpty()) return;
         DYED_BLOCKS.clear();
-        final Map<String, BiMap<DyeColor, Block>> byType = BuiltInRegistries.BLOCK.holders()
-            .filter(holder -> holder.getKey().location().getPath().startsWith("pink_"))
+        final Map<Pattern, BiMap<DyeColor, Block>> byRegex = BuiltInRegistries.BLOCK.holders()
+            .filter(holder -> holder.getKey().location().getPath().contains("pink"))
             .collect(Collectors.toMap(
-                holder -> holder.getKey().location().getPath().substring(5),
+                holder -> {
+                    final String path = holder.getKey().location().getPath();
+                    final int index = path.indexOf("pink");
+                    return Pattern.compile("^" + Pattern.quote(path.substring(0, index)) + "(.+?)" + Pattern.quote(path.substring(index + 4)) + "$");
+                },
                 holder -> {
                     final BiMap<DyeColor, Block> map = HashBiMap.create();
                     map.put(DyeColor.PINK, holder.value());
@@ -45,15 +52,15 @@ public class DyeHelper {
                 }
             ));
         BuiltInRegistries.BLOCK.holders().forEach(holder -> {
-            for (Map.Entry<String, BiMap<DyeColor, Block>> entry : byType.entrySet()) {
-                final String path = holder.getKey().location().getPath();
-                if (path.endsWith(entry.getKey())) {
-                    final DyeColor color = DyeColor.byName(path.substring(0, entry.getKey().length()), null);
+            for (Map.Entry<Pattern, BiMap<DyeColor, Block>> entry : byRegex.entrySet()) {
+                final Matcher matcher = entry.getKey().matcher(holder.getKey().location().getPath());
+                if (matcher.matches()) {
+                    final DyeColor color = DyeColor.byName(matcher.group(1), null);
                     if (color != null && entry.getValue().get(DyeColor.PINK).getClass() == holder.value().getClass()) entry.getValue().put(color, holder.value());
                 };
             };
         });
-        for (BiMap<DyeColor, Block> map : byType.values()) {
+        for (BiMap<DyeColor, Block> map : byRegex.values()) {
             if (map.size() < 16) continue; // If we don't have all 16 (or more) colors
             for (Block block : map.values()) DYED_BLOCKS.put(block, map);
         };

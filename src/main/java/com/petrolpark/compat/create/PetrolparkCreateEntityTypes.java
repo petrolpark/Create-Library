@@ -5,7 +5,6 @@ import com.petrolpark.PetrolparkRegistrate;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessEntity;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillContraptionEntity;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
-import com.simibubi.create.content.contraptions.actors.seat.SeatEntity;
 import com.simibubi.create.content.contraptions.render.ContraptionEntityRenderer;
 import com.simibubi.create.content.contraptions.render.ContraptionVisual;
 import com.simibubi.create.foundation.data.CreateEntityBuilder;
@@ -29,7 +28,7 @@ public class PetrolparkCreateEntityTypes {
         .tag(EntityTypes.TELEPORTING_NOT_SUPPORTED)
         .register();
     
-    public static final EntityEntry<HarnessEntity> HARNESS = PetrolparkCreateEntityTypes.<HarnessEntity>register("harness", HarnessEntity::new, () -> SeatEntity.Render::new, MobCategory.MISC, 5, Integer.MAX_VALUE, false, true, HarnessEntity::build)
+    public static final EntityEntry<HarnessEntity> HARNESS = PetrolparkCreateEntityTypes.<HarnessEntity>register("harness", HarnessEntity::new, () -> HarnessEntity.Renderer::new, MobCategory.MISC, 5, Integer.MAX_VALUE, false, true, HarnessEntity::build)
         .register();
 
     private static <T extends Entity> CreateEntityBuilder<T, ?> register(String name, EntityFactory<T> factory, NonNullSupplier<NonNullFunction<EntityRendererProvider.Context, EntityRenderer<? super T>>> renderer, MobCategory group, int range, int updateFrequency, boolean sendVelocity, boolean immuneToFire, NonNullConsumer<EntityType.Builder<T>> propertyBuilder) {

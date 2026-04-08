@@ -96,6 +96,8 @@
 
     "dough.petrolpark.pasta_dough": "test dough",
 
+    "effect.petrolpark.midas_touch": "Midas Touch",
+    "effect.petrolpark.midas_touch.description": "Everything touched turns to gold",
     "effect.petrolpark.miners_luck": "Miners' Luck",
     "effect.petrolpark.miners_luck.description": "Greater chance of finding ore patches while mining",
     "effect.petrolpark.numbness": "Numbness",
@@ -103,7 +105,8 @@
     "effect.petrolpark.slipping": "Slipping",
     "effect.petrolpark.slipping.description": "Slide around as if on ice",
 
-    "entity.petrolpark.horse_mill_contraption": "Horse Mill",
+    "entity.petrolpark.harness": "Harness",
+    "entity.petrolpark.horse_mill_contraption": "Horse Mill Contraption",
 
     "fluid.petrolpark.blood": "Blood",
     "fluid.petrolpark.cream": "Cream",

@@ -2,18 +2,24 @@ package com.petrolpark.util;
 
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
+
+import com.google.common.base.Suppliers;
 
 import net.minecraft.advancements.critereon.BlockPredicate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Vec3i;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -22,6 +28,10 @@ import net.minecraft.world.level.block.state.properties.Property;
 public class BlockHelper {
     
     public static final Vec3i UNIT = new Vec3i(1, 1, 1);
+
+    public static final Supplier<Block> supplier(ResourceLocation id) {
+        return Suppliers.memoize(() -> BuiltInRegistries.BLOCK.get(id));
+    };
 
     public static final Stream<BlockPos> betweenClosedExcludingEdges(BlockPos firstPos, BlockPos secondPos) {
         return BlockPos.betweenClosedStream(firstPos, secondPos).filter(coplanarWith(firstPos).or(coplanarWith(secondPos)));
@@ -44,6 +54,10 @@ public class BlockHelper {
         return stream;
     };
 
+    public static final boolean equals(BlockState s1, BlockState s2) {
+        return s1.getBlock() == s2.getBlock() && s1.getValues().equals(s2.getValues());
+    };
+
     @Nullable
     public static final Block getBlock(Object obj) {
         if (obj instanceof Holder holder) return getBlock(holder.value());
@@ -51,7 +65,7 @@ public class BlockHelper {
         else if (obj instanceof BlockState state) return state.getBlock();
         else {
             final Item potentialItem;
-            if (obj instanceof Item item) potentialItem = item;
+            if (obj instanceof ItemLike item) potentialItem = item.asItem();
             else if (obj instanceof ItemStack stack) potentialItem = stack.getItem();
             else return null;
             if (potentialItem instanceof BlockItem blockItem) return blockItem.getBlock();

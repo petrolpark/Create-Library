@@ -3,7 +3,9 @@ package com.petrolpark.util;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -11,7 +13,6 @@ import java.util.regex.Pattern;
 
 import javax.annotation.Nullable;
 
-import com.google.common.base.Predicates;
 import com.google.common.base.Suppliers;
 import com.google.common.collect.BiMap;
 
@@ -23,7 +24,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.decoration.ItemFrame;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
@@ -62,121 +65,260 @@ public interface Conversion<T> {
         return object.getClass() == subClass;
     };
 
+    public default <U, S extends U> boolean isChildInstance(U object, Class<S> subClass) {
+        return object.getClass().isAssignableFrom(subClass);
+    };
+
     public static <T> ConversionResult<T> convert(Level level, T object, @Nullable Player player, Collection<Conversion.Entry<T>> conversions) {
+        final T original = object;
         for (Conversion.Entry<T> entry : conversions) {
             try {
                 final ConversionResult<T> result = entry.conversion().convert(level, object, player);
-                object = result.object();
+                object = result.value();
                 if (result.finish()) return result;
             } catch (Throwable e) {
                 throw new RuntimeException("Problem while running converter " + entry.id().toString(), e);
             };
         };
-        return new ConversionResult.Pass<>(object);
+        return object.equals(original) ? new ConversionResult.Pass<>(original) : new ConversionResult.Finish<>(object);
     };
 
     public static <T> NoConversion<T> dontConvert(Predicate<T> predicate) {
         return new NoConversion<>(predicate);
     };
 
-    public static MatchingItemStackConversion convertItem(Item item, Item result) {
+    /**
+     * Convert the Items of ItemStacks according to the given Item Conversion. The results are cached
+     */
+    public static ItemStackItemConversion convertItemStackItem(Conversion<Item> itemConversion) {
+        return new ItemStackItemConversion(itemConversion);
+    };
+
+    /**
+     * Convert the first Item into the second and finish
+     */
+    public static ReplacementConversion<Item> convertItem(Item item, Item result) {
         return convertItem(() -> item, () -> result);
     };
 
-    public static MatchingItemStackConversion convertItemIds(ResourceLocation id, ResourceLocation resultId) {
+    /**
+     * Convert the Item with the first ID (if it exists) to the Item with the second ID (if it exists) and finish, or else pass
+     */
+    public static ReplacementConversion<Item> convertItemIds(ResourceLocation id, ResourceLocation resultId) {
         return convertItem(Suppliers.memoize(() -> BuiltInRegistries.ITEM.get(id)), Suppliers.memoize(() -> BuiltInRegistries.ITEM.get(resultId)));
     };
 
-    public static MatchingItemStackConversion convertItem(Supplier<Item> item, Supplier<Item> result) {
-        return new MatchingItemStackConversion(s -> s.getItem() == item.get(), false, result);
+    /**
+     * Convert the first Item (if it exists) into the second (if it exists) and finish
+     */
+    public static ReplacementConversion<Item> convertItem(Supplier<Item> item, Supplier<Item> result) {
+        return new ReplacementConversion<>(item, result);
     };
 
-    public static MatchingItemStackConversion convertTaggedItem(TagKey<Item> tag, Item item) {
-        return convertTaggedItem(tag, () -> item);
+    /**
+     * Convert all Items with the given Tag into the given Item, if they are the exact same class, and finish
+     */
+    public static TaggedItemConversion convertTaggedItemStrict(TagKey<Item> tag, Item item) {
+        return convertTaggedItemStrict(tag, () -> item);
     };
 
-    public static MatchingItemStackConversion convertTaggedItem(TagKey<Item> tag, Supplier<Item> item) {
-        return new MatchingItemStackConversion(stack -> stack.is(tag), true, item);
+    /**
+     * Convert all Items with the given Tag into the given Item (if it exists), if they are the exact same class, and finish
+     */
+    public static TaggedItemConversion convertTaggedItemStrict(TagKey<Item> tag, Supplier<Item> item) {
+        return new TaggedItemConversion(tag, item, true);
     };
 
-    public static MatchingItemStackConversion convertItemIdRegex(String regex, Supplier<Item> item) {
-        final Pattern pattern = Pattern.compile(regex);
-        return new MatchingItemStackConversion(stack -> pattern.matcher(BuiltInRegistries.ITEM.getKey(stack.getItem()).getPath()).matches(), true, item);
+    /**
+     * Convert all Items whose IDs match the given regex into the given Item (if it exists), if they are the exact same class, and finish
+     */
+    public static ItemIDRegexConversion convertItemIdRegexStrict(String pathRegex, Supplier<Item> item) {
+        return convertItemIdRegexStrict("^.*$", pathRegex, item);
     };
 
-    public static MatchingItemStackConversion convertItemSameClass(Item item) {
+    /**
+     * Convert all Items whose IDs match the given regexes into the given Item (if it exists), if they are the exact same class, and finish
+     */
+    public static ItemIDRegexConversion convertItemIdRegexStrict(String namespaceRegex, String pathRegex, Supplier<Item> item) {
+        return new ItemIDRegexConversion(Pattern.compile(namespaceRegex), Pattern.compile(pathRegex), item, true);
+    };
+
+    /**
+     * Convert all Items with the exact same class as the given Item into the given Item and finish
+     */
+    public static AlwaysConversion<Item> convertItemSameClass(Item item) {
         return convertItemSameClass(() -> item);
     };
 
-    public static MatchingItemStackConversion convertItemSameClass(Supplier<Item> item) {
-        return new MatchingItemStackConversion(Predicates.alwaysTrue(), true, item);
+    /**
+     * Convert all Items with the exact same class as the given Item into the given Item and finish
+     */
+    public static AlwaysConversion<Item> convertItemSameClass(Supplier<Item> item) {
+        return new AlwaysConversion<>(item, true);
     };
 
-    public static MatchingItemStackConversion convertItemMatching(Predicate<ItemStack> predicate, Item item) {
-        return new MatchingItemStackConversion(predicate, true, () -> item);  
-    };
-
-    public static BlockItemConversion convertBlockItem(Conversion<BlockAndEntity> blockConversion) {
+    /**
+     * Apply the given Block Conversion to any Items which are Block Items and finish
+     */
+    public static BlockItemConversion convertBlockItem(Conversion<Block> blockConversion) {
         return new BlockItemConversion(blockConversion);
     };
 
-    public static <T> ItemStackComponentConversion<T> convertItemComponentIfPresent(DataComponentType<T> component, BiFunction<Level, T, T> map) {
-        return convertItemComponent(s -> s.has(component), component, map);
+    /**
+     * Convert all BlockItems into the corresponding BlockItems of the Blocks converted with the given Block Conversion, and finish
+     */
+    public static BlockStateItemStackConversion convertItemStackBlockState(Conversion<BlockStateAndEntity> blockConversion) {
+        return new BlockStateItemStackConversion(blockConversion);
     };
 
-    public static <T> ItemStackComponentConversion<T> convertItemComponent(Predicate<ItemStack> predicate, DataComponentType<T> component, BiFunction<Level, T, T> map) {
-        return convertItemComponent(predicate, () -> component, map, true);
+    /**
+     * Apply the given transformation to the given Component, only if that Component already existed, and continue
+     */
+    public static <T> ItemStackComponentConversion<T> convertItemStackComponentIfPresent(DataComponentType<T> component, BiFunction<Level, T, T> map) {
+        return convertItemStackComponent(s -> s.has(component), component, map);
     };
 
-    public static <T> ItemStackComponentConversion<T> convertItemComponentAndFinish(Predicate<ItemStack> predicate, DataComponentType<T> component, BiFunction<Level, T, T> map) {
-        return convertItemComponent(predicate, () -> component, map, false);
+    /**
+     * Apply the given transformation to the given Component if the ItemStack passes the given predicate, and continue
+     * @param <T> Component type
+     * @see Conversion#convertItemStackComponentAndFinish(Predicate, DataComponentType, BiFunction) Finish instead
+     */
+    public static <T> ItemStackComponentConversion<T> convertItemStackComponent(Predicate<ItemStack> predicate, DataComponentType<T> component, BiFunction<Level, T, T> map) {
+        return convertItemStackComponent(predicate, () -> component, map, true);
     };
 
-    public static <T> ItemStackComponentConversion<T> convertItemComponent(Predicate<ItemStack> predicate, Supplier<DataComponentType<T>> component, BiFunction<Level, T, T> map, boolean pass) {
+    /**
+     * Apply the given transformation to the given Component if the ItemStack passes the given predicate, and finish
+     * @param <T> Component type
+     * @see Conversion#convertItemStackComponent(Predicate, DataComponentType, BiFunction) Continue instead
+     */
+    public static <T> ItemStackComponentConversion<T> convertItemStackComponentAndFinish(Predicate<ItemStack> predicate, DataComponentType<T> component, BiFunction<Level, T, T> map) {
+        return convertItemStackComponent(predicate, () -> component, map, false);
+    };
+
+    /**
+     * Apply the given transformation to the given Component if the ItemStack passes the given predicate
+     * @param <T> Component type
+     */
+    public static <T> ItemStackComponentConversion<T> convertItemStackComponent(Predicate<ItemStack> predicate, Supplier<DataComponentType<T>> component, BiFunction<Level, T, T> map, boolean pass) {
         return new ItemStackComponentConversion<>(predicate, component, map, pass);
     };
 
+    /**
+     * Apply the given ItemStack Conversion to all Container contents or BundleContents of the ItemStack, and continue
+     */
     public static ItemStackContainerConversion convertItemStackContainerContents(Conversion<ItemStack> contentsConversion) {
         return new ItemStackContainerConversion(contentsConversion);
     };
 
-    public static MatchingBlockConversion convertBlock(Block block, Block result) {
+    /**
+     * Convert the Blocks of BlockStates according to the given Block Conversion. The results are cached
+     */
+    public static BlockStateBlockConversion convertBlockStateBlock(Conversion<Block> blockConversion) {
+        return new BlockStateBlockConversion(blockConversion);
+    };
+
+    /**
+     * Convert the first Block into the second and finish
+     */
+    public static ReplacementConversion<Block> convertBlock(Block block, Block result) {
         return convertBlock(() -> block, () -> result);
     };
 
-    public static MatchingBlockConversion convertBlockIds(ResourceLocation id, ResourceLocation resultId) {
-        return convertBlock(Suppliers.memoize(() -> BuiltInRegistries.BLOCK.get(id)), Suppliers.memoize(() -> BuiltInRegistries.BLOCK.get(resultId)));
+    /**
+     * Convert the Block with the first ID (if it exists) to the Block with the second ID (if it exists) and finish, or else pass
+     */
+    public static ReplacementConversion<Block> convertBlockIds(ResourceLocation id, ResourceLocation resultId) {
+        return convertBlock(BlockHelper.supplier(id), BlockHelper.supplier(resultId));
     };
 
-    public static MatchingBlockConversion convertBlock(Supplier<Block> block, Supplier<Block> result) {
-        return new MatchingBlockConversion(s -> s.block() == block.get(), false, result);
+    /**
+     * Convert the first Block into the second and finish
+     */
+    public static ReplacementConversion<Block> convertBlock(Supplier<Block> block, Supplier<Block> result) {
+        return new ReplacementConversion<>(block, result);
     };
 
-    public static MatchingBlockConversion convertTaggedBlock(TagKey<Block> tag, Block block) {
-        return convertTaggedBlock(tag, () -> block);
+    /**
+     * Convert all Blocks with the given Tag into the given Block, if they are the exact same class, and finish
+     */
+    public static TaggedBlockConversion convertTaggedBlockStrict(TagKey<Block> tag, Block block) {
+        return convertTaggedBlockStrict(tag, () -> block);
     };
 
-    public static MatchingBlockConversion convertTaggedBlock(TagKey<Block> tag, Supplier<Block> block) {
-        return new MatchingBlockConversion(b -> b.state().is(tag), true, block);
+    /**
+     * Convert all Blocks with the given Tag into the Block with the given ID (if it exists), if they are a subclass of the class of that Block, and finish
+     */
+    public static TaggedBlockConversion convertTaggedBlock(TagKey<Block> tag, ResourceLocation blockId) {
+        return convertTaggedBlock(tag, BlockHelper.supplier(blockId));
     };
 
-    public static MatchingBlockConversion convertBlockIdRegex(String regex, Block block) {
-        return convertBlockIdRegex(regex, () -> block);
+    /**
+     * Convert all Blocks with the given Tag into the given Block (if it exists), if they are a subclass of the class of that Block, and finish
+     */
+    public static TaggedBlockConversion convertTaggedBlock(TagKey<Block> tag, Supplier<Block> block) {
+        return new TaggedBlockConversion(tag, block, false);
     };
 
-    public static MatchingBlockConversion convertBlockIdRegex(String regex, Supplier<Block> block) {
-        final Pattern pattern = Pattern.compile(regex);
-        return new MatchingBlockConversion(b -> pattern.matcher(BuiltInRegistries.BLOCK.getKey(b.state().getBlock()).getPath()).matches(), true, block);
+    /**
+     * Convert all Blocks of the given Tag into the given Block (if it exists), if they are the exact same class, and finish
+     */
+    public static TaggedBlockConversion convertTaggedBlockStrict(TagKey<Block> tag, Supplier<Block> block) {
+        return new TaggedBlockConversion(tag, block, true);
     };
 
-    public static MatchingBlockConversion convertBlockSameClass(Block block) {
+    /**
+     * Convert all Blocks whose ID paths match the given regex into the given Block, if they are the exact same class, and finish
+     */
+    public static BlockIDRegexConversion convertBlockIdRegexStrict(String regex, Block block) {
+        return convertBlockIdRegexStrict(regex, () -> block);
+    };
+
+    /**
+     * Convert all Blocks whose ID paths match the given regex into the given Block (if it exists), if they are the exact same class, and finish
+     */
+    public static BlockIDRegexConversion convertBlockIdRegexStrict(String regex, Supplier<Block> block) {
+        return convertBlockIdRegexStrict("^.*$", regex, block);
+    };
+
+    /**
+     * Convert all Blocks whose ID paths match the given regex into the given Block (if it exists), and finish
+     */
+    public static BlockIDRegexConversion convertBlockIdRegex(String regex, Supplier<Block> block) {
+        return convertBlockIdRegex("^.*$", regex, block);
+    };
+
+    /**
+     * Convert all Blocks whose IDs match the given regexes into the given Block (if it exists), if they are the exact same class, and finish
+     */
+    public static BlockIDRegexConversion convertBlockIdRegexStrict(String namespaceRegex, String pathRegex, Supplier<Block> block) {
+        return new BlockIDRegexConversion(Pattern.compile(namespaceRegex), Pattern.compile(pathRegex), block, true);
+    };
+
+    /**
+     * Convert all Blocks whose IDs match the given regexes into the given Block (if it exists) and finish
+     */
+    public static BlockIDRegexConversion convertBlockIdRegex(String namespaceRegex, String pathRegex, Supplier<Block> block) {
+        return new BlockIDRegexConversion(Pattern.compile(namespaceRegex), Pattern.compile(pathRegex), block, false);
+    };
+
+    /**
+     * Convert all Blocks with the exact same class as the given Block into the given Block and finish
+     */
+    public static AlwaysConversion<Block> convertBlockSameClass(Block block) {
         return convertBlockSameClass(() -> block);
     };
 
-    public static MatchingBlockConversion convertBlockSameClass(Supplier<Block> block) {
-        return new MatchingBlockConversion(Predicates.alwaysTrue(), true, block);  
+    /**
+     * Convert all Blocks with the exact same class as the given Block into the given Block (if it exists) and finish
+     */
+    public static AlwaysConversion<Block> convertBlockSameClass(Supplier<Block> block) {
+        return new AlwaysConversion<>(block, true);  
     };
 
+    /**
+     * If the Block is a Container, convert all ItemStacks in it according to the given ItemStack Conversion, and continue
+     */
     public static ContainerConversion convertContainerContents(Conversion<ItemStack> contentsConversion) {
         return new ContainerConversion(contentsConversion);
     };
@@ -190,6 +332,129 @@ public interface Conversion<T> {
 
     };
 
+    public record ReplacementConversion<T>(Supplier<T> object, Supplier<T> result) implements Conversion<T> {
+
+        @Override
+        public ConversionResult<T> convert(Level level, T object, @Nullable Player player) {
+            return result().get() != null && Objects.equals(object().get(), object) ? finish(result().get()) : pass(object);
+        };
+
+    };
+
+    public record AlwaysConversion<T>(Supplier<T> result, boolean classesMustMatch) implements Conversion<T> {
+
+        @Override
+        public ConversionResult<T> convert(Level level, T object, @Nullable Player player) {
+            return result().get() != null && (classesMustMatch() ? result().get().getClass() == object.getClass() : object.getClass().isAssignableFrom(result().get().getClass())) ? finish(result().get()) : pass(object);
+        };
+
+    };
+
+    public record TaggedItemConversion(TagKey<Item> tag, Supplier<Item> result, boolean classesMustMatch) implements Conversion<Item> {
+
+        @Override
+        @SuppressWarnings("deprecation")
+        public ConversionResult<Item> convert(Level level, Item object, @Nullable Player player) {
+            return result().get() != null && object.builtInRegistryHolder().is(tag()) && (object.getClass() == result().getClass() || !classesMustMatch()) ? finish(result().get()) : pass(object);
+        };
+    };
+
+    public record ItemIDRegexConversion(Pattern namespaceRegex, Pattern pathRegex, Supplier<Item> result, boolean classesMustMatch) implements Conversion<Item> {
+
+        @Override
+        public ConversionResult<Item> convert(Level level, Item object, @Nullable Player player) {
+            final ResourceLocation id = BuiltInRegistries.ITEM.getKey(object);
+            return result().get() != null && (result().get().getClass() == object.getClass() || !classesMustMatch()) && namespaceRegex().matcher(id.getNamespace()).matches() && pathRegex().matcher(id.getPath()).matches() ? finish(result().get()) : pass(object);
+        };
+
+    };
+
+    public record BlockItemConversion(Conversion<Block> blockConversion) implements Conversion<Item> {
+
+        @Override
+        public ConversionResult<Item> convert(Level level, Item object, @Nullable Player player) {
+            if (object instanceof BlockItem blockItem) {
+                final Block resultBlock = blockConversion().convert(level, blockItem.getBlock(), player).value();
+                final Item resultItem = resultBlock.asItem();
+                if (
+                    resultItem != Items.AIR
+                    && resultBlock != blockItem.getBlock()
+                    && resultItem instanceof BlockItem resultBlockItem
+                    && resultBlockItem.getBlock() == resultBlock
+                ) return finish(resultItem);
+            };
+            return pass(object);
+        };
+        
+    };
+
+    public abstract class TieredItemConversion implements Conversion<Item> {
+
+        protected final Map<Class<? extends TieredItem>, Map<Item, Optional<TieredItem>>> map = new HashMap<>();
+
+        public abstract Tier convertTier(Level level, Item item, Tier tier);
+
+        @Override
+        public ConversionResult<Item> convert(Level level, Item object, @Nullable Player player) {
+            if (object instanceof TieredItem tieredItem) {
+                final Class<? extends TieredItem> tieredItemClass = tieredItem.getClass();
+                return map.computeIfAbsent(tieredItemClass, $ -> new HashMap<>())
+                    .computeIfAbsent(tieredItem, $ -> {
+                        final Tier tier = convertTier(level, object, tieredItem.getTier());
+                        return BuiltInRegistries.ITEM.stream()
+                            .filter(item -> item.getClass() == tieredItemClass)
+                            .map(item -> (TieredItem)item)
+                            .filter(item -> item.getTier() == tier)
+                            .findFirst();
+                    }).<ConversionResult<Item>>map(item -> finish(item)).orElse(pass(object));
+            };
+            return pass(object);
+        };
+
+    };
+
+    public abstract class ArmorItemConversion implements Conversion<Item> {
+
+        protected final Map<ArmorItem.Type, Map<Item, Optional<ArmorItem>>> map = new HashMap<>();
+
+        public abstract Holder<ArmorMaterial> convertArmorMaterial(Level level, Item object, Holder<ArmorMaterial> tier);
+
+        @Override
+        public ConversionResult<Item> convert(Level level, Item object, @Nullable Player player) {
+            if (object instanceof ArmorItem armorItem) {
+                return map.computeIfAbsent(armorItem.getType(), $ -> new HashMap<>())
+                    .computeIfAbsent(armorItem, $ -> {
+                        final Holder<ArmorMaterial> armorMaterial = convertArmorMaterial(level, object, armorItem.getMaterial());
+                        return BuiltInRegistries.ITEM.stream()
+                            .filter(item -> item instanceof ArmorItem armorItem2 && armorItem2.getType() == armorItem.getType())
+                            .map(item -> (ArmorItem)item)
+                            .filter(item -> item.getMaterial() == armorMaterial)
+                            .findFirst();
+                    }).<ConversionResult<Item>>map(item -> finish(item)).orElse(pass(object));
+            };
+            return pass(object);
+        };
+    };
+
+    public record TaggedBlockConversion(TagKey<Block> tag, Supplier<Block> result, boolean classesMustMatch) implements Conversion<Block> {
+        
+        @Override
+        @SuppressWarnings("deprecation")
+        public ConversionResult<Block> convert(Level level, Block object, @Nullable Player player) {
+            return result().get() != null && object.builtInRegistryHolder().is(tag()) && (object.getClass() == result().getClass() || !classesMustMatch()) ? finish(result().get()) : pass(object);
+        };
+    };
+
+    public record BlockIDRegexConversion(Pattern namespaceRegex, Pattern pathRegex, Supplier<Block> result, boolean classesMustMatch) implements Conversion<Block> {
+
+        @Override
+        public ConversionResult<Block> convert(Level level, Block object, @Nullable Player player) {
+            final ResourceLocation id = BuiltInRegistries.BLOCK.getKey(object);
+            return result().get() != null && (result().get().getClass() == object.getClass() || !classesMustMatch()) && namespaceRegex().matcher(id.getNamespace()).matches() && pathRegex().matcher(id.getPath()).matches() ? finish(result().get()) : pass(object);
+        };
+
+    };
+
     public interface ItemStackConversion extends Conversion<ItemStack> {
 
         public default ConversionResult<ItemStack> swap(ItemStack stack, Item item) {
@@ -197,29 +462,37 @@ public interface Conversion<T> {
         };
 
         public default ConversionResult<ItemStack> swap(ItemStack stack, Item item, boolean classesMustMatch) {
-            if (!isInstance(stack.getItem(), item.getClass()) && classesMustMatch) return pass(stack);
+            if (classesMustMatch && !isInstance(stack.getItem(), item.getClass())) return pass(stack);
             final ItemStack result = new ItemStack(item, stack.getCount());
             result.applyComponents(stack.getComponentsPatch());
             return finish(result);
         };
     };
 
-    public record MatchingItemStackConversion(Predicate<ItemStack> predicate, boolean classesMustMatch, Supplier<Item> item) implements ItemStackConversion {
+    public final class ItemStackItemConversion implements ItemStackConversion {
+
+        private final Map<Item, Item> map = new ConcurrentHashMap<>();
+
+        public final Conversion<Item> itemConversion;
+
+        public ItemStackItemConversion(Conversion<Item> itemConversion) {
+            this.itemConversion = itemConversion;
+        };
 
         @Override
         public ConversionResult<ItemStack> convert(Level level, ItemStack object, @Nullable Player player) {
-            final Item item = item().get();
-            return item != null && predicate().test(object) ? swap(object, item, classesMustMatch()) : pass(object); 
+            final Item item = map.computeIfAbsent(object.getItem(), $ -> itemConversion.convert(level, object.getItem(), player).value());
+            return object.getItem() == item ? pass(object) : swap(object, item, false);
         };
 
     };
 
-    public record BlockItemConversion(Conversion<BlockAndEntity> blockConversion) implements ItemStackConversion {
+    public record BlockStateItemStackConversion(Conversion<BlockStateAndEntity> blockConversion) implements ItemStackConversion {
 
         @Override
         public ConversionResult<ItemStack> convert(Level level, ItemStack object, @Nullable Player player) {
-            if (object.getItem() instanceof BlockItem blockItem) {
-                final Item item = blockConversion().convert(level, new BlockAndEntity(object.getOrDefault(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY).apply(blockItem.getBlock().defaultBlockState()), null), player).object().state().getBlock().asItem();
+            if (object.getItem() instanceof BlockItem blockItem && object.has(DataComponents.BLOCK_STATE)) {
+                final Item item = blockConversion().convert(level, new BlockStateAndEntity(object.getOrDefault(DataComponents.BLOCK_STATE, BlockItemStateProperties.EMPTY).apply(blockItem.getBlock().defaultBlockState()), null), player).value().state().getBlock().asItem();
                 if (item != Items.AIR) return swap(object, item);
             };
             return pass(object);
@@ -244,14 +517,14 @@ public interface Conversion<T> {
             if (object.has(DataComponents.CONTAINER)) {
                 object.set(DataComponents.CONTAINER, ItemContainerContents.fromItems(
                     object.getOrDefault(DataComponents.CONTAINER, ItemContainerContents.EMPTY).stream()
-                        .map(stack -> contentsConversion().convert(level, stack, player).object())
+                        .map(stack -> contentsConversion().convert(level, stack, player).value())
                         .toList()
                 ));
             };
             if (object.has(DataComponents.BUNDLE_CONTENTS)) {
                 object.set(DataComponents.BUNDLE_CONTENTS, new BundleContents(
                     object.getOrDefault(DataComponents.BUNDLE_CONTENTS, BundleContents.EMPTY).itemCopyStream()
-                        .map(stack -> contentsConversion().convert(level, stack, player).object())
+                        .map(stack -> contentsConversion().convert(level, stack, player).value())
                         .toList()
                 ));
             };
@@ -259,87 +532,47 @@ public interface Conversion<T> {
         };
     };
 
-    public abstract class TieredItemStackConversion implements ItemStackConversion {
+    public interface BlockStateConversion extends Conversion<BlockStateAndEntity> {
 
-        protected final Map<Class<? extends TieredItem>, Map<Item, Optional<TieredItem>>> map = new HashMap<>();
-
-        public abstract Tier convertTier(Level level, ItemStack object, Tier tier);
-
-        @Override
-        public ConversionResult<ItemStack> convert(Level level, ItemStack object, @Nullable Player player) {
-            if (object.getItem() instanceof TieredItem tieredItem) {
-                final Class<? extends TieredItem> tieredItemClass = tieredItem.getClass();
-                return map.computeIfAbsent(tieredItemClass, $ -> new HashMap<>())
-                    .computeIfAbsent(tieredItem, $ -> {
-                        final Tier tier = convertTier(level, object, tieredItem.getTier());
-                        return BuiltInRegistries.ITEM.stream()
-                            .filter(item -> item.getClass() == tieredItemClass)
-                            .map(item -> (TieredItem)item)
-                            .filter(item -> item.getTier() == tier)
-                            .findFirst();
-                    }).map(item -> swap(object, item)).orElse(pass(object));
-            };
-            return pass(object);
-        };
-
-    };
-
-    public abstract class ArmorItemStackConversion implements ItemStackConversion {
-
-        protected final Map<ArmorItem.Type, Map<Item, Optional<ArmorItem>>> map = new HashMap<>();
-
-        public abstract Holder<ArmorMaterial> convertArmorMaterial(Level level, ItemStack object, Holder<ArmorMaterial> tier);
-
-        @Override
-        public ConversionResult<ItemStack> convert(Level level, ItemStack object, @Nullable Player player) {
-            if (object.getItem() instanceof ArmorItem armorItem) {
-                return map.computeIfAbsent(armorItem.getType(), $ -> new HashMap<>())
-                    .computeIfAbsent(armorItem, $ -> {
-                        final Holder<ArmorMaterial> armorMaterial = convertArmorMaterial(level, object, armorItem.getMaterial());
-                        return BuiltInRegistries.ITEM.stream()
-                            .filter(item -> item instanceof ArmorItem armorItem2 && armorItem2.getType() == armorItem.getType())
-                            .map(item -> (ArmorItem)item)
-                            .filter(item -> item.getMaterial() == armorMaterial)
-                            .findFirst();
-                    }).map(item -> swap(object, item)).orElse(pass(object));
-            };
-            return pass(object);
-        };
-    };
-
-    public interface BlockConversion extends Conversion<BlockAndEntity> {
-
-        public default ConversionResult<BlockAndEntity> swap(BlockAndEntity blockAndEntity, Block block) {
+        public default ConversionResult<BlockStateAndEntity> swap(BlockStateAndEntity blockAndEntity, Block block) {
             return swap(blockAndEntity, block, true);
         };
 
-        public default ConversionResult<BlockAndEntity> swap(BlockAndEntity blockAndEntity, Block block, boolean classesMustMatch) {
-            if (!isInstance(blockAndEntity.state().getBlock(), block.getClass()) && classesMustMatch) return pass(blockAndEntity);
+        public default ConversionResult<BlockStateAndEntity> swap(BlockStateAndEntity blockAndEntity, Block block, boolean classesMustMatch) {
+            if (!isInstance(blockAndEntity.block(), block.getClass()) && classesMustMatch) return pass(blockAndEntity);
             return blockAndEntity.withStateOptional(BlockHelper.copyAll(block.defaultBlockState(), blockAndEntity.state()))
-                .<ConversionResult<BlockAndEntity>>map(this::finish)
+                .<ConversionResult<BlockStateAndEntity>>map(this::finish)
                 .orElseGet(supplyPass(blockAndEntity));
         };
     };
 
-    public record MatchingBlockConversion(Predicate<BlockAndEntity> predicate, boolean classesMustMatch, Supplier<Block> block) implements BlockConversion {
+    public final class BlockStateBlockConversion implements BlockStateConversion {
+
+        private final Map<Block, Block> map = new ConcurrentHashMap<>();
+
+        public final Conversion<Block> blockConversion;
+
+        public BlockStateBlockConversion(Conversion<Block> blockConversion) {
+            this.blockConversion = blockConversion;
+        };
 
         @Override
-        public ConversionResult<BlockAndEntity> convert(Level level, BlockAndEntity object, @Nullable Player player) {
-            final Block block = block().get();
-            return block != null && predicate().test(object) ? swap(object, block, classesMustMatch()) : pass(object);
+        public ConversionResult<BlockStateAndEntity> convert(Level level, BlockStateAndEntity object, @Nullable Player player) {
+            final Block block = map.computeIfAbsent(object.block(), $ -> blockConversion.convert(level, object.block(), player).value());
+            return block == object.block() ? pass(object) : swap(object, block, false);
         };
         
     };
 
-    public record ContainerConversion(Conversion<ItemStack> itemConversion) implements BlockConversion {
+    public record ContainerConversion(Conversion<ItemStack> itemConversion) implements BlockStateConversion {
 
         @Override
-        public ConversionResult<BlockAndEntity> convert(Level level, BlockAndEntity object, @Nullable Player player) {
+        public ConversionResult<BlockStateAndEntity> convert(Level level, BlockStateAndEntity object, @Nullable Player player) {
             object.entityOp().ifPresent(be -> {
                 if (be instanceof Container container) {
                     for (int slot = 0; slot < container.getContainerSize(); slot++) {
                         final ItemStack stack = container.getItem(slot);
-                        final ItemStack converted = itemConversion().convert(level, stack, player).object();
+                        final ItemStack converted = itemConversion().convert(level, stack, player).value();
                         if (!ItemStack.isSameItemSameComponents(stack, converted)) container.setItem(slot, converted);
                     };
                 };
@@ -349,25 +582,58 @@ public interface Conversion<T> {
 
     };
 
-    public static abstract class DyedBlockConversion implements BlockConversion {
+    public static abstract class DyedBlockConversion implements Conversion<Block> {
 
-        protected final Map<Block, Block> blocks = new HashMap<>();
+        protected final Map<Block, Optional<Block>> blocks = new HashMap<>();
 
-        public abstract boolean isValid(BlockAndEntity block);
-
-        public abstract DyeColor convert(BlockAndEntity block, DyeColor color);
+        public abstract DyeColor convert(Block block, DyeColor color);
 
         @Override
-        public ConversionResult<BlockAndEntity> convert(Level level, BlockAndEntity object, @Nullable Player player) {
-            if (!isValid(object)) return pass(object);
-            final Block block = blocks.computeIfAbsent(object.block(), b -> {
+        public ConversionResult<Block> convert(Level level, Block object, @Nullable Player player) {
+            if (!DyeHelper.isDyed(object)) return pass(object);
+            final Optional<Block> block = blocks.computeIfAbsent(object, b -> {
                 final Optional<BiMap<DyeColor, Block>> map = DyeHelper.getMap(b);
-                if (map.isEmpty()) return null; // Not dyed
-                return map.get().get(convert(object, map.get().inverse().get(b)));
+                if (map.isEmpty()) return Optional.empty(); // Not dyed
+                return Optional.of(map.get().get(convert(object, map.get().inverse().get(b))));
             });
-            return block == null ? pass(object) : swap(object, block); 
+            return block.isEmpty() ? pass(object) : finish(block.get()); 
         };
 
+    };
+
+    public record ItemEntityConversion(Conversion<ItemStack> itemStackConversion) implements Conversion<Entity> {
+
+        @Override
+        public ConversionResult<Entity> convert(Level level, Entity object, @Nullable Player player) {
+            if (object instanceof ItemEntity itemEntity) {
+                itemEntity.setItem(itemStackConversion().convert(level, itemEntity.getItem(), player).value());
+                return finish(itemEntity);
+            } else {
+                return pass(object);
+            }
+        };
+
+    };
+
+    public record InventoryEntityConversion(Conversion<ItemStack> itemStackConversion) implements Conversion<Entity> {
+
+        @Override
+        public ConversionResult<Entity> convert(Level level, Entity object, @Nullable Player player) {
+            if (object instanceof LivingEntity living) ItemHelper.modifyItems(living, stack -> itemStackConversion().convert(level, stack, player).value());
+            return pass(object);
+        };
+
+    };
+
+    public abstract class ColorEntityConversion implements Conversion<Entity> {
+
+        public abstract DyeColor convert(Entity entity, DyeColor color);
+
+        @Override
+        public ConversionResult<Entity> convert(Level level, Entity object, @Nullable Player player) {
+            if (object instanceof LivingEntity living) ColorHelper.setColor(living, convert(object, ColorHelper.getColor(living)));
+            return pass(object);
+        };
     };
 
     public record ItemFrameItemConversion(Conversion<ItemStack> itemConversion) implements Conversion<Entity> {
@@ -375,7 +641,7 @@ public interface Conversion<T> {
         @Override
         public ConversionResult<Entity> convert(Level level, Entity object, @Nullable Player player) {
             if (object instanceof ItemFrame itemFrame) {
-                itemFrame.setItem(itemConversion().convert(level, itemFrame.getItem(), player).object());
+                itemFrame.setItem(itemConversion().convert(level, itemFrame.getItem(), player).value());
                 return finish(itemFrame);
             } else {
                 return pass(object);
@@ -386,7 +652,7 @@ public interface Conversion<T> {
 
     public sealed interface ConversionResult<T> permits ConversionResult.Pass, ConversionResult.Finish {
 
-        public T object();
+        public T value();
 
         public boolean pass();
 
@@ -394,7 +660,7 @@ public interface Conversion<T> {
             return !pass();
         };
 
-        public static record Pass<T>(T object) implements ConversionResult<T> {
+        public static record Pass<T>(T value) implements ConversionResult<T> {
 
             @Override
             public boolean pass() {
@@ -402,7 +668,7 @@ public interface Conversion<T> {
             };
         };
 
-        public static record Finish<T>(T object) implements ConversionResult<T> {
+        public static record Finish<T>(T value) implements ConversionResult<T> {
 
             @Override
             public boolean pass() {

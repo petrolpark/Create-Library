@@ -6,10 +6,12 @@ import java.util.function.Supplier;
 
 import com.google.common.base.Strings;
 import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.util.BlockHelper;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
@@ -30,9 +32,12 @@ public enum Mods implements StringRepresentable {
     ARS_NOUVEAU("ars_nouveau"),
     BIG_CANNONS("createbigcannons"),
     BREWIN_AND_CHEWIN("brewinandchewin"),
+    CHIPPED,
     CURIOS,
     JEI,
     OBESE_CROPS,
+    QUARK,
+    SUPPLEMENTARIES,
     TFMG,
     YOUKAIS_HOMECOMING("youkaishomecoming"),
     ;
@@ -76,6 +81,10 @@ public enum Mods implements StringRepresentable {
 
     public ResourceLocation asResource(String path) {
         return ResourceLocation.fromNamespaceAndPath(id, path);
+    };
+
+    public Supplier<Block> block(String path) {
+        return BlockHelper.supplier(asResource(path));
     };
 
     public PetrolparkRegistrate registrate() {
