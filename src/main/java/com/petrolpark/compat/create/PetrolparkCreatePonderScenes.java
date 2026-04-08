@@ -51,7 +51,7 @@ public class PetrolparkCreatePonderScenes {
 	
 		if (SharedFeatureFlag.MESH_BASIN.enabled()) itemProviderHelper.forComponents(PetrolparkCreateBlocks.MESH_BASIN)
 			.addStoryBoard("processing/mesh_basin/juicing", MeshBasinScenes::juicing)
-			.addStoryBoard("processing/mesh_basin/deep_frying", MeshBasinScenes::deepFrying);
+			.addStoryBoard("processing/mesh_basin/boiling", MeshBasinScenes::boiling);
 
 		if (SharedFeatureFlag.REDSTONE_PROGRAMMER.enabled()) itemProviderHelper.forComponents(PetrolparkCreateBlocks.REDSTONE_PROGRAMMER)
 			.addStoryBoard("redstone/programmer", RedstoneProgrammerPonderScenes::redstoneProgrammer, AllCreatePonderTags.REDSTONE);

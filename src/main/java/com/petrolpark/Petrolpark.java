@@ -43,8 +43,8 @@ public class Petrolpark {
 
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final PetrolparkRegistrate REGISTRATE = new PetrolparkRegistrate(MOD_ID);
-    public static final PetrolparkRegistrate DESTROY_REGISTRATE = Mods.DESTROY.registrate();
+    public static final PetrolparkRegistrate REGISTRATE = new PetrolparkRegistrate();
+    public static final AbstractPetrolparkRegistrate<?> DESTROY_REGISTRATE = Mods.DESTROY.registrate();
 
     public static ResourceLocation asResource(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);

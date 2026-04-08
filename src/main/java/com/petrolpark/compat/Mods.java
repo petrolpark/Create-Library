@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.google.common.base.Strings;
-import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.util.BlockHelper;
 import com.petrolpark.util.Lang;
 
@@ -45,7 +45,7 @@ public enum Mods implements StringRepresentable {
     public static final Function<String, Mods> LOOKUP = StringRepresentable.createNameLookup(values(), Function.identity());
 
     public final String id;
-    private PetrolparkRegistrate registrate;
+    private OtherModRegistrate registrate;
 
     private Mods() {
         id = Lang.asId(name());
@@ -87,13 +87,21 @@ public enum Mods implements StringRepresentable {
         return BlockHelper.supplier(asResource(path));
     };
 
-    public PetrolparkRegistrate registrate() {
-        if (registrate == null) registrate = new PetrolparkRegistrate(id);
+    public OtherModRegistrate registrate() {
+        if (registrate == null) registrate = new OtherModRegistrate();
         return registrate;
     };
 
     @Override
     public String getSerializedName() {
         return id;
+    };
+
+    class OtherModRegistrate extends AbstractPetrolparkRegistrate<OtherModRegistrate> {
+
+        protected OtherModRegistrate() {
+            super(id);
+        };
+
     };
 };

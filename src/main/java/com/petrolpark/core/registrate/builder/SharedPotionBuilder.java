@@ -2,7 +2,7 @@ package com.petrolpark.core.registrate.builder;
 
 import org.apache.commons.lang3.function.TriConsumer;
 
-import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -13,14 +13,14 @@ import net.minecraft.world.item.alchemy.PotionBrewing.Builder;;
 
 public class SharedPotionBuilder<P> extends PotionBuilder<P> {
 
-    public static final <P> SharedPotionBuilder<P> create(PetrolparkRegistrate owner, P parent, SharedFeatureFlag featureFlag, String name, String potionName, BuilderCallback callback) {
+    public static final <P> SharedPotionBuilder<P> create(AbstractPetrolparkRegistrate<?> owner, P parent, SharedFeatureFlag featureFlag, String name, String potionName, BuilderCallback callback) {
         return new SharedPotionBuilder<P>(owner, parent, featureFlag, name, potionName, callback)
             .asOptional();
     };
 
     protected final SharedFeatureFlag featureFlag;
 
-    protected SharedPotionBuilder(PetrolparkRegistrate owner, P parent, SharedFeatureFlag featureFlag, String name, String potionName, BuilderCallback callback) {
+    protected SharedPotionBuilder(AbstractPetrolparkRegistrate<?> owner, P parent, SharedFeatureFlag featureFlag, String name, String potionName, BuilderCallback callback) {
         super(owner, parent, name, potionName, callback);
         this.featureFlag = featureFlag;
     };

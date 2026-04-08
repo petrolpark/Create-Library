@@ -3,7 +3,7 @@ package com.petrolpark.core.registrate.builder;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.PetrolparkRegistrateProviderTypes;
 import com.petrolpark.core.registrate.MobEffectEntry;
 import com.tterrag.registrate.builders.AbstractBuilder;
@@ -26,7 +26,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<MobEffect, T, P, MobEffectBuilder<T, P>> {
 
-    protected final PetrolparkRegistrate petrolparkOwner;
+    protected final AbstractPetrolparkRegistrate<?> petrolparkOwner;
 
     protected final Factory<T> factory;
 
@@ -34,7 +34,7 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
     protected int color = 0xFF000000;
     protected NonNullBiConsumer<T, ResourceLocation> mobEffectCallback = (e, id) -> {};
 
-    public MobEffectBuilder(PetrolparkRegistrate owner, P parent, String name, BuilderCallback callback, Factory<T> factory) {
+    public MobEffectBuilder(AbstractPetrolparkRegistrate<?> owner, P parent, String name, BuilderCallback callback, Factory<T> factory) {
         super(owner, parent, name, callback, Registries.MOB_EFFECT);
         this.petrolparkOwner = owner;
         this.factory = factory;
@@ -109,7 +109,7 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
         public T create(MobEffectCategory category, int color);
     };
 
-    public static class MobEffectInstanceBuilder {
+    public static class MobEffectInstanceBuilder implements NonNullSupplier<MobEffectInstance> {
 
         protected final NonNullSupplier<Holder<MobEffect>> effect;
         protected int duration = 600;
@@ -202,6 +202,12 @@ public class MobEffectBuilder<T extends MobEffect, P> extends AbstractBuilder<Mo
 
         public MobEffectInstance build() {
             return new MobEffectInstance(effect.get(), duration, amplifier, ambient, visible, showIcon, hidden == null ? null : hidden.build());
+        }
+
+        @Override
+        @Deprecated
+        public final @NonnullType MobEffectInstance get() {
+            return build();
         };
     };
     

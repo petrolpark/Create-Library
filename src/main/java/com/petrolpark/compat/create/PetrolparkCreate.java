@@ -19,6 +19,8 @@ import net.neoforged.neoforge.registries.RegisterEvent;
 @RequiresCreate
 public class PetrolparkCreate {
 
+    public static final PetrolparkCreateRegistrate REGISTRATE = new PetrolparkCreateRegistrate();
+
     public static final ExtrusionRecipe.MovementBehaviourProvider EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER = new ExtrusionRecipe.MovementBehaviourProvider();
 
     static {

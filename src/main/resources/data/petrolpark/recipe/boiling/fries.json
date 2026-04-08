@@ -16,7 +16,7 @@
             "feature": "mesh_basin"
         }
     ],
-    "type": "petrolpark:deep_frying",
+    "type": "petrolpark:boiling",
     "ingredients": [
         {
             "item": "petrolpark:raw_fries"

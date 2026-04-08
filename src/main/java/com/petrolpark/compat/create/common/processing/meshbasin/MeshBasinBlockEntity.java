@@ -140,7 +140,7 @@ public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferent
     };
 
     public boolean matchStaticFiltersForSelfProcessing(RecipeHolder<?> rh) {
-        return rh.value().getType() == PetrolparkCreateRecipeTypes.DEEP_FRYING.getType();
+        return rh.value().getType() == PetrolparkCreateRecipeTypes.BOILING.getType();
     };
 
     public void renderParticles() {

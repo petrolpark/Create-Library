@@ -6,7 +6,6 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkLootContextParams;
 import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
 import com.petrolpark.util.CodecHelper;
@@ -20,7 +19,7 @@ import net.minecraft.world.level.storage.loot.providers.number.LootNumberProvide
 /**
  * <p>{@code petrolpark:tool_property}</p>
  * 
- * Get a {@link ItemStackNumberProvider} value of the {@link PetrolparkLootContextParams#TOOL Item Stack tool provided} in the {@link LootContext}.
+ * Get a {@link ItemStackNumberProvider} value of the {@link LootContextParams#TOOL Item Stack tool provided} in the {@link LootContext}.
  * 
  * Arguments:
  * <ul>

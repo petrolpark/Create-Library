@@ -40,9 +40,9 @@ public class MeshBasinScenes {
     public static ItemLike toJuice = Items.SUNFLOWER;
     public static Supplier<FluidStack> juicedFluid = () -> new FluidStack(PetrolparkCreateFluids.SUNFLOWER_OIL.get(), 1000);
     
-    public static final void deepFrying(SceneBuilder sceneIn, SceneBuildingUtil util) {
+    public static final void boiling(SceneBuilder sceneIn, SceneBuildingUtil util) {
         final CreateSceneBuilder scene = new CreateSceneBuilder(sceneIn);
-		scene.title("deep_frying", "This text is defined in a language file");
+		scene.title("boiling", "This text is defined in a language file");
 		scene.configureBasePlate(0, 0, 3);
 
         final BlockPos basin = util.grid().at(1, 2, 1);

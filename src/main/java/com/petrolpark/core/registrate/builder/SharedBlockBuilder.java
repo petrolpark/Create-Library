@@ -4,7 +4,7 @@ import java.util.Collections;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.compat.SharedFeatureBlockItem;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.data.condition.SharedFeatureEnabledCondition;
@@ -27,18 +27,18 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 
-public class SharedBlockBuilder<T extends Block, P extends PetrolparkRegistrate> extends PetrolparkBlockBuilder<T, P> {
+public class SharedBlockBuilder<T extends Block, P> extends PetrolparkBlockBuilder<T, P> {
 
-    public static <T extends Block, P extends PetrolparkRegistrate> BlockBuilder<T, P> create(P owner, P parent, SharedFeatureFlag feature, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory) {
+    public static <T extends Block, P extends AbstractPetrolparkRegistrate<?>> BlockBuilder<T, P> create(P owner, P parent, SharedFeatureFlag feature, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory) {
         return new SharedBlockBuilder<>(owner, parent, feature, name, callback, factory, () -> BlockBehaviour.Properties.of())
             .asOptional()
             .defaultLoot();
     };
 
-    private final PetrolparkRegistrate petrolparkOwner;
+    private final AbstractPetrolparkRegistrate<?> petrolparkOwner;
     public final SharedFeatureFlag featureFlag;
 
-    public SharedBlockBuilder(PetrolparkRegistrate owner, P parent, SharedFeatureFlag featureFlag, String name, BuilderCallback callback, NonNullFunction<Properties, T> factory, NonNullSupplier<Properties> initialProperties) {
+    public SharedBlockBuilder(AbstractPetrolparkRegistrate<?> owner, P parent, SharedFeatureFlag featureFlag, String name, BuilderCallback callback, NonNullFunction<Properties, T> factory, NonNullSupplier<Properties> initialProperties) {
         super(owner, parent, name, callback, factory, initialProperties);
         this.petrolparkOwner = owner;
         this.featureFlag = featureFlag;
