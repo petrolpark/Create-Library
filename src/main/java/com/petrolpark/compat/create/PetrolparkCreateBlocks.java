@@ -10,6 +10,7 @@ import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableI
 
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessBlock;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessMovementBehaviour;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillBearingBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlock;
@@ -99,6 +100,7 @@ public class PetrolparkCreateBlocks {
         .register();
 
     public static final BlockEntry<HarnessBlock> HARNESS = REGISTRATE.sharedBlock(SharedFeatureFlag.HORSE_MILL, "harness", HarnessBlock::new)
+        .onRegister(movementBehaviour(new HarnessMovementBehaviour()))
         .item()
         .build()
         .register();

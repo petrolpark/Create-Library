@@ -31,6 +31,8 @@ public class PetrolparkCreate {
 
         PetrolparkCreateRegistries.init();
 
+        REGISTRATE.registerEventListeners(modEventBus);
+
         // Registrations
         PetrolparkCreateAdvancedIngredientTypes.register();
         PetrolparkCreateAttachmentTypes.register(modEventBus);

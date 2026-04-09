@@ -12,6 +12,7 @@ import org.jetbrains.annotations.Nullable;
 
 import com.petrolpark.compat.create.PetrolparkCreateContraptionTypes;
 import com.petrolpark.mixin.compat.create.accessor.ContraptionAccessor;
+import com.petrolpark.util.Lang;
 import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.content.contraptions.AbstractContraptionEntity;
 import com.simibubi.create.content.contraptions.AssemblyException;
@@ -28,9 +29,13 @@ import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 
 public class HorseMillContraption extends BearingContraption {
+
+    protected @Nullable Boolean clockwise = null;
 
     protected List<BlockPos> harnesses = new ArrayList<>();
 	protected Map<UUID, Integer> harnessMapping = new HashMap<>();
@@ -39,6 +44,16 @@ public class HorseMillContraption extends BearingContraption {
     
     public HorseMillContraption(Direction facing) {
         super(false, facing);
+    };
+
+    public void recalculateSpeedAndStress() {
+        //TODO
+    };
+
+    @Override
+    public boolean assemble(Level world, BlockPos pos) throws AssemblyException {
+        clockwise = null; // Don't know yet
+        return super.assemble(world, pos);
     };
 
     @Override
@@ -60,7 +75,16 @@ public class HorseMillContraption extends BearingContraption {
     protected boolean moveBlock(Level world, @Nullable Direction forcedDirection, Queue<BlockPos> frontier, Set<BlockPos> visited) throws AssemblyException {
         final BlockPos pos = frontier.peek();
         final boolean moved = super.moveBlock(world, forcedDirection, frontier, visited);
-        if (moved && world.getBlockState(pos).getBlock() instanceof HarnessBlock) moveHarness(world, pos); 
+        final BlockState state = world.getBlockState(pos);
+        if (moved && state.getBlock() instanceof HarnessBlock) {
+            double facing = new Vec3(pos.getZ() - anchor.getZ(), 0f, anchor.getX() - pos.getX()).dot(Vec3.atLowerCornerOf(state.getValue(HarnessBlock.FACING).getNormal()));
+            if (facing == 0d) throw harnessesFacingWrongWay(); // Radial
+            boolean clockwise = facing > 0d;
+            if (this.clockwise == null) {
+                this.clockwise = clockwise;
+            } else if (clockwise != this.clockwise) throw harnessesFacingWrongWay();
+            moveHarness(world, pos); 
+        };
         return moved;
     };
 
@@ -79,6 +103,8 @@ public class HorseMillContraption extends BearingContraption {
     public void readNBT(Level world, CompoundTag tag, boolean spawnData) {
         super.readNBT(world, tag, spawnData);
 
+        clockwise = tag.contains("Clockwise", Tag.TAG_BYTE) ? null : tag.getBoolean("Clockwise");
+
         harnesses.clear();
         NBTHelper.iterateCompoundList(tag.getList("Harnesses", Tag.TAG_COMPOUND),
 			c -> harnesses.add(c.contains("Pos") ? NBTHelper.readBlockPos(c, "Pos")
@@ -92,6 +118,8 @@ public class HorseMillContraption extends BearingContraption {
     @Override
     public CompoundTag writeNBT(HolderLookup.Provider registries, boolean spawnPacket) {
         final CompoundTag nbt = super.writeNBT(registries, spawnPacket);
+
+        if (clockwise != null) nbt.putBoolean("Clockwise", clockwise);
 
         nbt.put("Harnesses", NBTHelper.writeCompoundList(getHarnesses(), pos -> {
 			CompoundTag c = new CompoundTag();
@@ -151,5 +179,9 @@ public class HorseMillContraption extends BearingContraption {
     @Override
     public ContraptionType getType() {
         return PetrolparkCreateContraptionTypes.HORSE_MILL.get();
+    };
+
+    public static final AssemblyException harnessesFacingWrongWay() {
+        return new AssemblyException(Lang.translate("gui.assembly.exception.harnessesFaceWrongWay"));
     };
 };
