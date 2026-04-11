@@ -66,7 +66,7 @@ public class HorseMillContraptionEntity extends ControlledContraptionEntity {
 			if (harnessPos == null) continue;
 			final BlockState state = getContraption().getActorAt(harnessPos).getLeft().state();
 			if (state.getBlock() instanceof HarnessBlock) {
-				if (passenger instanceof LivingEntity living) living.calculateEntityAnimation(false);
+				if (passenger instanceof LivingEntity living) living.calculateEntityAnimation(false); //TODO this doesnt give enough of that sweet sweet swangalanging
 				HarnessEntity.setFacing(passenger, -contraptionAngle - AngleHelper.horizontalAngle(state.getValue(HarnessBlock.FACING)));
 			};
 		};
