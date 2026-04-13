@@ -20,7 +20,7 @@ public class EntityCustomer extends AbstractCustomer {
 
     public static final EntityCustomer create(IAttachmentHolder attachmentHolder) {
         if (attachmentHolder instanceof Entity entity) return new EntityCustomer(entity);
-        throw new IllegalArgumentException(attachmentHolder.toString()+" is not an Entity");
+        throw new IllegalArgumentException(attachmentHolder.toString() + " is not an Entity");
     };
 
     public EntityCustomer(Entity entity) {

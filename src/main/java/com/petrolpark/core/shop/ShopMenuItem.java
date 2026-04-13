@@ -14,6 +14,7 @@ import com.petrolpark.core.team.ITeamBoundItem;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.InteractionResultHolder;
@@ -46,9 +47,10 @@ public class ShopMenuItem extends Item implements ITeamBoundItem {
 
     @Override
     public InteractionResult interactLivingEntity(@Nonnull ItemStack stack, @Nonnull Player player, @Nonnull LivingEntity entity, @Nonnull InteractionHand hand) {
+        if (!(player instanceof ServerPlayer serverPlayer)) return InteractionResult.SUCCESS;
         return Optional.ofNullable(stack.get(PetrolparkDataComponentTypes.SHOP))
             .map(Holder::value)
-            .filter(shop -> shop.canServe(entity))
+            .filter(shop -> shop.canServe(serverPlayer, entity))
             .map(shop -> {
                 entity.getData(PetrolparkAttachmentTypes.ENTITY_CUSTOMER);
                 //TODO

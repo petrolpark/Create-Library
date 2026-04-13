@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -51,6 +52,7 @@ import com.petrolpark.core.registrate.WoodSetEntry;
 import com.petrolpark.core.registrate.builder.MobEffectBuilder;
 import com.petrolpark.core.registrate.builder.PetrolparkBlockBuilder;
 import com.petrolpark.core.registrate.builder.PetrolparkBlockEntityBuilder;
+import com.petrolpark.core.registrate.builder.PetrolparkEntityBuilder;
 import com.petrolpark.core.registrate.builder.PetrolparkItemBuilder;
 import com.petrolpark.core.registrate.builder.SharedBlockBuilder;
 import com.petrolpark.core.registrate.builder.SharedBlockEntityBuilder;
@@ -98,6 +100,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType.EntityFactory;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
@@ -133,6 +137,7 @@ import net.neoforged.neoforge.fluids.crafting.FluidIngredientType;
 import net.neoforged.neoforge.registries.DeferredHolder;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 
+@ParametersAreNonnullByDefault
 public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkRegistrate<R>> extends AbstractRegistrate<R> {
 
     protected AbstractPetrolparkRegistrate(String modid) {
@@ -166,11 +171,17 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
         return (PetrolparkBlockEntityBuilder<T, P>)entry(name, callback -> PetrolparkBlockEntityBuilder.create(this, parent, name, callback, factory));
     };
 
-    public <T extends MobEffect> MobEffectBuilder<T, R> mobEffect(@Nonnull String name, @Nonnull MobEffectBuilder.Factory<T> factory) {
+    // No default lang
+    @Override
+    public <T extends Entity, P> PetrolparkEntityBuilder<T, P> entity(P parent, String name, EntityFactory<T> factory, MobCategory classification) {
+        return (PetrolparkEntityBuilder<T, P>)entry(name, callback -> new PetrolparkEntityBuilder<>(this, parent, name, callback, factory, classification));
+    };
+
+    public <T extends MobEffect> MobEffectBuilder<T, R> mobEffect(String name, MobEffectBuilder.Factory<T> factory) {
         return mobEffect(self(), name, factory);
     };
 
-    public <T extends MobEffect, P> MobEffectBuilder<T, P> mobEffect(@Nonnull P parent, @Nonnull String name, @Nonnull MobEffectBuilder.Factory<T> factory) {
+    public <T extends MobEffect, P> MobEffectBuilder<T, P> mobEffect(P parent, String name, MobEffectBuilder.Factory<T> factory) {
         return entry(name, callback -> new MobEffectBuilder<>(this, parent, name, callback, factory));
     };
 
@@ -466,7 +477,7 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
 
     };
 
-    public <R2, T extends R2, P, BUILDER extends AbstractBuilder<R2, T, P, BUILDER>> BUILDER sharedEntry(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BuilderCallback, BUILDER> factory) {
+    public <R2, T extends R2, P, BUILDER extends AbstractBuilder<R2, T, P, BUILDER>> BUILDER sharedEntry(SharedFeatureFlag featureFlag, String name, NonNullFunction<BuilderCallback, BUILDER> factory) {
         return factory.apply(new SharedFeatureBuilderCallback(featureFlag)).asOptional();
     };
 
@@ -474,27 +485,27 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
         return (SharedBlockEntityBuilder<T, R>)sharedEntry(featureFlag, name, callback -> SharedBlockEntityBuilder.create(self(), self(), featureFlag, name, callback, factory));
     };
 
-    public <T extends Block, P> SharedBlockBuilder<T, R> sharedBlock(SharedFeatureFlag featureFlag, @Nonnull String name, @Nonnull NonNullFunction<BlockBehaviour.Properties, T> factory) {
+    public <T extends Block, P> SharedBlockBuilder<T, R> sharedBlock(SharedFeatureFlag featureFlag, String name, NonNullFunction<BlockBehaviour.Properties, T> factory) {
         return (SharedBlockBuilder<T, R>)sharedEntry(featureFlag, name, callback -> SharedBlockBuilder.create(self(), self(), featureFlag, name, callback, factory));
     };
 
-    public <T extends Block> SharedBlockBuilder<T, R> sharedBlock(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullBiFunction<BlockBehaviour.Properties, SharedFeatureFlag, T> factory) {
+    public <T extends Block> SharedBlockBuilder<T, R> sharedBlock(SharedFeatureFlag featureFlag, String name, NonNullBiFunction<BlockBehaviour.Properties, SharedFeatureFlag, T> factory) {
         return sharedBlock(featureFlag, name, properties -> factory.apply(properties, featureFlag));
     };
 
-    public <T extends Item, P> SharedItemBuilder<T, P> sharedItem(P parent, @Nonnull SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
+    public <T extends Item, P> SharedItemBuilder<T, P> sharedItem(P parent, SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
         return (SharedItemBuilder<T, P>)sharedEntry(featureFlag, name, callback -> new SharedItemBuilder<>(this, parent, featureFlag, name, callback, factory));
     };
 
-    public <T extends Item> SharedItemBuilder<T, R> sharedItem(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
+    public <T extends Item> SharedItemBuilder<T, R> sharedItem(SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
         return sharedItem(self(), featureFlag, name, factory);
     };
     
-    public <T extends Item> SharedItemBuilder<T, R> sharedItem(@Nonnull SharedFeatureFlag featureFlag, String name, NonNullBiFunction<Item.Properties, SharedFeatureFlag, T> factory) {
+    public <T extends Item> SharedItemBuilder<T, R> sharedItem(SharedFeatureFlag featureFlag, String name, NonNullBiFunction<Item.Properties, SharedFeatureFlag, T> factory) {
         return sharedItem(featureFlag, name, properties -> factory.apply(properties, featureFlag));
     };
 
-    public <T extends MobEffect> SharedMobEffectBuilder<T, R> sharedMobEffect(@Nonnull SharedFeatureFlag featureFlag, String name, MobEffectBuilder.Factory<T> factory) {
+    public <T extends MobEffect> SharedMobEffectBuilder<T, R> sharedMobEffect(SharedFeatureFlag featureFlag, String name, MobEffectBuilder.Factory<T> factory) {
         return (SharedMobEffectBuilder<T, R>)sharedEntry(featureFlag, name, callback -> SharedMobEffectBuilder.create(self(), self(), featureFlag, name, callback, factory));
     };
 

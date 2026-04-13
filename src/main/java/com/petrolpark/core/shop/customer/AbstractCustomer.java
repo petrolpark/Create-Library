@@ -4,11 +4,10 @@ import javax.annotation.Nonnull;
 
 import com.mojang.datafixers.util.Pair;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.offer.ShopOffer;
-import com.petrolpark.util.NBTHelper;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
@@ -21,7 +20,7 @@ public abstract class AbstractCustomer implements ICustomer, INBTSerializable<Co
     protected int elapsedOrderTime = 0;
 
     protected ShopOffer openOffer = null;
-    protected Shop shop = null;
+    protected Holder<Shop> shop = null;
 
     @Override
     public int getOrderTime() {
@@ -40,7 +39,7 @@ public abstract class AbstractCustomer implements ICustomer, INBTSerializable<Co
 
     @Override
     public Shop getShop() {
-        return shop;
+        return shop.value();
     };
 
     @Override
@@ -61,7 +60,7 @@ public abstract class AbstractCustomer implements ICustomer, INBTSerializable<Co
         if (openOffer != null) ShopOffer.CODEC.encodeStart(NbtOps.INSTANCE, openOffer)
             .resultOrPartial(Petrolpark.LOGGER::warn)
             .ifPresent(t -> tag.put("Offer", t));
-        if (getShop() != null) PetrolparkRegistries.getHolder(provider, PetrolparkRegistries.Keys.SHOP, getShop());
+        if (shop != null) tag.put("Shop", Shop.CODEC.encodeStart(NbtOps.INSTANCE, shop).getOrThrow());
         return tag;
     };
 
@@ -76,7 +75,7 @@ public abstract class AbstractCustomer implements ICustomer, INBTSerializable<Co
             .resultOrPartial(Petrolpark.LOGGER::warn)
             .map(Pair::getFirst)
             .ifPresent(s -> openOffer = s);
-        if (nbt.contains("Shop", Tag.TAG_STRING)) shop = NBTHelper.readDataRegistryObject(nbt, "Shop", PetrolparkRegistries.Keys.SHOP);
+        if (nbt.contains("Shop", Tag.TAG_STRING)) shop = Shop.CODEC.parse(NbtOps.INSTANCE, nbt.getCompound("Shop")).resultOrPartial(Petrolpark.LOGGER::warn).get();
     };
 
     public void tick() {

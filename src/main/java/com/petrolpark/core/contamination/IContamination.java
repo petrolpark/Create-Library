@@ -1,8 +1,8 @@
 package com.petrolpark.core.contamination;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -109,8 +109,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
     public Stream<Holder<Contaminant>> streamOrphanExtrinsicContaminants();
 
     public default Stream<Holder<Contaminant>> streamShownContaminants() {
-        Set<Holder<Contaminant>> shownIfAbsent = IntrinsicContaminants.getShownIfAbsent(this);
-        IntrinsicContaminants.get(this); // Do this before the Stream is opened to generate the Intrinsic Contaminants early and avoid a ConcurrentModificationException 
+        List<Holder<Contaminant>> shownIfAbsent = streamShownAbsentContaminants().toList();
         return streamAllContaminants().dropWhile(PetrolparkTags.Contaminants.HIDDEN::matches).dropWhile(shownIfAbsent::contains);
     };
 
@@ -151,15 +150,9 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
      */
     public boolean fullyDecontaminate();
 
-    public default boolean isIntrinsic(Holder<Contaminant> contaminantHolder) {
-        return IntrinsicContaminants.get(this).contains(contaminantHolder);
-    };
+    public boolean isIntrinsic(Holder<Contaminant> contaminantHolder);
 
-    default Stream<Holder<Contaminant>> streamIntrinsicContaminants() {
-        return IntrinsicContaminants.get(this).stream();
-    };
+    public Stream<Holder<Contaminant>> streamIntrinsicContaminants();
 
-    default Stream<Holder<Contaminant>> streamShownIfAbsentContaminants() {
-        return IntrinsicContaminants.getShownIfAbsent(this).stream();
-    };
+    public Stream<Holder<Contaminant>> streamShownIfAbsentContaminants();
 };

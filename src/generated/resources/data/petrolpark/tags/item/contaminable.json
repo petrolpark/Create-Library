@@ -1,0 +1,1209 @@
+{
+  "values": [
+
+    "minecraft:carrot_on_a_stick",
+    "minecraft:warped_fungus_on_a_stick",
+    "minecraft:elytra",
+
+    "minecraft:turtle_helmet",
+    "minecraft:turtle_scute",
+    "minecraft:armadillo_scute",
+    "minecraft:wolf_armor",
+    "minecraft:flint_and_steel",
+    "minecraft:bowl",
+    "minecraft:apple",
+    "minecraft:bow",
+    "minecraft:arrow",
+    "minecraft:coal",
+    "minecraft:charcoal",
+    "minecraft:diamond",
+    "minecraft:emerald",
+    "minecraft:lapis_lazuli",
+    "minecraft:quartz",
+    "minecraft:amethyst_shard",
+    "minecraft:raw_iron",
+    "minecraft:iron_ingot",
+    "minecraft:raw_copper",
+    "minecraft:copper_ingot",
+    "minecraft:raw_gold",
+    "minecraft:gold_ingot",
+    "minecraft:netherite_ingot",
+    "minecraft:netherite_scrap",
+    "minecraft:wooden_sword",
+    "minecraft:wooden_shovel",
+    "minecraft:wooden_pickaxe",
+    "minecraft:wooden_axe",
+    "minecraft:wooden_hoe",
+    "minecraft:stone_sword",
+    "minecraft:stone_shovel",
+    "minecraft:stone_pickaxe",
+    "minecraft:stone_axe",
+    "minecraft:stone_hoe",
+    "minecraft:golden_sword",
+    "minecraft:golden_shovel",
+    "minecraft:golden_pickaxe",
+    "minecraft:golden_axe",
+    "minecraft:golden_hoe",
+    "minecraft:iron_sword",
+    "minecraft:iron_shovel",
+    "minecraft:iron_pickaxe",
+    "minecraft:iron_axe",
+    "minecraft:iron_hoe",
+    "minecraft:diamond_sword",
+    "minecraft:diamond_shovel",
+    "minecraft:diamond_pickaxe",
+    "minecraft:diamond_axe",
+    "minecraft:diamond_hoe",
+    "minecraft:netherite_sword",
+    "minecraft:netherite_shovel",
+    "minecraft:netherite_pickaxe",
+    "minecraft:netherite_axe",
+    "minecraft:netherite_hoe",
+    "minecraft:stick",
+    "minecraft:mushroom_stew",
+    "minecraft:feather",
+    "minecraft:gunpowder",
+    "minecraft:wheat",
+    "minecraft:bread",
+    "minecraft:leather_helmet",
+    "minecraft:leather_chestplate",
+    "minecraft:leather_leggings",
+    "minecraft:leather_boots",
+    "minecraft:chainmail_helmet",
+    "minecraft:chainmail_chestplate",
+    "minecraft:chainmail_leggings",
+    "minecraft:chainmail_boots",
+    "minecraft:iron_helmet",
+    "minecraft:iron_chestplate",
+    "minecraft:iron_leggings",
+    "minecraft:iron_boots",
+    "minecraft:diamond_helmet",
+    "minecraft:diamond_chestplate",
+    "minecraft:diamond_leggings",
+    "minecraft:diamond_boots",
+    "minecraft:golden_helmet",
+    "minecraft:golden_chestplate",
+    "minecraft:golden_leggings",
+    "minecraft:golden_boots",
+    "minecraft:netherite_helmet",
+    "minecraft:netherite_chestplate",
+    "minecraft:netherite_leggings",
+    "minecraft:netherite_boots",
+    "minecraft:flint",
+    "minecraft:porkchop",
+    "minecraft:cooked_porkchop",
+    "minecraft:painting",
+    "minecraft:golden_apple",
+    "minecraft:enchanted_golden_apple",
+    "minecraft:bucket",
+    "minecraft:water_bucket",
+    "minecraft:lava_bucket",
+    "minecraft:snowball",
+    "minecraft:leather",
+    "minecraft:milk_bucket",
+    "minecraft:pufferfish_bucket",
+    "minecraft:salmon_bucket",
+    "minecraft:cod_bucket",
+    "minecraft:tropical_fish_bucket",
+    "minecraft:axolotl_bucket",
+    "minecraft:tadpole_bucket",
+    "minecraft:brick",
+    "minecraft:clay_ball",
+    "minecraft:paper",
+    "minecraft:book",
+    "minecraft:slime_ball",
+    "minecraft:egg",
+    "minecraft:compass",
+    "minecraft:recovery_compass",
+    "minecraft:bundle",
+    "minecraft:fishing_rod",
+    "minecraft:clock",
+    "minecraft:spyglass",
+    "minecraft:glowstone_dust",
+    "minecraft:cod",
+    "minecraft:salmon",
+    "minecraft:tropical_fish",
+    "minecraft:pufferfish",
+    "minecraft:cooked_cod",
+    "minecraft:cooked_salmon",
+    "minecraft:ink_sac",
+    "minecraft:glow_ink_sac",
+    "minecraft:white_dye",
+    "minecraft:orange_dye",
+    "minecraft:magenta_dye",
+    "minecraft:light_blue_dye",
+    "minecraft:yellow_dye",
+    "minecraft:lime_dye",
+    "minecraft:pink_dye",
+    "minecraft:gray_dye",
+    "minecraft:light_gray_dye",
+    "minecraft:cyan_dye",
+    "minecraft:purple_dye",
+    "minecraft:blue_dye",
+    "minecraft:brown_dye",
+    "minecraft:green_dye",
+    "minecraft:red_dye",
+    "minecraft:black_dye",
+    "minecraft:bone_meal",
+    "minecraft:bone",
+    "minecraft:sugar",
+    "minecraft:cookie",
+    "minecraft:filled_map",
+    "minecraft:shears",
+    "minecraft:melon_slice",
+    "minecraft:dried_kelp",
+    "minecraft:beef",
+    "minecraft:cooked_beef",
+    "minecraft:chicken",
+    "minecraft:cooked_chicken",
+    "minecraft:rotten_flesh",
+    "minecraft:ender_pearl",
+    "minecraft:blaze_rod",
+    "minecraft:ghast_tear",
+    "minecraft:gold_nugget",
+    "minecraft:potion",
+    "minecraft:glass_bottle",
+    "minecraft:spider_eye",
+    "minecraft:fermented_spider_eye",
+    "minecraft:blaze_powder",
+    "minecraft:magma_cream",
+    "minecraft:ender_eye",
+    "minecraft:glistering_melon_slice",
+    "minecraft:armadillo_spawn_egg",
+    "minecraft:allay_spawn_egg",
+    "minecraft:axolotl_spawn_egg",
+    "minecraft:bat_spawn_egg",
+    "minecraft:bee_spawn_egg",
+    "minecraft:blaze_spawn_egg",
+    "minecraft:bogged_spawn_egg",
+    "minecraft:breeze_spawn_egg",
+    "minecraft:cat_spawn_egg",
+    "minecraft:camel_spawn_egg",
+    "minecraft:cave_spider_spawn_egg",
+    "minecraft:chicken_spawn_egg",
+    "minecraft:cod_spawn_egg",
+    "minecraft:cow_spawn_egg",
+    "minecraft:creeper_spawn_egg",
+    "minecraft:dolphin_spawn_egg",
+    "minecraft:donkey_spawn_egg",
+    "minecraft:drowned_spawn_egg",
+    "minecraft:elder_guardian_spawn_egg",
+    "minecraft:ender_dragon_spawn_egg",
+    "minecraft:enderman_spawn_egg",
+    "minecraft:endermite_spawn_egg",
+    "minecraft:evoker_spawn_egg",
+    "minecraft:fox_spawn_egg",
+    "minecraft:frog_spawn_egg",
+    "minecraft:ghast_spawn_egg",
+    "minecraft:glow_squid_spawn_egg",
+    "minecraft:goat_spawn_egg",
+    "minecraft:guardian_spawn_egg",
+    "minecraft:hoglin_spawn_egg",
+    "minecraft:horse_spawn_egg",
+    "minecraft:husk_spawn_egg",
+    "minecraft:iron_golem_spawn_egg",
+    "minecraft:llama_spawn_egg",
+    "minecraft:magma_cube_spawn_egg",
+    "minecraft:mooshroom_spawn_egg",
+    "minecraft:mule_spawn_egg",
+    "minecraft:ocelot_spawn_egg",
+    "minecraft:panda_spawn_egg",
+    "minecraft:parrot_spawn_egg",
+    "minecraft:phantom_spawn_egg",
+    "minecraft:pig_spawn_egg",
+    "minecraft:piglin_spawn_egg",
+    "minecraft:piglin_brute_spawn_egg",
+    "minecraft:pillager_spawn_egg",
+    "minecraft:polar_bear_spawn_egg",
+    "minecraft:pufferfish_spawn_egg",
+    "minecraft:rabbit_spawn_egg",
+    "minecraft:ravager_spawn_egg",
+    "minecraft:salmon_spawn_egg",
+    "minecraft:sheep_spawn_egg",
+    "minecraft:shulker_spawn_egg",
+    "minecraft:silverfish_spawn_egg",
+    "minecraft:skeleton_spawn_egg",
+    "minecraft:skeleton_horse_spawn_egg",
+    "minecraft:slime_spawn_egg",
+    "minecraft:sniffer_spawn_egg",
+    "minecraft:snow_golem_spawn_egg",
+    "minecraft:spider_spawn_egg",
+    "minecraft:squid_spawn_egg",
+    "minecraft:stray_spawn_egg",
+    "minecraft:strider_spawn_egg",
+    "minecraft:tadpole_spawn_egg",
+    "minecraft:trader_llama_spawn_egg",
+    "minecraft:tropical_fish_spawn_egg",
+    "minecraft:turtle_spawn_egg",
+    "minecraft:vex_spawn_egg",
+    "minecraft:villager_spawn_egg",
+    "minecraft:vindicator_spawn_egg",
+    "minecraft:wandering_trader_spawn_egg",
+    "minecraft:warden_spawn_egg",
+    "minecraft:witch_spawn_egg",
+    "minecraft:wither_spawn_egg",
+    "minecraft:wither_skeleton_spawn_egg",
+    "minecraft:wolf_spawn_egg",
+    "minecraft:zoglin_spawn_egg",
+    "minecraft:zombie_spawn_egg",
+    "minecraft:zombie_horse_spawn_egg",
+    "minecraft:zombie_villager_spawn_egg",
+    "minecraft:zombified_piglin_spawn_egg",
+    "minecraft:experience_bottle",
+    "minecraft:fire_charge",
+    "minecraft:wind_charge",
+    "minecraft:writable_book",
+    "minecraft:written_book",
+    "minecraft:mace",
+    "minecraft:item_frame",
+    "minecraft:glow_item_frame",
+    "minecraft:baked_potato",
+    "minecraft:poisonous_potato",
+    "minecraft:map",
+    "minecraft:golden_carrot",
+    "minecraft:nether_star",
+    "minecraft:pumpkin_pie",
+    "minecraft:firework_rocket",
+    "minecraft:firework_star",
+    "minecraft:enchanted_book",
+    "minecraft:nether_brick",
+    "minecraft:prismarine_shard",
+    "minecraft:prismarine_crystals",
+    "minecraft:rabbit",
+    "minecraft:cooked_rabbit",
+    "minecraft:rabbit_stew",
+    "minecraft:rabbit_foot",
+    "minecraft:rabbit_hide",
+    "minecraft:armor_stand",
+    "minecraft:iron_horse_armor",
+    "minecraft:golden_horse_armor",
+    "minecraft:diamond_horse_armor",
+    "minecraft:leather_horse_armor",
+    "minecraft:lead",
+    "minecraft:name_tag",
+
+    "minecraft:mutton",
+    "minecraft:cooked_mutton",
+    "minecraft:end_crystal",
+    "minecraft:chorus_fruit",
+    "minecraft:popped_chorus_fruit",
+    "minecraft:beetroot",
+    "minecraft:beetroot_soup",
+    "minecraft:dragon_breath",
+    "minecraft:splash_potion",
+    "minecraft:spectral_arrow",
+    "minecraft:tipped_arrow",
+    "minecraft:lingering_potion",
+    "minecraft:shield",
+    "minecraft:totem_of_undying",
+    "minecraft:shulker_shell",
+    "minecraft:iron_nugget",
+
+    "minecraft:music_disc_13",
+    "minecraft:music_disc_cat",
+    "minecraft:music_disc_blocks",
+    "minecraft:music_disc_chirp",
+    "minecraft:music_disc_creator",
+    "minecraft:music_disc_creator_music_box",
+    "minecraft:music_disc_far",
+    "minecraft:music_disc_mall",
+    "minecraft:music_disc_mellohi",
+    "minecraft:music_disc_stal",
+    "minecraft:music_disc_strad",
+    "minecraft:music_disc_ward",
+    "minecraft:music_disc_11",
+    "minecraft:music_disc_wait",
+    "minecraft:music_disc_otherside",
+    "minecraft:music_disc_relic",
+    "minecraft:music_disc_5",
+    "minecraft:music_disc_pigstep",
+    "minecraft:music_disc_precipice",
+    "minecraft:disc_fragment_5",
+    "minecraft:trident",
+    "minecraft:phantom_membrane",
+    "minecraft:nautilus_shell",
+    "minecraft:heart_of_the_sea",
+    "minecraft:crossbow",
+    "minecraft:suspicious_stew",
+    "minecraft:flower_banner_pattern",
+    "minecraft:creeper_banner_pattern",
+    "minecraft:skull_banner_pattern",
+    "minecraft:mojang_banner_pattern",
+    "minecraft:globe_banner_pattern",
+    "minecraft:piglin_banner_pattern",
+    "minecraft:flow_banner_pattern",
+    "minecraft:guster_banner_pattern",
+    "minecraft:goat_horn",
+    "minecraft:honeycomb",
+    "minecraft:honey_bottle",
+    "minecraft:echo_shard",
+    "minecraft:brush",
+    "minecraft:netherite_upgrade_smithing_template",
+    "minecraft:sentry_armor_trim_smithing_template",
+    "minecraft:dune_armor_trim_smithing_template",
+    "minecraft:coast_armor_trim_smithing_template",
+    "minecraft:wild_armor_trim_smithing_template",
+    "minecraft:ward_armor_trim_smithing_template",
+    "minecraft:eye_armor_trim_smithing_template",
+    "minecraft:vex_armor_trim_smithing_template",
+    "minecraft:tide_armor_trim_smithing_template",
+    "minecraft:snout_armor_trim_smithing_template",
+    "minecraft:rib_armor_trim_smithing_template",
+    "minecraft:spire_armor_trim_smithing_template",
+    "minecraft:wayfinder_armor_trim_smithing_template",
+    "minecraft:shaper_armor_trim_smithing_template",
+    "minecraft:silence_armor_trim_smithing_template",
+    "minecraft:raiser_armor_trim_smithing_template",
+    "minecraft:host_armor_trim_smithing_template",
+    "minecraft:flow_armor_trim_smithing_template",
+    "minecraft:bolt_armor_trim_smithing_template",
+    "minecraft:angler_pottery_sherd",
+    "minecraft:archer_pottery_sherd",
+    "minecraft:arms_up_pottery_sherd",
+    "minecraft:blade_pottery_sherd",
+    "minecraft:brewer_pottery_sherd",
+    "minecraft:burn_pottery_sherd",
+    "minecraft:danger_pottery_sherd",
+    "minecraft:explorer_pottery_sherd",
+    "minecraft:flow_pottery_sherd",
+    "minecraft:friend_pottery_sherd",
+    "minecraft:guster_pottery_sherd",
+    "minecraft:heart_pottery_sherd",
+    "minecraft:heartbreak_pottery_sherd",
+    "minecraft:howl_pottery_sherd",
+    "minecraft:miner_pottery_sherd",
+    "minecraft:mourner_pottery_sherd",
+    "minecraft:plenty_pottery_sherd",
+    "minecraft:prize_pottery_sherd",
+    "minecraft:scrape_pottery_sherd",
+    "minecraft:sheaf_pottery_sherd",
+    "minecraft:shelter_pottery_sherd",
+    "minecraft:skull_pottery_sherd",
+    "minecraft:snort_pottery_sherd",
+    "minecraft:trial_key",
+    "minecraft:ominous_trial_key",
+    "minecraft:ominous_bottle",
+    "minecraft:breeze_rod",
+    "minecraft:string",
+    "minecraft:nether_wart",
+    "#c:shulker_boxes",
+    "#c:seeds",
+    {
+      "id": "petrolpark:badge/beta_tester",
+      "required": false
+    },
+    {
+      "id": "petrolpark:badge/bestie",
+      "required": false
+    },
+    {
+      "id": "petrolpark:badge/competition_winner",
+      "required": false
+    },
+    {
+      "id": "petrolpark:badge/content_creator",
+      "required": false
+    },
+    {
+      "id": "petrolpark:badge/developer",
+      "required": false
+    },
+    {
+      "id": "petrolpark:badge/early_bird",
+      "required": false
+    },
+    {
+      "id": "petrolpark:badge/nitro",
+      "required": false
+    },
+    {
+      "id": "petrolpark:badge/suggestion",
+      "required": false
+    },
+    {
+      "id": "petrolpark:badge/translator",
+      "required": false
+    },
+    {
+      "id": "petrolpark:rolling_pin",
+      "required": false
+    },
+    {
+      "id": "petrolpark:shulker_belt",
+      "required": false
+    },
+    {
+      "id": "petrolpark:butter",
+      "required": false
+    },
+    {
+      "id": "petrolpark:fries",
+      "required": false
+    },
+    {
+      "id": "petrolpark:mashed_potato",
+      "required": false
+    },
+    {
+      "id": "petrolpark:mesh",
+      "required": false
+    },
+    {
+      "id": "petrolpark:raw_fries",
+      "required": false
+    },
+    {
+      "id": "petrolpark:blood_bucket",
+      "required": false
+    },
+    {
+      "id": "petrolpark:cream_bucket",
+      "required": false
+    },
+    {
+      "id": "petrolpark:skimmed_milk_bucket",
+      "required": false
+    },
+    {
+      "id": "petrolpark:sunflower_oil_bottle",
+      "required": false
+    },
+    {
+      "id": "petrolpark:unprocessed_mashed_potato",
+      "required": false
+    },
+    {
+      "id": "create:wheat_flour",
+      "required": false
+    },
+    {
+      "id": "create:dough",
+      "required": false
+    },
+    {
+      "id": "create:cinder_flour",
+      "required": false
+    },
+    {
+      "id": "create:rose_quartz",
+      "required": false
+    },
+    {
+      "id": "create:polished_rose_quartz",
+      "required": false
+    },
+    {
+      "id": "create:powdered_obsidian",
+      "required": false
+    },
+    {
+      "id": "create:sturdy_sheet",
+      "required": false
+    },
+    {
+      "id": "create:propeller",
+      "required": false
+    },
+    {
+      "id": "create:whisk",
+      "required": false
+    },
+    {
+      "id": "create:brass_hand",
+      "required": false
+    },
+    {
+      "id": "create:crafter_slot_cover",
+      "required": false
+    },
+    {
+      "id": "create:electron_tube",
+      "required": false
+    },
+    {
+      "id": "create:transmitter",
+      "required": false
+    },
+    {
+      "id": "create:pulp",
+      "required": false
+    },
+    {
+      "id": "create:cardboard",
+      "required": false
+    },
+    {
+      "id": "create:incomplete_precision_mechanism",
+      "required": false
+    },
+    {
+      "id": "create:unprocessed_obsidian_sheet",
+      "required": false
+    },
+    {
+      "id": "create:incomplete_track",
+      "required": false
+    },
+    {
+      "id": "create:precision_mechanism",
+      "required": false
+    },
+    {
+      "id": "create:blaze_cake_base",
+      "required": false
+    },
+    {
+      "id": "create:blaze_cake",
+      "required": false
+    },
+    {
+      "id": "create:creative_blaze_cake",
+      "required": false
+    },
+    {
+      "id": "create:bar_of_chocolate",
+      "required": false
+    },
+    {
+      "id": "create:sweet_roll",
+      "required": false
+    },
+    {
+      "id": "create:chocolate_glazed_berries",
+      "required": false
+    },
+    {
+      "id": "create:honeyed_apple",
+      "required": false
+    },
+    {
+      "id": "create:builders_tea",
+      "required": false
+    },
+    {
+      "id": "create:cardboard_sword",
+      "required": false
+    },
+    {
+      "id": "create:raw_zinc",
+      "required": false
+    },
+    {
+      "id": "create:andesite_alloy",
+      "required": false
+    },
+    {
+      "id": "create:zinc_ingot",
+      "required": false
+    },
+    {
+      "id": "create:brass_ingot",
+      "required": false
+    },
+    {
+      "id": "create:chromatic_compound",
+      "required": false
+    },
+    {
+      "id": "create:shadow_steel",
+      "required": false
+    },
+    {
+      "id": "create:refined_radiance",
+      "required": false
+    },
+    {
+      "id": "create:copper_nugget",
+      "required": false
+    },
+    {
+      "id": "create:zinc_nugget",
+      "required": false
+    },
+    {
+      "id": "create:brass_nugget",
+      "required": false
+    },
+    {
+      "id": "create:experience_nugget",
+      "required": false
+    },
+    {
+      "id": "create:copper_sheet",
+      "required": false
+    },
+    {
+      "id": "create:brass_sheet",
+      "required": false
+    },
+    {
+      "id": "create:iron_sheet",
+      "required": false
+    },
+    {
+      "id": "create:golden_sheet",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_iron",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_gold",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_copper",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_zinc",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_osmium",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_platinum",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_silver",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_tin",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_lead",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_quicksilver",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_aluminum",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_uranium",
+      "required": false
+    },
+    {
+      "id": "create:crushed_raw_nickel",
+      "required": false
+    },
+    {
+      "id": "create:goggles",
+      "required": false
+    },
+    {
+      "id": "create:super_glue",
+      "required": false
+    },
+    {
+      "id": "create:minecart_coupling",
+      "required": false
+    },
+    {
+      "id": "create:crafting_blueprint",
+      "required": false
+    },
+    {
+      "id": "create:copper_backtank",
+      "required": false
+    },
+    {
+      "id": "create:netherite_backtank",
+      "required": false
+    },
+    {
+      "id": "create:copper_diving_helmet",
+      "required": false
+    },
+    {
+      "id": "create:netherite_diving_helmet",
+      "required": false
+    },
+    {
+      "id": "create:copper_diving_boots",
+      "required": false
+    },
+    {
+      "id": "create:netherite_diving_boots",
+      "required": false
+    },
+    {
+      "id": "create:cardboard_helmet",
+      "required": false
+    },
+    {
+      "id": "create:cardboard_chestplate",
+      "required": false
+    },
+    {
+      "id": "create:cardboard_leggings",
+      "required": false
+    },
+    {
+      "id": "create:cardboard_boots",
+      "required": false
+    },
+    {
+      "id": "create:sand_paper",
+      "required": false
+    },
+    {
+      "id": "create:red_sand_paper",
+      "required": false
+    },
+    {
+      "id": "create:wrench",
+      "required": false
+    },
+    {
+      "id": "create:minecart_contraption",
+      "required": false
+    },
+    {
+      "id": "create:furnace_minecart_contraption",
+      "required": false
+    },
+    {
+      "id": "create:chest_minecart_contraption",
+      "required": false
+    },
+    {
+      "id": "create:linked_controller",
+      "required": false
+    },
+    {
+      "id": "create:potato_cannon",
+      "required": false
+    },
+    {
+      "id": "create:extendo_grip",
+      "required": false
+    },
+    {
+      "id": "create:wand_of_symmetry",
+      "required": false
+    },
+    {
+      "id": "create:handheld_worldshaper",
+      "required": false
+    },
+    {
+      "id": "create:tree_fertilizer",
+      "required": false
+    },
+    {
+      "id": "create:cardboard_package_12x12",
+      "required": false
+    },
+    {
+      "id": "create:cardboard_package_10x12",
+      "required": false
+    },
+    {
+      "id": "create:cardboard_package_10x8",
+      "required": false
+    },
+    {
+      "id": "create:cardboard_package_12x10",
+      "required": false
+    },
+    {
+      "id": "create:rare_creeper_package",
+      "required": false
+    },
+    {
+      "id": "create:rare_darcy_package",
+      "required": false
+    },
+    {
+      "id": "create:rare_evan_package",
+      "required": false
+    },
+    {
+      "id": "create:rare_jinx_package",
+      "required": false
+    },
+    {
+      "id": "create:rare_kryppers_package",
+      "required": false
+    },
+    {
+      "id": "create:rare_simi_package",
+      "required": false
+    },
+    {
+      "id": "create:rare_starlotte_package",
+      "required": false
+    },
+    {
+      "id": "create:rare_thunder_package",
+      "required": false
+    },
+    {
+      "id": "create:rare_up_package",
+      "required": false
+    },
+    {
+      "id": "create:rare_vector_package",
+      "required": false
+    },
+    {
+      "id": "create:filter",
+      "required": false
+    },
+    {
+      "id": "create:attribute_filter",
+      "required": false
+    },
+    {
+      "id": "create:package_filter",
+      "required": false
+    },
+    {
+      "id": "create:schedule",
+      "required": false
+    },
+    {
+      "id": "create:shopping_list",
+      "required": false
+    },
+    {
+      "id": "create:empty_schematic",
+      "required": false
+    },
+    {
+      "id": "create:schematic_and_quill",
+      "required": false
+    },
+    {
+      "id": "create:schematic",
+      "required": false
+    },
+    {
+      "id": "create:honey_bucket",
+      "required": false
+    },
+    {
+      "id": "create:chocolate_bucket",
+      "required": false
+    },
+    {
+      "id": "create:shaft",
+      "required": false
+    },
+    {
+      "id": "create:cogwheel",
+      "required": false
+    },
+    {
+      "id": "create:large_cogwheel",
+      "required": false
+    },
+    {
+      "id": "create:andesite_encased_shaft",
+      "required": false
+    },
+    {
+      "id": "create:brass_encased_shaft",
+      "required": false
+    },
+    {
+      "id": "create:andesite_encased_cogwheel",
+      "required": false
+    },
+    {
+      "id": "create:brass_encased_cogwheel",
+      "required": false
+    },
+    {
+      "id": "create:andesite_encased_large_cogwheel",
+      "required": false
+    },
+    {
+      "id": "create:brass_encased_large_cogwheel",
+      "required": false
+    },
+    {
+      "id": "create:gearbox",
+      "required": false
+    },
+    {
+      "id": "create:clutch",
+      "required": false
+    },
+    {
+      "id": "create:gearshift",
+      "required": false
+    },
+    {
+      "id": "create:encased_chain_drive",
+      "required": false
+    },
+    {
+      "id": "create:adjustable_chain_gearshift",
+      "required": false
+    },
+    {
+      "id": "create:chain_conveyor",
+      "required": false
+    },
+    {
+      "id": "create:creative_motor",
+      "required": false
+    },
+    {
+      "id": "create:water_wheel",
+      "required": false
+    },
+    {
+      "id": "create:large_water_wheel",
+      "required": false
+    },
+    {
+      "id": "create:encased_fan",
+      "required": false
+    },
+    {
+      "id": "create:turntable",
+      "required": false
+    },
+    {
+      "id": "create:hand_crank",
+      "required": false
+    },
+    {
+      "id": "create:cuckoo_clock",
+      "required": false
+    },
+    {
+      "id": "create:mysterious_cuckoo_clock",
+      "required": false
+    },
+    {
+      "id": "create:millstone",
+      "required": false
+    },
+    {
+      "id": "create:crushing_wheel",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_press",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_mixer",
+      "required": false
+    },
+    {
+      "id": "create:weighted_ejector",
+      "required": false
+    },
+    {
+      "id": "create:speedometer",
+      "required": false
+    },
+    {
+      "id": "create:stressometer",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_pump",
+      "required": false
+    },
+    {
+      "id": "create:fluid_valve",
+      "required": false
+    },
+    {
+      "id": "create:copper_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:white_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:orange_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:magenta_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:light_blue_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:yellow_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:lime_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:pink_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:gray_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:light_gray_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:cyan_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:purple_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:blue_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:brown_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:green_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:red_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:black_valve_handle",
+      "required": false
+    },
+    {
+      "id": "create:hose_pulley",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_piston",
+      "required": false
+    },
+    {
+      "id": "create:sticky_mechanical_piston",
+      "required": false
+    },
+    {
+      "id": "create:gantry_carriage",
+      "required": false
+    },
+    {
+      "id": "create:gantry_shaft",
+      "required": false
+    },
+    {
+      "id": "create:windmill_bearing",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_bearing",
+      "required": false
+    },
+    {
+      "id": "create:clockwork_bearing",
+      "required": false
+    },
+    {
+      "id": "create:rope_pulley",
+      "required": false
+    },
+    {
+      "id": "create:elevator_pulley",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_drill",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_saw",
+      "required": false
+    },
+    {
+      "id": "create:deployer",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_crafter",
+      "required": false
+    },
+    {
+      "id": "create:sequenced_gearshift",
+      "required": false
+    },
+    {
+      "id": "create:flywheel",
+      "required": false
+    },
+    {
+      "id": "create:rotation_speed_controller",
+      "required": false
+    },
+    {
+      "id": "create:mechanical_arm",
+      "required": false
+    },
+    {
+      "id": "create:display_board",
+      "required": false
+    },
+    {
+      "id": "create:belt_connector",
+      "required": false
+    },
+    {
+      "id": "create:vertical_gearbox",
+      "required": false
+    },
+    {
+      "id": "create:copper_backtank_placeable",
+      "required": false
+    },
+    {
+      "id": "create:netherite_backtank_placeable",
+      "required": false
+    },
+    {
+      "id": "petrolpark:blender",
+      "required": false
+    },
+    {
+      "id": "petrolpark:centrifuge",
+      "required": false
+    },
+    "petrolpark:dough",
+    {
+      "id": "petrolpark:extrusion_die",
+      "required": false
+    },
+    {
+      "id": "petrolpark:horse_mill_bearing",
+      "required": false
+    },
+    {
+      "id": "petrolpark:mandrel",
+      "required": false
+    }
+  ]
+}

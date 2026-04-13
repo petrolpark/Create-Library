@@ -1,5 +1,7 @@
 package com.petrolpark;
 
+import com.petrolpark.client.texts.ReplyTextPacket;
+import com.petrolpark.client.texts.RequestTextPacket;
 import com.petrolpark.core.actionrecord.ActionRecordEntryResult;
 import com.petrolpark.core.actionrecord.packet.entrant.ICustomPacketPayloadEntrant;
 import com.petrolpark.core.actionrecord.packet.entrant.PacketEntrants;
@@ -29,6 +31,7 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
     BIND_TEAM_ITEM(BindTeamItemPacket.class, BindTeamItemPacket.STREAM_CODEC),
     BIND_TEAM_BLOCK(BindTeamBlockPacket.class, BindTeamBlockPacket.STREAM_CODEC),
 	REQUEST_INVENTORY_FULL_STATE(RequestInventoryFullStatePacket.class, RequestInventoryFullStatePacket.STREAM_CODEC, false),
+	REPLY_TEXT(ReplyTextPacket.class, ReplyTextPacket.STREAM_CODEC, false),
 
 	// Server -> client
 	SINGLE_PLAYER_TEAM_COMPONENT_CHANGED(SinglePlayerTeamComponentChangedPacket.class, SinglePlayerTeamComponentChangedPacket.STREAM_CODEC, false),
@@ -38,7 +41,8 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
 	REMOVE_SHADER(RemoveEffectShaderPacket.class, RemoveEffectShaderPacket.STREAM_CODEC, false),
 	SYNC_MOB_EFFECT_TOTAL_DURATION(SyncMobEffectTotalDurationPacket.class, SyncMobEffectTotalDurationPacket.STREAM_CODEC, false),
 	REMOVE_ALL_EFFECT_SHADERS(RemoveAllEffectShadersPacket.class, RemoveAllEffectShadersPacket.STREAM_CODEC, false),
-	INIT_SHADER(InitEffectShaderPacket.class, InitEffectShaderPacket.STREAM_CODEC, false)
+	INIT_SHADER(InitEffectShaderPacket.class, InitEffectShaderPacket.STREAM_CODEC, false),
+	REQUEST_TEXT(RequestTextPacket.class, RequestTextPacket.STREAM_CODEC, false);
 	;
 
     private final CatnipPacketRegistry.PacketType<?> type;

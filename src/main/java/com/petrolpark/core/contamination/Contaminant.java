@@ -26,10 +26,8 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.tags.TagKey;
 import net.minecraft.util.ExtraCodecs;
 
 public class Contaminant {
@@ -47,21 +45,6 @@ public class Contaminant {
 
     public static int compareHolders(Holder<Contaminant> holder1, Holder<Contaminant> holder2) {
         return holder1.unwrapKey().map(ResourceKey::location).flatMap(rl1 -> holder2.unwrapKey().map(ResourceKey::location).map(rl2 -> rl1.compareTo(rl2))).orElse(0);
-    };
-
-    public static ResourceKey<Contaminant> getKeyFromInstrinsicTag(TagKey<?> tagKey) {
-        return getKeyFromTag(tagKey, "intrinsic");
-    };
-
-    public static ResourceKey<Contaminant> getKeyFromShownIfAbsentTag(TagKey<?> tagKey) {
-        return getKeyFromTag(tagKey, "show_if_absent");
-    };
-
-    public static ResourceKey<Contaminant> getKeyFromTag(TagKey<?> tagKey, String pathSuffix) {
-        ResourceLocation rl = tagKey.location();
-        String[] path = rl.getPath().split("/");
-        if (!path[0].equals("contaminant") || !path[path.length - 1].equals(pathSuffix)) return null;
-        return ResourceKey.create(PetrolparkRegistries.Keys.CONTAMINANT, ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), path[1]));
     };
 
     // Initial fields
@@ -184,7 +167,6 @@ public class Contaminant {
                     throw new JsonSyntaxException(String.format("Contaminant %s is its own descendant. Replace the circular reference with a single Contaminant", parentHolder.getKey().location().toString()));
                 };
             });
-            IntrinsicContaminants.clear();
         };
 
     };

@@ -5,6 +5,7 @@ import static com.petrolpark.Petrolpark.REGISTRATE;
 import com.petrolpark.core.data.reward.ContextEntityReward;
 import com.petrolpark.core.data.reward.ContextTeamReward;
 import com.petrolpark.core.data.reward.RewardType;
+import com.petrolpark.core.data.reward.entity.AllTeamsPlayerReward;
 import com.petrolpark.core.data.reward.entity.EntityRewardType;
 import com.petrolpark.core.data.reward.entity.GiveItemEntityReward;
 import com.petrolpark.core.data.reward.entity.GiveLootEntityReward;
@@ -30,7 +31,7 @@ public class PetrolparkRewardTypes {
     GRANT_EXPERIENCE = REGISTRATE.entityRewardType("grant_experience", GrantExperiencePlayerReward.CODEC),
     UNLOCK_TRADE = REGISTRATE.entityRewardType("unlock_trade", UnlockTradeEntityReward.CODEC),
     GOSSIP = REGISTRATE.entityRewardType("villager_gossip", VillagerGossipEntityReward.CODEC),
-    ALL_TEAMS = REGISTRATE.entityRewardType("all_teams", null);
+    ALL_TEAMS = REGISTRATE.entityRewardType("all_teams", AllTeamsPlayerReward.CODEC);
 
     public static final RegistryEntry<TeamRewardType, TeamRewardType>
 
