@@ -202,7 +202,7 @@ public class PetrolparkRegistries {
 
         // Shops
         public static final ResourceKey<Registry<Shop>> SHOP = key("shop");
-        public static final ResourceKey<Registry<ShopOfferGenerator>> SHOP_OFFER_GENERATOR = key("shop_offer_generator");
+        public static final ResourceKey<Registry<ShopOfferGenerator>> SHOP_OFFER_GENERATOR = key("shop/offer_generator");
 
         // Boggle Patterns
         public static final ResourceKey<Registry<BogglePatternGeneratorType>> BOGGLE_PATTERN_GENERATOR_TYPE = key("boggle_pattern_generator_type");

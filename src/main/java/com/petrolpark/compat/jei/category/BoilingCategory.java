@@ -7,23 +7,23 @@ import com.mojang.math.Axis;
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.PetrolparkCreateBlocks;
-import com.petrolpark.compat.create.common.processing.meshbasin.DeepFryingRecipe;
+import com.petrolpark.compat.create.common.processing.meshbasin.BoilingRecipe;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IJeiHelpers;
 import net.minecraft.client.gui.GuiGraphics;
 
-public class DeepFryingCategory extends SmallBasinCategory<DeepFryingRecipe> implements ISharedFeature {
+public class BoilingCategory extends SmallBasinCategory<BoilingRecipe> implements ISharedFeature {
 
     private final AnimatedMeshBasin basin = new AnimatedMeshBasin();
 
-    public DeepFryingCategory(Info<DeepFryingRecipe> info, IJeiHelpers helpers) {
+    public BoilingCategory(Info<BoilingRecipe> info, IJeiHelpers helpers) {
         super(info, helpers);
     };
 
     @Override
-    protected void draw(@Nonnull DeepFryingRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics graphics, double mouseX, double mouseY) {
+    protected void draw(@Nonnull BoilingRecipe recipe, @Nonnull IRecipeSlotsView recipeSlotsView, @Nonnull GuiGraphics graphics, double mouseX, double mouseY) {
         super.draw(recipe, recipeSlotsView, graphics, mouseX, mouseY);
 
         basin.draw(graphics, getBackground().getWidth() / 2 + 3, 49);

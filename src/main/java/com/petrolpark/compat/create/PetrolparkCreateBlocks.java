@@ -8,8 +8,10 @@ import static net.minecraft.world.level.storage.loot.LootPool.lootPool;
 import static net.minecraft.world.level.storage.loot.LootTable.lootTable;
 import static net.minecraft.world.level.storage.loot.entries.LootItem.lootTableItem;
 
+import com.petrolpark.PetrolparkTags;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessBlock;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessMovementBehaviour;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillBearingBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlock;
@@ -61,6 +63,7 @@ public class PetrolparkCreateBlocks {
         .transform(axeOrPickaxe())
         .transform(PetrolparkStressConfig.setImpact(2f))
         .item()
+        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
         .onRegister(PetrolparkCreate::registerTooltip)
         .build()
         .register();
@@ -71,6 +74,7 @@ public class PetrolparkCreateBlocks {
         .transform(pickaxeOnly())
         .transform(PetrolparkStressConfig.setImpact(2f))
         .item()
+        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
         .onRegister(PetrolparkCreate::registerTooltip)
         .build()
         .register();
@@ -81,6 +85,7 @@ public class PetrolparkCreateBlocks {
             .instabreak()
         ).color(() -> () -> DoughBlock::getColor) // For particles
         .item(DoughItem::new)
+        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
         .properties(p -> p
             .stacksTo(1)
         ).build()
@@ -95,10 +100,12 @@ public class PetrolparkCreateBlocks {
         .properties(BlockBehaviour.Properties::noCollission)
         .transform(pickaxeOnly())
         .item()
+        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
         .build()
         .register();
 
     public static final BlockEntry<HarnessBlock> HARNESS = REGISTRATE.sharedBlock(SharedFeatureFlag.HORSE_MILL, "harness", HarnessBlock::new)
+        .onRegister(movementBehaviour(new HarnessMovementBehaviour()))
         .item()
         .build()
         .register();
@@ -111,6 +118,7 @@ public class PetrolparkCreateBlocks {
         ).onRegister(BlockStressValues.setGeneratorSpeed(16, true))
         .tag(AllBlockTags.SAFE_NBT.tag)
         .item()
+        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
         .build()
         .register();
 
@@ -119,6 +127,7 @@ public class PetrolparkCreateBlocks {
         .blockstate(BlockStateGen.horizontalBlockProvider(true))
         .transform(axeOrPickaxe())
         .item()
+        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
         .transform(ModelGen.customItemModel())
         .register();
 

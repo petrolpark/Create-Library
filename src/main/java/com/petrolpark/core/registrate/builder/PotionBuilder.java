@@ -6,7 +6,7 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.function.TriConsumer;
 
-import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.PetrolparkRegistrateProviderTypes;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
@@ -32,16 +32,16 @@ import net.neoforged.neoforge.event.brewing.RegisterBrewingRecipesEvent;
 
 public class PotionBuilder<P> extends AbstractBuilder<Potion, Potion, P, PotionBuilder<P>> {
 
-    public static final <P> PotionBuilder<P> create(PetrolparkRegistrate owner, P parent, String name, String potionName, BuilderCallback callback) {
+    public static final <P> PotionBuilder<P> create(AbstractPetrolparkRegistrate<?> owner, P parent, String name, String potionName, BuilderCallback callback) {
         return new PotionBuilder<>(owner, parent, name, potionName, callback);
     };
 
-    protected final PetrolparkRegistrate petrolparkOwner;
+    protected final AbstractPetrolparkRegistrate<?> petrolparkOwner;
 
     protected final String potionName;
     protected final List<MobEffectBuilder.MobEffectInstanceBuilder> effectInstanceBuilders = new ArrayList<>();
 
-    protected PotionBuilder(PetrolparkRegistrate owner, P parent, String name, String potionName, BuilderCallback callback) {
+    protected PotionBuilder(AbstractPetrolparkRegistrate<?> owner, P parent, String name, String potionName, BuilderCallback callback) {
         super(owner, parent, name, callback, Registries.POTION);
         this.petrolparkOwner = owner;
         this.potionName = potionName;

@@ -42,7 +42,7 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
 
     @Override
     public final boolean hasAnyContaminant() {
-        return !IntrinsicContaminants.get(this).isEmpty() || hasAnyExtrinsicContaminant();
+        return !getContaminable().getIntrinsicContaminants(getType()).isEmpty()|| hasAnyExtrinsicContaminant();
     };
 
     @Override
@@ -126,6 +126,21 @@ public abstract class Contamination<OBJECT, OBJECT_STACK> implements IContaminat
             //.map(Optional::get)
             //.map(h -> (Holder<Contaminant>)h)
             .toList();
+    };
+
+    @Override
+    public Stream<Holder<Contaminant>> streamIntrinsicContaminants() {
+        return getContaminable().getIntrinsicContaminants(getType()).stream();
+    };
+
+    @Override
+    public Stream<Holder<Contaminant>> streamShownIfAbsentContaminants() {
+        return getContaminable().getShownIfAbsentContaminants(getType()).stream();
+    };
+
+    @Override
+    public boolean isIntrinsic(Holder<Contaminant> contaminantHolder) {
+        return getContaminable().getShownIfAbsentContaminants(getType()).contains(contaminantHolder);
     };
 };
 

@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import com.petrolpark.PetrolparkDataMapTypes;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.core.contamination.Contaminable.GenericContaminable;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
@@ -36,11 +36,11 @@ public class Contaminables {
         };
     }; 
 
-    public static final Contaminable<Item, ItemStack> ITEM = new BuiltInRegistryContaminable<>(BuiltInRegistries.ITEM) {
+    public static final Contaminable<Item, ItemStack> ITEM = new BuiltInRegistryContaminable<>(BuiltInRegistries.ITEM, PetrolparkDataMapTypes.ITEM_INTRINSIC_CONTAMINANTS, PetrolparkDataMapTypes.ITEM_SHOWN_IF_ABSENT_CONTAMINANTS) {
         
         @Override
         public boolean isContaminable(Item object) {
-            return object instanceof BlockItem ? PetrolparkTags.Items.CONTAMINABLE_BLOCKS.matches(object) : !PetrolparkTags.Items.INCONTAMINABLE.matches(object);
+            return PetrolparkTags.Items.CONTAMINABLE.matches(object);
         };
 
         @Override
@@ -56,11 +56,12 @@ public class Contaminables {
         
     };
 
-    public static final Contaminable<Fluid, FluidStack> FLUID = new BuiltInRegistryContaminable<>(BuiltInRegistries.FLUID) {
+    public static final Contaminable<Fluid, FluidStack> FLUID = new BuiltInRegistryContaminable<>(BuiltInRegistries.FLUID, PetrolparkDataMapTypes.FLUID_INTRINSIC_CONTAMINANTS, PetrolparkDataMapTypes.FLUID_SHOWN_IF_ABSENT_CONTAMINANTS) {
 
+        
         @Override
         public boolean isContaminable(Fluid object) {
-            return !PetrolparkTags.Fluids.INCONTAMINABLE.matches(object);
+            return PetrolparkTags.Fluids.CONTAMINABLE.matches(object);
         };
 
         @Override

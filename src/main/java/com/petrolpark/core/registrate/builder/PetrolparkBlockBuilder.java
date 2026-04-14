@@ -5,7 +5,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import com.google.gson.JsonElement;
-import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.builders.ItemBuilder;
@@ -26,11 +26,11 @@ import net.neoforged.neoforge.client.model.generators.BlockStateProvider;
  */
 public class PetrolparkBlockBuilder<T extends Block, P> extends BlockBuilder<T, P> {
 
-    public static <T extends Block, P> PetrolparkBlockBuilder<T, P> create(PetrolparkRegistrate owner, P parent, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory) {
+    public static <T extends Block, P> PetrolparkBlockBuilder<T, P> create(AbstractPetrolparkRegistrate<?> owner, P parent, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory) {
         return new PetrolparkBlockBuilder<>(owner, parent, name, callback, factory, () -> BlockBehaviour.Properties.of());
     }
 
-    public PetrolparkBlockBuilder(PetrolparkRegistrate owner, P parent, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory, NonNullSupplier<BlockBehaviour.Properties> initialProperties) {
+    public PetrolparkBlockBuilder(AbstractPetrolparkRegistrate<?> owner, P parent, String name, BuilderCallback callback, NonNullFunction<BlockBehaviour.Properties, T> factory, NonNullSupplier<BlockBehaviour.Properties> initialProperties) {
         super(owner, parent, name, callback, factory, initialProperties);
     };
 

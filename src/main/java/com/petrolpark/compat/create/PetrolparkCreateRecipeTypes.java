@@ -12,7 +12,7 @@ import com.petrolpark.compat.create.common.processing.blender.BlendingRecipe;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationRecipe;
 import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRecipe;
-import com.petrolpark.compat.create.common.processing.meshbasin.DeepFryingRecipe;
+import com.petrolpark.compat.create.common.processing.meshbasin.BoilingRecipe;
 import com.petrolpark.compat.create.common.processing.meshbasin.JuicingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
@@ -37,7 +37,7 @@ public enum PetrolparkCreateRecipeTypes implements IPetrolparkRecipeTypes, IReci
     BLENDING(SharedFeatureFlag.BLENDER, BlendingRecipe.Serializer::new),
     CENTRIFUGATION(SharedFeatureFlag.CENTRIFUGE, CentrifugationRecipe::new),
     EXTRUSION(SharedFeatureFlag.EXTRUSION, ExtrusionRecipe.Serializer::new),
-    DEEP_FRYING(SharedFeatureFlag.MESH_BASIN, DeepFryingRecipe.Serializer::new),
+    BOILING(SharedFeatureFlag.MESH_BASIN, BoilingRecipe.Serializer::new),
     JUICING(SharedFeatureFlag.MESH_BASIN, JuicingRecipe.Serializer::new),
     LIDDED_BASIN(SharedFeatureFlag.BASIN_LID, LiddedBasinRecipe.Serializer::new),
     MANDREL(SharedFeatureFlag.MANDREL, MandrelRecipe.Serializer::new),

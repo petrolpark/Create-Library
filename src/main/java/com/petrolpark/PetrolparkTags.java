@@ -97,7 +97,6 @@ public class PetrolparkTags {
 
     public enum BlockEntityTypes {
 
-        CONTAMINABLE_KINETIC,
         ;
 
         public final TagKey<BlockEntityType<?>> tag;
@@ -137,7 +136,7 @@ public class PetrolparkTags {
 
     public enum Fluids {
 
-        INCONTAMINABLE,
+        CONTAMINABLE,
         ;
 
         public final TagKey<Fluid> tag;
@@ -167,8 +166,7 @@ public class PetrolparkTags {
 
     public enum Items {
 
-        INCONTAMINABLE,
-        CONTAMINABLE_BLOCKS,
+        CONTAMINABLE,
         SLIPPING_POTION_INGREDIENTS,
         ;
 

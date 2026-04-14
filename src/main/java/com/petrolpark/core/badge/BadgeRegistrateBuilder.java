@@ -3,7 +3,7 @@ package com.petrolpark.core.badge;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.compat.curios.PetrolparkCuriosSetup;
 import com.tterrag.registrate.builders.AbstractBuilder;
@@ -24,11 +24,11 @@ public class BadgeRegistrateBuilder<T extends Badge, P> extends AbstractBuilder<
     protected ItemEntry<BadgeItem> item;
     protected Supplier<Ingredient> duplicationIngredient;
 
-    public static <T extends Badge, P> BadgeRegistrateBuilder<T, P> create(PetrolparkRegistrate owner, P parent, String name, BuilderCallback callback, NonNullSupplier<T> factory) {
+    public static <T extends Badge, P> BadgeRegistrateBuilder<T, P> create(AbstractPetrolparkRegistrate<?> owner, P parent, String name, BuilderCallback callback, NonNullSupplier<T> factory) {
         return new BadgeRegistrateBuilder<>(owner, parent, name, callback, factory);
     };
 
-    public BadgeRegistrateBuilder(PetrolparkRegistrate owner, P parent, String name, BuilderCallback callback, NonNullSupplier<T> factory) {
+    public BadgeRegistrateBuilder(AbstractPetrolparkRegistrate<?> owner, P parent, String name, BuilderCallback callback, NonNullSupplier<T> factory) {
         super(owner, parent, name, callback, PetrolparkRegistries.Keys.BADGE);
         this.factory = factory;
 

@@ -10,7 +10,6 @@ import com.petrolpark.core.data.loot.numberprovider.entity.EntityNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
 import com.petrolpark.core.team.ITeam;
 
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -40,7 +39,7 @@ public interface TeamNumberProvider extends LootContextUser {
     public float getFloat(ITeam team, LootContext context);
 
     /**
-     * Get the approximate bounds for the {@link TeamNumberProvider#getFloat(ItemStack, LootContext) output} of this {@link TeamNumberProvider} on a best-effort basis.
+     * Get the approximate bounds for the {@link TeamNumberProvider#getFloat(ITeam, LootContext) output} of this {@link TeamNumberProvider} on a best-effort basis.
      * @see NumberEstimate#unknown() 
      */
     public NumberEstimate getEstimate();

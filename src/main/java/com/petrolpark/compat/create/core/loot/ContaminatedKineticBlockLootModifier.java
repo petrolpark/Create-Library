@@ -13,6 +13,7 @@ import com.petrolpark.core.contamination.ItemContamination;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -41,11 +42,13 @@ public class ContaminatedKineticBlockLootModifier extends LootModifier {
 
     @Override
     protected @NotNull ObjectArrayList<ItemStack> doApply(@Nonnull ObjectArrayList<ItemStack> generatedLoot, @Nonnull LootContext context) {
-        BlockEntity be = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
-        if (be == null || !(be instanceof KineticBlockEntity kbe && PetrolparkTags.BlockEntityTypes.CONTAMINABLE_KINETIC.matches(kbe))) return generatedLoot;
-        ContaminationBehaviour behaviour = kbe.getBehaviour(ContaminationBehaviour.TYPE);
+        final BlockEntity be = context.getParamOrNull(LootContextParams.BLOCK_ENTITY);
+        if (be == null || !(be instanceof KineticBlockEntity kbe)) return generatedLoot;
+        final Item item = kbe.getBlockState().getBlock().asItem();
+        if (!PetrolparkTags.Items.CONTAMINABLE.matches(item)) return generatedLoot;
+        final ContaminationBehaviour behaviour = kbe.getBehaviour(ContaminationBehaviour.TYPE);
         if (behaviour == null) return generatedLoot;
-        generatedLoot.stream().filter(stack -> stack.getItem() == kbe.getBlockState().getBlock().asItem()).map(ItemContamination::get).forEach(c -> c.contaminateAll(behaviour.getContamination().streamAllContaminants()));
+        generatedLoot.stream().filter(stack -> stack.getItem() == item).map(ItemContamination::get).forEach(c -> c.contaminateAll(behaviour.getContamination().streamAllContaminants()));
         return generatedLoot;
     };
     

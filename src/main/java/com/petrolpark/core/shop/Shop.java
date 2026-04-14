@@ -2,7 +2,6 @@ package com.petrolpark.core.shop;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import com.google.common.collect.Sets;
@@ -13,16 +12,15 @@ import com.petrolpark.core.shop.offer.ShopOffer;
 import com.petrolpark.core.shop.offer.ShopOfferGenerator;
 import com.petrolpark.core.shop.offer.order.ShopOrderModifierEntry;
 
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Holder;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFileCodec;
-import net.minecraft.tags.TagKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
@@ -38,7 +36,7 @@ public class Shop {
             Codec.STRING.fieldOf("name").forGetter(Shop::getTranslationKey),
             Codec.list(OfferGeneratorEntry.CODEC).fieldOf("offer_generators").forGetter(Shop::getOfferGeneratorEntries),
             Codec.list(ShopOrderModifierEntry.CODEC).optionalFieldOf("global_order_modifiers", Collections.emptyList()).forGetter(Shop::getGlobalOrderModifierEntries),
-            TagKey.codec(Registries.ENTITY_TYPE).optionalFieldOf("customer_entity_types").forGetter(Shop::getCustomerEntityTypes)
+            EntityPredicate.CODEC.optionalFieldOf("customers", null).forGetter(Shop::getCustomerEntities)
         ).apply(instance, Shop::new)
     ));
 
@@ -49,14 +47,13 @@ public class Shop {
     public final List<OfferGeneratorEntry> offerGeneratorEntries;
     protected final List<ShopOrderModifierEntry> globalOrderModifierEntries;
 
-    public final Optional<TagKey<EntityType<?>>> customerEntityTypes;
+    public final EntityPredicate customerEntities;
 
-    public Shop(String translationKey, List<OfferGeneratorEntry> offerGeneratorEntries, List<ShopOrderModifierEntry> globalOrderModifierEntries, Optional<TagKey<EntityType<?>>> customerEntityTypes) {
+    public Shop(String translationKey, List<OfferGeneratorEntry> offerGeneratorEntries, List<ShopOrderModifierEntry> globalOrderModifierEntries, EntityPredicate customerEntities) {
         this.translationKey = translationKey;
         this.offerGeneratorEntries = offerGeneratorEntries;
         this.globalOrderModifierEntries = globalOrderModifierEntries;
-
-        this.customerEntityTypes = customerEntityTypes;
+        this.customerEntities = customerEntities;
     };
 
     public String getTranslationKey() {
@@ -76,8 +73,8 @@ public class Shop {
         return globalOrderModifierEntries;
     };
 
-    public Optional<TagKey<EntityType<?>>> getCustomerEntityTypes() {
-        return customerEntityTypes;
+    public EntityPredicate getCustomerEntities() {
+        return customerEntities;
     };
 
     public ShopOffer generateOffer(LootContext context) {
@@ -95,8 +92,8 @@ public class Shop {
         return ShopOffer.EMPTY;
     };
 
-    public boolean canServe(Entity entity) {
-        return customerEntityTypes.map(entity.getType()::is).orElse(false);
+    public boolean canServe(ServerPlayer player, Entity entity) {
+        return customerEntities.matches(player, entity);
     };
 
     public static record OfferGeneratorEntry(ShopOfferGenerator generator, NumberProvider weight) implements LootContextUser {

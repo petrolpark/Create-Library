@@ -1,5 +1,6 @@
 package com.petrolpark;
 
+import com.petrolpark.client.texts.ClientTextsManager;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.PetrolparkCreateClient;
 import com.petrolpark.compat.curios.PetrolparkCuriosClient;
@@ -18,6 +19,7 @@ import net.neoforged.neoforge.common.NeoForge;
 public class PetrolparkClient {
 
     public static final ExtendedInventoryClientHandler EXTENDED_INVENTORY_HANDLER = new ExtendedInventoryClientHandler();
+    public static final ClientTextsManager TEXTS = new ClientTextsManager();
 
     public PetrolparkClient(IEventBus modEventBus) {
 		clientCtor(modEventBus, NeoForge.EVENT_BUS);
@@ -31,6 +33,7 @@ public class PetrolparkClient {
 
     public final void clientCtor(IEventBus modEventBus, IEventBus neoEventBus) {
         modEventBus.addListener(PetrolparkClient::clientInit);
+        modEventBus.addListener(TEXTS::registerListener);
         neoEventBus.register(EXTENDED_INVENTORY_HANDLER);
     };
     

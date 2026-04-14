@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.core.AbstractPetrolparkCreateRegistrate;
 import com.simibubi.create.foundation.data.CreateBlockEntityBuilder;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BlockEntityBuilder;
@@ -24,7 +25,7 @@ public class SharedCreateBlockEntityBuilder<T extends BlockEntity, P> extends Cr
 
     public final SharedFeatureFlag featureFlag;
 
-    public static <T extends BlockEntity, P> SharedCreateBlockEntityBuilder<T, P> create(AbstractRegistrate<?> owner, P parent, SharedFeatureFlag featureFlag, String name, BuilderCallback callback, BlockEntityFactory<T> factory) {
+    public static <T extends BlockEntity, P> SharedCreateBlockEntityBuilder<T, P> create(AbstractPetrolparkCreateRegistrate<?> owner, P parent, SharedFeatureFlag featureFlag, String name, BuilderCallback callback, BlockEntityFactory<T> factory) {
 		final SharedCreateBlockEntityBuilder<T, P> builder = new SharedCreateBlockEntityBuilder<>(owner, parent, featureFlag, name, callback, factory);
         builder.asOptional();
         return builder;

@@ -41,22 +41,24 @@ public class HarnessEntity extends SeatEntity {
         final BlockState state = level().getBlockState(blockPosition());
         if (state.getBlock() instanceof HarnessBlock) {
             final float angle = -AngleHelper.horizontalAngle(state.getValue(HarnessBlock.FACING));
-            for (Entity entity : getPassengers()) {
-                if (!(entity instanceof LivingEntity living)) continue;
-                if (level().isClientSide()) {
-                    living.lerpTo(0, 0, 0, 0, 0, 0);
-                    living.lerpHeadTo(0, 0);
-                    living.setYRot(angle);
-                    living.setXRot(0);
-                    living.yBodyRot = angle;
-                    living.yHeadRot = angle;
-                } else {
-                    living.setYRot(angle);
-                };
-            };
+            for (Entity entity : getPassengers()) setFacing(entity, angle);
             if (isVehicle()) return;
         };
 		discard();
+    };
+
+    public static final void setFacing(Entity entity, float angle) {
+        if (!(entity instanceof LivingEntity living)) return;
+        if (entity.level().isClientSide()) {
+            living.lerpTo(0, 0, 0, 0, 0, 0);
+            living.lerpHeadTo(0, 0);
+            living.setYRot(angle);
+            living.setXRot(0);
+            living.yBodyRot = angle;
+            living.yHeadRot = angle;
+        } else {
+            living.setYRot(angle);
+        };
     };
 
     @Override
@@ -86,7 +88,6 @@ public class HarnessEntity extends SeatEntity {
         public void render(@Nonnull SeatEntity entity, float entityYaw, float partialTick, @Nonnull PoseStack poseStack, @Nonnull MultiBufferSource bufferSource, int packedLight) {
             final BlockState state = entity.level().getBlockState(entity.blockPosition());
             if (!(state.getBlock() instanceof HarnessBlock)) return;
-            final Optional<HorseMillProperties> properties = HorseMillProperties.get(entity.getFirstPassenger());
             Optional.ofNullable(entity.getFirstPassenger())
                 .flatMap(HorseMillProperties::get)
                 .flatMap(HorseMillProperties::harnessModelLocation)

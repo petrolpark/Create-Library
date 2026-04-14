@@ -1,5 +1,7 @@
 package com.petrolpark.core.contamination;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,23 +17,28 @@ import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
+import net.neoforged.neoforge.registries.datamaps.DataMapType;
 
 public abstract class BuiltInRegistryContaminable<OBJECT, OBJECT_STACK> extends Contaminable<OBJECT, OBJECT_STACK> {
 
     public final Registry<OBJECT> builtInRegistry;
+    public final DataMapType<OBJECT, List<Holder<Contaminant>>> intrinsicContaminantsDataMapType;
+    public final DataMapType<OBJECT, List<Holder<Contaminant>>> shownIfAbsentContaminantsDataMapType;
 
-    public BuiltInRegistryContaminable(Registry<OBJECT> builtInRegistry) {
+    @Override
+    public final Collection<Holder<Contaminant>> getIntrinsicContaminants(OBJECT object) {
+        return builtInRegistry.wrapAsHolder(object).getData(intrinsicContaminantsDataMapType);
+    };
+
+    @Override
+    public final Collection<Holder<Contaminant>> getShownIfAbsentContaminants(OBJECT object) {
+        return builtInRegistry.wrapAsHolder(object).getData(shownIfAbsentContaminantsDataMapType);
+    };
+
+    public BuiltInRegistryContaminable(Registry<OBJECT> builtInRegistry, DataMapType<OBJECT, List<Holder<Contaminant>>> intrinsicContaminantsDataMapType, DataMapType<OBJECT, List<Holder<Contaminant>>> shownIfAbsentContaminantsDataMapType) {
         this.builtInRegistry = builtInRegistry;
-    };
-
-    @Override
-    public Map<OBJECT, Set<Holder<Contaminant>>> getIntrinsicContaminants(RegistryAccess registryAccess) {
-        return getContaminantsFromTags(registryAccess, Contaminant::getKeyFromInstrinsicTag);
-    };
-
-    @Override
-    public Map<OBJECT, Set<Holder<Contaminant>>> getShownIfAbsentContaminants(RegistryAccess registryAccess) {
-        return getContaminantsFromTags(registryAccess, Contaminant::getKeyFromShownIfAbsentTag);
+        this.intrinsicContaminantsDataMapType = intrinsicContaminantsDataMapType;
+        this.shownIfAbsentContaminantsDataMapType = shownIfAbsentContaminantsDataMapType;
     };
 
     protected Map<OBJECT, Set<Holder<Contaminant>>> getContaminantsFromTags(RegistryAccess registryAccess, Function<TagKey<?>, ResourceKey<Contaminant>> contaminantKeyGetter) {

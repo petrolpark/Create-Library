@@ -10,6 +10,8 @@ public final class IncontaminableContamination implements IContamination<Object,
 
     private static final Object OBJECT = new Object();
 
+    private IncontaminableContamination() {};
+
     @Override
     public Contaminable<Object, Object> getContaminable() {
         return Contaminables.NOT;
@@ -75,6 +77,21 @@ public final class IncontaminableContamination implements IContamination<Object,
 
     @Override
     public boolean fullyDecontaminate() {
+        return false;
+    };
+
+    @Override
+    public Stream<Holder<Contaminant>> streamIntrinsicContaminants() {
+        return Stream.empty();
+    };
+
+    @Override
+    public Stream<Holder<Contaminant>> streamShownIfAbsentContaminants() {
+        return Stream.empty();
+    };
+
+    @Override
+    public boolean isIntrinsic(Holder<Contaminant> contaminantHolder) {
         return false;
     };
     

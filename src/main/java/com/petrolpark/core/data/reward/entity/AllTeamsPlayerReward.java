@@ -17,7 +17,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
  * 
  * Arguments:
  * <ul>
- * <li> {@code reward} - {@link ITeamReward} to award to all {@link ITeams}
+ * <li> {@code reward} - {@link ITeamReward} to award to all {@link ITeam}s
  * </ul>
  * 
  * @author petrolpark

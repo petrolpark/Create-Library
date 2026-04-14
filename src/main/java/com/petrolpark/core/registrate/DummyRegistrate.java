@@ -2,14 +2,14 @@ package com.petrolpark.core.registrate;
 
 import javax.annotation.Nonnull;
 
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkRegistrate;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 
-public final class DummyRegistrate extends PetrolparkRegistrate {
+public final class DummyRegistrate extends AbstractPetrolparkRegistrate<DummyRegistrate> {
 
     public static final DummyRegistrate INSTANCE = new DummyRegistrate(Petrolpark.MOD_ID);
 

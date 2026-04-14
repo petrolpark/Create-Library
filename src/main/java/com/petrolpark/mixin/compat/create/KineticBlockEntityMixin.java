@@ -31,6 +31,6 @@ public abstract class KineticBlockEntityMixin extends SmartBlockEntity {
         remap = false
     )
     public void petrolpark$addContaminationBehaviour(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
-        if (PetrolparkTags.BlockEntityTypes.CONTAMINABLE_KINETIC.matches(getType())) behaviours.add(new ContaminationBehaviour(this));
+        if (PetrolparkTags.Items.CONTAMINABLE.matches(getBlockState().getBlock().asItem())) behaviours.add(new ContaminationBehaviour(this));
     };
 };

@@ -1,5 +1,7 @@
 package com.petrolpark.compat.create.common.kinetics.horseMill;
 
+import java.util.Optional;
+
 import org.jetbrains.annotations.NotNull;
 
 import com.petrolpark.compat.create.PetrolparkCreateEntityTypes;
@@ -7,10 +9,16 @@ import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
 import com.simibubi.create.content.contraptions.IControlContraption;
 
+import net.createmod.catnip.math.AngleHelper;
+import net.createmod.catnip.math.VecHelper;
 import net.createmod.catnip.platform.CatnipServices;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class HorseMillContraptionEntity extends ControlledContraptionEntity {
@@ -38,9 +46,30 @@ public class HorseMillContraptionEntity extends ControlledContraptionEntity {
 		// };
 		passenger.startRiding(this, true);
 		if (level().isClientSide()) return;
-		getContraption().getHarnessMapping().put(passenger.getUUID(), harnessIndex);
 
+		getContraption().getHarnessMapping().put(passenger.getUUID(), harnessIndex);
 		CatnipServices.NETWORK.sendToClientsTrackingEntity(this, new HorseMillContraptionHarnessMappingPacket(getId(), getContraption().getHarnessMapping()));
+		getContraption().recalculateSpeedAndStress();
+	};
+
+	@Override
+	public boolean shouldRiderSit() {
+		return false; // Mobs need to animate
+	};
+
+	@Override
+	public void tick() {
+		super.tick();
+		final float contraptionAngle = getAngle(1f);
+		for (Entity passenger : getPassengers()) {
+			final BlockPos harnessPos = getContraption().getHarnessOf(passenger.getUUID());
+			if (harnessPos == null) continue;
+			final BlockState state = getContraption().getActorAt(harnessPos).getLeft().state();
+			if (state.getBlock() instanceof HarnessBlock) {
+				if (passenger instanceof LivingEntity living) living.calculateEntityAnimation(false); //TODO this doesnt give enough of that sweet sweet swangalanging
+				HarnessEntity.setFacing(passenger, -contraptionAngle - AngleHelper.horizontalAngle(state.getValue(HarnessBlock.FACING)));
+			};
+		};
 	};
 
 	@Override
@@ -50,18 +79,37 @@ public class HorseMillContraptionEntity extends ControlledContraptionEntity {
 		
 		getContraption().getHarnessMapping().remove(passenger.getUUID());
 		CatnipServices.NETWORK.sendToClientsTrackingEntity(this, new HorseMillContraptionHarnessMappingPacket(getId(), getContraption().getHarnessMapping()));
+		getContraption().recalculateSpeedAndStress();
 	};
 
 	@Override
 	public void positionRider(Entity passenger, MoveFunction callback) {
-		// TODO Auto-generated method stub
+		if (contraption != null && getContraption().getHarnessOf(passenger.getUUID()) != null) {
+			final Vec3 pos = getPassengerPosition(passenger, 1f);
+			if (pos != null) {
+				callback.accept(passenger, pos.x(), pos.y(), pos.z());
+				return;
+			};
+		};
 		super.positionRider(passenger, callback);
 	};
 
 	@Override
 	public Vec3 getPassengerPosition(Entity passenger, float partialTicks) {
-		// TODO Auto-generated method stub
-		return super.getPassengerPosition(passenger, partialTicks);
+		final Vec3 seatedPos = super.getPassengerPosition(passenger, partialTicks);
+		if (seatedPos != null) return seatedPos;
+		if (contraption == null) return null;
+
+		final BlockPos harnessPos = getContraption().getHarnessOf(passenger.getUUID());
+		if (harnessPos == null) return null;
+		final BlockState harnessState = getContraption().getActorAt(harnessPos).getLeft().state();
+		if (!(harnessState.getBlock() instanceof HarnessBlock)) return null;
+
+		final Optional<Vec3> offset = HorseMillProperties.get(passenger).map(HorseMillProperties::positionOffset);
+		if (offset.isPresent()) return toGlobalVector(Vec3.atBottomCenterOf(harnessPos), partialTicks)
+			.add(VecHelper.rotate(offset.get(), getAngle(partialTicks) + AngleHelper.horizontalAngle(harnessState.getValue(HarnessBlock.FACING)), Axis.Y)); //TODO
+	
+		return null;
 	};
 
 	@Override

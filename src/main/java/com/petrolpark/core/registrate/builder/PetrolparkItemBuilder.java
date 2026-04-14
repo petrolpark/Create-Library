@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.PetrolparkCreate;
 import com.tterrag.registrate.builders.BuilderCallback;
@@ -28,11 +28,11 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
  */
 public class PetrolparkItemBuilder<T extends Item, P> extends ItemBuilder<T, P> {
 
-    public static <T extends Item, P> PetrolparkItemBuilder<T, P> create(PetrolparkRegistrate owner, P parent, String name, BuilderCallback callback, NonNullFunction<Item.Properties, T> factory) {
+    public static <T extends Item, P> PetrolparkItemBuilder<T, P> create(AbstractPetrolparkRegistrate<?> owner, P parent, String name, BuilderCallback callback, NonNullFunction<Item.Properties, T> factory) {
         return new PetrolparkItemBuilder<>(owner, parent, name, callback, factory);
     };
 
-    public PetrolparkItemBuilder(PetrolparkRegistrate owner, P parent, String name, BuilderCallback callback, NonNullFunction<Properties, T> factory) {
+    public PetrolparkItemBuilder(AbstractPetrolparkRegistrate<?> owner, P parent, String name, BuilderCallback callback, NonNullFunction<Properties, T> factory) {
         super(owner, parent, name, callback, factory);
     };
 

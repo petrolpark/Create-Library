@@ -20,18 +20,18 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 
-public class DeepFryingRecipe extends AdvancedBasinRecipe {
+public class BoilingRecipe extends AdvancedBasinRecipe {
     
-    public static final MapCodec<DeepFryingRecipe> CODEC = ProcessingRecipe.codec(DeepFryingRecipe::create, AdvancedProcessingRecipeParams.UNADVANCED_CODEC);
-    public static final StreamCodec<RegistryFriendlyByteBuf, DeepFryingRecipe> STREAM_CODEC = ProcessingRecipe.streamCodec(DeepFryingRecipe::create, AdvancedProcessingRecipeParams.UNADVANCED_STREAM_CODEC);
+    public static final MapCodec<BoilingRecipe> CODEC = ProcessingRecipe.codec(BoilingRecipe::create, AdvancedProcessingRecipeParams.UNADVANCED_CODEC);
+    public static final StreamCodec<RegistryFriendlyByteBuf, BoilingRecipe> STREAM_CODEC = ProcessingRecipe.streamCodec(BoilingRecipe::create, AdvancedProcessingRecipeParams.UNADVANCED_STREAM_CODEC);
 
-    public static final DeepFryingRecipe create(ProcessingRecipeParams params) {
+    public static final BoilingRecipe create(ProcessingRecipeParams params) {
         if (!(params instanceof AdvancedProcessingRecipeParams advancedParams)) throw new IllegalArgumentException("Not Advanced Processing Params");
-        return new DeepFryingRecipe(advancedParams);
+        return new BoilingRecipe(advancedParams);
     };
 
-    protected DeepFryingRecipe(AdvancedProcessingRecipeParams params) {
-        super(PetrolparkCreateRecipeTypes.DEEP_FRYING, params);
+    protected BoilingRecipe(AdvancedProcessingRecipeParams params) {
+        super(PetrolparkCreateRecipeTypes.BOILING, params);
     };
 
     @Override
@@ -39,19 +39,19 @@ public class DeepFryingRecipe extends AdvancedBasinRecipe {
         return true;
     };
 
-    public static final AdvancedProcessingRecipe.BasinBuilder<DeepFryingRecipe> builder(ResourceLocation id) {
-        return new AdvancedProcessingRecipe.BasinBuilder<>(DeepFryingRecipe::create, id);
+    public static final AdvancedProcessingRecipe.BasinBuilder<BoilingRecipe> builder(ResourceLocation id) {
+        return new AdvancedProcessingRecipe.BasinBuilder<>(BoilingRecipe::create, id);
     };
 
-    public static class Serializer implements RecipeSerializer<DeepFryingRecipe> {
+    public static class Serializer implements RecipeSerializer<BoilingRecipe> {
 
         @Override
-        public MapCodec<DeepFryingRecipe> codec() {
+        public MapCodec<BoilingRecipe> codec() {
             return CODEC;
         };
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, DeepFryingRecipe> streamCodec() {
+        public StreamCodec<RegistryFriendlyByteBuf, BoilingRecipe> streamCodec() {
             return STREAM_CODEC;
         };
 
@@ -61,7 +61,7 @@ public class DeepFryingRecipe extends AdvancedBasinRecipe {
      * The base class for Deep Frying recipe generation.
      * Addons should extend this and use the {@link ProcessingRecipeGen#create} methods to make recipes.
      */
-    public static abstract class Gen extends AdvancedBasinRecipe.Gen<DeepFryingRecipe> {
+    public static abstract class Gen extends AdvancedBasinRecipe.Gen<BoilingRecipe> {
 
         public Gen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries, String defaultNamespace) {
             super(output, registries, defaultNamespace);
@@ -69,11 +69,11 @@ public class DeepFryingRecipe extends AdvancedBasinRecipe {
 
         @Override
         protected IRecipeTypeInfo getRecipeType() {
-            return PetrolparkCreateRecipeTypes.DEEP_FRYING;
+            return PetrolparkCreateRecipeTypes.BOILING;
         };
 
         @Override
-        protected BasinBuilder<DeepFryingRecipe> getBuilder(ResourceLocation id) {
+        protected BasinBuilder<BoilingRecipe> getBuilder(ResourceLocation id) {
             return builder(id);
         };
 

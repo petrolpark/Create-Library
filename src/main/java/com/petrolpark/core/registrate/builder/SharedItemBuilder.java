@@ -2,7 +2,7 @@ package com.petrolpark.core.registrate.builder;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.PetrolparkRegistrate;
+import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.builders.ItemBuilder;
@@ -19,7 +19,7 @@ public class SharedItemBuilder<T extends Item, P> extends PetrolparkItemBuilder<
 
     protected final SharedFeatureFlag featureFlag;
 
-    public SharedItemBuilder(PetrolparkRegistrate owner, P parent, @Nonnull SharedFeatureFlag featureFlag, String name, BuilderCallback callback, NonNullFunction<Properties, T> factory) {
+    public SharedItemBuilder(AbstractPetrolparkRegistrate<?> owner, P parent, @Nonnull SharedFeatureFlag featureFlag, String name, BuilderCallback callback, NonNullFunction<Properties, T> factory) {
         super(owner, parent, name, callback, factory);
         this.featureFlag = featureFlag;
     }
