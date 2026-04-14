@@ -7,8 +7,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillContraptionEntity;
 import com.petrolpark.core.world.ChunkTickEvent;
 import com.petrolpark.core.world.block.HandlePrecipitationEvent;
 
@@ -18,6 +20,7 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
@@ -71,5 +74,16 @@ public abstract class ServerLevelMixin extends Level {
         // Top block, including non-motion blocking
         final BlockPos nonMotionBlockingTopPos = getHeightmapPos(Heightmap.Types.WORLD_SURFACE, randomPos).below();
         if (!nonMotionBlockingTopPos.equals(motionBlockingTopPos)) NeoForge.EVENT_BUS.post(new HandlePrecipitationEvent(level, nonMotionBlockingTopPos, getBlockState(nonMotionBlockingTopPos), precipitation));
+    };
+
+    @WrapWithCondition(
+        method = "tickPassenger",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/Entity;setOldPosAndRot()V"
+        )
+    )
+    public boolean petrolpark$swingLegsIfRidingHorseMillContraption(Entity entity) {
+        return !(entity.getVehicle() instanceof HorseMillContraptionEntity);
     };
 };

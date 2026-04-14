@@ -269,6 +269,7 @@
     "petrolpark.generic.wood.unknown": "Unknown Wood",
 
     "petrolpark.gui.assembly.exception.harnessesFaceWrongWay": "All Harnesses must face the same way, clockwise or counterclockwise",
+    "petrolpark.gui.assembly.exception.noHorseMillAnimals": "A Horse Mill requires at least one mob in a Harness to work",
 
     "petrolpark.gui.goggles.centrifuge": "Centrifuge Contents",
     "petrolpark.gui.goggles.centrifuge.inner": "Inner Chamber:",

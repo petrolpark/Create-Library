@@ -46,14 +46,12 @@ public class HorseMillContraption extends BearingContraption {
         super(false, facing);
     };
 
-    public void recalculateSpeedAndStress() {
-        //TODO
-    };
-
     @Override
     public boolean assemble(Level world, BlockPos pos) throws AssemblyException {
         clockwise = null; // Don't know yet
-        return super.assemble(world, pos);
+        boolean assembled = super.assemble(world, pos);
+        if (clockwise == null || getHarnesses().isEmpty() || initialPassengers().isEmpty()) throw noAnimals();
+        return assembled;
     };
 
     @Override
@@ -183,5 +181,9 @@ public class HorseMillContraption extends BearingContraption {
 
     public static final AssemblyException harnessesFacingWrongWay() {
         return new AssemblyException(Lang.translate("gui.assembly.exception.harnessesFaceWrongWay"));
+    };
+
+    public static final AssemblyException noAnimals() {
+        return new AssemblyException(Lang.translate("gui.assembly.exception.noHorseMillAnimals"));
     };
 };

@@ -11,7 +11,6 @@ import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
 import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,7 +24,16 @@ public class HorseMillBearingBlockEntity extends WindmillBearingBlockEntity {
 
 	@Override
 	public float calculateAddedStressCapacity() {
-		return 1f; //TODO
+		return movedContraption == null ? 0f : movedContraption.getEntityData().get(HorseMillContraptionEntity.GENERATED_STRESS_CAPACITY);
+	};
+
+	@Override
+	public float getGeneratedSpeed() {
+		if (movedContraption == null)
+			return lastGeneratedSpeed;
+		if (!running || movedContraption.isStalled())
+			return 0f;
+		return movedContraption.getEntityData().get(HorseMillContraptionEntity.GENERATED_SPEED);
 	};
 
 	@Override
@@ -106,7 +114,7 @@ public class HorseMillBearingBlockEntity extends WindmillBearingBlockEntity {
 
 		@Override
 		protected boolean isSideActive(BlockState state, Direction direction) {
-			return direction.getAxis() != Axis.Y;
+			return false; // Disabled
 		};
 
 	};
