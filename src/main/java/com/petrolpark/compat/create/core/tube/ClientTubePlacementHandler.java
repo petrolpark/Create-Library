@@ -141,7 +141,7 @@ public class ClientTubePlacementHandler {
         String requiredItemCount = ""+tubeBlock.getItemsForTubeLength(spline.getLength());
 
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(Component.translatable("petrolpark.tube.title", requiredItemCount, currentStack.getHoverName()));
+        tooltip.add(Lang.translate("tube.title", requiredItemCount, currentStack.getHoverName()));
         for (Controls control : Controls.values()) if (control.canUse()) tooltip.add(control.translate());
 
         int tooltipTextWidth = 0;
@@ -221,7 +221,7 @@ public class ClientTubePlacementHandler {
         public abstract void use();
 
         public Component translate() {
-            return Component.translatable("petrolpark.tube.control."+ Lang.asId(name()), key == null ? "" : key.keybind.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY);
+            return Lang.translate("tube.control."+ Lang.asId(name()), key == null ? "" : key.keybind.getKey().getDisplayName()).withStyle(ChatFormatting.GRAY);
         };
     };
 
@@ -283,7 +283,7 @@ public class ClientTubePlacementHandler {
             ClientTubePlacementHandler.tubeBlock = tubeBlock;
             start = location;
             spline = null;
-            if (manualPlacement && player != null) player.displayClientMessage(Component.translatable("petrolpark.tube.connect_another", stack.getHoverName()), true);
+            if (manualPlacement && player != null) player.displayClientMessage(Lang.translate("tube.connect_another", stack.getHoverName()), true);
             resetTTL();
         } else if (spline == null) { // If placing the second Block
             if (!ItemStack.isSameItemSameComponents(stack, currentStack)) {

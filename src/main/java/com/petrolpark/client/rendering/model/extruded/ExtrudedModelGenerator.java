@@ -34,7 +34,7 @@ public class ExtrudedModelGenerator {
     public static final String SIDE_TEXTURE_KEY = "side";
     public static final String BOTTOM_TEXTURE_KEY = "bottom";
 
-    public static final List<String> TEXTURE_KEYS = List.of(TOP_TEXTURE_KEY, SIDE_TEXTURE_KEY, BOTTOM_TEXTURE_KEY);
+    protected static final List<String> REQUIRED_TEXTURE_KEYS = List.of(TOP_TEXTURE_KEY, SIDE_TEXTURE_KEY, BOTTOM_TEXTURE_KEY);
 
     /**
      * Generate an {@link ExtrudedModel}. The extrusion takes place in the z direction.
@@ -46,12 +46,14 @@ public class ExtrudedModelGenerator {
      * @param spriteGetter
      * @param baseModel A {@link BlockModel} containing no {@link BlockElement elements}, but the {@link BlockModel#textureMap specifying the textures} {@code top}, {@code side} and {@code bottom}.
      * The {@code side} texture should be 16x16 and will be tiled, but the top and bottom textures will not be, so they need to be large enough for the {@code topUV}, when fit to the {@code mask}, to still fit.
+     * Can optionally specify textures {@code top_1}, {@code top_2}, etc. that will be layered on top with the corresponding tint index
+     * ({@code bottom}, {@code side} and {@code top} will have tint index {@code 0}).
      */
     public BlockModel generateExtrudedModel(Mask mask, float minZ, float maxZ, BlockFaceUV topUV, Function<Material, TextureAtlasSprite> spriteGetter, BlockModel baseModel) {
         final Map<String, Either<Material, String>> textures = Maps.newHashMap();
         final List<BlockElement> elements = Lists.newArrayList();
 
-        for (String textureKey : TEXTURE_KEYS) {
+        for (String textureKey : REQUIRED_TEXTURE_KEYS) {
             if (!baseModel.hasTexture(textureKey)) {
                 if (textureKey == BOTTOM_TEXTURE_KEY) textureKey = TOP_TEXTURE_KEY;
                 else throw new IllegalArgumentException("Missing texture: "+textureKey);
@@ -60,8 +62,19 @@ public class ExtrudedModelGenerator {
             textures.put(textureKey, Either.left(material));
         };
 
+        for (Map.Entry<String, Either<Material, String>> additionalTextureEntry : baseModel.textureMap.entrySet()) {
+            if (REQUIRED_TEXTURE_KEYS.contains(additionalTextureEntry.getKey())) continue;
+            textures.put(additionalTextureEntry.getKey(), additionalTextureEntry.getValue());
+        };
+
         elements.addAll(getExtrudedSideElements(mask, minZ, maxZ));
-        elements.addAll(getMaskedFrontElements(mask, minZ, maxZ, topUV, 16f, 16f));
+        elements.addAll(getMaskedFrontElements(mask, minZ, maxZ, topUV, 0, TOP_TEXTURE_KEY, 16f, 16f));
+
+        int i = 1;
+        while (baseModel.hasTexture("top_" + i)) {
+            elements.addAll(getMaskedFrontElements(mask, minZ, maxZ, topUV, i, "top_" + i, 16f, 16f));
+            i++;
+        };
 
         final BlockModel model = new BlockModel(null, elements, textures, false, baseModel.getGuiLight(), baseModel.getTransforms(), baseModel.getOverrides());
         model.name = baseModel.name;
@@ -71,14 +84,14 @@ public class ExtrudedModelGenerator {
         return model;
     };
 
-    private List<BlockElement> getMaskedFrontElements(Mask mask, float minZ, float maxZ, BlockFaceUV topUV, float textureWidth, float textureHeight) {
+    private List<BlockElement> getMaskedFrontElements(Mask mask, float minZ, float maxZ, BlockFaceUV topUV, int tintIndex, String textureKey, float textureWidth, float textureHeight) {
         final List<BlockElement> elements = Lists.newArrayList();
         final float uOffset = topUV.uvs[0];
         final float vOffset = topUV.uvs[1];
         final float uScale = (topUV.uvs[2] - uOffset) / 16f;
         final float vScale = (topUV.uvs[3] - vOffset) / 16f;
         for (Rect2i rect : mask.rectangularize()) {
-            final BlockElementFace frontFace = new BlockElementFace(null, 0, TOP_TEXTURE_KEY, new BlockFaceUV(new float[]{
+            final BlockElementFace frontFace = new BlockElementFace(null, tintIndex, textureKey, new BlockFaceUV(new float[]{
                 uOffset + uScale * rect.getX(),
                 vOffset + vScale * rect.getY(),
                 uOffset + uScale * (rect.getX() + rect.getWidth()),

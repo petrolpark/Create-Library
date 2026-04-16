@@ -7,6 +7,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
 
+import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkTeamProviderTypes;
 
 import net.minecraft.client.gui.GuiGraphics;
@@ -82,7 +83,7 @@ public final class NoTeam implements ITeam, ITeam.Provider {
 
     @Override
     public Component getRenderedMemberList(int maxTextWidth) {
-        return Component.translatable("petrolpark.generic.list.none");
+        return Component.translatable(Petrolpark.translationKey("generic.list.none"));
     };
 
     @Override

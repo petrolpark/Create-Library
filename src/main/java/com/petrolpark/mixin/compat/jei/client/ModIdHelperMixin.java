@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.SharedFeatureFlag;
@@ -23,7 +24,7 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(ModIdHelper.class)
 public abstract class ModIdHelperMixin implements IModIdHelper {
 
-    private static final String SHARED_FEATURE_ID_KEY = "petrolparkshared";
+    private static final String SHARED_FEATURE_ID_KEY = Petrolpark.MOD_ID + "shared";
     private static final String DELIMITER = ",";
 
     @WrapOperation(

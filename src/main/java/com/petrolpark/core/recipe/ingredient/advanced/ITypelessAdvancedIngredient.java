@@ -42,7 +42,7 @@ public interface ITypelessAdvancedIngredient<STACK> extends Predicate<STACK> {
      * @return A stack not fulfilling this Ingredient, possibly the same object reference, or {@code null} if that stack always fulfills this Ingredient
      */
     public default Stream<STACK> modifyCounterExamples(Stream<STACK> counterExampleStacks) {
-        return counterExampleStacks.dropWhile(this::test);
+        return counterExampleStacks.filter(Predicate.not(this::test));
     };
 
     public void addToDescription(IndentedTooltipBuilder description);

@@ -86,5 +86,10 @@ public final class SimpleDoughType implements IDough, IDoughType<SimpleDoughType
     public StreamCodec<? super RegistryFriendlyByteBuf, SimpleDoughType> streamCodec() {
         return streamCodec;
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj == this || obj instanceof SimpleDoughType dough && dough.id.equals(id);
+    };
     
 };

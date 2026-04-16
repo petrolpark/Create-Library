@@ -7,6 +7,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import com.petrolpark.Petrolpark;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -94,7 +96,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
         protected static class Type implements BlockIngredientType<ImpossibleBlockIngredient> {
 
-            public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("petrolpark", "impossible");
+            public static final ResourceLocation ID = Petrolpark.asResource("impossible");
 
             @Override
             public ImpossibleBlockIngredient read(FriendlyByteBuf buffer) {
@@ -152,7 +154,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
     //         @Override
     //         public ResourceLocation getId() {
-    //             return ResourceLocation.fromNamespaceAndPath("petrolpark", "single_block");
+    //             return Petrolpark.asResource("single_block");
     //         };
 
     //     };
@@ -196,7 +198,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
         protected static class Type implements BlockIngredientType<BlockTagIngredient> {
 
-            public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("petrolpark", "block_tag");
+            public static final ResourceLocation ID = Petrolpark.asResource("block_tag");
 
             @Override
             public BlockTagIngredient read(FriendlyByteBuf buffer) {
@@ -270,7 +272,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
     
         protected static class Type extends SetBlockIngredientType<UnionBlockIngredient> {
 
-            public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("petrolpark", "union");
+            public static final ResourceLocation ID = Petrolpark.asResource("union");
 
             @Override
             public ResourceLocation getId() {
@@ -314,7 +316,7 @@ public interface BlockIngredient<T extends BlockIngredient<T>> {
 
         protected static class Type extends SetBlockIngredientType<IntersectionBlockIngredient> {
 
-            public static final ResourceLocation ID = ResourceLocation.fromNamespaceAndPath("petrolpark", "intersection");
+            public static final ResourceLocation ID = Petrolpark.asResource("intersection");
 
             @Override
             public ResourceLocation getId() {

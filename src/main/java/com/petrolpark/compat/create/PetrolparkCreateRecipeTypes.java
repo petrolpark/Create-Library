@@ -14,6 +14,7 @@ import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
 import com.petrolpark.compat.create.common.processing.mandrel.MandrelRecipe;
 import com.petrolpark.compat.create.common.processing.meshbasin.BoilingRecipe;
 import com.petrolpark.compat.create.common.processing.meshbasin.JuicingRecipe;
+import com.petrolpark.compat.create.core.dough.cookieCutter.CookieCuttingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipe;
 import com.petrolpark.compat.create.core.recipe.AdvancedProcessingRecipeParams;
 import com.petrolpark.compat.create.core.recipe.RecipeBookMechanicalCraftingRecipe;
@@ -36,6 +37,7 @@ public enum PetrolparkCreateRecipeTypes implements IPetrolparkRecipeTypes, IReci
 
     BLENDING(SharedFeatureFlag.BLENDER, BlendingRecipe.Serializer::new),
     CENTRIFUGATION(SharedFeatureFlag.CENTRIFUGE, CentrifugationRecipe::new),
+    COOKIE_CUTTING(CookieCuttingRecipe.Serializer::new, () -> CookieCuttingRecipe.TYPE),
     EXTRUSION(SharedFeatureFlag.EXTRUSION, ExtrusionRecipe.Serializer::new),
     BOILING(SharedFeatureFlag.MESH_BASIN, BoilingRecipe.Serializer::new),
     JUICING(SharedFeatureFlag.MESH_BASIN, JuicingRecipe.Serializer::new),

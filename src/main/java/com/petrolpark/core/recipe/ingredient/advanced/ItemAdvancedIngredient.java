@@ -5,6 +5,8 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import com.mojang.serialization.Codec;
 import com.petrolpark.PetrolparkRegistries;
 
@@ -25,6 +27,7 @@ public interface ItemAdvancedIngredient extends IAdvancedIngredient<ItemStack>, 
     /**
      * Use {@link ItemAdvancedIngredient#CODEC instead}.
      */
+    @ApiStatus.Internal
     static final Codec<IAdvancedIngredient<? super ItemStack>> TYPED_CODEC = PetrolparkRegistries.ADVANCED_ITEM_INGREDIENT_TYPES
         .byNameCodec()
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::codec);

@@ -3,7 +3,6 @@ package com.petrolpark;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.packs.PackType;
 import net.minecraft.server.packs.repository.Pack;
 import net.minecraft.server.packs.repository.PackSource;
@@ -50,7 +49,7 @@ public enum PetrolparkFeatureFlags {
             event.addPackFinders(
                 Petrolpark.asResource("data/petrolpark/datapack/experimental/"+id),
                 PackType.SERVER_DATA,
-                Component.translatable("petrolpark.dataPack."+id+".name"),
+                Lang.translate("dataPack."+id+".name"),
                 PackSource.FEATURE,
                 false,
                 Pack.Position.TOP

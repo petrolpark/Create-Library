@@ -5,7 +5,7 @@ import static com.petrolpark.PetrolparkTags.commonItemTag;
 
 import com.petrolpark.common.item.shulkerbelt.ShulkerBeltItem;
 import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.core.dough.rollingpin.RollingPinItem;
+import com.petrolpark.compat.create.core.dough.rollingPin.RollingPinItem;
 import com.petrolpark.core.item.SharedItem;
 import com.petrolpark.core.recipe.book.RecipeBookItem;
 import com.petrolpark.core.shop.ShopMenuItem;

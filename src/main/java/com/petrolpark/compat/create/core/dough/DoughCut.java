@@ -5,6 +5,7 @@ import org.jetbrains.annotations.ApiStatus;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.compat.create.PetrolparkCreateRegistries;
+import com.petrolpark.util.Mask;
 
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -12,11 +13,20 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFileCodec;
 
+/**
+ * @param shape
+ * @param pattern
+ * @param area
+ */
 @ApiStatus.Experimental
-public record DoughCut(int pattern, float area) {
+public record DoughCut(Mask shape, Mask pattern, float area) {
+
+    public DoughCut(Mask shape, float area) {
+        this(shape, shape.downsample(4), area);
+    };
 
     public static final Codec<DoughCut> DIRECT_CODEC = RecordCodecBuilder.create(instance -> instance.group(
-        Codec.intRange(0, 255).fieldOf("pattern").forGetter(DoughCut::pattern),
+        Mask.friendlyCodecSized(16, 16).fieldOf("pattern").forGetter(DoughCut::pattern),
         Codec.floatRange(0f, 1f).fieldOf("area").forGetter(DoughCut::area)
     ).apply(instance, DoughCut::new));
 

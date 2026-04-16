@@ -13,6 +13,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkAdvancedIngredientTypes;
+import com.petrolpark.util.Lang;
 import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -235,7 +236,7 @@ public record CompoundAdvancedIngredient<STACK>(List<IAdvancedIngredient<? super
     };
 
     protected Component translate(String keyPostfix, Object... args) {
-        return Component.translatable("petrolpark.advanced_ingredient.compound."+keyPostfix, args);
+        return Lang.translate("advancedIngredient.compound." + keyPostfix, args);
     };
 
     // Doesn't compile for some reason

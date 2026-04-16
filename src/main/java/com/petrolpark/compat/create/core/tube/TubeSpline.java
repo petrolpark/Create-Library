@@ -1,20 +1,19 @@
 package com.petrolpark.compat.create.core.tube;
 
-import java.util.Set;
-import java.util.HashSet;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-
+import java.util.Set;
 import java.util.function.Consumer;
 
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.util.BlockFace;
 import com.petrolpark.util.ClampedCubicSpline;
+import com.petrolpark.util.Lang;
 import com.petrolpark.util.MathsHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.createmod.catnip.codecs.stream.CatnipStreamCodecs;
-import net.createmod.catnip.lang.Lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -183,7 +182,7 @@ public class TubeSpline extends ClampedCubicSpline {
         };
 
         public Component translate(ItemStack stack) {
-            return Component.translatable("petrolpark.tube.result."+ Lang.asId(name()), stack.getHoverName()).withStyle(success ? ChatFormatting.GREEN : ChatFormatting.RED);
+            return Lang.translate("tube.result."+ Lang.asId(name()), stack.getHoverName()).withStyle(success ? ChatFormatting.GREEN : ChatFormatting.RED);
         };
     };
 

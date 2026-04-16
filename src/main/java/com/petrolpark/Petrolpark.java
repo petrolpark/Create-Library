@@ -50,6 +50,10 @@ public class Petrolpark {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     };
 
+    public static final String translationKey(String suffix) {
+        return MOD_ID + "." + suffix;
+    };
+
     public static final CompatRecipeManager COMPAT_RECIPES = new CompatRecipeManager();
     public static final ScoreboardTeamManager SCOREBOARD_TEAMS = new ScoreboardTeamManager();
     public static final BogglePattern.Manager BOGGLE_PATTERNS = new BogglePattern.Manager();

@@ -43,6 +43,12 @@ public class Lang {
         INT_DF.setMinimumFractionDigits(0);
         INT_DF.setMaximumFractionDigits(0);
     };
+
+    public static final DecimalFormat ONE_DP_DF = new DecimalFormat();
+    static {
+        ONE_DP_DF.setMinimumFractionDigits(1);
+        ONE_DP_DF.setMaximumFractionDigits(1);
+    }
     
     public static String asId(String string) {
         return string.toLowerCase(Locale.ROOT);
@@ -53,7 +59,7 @@ public class Lang {
     };
 
     public static Component shortList(List<? extends Component> elements, int maxTextWidth, Font font) {
-        if (elements.isEmpty()) return Component.translatable("petrolpark.generic.list.none");
+        if (elements.isEmpty()) return Component.translatable(Petrolpark.translationKey("generic.list.none"));
         if (elements.size() == 1) return elements.get(0);
         int namedElements = 1;
         Component namedList = elements.get(0), extendedList = namedList, list;
@@ -62,10 +68,10 @@ public class Lang {
             Component nextElement = elements.get(namedElements);
             namedElements++;
             if (namedElements < elements.size()) {
-                namedList = Component.translatable("petrolpark.generic.list.comma", namedList, nextElement);
-                extendedList = Component.translatable("petrolpark.generic.list.and_more", namedList, elements.size() - namedElements);
+                namedList = Component.translatable(Petrolpark.translationKey("generic.list.comma"), namedList, nextElement);
+                extendedList = Component.translatable(Petrolpark.translationKey("generic.list.and_more"), namedList, elements.size() - namedElements);
             } else {
-                extendedList = Component.translatable("petrolpark.generic.list.and", namedList, nextElement);
+                extendedList = Component.translatable(Petrolpark.translationKey("generic.list.and"), namedList, nextElement);
             };
         } while (font.width(extendedList) < maxTextWidth && namedElements < elements.size());
         list = extendedList;
@@ -73,7 +79,7 @@ public class Lang {
     };
 
     public static String shortList(String[] elements) {
-        if (elements.length == 0) return Component.translatable("petrolpark.generic.list.none").getString();
+        if (elements.length == 0) return Component.translatable(Petrolpark.translationKey("generic.list.none")).getString();
         if (elements.length == 1) return elements[0];
         int namedElements = 1;
         String namedList = elements[0], extendedList = namedList, list;
@@ -82,10 +88,10 @@ public class Lang {
             String nextElement = elements[namedElements];
             namedElements++;
             if (namedElements < elements.length) {
-                namedList = Component.translatable("petrolpark.generic.list.comma", namedList, nextElement).getString();
-                extendedList = Component.translatable("petrolpark.generic.list.and_more", namedList, elements.length - namedElements).getString();
+                namedList = Component.translatable(Petrolpark.translationKey("generic.list.comma"), namedList, nextElement).getString();
+                extendedList = Component.translatable(Petrolpark.translationKey("generic.list.and_more"), namedList, elements.length - namedElements).getString();
             } else {
-                extendedList = Component.translatable("petrolpark.generic.list.and", namedList, nextElement).getString();
+                extendedList = Component.translatable(Petrolpark.translationKey("generic.list.and"), namedList, nextElement).getString();
             };
         } while (namedElements < elements.length);
         list = extendedList;
@@ -114,12 +120,12 @@ public class Lang {
         return builder.add(Component.literal(")"));
     };
 
-    public static final MutableComponent translate(String keyEnd) {
-        return Component.translatable(Petrolpark.MOD_ID + "." + keyEnd);
+    public static final MutableComponent translate(String keyEnd, Object ... args) {
+        return Component.translatable(Petrolpark.translationKey(keyEnd), args);
     };
 
     public static final String genericTranslationKey(String keyEnd) {
-        return "petrolpark.generic."+keyEnd;
+        return Petrolpark.translationKey("generic." + keyEnd);
     };
 
     public static final String mathTranslationKey(String key) {
@@ -171,19 +177,19 @@ public class Lang {
 		return Component.translatableWithFallback(tagTranslationKey, "#" + tagKey.location());
 	};
 
-    public static Component loot(ResourceLocation id) {
+    public static final Component loot(ResourceLocation id) {
         return Component.translatableWithFallback(Util.makeDescriptionId("loot_table", id), "" + id);
     };
 
-    public static Component unknownRange() {
+    public static final Component unknownRange() {
         return generic("range.unknown");
     };
 
-    public static Component range(float min, float max, DecimalFormat df) {
+    public static final Component range(float min, float max, DecimalFormat df) {
         return range(min, max, false, df);
     };
 
-    public static Component range(float min, float max, boolean approximate, DecimalFormat df) {
+    public static final Component range(float min, float max, boolean approximate, DecimalFormat df) {
         String postfix;
         String[] args;
         if (min == Float.NaN) {
@@ -198,6 +204,23 @@ public class Lang {
             args = new String[]{df.format(min), df.format(max)};
         }
         if (approximate) postfix += ".approximate";
+        return generic(postfix, (Object[])args);
+    };
+
+    public static final Component rangeWorded(float min, float max, boolean inverse, DecimalFormat df) {
+        String postfix;
+        String[] args;
+        if (min == Float.NaN) {
+            if (max == Float.NaN) return unknownRange();
+            postfix = inverse ? "range.at_least.worded" : "range.at_most.worded";
+            args = new String[]{df.format(max)};
+        } else if (max == Float.NaN) {
+            postfix = inverse ? "range.at_most.worded" : "range.at_least.worded";
+            args = new String[]{df.format(min)};
+        } else {
+            postfix = inverse ? "range.outside.worded" : "range.worded";
+            args = new String[]{df.format(min), df.format(max)};
+        }
         return generic(postfix, (Object[])args);
     };
 

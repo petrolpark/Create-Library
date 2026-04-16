@@ -92,7 +92,7 @@ public class BogglePattern {
             if (savedData != null) return;
             savedData = server.overworld()
                 .getDataStorage()
-                .computeIfAbsent(new SavedData.Factory<>(() -> new BogglePatternSavedData(server.overworld()), (tag, registries) -> load(server.overworld(), tag)), "petrolpark_boggle_patterns");
+                .computeIfAbsent(new SavedData.Factory<>(() -> new BogglePatternSavedData(server.overworld()), (tag, registries) -> load(server.overworld(), tag)), Petrolpark.MOD_ID + "_boggle_patterns");
         };
 
         public class BogglePatternSavedData extends SavedData {

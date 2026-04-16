@@ -3,6 +3,7 @@ package com.petrolpark.core.recipe.ingredient.advanced;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.MapCodec;
+import com.petrolpark.Petrolpark;
 import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 
 import io.netty.buffer.ByteBuf;
@@ -13,7 +14,9 @@ public class PassAdvancedIngredient implements IAdvancedIngredient<Object> {
     public static final PassAdvancedIngredient INSTANCE = new PassAdvancedIngredient();
     public static final MapCodec<PassAdvancedIngredient> CODEC = MapCodec.unit(INSTANCE);
     public static final StreamCodec<ByteBuf, PassAdvancedIngredient> STREAM_CODEC = StreamCodec.unit(INSTANCE);
-    public static final IAdvancedIngredientType<Object> TYPE = new AdvancedIngredientGenericType<>("petrolpark.advanced_ingredient.pass", CODEC, STREAM_CODEC);
+    public static final IAdvancedIngredientType<Object> TYPE = new AdvancedIngredientGenericType<>(Petrolpark.translationKey("advancedIngredient.pass"), CODEC, STREAM_CODEC);
+
+    private PassAdvancedIngredient() {};
 
     @Override
     public boolean test(Object stack) {

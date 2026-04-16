@@ -37,7 +37,7 @@ public record HolderSetItemAdvancedIngredient(HolderSet<Item> set) implements It
     @Override
     public void addToDescription(IndentedTooltipBuilder description) {
         set.unwrap().map(
-            tag -> description.add(Component.translatable("advanced_ingredient.petrolpark.tag", tag)),
+            tag -> description.add(Component.translatable("advancedIngredient.petrolpark.tag", tag)),
             items -> {
                 description.add(translate("")).indent();
                 items.stream().map(Holder::value).map(Item::getDescription).forEach(description::add);
@@ -49,7 +49,7 @@ public record HolderSetItemAdvancedIngredient(HolderSet<Item> set) implements It
     @Override
     public void addToCounterDescription(IndentedTooltipBuilder description) {
         set.unwrap().map(
-            tag -> description.add(Component.translatable("advanced_ingredient.petrolpark.tag.inverse", tag)),
+            tag -> description.add(Component.translatable("advancedIngredient.petrolpark.tag.inverse", tag)),
             items -> {
                 description.add(translateInverse()).indent();
                 items.stream().map(Holder::value).map(Item::getDescription).forEach(description::add);
