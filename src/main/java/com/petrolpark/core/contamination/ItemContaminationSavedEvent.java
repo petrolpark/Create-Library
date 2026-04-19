@@ -3,9 +3,6 @@ package com.petrolpark.core.contamination;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.Event;
 
-/**
- * Cancelling has no effect.
- */
 public class ItemContaminationSavedEvent extends Event {
     
     public final ItemStack stack;

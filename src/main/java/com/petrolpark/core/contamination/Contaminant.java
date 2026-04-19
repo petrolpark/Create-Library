@@ -1,5 +1,6 @@
 package com.petrolpark.core.contamination;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -34,7 +35,7 @@ public class Contaminant {
 
     public static final Codec<Contaminant> DIRECT_CODEC = ExtraCodecs.catchDecoderException(RecordCodecBuilder.create(instance -> 
         instance.group(
-            Codec.doubleRange(0d, 1d).fieldOf("preservationProportion").forGetter(Contaminant::getPreservationProportion),
+            Codec.floatRange(0f, 1f).fieldOf("preservationProportion").forGetter(Contaminant::getPreservationProportion),
             Codec.intRange(0, 16777215).fieldOf("color").forGetter(Contaminant::getColor),
             Codec.intRange(0, 16777215).fieldOf("absentColor").forGetter(Contaminant::getAbsentColor),
             RegistryCodecs.homogeneousList(PetrolparkRegistries.Keys.CONTAMINANT).optionalFieldOf("children", HolderSet.direct()).forGetter(Contaminant::getDirectChildrenHolders)
@@ -48,7 +49,7 @@ public class Contaminant {
     };
 
     // Initial fields
-    public final double preservationProportion;
+    public final float preservationProportion;
     public final int color;
     public final int absentColor;
     protected final HolderSet<Contaminant> directChildrenHolders;
@@ -56,6 +57,7 @@ public class Contaminant {
     // Internal fields
     protected final Set<Holder<Contaminant>> childrenHolders;
     protected final Set<Holder<Contaminant>> parentHolders = new HashSet<>();
+    protected boolean familyInitialized = false;
 
     // Publicly accessible fields
     protected String descriptionId;
@@ -63,7 +65,7 @@ public class Contaminant {
     protected Set<Holder<Contaminant>> childrenView = null;
     protected Set<Holder<Contaminant>> parentsView = null;
 
-    public Contaminant(double preservationProportion, int color, int absentColor, HolderSet<Contaminant> directChildrenHolders) {
+    public Contaminant(float preservationProportion, int color, int absentColor, HolderSet<Contaminant> directChildrenHolders) {
         this.preservationProportion = preservationProportion;
         this.color = color;
         this.absentColor = absentColor;
@@ -73,7 +75,7 @@ public class Contaminant {
         directChildrenHolders.forEach(childrenHolders::add);
     };
 
-    public double getPreservationProportion() {
+    public float getPreservationProportion() {
         return preservationProportion;
     };
 
@@ -98,6 +100,7 @@ public class Contaminant {
      * All Contaminants (not just direct children) which any Contamination automatically has if they have this Contaminant.
      */
     public Set<Holder<Contaminant>> getChildren() {
+        if (!familyInitialized) return Collections.emptySet(); // Don't access too early
         if (childrenView == null) childrenView = childrenHolders.stream().collect(Collectors.toUnmodifiableSet());
         return childrenView;
     };
@@ -106,6 +109,7 @@ public class Contaminant {
      * Any Contaminants (not just direct parents) which, if a Contamination has, will also belong to that Contamination.
      */
     public Set<Holder<Contaminant>> getParents() {
+        if (!familyInitialized) return Collections.emptySet(); // Don't access too early
         if (parentsView == null) parentsView = parentHolders.stream().collect(Collectors.toUnmodifiableSet());
         return parentsView;
     };
@@ -163,10 +167,12 @@ public class Contaminant {
                         parentHolder.value().childrenHolders.add(descendantHolder);
                         descendantHolder.value().parentHolders.add(parentHolder);
                     };
+                    parentHolder.value().familyInitialized = true;
                 } catch (CircularReferenceException e) {
                     throw new JsonSyntaxException(String.format("Contaminant %s is its own descendant. Replace the circular reference with a single Contaminant", parentHolder.getKey().location().toString()));
                 };
             });
+            //TODO sync
         };
 
     };

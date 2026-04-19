@@ -101,7 +101,7 @@ public interface IContamination<OBJECT, OBJECT_STACK> {
 
     /**
      * Stream all Contaminants in this Contamination that:<ul>
-     * <li>Are not {@link IntrinsicContaminants intrinsic}
+     * <li>Are not {@link Contamination#streamIntrinsicContaminants() intrinsic}
      * <li>Have no children in this Contamination</ul>
      * Note that this is the minimum set of Contaminants needed to uniquely define a Contamination.
      * @return Distinct Stream of Contaminants 

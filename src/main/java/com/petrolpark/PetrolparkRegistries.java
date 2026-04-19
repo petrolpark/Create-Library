@@ -191,7 +191,7 @@ public class PetrolparkRegistries {
 
         // Generated ingredients
         public static final ResourceKey<Registry<IngredientRandomizerType>> INGREDIENT_RANDOMIZER_TYPE = key("ingredient_randomizer_type");
-        public static final ResourceKey<Registry<IAdvancedIngredientType<? super ItemStack>>> ADVANCED_ITEM_INGREDIENT_TYPE = key("advancedIngredient_type");
+        public static final ResourceKey<Registry<IAdvancedIngredientType<? super ItemStack>>> ADVANCED_ITEM_INGREDIENT_TYPE = key("advanced_ingredient_type");
         public static final ResourceKey<Registry<IAdvancedIngredientType<? super FluidStack>>> ADVANCED_FLUID_INGREDIENT_TYPE = key("advanced_fluid_ingredient_type");
         
         // Rewards
