@@ -20,7 +20,13 @@ public class AbstractCookingRecipeMixin {
     )
     public ItemStack petrolpark$propagateContaminants(SingleRecipeInput input, HolderLookup.Provider registries, Operation<ItemStack> original) {
         final ItemStack result = original.call(input, registries);
-        if (PetrolparkConfigs.server().cookingPropagatesContaminants.get()) ItemContamination.get(result).contaminateAll(ItemContamination.get(input.item()).streamAllContaminants());
+        boolean propagate;
+        try {
+            propagate = PetrolparkConfigs.server().cookingPropagatesContaminants.get(); 
+        } catch (IllegalStateException e) {
+            propagate = false;
+        };
+        if (propagate) ItemContamination.get(result).contaminateAll(ItemContamination.get(input.item()).streamAllContaminants());
         return result;
     };
 };

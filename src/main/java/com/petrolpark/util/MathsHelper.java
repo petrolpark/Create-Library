@@ -2,6 +2,8 @@ package com.petrolpark.util;
 
 import java.util.Comparator;
 
+import org.apache.commons.math3.fraction.BigFraction;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
@@ -92,5 +94,17 @@ public class MathsHelper {
 
     public static final double volume(AABB box) {
         return (box.maxX - box.minX) * (box.maxY - box.minY) * (box.maxZ - box.minZ);
+    };
+
+    public static final int clampInt(long value) {
+        return value > (long)Integer.MAX_VALUE ? Integer.MAX_VALUE : (int)value;
+    };
+
+    public static final long properWhole(BigFraction fraction) {
+        return Math.floorDiv(fraction.getNumeratorAsLong(), fraction.getDenominatorAsLong());
+    };
+
+    public static final int properWholeInt(BigFraction fraction) {
+        return clampInt(properWhole(fraction));
     };
 };

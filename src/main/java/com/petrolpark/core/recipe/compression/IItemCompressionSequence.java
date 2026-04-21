@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.math.Fraction;
+import org.apache.commons.math3.fraction.BigFraction;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.petrolpark.util.BigItemStack;
@@ -58,7 +58,7 @@ public interface IItemCompressionSequence {
      * @return {@code null} if the Item (considering its Components) are not part of this sequence
      * @see IItemCompressionSequence#getEquivalentBaseItems(int)
      */
-    public Fraction getEquivalentBaseItems(ItemStack stack);
+    public BigFraction getEquivalentBaseItems(ItemStack stack);
 
     /**
      * Get the number of {@link IItemCompressionSequence#getBaseItem() base Items} a given amount of the given Item.
@@ -74,7 +74,7 @@ public interface IItemCompressionSequence {
      * @return {@code null} if {@code item} is outside the bounds of the number of Items in this sequence.
      * @see IItemCompressionSequence#getEquivalentBaseItems(ItemStack)
      */
-    public default Fraction getEquivalentBaseItems(int item) {
+    public default BigFraction getEquivalentBaseItems(int item) {
         if (item < 0 || item >= size()) return null;
         return getEquivalentBaseItems(getAllItems().get(item));
     };
@@ -100,10 +100,10 @@ public interface IItemCompressionSequence {
         if (baseItemCount <= 0) return Collections.emptyList();
         List<BigItemStack> stacks = new ArrayList<>(size());
         for (int item = size() - 1; item >= 0; item--) {
-            long amount = Fraction.getFraction((int)baseItemCount, 1).divideBy(getEquivalentBaseItems(item)).longValue();
+            long amount = BigFraction.getReducedFraction((int)baseItemCount, 1).divide(getEquivalentBaseItems(item)).longValue();
             if (amount == 0) continue;
             stacks.add(new BigItemStack(getAllItems().get(item), amount));
-            baseItemCount -= Fraction.getFraction((int)amount, 1).multiplyBy(getEquivalentBaseItems(item)).longValue();
+            baseItemCount -= BigFraction.getReducedFraction((int)amount, 1).multiply(getEquivalentBaseItems(item)).longValue();
         };
         return stacks;
     };
@@ -135,7 +135,7 @@ public interface IItemCompressionSequence {
         };
 
         @Override
-        public Fraction getEquivalentBaseItems(ItemStack stack) {
+        public BigFraction getEquivalentBaseItems(ItemStack stack) {
             return null;
         };
 
@@ -145,8 +145,8 @@ public interface IItemCompressionSequence {
         };
 
         @Override
-        public Fraction getEquivalentBaseItems(int item) {
-            return item == 0 ? Fraction.ZERO : null;
+        public BigFraction getEquivalentBaseItems(int item) {
+            return item == 0 ? BigFraction.ZERO : null;
         };
 
         @Override

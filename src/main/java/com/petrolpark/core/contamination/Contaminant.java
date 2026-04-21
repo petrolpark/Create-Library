@@ -5,8 +5,6 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
-
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -27,10 +25,12 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFixedCodec;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.server.packs.resources.ResourceManager;
-import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.util.ExtraCodecs;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.TagsUpdatedEvent;
 
+@EventBusSubscriber
 public class Contaminant {
 
     public static final Codec<Contaminant> DIRECT_CODEC = ExtraCodecs.catchDecoderException(RecordCodecBuilder.create(instance -> 
@@ -145,35 +145,28 @@ public class Contaminant {
         );
     };
 
-    public static class ReloadListener implements ResourceManagerReloadListener {
-
-        public final RegistryAccess registryAccess;
-
-        public ReloadListener(RegistryAccess registryAccess) {
-            this.registryAccess = registryAccess;
-        };
-
-        @Override
-        public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
-            Registry<Contaminant> registry = registryAccess.registryOrThrow(PetrolparkRegistries.Keys.CONTAMINANT);
-            registry.asLookup().listElements().forEach(parentHolder -> {
-                parentHolder.value().directChildrenHolders.forEach(childHolder -> 
-                    childHolder.value().parentHolders.add(parentHolder)
-                );
-            });
-            registry.asLookup().listElements().forEach(parentHolder -> {
-                try {
-                    for (Holder<Contaminant> descendantHolder : GraphHelper.getAllDescendants((Holder<Contaminant>)parentHolder, h -> h.value().directChildrenHolders)) {
-                        parentHolder.value().childrenHolders.add(descendantHolder);
-                        descendantHolder.value().parentHolders.add(parentHolder);
-                    };
-                    parentHolder.value().familyInitialized = true;
-                } catch (CircularReferenceException e) {
-                    throw new JsonSyntaxException(String.format("Contaminant %s is its own descendant. Replace the circular reference with a single Contaminant", parentHolder.getKey().location().toString()));
+    public static final void loadChildren(RegistryAccess registries) {
+        final Registry<Contaminant> registry = registries.registryOrThrow(PetrolparkRegistries.Keys.CONTAMINANT);
+        registry.asLookup().listElements().forEach(parentHolder -> {
+            parentHolder.value().directChildrenHolders.forEach(childHolder -> 
+                childHolder.value().parentHolders.add(parentHolder)
+            );
+        });
+        registry.asLookup().listElements().forEach(parentHolder -> {
+            try {
+                for (Holder<Contaminant> descendantHolder : GraphHelper.getAllDescendants((Holder<Contaminant>)parentHolder, h -> h.value().directChildrenHolders)) {
+                    parentHolder.value().childrenHolders.add(descendantHolder);
+                    descendantHolder.value().parentHolders.add(parentHolder);
                 };
-            });
-            //TODO sync
-        };
+                parentHolder.value().familyInitialized = true;
+            } catch (CircularReferenceException e) {
+                throw new JsonSyntaxException(String.format("Contaminant %s is its own descendant. Replace the circular reference with a single Contaminant", parentHolder.getKey().location().toString()));
+            };
+        });
+    };
 
+    @SubscribeEvent
+    public static final void onTagsUpdated(TagsUpdatedEvent event) {
+        loadChildren(event.getRegistryAccess());
     };
 };

@@ -30,7 +30,9 @@ import net.minecraft.world.item.ItemStack;
 @ParametersAreNonnullByDefault
 public class ContaminantInfoCategory<STACK> extends AbstractRecipeCategory<ContaminantInfoRecipe<STACK>> {
 
-    public static final mezz.jei.api.recipe.RecipeType<ContaminantInfoRecipe<ItemStack>> ITEM_TYPE = mezz.jei.api.recipe.RecipeType.create(Petrolpark.MOD_ID, "item_contaminants", ContaminantInfoRecipe.class);
+    @SuppressWarnings("unchecked")
+    protected static final Class<ContaminantInfoRecipe<ItemStack>> ITEM_INFO_RECIPE_CLASS = (Class<ContaminantInfoRecipe<ItemStack>>)(Class<?>)ContaminantInfoRecipe.class;
+    public static final mezz.jei.api.recipe.RecipeType<ContaminantInfoRecipe<ItemStack>> ITEM_RECIPE_TYPE = mezz.jei.api.recipe.RecipeType.create(Petrolpark.MOD_ID, "item_contaminants", ITEM_INFO_RECIPE_CLASS);
 
     final IIngredientType<STACK> ingredientType;
 
@@ -48,6 +50,7 @@ public class ContaminantInfoCategory<STACK> extends AbstractRecipeCategory<Conta
 
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, ContaminantInfoRecipe<STACK> recipe, IFocusGroup focuses) {
+        //TODO make these better
         builder.addScrollBoxWidget(164, 27, 3, 45)
             .setContents(recipe.contaminant().value().getChildren().stream().<FormattedText>map(Contaminant::getNameColored).toList());
         builder.addScrollBoxWidget(164, 27, 3, 90)

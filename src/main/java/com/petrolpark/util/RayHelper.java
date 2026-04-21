@@ -1,8 +1,8 @@
 package com.petrolpark.util;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.Collections;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -108,7 +108,7 @@ public class RayHelper {
      * @param end
      * @return The index of the box which was hit, or {@code -1} if there was no hit
      */
-    public static int getHit(List<AABB> boxes, Vec3 start, Vec3 end) {
+    public static final int getHit(List<AABB> boxes, Vec3 start, Vec3 end) {
         int hit = -1;
         int boxNo = 0;
         double minimumDistance = Double.MAX_VALUE;
@@ -125,6 +125,12 @@ public class RayHelper {
             boxNo++;
         };
         return hit;
+    };
+
+    public static final int getHit(List<AABB> boxes, Entity entity) {
+        Vec3 view = entity.getViewVector(1f);
+        Vec3 ray = entity.getEyePosition().add(view.scale(getBlockReach(entity)));
+        return getHit(boxes, entity.getEyePosition(), ray);
     };
     
 };

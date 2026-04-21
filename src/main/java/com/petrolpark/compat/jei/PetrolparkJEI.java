@@ -37,12 +37,12 @@ public class PetrolparkJEI implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new ContaminantInfoCategory<>(registration.getJeiHelpers().getGuiHelper(), VanillaTypes.ITEM_STACK, ContaminantInfoCategory.ITEM_TYPE));
+        registration.addRecipeCategories(new ContaminantInfoCategory<>(registration.getJeiHelpers().getGuiHelper(), VanillaTypes.ITEM_STACK, ContaminantInfoCategory.ITEM_RECIPE_TYPE));
     };
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(ContaminantInfoCategory.ITEM_TYPE, RegistryUtil.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).holders()
+        registration.addRecipes(ContaminantInfoCategory.ITEM_RECIPE_TYPE, RegistryUtil.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).holders()
             .map(ContaminantInfoRecipe::forItemStacks)
             .toList()
         );
@@ -50,7 +50,7 @@ public class PetrolparkJEI implements IModPlugin {
 
     @Override
     public void registerAdvanced(IAdvancedRegistration registration) {
-        registration.addTypedRecipeManagerPlugin(ContaminantInfoCategory.ITEM_TYPE, new ContaminantInfoRecipeManager<>(Contaminables.ITEM, VanillaTypes.ITEM_STACK));
+        registration.addTypedRecipeManagerPlugin(ContaminantInfoCategory.ITEM_RECIPE_TYPE, new ContaminantInfoRecipeManager<>(Contaminables.ITEM, VanillaTypes.ITEM_STACK));
     };
 
     @Override
