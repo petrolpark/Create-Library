@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.petrolpark.compat.create.PetrolparkCreateBlockEntityTypes;
-import com.petrolpark.compat.create.core.dough.rollingpin.IRollableBlock;
+import com.petrolpark.compat.create.core.dough.rollingPin.IRollableBlock;
 import com.petrolpark.core.world.block.IPickUpPutDownBlock;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -55,9 +55,9 @@ public class DoughBlock extends Block implements IBE<DoughBlockEntity>, IRollabl
     };
 
     @Override
-    public void rollingPinRoll(Level level, BlockPos pos, Direction horizontalLookingDirection) {
+    public void rollingPinRoll(Level level, BlockPos pos, Direction horizontalLookingDirection, boolean byPlayer) {
         final boolean lengthwise = horizontalLookingDirection.getAxis() == Axis.Z;
-        withBlockEntityDo(level, pos, be -> be.modifyDough(dough -> dough.isRollable(lengthwise) ? dough.rolled(lengthwise) : dough));
+        withBlockEntityDo(level, pos, be -> be.modifyDough(dough -> dough.isRollable(lengthwise) ? dough.rolled(lengthwise, byPlayer) : dough));
     };
 
     @Override

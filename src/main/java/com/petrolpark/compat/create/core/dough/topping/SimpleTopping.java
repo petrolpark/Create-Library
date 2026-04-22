@@ -28,7 +28,7 @@ public record SimpleTopping(String translationKey, ResourceLocation textureLocat
     );
 
     @Override
-    public Component name(DoughData doughData) {
+    public Component name() {
         return Component.translatable(translationKey());
     };
 

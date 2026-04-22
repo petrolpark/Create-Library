@@ -22,7 +22,7 @@ public interface IDoughTopping {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<IDoughTopping>> STREAM_CODEC = ByteBufCodecs.holderRegistry(PetrolparkCreateRegistries.Keys.DOUGH_TOPPING);
 
-    public Component name(DoughData doughData);
+    public Component name();
     
     public ResourceLocation textureLocation(DoughData doughData);
 

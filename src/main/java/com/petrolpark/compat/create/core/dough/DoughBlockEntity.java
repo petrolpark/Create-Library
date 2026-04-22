@@ -55,7 +55,7 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
     public void tick() {
         super.tick();
         if (doughData == null) { // Templrary
-            doughData = new DoughData(PetrolparkCreateDoughTypes.TEST.get(), 4f, (byte)1, (byte)1, Neither.neither()); // TEMP
+            doughData = new DoughData(PetrolparkCreateDoughTypes.TEST.get(), 4f, (byte)1, (byte)1, Neither.neither(), false); // TEMP
             onDoughChanged();
         };
         renderingData.tick(getLevel());

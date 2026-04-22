@@ -7,9 +7,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.PetrolparkTags;
 
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -21,6 +25,7 @@ import net.minecraft.world.level.Level;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 
 @EventBusSubscriber
 public class RecyclingManager {
@@ -47,7 +52,9 @@ public class RecyclingManager {
         registerModifier(RecyclingOutputsModifier.DECOMPRESSION);
     };
 
-    public static final void loadIngredientInverses(RecipeManager recipeManager) {
+    public static final void reload(RecipeManager recipeManager) {
+        INGREDIENT_INVERSES.clear();
+        ITEM_RECYCLINGS.clear();
         recipeManager.getAllRecipesFor(PetrolparkRecipeTypes.INGREDIENT_RECYCLING.get()).stream()
             .map(RecipeHolder::value)
             .forEach(recipe -> INGREDIENT_INVERSES.put(recipe.ingredient(), recipe.outputs()));
@@ -130,8 +137,16 @@ public class RecyclingManager {
 
     @SubscribeEvent
     public static final void onRecipesUpdated(RecipesUpdatedEvent event) {
-        INGREDIENT_INVERSES.clear();
-        ITEM_RECYCLINGS.clear();
-        loadIngredientInverses(event.getRecipeManager());
+        reload(event.getRecipeManager());
+    };
+
+    @SubscribeEvent
+    public static final void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(new ResourceManagerReloadListener() {
+            @Override
+            public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
+                RecyclingManager.reload(event.getServerResources().getRecipeManager());
+            };
+        });
     };
 };

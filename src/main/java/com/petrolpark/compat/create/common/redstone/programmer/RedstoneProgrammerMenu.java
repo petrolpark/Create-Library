@@ -27,12 +27,10 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
 
-@EventBusSubscriber
 public class RedstoneProgrammerMenu extends GhostItemMenu<RedstoneProgram> {
 
     public static final int SCREEN_ITEM_AREA_X = 3;

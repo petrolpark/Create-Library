@@ -1,6 +1,8 @@
 package com.petrolpark.compat.create.core.dough;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
@@ -18,7 +20,7 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
 
-public record DoughData(IDough dough, float thickness, byte width, byte length, Neither<DoughData.Cuts, DoughData.Toppings> decoration) {
+public record DoughData(IDough dough, float thickness, byte width, byte length, Neither<DoughData.Cuts, DoughData.Toppings> decoration, boolean madeByPlayer) {
 
     public static final byte MAX_WIDTH = (byte)4;
 
@@ -27,7 +29,8 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
         Codec.floatRange(0f, 16f).fieldOf("thickness").forGetter(DoughData::thickness),
         CodecHelper.byteRanged((byte)1, MAX_WIDTH).fieldOf("width").forGetter(DoughData::width),
         CodecHelper.byteRanged((byte)1, MAX_WIDTH).fieldOf("length").forGetter(DoughData::length),
-        Neither.fieldCodec(DoughData.Cuts.CODEC, DoughData.Toppings.CODEC, "decoration").forGetter(DoughData::decoration)
+        Neither.fieldCodec(DoughData.Cuts.CODEC, DoughData.Toppings.CODEC, "decoration").forGetter(DoughData::decoration),
+        Codec.BOOL.optionalFieldOf("player_made", false).forGetter(DoughData::madeByPlayer)
     ).apply(instance, DoughData::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, DoughData> STREAM_CODEC = StreamCodec.composite(
@@ -36,6 +39,7 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
         ByteBufCodecs.BYTE, DoughData::width,
         ByteBufCodecs.BYTE, DoughData::length,
         Neither.streamCodec(DoughData.Cuts.STREAM_CODEC, DoughData.Toppings.STREAM_CODEC), DoughData::decoration,
+        ByteBufCodecs.BOOL, DoughData::madeByPlayer,
         DoughData::new
     );
 
@@ -43,12 +47,12 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
         return decoration().isEmpty() && (lengthwise ? length() < MAX_WIDTH : width() < MAX_WIDTH);
     };
 
-    public DoughData rolled(boolean lengthwise) {
-        return lengthwise ? rolled(width(), (byte)(length() + 1)) : rolled((byte)(width() + 1), length());
+    public DoughData rolled(boolean lengthwise, boolean byPlayer) {
+        return lengthwise ? rolled(width(), (byte)(length() + 1), byPlayer) : rolled((byte)(width() + 1), length(), byPlayer);
     };
 
-    public DoughData rolled(byte width, byte length) {
-        if (width >= 1 && width <= MAX_WIDTH && length >= 1 && length <= MAX_WIDTH && decoration().isEmpty()) return new DoughData(dough(), width() * length() * thickness() / ((float)width * (float)length), width, length, decoration());
+    public DoughData rolled(byte width, byte length, boolean byPlayer) {
+        if (width >= 1 && width <= MAX_WIDTH && length >= 1 && length <= MAX_WIDTH && decoration().isEmpty()) return new DoughData(dough(), width() * length() * thickness() / ((float)width * (float)length), width, length, decoration(), byPlayer);
         return this;
     };
 
@@ -58,7 +62,7 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
      */
     public DoughData forItem() {
         if (decoration.isRight()) return this; // Preserve Toppings
-        return new DoughData(dough(), thickness() * remainingArea(), (byte)1, (byte)1, Neither.neither());
+        return new DoughData(dough(), thickness() * remainingArea(), (byte)1, (byte)1, Neither.neither(), madeByPlayer());
     };
 
     public float remainingArea() {
@@ -69,6 +73,34 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
             .map(Holder::value)
             .mapToDouble(DoughCut::area)
             .sum();
+    };
+
+    public DoughData withDough(IDough dough) {
+        if (dough.equals(dough())) return this;
+        return new DoughData(dough, thickness(), width(), length(), decoration(), madeByPlayer());
+    };
+
+    public DoughData withThickness(float thickness) {
+        if (Float.compare(thickness, thickness()) == 0) return this;
+        return new DoughData(dough(), thickness, width(), length(), decoration(), madeByPlayer());
+    };
+
+    public DoughData withNewTopping(Holder<IDoughTopping> topping) {
+        return withNewTopping(new DoughData.Toppings.Entry(topping));
+    };
+
+    public DoughData withNewTopping(DoughData.Toppings.Entry topping) {
+        if (!decoration().isRight() || decoration().right().filter(toppings -> toppings.has(topping.topping())).isPresent()) return this;
+        return new DoughData(dough(), thickness(), width(), length(), decoration().mapRight(toppings -> toppings.with(topping)), madeByPlayer());
+    };
+
+    public DoughData withoutTopping(Holder<IDoughTopping> topping) {
+        if (decoration().right().filter(toppings -> !toppings.has(topping)).isPresent()) return this;
+        return new DoughData(dough(), thickness(), width(), length(), decoration().mapRight(toppings -> toppings.without(topping)), madeByPlayer());
+    };
+
+    public DoughData madeByPlayer(boolean madeByPlayer) {
+        return madeByPlayer == madeByPlayer() ? this : new DoughData(dough(), thickness(), width(), length(), decoration(), madeByPlayer);  
     };
 
     @Nullable
@@ -115,6 +147,18 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
                 IDoughTopping.STREAM_CODEC, DoughData.Toppings.Entry::topping,
                 DoughData.Toppings.Entry::new
             );
+        };
+
+        public DoughData.Toppings with(DoughData.Toppings.Entry topping) {
+            return new DoughData.Toppings(Stream.concat(toppings().stream(), Stream.of(topping)).toList());
+        };
+
+        public DoughData.Toppings without(Holder<IDoughTopping> topping) {
+            return new DoughData.Toppings(toppings().stream().filter(Predicate.not(entry -> entry.topping().equals(topping))).toList());
+        };
+
+        public boolean has(Holder<IDoughTopping> topping) {
+            return toppings().stream().map(DoughData.Toppings.Entry::topping).anyMatch(topping::equals);
         };
     };
 };

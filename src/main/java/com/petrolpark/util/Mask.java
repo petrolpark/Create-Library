@@ -22,6 +22,12 @@ public class Mask implements Cloneable {
         Codec.STRING.listOf().fieldOf("pattern").forGetter(Mask::rowStrings)
     ).apply(instance, Mask::fromRowStrings));
 
+    public static final Codec<Mask> friendlyCodecSized(int maxWidth, int maxHeight) {
+        return Codec.string(0, maxWidth)
+            .listOf(0, maxHeight)
+            .xmap(strings -> fromRowStrings(0, 0, strings), Mask::rowStrings);
+    };
+
     private BitSet bits = new BitSet();
 
     private int xOffset;
@@ -169,6 +175,36 @@ public class Mask implements Cloneable {
         return inBounds(x, y) && bits.get(index(x, y));
     };
 
+    /**
+     * {@code true} if any pixels are set in the given region
+     * @param minX
+     * @param minY
+     * @param maxX
+     * @param maxY
+     */
+    public boolean getRegion(int minX, int minY, int maxX, int maxY) {
+        final int startY = Math.max(minY, yOffset);
+        final int endY = Math.min(maxY, yOffset + height - 1);
+
+        final int startX = Math.max(minX, xOffset);
+        final int endX = Math.min(maxX, xOffset + width - 1);
+
+        if (startX > endX || startY > endY) return false;
+
+        for (int y = startY; y <= endY; y++) {
+            int rowStart = (y - yOffset) * width;
+            int from = rowStart + (startX - xOffset);
+            int to = rowStart + (endX - xOffset) + 1;
+
+            int bit = bits.nextSetBit(from);
+            if (bit >= from && bit < to) {
+                return true;
+            };
+        };
+
+        return false;
+    }
+
     private void setUnchecked(int x, int y, boolean value) {
         bits.set(index(x, y), value);
     };
@@ -298,6 +334,38 @@ public class Mask implements Cloneable {
             rowStrings.add(rowString);
         };
         return rowStrings;
+    };
+
+    /**
+     * Get a <em>new</em> {@link Mask} by splitting this Mask into {@code factor} by {@code factor} blocks
+     * and setting pixels in that Mask if any pixels in the corresponding block in this Mask are set.
+     * @param factor
+     */
+    public Mask downsample(int factor) {
+        if (factor <= 0) throw new IllegalArgumentException("factor must be > 0");
+    
+        final Mask result = Mask.rect(0, 0, 0, 0);
+
+        if (bits.isEmpty()) return result;
+
+        int newMinX = Math.floorDiv(xOffset, factor);
+        int newMinY = Math.floorDiv(yOffset, factor);
+        int newMaxX = Math.floorDiv(xOffset + width - 1, factor);
+        int newMaxY = Math.floorDiv(yOffset + height - 1, factor);
+
+        for (int y = newMinY; y <= newMaxY; y++) {
+            int srcY0 = y * factor;
+            int srcY1 = srcY0 + factor - 1;
+
+            for (int x = newMinX; x <= newMaxX; x++) {
+                int srcX0 = x * factor;
+                int srcX1 = srcX0 + factor - 1;
+
+                if (getRegion(srcX0, srcY0, srcX1, srcY1)) result.set(x, y);
+            };
+        };
+
+        return result;
     };
 
     /**

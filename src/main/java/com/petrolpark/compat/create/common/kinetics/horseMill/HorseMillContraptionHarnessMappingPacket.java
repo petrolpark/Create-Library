@@ -30,7 +30,7 @@ public record HorseMillContraptionHarnessMappingPacket(int entityId, Map<UUID, I
 		final Entity entityByID = player.clientLevel.getEntity(entityId);
 		if (!(entityByID instanceof HorseMillContraptionEntity contraptionEntity)) return;
 		contraptionEntity.getContraption().setHarnessMapping(new HashMap<>(mapping));
-		contraptionEntity.getContraption().recalculateSpeedAndStress();
+		contraptionEntity.calculateGeneratedSpeedAndStress();
 	};
 
 	@Override

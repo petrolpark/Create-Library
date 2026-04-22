@@ -6,7 +6,6 @@ import java.util.stream.Stream;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.contamination.ContaminateHeldItemCommand;
 import com.petrolpark.core.contamination.ItemContamination;
 import com.petrolpark.core.item.decay.ItemDecay;
@@ -35,7 +34,6 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
-import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.PotionBrewEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
@@ -53,11 +51,6 @@ public class CommonEvents {
     public static void registerCommands(RegisterCommandsEvent event) {
         ContaminateHeldItemCommand.register(event.getDispatcher(), event.getBuildContext());
         BogglePatternCommand.register(event.getDispatcher(), event.getBuildContext());
-    };
-
-    @SubscribeEvent
-    public static void addReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(new Contaminant.ReloadListener(event.getRegistryAccess()));
     };
 
     public static final ResourceLocation PLAYER_JOINS_FUNCTION_TAG = Petrolpark.asResource("player_joins");

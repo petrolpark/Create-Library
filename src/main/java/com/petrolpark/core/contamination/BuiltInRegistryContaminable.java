@@ -1,6 +1,7 @@
 package com.petrolpark.core.contamination;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -27,12 +28,12 @@ public abstract class BuiltInRegistryContaminable<OBJECT, OBJECT_STACK> extends 
 
     @Override
     public final Collection<Holder<Contaminant>> getIntrinsicContaminants(OBJECT object) {
-        return builtInRegistry.wrapAsHolder(object).getData(intrinsicContaminantsDataMapType);
+        return Optional.ofNullable(builtInRegistry.wrapAsHolder(object).getData(intrinsicContaminantsDataMapType)).orElseGet(Collections::emptyList);
     };
 
     @Override
     public final Collection<Holder<Contaminant>> getShownIfAbsentContaminants(OBJECT object) {
-        return builtInRegistry.wrapAsHolder(object).getData(shownIfAbsentContaminantsDataMapType);
+        return Optional.ofNullable(builtInRegistry.wrapAsHolder(object).getData(shownIfAbsentContaminantsDataMapType)).orElseGet(Collections::emptyList);
     };
 
     public BuiltInRegistryContaminable(Registry<OBJECT> builtInRegistry, DataMapType<OBJECT, List<Holder<Contaminant>>> intrinsicContaminantsDataMapType, DataMapType<OBJECT, List<Holder<Contaminant>>> shownIfAbsentContaminantsDataMapType) {

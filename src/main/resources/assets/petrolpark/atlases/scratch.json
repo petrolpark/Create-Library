@@ -4,10 +4,10 @@
             "type": "paletted_permutations",
             "textures": [
                 "petrolpark:gui/scratch/block",
-                "petrolpark:gui/scratch/connector/horizontal/circle",
-                "petrolpark:gui/scratch/connector/horizontal/triangle"
+                "petrolpark:gui/scratch/connector/circle",
+                "petrolpark:gui/scratch/connector/triangle"
             ],
-            "palette_key": "petrolpark:gui/scratch/palette",
+            "palette_key": "petrolpark:gui/scratch/palette_template",
             "permutations": {
                 "petrolpark_brass": "petrolpark:gui/scratch/palette/brass",
                 "petrolpark_pink": "petrolpark:gui/scratch/palette/pink"

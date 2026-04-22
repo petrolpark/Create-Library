@@ -57,7 +57,7 @@ public class ContextArgument<ENVIRONMENT extends IScratchEnvironment, CONTEXT ex
         @SuppressWarnings("unchecked")
         protected final ContextualCodec<IScratchContextProvider<?>, ContextArgument<ENVIRONMENT, CONTEXT>> codec = ContextualCodec.<IScratchContextProvider<?>, Integer>of(Codec.INT).flatContextualXmap(
             (contextProvider, nesting) -> {
-                for (int i = 0; i < nesting; i++) contextProvider = contextProvider.enclosingContextProvider();
+                for (int i = 0; i < nesting && !contextProvider.isRoot(); i++) contextProvider = contextProvider.enclosingContextProvider();
                 try {
                     return DataResult.success(new ContextArgument<>(this, (IScratchContextProvider<CONTEXT>)contextProvider));
                 } catch (ClassCastException e) {};
@@ -65,7 +65,7 @@ public class ContextArgument<ENVIRONMENT extends IScratchEnvironment, CONTEXT ex
             }, (contextProvider, argument) -> {
                 int nesting = 0;
                 try {
-                    while (contextProvider != argument.contextProvider && nesting < 255) {
+                    while (contextProvider != argument.contextProvider && !contextProvider.isRoot() && nesting < 255) {
                         contextProvider = contextProvider.enclosingContextProvider();
                         nesting++;
                     };
@@ -80,7 +80,7 @@ public class ContextArgument<ENVIRONMENT extends IScratchEnvironment, CONTEXT ex
         @SuppressWarnings("unchecked")
         protected final ContextualStreamCodec<ByteBuf, IScratchContextProvider<?>, ContextArgument<ENVIRONMENT, CONTEXT>> streamCodec = ContextualStreamCodec.<ByteBuf, IScratchContextProvider<?>, Integer>of(ByteBufCodecs.INT).map(
             (nesting, contextProvider) -> {
-                for (int i = 0; i < nesting; i++) contextProvider = contextProvider.enclosingContextProvider();
+                for (int i = 0; i < nesting && !contextProvider.isRoot(); i++) contextProvider = contextProvider.enclosingContextProvider();
                 try {
                     return new ContextArgument<>(this, (IScratchContextProvider<CONTEXT>)contextProvider);
                 } catch (ClassCastException e) {};
@@ -88,7 +88,7 @@ public class ContextArgument<ENVIRONMENT extends IScratchEnvironment, CONTEXT ex
             }, (argument, contextProvider) -> {
                 int nesting = 0;
                 try {
-                    while (contextProvider != argument.contextProvider && nesting < 255) {
+                    while (contextProvider != argument.contextProvider && !contextProvider.isRoot() && nesting < 255) {
                         contextProvider = contextProvider.enclosingContextProvider();
                         nesting++;
                     };

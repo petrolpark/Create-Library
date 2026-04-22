@@ -50,6 +50,7 @@ public class PetrolparkCreate {
         PetrolparkCreateMenuTypes.register();
         PetrolparkCreatePackets.register();
         PetrolparkCreateRegistrateProviderTypes.register();
+        PetrolparkDoughIngredientTypes.register();
         PetrolparkDoughToppingTypes.register();
     
         PetrolparkArmInteractionPointTypes.register();

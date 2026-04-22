@@ -9,11 +9,15 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import javax.annotation.Nonnull;
+
 import com.petrolpark.Petrolpark;
 import com.petrolpark.core.recipe.compression.IItemCompressionSequence.EmptyItemCompressionSequence;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -24,6 +28,7 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 import net.neoforged.neoforge.common.util.ItemStackMap;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 
 @EventBusSubscriber
 public class ItemCompressionManager {
@@ -162,7 +167,7 @@ public class ItemCompressionManager {
         protected final List<ItemStack> items;
 
         public EmptySharedItemCompressionSequence(IItemCompressionSequence sequence) {
-            this.items = sequence.getAllItems();
+            this.items = sequence.getKnownItems();
         };
 
         @Override
@@ -174,5 +179,15 @@ public class ItemCompressionManager {
     @SubscribeEvent
     public static void onRecipeReload(RecipesUpdatedEvent event) {
         reload(event.getRecipeManager());
+    };
+
+    @SubscribeEvent
+    public static final void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(new ResourceManagerReloadListener() {
+            @Override
+            public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
+                ItemCompressionManager.reload(event.getServerResources().getRecipeManager());
+            };
+        });
     };
 };

@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import com.petrolpark.Petrolpark;
 import com.petrolpark.core.team.ITeam;
 
 import net.createmod.catnip.platform.CatnipServices;
@@ -76,7 +77,7 @@ public class ScoreboardTeamManager {
 		if (savedData != null) return;
 		savedData = server.overworld()
             .getDataStorage()
-            .computeIfAbsent(new SavedData.Factory<>(ScoreboardTeamSavedData::new, (tag, registries) -> load(server.overworld(), tag)), "petrolpark_teams");
+            .computeIfAbsent(new SavedData.Factory<>(ScoreboardTeamSavedData::new, (tag, registries) -> load(server.overworld(), tag)), Petrolpark.MOD_ID + "_teams");
 	};
 
     public void markDirty() {

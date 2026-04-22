@@ -354,7 +354,7 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
     };
 
     public RegistryEntry<IAdvancedIngredientType<? super ItemStack>, NamedAdvancedIngredientType<ItemStack>> itemAdvancedIngredientType(String name, MapCodec<? extends ItemAdvancedIngredient> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends ItemAdvancedIngredient> streamCodec) {
-        return simple(name, PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE, () -> new NamedAdvancedIngredientType<>(Util.makeDescriptionId("advanced_ingredient", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
+        return simple(name, PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE, () -> new NamedAdvancedIngredientType<>(Util.makeDescriptionId("advancedIngredient", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
     };
 
     public RegistryEntry<IAdvancedIngredientType<? super ItemStack>, IAdvancedIngredientType<? super ItemStack>> itemAdvancedIngredientType(String name, IAdvancedIngredientType<? super ItemStack> type) {
@@ -362,7 +362,7 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
     };
 
     public RegistryEntry<IAdvancedIngredientType<? super ItemStack>, INamedAdvancedIngredientType<ItemStack>> itemAdvancedIngredientType(String name, NonNullFunction<String, INamedAdvancedIngredientType<ItemStack>> typeFactory) {
-        return simple(name, PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE, () -> typeFactory.apply(Util.makeDescriptionId("advanced_ingredient", ResourceLocation.fromNamespaceAndPath(getModid(), name))));
+        return simple(name, PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE, () -> typeFactory.apply(Util.makeDescriptionId("advancedIngredient", ResourceLocation.fromNamespaceAndPath(getModid(), name))));
     };
 
     public <TYPELESS_INGREDIENT extends ITypelessAdvancedIngredient<ItemStack>> RegistryEntry<IAdvancedIngredientType<? super ItemStack>, GenericAdvancedIngredientType<ItemStack, TYPELESS_INGREDIENT>> itemAdvancedIngredientType(String name, Function<Codec<IAdvancedIngredient<? super ItemStack>>, MapCodec<TYPELESS_INGREDIENT>> codecFactory, Function<StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super ItemStack>>, StreamCodec<? super RegistryFriendlyByteBuf, TYPELESS_INGREDIENT>> streamCodecFactory) {
@@ -370,7 +370,7 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
     };
 
     public RegistryEntry<IAdvancedIngredientType<? super FluidStack>, NamedAdvancedIngredientType<FluidStack>> fluidAdvancedIngredientType(String name, MapCodec<? extends FluidAdvancedIngredient> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends FluidAdvancedIngredient> streamCodec) {
-        return simple(name, PetrolparkRegistries.Keys.ADVANCED_FLUID_INGREDIENT_TYPE, () -> new NamedAdvancedIngredientType<>(Util.makeDescriptionId("advanced_ingredient", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
+        return simple(name, PetrolparkRegistries.Keys.ADVANCED_FLUID_INGREDIENT_TYPE, () -> new NamedAdvancedIngredientType<>(Util.makeDescriptionId("advancedIngredient", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
     };
 
     public RegistryEntry<IAdvancedIngredientType<? super FluidStack>, IAdvancedIngredientType<? super FluidStack>> fluidAdvancedIngredientType(String name, IAdvancedIngredientType<? super FluidStack> type) {

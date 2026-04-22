@@ -2,6 +2,9 @@ package com.petrolpark.core.contamination;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.core.Holder;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
@@ -12,7 +15,12 @@ public abstract class Contaminable<OBJECT, OBJECT_STACK> {
 
     public abstract boolean isContaminableStack(OBJECT_STACK stack);
   
+    @Nullable
     public abstract IContamination<OBJECT, OBJECT_STACK> getContamination(Object stack);
+
+    public final Optional<IContamination<OBJECT, OBJECT_STACK>> getContaminationOptional(Object stack) {
+        return Optional.ofNullable(getContamination(stack));
+    };
 
     public abstract Collection<Holder<Contaminant>> getIntrinsicContaminants(OBJECT object);
 

@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.apache.commons.lang3.math.Fraction;
+import org.apache.commons.math3.fraction.BigFraction;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -16,8 +16,8 @@ public class FinishableMapItemCompressionSequence implements IItemCompressionSeq
     protected boolean finished = false;
     protected final ItemStack baseItem;
 
-    protected final Map<ItemStack, Fraction> fractionsByStack = ItemStackMap.createTypeAndTagMap();
-    protected final List<Fraction> fractionsByIndex = new ArrayList<>();
+    protected final Map<ItemStack, BigFraction> fractionsByStack = ItemStackMap.createTypeAndTagMap();
+    protected final List<BigFraction> fractionsByIndex = new ArrayList<>();
 
     protected final List<ItemStack> allItems = new ArrayList<>();
     protected final List<IItemCompression> compressions = new ArrayList<>();
@@ -25,7 +25,7 @@ public class FinishableMapItemCompressionSequence implements IItemCompressionSeq
 
     public FinishableMapItemCompressionSequence(ItemStack baseItem) {
         this.baseItem = baseItem;
-        fractionsByIndex.add(Fraction.ONE);
+        fractionsByIndex.add(BigFraction.ONE);
         allItems.add(baseItem);
         checkToAddBaseBlock(baseItem);
     };
@@ -39,7 +39,7 @@ public class FinishableMapItemCompressionSequence implements IItemCompressionSeq
         ItemStack newItem = compression.result().copyWithCount(1);
         if (fractionsByStack.containsKey(newItem)) return false;
         ItemStack lastItem = compressions.size() == 0 ? baseItem.copyWithCount(1) : compressions.get(compressions.size() - 1).result().copyWithCount(1);
-        Fraction fraction = fractionsByIndex.get(fractionsByIndex.size() - 1).multiplyBy(Fraction.getFraction(compression.count(), compression.result().getCount()));
+        BigFraction fraction = fractionsByIndex.get(fractionsByIndex.size() - 1).multiply(BigFraction.getReducedFraction(compression.count(), compression.result().getCount()));
         fractionsByStack.put(lastItem, fraction);
         fractionsByIndex.add(fraction);
         allItems.add(newItem);
@@ -71,21 +71,21 @@ public class FinishableMapItemCompressionSequence implements IItemCompressionSeq
     };
 
     @Override
-    public Fraction getEquivalentBaseItems(ItemStack stack) {
-        Fraction fraction = fractionsByStack.get(stack);
+    public BigFraction getEquivalentBaseItems(ItemStack stack) {
+        BigFraction fraction = fractionsByStack.get(stack);
         if (fraction == null) return null;
-        return fraction.multiplyBy(Fraction.getFraction(stack.getCount(), 1));
+        return fraction.multiply(BigFraction.getReducedFraction(stack.getCount(), 1));
     };
 
     @Override
     public double getEquivalentBaseItems(ItemStack stack, double count) {
-        Fraction fraction = fractionsByStack.get(stack);
+        BigFraction fraction = fractionsByStack.get(stack);
         if (fraction == null) return 0d;
         return fraction.doubleValue() * count;
     };
 
     @Override
-    public Fraction getEquivalentBaseItems(int item) {
+    public BigFraction getEquivalentBaseItems(int item) {
         if (item < 0 || item >= fractionsByIndex.size()) return null;
        return fractionsByIndex.get(item);
     };

@@ -1,4 +1,7 @@
 {
     "name": "shop.petrolpark.example",
+    "customers": {
+        
+    },
     "offer_generators": []
 }

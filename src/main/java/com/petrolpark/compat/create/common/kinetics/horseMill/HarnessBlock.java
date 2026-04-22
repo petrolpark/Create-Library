@@ -87,7 +87,6 @@ public class HarnessBlock extends HorizontalDirectionalBlock implements ISharedF
 	};
 
     public static final void harness(Level level, BlockPos pos, Entity entity) {
-		if (level.isClientSide()) return;
 		final HarnessEntity harness = new HarnessEntity(level);
 		harness.setPos(pos.getX() + 0.5d, pos.getY(), pos.getZ() + 0.5d);
 		level.addFreshEntity(harness);

@@ -2,6 +2,8 @@ package com.petrolpark.core.actionrecord;
 
 import org.jetbrains.annotations.ApiStatus;
 
+import com.petrolpark.util.Lang;
+
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.PacketType;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -51,7 +53,7 @@ public sealed interface ActionRecordEntryResult permits ActionRecordEntryResult.
 
             @Override
             public Component name(TooltipFlag tooltipFlag) {
-                return tooltipFlag.isAdvanced() ? Component.translatable("petrolpark.packet.unsupported.advanced", id()) : Component.translatable("petrolpark.packet.unsupported");
+                return tooltipFlag.isAdvanced() ? Lang.translate("packet.unsupported.advanced", id()) : Lang.translate("packet.unsupported");
             };
 
         };

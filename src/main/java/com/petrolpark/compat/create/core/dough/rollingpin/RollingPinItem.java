@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create.core.dough.rollingpin;
+package com.petrolpark.compat.create.core.dough.rollingPin;
 
 import javax.annotation.Nonnull;
 
@@ -17,6 +17,7 @@ import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
+import net.neoforged.neoforge.common.util.FakePlayer;
 
 public class RollingPinItem extends WoodenItem implements ISharedFeature {
 
@@ -42,7 +43,7 @@ public class RollingPinItem extends WoodenItem implements ISharedFeature {
     public void onUseTick(@Nonnull Level level, @Nonnull LivingEntity livingEntity, @Nonnull ItemStack stack, int remainingUseDuration) {
         super.onUseTick(level, livingEntity, stack, remainingUseDuration);
         if (livingEntity.pick(RayHelper.getBlockReach(livingEntity), 1f, false) instanceof BlockHitResult bhr && level.getBlockState(bhr.getBlockPos()).getBlock() instanceof IRollableBlock rollable) {
-            if (remainingUseDuration == 11) rollable.rollingPinRoll(level, bhr.getBlockPos(), livingEntity.getDirection());
+            if (remainingUseDuration == 11) rollable.rollingPinRoll(level, bhr.getBlockPos(), livingEntity.getDirection(), livingEntity instanceof Player && !(livingEntity instanceof FakePlayer));
             if (remainingUseDuration == 1 && rollable.canBeRollingPinRolled(level, bhr.getBlockPos(), livingEntity.getDirection()) && livingEntity instanceof Player player) {
                 ItemUtils.startUsingInstantly(level, player, player.getUsedItemHand());
                 player.useItemRemaining = 18;

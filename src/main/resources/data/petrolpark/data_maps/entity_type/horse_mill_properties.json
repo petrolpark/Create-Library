@@ -3,7 +3,7 @@
         "#petrolpark:has_cow_horse_mill_properties": {
             "position_offset": [0.0, 0.0, 0.625],
             "max_speed": 0.2,
-            "stress_capacity": 256,
+            "stress_capacity": 512,
             "harness_model": "petrolpark:block/harness/cow"
         }
     }

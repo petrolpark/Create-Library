@@ -97,6 +97,7 @@ configurations {
 }
 
 repositories {
+    mavenCentral()
     maven { url = 'https://maven.neoforged.net/releases' }
     maven { url = "https://maven.createmod.net" } // Ponder, Flywheel, Create
     maven { url = "https://mvn.devos.one/snapshots" } // Registrate
@@ -121,6 +122,9 @@ dependencies {
 
     // HARD DEPENDENCIES
 
+    // Apache Commons Math
+    jarJar(implementation("org.apache.commons:commons-math3:3.6.1"))
+    additionalRuntimeClasspath("org.apache.commons:commons-math3:3.6.1")
     // Registrate (bundled with Petrolpark's Library)
     jarJar(implementation("com.tterrag.registrate:Registrate:${registrate_version}"))
     // Ponder/Flywhel (also bundled)

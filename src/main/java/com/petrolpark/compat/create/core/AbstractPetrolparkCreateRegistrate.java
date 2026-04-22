@@ -1,9 +1,22 @@
 package com.petrolpark.compat.create.core;
 
+import java.util.function.Function;
+
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.PetrolparkCreateRegistries;
+import com.petrolpark.compat.create.core.dough.DoughData;
+import com.petrolpark.compat.create.core.dough.ingredient.DoughIngredient;
 import com.petrolpark.core.fluid.ColoredFluidType;
+import com.petrolpark.core.recipe.ingredient.advanced.GenericAdvancedIngredientType;
+import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.IAdvancedIngredientType;
+import com.petrolpark.core.recipe.ingredient.advanced.INamedAdvancedIngredientType;
+import com.petrolpark.core.recipe.ingredient.advanced.ITypelessAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.NamedAdvancedIngredientType;
 import com.petrolpark.core.registrate.builder.SharedCreateBlockEntityBuilder;
 import com.petrolpark.core.world.fluid.VirtualFluidWithContainer;
 import com.simibubi.create.content.fluids.VirtualFluid;
@@ -11,8 +24,12 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.VirtualFluidBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
 import com.tterrag.registrate.builders.FluidBuilder;
+import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 
+import net.minecraft.Util;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -66,4 +83,21 @@ public class AbstractPetrolparkCreateRegistrate<R extends AbstractPetrolparkCrea
     public <T extends BaseFlowingFluid> FluidBuilder<T, R> sharedVirtualFluid(SharedFeatureFlag featureFlag, String name, ResourceLocation stillTexture, ResourceLocation flowingTexture, FluidBuilder.FluidTypeFactory typeFactory, NonNullFunction<BaseFlowingFluid.Properties, T> sourceFactory, NonNullFunction<BaseFlowingFluid.Properties, T> flowingFactory) {
 		return sharedEntry(featureFlag, name, c -> new VirtualFluidBuilder<>(self(), self(), name, c, stillTexture, flowingTexture, typeFactory, sourceFactory, flowingFactory)).asOptional();
 	};
+
+    public RegistryEntry<IAdvancedIngredientType<? super DoughData>, NamedAdvancedIngredientType<DoughData>> doughIngredientType(String name, MapCodec<? extends DoughIngredient> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends DoughIngredient> streamCodec) {
+        return simple(name, PetrolparkCreateRegistries.Keys.DOUGH_INGREDIENT_TYPE, () -> new NamedAdvancedIngredientType<>(Util.makeDescriptionId("advancedIngredient.dough", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
+    };
+
+    public RegistryEntry<IAdvancedIngredientType<? super DoughData>, IAdvancedIngredientType<? super DoughData>> doughIngredientType(String name, IAdvancedIngredientType<? super DoughData> type) {
+        return simple(name, PetrolparkCreateRegistries.Keys.DOUGH_INGREDIENT_TYPE, () -> type);
+    };
+
+
+    public RegistryEntry<IAdvancedIngredientType<? super DoughData>, INamedAdvancedIngredientType<DoughData>> doughIngredientType(String name, NonNullFunction<String, INamedAdvancedIngredientType<DoughData>> typeFactory) {
+        return simple(name, PetrolparkCreateRegistries.Keys.DOUGH_INGREDIENT_TYPE, () -> typeFactory.apply(Util.makeDescriptionId("advancedIngredient", ResourceLocation.fromNamespaceAndPath(getModid(), name))));
+    };
+
+    public <TYPELESS_INGREDIENT extends ITypelessAdvancedIngredient<DoughData>> RegistryEntry<IAdvancedIngredientType<? super DoughData>, GenericAdvancedIngredientType<DoughData, TYPELESS_INGREDIENT>> doughIngredientType(String name, Function<Codec<IAdvancedIngredient<? super DoughData>>, MapCodec<TYPELESS_INGREDIENT>> codecFactory, Function<StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super DoughData>>, StreamCodec<? super RegistryFriendlyByteBuf, TYPELESS_INGREDIENT>> streamCodecFactory) {
+        return genericAdvancedIngredientType(PetrolparkCreateRegistries.Keys.DOUGH_INGREDIENT_TYPE, DoughIngredient.CODEC, DoughIngredient.STREAM_CODEC, name, codecFactory, streamCodecFactory);
+    };
 };

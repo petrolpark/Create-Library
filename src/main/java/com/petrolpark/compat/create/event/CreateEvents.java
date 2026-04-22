@@ -3,6 +3,7 @@ package com.petrolpark.compat.create.event;
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillContraptionEntity;
 import com.petrolpark.compat.create.common.processing.blender.BlenderBlockEntity;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationEvent;
 import com.petrolpark.compat.create.common.processing.centrifuge.PotionCentrifugation;
@@ -22,6 +23,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 public class CreateEvents {
 
@@ -65,5 +67,10 @@ public class CreateEvents {
     @SubscribeEvent
     public static final void onUseItem(UseItemOnBlockEvent event) {
         EncasedCrushingWheelControllerBlock.onItemUsed(event);
+    };
+
+    @SubscribeEvent
+    public static final void onEntityTickPost(EntityTickEvent.Post event) {
+        HorseMillContraptionEntity.onEntityTickPost(event);
     };
 };

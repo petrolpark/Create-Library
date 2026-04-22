@@ -21,6 +21,8 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.server.packs.resources.ResourceManager;
+import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
@@ -34,6 +36,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
 
 public class ExtrusionRecipe implements Recipe<ExtrusionRecipe.Input> {
 
@@ -154,6 +157,11 @@ public class ExtrusionRecipe implements Recipe<ExtrusionRecipe.Input> {
 
         private RecipeManager recipeManager = null;
 
+        public void reload(RecipeManager recipeManager) {
+            this.recipeManager = recipeManager;
+            MovementBehaviour.REGISTRY.invalidate();
+        };
+
         @Override
         @SuppressWarnings("deprecation")
         public @Nullable MovementBehaviour get(Block block) {
@@ -168,8 +176,19 @@ public class ExtrusionRecipe implements Recipe<ExtrusionRecipe.Input> {
 
         @SubscribeEvent
         public final void onRecipesUpdated(RecipesUpdatedEvent event) {
-            recipeManager = event.getRecipeManager();
-            MovementBehaviour.REGISTRY.invalidate();
+            reload(event.getRecipeManager());
+        };
+
+        @SubscribeEvent
+        public final void onAddReloadListeners(AddReloadListenerEvent event) {
+            event.addListener(new ResourceManagerReloadListener() {
+
+                @Override
+                public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
+                    ExtrusionRecipe.MovementBehaviourProvider.this.reload(recipeManager);
+                };
+                
+            });
         };
 
     };

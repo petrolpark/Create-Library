@@ -17,24 +17,24 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 
-public record CookableTopping(List<String> translationKeys, List<ResourceLocation> textures, List<Integer> tints) implements IDoughTopping {
+public record CookableTopping(String translationKey, List<ResourceLocation> textures, List<Integer> tints) implements IDoughTopping {
 
     public static final MapCodec<CookableTopping> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Codec.STRING.listOf(1, 64).fieldOf("translation_keys").forGetter(CookableTopping::translationKeys),
+        Codec.STRING.fieldOf("translation_keys").forGetter(CookableTopping::translationKey),
         ResourceLocation.CODEC.listOf(1, 64).fieldOf("textures").forGetter(CookableTopping::textures),
         Codec.INT.listOf(1, 64).optionalFieldOf("tints", Collections.singletonList(0xFFFFFFFF)).forGetter(CookableTopping::tints)
     ).apply(instance, CookableTopping::new));
 
     public static final StreamCodec<ByteBuf, CookableTopping> STREAM_CODEC = StreamCodec.composite(
-        ByteBufCodecs.STRING_UTF8.apply(ByteBufCodecs.list()), CookableTopping::translationKeys,
+        ByteBufCodecs.STRING_UTF8, CookableTopping::translationKey,
         ResourceLocation.STREAM_CODEC.apply(ByteBufCodecs.list()), CookableTopping::textures,
         ByteBufCodecs.INT.apply(ByteBufCodecs.list()), CookableTopping::tints,
         CookableTopping::new
     );
 
     @Override
-    public Component name(DoughData doughData) {
-        return Component.translatable(get(translationKeys(), doughData));
+    public Component name() {
+        return Component.translatable(translationKey());
     };
 
     @Override

@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create.core.dough.rollingpin;
+package com.petrolpark.compat.create.core.dough.rollingPin;
 
 import javax.annotation.Nonnull;
 

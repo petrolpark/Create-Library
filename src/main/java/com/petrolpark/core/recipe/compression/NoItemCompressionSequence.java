@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import org.apache.commons.lang3.math.Fraction;
+import org.apache.commons.math3.fraction.BigFraction;
 
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
@@ -43,8 +43,8 @@ public class NoItemCompressionSequence implements IItemCompressionSequence {
     };
 
     @Override
-    public Fraction getEquivalentBaseItems(ItemStack stack) {
-        return ItemStack.isSameItemSameComponents(stack, this.stack) ? Fraction.getFraction(stack.getCount(), 1) : null;
+    public BigFraction getEquivalentBaseItems(ItemStack stack) {
+        return ItemStack.isSameItemSameComponents(stack, this.stack) ? BigFraction.getReducedFraction(stack.getCount(), 1) : null;
     };
 
     @Override

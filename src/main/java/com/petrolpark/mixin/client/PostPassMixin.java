@@ -12,7 +12,7 @@ import com.petrolpark.PetrolparkPostUniforms;
 import net.minecraft.client.renderer.EffectInstance;
 import net.minecraft.client.renderer.PostPass;
 
-@Mixin( PostPass.class)
+@Mixin(PostPass.class)
 public abstract class PostPassMixin {
     
     @Shadow
