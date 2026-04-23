@@ -118,7 +118,8 @@ public class Petrolpark {
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
-        return new SharedFeatureFlag[]{SharedFeatureFlag.HORSE_MILL, SharedFeatureFlag.GOLD_CONVERSION};
+        return new SharedFeatureFlag[]{};
+        // return new SharedFeatureFlag[]{SharedFeatureFlag.HORSE_MILL, SharedFeatureFlag.GOLD_CONVERSION};
     };
 
     private void init(final FMLCommonSetupEvent event) {

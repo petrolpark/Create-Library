@@ -4,9 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.compat.jei.category.ContaminantInfoCategory;
-import com.petrolpark.compat.jei.category.ContaminantInfoCategory.ContaminantInfoRecipe;
 import com.petrolpark.core.contamination.Contaminables;
 import com.petrolpark.core.inventory.extended.ExtendedInventoryJeiGuiHandler;
 import com.petrolpark.core.recipe.book.RecipeBookItemJEICategoryCache;
@@ -19,7 +17,6 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
-import mezz.jei.common.util.RegistryUtil;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.bus.api.IEventBus;
 
@@ -37,15 +34,15 @@ public class PetrolparkJEI implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new ContaminantInfoCategory<>(registration.getJeiHelpers().getGuiHelper(), VanillaTypes.ITEM_STACK, ContaminantInfoCategory.ITEM_RECIPE_TYPE));
+        // registration.addRecipeCategories(new ContaminantInfoCategory<>(registration.getJeiHelpers().getGuiHelper(), VanillaTypes.ITEM_STACK, ContaminantInfoCategory.ITEM_RECIPE_TYPE));
     };
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(ContaminantInfoCategory.ITEM_RECIPE_TYPE, RegistryUtil.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).holders()
-            .map(ContaminantInfoRecipe::forItemStacks)
-            .toList()
-        );
+        // registration.addRecipes(ContaminantInfoCategory.ITEM_RECIPE_TYPE, RegistryUtil.getRegistry(PetrolparkRegistries.Keys.CONTAMINANT).holders()
+        //     .map(ContaminantInfoRecipe::forItemStacks)
+        //     .toList()
+        // );
     };
 
     @Override
