@@ -36,17 +36,21 @@ public class ItemCompressionManager {
     protected static final Map<ItemStack, IItemCompression> COMPRESSIONS = ItemStackMap.createTypeAndTagMap();
     protected static final Map<ItemStack, IItemCompressionSequence> COMPRESSION_SEQUENCES = ItemStackMap.createTypeAndTagMap();
 
-    public static Optional<IItemCompression> get(ItemStack stack) {
+    protected static boolean cacheInvalid = true;
+
+    public static Optional<IItemCompression> get(RecipeManager recipeManager, ItemStack stack) {
+        if (cacheInvalid) reload(recipeManager);
         return Optional.ofNullable(COMPRESSIONS.get(stack));
     };
 
-    public static Optional<IItemCompressionSequence> getSequence(ItemStack stack) {
+    public static Optional<IItemCompressionSequence> getSequence(RecipeManager recipeManager, ItemStack stack) {
+        if (cacheInvalid) reload(recipeManager);
         return Optional.ofNullable(COMPRESSION_SEQUENCES.get(stack));
     };
 
     private static final List<Recipe<?>> singleInputRecipes = new ArrayList<>();
 
-    public static void reload(RecipeManager recipeManager) {
+    public static final void reload(RecipeManager recipeManager) {
         COMPRESSIONS.clear();
         singleInputRecipes.clear(); // Retains memory size from before
         for (CompressionRecipe compression : recipeManager.getRecipes().stream()
@@ -134,7 +138,7 @@ public class ItemCompressionManager {
                 while (nextCompression != null) {
                     try {
                         if (!sequence.add(nextCompression)) return new EmptySharedItemCompressionSequence(sequence); // Remove all circular Compression sequences
-                    } catch (ArithmeticException e) { //TODO switch to BigFraction
+                    } catch (ArithmeticException e) {
                         Petrolpark.LOGGER.warn("Item %s has too large of a compression factor to recognise compression sequence");
                         return new EmptySharedItemCompressionSequence(sequence);
                     };
@@ -177,8 +181,8 @@ public class ItemCompressionManager {
     };
 
     @SubscribeEvent
-    public static void onRecipeReload(RecipesUpdatedEvent event) {
-        reload(event.getRecipeManager());
+    public static final void onRecipeReload(RecipesUpdatedEvent event) {
+        cacheInvalid = true;
     };
 
     @SubscribeEvent
@@ -186,7 +190,7 @@ public class ItemCompressionManager {
         event.addListener(new ResourceManagerReloadListener() {
             @Override
             public void onResourceManagerReload(@Nonnull ResourceManager resourceManager) {
-                ItemCompressionManager.reload(event.getServerResources().getRecipeManager());
+                cacheInvalid = true;
             };
         });
     };

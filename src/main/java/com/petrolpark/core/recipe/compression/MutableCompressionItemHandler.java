@@ -8,6 +8,7 @@ import javax.annotation.Nonnull;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.neoforge.common.util.DataComponentUtil;
 
 /**
@@ -16,8 +17,11 @@ import net.neoforged.neoforge.common.util.DataComponentUtil;
  */
 public class MutableCompressionItemHandler extends CompressionItemHandler {
 
-    public MutableCompressionItemHandler(int capacity) {
+    protected final RecipeManager recipeManager;
+
+    public MutableCompressionItemHandler(RecipeManager recipeManager, int capacity) {
         super(IItemCompressionSequence.EMPTY, capacity);
+        this.recipeManager = recipeManager;
     };
 
     @Override
@@ -38,7 +42,7 @@ public class MutableCompressionItemHandler extends CompressionItemHandler {
      */
     protected Optional<ItemStack> createNewSequenceAndStore(ItemStack stack, boolean simulate) {
         if (sequence.isEmpty()) {
-            Optional<IItemCompressionSequence> newSequence = ItemCompressionManager.getSequence(stack).map(onNewSequence(simulate));
+            Optional<IItemCompressionSequence> newSequence = ItemCompressionManager.getSequence(recipeManager, stack).map(onNewSequence(simulate));
             if (newSequence.isPresent()) {
                 sequence = newSequence.get();
                 ItemStack remainder = super.insertItem(stack, simulate);
@@ -79,7 +83,7 @@ public class MutableCompressionItemHandler extends CompressionItemHandler {
     public void deserializeNBT(@Nonnull HolderLookup.Provider provider, @Nonnull CompoundTag nbt) {
         super.deserializeNBT(provider, nbt);
         Optional<ItemStack> stack = ItemStack.parse(provider, nbt.getCompound("Item"));
-        sequence = stack.flatMap(ItemCompressionManager::getSequence)
+        sequence = stack.flatMap(s -> ItemCompressionManager.getSequence(recipeManager, s))
             .map(onNewSequence(false))
             .orElse(stack.<IItemCompressionSequence>map(NoItemCompressionSequence::new)
                 .orElse(IItemCompressionSequence.EMPTY)

@@ -79,7 +79,7 @@ public class RecyclingManager {
      * @return A {@link RecyclingOutputs}, or {@link RecyclingOutputs#empty()} if there are multiple different Recipes for crafting this Item
      */
     public static final RecyclingOutputs getInverseRecipeRecyclingOutputs(Level level, Item item) {
-        final List<RecyclingOutputs> possibleOutputs = level.getRecipeManager().getRecipes().stream()
+        return level.getRecipeManager().getRecipes().stream()
             .map(RecipeHolder::value)
             .filter(PetrolparkTags.RecipeTypes.RECYCLABLE::matches)
             .filter(recipe -> recipe.getResultItem(level.registryAccess()).is(item))
@@ -89,10 +89,8 @@ public class RecyclingManager {
                 .map(outputs -> outputs.multiplyAll(1f / (float)recipe.getResultItem(level.registryAccess()).getCount()))
             ).dropWhile(Optional::isEmpty)
             .map(Optional::get)
-            .distinct() // If there are multiple Recipes but they have the same Ingredients (therefore the same Recycling Outputs), then the Item can still be recycled
-            .toList();
-        if (possibleOutputs.size() == 1) return possibleOutputs.get(0);
-        return RecyclingOutputs.empty(); // If there are multiple non-equal outputs in the list
+            .reduce(RecyclingOutputs::intersect)
+            .orElseGet(RecyclingOutputs::empty);
     };
 
     /**

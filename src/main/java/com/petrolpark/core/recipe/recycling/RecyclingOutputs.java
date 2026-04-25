@@ -15,11 +15,14 @@ import java.util.stream.Collector;
 
 import com.petrolpark.util.BigItemStack;
 
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenCustomHashMap;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ItemStackLinkedSet;
 
 public class RecyclingOutputs extends LinkedList<RecyclingOutput> {
 
@@ -37,7 +40,11 @@ public class RecyclingOutputs extends LinkedList<RecyclingOutput> {
      * Factor by which the expected amounts of all {@link RecyclingOutput}s are multiplied when {@link RecyclingOutputs#rollStacks actually determining the output}.
      * Change this to avoid having to iterate over every single individual output.
      */
-    public double expectationMultiplier = 1f;
+    public double expectationMultiplier = 1d;
+
+    public RecyclingOutputs() {
+
+    };
 
     public RecyclingOutputs(ItemStack stack) {
         this(Collections.singleton(new RecyclingOutput(stack)));
@@ -118,6 +125,27 @@ public class RecyclingOutputs extends LinkedList<RecyclingOutput> {
             existing.multiply(1f - proportion);
             remainderModification.accept(existing);
         };
+    };
+
+    /**
+     * Reduces two {@link RecyclingOutputs} to their minimum shared {@link RecyclingOutput}s.
+     * If an Item has multiple Recipes (not just one Recipe with complex Ingredients), this gives only the Items used in both Recipes.
+     * For instance, a Copper Block can craft four Copper Grates with a Stonecutter but only one with a Crafting Table, so this returns the only shared Ingredient, which is a single Copper Block.
+     * In a lot of cases this will return {@link RecyclingOutputs#empty()}.
+     */
+    public static final RecyclingOutputs intersect(RecyclingOutputs outputs1, RecyclingOutputs outputs2) {
+        if (outputs1.isEmpty()) return outputs1;
+        if (outputs2.isEmpty()) return outputs2;
+        final Object2DoubleMap<ItemStack> stacks = new Object2DoubleOpenCustomHashMap<>(ItemStackLinkedSet.TYPE_AND_TAG);
+        outputs1.forEach(output -> stacks.put(output.getItem(), output.getExpectedCount() * outputs1.getExpectationMultiplier()));
+        final Object2DoubleMap<ItemStack> result = new Object2DoubleOpenCustomHashMap<>(ItemStackLinkedSet.TYPE_AND_TAG);
+        outputs2.forEach(output -> {
+            double amount = stacks.getDouble(output.getItem());
+            if (amount != 0d) result.put(output.getItem(), Math.min(amount, output.getExpectedCount() * outputs2.getExpectationMultiplier()));
+        });
+        if (result.isEmpty()) return empty();
+        return result.object2DoubleEntrySet().stream().map(entry -> new RecyclingOutput(entry.getKey(), entry.getDoubleValue()))
+            .collect(RecyclingOutputs::new, RecyclingOutputs::add, RecyclingOutputs::addOther);
     };
 
     public List<ItemStack> getMaxPossibleStacks() {

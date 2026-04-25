@@ -84,7 +84,7 @@ public interface RecyclingOutputsModifier extends Comparable<RecyclingOutputsMod
         @Override
         public void modify(Level level, ItemStack input, RecyclingOutputs outputs) {
             outputs.forEach(output -> {
-                ItemCompressionManager.getSequence(output.item).ifPresent(sequence -> {
+                ItemCompressionManager.getSequence(level.getRecipeManager(), output.item).ifPresent(sequence -> {
                     double remainder = output.getExpectedRemainder(); // Only decompress the remainder as passing the whole amount through the following procedure would also compress it
                     double baseItems = sequence.getEquivalentBaseItems(output.item, remainder);
                     long wholeBaseItems = (long)baseItems;
