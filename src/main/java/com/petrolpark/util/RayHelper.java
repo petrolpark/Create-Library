@@ -132,5 +132,11 @@ public class RayHelper {
         Vec3 ray = entity.getEyePosition().add(view.scale(getBlockReach(entity)));
         return getHit(boxes, entity.getEyePosition(), ray);
     };
+
+    public static final int getHitPositioned(List<AABB> boxes, Vec3 offset, Entity entity) {
+        Vec3 view = entity.getViewVector(1f);
+        Vec3 ray = entity.getEyePosition().add(view.scale(getBlockReach(entity)));
+        return getHit(boxes, entity.getEyePosition().subtract(offset), ray.subtract(offset));
+    };
     
 };

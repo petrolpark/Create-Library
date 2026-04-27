@@ -117,11 +117,11 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
     @Override
     protected void write(CompoundTag tag, Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
-        NBTHelper.writeCompoundList(getParts(), part -> {
+        tag.put("Parts", NBTHelper.writeCompoundList(getParts(), part -> {
             final CompoundTag partTag = new CompoundTag();
             part.write(partTag, registries, clientPacket);
             return partTag;
-        });
+        }));
     };
 
     public abstract class CompositeKineticBlockEntityPart extends KineticBlockEntity {

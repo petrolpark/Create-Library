@@ -38,6 +38,7 @@
         "compat.create.PressingBehaviourModeMixin",
         "compat.create.ProcessingRecipeMixin",
         "compat.create.RecipeApplierMixin",
+        "compat.create.RotationPropagatorMixin",
         "compat.create.SandPaperPolishingRecipeMixin",
         "compat.create.SawBlockEntityMixin",
         "compat.create.SharedDepotBlockMethodsMixin",

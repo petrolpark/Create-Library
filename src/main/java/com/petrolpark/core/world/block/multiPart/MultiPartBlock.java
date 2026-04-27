@@ -26,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
@@ -64,35 +65,40 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
         if (context instanceof EntityCollisionContext entityContext) {
             final Entity entity = entityContext.getEntity();
             if (entity != null) {
-                final PART part = clipperCache.get(state).clip(entity);
+                final PART part = clipperCache.get(state).clip(pos, entity);
                 if (part != null) return part.shape();
             };
         };
-        return getFullShape(state, level, pos);
+        return getFullShape(state);
     };
 
-    public VoxelShape getFullShape(BlockState state, BlockGetter level, BlockPos pos) {
+    public VoxelShape getFullShape(BlockState state) {
         return shapeCache.get(state);
     };
 
     @Override
     protected VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return getFullShape(state, level, pos);
+        return getFullShape(state);
     };
 
     @Override
     protected VoxelShape getBlockSupportShape(BlockState state, BlockGetter level, BlockPos pos) {
-        return getFullShape(state, level, pos);
+        return getFullShape(state);
     };
 
     @Override
     protected VoxelShape getVisualShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return getFullShape(state, level, pos);
+        return getFullShape(state);
+    };
+
+    @Override
+    protected RenderShape getRenderShape(BlockState state) {
+        return getFullShape(state).isEmpty() ? RenderShape.INVISIBLE : super.getRenderShape(state);
     };
 
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        final PART part = clipperCache.get(state).clip(player);
+        final PART part = clipperCache.get(state).clip(pos, player);
         if (part != null) {
             level.setBlock(pos, withoutPart(state, part), 11);
             if (willHarvest) { // Actual Block breaking is cancelled, so do it here
@@ -152,8 +158,8 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
     public record Clipper<PART extends IPart>(List<AABB> boxes, List<PART> parts) {
 
         @Nullable
-        public PART clip(Entity entity) {
-            final int index = RayHelper.getHit(boxes(), entity);
+        public PART clip(BlockPos pos, Entity entity) {
+            final int index = RayHelper.getHitPositioned(boxes(), Vec3.atLowerCornerOf(pos), entity);
             if (index >= 0) return parts.get(index);
             return null;
         };

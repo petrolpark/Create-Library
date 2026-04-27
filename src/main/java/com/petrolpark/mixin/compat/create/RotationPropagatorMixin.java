@@ -1,5 +1,6 @@
 package com.petrolpark.mixin.compat.create;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -18,14 +19,14 @@ import net.minecraft.core.BlockPos;
 public class RotationPropagatorMixin {
   
     @Inject(
-        method = "getConnectedNeighbors",
+        method = "getConnectedNeighbours",
         at = @At(
             value = "INVOKE",
-            target = "Lcom/simibubi/create/content/kinetics/RotationPropagator;findConnectedNeighbor(Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;Lnet/minecraft/core/BlockPos;)Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;"
+            target = "Lcom/simibubi/create/content/kinetics/RotationPropagator;findConnectedNeighbour(Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;Lnet/minecraft/core/BlockPos;)Lcom/simibubi/create/content/kinetics/base/KineticBlockEntity;"
         ),
-        locals = LocalCapture.CAPTURE_FAILSOFT
+        locals = LocalCapture.CAPTURE_FAILHARD
     )
-    private static void petrolpark$addMultiPartKineticBlocks(KineticBlockEntity be, CallbackInfoReturnable<List<KineticBlockEntity>> cir, List<KineticBlockEntity> neighbors, BlockPos neighborPos) {
-        CompositeKineticBlockEntity.addMultiParts(be, neighborPos, neighbors::add);
+    private static void petrolpark$addMultiPartKineticBlocks(KineticBlockEntity be, CallbackInfoReturnable<List<KineticBlockEntity>> cir, List<KineticBlockEntity> neighbors, Iterator<KineticBlockEntity> iterator, BlockPos neighbourPos) {
+        CompositeKineticBlockEntity.addMultiParts(be, neighbourPos, neighbors::add);
     };
 };

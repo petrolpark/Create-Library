@@ -15,7 +15,7 @@ public final class RecyclingOutput {
 
     public static final Codec<RecyclingOutput> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ItemStack.SINGLE_ITEM_CODEC.fieldOf("item").forGetter(RecyclingOutput::getItem),
-        Codec.DOUBLE.fieldOf("expectedCount").forGetter(RecyclingOutput::getExpectedCount)
+        Codec.DOUBLE.fieldOf("expected_count").forGetter(RecyclingOutput::getExpectedCount)
     ).apply(instance, RecyclingOutput::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, RecyclingOutput> STREAM_CODEC = StreamCodec.composite(
