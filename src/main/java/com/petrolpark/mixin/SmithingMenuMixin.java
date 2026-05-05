@@ -3,6 +3,7 @@ package com.petrolpark.mixin;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -29,6 +30,7 @@ import net.minecraft.world.level.Level;
 public abstract class SmithingMenuMixin extends ItemCombinerMenu {
 
     @Shadow
+    @Final
     private final Level level;
     
     public SmithingMenuMixin(MenuType<?> pType, int pContainerId, Inventory pPlayerInventory, ContainerLevelAccess pAccess) {

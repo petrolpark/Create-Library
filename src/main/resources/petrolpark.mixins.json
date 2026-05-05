@@ -10,6 +10,7 @@
         "compat.create.accessor.BasinOperatingBlockEntityAccessor",
         "compat.create.accessor.ContraptionAccessor",
         "compat.create.accessor.DepotBehaviourAccessor",
+        "compat.create.accessor.GhostBlockParamsAccessor",
         "compat.create.ArmBlockEntityMixin",
         "compat.create.BasinBlockEntityMixin",
         "compat.create.BasinOperatingBlockEntityMixin",
@@ -33,6 +34,7 @@
         "compat.create.MechanicalPressBlockEntityMixin",
         "compat.create.MillstoneBlockEntityMixin",
         "compat.create.OpenEndedPipeMixin",
+        "compat.create.PlacementOffsetMixin",
         "compat.create.PotatoProjectileEntityMixin",
         "compat.create.PressingBehaviourMixin",
         "compat.create.PressingBehaviourModeMixin",
@@ -109,5 +111,8 @@
     "injectors": {
         "defaultRequire": 1
     },
-    "minVersion": "0.8"
+    "minVersion": "0.8",
+    "mixinextras": {
+        "minVersion": "0.5.0"
+    }
 }

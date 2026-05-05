@@ -10,6 +10,7 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.petrolpark.PetrolparkAttributes;
 import com.petrolpark.PetrolparkTags;
+import com.petrolpark.compat.SharedFeatureFlag;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -125,6 +126,6 @@ public abstract class LivingEntityMixin extends Entity implements ILivingEntityE
         at = @At("RETURN")
     )
     private static AttributeSupplier.Builder petrolpark$addFrictionAttribute(AttributeSupplier.Builder builder) {
-        return builder.add(PetrolparkAttributes.SLIPPERINESS);
+        return SharedFeatureFlag.SLIPPING.enabled() ? builder.add(PetrolparkAttributes.SLIPPERINESS) : builder;
     };
 };

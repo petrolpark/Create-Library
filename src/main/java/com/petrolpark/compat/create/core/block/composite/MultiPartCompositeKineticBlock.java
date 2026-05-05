@@ -3,7 +3,7 @@ package com.petrolpark.compat.create.core.block.composite;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.core.world.block.multiPart.MultiPartBlock;
+import com.petrolpark.compat.create.core.block.CreateMultiPartBlock;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
@@ -14,7 +14,7 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 
-public abstract class MultiPartCompositeKineticBlock<PART extends MultiPartBlock.IPart> extends MultiPartBlock<PART> implements ICompositeKineticBlock {
+public abstract class MultiPartCompositeKineticBlock<PART extends CreateMultiPartBlock.ICreatePart> extends CreateMultiPartBlock<PART> implements ICompositeKineticBlock {
 
     public MultiPartCompositeKineticBlock(BlockBehaviour.Properties properties) {
         super(properties);

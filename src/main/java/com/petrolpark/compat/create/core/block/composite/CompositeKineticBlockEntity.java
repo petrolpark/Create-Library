@@ -134,6 +134,8 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
 
         public abstract boolean areStatesKineticallyEquivalent(BlockState oldState, BlockState state);
 
+        public abstract int getIndex();
+
         @Override
         @Deprecated
         public final void setChanged() {

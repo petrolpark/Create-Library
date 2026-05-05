@@ -93,6 +93,7 @@ public record WoodSetEntry(
         protected NonNullFunction<BlockBehaviour.Properties, LeavesBlock> leavesFactory = LeavesBlock::new;
         protected MapColor planksMapColor = MapColor.WOOD;
         protected MapColor logMapColor = MapColor.PODZOL;
+        protected boolean wooden = true;
         protected boolean flammable = true;
         protected boolean randomizePlanksFlip = false;
         protected boolean randomizeLogRotation = false;
@@ -130,6 +131,14 @@ public record WoodSetEntry(
             return this;
         };
 
+        /**
+         * Whether to group blocks like Trapdoors and Fences with the other wooden equivalents, or keep them in separate tags and crafting groups
+         */
+        public WoodSetEntry.Builder<REGISTRATE> wooden(boolean wooden) {
+            this.wooden = wooden;
+            return this;
+        };
+
         public WoodSetEntry.Builder<REGISTRATE> flammable(boolean flammable) {
             this.flammable = flammable;
             return this;
@@ -158,13 +167,15 @@ public record WoodSetEntry(
             final TagKey<Item> logsItemTag = TagKey.create(Registries.ITEM, logsTagId);
 
             registrate
-                .addDataGenerator(ProviderType.BLOCK_TAGS, prov -> prov.addTag(flammable ? BlockTags.LOGS_THAT_BURN : BlockTags.LOGS).addTag(logsBlockTag))
-                .addDataGenerator(ProviderType.ITEM_TAGS, prov -> prov.addTag(flammable ? ItemTags.LOGS_THAT_BURN : ItemTags.LOGS).addTag(logsItemTag))
                 .addDataGenerator(ProviderType.LANG, prov -> {
                     final String name = englishName + " Logs";
                     prov.addTag(() -> logsBlockTag, name);
                     prov.addTag(() -> logsItemTag, name);
                 });
+
+            if (wooden) registrate
+                .addDataGenerator(ProviderType.BLOCK_TAGS, prov -> prov.addTag(flammable ? BlockTags.LOGS_THAT_BURN : BlockTags.LOGS).addTag(logsBlockTag))
+                .addDataGenerator(ProviderType.ITEM_TAGS, prov -> prov.addTag(flammable ? ItemTags.LOGS_THAT_BURN : ItemTags.LOGS).addTag(logsItemTag));
 
             final ResourceLocation logId = ResourceLocation.fromNamespaceAndPath(registrate.getModid(), woodName + "_log");
             final ResourceLocation logTextureId = logId.withPrefix("block/");
@@ -261,10 +272,10 @@ public record WoodSetEntry(
                     } else {
                         prov.simpleBlock(ctx.getEntry());
                     };
-                }).tag(BlockTags.PLANKS)
+                }).transform(b -> wooden ? b.tag(BlockTags.PLANKS) : b)
                 .onRegister(block -> { if (flammable) fire.setFlammable(block, 5, 20); })
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
-                .tag(ItemTags.PLANKS)
+                .transform(b -> wooden ? b.tag(ItemTags.PLANKS) : b)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.planksFromLogs(prov, ctx.get(), logsItemTag, 4))
                 .build()
                 .register();
@@ -300,7 +311,7 @@ public record WoodSetEntry(
                 .loot((lt, b) -> lt.add(b, lt.createLeavesDrops(b, sapling.get(), new float[]{0.05f, 0.0625f, 0.083333336f, 0.1f})))
                 .defaultBlockstate()
                 .tag(BlockTags.LEAVES)
-                .onRegister(block -> fire.setFlammable(block, 30, 60))
+                .onRegister(block -> { if (flammable) fire.setFlammable(block, 30, 60); })
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
                 .tag(ItemTags.LEAVES)
                 .compostable(0.3f)
@@ -314,12 +325,12 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.slabBlock(ctx.get(), planksId, planksTextureId))
                 .properties(p -> p
                     .mapColor(planksMapColor)
-                ).tag(BlockTags.WOODEN_SLABS)
+                ).tag(wooden ? BlockTags.WOODEN_SLABS : BlockTags.SLABS)
                 .onRegister(block -> { if (flammable) fire.setFlammable(block, 5, 20); })
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
-                .tag(ItemTags.WOODEN_SLABS)
+                .tag(wooden ? ItemTags.WOODEN_SLABS : ItemTags.SLABS)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.slabBuilder(RecipeCategory.BUILDING_BLOCKS, ctx.get(), Ingredient.of(planks))
-                    .group("wooden_slab")
+                    .group(wooden ? "wooden_slab" : "")
                     .unlockedBy("has_planks", RegistrateRecipeProvider.has(planks))
                     .save(prov)
                 ).build()
@@ -332,12 +343,12 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.stairsBlock(ctx.get(), planksTextureId))
                 .properties(p -> p
                     .mapColor(planksMapColor)
-                ).tag(BlockTags.WOODEN_STAIRS)
+                ).tag(wooden ? BlockTags.WOODEN_STAIRS : BlockTags.STAIRS)
                 .onRegister(block -> { if (flammable) fire.setFlammable(block, 5, 20); })
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
-                .tag(ItemTags.WOODEN_STAIRS)
+                .tag(wooden ? ItemTags.WOODEN_STAIRS : ItemTags.STAIRS)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.stairBuilder(ctx.get(), Ingredient.of(planks))
-                    .group("wooden_stairs")
+                    .group(wooden ? "wooden_stairs" : "")
                     .unlockedBy("has_planks", RegistrateRecipeProvider.has(planks))
                     .save(prov)
                 ).build()
@@ -350,11 +361,11 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.fenceBlock(ctx.get(), planksTextureId))
                 .properties(p -> p
                     .mapColor(planksMapColor)
-                ).tag(BlockTags.WOODEN_FENCES)
+                ).tag(wooden ? BlockTags.WOODEN_FENCES : BlockTags.FENCES)
                 .onRegister(block -> { if (flammable) fire.setFlammable(block, 5, 20); })
                 .item()
                 .model((ctx, prov) -> prov.fenceInventory(woodName + "_fence", planksTextureId))
-                .tag(ItemTags.WOODEN_FENCES)
+                .tag(wooden ? ItemTags.WOODEN_FENCES : ItemTags.FENCES)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.fenceBuilder(ctx.get(), Ingredient.of(planks))
                     .group("fence")
                     .unlockedBy("has_planks", RegistrateRecipeProvider.has(planks))
@@ -369,10 +380,10 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.fenceGateBlock(ctx.get(), planksTextureId))
                 .properties(p -> p
                     .mapColor(planksMapColor)
-                ).tag(BlockTags.FENCE_GATES, Tags.Blocks.FENCE_GATES_WOODEN)
+                ).tag(wooden ? Tags.Blocks.FENCE_GATES_WOODEN : BlockTags.FENCE_GATES)
                 .onRegister(block -> { if (flammable) fire.setFlammable(block, 5, 20); })
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
-                .tag(ItemTags.FENCE_GATES, Tags.Items.FENCE_GATES_WOODEN)
+                .tag(wooden ? Tags.Items.FENCE_GATES_WOODEN : ItemTags.FENCE_GATES)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.fenceGateBuilder(ctx.get(), Ingredient.of(planks))
                     .group("fence_gate")
                     .unlockedBy("has_planks", RegistrateRecipeProvider.has(planks))
@@ -387,11 +398,11 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.pressurePlateBlock(ctx.get(), planksTextureId))
                 .properties(p -> p
                     .mapColor(planksMapColor)
-                ).tag(BlockTags.WOODEN_PRESSURE_PLATES)
+                ).tag(wooden ? BlockTags.WOODEN_PRESSURE_PLATES : BlockTags.PRESSURE_PLATES)
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
-                .tag(ItemTags.WOODEN_PRESSURE_PLATES)
+                .tag(wooden ? ItemTags.WOODEN_PRESSURE_PLATES : ItemTags.WOODEN_PRESSURE_PLATES) //TODO non-wooden pressure plate tag
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.pressurePlateBuilder(RecipeCategory.REDSTONE, ctx.get(), Ingredient.of(planks))
-                    .group("wooden_pressure_plate")
+                    .group(wooden ? "wooden_pressure_plate" : "")
                     .unlockedBy("has_planks", RegistrateRecipeProvider.has(planks))
                     .save(prov)
                 ).build()
@@ -402,11 +413,11 @@ public record WoodSetEntry(
                 .lang(englishName + " Button")
                 .defaultLoot()
                 .blockstate((ctx, prov) -> prov.buttonBlock(ctx.get(), planksTextureId))
-                .tag(BlockTags.WOODEN_BUTTONS)
+                .tag(wooden ? BlockTags.WOODEN_BUTTONS : BlockTags.BUTTONS)
                 .transform(PetrolparkBlockBuilder::defaultBlockItem)
-                .tag(ItemTags.WOODEN_BUTTONS)
+                .tag(wooden ? ItemTags.WOODEN_BUTTONS : ItemTags.BUTTONS)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.buttonBuilder(ctx.get(), Ingredient.of(planks))
-                    .group("wooden_button")
+                    .group(wooden ? "wooden_button" : "")
                     .unlockedBy("has_planks", RegistrateRecipeProvider.has(planks))
                     .save(prov)
                 ).build()
@@ -422,12 +433,12 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.doorBlockWithRenderType(ctx.get(), woodName, doorTextureId.withSuffix("_bottom"), doorTextureId.withSuffix("_top"), "cutout"))
                 .properties(p -> p
                     .mapColor(planksMapColor)
-                ).tag(BlockTags.WOODEN_DOORS)
+                ).tag(wooden ? BlockTags.WOODEN_DOORS : BlockTags.DOORS)
                 .item()
                 .defaultModel()
-                .tag(ItemTags.WOODEN_DOORS)
+                .tag(wooden ? ItemTags.WOODEN_DOORS : ItemTags.DOORS)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.doorBuilder(ctx.get(), Ingredient.of(planks))
-                    .group("wooden_door")
+                    .group(wooden ? "wooden_door" : "")
                     .unlockedBy("has_planks", RegistrateRecipeProvider.has(planks))
                     .save(prov)
                 ).build()
@@ -442,12 +453,12 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.trapdoorBlockWithRenderType(ctx.get(), woodName, trapdoorId.withPrefix("block/"), true, "cutout"))
                 .properties(p -> p
                     .mapColor(planksMapColor)
-                ).tag(BlockTags.WOODEN_TRAPDOORS)
+                ).tag(wooden ? BlockTags.WOODEN_TRAPDOORS : BlockTags.TRAPDOORS)
                 .item()
                 .model((ctx, prov) -> prov.blockItem(ctx::get, "_bottom"))
-                .tag(ItemTags.WOODEN_TRAPDOORS)
+                .tag(wooden ? ItemTags.WOODEN_TRAPDOORS : ItemTags.TRAPDOORS)
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.trapdoorBuilder(ctx.get(), Ingredient.of(planks))
-                    .group("wooden_trapdoor")
+                    .group(wooden ? "wooden_trapdoor" : "")
                     .unlockedBy("has_planks", RegistrateRecipeProvider.has(planks))
                     .save(prov)
                 ).build()
@@ -463,7 +474,7 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.get(), prov.models().sign(signModelId.getPath(), planksTextureId)))
                 .properties(p -> p
                     .mapColor(planksMapColor)
-                ).tag(BlockTags.SIGNS)
+                ).tag(BlockTags.SIGNS) //TODO non-wooden signs
                 .register();
 
             final ResourceLocation wallSignId = ResourceLocation.fromNamespaceAndPath(registrate.getModid(), woodName + "_wall_sign");
@@ -475,14 +486,14 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.get(), prov.models().getExistingFile(signModelId)))
                 .properties(p -> p
                     .mapColor(planksMapColor)
-                ).tag(BlockTags.WALL_SIGNS)
+                ).tag(BlockTags.WALL_SIGNS) //TODO non-wooden signs
                 .register();
 
             OneTimeEventReceiver.addModListener(registrate, BlockEntityTypeAddBlocksEvent.class, e -> e.modify(BlockEntityType.SIGN, standingSign.get(), wallSign.get()));
 
             final ItemEntry<SignItem> signItem = registrate.item(woodName + "_sign", p -> new SignItem(p, standingSign.get(), wallSign.get()))
                 .defaultModel()
-                .tag(ItemTags.SIGNS)
+                .tag(ItemTags.SIGNS) //TODO non-wooden signs
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.signBuilder(ctx.get(), Ingredient.of(planks))
                     .group("sign")
                     .unlockedBy("has_planks", RegistrateRecipeProvider.has(planks))
@@ -499,7 +510,7 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.get(), prov.models().sign(hangingSignModelId.getPath(), strippedLogTextureId)))
                 .properties(p -> p
                     .mapColor(logMapColor)
-                ).tag(BlockTags.CEILING_HANGING_SIGNS)
+                ).tag(BlockTags.CEILING_HANGING_SIGNS) //TODO non-wooden signs
                 .register();
 
             final ResourceLocation wallHangingSignId = ResourceLocation.fromNamespaceAndPath(registrate.getModid(), woodName + "_wall_hanging_sign");
@@ -511,14 +522,14 @@ public record WoodSetEntry(
                 .blockstate((ctx, prov) -> prov.simpleBlock(ctx.get(), prov.models().getExistingFile(hangingSignModelId)))
                 .properties(p -> p
                     .mapColor(logMapColor)
-                ).tag(BlockTags.WALL_HANGING_SIGNS)
+                ).tag(BlockTags.WALL_HANGING_SIGNS) //TODO non-wooden signs
                 .register();
 
             OneTimeEventReceiver.addModListener(registrate, BlockEntityTypeAddBlocksEvent.class, e -> e.modify(BlockEntityType.HANGING_SIGN, ceilingHangingSign.get(), wallHangingSign.get()));
 
             final ItemEntry<HangingSignItem> hangingSignItem = registrate.item(woodName + "_hanging_sign", p -> new HangingSignItem(ceilingHangingSign.get(), wallHangingSign.get(), p))
                 .defaultModel()
-                .tag(ItemTags.HANGING_SIGNS)
+                .tag(ItemTags.HANGING_SIGNS) //TODO non-wooden signs
                 .recipe((ctx, prov) -> RegistrateRecipeProvider.hangingSign(prov, ctx.get(), planks))
                 .register();
 

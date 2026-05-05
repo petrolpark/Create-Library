@@ -25,6 +25,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -37,6 +38,7 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
@@ -60,12 +62,24 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
 
     public abstract BlockState withoutPart(BlockState state, PART part);
 
+    @Nullable
+    public PART getTargetedPart(BlockState state, BlockPos pos, Entity entity) {
+        return clipperCache.get(state).clip(pos, entity);
+    };
+
+    @Override
+    public ItemStack getCloneItemStack(BlockState state, HitResult target, LevelReader level, BlockPos pos, Player player) {
+        final PART part = getTargetedPart(state, pos, player);
+        if (part != null) return part.cloneItemStack(state, level, pos, player);
+        return ItemStack.EMPTY;
+    };
+
     @Override
     protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         if (context instanceof EntityCollisionContext entityContext) {
             final Entity entity = entityContext.getEntity();
             if (entity != null) {
-                final PART part = clipperCache.get(state).clip(pos, entity);
+                final PART part = getTargetedPart(state, pos, entity);
                 if (part != null) return part.shape();
             };
         };
@@ -98,7 +112,7 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
 
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
-        final PART part = clipperCache.get(state).clip(pos, player);
+        final PART part = getTargetedPart(state, pos, player);
         if (part != null) {
             level.setBlock(pos, withoutPart(state, part), 11);
             if (willHarvest) { // Actual Block breaking is cancelled, so do it here
@@ -151,6 +165,7 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
     };
 
     public interface IPart {
+        public ItemStack cloneItemStack(BlockState state, LevelReader level, BlockPos pos, Player player);
         public VoxelShape shape();
         public ResourceKey<LootTable> loot();
     };

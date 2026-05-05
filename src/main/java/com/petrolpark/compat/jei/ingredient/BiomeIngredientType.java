@@ -56,14 +56,14 @@ public class BiomeIngredientType implements IIngredientType<Biome> {
         };
 
         public Component getDisplayNameComponent(@Nonnull Biome ingredient) {
-            ResourceLocation rl = getResourceLocation(ingredient);
+            final ResourceLocation rl = getResourceLocation(ingredient);
             if (rl == null) return Component.translatable("biome.petrolpark.unknown");
             return Component.translatable(getResourceLocation(ingredient).toLanguageKey("biome"));
         };
 
         @Override
         public String getUniqueId(@Nonnull Biome ingredient, @Nonnull UidContext context) {
-            ResourceLocation rl = getResourceLocation(ingredient);
+            final ResourceLocation rl = getResourceLocation(ingredient);
             if (rl == null) return "Unknown Biome";
             return rl.toString();
         };
@@ -81,6 +81,13 @@ public class BiomeIngredientType implements IIngredientType<Biome> {
         @Override
         public String getErrorInfo(@Nonnull Biome ingredient) {
             return "";
+        };
+
+        @Override
+        public String getDisplayModId(@Nonnull Biome ingredient) {
+            final ResourceLocation rl = getResourceLocation(ingredient);
+            if (rl == null) return "unknown";
+            return rl.getNamespace();
         };
 
     };
