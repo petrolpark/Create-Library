@@ -108,7 +108,6 @@ public class RotationPropagatorMixin {
     )
     private static void petrolpark$getCurrentBEIndex(KineticBlockEntity updateTE, CallbackInfo ci, @Share("index") LocalIntRef indexRef, @Share("indexFrontier") LocalRef<List<Integer>> indexFrontierRef) {
         indexRef.set(indexFrontierRef.get().remove(0));
-        Petrolpark.LOGGER.info("checking index " + indexRef.get());
     };
 
     /**
@@ -122,7 +121,11 @@ public class RotationPropagatorMixin {
         )
     )
     private static BlockEntity petrolpark$getCorrectCompositePart(BlockEntity original, @Share("index") LocalIntRef indexRef) {
-        return original instanceof CompositeKineticBlockEntity composite ? composite.getParts().get(indexRef.get()) : original;
+        // Was: no guard on index, -1 would cause IndexOutOfBounds or wrong part
+        if (!(original instanceof CompositeKineticBlockEntity composite)) return original;
+        int index = indexRef.get();
+        if (index < 0 || index >= composite.getParts().size()) return original;
+        return composite.getParts().get(index);
     };
 
     /**
@@ -169,7 +172,7 @@ public class RotationPropagatorMixin {
         )
     )
     private static void petrolpark$addNeighbourIndexToFrontier(KineticBlockEntity updateTE, CallbackInfo ci, @Share("indexFrontier") LocalRef<List<Integer>> indexFrontierRef, @Local(ordinal = 2) KineticBlockEntity neighbourBE) {
-        if (neighbourBE instanceof CompositeKineticBlockEntityPart part) indexFrontierRef.get().add(part.getIndex());
+        indexFrontierRef.get().add(neighbourBE instanceof CompositeKineticBlockEntityPart part ? part.getIndex() : -1);
     };
 
     @ModifyExpressionValue(
