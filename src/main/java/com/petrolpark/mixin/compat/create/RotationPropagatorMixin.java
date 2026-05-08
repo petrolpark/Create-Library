@@ -121,7 +121,6 @@ public class RotationPropagatorMixin {
         )
     )
     private static BlockEntity petrolpark$getCorrectCompositePart(BlockEntity original, @Share("index") LocalIntRef indexRef) {
-        // Was: no guard on index, -1 would cause IndexOutOfBounds or wrong part
         if (!(original instanceof CompositeKineticBlockEntity composite)) return original;
         int index = indexRef.get();
         if (index < 0 || index >= composite.getParts().size()) return original;
