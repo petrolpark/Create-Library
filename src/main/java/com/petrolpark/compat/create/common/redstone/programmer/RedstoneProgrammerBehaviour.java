@@ -136,6 +136,7 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
         return TYPE;
     }
 
+    //TODO separate keys (so separate behaviours) for copying whole programs vs a single frequency
     @Override
     public String getClipboardKey() {
         return "Frequencies";
@@ -155,9 +156,7 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
         };
         if (tag.contains("First") || !tag.contains("Last")) {
             final Couple<Frequency> frequencies = Couple.create(Frequency.of(ItemStack.parseOptional(registries, tag.getCompound("FrequencyFirst"))), Frequency.of(ItemStack.parseOptional(registries, tag.getCompound("FrequencyLast"))));
-            if (program.getChannels().stream().anyMatch(channel -> channel.networkKey.equals(frequencies))) return false;
-            if (!simulate) program.addBlankChannel(frequencies);
-            return true;
+            return program.addBlankChannel(frequencies, simulate);
         };
         return false;
     };

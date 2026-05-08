@@ -9,6 +9,8 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import javax.annotation.Nonnull;
+
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -268,11 +270,19 @@ public abstract class RedstoneProgram {
         return ImmutableList.copyOf(channels);
     };
 
-    public void addBlankChannel(Couple<Frequency> frequencies) {
+    /**
+     * 
+     * @param frequencies
+     * @return {@code true} if the Channel could be added (that frequency did not already exist)
+     */
+    public boolean addBlankChannel(Couple<Frequency> frequencies, boolean simulate) {
         final Channel channel = new Channel(frequencies, new int[length]);
-        channels.add(channel);
-        if (!isValidWorld(getWorld())) return;
-        getHandler().addToNetwork(getWorld(), channel);
+        if (getChannels().stream().anyMatch(c -> c.networkKey.equals(frequencies)) && !frequencies.both(frequency -> frequency.getStack().isEmpty())) return false;
+        if (!simulate) {
+            channels.add(channel);
+            if (!isValidWorld(getWorld())) getHandler().addToNetwork(getWorld(), channel);
+        };
+        return true;
     };
 
     public boolean remove(Channel channel) {
@@ -319,7 +329,7 @@ public abstract class RedstoneProgram {
         return this;
     };
 
-    public RedstoneProgram copyFrom(RedstoneProgram otherProgram) {
+    public RedstoneProgram copyFrom(@Nonnull RedstoneProgram otherProgram) {
         return copyFrom(otherProgram.getMode(), otherProgram.getLength(), otherProgram.getPlaytime(), otherProgram.getTicksToNextBeat(), otherProgram.isPaused(), otherProgram.wasPausedLastTick(), otherProgram.wasPoweredLastTick(), otherProgram.getChannelData(), otherProgram.getTicksPerBeat(), otherProgram.getBeatsPerLine(), otherProgram.getLinesPerBar());
     };
 

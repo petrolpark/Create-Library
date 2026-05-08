@@ -5,15 +5,20 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.Codec;
 import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.PetrolparkCreateDataComponentTypes;
 import com.petrolpark.core.world.block.IPickUpPutDownBlock;
+import com.simibubi.create.content.redstone.link.LinkBehaviour;
+import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.render.SimpleCustomRenderer;
 
+import net.createmod.catnip.data.Couple;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -24,7 +29,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -35,6 +39,7 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 
+@ParametersAreNonnullByDefault
 public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFeature {
 
     public RedstoneProgrammerBlockItem(RedstoneProgrammerBlock block, Properties properties) {
@@ -43,20 +48,32 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
     };
 
     @Override
-    public InteractionResult onItemUseFirst(@Nonnull ItemStack stack, @Nonnull UseOnContext context) {
+    public InteractionResult onItemUseFirst(ItemStack stack, UseOnContext context) {
         final Player player = context.getPlayer();
-        if (player != null && player.isShiftKeyDown()) return super.onItemUseFirst(stack, context);
+        if (player == null || player.isShiftKeyDown()) return super.onItemUseFirst(stack, context);
+        
+        // Copy Frequency from Link
+        final LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(context.getLevel(), context.getClickedPos(), LinkBehaviour.TYPE);
+        if (linkBehaviour != null) {
+            final Couple<Frequency> frequency = linkBehaviour.getNetworkKey();
+            if (frequency.both(freq -> !freq.getStack().isEmpty()) && getProgram(stack, context.getLevel(), player)
+                .filter(program -> program.addBlankChannel(frequency, false))
+                .isPresent()
+            ) return InteractionResult.SUCCESS;
+        };
+        
+        // Edit program
         openScreen(stack, context.getLevel(), player);
         return InteractionResult.SUCCESS;
     };
 
     @Override
-    public InteractionResult place(@Nonnull BlockPlaceContext context) {
+    public InteractionResult place(BlockPlaceContext context) {
         return IPickUpPutDownBlock.removeItemFromInventory(context, super.place(context));
     };
 
     @Override
-    public InteractionResultHolder<ItemStack> use(@Nonnull Level level, @Nonnull Player player, @Nonnull InteractionHand usedHand) {
+    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand usedHand) {
         ItemStack stack = player.getItemInHand(usedHand);
         openScreen(stack, level, player);
         return new InteractionResultHolder<>(InteractionResult.SUCCESS, player.getItemInHand(usedHand));
@@ -69,11 +86,11 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
     };
 
     @Override
-    public void inventoryTick(@Nonnull ItemStack stack, @Nonnull Level level, @Nonnull Entity entity, int slotId, boolean isSelected) {
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slotId, boolean isSelected) {
         super.inventoryTick(stack, level, entity, slotId, isSelected);
         if (entity instanceof LivingEntity player) {
             getProgram(stack, level, player).ifPresent(program -> {
-                if (!level.isClientSide()) program.load(); // This is a set so we're safe to repeatedly load
+                if (!level.isClientSide()) program.load(); // This is a Set so we're safe to repeatedly load
                 program.tick();
                 stack.set(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM, program);
             });
@@ -81,12 +98,12 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
     };
 
     @Override
-    public boolean shouldCauseReequipAnimation(@Nonnull ItemStack from, @Nonnull ItemStack to, boolean slotChanged) {
+    public boolean shouldCauseReequipAnimation(ItemStack from, ItemStack to, boolean slotChanged) {
         return !(from.getItem() instanceof RedstoneProgrammerBlockItem && to.getItem() instanceof RedstoneProgrammerBlockItem);
     };
 
     @Override
-    public boolean shouldCauseBlockBreakReset(@Nonnull ItemStack from, @Nonnull ItemStack to) {
+    public boolean shouldCauseBlockBreakReset(ItemStack from, ItemStack to) {
         return !(from.getItem() instanceof RedstoneProgrammerBlockItem && to.getItem() instanceof RedstoneProgrammerBlockItem);
     };
 
@@ -97,8 +114,8 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
      * @param player
      * @return An Optional which should almost always contain a Redstone Program
      */
-    public static Optional<ItemStackRedstoneProgram> getProgram(ItemStack stack, LevelAccessor level, LivingEntity player) {
-        if (!(stack.getItem() instanceof RedstoneProgrammerBlockItem) || player == null) return Optional.empty();
+    public static Optional<ItemStackRedstoneProgram> getProgram(ItemStack stack, @Nullable LevelAccessor level, @Nullable LivingEntity player) {
+        if (!(stack.getItem() instanceof RedstoneProgrammerBlockItem) || level == null || player == null) return Optional.empty();
 
         final UUID uuid;
         if (stack.has(PetrolparkCreateDataComponentTypes.REDSTONE_PROGRAM_UUID)) {
@@ -190,7 +207,7 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
     public static record ItemStackRedstoneProgramMenuOpener(RedstoneProgram program) implements MenuProvider {
 
         @Override
-        public AbstractContainerMenu createMenu(int id, @Nonnull Inventory inv, @Nonnull Player player) {
+        public RedstoneProgrammerMenu createMenu(int id, Inventory inv, Player player) {
             return RedstoneProgrammerMenu.create(id, inv, program);
         };
 
@@ -203,7 +220,7 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
 
     @Override
     @OnlyIn(Dist.CLIENT)
-	public void initializeClient(@Nonnull Consumer<IClientItemExtensions> consumer) {
+	public void initializeClient(Consumer<IClientItemExtensions> consumer) {
 		consumer.accept(SimpleCustomRenderer.create(this, new RedstoneProgrammerItemRenderer()));
 	};
 
