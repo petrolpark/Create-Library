@@ -66,7 +66,7 @@ public abstract class AbstractRememberPlacerBehaviour extends BlockEntityBehavio
         setPlacedBy(sbe, player);
 	};
 
-    public static void setPlacedBy(SmartBlockEntity be, Player player) {
+    public static final void setPlacedBy(SmartBlockEntity be, Player player) {
         if (player == null) return;
         for (BlockEntityBehaviour behaviour : be.getAllBehaviours()) {
             if (behaviour instanceof AbstractRememberPlacerBehaviour arpb && arpb.shouldRememberPlacer(player)) arpb.setPlayer(player.getUUID());
@@ -82,8 +82,12 @@ public abstract class AbstractRememberPlacerBehaviour extends BlockEntityBehavio
     @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
         super.write(nbt, registries, clientPacket);
-        Player player = getPlayer();
-        if (!nbt.contains("Owner") && player != null && shouldRememberPlacer(player)) nbt.putUUID("Owner", playerUUID); // Don't record more than once
+        if (playerUUID == null) return;
+        if (blockEntity.hasLevel()) {
+            final Player player = getPlayer();
+            if (player == null || !shouldRememberPlacer(player)) return;
+        };
+        if (!nbt.contains("Owner")) nbt.putUUID("Owner", playerUUID); // Don't record more than once
     };
     
 };
