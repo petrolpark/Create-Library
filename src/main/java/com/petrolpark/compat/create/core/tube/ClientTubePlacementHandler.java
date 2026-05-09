@@ -27,6 +27,7 @@ import net.createmod.catnip.platform.CatnipServices;
 import net.createmod.catnip.theme.Color;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.DeltaTracker;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.GuiGraphics;
@@ -46,6 +47,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
+import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 
 @OnlyIn(Dist.CLIENT)
 @RequiresCreate
@@ -67,7 +69,7 @@ public class ClientTubePlacementHandler {
     protected static boolean canAfford = true;
 
     @SubscribeEvent
-    public static void tick(ClientTickEvent.Pre event) {
+    public static final void tick(ClientTickEvent.Pre event) {
         Minecraft mc = Minecraft.getInstance();
         ClientLevel level = mc.level;
         LocalPlayer player = mc.player;
@@ -133,7 +135,7 @@ public class ClientTubePlacementHandler {
 
     public static final LayeredDraw.Layer OVERLAY = ClientTubePlacementHandler::renderOverlay;
 
-    public static void renderOverlay(GuiGraphics graphics, DeltaTracker deltaTracker) {
+    public static final void renderOverlay(GuiGraphics graphics, DeltaTracker deltaTracker) {
         if (spline == null) return;
         Minecraft mc = Minecraft.getInstance();
 
@@ -226,10 +228,15 @@ public class ClientTubePlacementHandler {
     };
 
     @SubscribeEvent
-    public static void onUseMouse(InputEvent.MouseButton.Pre event) {
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
-        if (player != null && spline != null && targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT && draggingSelectedControlPoint == (event.getAction() == InputConstants.RELEASE)) {
+    public static final void onUseMouse(InputEvent.MouseButton.Pre event) {
+        final Minecraft mc = Minecraft.getInstance();
+        final LocalPlayer player = mc.player;
+
+        if (player == null || spline == null) return; 
+        event.setCanceled(true); // No other mouse inputs allowed in Tube placing mode
+        KeyMapping.set(InputConstants.Type.MOUSE.getOrCreate(event.getButton()), false);
+        
+        if (targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT && draggingSelectedControlPoint == (event.getAction() == InputConstants.RELEASE)) {
             draggingSelectedControlPoint = !draggingSelectedControlPoint;
             distanceToSelectedControlPoint = player.getEyePosition().distanceTo(spline.getControlPoints().get(targetedControlPoint));
             resetTTL();
@@ -237,7 +244,7 @@ public class ClientTubePlacementHandler {
     };
 
     @SubscribeEvent
-    public static void onScrollMouse(InputEvent.MouseScrollingEvent event) {
+    public static final void onScrollMouse(InputEvent.MouseScrollingEvent event) {
         if (draggingSelectedControlPoint) {
             distanceToSelectedControlPoint = Mth.clamp(distanceToSelectedControlPoint + event.getScrollDeltaY() / 8d, Math.min(distanceToSelectedControlPoint, 0.5d), Math.max(distanceToSelectedControlPoint, 6d));
             relocateControlPoint();
@@ -247,11 +254,11 @@ public class ClientTubePlacementHandler {
     };
 
     @SubscribeEvent
-    public static void onUseKey(InputEvent.Key event) {
+    public static final void onUseKey(InputEvent.Key event) {
         if (spline == null) return;
         if (event.getAction() == InputConstants.RELEASE) {
-            Minecraft mc = Minecraft.getInstance();
-            for (Controls control : Controls.values()) if (control.canUse() && control.key != null && event.getKey() == control.key.keybind.getKey().getValue()) {
+            final Minecraft mc = Minecraft.getInstance();
+            for (final Controls control : Controls.values()) if (control.canUse() && control.key != null && event.getKey() == control.key.keybind.getKey().getValue()) {
                 control.key.keybind.consumeClick();
                 control.use();
                 if (spline != null) {
@@ -264,7 +271,12 @@ public class ClientTubePlacementHandler {
         };
     };
 
-    protected static void relocateControlPoint() {
+    @SubscribeEvent
+    public static final void onRenderHighlight(RenderHighlightEvent.Block event) {
+        if (spline != null) event.setCanceled(true);
+    };
+
+    protected static final void relocateControlPoint() {
         Minecraft mc = Minecraft.getInstance();
         ClientLevel level = mc.level;
         LocalPlayer player = mc.player;
@@ -275,7 +287,7 @@ public class ClientTubePlacementHandler {
         };
     };
 
-    public static void tryConnect(BlockFace location, ItemStack stack, ITubeBlock tubeBlock, boolean manualPlacement) {
+    public static final void tryConnect(BlockFace location, ItemStack stack, ITubeBlock tubeBlock, boolean manualPlacement) {
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
         if (start == null) { // If placing the first Block
@@ -301,23 +313,23 @@ public class ClientTubePlacementHandler {
         };
     };
 
-    public static void revalidateSpline(Minecraft mc) {
+    public static final void revalidateSpline(Minecraft mc) {
         spline.validate(mc.level, mc.player, currentStack.getItem(), tubeBlock);
     };
 
-    public static void addControlPointWithoutRevalidating(Vec3 controlPoint) {
+    public static final void addControlPointWithoutRevalidating(Vec3 controlPoint) {
         if (spline != null) spline.addControlPoint(controlPoint);
     };
 
-    public static void resetTTL() {
+    public static final void resetTTL() {
         ttl = TIMEOUT;
     };
 
-    public static boolean active() {
+    public static final boolean active() {
         return spline != null;
     };
 
-    public static void cancel() {
+    public static final void cancel() {
         currentStack = ItemStack.EMPTY;
         tubeBlock = null;
         start = null;
