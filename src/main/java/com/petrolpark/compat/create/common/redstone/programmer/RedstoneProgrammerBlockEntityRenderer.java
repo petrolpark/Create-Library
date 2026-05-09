@@ -23,14 +23,14 @@ public class RedstoneProgrammerBlockEntityRenderer extends SafeBlockEntityRender
 
     @Override
     protected void renderSafe(RedstoneProgrammerBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
-        Direction direction = be.getBlockState().getValue(RedstoneProgrammerBlock.FACING);
-        RedstoneProgram program = be.programmer.program;
-        VertexConsumer vc = bufferSource.getBuffer(RenderType.cutout());
-        SuperByteBuffer cylinder = CachedBuffers.partial(PetrolparkPartialModels.REDSTONE_PROGRAMMER_CYLINDER, be.getBlockState())
+        final Direction direction = be.getBlockState().getValue(RedstoneProgrammerBlock.FACING);
+        final RedstoneProgram program = be.programmer.program;
+        final VertexConsumer vc = bufferSource.getBuffer(RenderType.cutout());
+        final SuperByteBuffer cylinder = CachedBuffers.partial(PetrolparkPartialModels.REDSTONE_PROGRAMMER_CYLINDER, be.getBlockState())
             .center()
             .rotateYDegrees(AngleHelper.horizontalAngle(direction))
             .uncenter();
-        SuperByteBuffer needle = CachedBuffers.partial(PetrolparkPartialModels.REDSTONE_PROGRAMMER_NEEDLE, be.getBlockState())
+        final SuperByteBuffer needle = CachedBuffers.partial(PetrolparkPartialModels.REDSTONE_PROGRAMMER_NEEDLE, be.getBlockState())
             .center()
             .rotateYDegrees(AngleHelper.horizontalAngle(direction))
             .uncenter();
@@ -53,7 +53,7 @@ public class RedstoneProgrammerBlockEntityRenderer extends SafeBlockEntityRender
         ImmutableList<Channel> channels = program.getChannels();
         for (int i = 0; i < 6; i++) {
             if (i >= channels.size()) continue;
-            boolean powered = !program.paused && program.getChannels().get(i).getTransmittedStrength() != 0;
+            boolean powered = program.getChannels().get(i).getTransmittedStrength() != 0;
             CachedBuffers.partial(powered ? PetrolparkPartialModels.REDSTONE_PROGRAMMER_TRANSMITTER_POWERED : PetrolparkPartialModels.REDSTONE_PROGRAMMER_TRANSMITTER, be.getBlockState())
                 .center()
                 .rotateYDegrees(AngleHelper.horizontalAngle(direction))

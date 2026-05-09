@@ -56,10 +56,10 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
         final LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(context.getLevel(), context.getClickedPos(), LinkBehaviour.TYPE);
         if (linkBehaviour != null) {
             final Couple<Frequency> frequency = linkBehaviour.getNetworkKey();
-            if (frequency.both(freq -> !freq.getStack().isEmpty()) && getProgram(stack, context.getLevel(), player)
-                .filter(program -> program.addBlankChannel(frequency, false))
-                .isPresent()
-            ) return InteractionResult.SUCCESS;
+            if (frequency.both(freq -> !freq.getStack().isEmpty())) {
+                final Optional<ItemStackRedstoneProgram> programOp = getProgram(stack, player.level(), player);
+                if (programOp.isPresent()) return programOp.get().tryAddNewChannel(frequency, player, false) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
+            };
         };
         
         // Edit program

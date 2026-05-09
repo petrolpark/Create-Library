@@ -1,5 +1,7 @@
 package com.petrolpark.compat.create.common.redstone.programmer;
 
+import static com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgram.translate;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,6 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.client.rendering.PetrolparkGuiTexture;
-import com.petrolpark.compat.create.PetrolparkCreateBlocks;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgram.Channel;
 import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgram.PlayMode;
 import com.petrolpark.compat.jei.ghost.IConditionalGhostSlot;
@@ -29,7 +30,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.Rect2i;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
@@ -518,12 +518,16 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
 
         ms.popPose();
 
+        ms.pushPose();
+
         // Aforementioned tooltips for adding/removing bars
         if ("remove".equals(renderedTooltip)) {
             graphics.renderTooltip(font, List.of(translate("remove_bar"), translate("remove_bar.hint")), Optional.empty(), mouseX, mouseY);
         } else if ("add".equals(renderedTooltip)) {
             graphics.renderTooltip(font, List.of(translate("add_bar"), translate("add_bar.hint")), Optional.empty(), mouseX, mouseY);
         };
+
+        ms.popPose();
     };
 
     @Override
@@ -554,10 +558,6 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
 
     public void setPlayPauseButtonIcon() {
         playPauseButton.setIcon(program.paused ? AllIcons.I_PLAY : AllIcons.I_PAUSE);
-    };
-
-    public static final MutableComponent translate(String suffix) {
-        return Component.translatable(PetrolparkCreateBlocks.REDSTONE_PROGRAMMER.get().getDescriptionId() + "." + suffix);
     };
 
     private final void enableScissor(GuiGraphics graphics, Rect2i rect) {

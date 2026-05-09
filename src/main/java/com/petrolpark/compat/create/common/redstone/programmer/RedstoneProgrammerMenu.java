@@ -129,7 +129,7 @@ public class RedstoneProgrammerMenu extends GhostItemMenu<RedstoneProgram> {
                 } else {
                     final Couple<Frequency> networkKey = Couple.create(Frequency.of(ItemStack.EMPTY), Frequency.of(ItemStack.EMPTY));
                     networkKey.set(first, Frequency.of(stack));
-                    contentHolder.addBlankChannel(networkKey, false);
+                    contentHolder.addBlankChannel(networkKey);
                 };
             } else if (!contentHolder.getChannels().isEmpty()) {
                 final Channel channel = contentHolder.getChannels().get(channelIndex);

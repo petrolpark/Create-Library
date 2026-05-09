@@ -10,12 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import com.mojang.serialization.Codec;
 import com.petrolpark.util.NBTHelper;
 import com.simibubi.create.content.equipment.clipboard.ClipboardCloneable;
-import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import net.createmod.catnip.data.Couple;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -26,7 +24,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -134,17 +131,16 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
     @Override
     public BehaviourType<?> getType() {
         return TYPE;
-    }
+    };
 
-    //TODO separate keys (so separate behaviours) for copying whole programs vs a single frequency
     @Override
     public String getClipboardKey() {
-        return "Frequencies";
+        return "RedstoneProgram";
     };
 
     @Override
     public boolean writeToClipboard(@NotNull Provider registries, CompoundTag tag, Direction side) {
-        tag.put("RedstoneProgram", NBTHelper.write(registries, programCodec, program));
+        tag.put("Program", NBTHelper.write(registries, programCodec, program));
         return true;
     };
 
@@ -153,10 +149,6 @@ public class RedstoneProgrammerBehaviour extends BlockEntityBehaviour implements
         if (tag.contains("RedstoneProgram")) {
             if (!simulate) NBTHelper.read(registries, programCodec, tag);
             return true;
-        };
-        if (tag.contains("First") || !tag.contains("Last")) {
-            final Couple<Frequency> frequencies = Couple.create(Frequency.of(ItemStack.parseOptional(registries, tag.getCompound("FrequencyFirst"))), Frequency.of(ItemStack.parseOptional(registries, tag.getCompound("FrequencyLast"))));
-            return program.addBlankChannel(frequencies, simulate);
         };
         return false;
     };

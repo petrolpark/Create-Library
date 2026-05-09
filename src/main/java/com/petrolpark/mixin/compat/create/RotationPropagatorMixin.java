@@ -20,7 +20,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.core.block.composite.CompositeKineticBlockEntity;
 import com.petrolpark.compat.create.core.block.composite.CompositeKineticBlockEntity.CompositeKineticBlockEntityPart;
 import com.petrolpark.compat.create.core.block.entity.IKineticBlockEntityDuck;

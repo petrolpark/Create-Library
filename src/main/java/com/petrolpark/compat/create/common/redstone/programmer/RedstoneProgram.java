@@ -27,15 +27,18 @@ import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Freq
 
 import net.createmod.catnip.codecs.stream.CatnipStreamCodecBuilders;
 import net.createmod.catnip.data.Couple;
+import net.minecraft.ChatFormatting;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.StreamEncoder;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
 
@@ -270,19 +273,31 @@ public abstract class RedstoneProgram {
         return ImmutableList.copyOf(channels);
     };
 
+    public boolean tryAddNewChannel(Couple<Frequency> frequency, Player player, boolean simulate) {
+        if (frequency.getFirst().getStack().isEmpty() && frequency.getSecond().getStack().isEmpty()) return false;
+        if (channels.size() >= PetrolparkConfigs.server().redstoneProgrammerMaxChannels.get()) {
+            if (!simulate) player.displayClientMessage(translate("add_frequency.failure.full").withStyle(ChatFormatting.RED), true);
+        }  else if (channels.stream().map(Channel::getNetworkKey).anyMatch(frequency::equals)) {
+            if (!simulate) player.displayClientMessage(translate("add_frequency.failure.exists").withStyle(ChatFormatting.RED), true);
+        } else {
+            if (!simulate) {
+                player.displayClientMessage(translate("add_frequency.success", frequency.getFirst().getStack().getHoverName(), frequency.getSecond().getStack().getHoverName()), true);
+                addBlankChannel(frequency);
+            };
+            return true;
+        };
+        return false;
+    };
+
     /**
      * 
      * @param frequencies
      * @return {@code true} if the Channel could be added (that frequency did not already exist)
      */
-    public boolean addBlankChannel(Couple<Frequency> frequencies, boolean simulate) {
+    public void addBlankChannel(Couple<Frequency> frequencies) {
         final Channel channel = new Channel(frequencies, new int[length]);
-        if (getChannels().stream().anyMatch(c -> c.networkKey.equals(frequencies)) && !frequencies.both(frequency -> frequency.getStack().isEmpty())) return false;
-        if (!simulate) {
-            channels.add(channel);
-            if (!isValidWorld(getWorld())) getHandler().addToNetwork(getWorld(), channel);
-        };
-        return true;
+        channels.add(channel);
+        if (isValidWorld(getWorld())) getHandler().addToNetwork(getWorld(), channel);
     };
 
     public boolean remove(Channel channel) {
@@ -517,7 +532,9 @@ public abstract class RedstoneProgram {
     
     };
 
-    
+    public static final MutableComponent translate(String suffix, Object ... args) {
+        return Component.translatable(PetrolparkCreateBlocks.REDSTONE_PROGRAMMER.get().getDescriptionId() + "." + suffix, args);
+    };
 
     @Override
     public boolean equals(Object obj) {
