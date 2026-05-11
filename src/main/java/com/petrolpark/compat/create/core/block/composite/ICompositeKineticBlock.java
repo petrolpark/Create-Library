@@ -24,7 +24,7 @@ public interface ICompositeKineticBlock extends IRotate {
 
 	public default void onPlace(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState oldState, boolean isMoving) {
 		if (level.getBlockEntity(pos) instanceof CompositeKineticBlockEntity be) {
-            boolean changed = oldState.getBlock() != state.getBlock() || state.hasBlockEntity() != oldState.hasBlockEntity();
+            boolean changed = oldState.getBlock() != state.getBlock() || state.hasBlockEntity() != oldState.hasBlockEntity() || !oldState.equals(state);
             for (CompositeKineticBlockEntityPart part : be.getParts()) {
                 part.preventSpeedUpdate = 0;
                 if (changed || !part.areStatesKineticallyEquivalent(oldState, state)) return;

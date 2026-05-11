@@ -289,11 +289,6 @@ public abstract class RedstoneProgram {
         return false;
     };
 
-    /**
-     * 
-     * @param frequencies
-     * @return {@code true} if the Channel could be added (that frequency did not already exist)
-     */
     public void addBlankChannel(Couple<Frequency> frequencies) {
         final Channel channel = new Channel(frequencies, new int[length]);
         channels.add(channel);

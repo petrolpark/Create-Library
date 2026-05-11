@@ -44,6 +44,10 @@ public class PetrolparkDataMapTypes {
 
     @SubscribeEvent
     public static final void onRegisterDataMapTypes(RegisterDataMapTypesEvent event) {
+        event.register(ITEM_INTRINSIC_CONTAMINANTS);
+        event.register(ITEM_SHOWN_IF_ABSENT_CONTAMINANTS);
+        event.register(FLUID_INTRINSIC_CONTAMINANTS);
+        event.register(FLUID_SHOWN_IF_ABSENT_CONTAMINANTS);
         event.register(BLOCK_ENTITY_ADVANCEMENTS);
     };
 

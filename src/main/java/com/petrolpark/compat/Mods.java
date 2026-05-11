@@ -33,6 +33,8 @@ public enum Mods implements StringRepresentable {
     BIG_CANNONS("createbigcannons"),
     BREWIN_AND_CHEWIN("brewinandchewin"),
     CHIPPED,
+    CREATE_CONNECTED,
+    CREATE_GEARS_N_KINETICS("gnkinetics"),
     CURIOS,
     JEI,
     OBESE_CROPS,

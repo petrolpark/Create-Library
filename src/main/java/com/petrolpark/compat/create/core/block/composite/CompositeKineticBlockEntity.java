@@ -6,9 +6,13 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
+import com.petrolpark.compat.create.core.block.entity.IKineticBlockEntityDuck;
 import com.petrolpark.util.NBTHelper;
+import com.simibubi.create.content.kinetics.KineticNetwork;
 import com.simibubi.create.content.kinetics.RotationPropagator;
+import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.IRotate;
+import com.simibubi.create.content.kinetics.base.IRotate.SpeedLevel;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
@@ -213,6 +217,163 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
         public final void queueRotationIndicators() {
             effects.queueRotationIndicators();
         };
+    };
+
+    /**
+     * All copied from {@link GeneratingKineticBlockEntity}
+     */
+    public abstract class GeneratingCompositeKineticBlockEntityPart extends CompositeKineticBlockEntityPart {
+
+        public boolean reActivateSource = false;
+
+        public GeneratingCompositeKineticBlockEntityPart(BlockEntityType<?> typeIn) {
+            super(typeIn);
+        };
+
+        public void notifyStressCapacityChange(float capacity) {
+	        getOrCreateNetwork().updateCapacityFor(this, capacity);
+	    };
+
+        @Override
+        public void removeSource() {
+            if (hasSource() && isSource()) reActivateSource = true;
+            super.removeSource();
+        };
+
+        @Override
+        public void setSource(BlockPos source) {
+            super.setSource(source);
+            if (!reActivateSource) return;
+            final Level level = getLevel();
+            if (level == null) return;
+            final KineticBlockEntity sourceBE = IKineticBlockEntityDuck.getSource(this);
+            if (sourceBE == null) return;
+            if (Math.abs(sourceBE.getSpeed()) >= Math.abs(getGeneratedSpeed())) reActivateSource = false;
+        };
+
+        @Override
+        public void tick() {
+            super.tick();
+            if (reActivateSource) {
+                updateGeneratedRotation();
+                reActivateSource = false;
+            };
+        };
+
+        // @Override
+        // public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+        //     boolean added = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+        //     if (!StressImpact.isEnabled())
+        //         return added;
+
+        //     float stressBase = calculateAddedStressCapacity();
+        //     if (Mth.equal(stressBase, 0))
+        //         return added;
+
+        //     CreateLang.translate("gui.goggles.generator_stats")
+        //         .forGoggles(tooltip);
+        //     CreateLang.translate("tooltip.capacityProvided")
+        //         .style(ChatFormatting.GRAY)
+        //         .forGoggles(tooltip);
+
+        //     float speed = getTheoreticalSpeed();
+        //     if (speed != getGeneratedSpeed() && speed != 0)
+        //         stressBase *= getGeneratedSpeed() / speed;
+
+        //     float stressTotal = Math.abs(stressBase * speed);
+
+        //     CreateLang.number(stressTotal)
+        //         .translate("generic.unit.stress")
+        //         .style(ChatFormatting.AQUA)
+        //         .space()
+        //         .add(CreateLang.translate("gui.goggles.at_current_speed")
+        //             .style(ChatFormatting.DARK_GRAY))
+        //         .forGoggles(tooltip, 1);
+
+        //     return true;
+        // };
+
+        public void updateGeneratedRotation() {
+            final Level level = getLevel();
+            final float speed = getGeneratedSpeed();
+            final float prevSpeed = this.speed;
+
+            if (level == null || level.isClientSide()) return;
+
+            if (prevSpeed != speed) {
+                if (!hasSource()) {
+                    final SpeedLevel levelBefore = SpeedLevel.of(this.speed);
+                    final SpeedLevel levelafter = SpeedLevel.of(speed);
+                    if (levelBefore != levelafter) queueRotationIndicators();
+                };
+
+                applyNewSpeed(prevSpeed, speed);
+            };
+
+            if (hasNetwork() && speed != 0) {
+                KineticNetwork network = getOrCreateNetwork();
+                notifyStressCapacityChange(calculateAddedStressCapacity());
+                getOrCreateNetwork().updateStressFor(this, calculateStressApplied());
+                network.updateStress();
+            };
+
+            onSpeedChanged(prevSpeed);
+            sendData();
+        };
+
+        public void applyNewSpeed(float prevSpeed, float speed) {
+
+            final Level level = getLevel();
+            if (level == null) return;
+
+            // Speed changed to 0
+            if (speed == 0) {
+                if (hasSource()) {
+                    notifyStressCapacityChange(0);
+                    getOrCreateNetwork().updateStressFor(this, calculateStressApplied());
+                    return;
+                };
+                detachKinetics();
+                setSpeed(0);
+                setNetwork(null);
+                return;
+
+            // Now turning - create a new Network
+            } else if (prevSpeed == 0) {
+                setSpeed(speed);
+                setNetwork(createNetworkId());
+                attachKinetics();
+                return;
+
+            // Change speed when overpowered by other generator
+            } else if (hasSource()) {
+
+                // Staying below Overpowered speed
+                if (Math.abs(prevSpeed) >= Math.abs(speed)) {
+                    if (Math.signum(prevSpeed) != Math.signum(speed)) level.destroyBlock(getBlockPos(), true);
+                    return;
+                };
+
+                // Faster than attached network -> become the new source
+                detachKinetics();
+                setSpeed(speed);
+                source = null;
+                setNetwork(createNetworkId());
+                attachKinetics();
+                return;
+
+            // Reapply source
+            } else {
+                detachKinetics();
+                setSpeed(speed);
+                attachKinetics();
+            };
+        };
+
+        public long createNetworkId() {
+            return getBlockPos().asLong() ^ ((long)getIndex() << 9l); // y coord only likely to take up first 9 bits
+        };
+
     };
 
     public static final void addMultiParts(KineticBlockEntity from, BlockPos neighborPos, Consumer<KineticBlockEntity> beAdder) {
