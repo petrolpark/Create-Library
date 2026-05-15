@@ -1,5 +1,7 @@
 package com.petrolpark.compat.create.client.ghostBlocks;
 
+import java.util.function.Function;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -35,16 +37,26 @@ public class OffsetTransparentGhostBlockRenderer extends GhostBlockRenderer {
 		return GhostBlocks.getInstance().showGhost(slot, new OffsetTransparentGhostBlockRenderer(offset), GhostBlockParams.of(state), ttl);
 	};
 
+    public static final GhostBlockParams show(Object slot, BlockState state, Vec3 offset, Function<BlockState, BakedModel> modelGetter, int ttl) {
+		return GhostBlocks.getInstance().showGhost(slot, new OffsetTransparentGhostBlockRenderer(offset), GhostBlockParams.of(state), ttl);
+	};
+
+    protected final Function<BlockState, BakedModel> modelGetter;
     protected final Vec3 offset;
     
     protected OffsetTransparentGhostBlockRenderer(Vec3 offset) {
+        this(offset, state -> Minecraft.getInstance().getBlockRenderer().getBlockModel(state));
+    };
+
+    protected OffsetTransparentGhostBlockRenderer(Vec3 offset, Function<BlockState, BakedModel> modelGetter) {
         this.offset = offset;
+        this.modelGetter = modelGetter;
     };
 
     @Override
     public void render(PoseStack ms, SuperRenderTypeBuffer buffer, Vec3 camera, GhostBlockParams params) {
         final BlockState state = ((GhostBlockParamsAccessor)params).getState();
-        final BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModel(state);
+        final BakedModel model = modelGetter.apply(state);
         final BlockPos pos = ((GhostBlockParamsAccessor)params).getPos();
         final float alpha = ((GhostBlockParamsAccessor)params).getAlphaSupplier().get() * 0.75f * PlacementClient.getCurrentAlpha();
         final VertexConsumer vb = new ColoringVertexConsumer(buffer.getEarlyBuffer(RenderType.translucent()), 1, 1, 1, alpha);
