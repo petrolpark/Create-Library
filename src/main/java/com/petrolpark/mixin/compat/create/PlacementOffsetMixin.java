@@ -15,9 +15,12 @@ import net.createmod.catnip.placement.PlacementOffset;
 import net.createmod.catnip.platform.services.ModHooksHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 
 @Mixin(PlacementOffset.class)
 public abstract class PlacementOffsetMixin {
@@ -27,10 +30,7 @@ public abstract class PlacementOffsetMixin {
 
     @Shadow
     private Function<BlockState, BlockState> stateTransform;
-
-    @Shadow
-    public abstract boolean isReplaceable(Level world);
-    
+   
     @ModifyExpressionValue(
         method = "placeInWorld",
         at = @At(
@@ -39,28 +39,29 @@ public abstract class PlacementOffsetMixin {
             ordinal = 0
         )
     )
-    public boolean petrolpark$deferReplaceableCheck(boolean replaceable) {
-        return true;
+    public boolean petrolpark$allowReplaceableBlocks(boolean replaceable, Level world, BlockItem blockItem, Player player, InteractionHand hand, BlockHitResult ray) {
+        final BlockPos pos = new BlockPos(this.pos);
+        final BlockState existingState = world.getBlockState(pos);
+        final BlockState stateToPlace = stateTransform.apply(blockItem.getBlock().defaultBlockState());
+        return replaceable ||
+            (existingState.getBlock() instanceof IReplaceableBlock replaceableBlock && replaceableBlock.canBeReplaced(world, pos, existingState, stateToPlace, player)) ||
+            (stateToPlace.getBlock() instanceof IReplaceableBlock replaceableBlock && replaceableBlock.canBeReplaced(world, pos, existingState, stateToPlace, player));
     };
 
     @WrapOperation(
         method = "placeInWorld",
-        at = @At( 
+        at = @At(
             value = "INVOKE",
             target = "playerPlaceSingleBlock"
         )
     )
-    public boolean petrolpark$allowReplacingBlocks(ModHooksHelper hooks, Player player, Level level, BlockPos pos, BlockState state, Operation<Boolean> original) {
-        if (isReplaceable(level)) return original.call(hooks, player, level, pos, state); // This is the check we deferred
+    public boolean petrolpark$replaceState(ModHooksHelper hooks, Player player, Level level, BlockPos pos, BlockState newState, Operation<Boolean> original) {
         final BlockState existingState = level.getBlockState(pos);
-        if (existingState.getBlock() instanceof IReplaceableBlock replaceable) {
-            final BlockState replacedState = replaceable.getReplacedState(level, pos, existingState, state, player);
-            if (replacedState != null) return original.call(hooks, player, level, pos, replacedState);
+        if (existingState.getBlock() instanceof IReplaceableBlock replaceableBlock) {
+            return original.call(hooks,player, level, pos, replaceableBlock.getReplacedState(level, pos, existingState, newState, player));
+        } else if (newState.getBlock() instanceof IReplaceableBlock replaceableBlock) {
+            return original.call(hooks, player, level, pos, replaceableBlock.getReplacedState(level, pos, existingState, newState, player));
         };
-        if (state.getBlock() instanceof IReplaceableBlock replaceable) {
-            final BlockState replacedState = replaceable.getReplacedState(level, pos, existingState, state, player);
-            if (replacedState != null) return original.call(hooks, player, level, pos, replacedState);
-        };
-        return true;
+        return original.call(hooks, player, level, pos, newState);
     };
 };

@@ -86,9 +86,6 @@
     "contaminant.petrolpark.example_parent": "Example (Parent)",
     "contaminant.petrolpark.example_parent.absent": "No Example (Parent)",
 
-    "create.item_attributes.has_contaminant": "Has contaminant: %s",
-    "create.item_attributes.has_contaminant.inverted": "Doesn't have contaminant: %s",
-
     "curios.identifier.petrolpark_badge": "Badge",
 
     "death.attack.petrolpark.blender": "%1$s was made into a milkshake",
@@ -208,6 +205,11 @@
     "petrolpark.dataPack.extended_inventory.intro": "This world has enabled experimental Extended Inventory features. ",
     "petrolpark.dataPack.extended_inventory.report_bugs": "Click here to report any bugs you experience. ",
     "petrolpark.dataPack.extended_inventory.safe_mode": "If you want to be a big help, disable safe mode (click here) and report any modded menus that do / don't cause issues, so they can be tagged as working / not working in safe mode.",
+
+    "petrolpark.item_attributes.has_contaminant": "Has contaminant: %s",
+    "petrolpark.item_attributes.has_contaminant.inverted": "Doesn't have contaminant: %s",
+    "petrolpark.item_attributes.is_compressed": "Is compressed %s",
+    "petrolpark.item_attributes.is_compressed.inverted": "Is not compressed %s",
 
     "petrolpark.jei.contamination.intrinsic": "This ingredient is always %1$s",
     "petrolpark.jei.contamination.extrinsic": "This stack is %1$s",

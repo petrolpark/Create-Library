@@ -24,7 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
 @RequiresCreate
-public record HasContaminantItemAttribute(Holder<Contaminant> contaminantHolder) implements ItemAttribute {
+public record HasContaminantItemAttribute(Holder<Contaminant> contaminantHolder) implements PetrolparkItemAttribute {
 
     public static final MapCodec<HasContaminantItemAttribute> CODEC = Contaminant.CODEC
 		.xmap(HasContaminantItemAttribute::new, HasContaminantItemAttribute::contaminantHolder)
@@ -54,6 +54,7 @@ public record HasContaminantItemAttribute(Holder<Contaminant> contaminantHolder)
     };
 
     public static class Type implements ItemAttributeType {
+
         @Override
         public @NotNull ItemAttribute createAttribute() {
             return new HasContaminantItemAttribute(null);
