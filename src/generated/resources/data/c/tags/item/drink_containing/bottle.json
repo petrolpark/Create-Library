@@ -3,6 +3,10 @@
     {
       "id": "petrolpark:sunflower_oil_bottle",
       "required": false
+    },
+    {
+      "id": "petrolpark:egg_white_bottle",
+      "required": false
     }
   ]
 }

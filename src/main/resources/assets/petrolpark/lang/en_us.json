@@ -107,6 +107,7 @@
 
     "fluid.petrolpark.blood": "Blood",
     "fluid.petrolpark.cream": "Cream",
+    "fluid.petrolpark.egg_white": "Egg White",
     "fluid.petrolpark.skimmed_milk": "Skimmed Milk",
     "fluid.petrolpark.sunflower_oil": "Sunflower Oil",
 
@@ -154,6 +155,8 @@
     "item.petrolpark.decaying_item.remaining": "Decays in %1$s",
     "item.petrolpark.drying_item.remaining": "Dries in %1$s",
     "item.petrolpark.drying_rack": "%1$s Drying Rack",
+    "item.petrolpark.eggshell": "Eggshell",
+    "item.petrolpark.egg_white_bottle": "Egg White Bottle",
     "item.petrolpark.fries": "Fries",
     "item.petrolpark.mashed_potato": "Mashed Potato",
     "item.petrolpark.menu": "Menu",
@@ -165,6 +168,7 @@
     "item.petrolpark.skimmed_milk_bucket": "Skimmed Milk Bucket",
     "item.petrolpark.sunflower_oil_bottle": "Sunflower Oil Bottle",
     "item.petrolpark.unprocessed_mashed_potato": "Unfinished Mashed Potato",
+    "item.petrolpark.yolk": "Yolk",
 
     "item.petrolpark.rolling_pin": "%1$s Rolling Pin",
 

@@ -37,11 +37,11 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
  */
 public record VillagerGossipEntityReward(GossipType type, NumberProvider value, IEntityTarget target) implements IEntityReward {
 
-    public static final ResourceLocation MAJOR_NEGATIVE_TEXTURE = Petrolpark.asResource("item/villager_gossip_major_negative");
-    public static final ResourceLocation MINOR_NEGATIVE_TEXTURE = Petrolpark.asResource("item/villager_gossip_minor_negative");
-    public static final ResourceLocation MINOR_POSITIVE_TEXTURE = Petrolpark.asResource("item/villager_gossip_minor_positive");
-    public static final ResourceLocation MAJOR_POSITIVE_TEXTURE = Petrolpark.asResource("item/villager_gossip_major_positive");
-    public static final ResourceLocation TRADING_TEXTURE = Petrolpark.asResource("item/villager_gossip_trading");
+    public static final ResourceLocation MAJOR_NEGATIVE_TEXTURE = Petrolpark.asResource("item/gui/villager_gossip_major_negative");
+    public static final ResourceLocation MINOR_NEGATIVE_TEXTURE = Petrolpark.asResource("item/gui/villager_gossip_minor_negative");
+    public static final ResourceLocation MINOR_POSITIVE_TEXTURE = Petrolpark.asResource("item/gui/villager_gossip_minor_positive");
+    public static final ResourceLocation MAJOR_POSITIVE_TEXTURE = Petrolpark.asResource("item/gui/villager_gossip_major_positive");
+    public static final ResourceLocation TRADING_TEXTURE = Petrolpark.asResource("item/gui/villager_gossip_trading");
 
     public static final MapCodec<VillagerGossipEntityReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         GossipType.CODEC.fieldOf("gossip_type").forGetter(VillagerGossipEntityReward::type),

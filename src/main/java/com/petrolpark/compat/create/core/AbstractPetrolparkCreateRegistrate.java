@@ -53,9 +53,16 @@ public class AbstractPetrolparkCreateRegistrate<R extends AbstractPetrolparkCrea
         return entry(name, c -> new VirtualFluidBuilder<>(self(), self(), name, c, stillTexture, flowingTexture, (properties, st, ft) -> new ColoredFluidType(properties, st, ft, color), p -> VirtualFluidWithContainer.createSource(p, container), p -> VirtualFluidWithContainer.createFlowing(p, container)));
     };
 
-    public FluidBuilder<VirtualFluid, R> virtualFluid(String name) {
+    public FluidBuilder<VirtualFluidWithContainer, R> virtualFluid(String name, ItemLike container) {
         return entry(name, c -> new VirtualFluidBuilder<>(self(), self(), name, c,
-			ResourceLocation.fromNamespaceAndPath(getModid(), "fluid/" + name + "_still"), ResourceLocation.fromNamespaceAndPath(getModid(), "fluid/" + name + "_flow"),
+			ResourceLocation.fromNamespaceAndPath(getModid(), "block/fluid/" + name + "_still"), ResourceLocation.fromNamespaceAndPath(getModid(), "block/fluid/" + name + "_flow"),
+			CreateRegistrate::defaultFluidType, p -> VirtualFluidWithContainer.createSource(p, container), p -> VirtualFluidWithContainer.createFlowing(p, container))
+        );
+    };
+
+    public FluidBuilder<VirtualFluid, R> virtualContainerFluid(String name) {
+        return entry(name, c -> new VirtualFluidBuilder<>(self(), self(), name, c,
+			ResourceLocation.fromNamespaceAndPath(getModid(), "block/fluid/" + name + "_still"), ResourceLocation.fromNamespaceAndPath(getModid(), "block/fluid/" + name + "_flow"),
 			CreateRegistrate::defaultFluidType, VirtualFluid::createSource, VirtualFluid::createFlowing)
         );
     };

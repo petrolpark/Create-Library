@@ -10,6 +10,7 @@ import com.petrolpark.util.CodecHelper;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 public record ChangeItemDecayProduct(ItemStack stack) implements IDecayProduct {
 
@@ -18,6 +19,10 @@ public record ChangeItemDecayProduct(ItemStack stack) implements IDecayProduct {
         ItemStack.STREAM_CODEC, ChangeItemDecayProduct::stack,
         ChangeItemDecayProduct::new
     );
+
+    public static final ChangeItemDecayProduct of(ItemLike item) {
+        return new ChangeItemDecayProduct(new ItemStack(item));
+    };
 
     @Override
     public ItemStack get(ItemStack stack) {

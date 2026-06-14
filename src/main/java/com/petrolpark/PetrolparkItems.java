@@ -68,7 +68,16 @@ public class PetrolparkItems {
             .food(PetrolparkFoods.RAW_FRIES)
         ).defaultModel()
         .tag(Tags.Items.FOODS)
-        .register();
+        .register(),
+    EGGSHELL = REGISTRATE.sharedItem(SharedFeatureFlag.EGG_PRODUCTS, "eggshell", SharedItem::new)
+        .defaultModel()
+        .tag(commonItemTag("eggshell"))
+        .register(),
+    YOLK = REGISTRATE.sharedItem(SharedFeatureFlag.EGG_PRODUCTS, "yolk", SharedItem::new)
+        .defaultModel()
+        .properties(p -> p
+            .food(PetrolparkFoods.YOLK)
+        ).register();
         
 
     public static final void register() {};

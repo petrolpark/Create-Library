@@ -1,0 +1,31 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "egg_products"
+        },
+        {
+            "type": "neoforge:not",
+            "value": {
+                "type": "petrolpark:config_bool",
+                "key": "petrolpark:common.glassBottleFluidCapability"
+            }
+        }
+    ],
+    "type": "create:filling",
+    "ingredients": [
+        {
+            "item": "minecraft:glass_bottle"
+        },
+        {
+            "type": "neoforge:single",
+            "amount": 250,
+            "fluid": "petrolpark:egg_white"
+        }
+    ],
+    "results": [
+        {
+            "id": "petrolpark:egg_white_bottle"
+        }
+    ]
+}

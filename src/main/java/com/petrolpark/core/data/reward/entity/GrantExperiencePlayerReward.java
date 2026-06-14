@@ -30,7 +30,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
  */
 public record GrantExperiencePlayerReward(NumberProvider amount) implements IPlayerReward {
 
-    public static final ResourceLocation EXPERIENCE_ORBS_TEXTURE = Petrolpark.asResource("items/experience_orbs");
+    public static final ResourceLocation EXPERIENCE_ORBS_TEXTURE = Petrolpark.asResource("items/gui/experience_orbs");
 
     public static final MapCodec<GrantExperiencePlayerReward> CODEC = CodecHelper.singleFieldMap(NumberProviders.CODEC, "amount", GrantExperiencePlayerReward::amount, GrantExperiencePlayerReward::new);
 

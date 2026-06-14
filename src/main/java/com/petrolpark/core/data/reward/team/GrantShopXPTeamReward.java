@@ -28,7 +28,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 
 public record GrantShopXPTeamReward(Holder<Shop> shop, NumberProvider amount) implements ITeamReward {
 
-    public static final ResourceLocation SHOP_EXPERIENCE_ORBS_TEXTURE = Petrolpark.asResource("item/shop_experience_orbs");
+    public static final ResourceLocation SHOP_EXPERIENCE_ORBS_TEXTURE = Petrolpark.asResource("item/gui/shop_experience_orbs");
 
     public static final MapCodec<GrantShopXPTeamReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         Shop.CODEC.fieldOf("shop").forGetter(GrantShopXPTeamReward::shop),

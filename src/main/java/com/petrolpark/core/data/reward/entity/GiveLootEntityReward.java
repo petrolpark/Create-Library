@@ -41,7 +41,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
  */
 public class GiveLootEntityReward extends AbstractGiveItemsEntityReward implements ILootTableAccessor {
 
-    public static final ResourceLocation DIE_TEXTURE = Petrolpark.asResource("item/die");
+    public static final ResourceLocation DIE_TEXTURE = Petrolpark.asResource("item/gui/die");
 
     public static final MapCodec<GiveLootEntityReward> CODEC = RecordCodecBuilder.mapCodec(instance -> 
         ILootTableAccessor.lootTableField(instance)

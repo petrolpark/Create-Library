@@ -1,10 +1,8 @@
 {
   "values": [
-
     "minecraft:carrot_on_a_stick",
     "minecraft:warped_fungus_on_a_stick",
     "minecraft:elytra",
-
     "minecraft:turtle_helmet",
     "minecraft:turtle_scute",
     "minecraft:armadillo_scute",
@@ -169,86 +167,6 @@
     "minecraft:magma_cream",
     "minecraft:ender_eye",
     "minecraft:glistering_melon_slice",
-    "minecraft:armadillo_spawn_egg",
-    "minecraft:allay_spawn_egg",
-    "minecraft:axolotl_spawn_egg",
-    "minecraft:bat_spawn_egg",
-    "minecraft:bee_spawn_egg",
-    "minecraft:blaze_spawn_egg",
-    "minecraft:bogged_spawn_egg",
-    "minecraft:breeze_spawn_egg",
-    "minecraft:cat_spawn_egg",
-    "minecraft:camel_spawn_egg",
-    "minecraft:cave_spider_spawn_egg",
-    "minecraft:chicken_spawn_egg",
-    "minecraft:cod_spawn_egg",
-    "minecraft:cow_spawn_egg",
-    "minecraft:creeper_spawn_egg",
-    "minecraft:dolphin_spawn_egg",
-    "minecraft:donkey_spawn_egg",
-    "minecraft:drowned_spawn_egg",
-    "minecraft:elder_guardian_spawn_egg",
-    "minecraft:ender_dragon_spawn_egg",
-    "minecraft:enderman_spawn_egg",
-    "minecraft:endermite_spawn_egg",
-    "minecraft:evoker_spawn_egg",
-    "minecraft:fox_spawn_egg",
-    "minecraft:frog_spawn_egg",
-    "minecraft:ghast_spawn_egg",
-    "minecraft:glow_squid_spawn_egg",
-    "minecraft:goat_spawn_egg",
-    "minecraft:guardian_spawn_egg",
-    "minecraft:hoglin_spawn_egg",
-    "minecraft:horse_spawn_egg",
-    "minecraft:husk_spawn_egg",
-    "minecraft:iron_golem_spawn_egg",
-    "minecraft:llama_spawn_egg",
-    "minecraft:magma_cube_spawn_egg",
-    "minecraft:mooshroom_spawn_egg",
-    "minecraft:mule_spawn_egg",
-    "minecraft:ocelot_spawn_egg",
-    "minecraft:panda_spawn_egg",
-    "minecraft:parrot_spawn_egg",
-    "minecraft:phantom_spawn_egg",
-    "minecraft:pig_spawn_egg",
-    "minecraft:piglin_spawn_egg",
-    "minecraft:piglin_brute_spawn_egg",
-    "minecraft:pillager_spawn_egg",
-    "minecraft:polar_bear_spawn_egg",
-    "minecraft:pufferfish_spawn_egg",
-    "minecraft:rabbit_spawn_egg",
-    "minecraft:ravager_spawn_egg",
-    "minecraft:salmon_spawn_egg",
-    "minecraft:sheep_spawn_egg",
-    "minecraft:shulker_spawn_egg",
-    "minecraft:silverfish_spawn_egg",
-    "minecraft:skeleton_spawn_egg",
-    "minecraft:skeleton_horse_spawn_egg",
-    "minecraft:slime_spawn_egg",
-    "minecraft:sniffer_spawn_egg",
-    "minecraft:snow_golem_spawn_egg",
-    "minecraft:spider_spawn_egg",
-    "minecraft:squid_spawn_egg",
-    "minecraft:stray_spawn_egg",
-    "minecraft:strider_spawn_egg",
-    "minecraft:tadpole_spawn_egg",
-    "minecraft:trader_llama_spawn_egg",
-    "minecraft:tropical_fish_spawn_egg",
-    "minecraft:turtle_spawn_egg",
-    "minecraft:vex_spawn_egg",
-    "minecraft:villager_spawn_egg",
-    "minecraft:vindicator_spawn_egg",
-    "minecraft:wandering_trader_spawn_egg",
-    "minecraft:warden_spawn_egg",
-    "minecraft:witch_spawn_egg",
-    "minecraft:wither_spawn_egg",
-    "minecraft:wither_skeleton_spawn_egg",
-    "minecraft:wolf_spawn_egg",
-    "minecraft:zoglin_spawn_egg",
-    "minecraft:zombie_spawn_egg",
-    "minecraft:zombie_horse_spawn_egg",
-    "minecraft:zombie_villager_spawn_egg",
-    "minecraft:zombified_piglin_spawn_egg",
     "minecraft:experience_bottle",
     "minecraft:fire_charge",
     "minecraft:wind_charge",
@@ -279,9 +197,6 @@
     "minecraft:golden_horse_armor",
     "minecraft:diamond_horse_armor",
     "minecraft:leather_horse_armor",
-    "minecraft:lead",
-    "minecraft:name_tag",
-
     "minecraft:mutton",
     "minecraft:cooked_mutton",
     "minecraft:end_crystal",
@@ -298,7 +213,6 @@
     "minecraft:totem_of_undying",
     "minecraft:shulker_shell",
     "minecraft:iron_nugget",
-
     "minecraft:music_disc_13",
     "minecraft:music_disc_cat",
     "minecraft:music_disc_blocks",
@@ -389,42 +303,6 @@
     "#c:shulker_boxes",
     "#c:seeds",
     {
-      "id": "petrolpark:badge/beta_tester",
-      "required": false
-    },
-    {
-      "id": "petrolpark:badge/bestie",
-      "required": false
-    },
-    {
-      "id": "petrolpark:badge/competition_winner",
-      "required": false
-    },
-    {
-      "id": "petrolpark:badge/content_creator",
-      "required": false
-    },
-    {
-      "id": "petrolpark:badge/developer",
-      "required": false
-    },
-    {
-      "id": "petrolpark:badge/early_bird",
-      "required": false
-    },
-    {
-      "id": "petrolpark:badge/nitro",
-      "required": false
-    },
-    {
-      "id": "petrolpark:badge/suggestion",
-      "required": false
-    },
-    {
-      "id": "petrolpark:badge/translator",
-      "required": false
-    },
-    {
       "id": "petrolpark:rolling_pin",
       "required": false
     },
@@ -453,6 +331,14 @@
       "required": false
     },
     {
+      "id": "petrolpark:eggshell",
+      "required": false
+    },
+    {
+      "id": "petrolpark:yolk",
+      "required": false
+    },
+    {
       "id": "petrolpark:blood_bucket",
       "required": false
     },
@@ -466,6 +352,10 @@
     },
     {
       "id": "petrolpark:sunflower_oil_bottle",
+      "required": false
+    },
+    {
+      "id": "petrolpark:egg_white_bottle",
       "required": false
     },
     {
@@ -798,62 +688,6 @@
     },
     {
       "id": "create:tree_fertilizer",
-      "required": false
-    },
-    {
-      "id": "create:cardboard_package_12x12",
-      "required": false
-    },
-    {
-      "id": "create:cardboard_package_10x12",
-      "required": false
-    },
-    {
-      "id": "create:cardboard_package_10x8",
-      "required": false
-    },
-    {
-      "id": "create:cardboard_package_12x10",
-      "required": false
-    },
-    {
-      "id": "create:rare_creeper_package",
-      "required": false
-    },
-    {
-      "id": "create:rare_darcy_package",
-      "required": false
-    },
-    {
-      "id": "create:rare_evan_package",
-      "required": false
-    },
-    {
-      "id": "create:rare_jinx_package",
-      "required": false
-    },
-    {
-      "id": "create:rare_kryppers_package",
-      "required": false
-    },
-    {
-      "id": "create:rare_simi_package",
-      "required": false
-    },
-    {
-      "id": "create:rare_starlotte_package",
-      "required": false
-    },
-    {
-      "id": "create:rare_thunder_package",
-      "required": false
-    },
-    {
-      "id": "create:rare_up_package",
-      "required": false
-    },
-    {
-      "id": "create:rare_vector_package",
       "required": false
     },
     {

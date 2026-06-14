@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.PetrolparkBuiltInLootTables;
 import com.petrolpark.PetrolparkTags;
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.contamination.ContaminateHeldItemCommand;
 import com.petrolpark.core.contamination.ItemContamination;
@@ -26,9 +28,14 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.projectile.ThrownEgg;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -36,6 +43,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.event.RegisterCommandsEvent;
 import net.neoforged.neoforge.event.brewing.PotionBrewEvent;
+import net.neoforged.neoforge.event.entity.ProjectileImpactEvent;
 import net.neoforged.neoforge.event.entity.living.BabyEntitySpawnEvent;
 import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
@@ -72,7 +80,7 @@ public class CommonEvents {
      * @param event
      */
     @SubscribeEvent
-    public static void onPotionBrewed(PotionBrewEvent.Post event) {
+    public static final void onPotionBrewed(PotionBrewEvent.Post event) {
         for (int slot = 0; slot < 3; slot++) {
             ItemStack potion = event.getItem(slot);
             ItemDecay.startDecay(potion);
@@ -87,6 +95,23 @@ public class CommonEvents {
             );
         };
     };
+
+    /**
+     * Have a chance to spawn Eggshells when Eggs land
+     */
+    @SubscribeEvent
+    public static final void onProjectileImpact(ProjectileImpactEvent event) {
+        if (!SharedFeatureFlag.EGG_PRODUCTS.enabled() || !(event.getEntity() instanceof ThrownEgg thrownEgg && thrownEgg.getItem().is(Items.EGG))) return;
+        if (!(thrownEgg.level() instanceof ServerLevel level)) return;
+        level.getServer().reloadableRegistries().getLootTable(PetrolparkBuiltInLootTables.EGG).getRandomItems(
+            new LootParams.Builder(level)
+                .withParameter(LootContextParams.THIS_ENTITY, thrownEgg)
+                .withParameter(LootContextParams.ORIGIN, thrownEgg.position())
+                .create(LootContextParamSets.CHEST)
+        ).forEach(thrownEgg::spawnAtLocation);
+    };
+
+    // EFFECT SHADERS
 
     /**
      * Cleans residual shader effects on disconnection

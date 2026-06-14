@@ -20,10 +20,11 @@ public class PetrolparkCreateFluids {
     CREAM = REGISTRATE.sharedSingleTextureVirtualContainerFluid(SharedFeatureFlag.MILK_PRODUCTS, "cream", PetrolparkCreateItems.CREAM_BUCKET)
         .tag(commonFluidTag("cream"))
         .register(),
+    EGG_WHITE = REGISTRATE.sharedColoredWaterContainerFluid(SharedFeatureFlag.EGG_PRODUCTS, "egg_white", 0xFFf3ff4f, PetrolparkCreateItems.EGG_WHITE_BOTTLE)
+        .register(),
     SKIMMED_MILK = REGISTRATE.sharedColoredWaterContainerFluid(SharedFeatureFlag.MILK_PRODUCTS, "skimmed_milk", 0xFFFFFFFF, PetrolparkCreateItems.SKIMMED_MILK_BUCKET)
         .tag(Tags.Fluids.MILK, commonFluidTag("milk/skimmed"))
         .register(),
-
     SUNFLOWER_OIL = REGISTRATE.sharedColoredWaterContainerFluid(SharedFeatureFlag.SUNFLOWER_OIL, "sunflower_oil", 0x80EFE864, PetrolparkCreateItems.SUNFLOWER_OIL_BOTTLE)
         .tag(commonFluidTag("oil"), PetrolparkTags.Fluids.COOKING_OILS, commonFluidTag("oil/sunflower"))
         .register();
