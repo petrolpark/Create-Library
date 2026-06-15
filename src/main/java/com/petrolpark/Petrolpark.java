@@ -118,8 +118,8 @@ public class Petrolpark {
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
-        //return new SharedFeatureFlag[]{};
-        return new SharedFeatureFlag[]{SharedFeatureFlag.EGG_PRODUCTS};
+        return new SharedFeatureFlag[]{};
+        //return new SharedFeatureFlag[]{SharedFeatureFlag.EGG_PRODUCTS};
     };
 
     private void init(final FMLCommonSetupEvent event) {

@@ -1,5 +1,7 @@
 package com.petrolpark;
 
+import java.util.Locale;
+
 import com.petrolpark.client.texts.ReplyTextPacket;
 import com.petrolpark.client.texts.RequestTextPacket;
 import com.petrolpark.core.actionrecord.ActionRecordEntryResult;
@@ -54,7 +56,7 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
 
 	<T extends BasePacketPayload> PetrolparkPackets(Class<T> clazz, StreamCodec<? super RegistryFriendlyByteBuf, T> codec, boolean recordable) {
 		type = new CatnipPacketRegistry.PacketType<>(
-			new CustomPacketPayload.Type<>(Petrolpark.asResource(name().toLowerCase())),
+			new CustomPacketPayload.Type<>(Petrolpark.asResource(name().toLowerCase(Locale.ROOT))),
 			clazz, codec
 		);
 		this.recordable = recordable;

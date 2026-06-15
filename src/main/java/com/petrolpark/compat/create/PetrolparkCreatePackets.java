@@ -1,5 +1,7 @@
 package com.petrolpark.compat.create;
 
+import java.util.Locale;
+
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillContraptionHarnessMappingPacket;
 import com.petrolpark.compat.create.common.redstone.programmer.ChangeRedstoneProgrammerPowerPacket;
@@ -35,7 +37,7 @@ public enum PetrolparkCreatePackets implements PacketTypeProvider, ICustomPacket
 
 	<T extends BasePacketPayload> PetrolparkCreatePackets(Class<T> clazz, StreamCodec<? super RegistryFriendlyByteBuf, T> codec) {
 		type = new CatnipPacketRegistry.PacketType<>(
-			new CustomPacketPayload.Type<>(Petrolpark.asResource(name().toLowerCase())),
+			new CustomPacketPayload.Type<>(Petrolpark.asResource(name().toLowerCase(Locale.ROOT))),
 			clazz, codec
 		);
 		//TODO clientbound packets do not need to be recordable
