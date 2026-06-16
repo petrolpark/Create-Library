@@ -1,0 +1,41 @@
+{
+	"format_version": "1.21.11",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "petrolpark:block/harness",
+		"particle": "petrolpark:block/harness"
+	},
+	"elements": [
+		{
+			"from": [1, 13, -12],
+			"to": [15, 23, -8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 20, -12]},
+			"faces": {
+				"north": {"uv": [3.5, 7.5, 7, 10], "texture": "#missing"},
+				"east": {"uv": [1, 4, 0, 6.5], "texture": "#missing"},
+				"south": {"uv": [0, 7.5, 3.5, 10], "texture": "#missing"},
+				"west": {"uv": [0, 4, 1, 6.5], "texture": "#missing"},
+				"up": {"uv": [0, 6.5, 3.5, 7.5], "texture": "#missing"},
+				"down": {"uv": [0, 6.5, 3.5, 7.5], "rotation": 180, "texture": "#missing"}
+			}
+		},
+		{
+			"from": [1, 0, -8],
+			"to": [1, 23, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 20, 0]},
+			"faces": {
+				"east": {"uv": [9.5, 0, 4, 5.75], "texture": "#0"},
+				"west": {"uv": [4, 0, 9.5, 5.75], "texture": "#0"}
+			}
+		},
+		{
+			"from": [15, 0, -8],
+			"to": [15, 23, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [14, 20, 0]},
+			"faces": {
+				"east": {"uv": [9.5, 0, 4, 5.75], "texture": "#0"},
+				"west": {"uv": [4, 0, 9.5, 5.75], "texture": "#0"}
+			}
+		}
+	]
+}

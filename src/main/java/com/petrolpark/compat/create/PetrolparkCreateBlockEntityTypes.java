@@ -7,6 +7,8 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.VerticalBearingRenderer;
 import com.petrolpark.compat.create.common.kinetics.VerticalBearingVisual;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillBearingBlockEntity;
+import com.petrolpark.compat.create.common.kinetics.horseMill.ponder.HarnessWithCowDummyBlockEntity;
+import com.petrolpark.compat.create.common.kinetics.horseMill.ponder.HarnessWithCowDummyRenderer;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlockEntity;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlockEntity;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlockEntity;
@@ -69,6 +71,12 @@ public class PetrolparkCreateBlockEntityTypes {
         .visual(() -> VerticalBearingVisual::new)
         .validBlock(PetrolparkCreateBlocks.HORSE_MILL_BEARING)
         .renderer(() -> VerticalBearingRenderer::new)
+        .register();
+
+    // Only exists to render in Ponder
+    public static final BlockEntityEntry<HarnessWithCowDummyBlockEntity> HARNESS_WITH_COW_DUMMY = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.HORSE_MILL, "harness_with_cow_dummy", HarnessWithCowDummyBlockEntity::new)
+        .validBlock(PetrolparkCreateBlocks.HARNESS_WITH_COW_DUMMY)
+        .renderer(() -> HarnessWithCowDummyRenderer::new)
         .register();
 
     public static final BlockEntityEntry<MandrelBlockEntity> MANDREL = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.MANDREL, "mandrel", MandrelBlockEntity::new)

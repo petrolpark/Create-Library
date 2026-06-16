@@ -1,0 +1,11 @@
+{
+	"parent": "block/block",
+	"loader": "neoforge:obj",
+	"flip_v": true,
+	"model": "petrolpark:models/block/harness/horse.obj",
+	"textures": {
+		"block_texture": "petrolpark:block/harness",
+		"particle": "create:block/andesite_casing"
+	},
+	"render_type": "cutout"
+}

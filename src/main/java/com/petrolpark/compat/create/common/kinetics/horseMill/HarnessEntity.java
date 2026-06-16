@@ -12,6 +12,7 @@ import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.createmod.catnip.math.AngleHelper;
 import net.createmod.catnip.math.VecHelper;
 import net.createmod.catnip.render.CachedBuffers;
+import net.createmod.ponder.api.level.PonderLevel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.culling.Frustum;
@@ -44,7 +45,7 @@ public class HarnessEntity extends SeatEntity {
             for (Entity entity : getPassengers()) setFacing(entity, angle);
             if (isVehicle()) return;
         };
-		discard();
+		if (!(level() instanceof PonderLevel)) discard();
     };
 
     public static final void setFacing(Entity entity, float angle) {

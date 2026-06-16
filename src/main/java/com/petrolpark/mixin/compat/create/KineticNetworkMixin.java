@@ -29,4 +29,16 @@ public class KineticNetworkMixin {
         if (be instanceof CompositeKineticBlockEntityPart part) return original.call(level, pos) instanceof CompositeKineticBlockEntity composite && part.getIndex() >= 0 && part.getIndex() < composite.getParts().size() ? composite.getParts().get(part.getIndex()) : null;
         return original.call(level, pos);
     };
+
+    @WrapOperation(
+        method = "calculateCapacity",
+        at = @At(
+            value = "INVOKE",
+            target = "getBlockEntity"
+        )
+    )
+    public BlockEntity petrolpark$checkCompositeGeneratingKBEsMatchPos(Level level, BlockPos pos, Operation<BlockEntity> original, @Local KineticBlockEntity be) {
+        if (be instanceof CompositeKineticBlockEntityPart part) return original.call(level, pos) instanceof CompositeKineticBlockEntity composite && part.getIndex() >= 0 && part.getIndex() < composite.getParts().size() ? composite.getParts().get(part.getIndex()) : null;
+        return original.call(level, pos);
+    };
 };

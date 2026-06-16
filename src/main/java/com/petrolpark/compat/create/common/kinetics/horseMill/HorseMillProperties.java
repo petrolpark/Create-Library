@@ -1,6 +1,7 @@
 package com.petrolpark.compat.create.common.kinetics.horseMill;
 
 import java.util.Optional;
+import java.util.function.DoubleSupplier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
@@ -13,6 +14,10 @@ import net.minecraft.world.phys.Vec3;
 
 public record HorseMillProperties(Vec3 positionOffset, EntityNumberProvider maxSpeed, EntityNumberProvider stressCapacity, Optional<ResourceLocation> harnessModelLocation) {
     
+    public static final float generateHorseMillStressCapacityAttribute(DoubleSupplier supplier) {
+        return 384f + (float)supplier.getAsDouble() * 128f + (float)supplier.getAsDouble() * 128f;
+    };
+
     @SuppressWarnings("deprecation")
     public static final Optional<HorseMillProperties> get(Entity entity) {
         return Optional.ofNullable(entity.getType().builtInRegistryHolder().getData(PetrolparkCreateDataMapTypes.HORSE_MILL_PROPERTIES));

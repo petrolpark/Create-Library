@@ -13,6 +13,7 @@ import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessBlock;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessMovementBehaviour;
 import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillBearingBlock;
+import com.petrolpark.compat.create.common.kinetics.horseMill.ponder.HarnessWithCowDummyBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterInputBlock;
 import com.petrolpark.compat.create.common.kinetics.torquelimiter.TorqueLimiterOutputBlock;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidBlock;
@@ -120,6 +121,10 @@ public class PetrolparkCreateBlocks {
         .item()
         .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
         .build()
+        .register();
+
+    public static final BlockEntry<HarnessWithCowDummyBlock> HARNESS_WITH_COW_DUMMY = REGISTRATE.sharedBlock(SharedFeatureFlag.HORSE_MILL, "harness_with_cow_dummy", HarnessWithCowDummyBlock::new)
+        .properties(BlockBehaviour.Properties::noOcclusion)
         .register();
 
     public static final BlockEntry<MandrelBlock> MANDREL = REGISTRATE.sharedBlock(SharedFeatureFlag.MANDREL, "mandrel", MandrelBlock::new)

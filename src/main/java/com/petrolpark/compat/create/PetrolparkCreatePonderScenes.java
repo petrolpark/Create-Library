@@ -1,6 +1,7 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.common.kinetics.horseMill.ponder.HorseMillScenes;
 import com.petrolpark.compat.create.common.processing.basinlid.BasinLidScenes;
 import com.petrolpark.compat.create.common.processing.blender.BlenderScenes;
 import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugeScenes;
@@ -48,6 +49,11 @@ public class PetrolparkCreatePonderScenes {
 			
 		if (SharedFeatureFlag.EXTRUSION.enabled()) itemProviderHelper.forComponents(PetrolparkCreateBlocks.EXTRUSION_DIE)
 			.addStoryBoard("processing/extrusion", ExtrusionScenes::extrusionDie, AllCreatePonderTags.CONTRAPTION_ACTOR);
+
+		if (SharedFeatureFlag.HORSE_MILL.enabled()) {
+			itemProviderHelper.forComponents(PetrolparkCreateBlocks.HORSE_MILL_BEARING, PetrolparkCreateBlocks.HARNESS)
+				.addStoryBoard("horse_mill", HorseMillScenes::horseMill);
+		};
 	
 		if (SharedFeatureFlag.MESH_BASIN.enabled()) itemProviderHelper.forComponents(PetrolparkCreateBlocks.MESH_BASIN)
 			.addStoryBoard("processing/mesh_basin/juicing", MeshBasinScenes::juicing)

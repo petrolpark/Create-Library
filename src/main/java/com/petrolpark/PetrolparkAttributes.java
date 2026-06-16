@@ -2,6 +2,7 @@ package com.petrolpark;
 
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
+import com.petrolpark.compat.SharedFeatureFlag;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.minecraft.world.entity.EntityType;
@@ -36,6 +37,11 @@ public class PetrolparkAttributes {
 
     ORE_DISCOVERY_CHANCE = REGISTRATE.attribute("player.ore_discovery_chance", () -> new RangedAttribute("attribute.petrolpark.player.ore_discovery_chance", 0d, 0d, 1d)
         .setSentiment(Attribute.Sentiment.POSITIVE)
+    ),
+
+    HORSE_MILL_STRESS_CAPACITY = REGISTRATE.attribute("horse.mill_stress_capacity", () -> new RangedAttribute("attribute.petrolpark.horse.mill_stress_capacity", 512d, 0d, Integer.MAX_VALUE)
+        .setSyncable(true)
+        .setSentiment(Attribute.Sentiment.POSITIVE)
     );
 
     @SubscribeEvent
@@ -43,6 +49,8 @@ public class PetrolparkAttributes {
         event.add(EntityType.PLAYER, EXTRA_HOTBAR_SLOTS);
         event.add(EntityType.PLAYER, EXTRA_INVENTORY_SIZE);
         event.add(EntityType.PLAYER, ORE_DISCOVERY_CHANCE);
+
+        if (SharedFeatureFlag.HORSE_MILL.enabled()) event.add(EntityType.HORSE, HORSE_MILL_STRESS_CAPACITY);
     };
 
     public static final void register() {};

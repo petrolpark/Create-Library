@@ -2,10 +2,11 @@ package com.petrolpark.core.data.loot.numberprovider.entity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
-import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;
@@ -22,14 +23,18 @@ import net.minecraft.world.level.storage.loot.LootContext;
  * Arguments:
  * <ul>
  * <li>{@code attribute} - ID of {@link Attribute} to get
+ * <li>{@code base} - Whether to get the base value (ignoring things like potion effects etc.) (defaults to {@code false})
  * </ul>
  * 
  * @author petrolpark
  */
 @ParametersAreNonnullByDefault
-public record AttributeEntityNumberProvider(Holder<Attribute> attribute) implements EntityNumberProvider {
+public record AttributeEntityNumberProvider(Holder<Attribute> attribute, boolean baseValue) implements EntityNumberProvider {
 
-    public static final MapCodec<AttributeEntityNumberProvider> CODEC = CodecHelper.singleFieldMap(Attribute.CODEC, "attribute", AttributeEntityNumberProvider::attribute, AttributeEntityNumberProvider::new);
+    public static final MapCodec<AttributeEntityNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
+        Attribute.CODEC.fieldOf("attribute").forGetter(AttributeEntityNumberProvider::attribute),
+        Codec.BOOL.optionalFieldOf("base", false).forGetter(AttributeEntityNumberProvider::baseValue)
+    ).apply(instance, AttributeEntityNumberProvider::new));
 
     @Override
     public float getFloat(Entity entity, LootContext lootContext) {
