@@ -365,7 +365,7 @@
     "petrolpark.ponder.horse_mill.text_1": "Hook a mob into a Harness with a Lead",
     "petrolpark.ponder.horse_mill.text_2": "Super Glue Harnesses to a Horse Mill Bearing to make a Horse Mill",
     "petrolpark.ponder.horse_mill.text_3": "All the Harnesses must be facing the same direction",
-    "petrolpark.ponder.horse_mill.text_4": "Click the Horse Mill Bearing for it to start generating Rotational Force",
+    "petrolpark.ponder.horse_mill.text_4": "Right-Click the Horse Mill Bearing for it to start generating Rotational Force",
     "petrolpark.ponder.horse_mill.text_5": "The mobs must have a floor to walk on, or the Contraption will stall",
     "petrolpark.ponder.horse_mill.text_6": "Each mob provides a certain amount of Stress Capacity",
     "petrolpark.ponder.horse_mill.text_7": "The speed of the Horse Mill is limited by the slowest mob, and how far it is from the Bearing",

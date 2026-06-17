@@ -8,15 +8,36 @@
         },
         "#petrolpark:has_horse_mill_properties_of/horse": {
             "position_offset": [0.0, 0.0, 0.6875],
-            "max_speed": 0.6,
+            "max_speed": {
+                "type": "petrolpark:attribute",
+                "attribute": "minecraft:generic.movement_speed",
+                "base": true
+            },
+            "stress_capacity": {
+                "type": "petrolpark:attribute",
+                "attribute": "petrolpark:horse.mill_stress_capacity",
+                "base": true
+            },
+            "harness_model": "petrolpark:block/harness/horse"
+        },
+        "#petrolpark:has_horse_mill_properties_of/undead_horse": {
+            "position_offset": [0.0, 0.0, 0.6875],
+            "max_speed": 0.2,
             "stress_capacity": 1024,
             "harness_model": "petrolpark:block/harness/horse"
         },
-        "petrolpark:has_horse_mill_properties_of/donkey": {
-            "position_offset": [0.0, 0.0, 0.5],
-            "max_speed": 0.6,
-            "stress_capacity": 512,
+        "#petrolpark:has_horse_mill_properties_of/donkey": {
+            "position_offset": [0.0, 0.0, 0.625],
+            "max_speed": 0.3,
+            "stress_capacity": 1024,
+            "harness_model": "petrolpark:block/harness/donkey"
+        },
+        "#petrolpark:has_horse_mill_properties_of/mule": {
+            "position_offset": [0.0, 0.0, 0.625],
+            "max_speed": 0.2,
+            "stress_capacity": 2048,
             "harness_model": "petrolpark:block/harness/donkey"
         }
+
     }
 }

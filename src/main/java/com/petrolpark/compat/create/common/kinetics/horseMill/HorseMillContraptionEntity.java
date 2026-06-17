@@ -75,7 +75,7 @@ public class HorseMillContraptionEntity extends ControlledContraptionEntity {
 				.withParameter(LootContextParams.ORIGIN, passenger.position())
 				.create(LootContextParamSets.ADVANCEMENT_ENTITY)
 			).create(Optional.empty());
-			speed = Mth.clamp(20.61f * propertiesOp.get().maxSpeed().getFloat(passenger, lootContext) / Mth.sqrt((float)harnessPos.distSqr(Vec3i.ZERO)), 0f, speed);
+			speed = Mth.clamp(42.16f * propertiesOp.get().maxSpeed().getFloat(passenger, lootContext) / Mth.sqrt((float)harnessPos.distSqr(Vec3i.ZERO)), 0f, speed);
 			stressCapacity += propertiesOp.get().stressCapacity().getFloat(passenger, lootContext);
 		};
 		if (hasEntities && speed > 0f) {

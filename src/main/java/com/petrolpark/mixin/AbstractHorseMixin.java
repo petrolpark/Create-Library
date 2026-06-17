@@ -6,7 +6,10 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.PetrolparkAttributes;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessEntity;
+import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillContraptionEntity;
 import com.petrolpark.config.PetrolparkConfigs;
 
 import net.minecraft.core.Holder;
@@ -40,5 +43,13 @@ public abstract class AbstractHorseMixin extends Animal {
         ) {
             setOffspringAttribute(parent, child, PetrolparkAttributes.HORSE_MILL_STRESS_CAPACITY, 256f, PetrolparkConfigs.common().createHorseMillStressCapacityAttributeMax.getF());
         };
+    };
+
+    @ModifyReturnValue(
+        method = "canPerformRearing",
+        at = @At("RETURN")
+    )
+    public boolean petrolpark$dontRearWhileHarnessed(boolean original) {
+        return (isPassenger() && (getVehicle() instanceof HarnessEntity || getVehicle() instanceof HorseMillContraptionEntity)) ? false : original;
     };
 };

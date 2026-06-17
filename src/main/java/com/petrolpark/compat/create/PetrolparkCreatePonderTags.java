@@ -31,7 +31,7 @@ public class PetrolparkCreatePonderTags {
             registrateHelper.addToTag(AllCreatePonderTags.KINETIC_SOURCES)
                 .add(PetrolparkCreateBlocks.HORSE_MILL_BEARING)
                 .add(PetrolparkCreateBlocks.HARNESS);
-            registrateHelper.addToTag(AllCreatePonderTags.CONTRAPTION_ASSEMBLY)
+            registrateHelper.addToTag(AllCreatePonderTags.MOVEMENT_ANCHOR)
                 .add(PetrolparkCreateBlocks.HORSE_MILL_BEARING);
             registrateHelper.addToTag(AllCreatePonderTags.CONTRAPTION_ACTOR)
                 .add(PetrolparkCreateBlocks.HARNESS);

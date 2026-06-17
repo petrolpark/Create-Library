@@ -22,11 +22,12 @@ public class HarnessWithCowDummyRenderer extends SafeBlockEntityRenderer<Harness
     };
 
     @Override
+    @SuppressWarnings("null")
     protected void renderSafe(HarnessWithCowDummyBlockEntity be, float partialTicks, PoseStack ms, MultiBufferSource bufferSource, int light, int overlay) {
         final BlockState state = be.getBlockState();
         final VertexConsumer vc = bufferSource.getBuffer(RenderType.solid());
 
-        final float angle = be.walking ? Mth.sin(AnimationTickHolder.getRenderTime() / 2f) * 15 : 0;
+        final float angle = be.walking ? Mth.sin(AnimationTickHolder.getRenderTime(be.getLevel()) / 8f) * 15 : 0;
 
         for (boolean left : Iterate.trueAndFalse) {
             for (boolean front : Iterate.trueAndFalse) {
