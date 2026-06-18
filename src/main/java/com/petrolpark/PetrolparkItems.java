@@ -71,7 +71,7 @@ public class PetrolparkItems {
         .register(),
     EGGSHELL = REGISTRATE.sharedItem(SharedFeatureFlag.EGG_PRODUCTS, "eggshell", SharedItem::new)
         .defaultModel()
-        .tag(commonItemTag("eggshell"))
+        .tag(commonItemTag("eggshells"))
         .register(),
     YOLK = REGISTRATE.sharedItem(SharedFeatureFlag.EGG_PRODUCTS, "yolk", SharedItem::new)
         .defaultModel()

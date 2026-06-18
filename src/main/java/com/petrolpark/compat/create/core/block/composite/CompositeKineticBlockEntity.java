@@ -13,18 +13,22 @@ import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.IRotate.SpeedLevel;
+import com.simibubi.create.content.kinetics.base.IRotate.StressImpact;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
+import com.simibubi.create.foundation.utility.CreateLang;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -42,6 +46,13 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
     public void setLevel(@Nonnull Level level) {
         super.setLevel(level);
         getParts().forEach(part -> part.setLevel(level));
+    };
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void setBlockState(@Nonnull BlockState blockState) {
+        super.setBlockState(blockState);
+        getParts().forEach(part -> part.setBlockState(blockState));
     };
 
     @Override
@@ -260,38 +271,36 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
             };
         };
 
-        // @Override
-        // public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
-        //     boolean added = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
-        //     if (!StressImpact.isEnabled())
-        //         return added;
+        @Override
+        public boolean addToGoggleTooltip(List<Component> tooltip, boolean isPlayerSneaking) {
+            boolean added = super.addToGoggleTooltip(tooltip, isPlayerSneaking);
+            if (!StressImpact.isEnabled()) return added;
 
-        //     float stressBase = calculateAddedStressCapacity();
-        //     if (Mth.equal(stressBase, 0))
-        //         return added;
+            float stressBase = calculateAddedStressCapacity();
+            // if (Mth.equal(stressBase, 0)) return added;
 
-        //     CreateLang.translate("gui.goggles.generator_stats")
-        //         .forGoggles(tooltip);
-        //     CreateLang.translate("tooltip.capacityProvided")
-        //         .style(ChatFormatting.GRAY)
-        //         .forGoggles(tooltip);
+            // CreateLang.translate("gui.goggles.generator_stats")
+            //     .forGoggles(tooltip);
+            CreateLang.translate("tooltip.capacityProvided")
+                .style(ChatFormatting.GRAY)
+                .forGoggles(tooltip);
 
-        //     float speed = getTheoreticalSpeed();
-        //     if (speed != getGeneratedSpeed() && speed != 0)
-        //         stressBase *= getGeneratedSpeed() / speed;
+            float speed = getTheoreticalSpeed();
+            if (speed != getGeneratedSpeed() && speed != 0)
+                stressBase *= getGeneratedSpeed() / speed;
 
-        //     float stressTotal = Math.abs(stressBase * speed);
+            float stressTotal = Math.abs(stressBase * speed);
 
-        //     CreateLang.number(stressTotal)
-        //         .translate("generic.unit.stress")
-        //         .style(ChatFormatting.AQUA)
-        //         .space()
-        //         .add(CreateLang.translate("gui.goggles.at_current_speed")
-        //             .style(ChatFormatting.DARK_GRAY))
-        //         .forGoggles(tooltip, 1);
+            CreateLang.number(stressTotal)
+                .translate("generic.unit.stress")
+                .style(ChatFormatting.AQUA)
+                .space()
+                .add(CreateLang.translate("gui.goggles.at_current_speed")
+                    .style(ChatFormatting.DARK_GRAY))
+                .forGoggles(tooltip, 1);
 
-        //     return true;
-        // };
+            return true;
+        };
 
         public void updateGeneratedRotation() {
             final Level level = getLevel();

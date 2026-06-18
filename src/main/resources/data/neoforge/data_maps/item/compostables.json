@@ -6,7 +6,7 @@
         "#c:storage_blocks/mashed_potato": {
             "chance": 1.0
         },
-        "#c:eggshell": {
+        "#c:eggshells": {
             "chance": 0.4
         }
     }
