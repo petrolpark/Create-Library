@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.core.contamination.IContamination;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.IFlagPole;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.item.IItemStackDuck;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.util.ItemHelper;
@@ -19,7 +19,7 @@ import net.minecraft.world.item.ItemStack;
 public class ItemStackMixin implements IItemStackDuck {
 
     @Unique
-    private IContamination<?, ?> contamination;
+    private IFlagPole<?, ?> flags;
 
     @ModifyReturnValue(
         method = "copy",
@@ -43,14 +43,14 @@ public class ItemStackMixin implements IItemStackDuck {
     };
 
     @Override
-    public IContamination<?, ?> getContamination() {
-        if (contamination == null) contamination = ItemContamination.create(self());
-        return contamination;
+    public IFlagPole<?, ?> getFlags() {
+        if (flags == null) flags = ItemFlagPole.create(self());
+        return flags;
     };
 
     @Override
-    public void onContaminationSaved() {
-        contamination = null;
+    public void onFlagsSaved() {
+        flags = null;
     };
 
     private ItemStack self() {

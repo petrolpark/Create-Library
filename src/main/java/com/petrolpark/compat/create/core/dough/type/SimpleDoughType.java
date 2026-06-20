@@ -73,6 +73,11 @@ public final class SimpleDoughType implements IDough, IDoughType<SimpleDoughType
     };
 
     @Override
+    public String uniqueString() {
+        return id.getNamespace() + "." + id.getPath();
+    };
+
+    @Override
     public SimpleDoughType getType() {
         return this;
     };

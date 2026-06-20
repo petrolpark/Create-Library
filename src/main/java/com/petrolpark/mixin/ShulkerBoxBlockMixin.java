@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.petrolpark.core.contamination.GenericContamination;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.GenericFlagPole;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.world.block.entity.IShulkerBoxBlockEntityDuck;
 
 import net.minecraft.core.BlockPos;
@@ -35,7 +35,7 @@ public abstract class ShulkerBoxBlockMixin extends BaseEntityBlock {
     };
 
     /**
-     * Contaminate the dropped Shulker Box Item with the Contaminants of the placed Block Entity.
+     * Flag the dropped Shulker Box Item with the Flags of the placed Block Entity.
      * @param original
      * @param state
      * @param params
@@ -44,22 +44,22 @@ public abstract class ShulkerBoxBlockMixin extends BaseEntityBlock {
         method = "getDrops",
         at = @At("RETURN")
     )
-    public List<ItemStack> petrolpark$contaminateDroppedItem(List<ItemStack> original, BlockState state, LootParams.Builder params) {
+    public List<ItemStack> petrolpark$flaggedroppedItem(List<ItemStack> original, BlockState state, LootParams.Builder params) {
         if (params.getOptionalParameter(LootContextParams.BLOCK_ENTITY) instanceof ShulkerBoxBlockEntity shulkerBox) {
-            final GenericContamination contamination = ((IShulkerBoxBlockEntityDuck)shulkerBox).getContamination();
-            original.stream().filter(s -> s.getItem() instanceof BlockItem b && b.getBlock() == this).map(ItemContamination::get).forEach(contam -> contam.contaminateAll(contamination.streamOrphanExtrinsicContaminants()));
+            final GenericFlagPole flags = ((IShulkerBoxBlockEntityDuck)shulkerBox).getFlagPole();
+            original.stream().filter(s -> s.getItem() instanceof BlockItem b && b.getBlock() == this).map(ItemFlagPole::get).forEach(contam -> contam.flagAll(flags.streamOrphanExtrinsicFlags()));
         };
         return original;
     };
     
     /**
-     * Contaminate the placed Block Entity with the Contaminants of the Item.
+     * Flag the placed Block Entity with the Flags of the Item.
      */
     @Override
     public void setPlacedBy(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState state, @Nullable LivingEntity placer, @Nonnull ItemStack stack) {
         level.getBlockEntity(pos, BlockEntityType.SHULKER_BOX)
             .map(IShulkerBoxBlockEntityDuck.class::cast)
-            .ifPresent(duck -> duck.contaminateAll(ItemContamination.get(stack).streamOrphanExtrinsicContaminants()));
+            .ifPresent(duck -> duck.flagAll(ItemFlagPole.get(stack).streamOrphanExtrinsicFlags()));
     };
     
 };

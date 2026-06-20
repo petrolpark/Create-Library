@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.core.contamination.recipe.IHandleContaminationMyselfRecipe;
+import com.petrolpark.core.flags.recipe.IHandleFlagsMyselfRecipe;
 import com.petrolpark.util.CodecHelper;
 
 import io.netty.handler.codec.DecoderException;
@@ -20,7 +20,7 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 
-public class DecayingItemCookingRecipe extends AbstractCookingRecipe implements IHandleContaminationMyselfRecipe<SingleRecipeInput> {
+public class DecayingItemCookingRecipe extends AbstractCookingRecipe implements IHandleFlagsMyselfRecipe<SingleRecipeInput> {
 
     public static final MapCodec<DecayingItemCookingRecipe> CODEC = CodecHelper.singleFieldMap(
         Recipe.CODEC.comapFlatMap(r -> r instanceof AbstractCookingRecipe cr ? DataResult.success(cr) : DataResult.error(() -> "Not a cooking recipe"), Function.identity()),

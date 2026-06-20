@@ -16,8 +16,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehaviour;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.IContamination;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.IFlagPole;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelControllerBlockEntity;
@@ -86,12 +86,12 @@ public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlock
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void petrolpark$propagateContaminants(CallbackInfo ci, Optional<RecipeHolder<StandardProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> list) {
+    public void petrolpark$propagateFlags(CallbackInfo ci, Optional<RecipeHolder<StandardProcessingRecipe<RecipeWrapper>>> recipe, List<ItemStack> list) {
         list.forEach(ItemDecay::startDecay);
-        if (PetrolparkConfigs.server().createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
-            IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
+        if (PetrolparkConfigs.server().createCrushingRecipesPropagateFlags.get() && lastItemProcessed != null) {
+            IFlagPole<?, ?> inputFlags = ItemFlagPole.get(lastItemProcessed);
             Level level = getLevel();
-            if (level != null) list.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
+            if (level != null) list.stream().map(ItemFlagPole::get).forEach(c -> c.flagAll(inputFlags.streamAllFlags()));
         };
     };
     

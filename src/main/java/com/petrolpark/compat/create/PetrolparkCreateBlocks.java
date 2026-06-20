@@ -64,7 +64,7 @@ public class PetrolparkCreateBlocks {
         .transform(axeOrPickaxe())
         .transform(PetrolparkStressConfig.setImpact(2f))
         .item()
-        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
+        .tag(PetrolparkTags.Items.FLAGGABLE.tag)
         .onRegister(PetrolparkCreate::registerTooltip)
         .build()
         .register();
@@ -75,7 +75,7 @@ public class PetrolparkCreateBlocks {
         .transform(pickaxeOnly())
         .transform(PetrolparkStressConfig.setImpact(2f))
         .item()
-        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
+        .tag(PetrolparkTags.Items.FLAGGABLE.tag)
         .onRegister(PetrolparkCreate::registerTooltip)
         .build()
         .register();
@@ -86,7 +86,7 @@ public class PetrolparkCreateBlocks {
             .instabreak()
         ).color(() -> () -> DoughBlock::getColor) // For particles
         .item(DoughItem::new)
-        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
+        .tag(PetrolparkTags.Items.FLAGGABLE.tag)
         .properties(p -> p
             .stacksTo(1)
         ).build()
@@ -101,7 +101,7 @@ public class PetrolparkCreateBlocks {
         .properties(BlockBehaviour.Properties::noCollission)
         .transform(pickaxeOnly())
         .item()
-        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
+        .tag(PetrolparkTags.Items.FLAGGABLE.tag)
         .build()
         .register();
 
@@ -119,7 +119,7 @@ public class PetrolparkCreateBlocks {
         ).onRegister(BlockStressValues.setGeneratorSpeed(16, true))
         .tag(AllBlockTags.SAFE_NBT.tag)
         .item()
-        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
+        .tag(PetrolparkTags.Items.FLAGGABLE.tag)
         .build()
         .register();
 
@@ -132,7 +132,7 @@ public class PetrolparkCreateBlocks {
         .blockstate(BlockStateGen.horizontalBlockProvider(true))
         .transform(axeOrPickaxe())
         .item()
-        .tag(PetrolparkTags.Items.CONTAMINABLE.tag)
+        .tag(PetrolparkTags.Items.FLAGGABLE.tag)
         .transform(ModelGen.customItemModel())
         .register();
 

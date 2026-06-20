@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.core.contamination.Contaminant;
-import com.petrolpark.core.contamination.GenericContamination;
+import com.petrolpark.core.flags.Flag;
+import com.petrolpark.core.flags.GenericFlagPole;
 import com.petrolpark.core.world.block.entity.IShulkerBoxBlockEntityDuck;
 
 import net.minecraft.core.BlockPos;
@@ -25,7 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBlockEntity implements IShulkerBoxBlockEntityDuck {
 
     @Unique
-    private GenericContamination contamination;
+    private GenericFlagPole flagPole;
 
     protected ShulkerBoxBlockEntityMixin(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
@@ -33,38 +33,38 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
     };
 
     @Override
-    public GenericContamination getContamination() {
-        if (contamination == null) contamination = new GenericContamination();
-        return contamination;
+    public GenericFlagPole getFlagPole() {
+        if (flagPole == null) flagPole = new GenericFlagPole();
+        return flagPole;
     };
 
     @Override
-    public void contaminateAll(Stream<Holder<Contaminant>> contaminants) {
-        contamination.contaminateAll(contaminants);
+    public void flagAll(Stream<Holder<Flag>> flags) {
+        flags.flagAll(flags);
     };
 
     @Inject(
         method = "<init>",
         at = @At("RETURN")
     )
-    public void petrolpark$createContamination(CallbackInfo ci) {
-        getContamination();
+    public void petrolpark$createFlags(CallbackInfo ci) {
+        getFlagPole();
     };
 
     @Inject(
         method = "loadFromTag",
         at = @At("HEAD")
     )
-    public void petrolpark$loadContamination(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
-        contamination = new GenericContamination().readNBT(tag.get("Contamination"), levelRegistry);
+    public void petrolpark$loadFlags(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
+        flagPole = new GenericFlagPole().readNBT(tag.get("Flags"), levelRegistry);
     };
 
     @Inject(
         method = "saveAdditional",
         at = @At("HEAD")
     )
-    public void petrolpark$saveContamination(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
-        tag.put("Contamination", getContamination().writeNBT(levelRegistry));
+    public void petrolpark$saveFlags(CompoundTag tag, HolderLookup.Provider levelRegistry, CallbackInfo ci) {
+        tag.put("Flags", getFlagPole().writeNBT(levelRegistry));
     };
     
 };

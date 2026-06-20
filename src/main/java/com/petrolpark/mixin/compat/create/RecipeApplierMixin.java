@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.IContamination;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.IFlagPole;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
 
@@ -24,10 +24,10 @@ public class RecipeApplierMixin {
         at = @At("RETURN"),
         remap = false
     )
-    private static List<ItemStack> petrolpark$propagateContaminantsAndStartDecay(List<ItemStack> original, Level level, ItemStack stackIn, Recipe<?> recipe, boolean returnProcessingRemainder) {
-        if (PetrolparkConfigs.server().createOtherRecipesPropagateContaminants.get()) {
-            IContamination<?, ?> inputContamination = ItemContamination.get(stackIn);
-            original.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
+    private static List<ItemStack> petrolpark$propagateFlagsAndStartDecay(List<ItemStack> original, Level level, ItemStack stackIn, Recipe<?> recipe, boolean returnProcessingRemainder) {
+        if (PetrolparkConfigs.server().createOtherRecipesPropagateFlags.get()) {
+            IFlagPole<?, ?> inputFlags = ItemFlagPole.get(stackIn);
+            original.stream().map(ItemFlagPole::get).forEach(c -> c.flagAll(inputFlags.streamAllFlags()));
         };
         original.forEach(ItemDecay::startDecay);
         return original;

@@ -15,8 +15,8 @@ import java.util.stream.Stream;
 import org.spongepowered.include.com.google.common.base.Strings;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.core.contamination.Contaminant;
-import com.petrolpark.core.contamination.IContamination;
+import com.petrolpark.core.flags.Flag;
+import com.petrolpark.core.flags.IFlagPole;
 
 import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.Util;
@@ -52,6 +52,23 @@ public class Lang {
     
     public static String asId(String string) {
         return string.toLowerCase(Locale.ROOT);
+    };
+
+    public static String shorten(String string, Font font, int maxWidth) {
+        if (font.width(string) <= maxWidth) return string;
+        if (string.isBlank()) return "";
+        String elipses = "...";
+        int elipsesWidth = font.width(elipses);
+        while (font.width(string) > maxWidth - elipsesWidth || string.charAt(string.length() - 1) == ' ') {
+            string = string.substring(0, string.length() - 1);
+            if (string.isBlank()) return "";
+        };
+        string += elipses;
+        return string;
+    };
+
+    public static Component shorten(Component component, Font font, int maxWidth) {
+        return Component.literal(shorten(component.getString(), font, maxWidth)).withStyle(component.getStyle());
     };
 
     public static Component shortList(List<? extends Component> elements, int maxTextWidth) {
@@ -98,24 +115,24 @@ public class Lang {
         return list;
     };
 
-    public static final void addContaminants(Consumer<Component> tooltip, IContamination<?, ?> contamination) {
-        addContaminants(tooltip, contamination, false);
+    public static final void addFlags(Consumer<Component> tooltip, IFlagPole<?, ?> flags) {
+        addFlags(tooltip, flags, false);
     };
 
-    public static final void addContaminants(Consumer<Component> tooltip, IContamination<?, ?> contamination, boolean addBlankLine) {
-        final List<Component> contaminantComponents = Stream.concat(contamination.streamShownContaminants().map(Contaminant::getNameColored), contamination.streamShownIfAbsentContaminants().map(Contaminant::getAbsentNameColored)).toList();
-        if (contaminantComponents.isEmpty()) return;
+    public static final void addFlags(Consumer<Component> tooltip, IFlagPole<?, ?> flags, boolean addBlankLine) {
+        final List<Component> flagComponents = Stream.concat(flags.streamShownFlags().map(Flag::getNameColored), flags.streamShownIfAbsentFlags().map(Flag::getAbsentNameColored)).toList();
+        if (flagComponents.isEmpty()) return;
         if (addBlankLine) tooltip.accept(Component.literal(" "));
-        contaminantComponents.forEach(tooltip);
+        flagComponents.forEach(tooltip);
     };
 
-    public static final LangBuilder appendContaminants(LangBuilder builder, IContamination<?, ?> contamination) {
-        final List<Component> contaminantComponents = Stream.concat(contamination.streamShownContaminants().map(Contaminant::getNameColored), contamination.streamShownIfAbsentContaminants().map(Contaminant::getAbsentNameColored)).toList();
-        if (contaminantComponents.isEmpty()) return builder;
+    public static final LangBuilder appendFlags(LangBuilder builder, IFlagPole<?, ?> flags) {
+        final List<Component> flagComponents = Stream.concat(flags.streamShownFlags().map(Flag::getNameColored), flags.streamShownIfAbsentFlags().map(Flag::getAbsentNameColored)).toList();
+        if (flagComponents.isEmpty()) return builder;
         builder.add(Component.literal(" ("));
-        for (int i = 0; i < contaminantComponents.size(); i++) {
-            builder.add(contaminantComponents.get(i));
-            if (i != contaminantComponents.size() - 1) builder.add(Component.literal(", "));
+        for (int i = 0; i < flagComponents.size(); i++) {
+            builder.add(flagComponents.get(i));
+            if (i != flagComponents.size() - 1) builder.add(Component.literal(", "));
         };
         return builder.add(Component.literal(")"));
     };

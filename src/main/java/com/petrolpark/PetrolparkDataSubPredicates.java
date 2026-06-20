@@ -13,7 +13,7 @@ import com.petrolpark.core.data.predicate.entity.OrEntitySubPredicate;
 import com.petrolpark.core.data.predicate.entity.PermissionsEntitySubPredicate;
 import com.petrolpark.core.data.predicate.entity.VillagerProfessionEntitySubPredicate;
 import com.petrolpark.core.data.predicate.item.AdvancedIngredientItemSubPredicate;
-import com.petrolpark.core.data.predicate.item.HasContaminantItemSubPredicate;
+import com.petrolpark.core.data.predicate.item.HasFlagItemSubPredicate;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.minecraft.advancements.critereon.EntitySubPredicate;
@@ -25,7 +25,7 @@ public class PetrolparkDataSubPredicates {
     public static final RegistryEntry<ItemSubPredicate.Type<?>, ? extends ItemSubPredicate.Type<?>> 
 
     ITEM_ADVANCED_INGREDIENT = REGISTRATE.itemSubPredicateType("advanced", AdvancedIngredientItemSubPredicate.CODEC),
-    ITEM_HAS_CONTAMINANT = REGISTRATE.itemSubPredicateType("has_contaminant", HasContaminantItemSubPredicate.CODEC);
+    ITEM_HAS_FLAG = REGISTRATE.itemSubPredicateType("has_flag", HasFlagItemSubPredicate.CODEC);
     
     public static final RegistryEntry<MapCodec<? extends EntitySubPredicate>, ? extends MapCodec<? extends EntitySubPredicate>>
 

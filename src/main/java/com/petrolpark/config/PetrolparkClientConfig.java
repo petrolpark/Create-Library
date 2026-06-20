@@ -16,7 +16,7 @@ public class PetrolparkClientConfig extends ConfigBase {
     public final ConfigGroup compatibility = group(0, "compatibiity");
         // Create
         public final ConfigGroup create = group(1, "create");
-            public final ConfigBool createShowContaminantsInFluidName = b(true, "showContaminantsInFluidName", "The Contaminants a fluid has are shown in its name when hovering a Create fluid-containing block");
+            public final ConfigBool createShowFlagsInFluidName = b(true, "showFlagsInFluidName", "The Flags a fluid has are shown in its name when hovering a Create fluid-containing block");
 
     @Override
     public String getName() {

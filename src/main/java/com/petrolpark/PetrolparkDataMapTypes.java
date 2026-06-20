@@ -3,7 +3,7 @@ package com.petrolpark;
 import java.util.List;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.flags.Flag;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
@@ -23,15 +23,15 @@ import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 @EventBusSubscriber
 public class PetrolparkDataMapTypes {
 
-    public static final AdvancedDataMapType<Item, List<Holder<Contaminant>>, DataMapValueRemover.Default<List<Holder<Contaminant>>, Item>>
+    public static final AdvancedDataMapType<Item, List<Holder<Flag>>, DataMapValueRemover.Default<List<Holder<Flag>>, Item>>
     
-    ITEM_INTRINSIC_CONTAMINANTS = contaminantListDataMapType(Petrolpark.asResource("intrinsic_contaminants"), Registries.ITEM),
-    ITEM_SHOWN_IF_ABSENT_CONTAMINANTS = contaminantListDataMapType(Petrolpark.asResource("shown_if_absent_contaminants"), Registries.ITEM);
+    ITEM_INTRINSIC_FLAGS = flagListDataMapType(Petrolpark.asResource("intrinsic_flags"), Registries.ITEM),
+    ITEM_SHOWN_IF_ABSENT_FLAGS = flagListDataMapType(Petrolpark.asResource("shown_if_absent_flags"), Registries.ITEM);
 
-    public static final AdvancedDataMapType<Fluid, List<Holder<Contaminant>>, DataMapValueRemover.Default<List<Holder<Contaminant>>, Fluid>>
+    public static final AdvancedDataMapType<Fluid, List<Holder<Flag>>, DataMapValueRemover.Default<List<Holder<Flag>>, Fluid>>
     
-    FLUID_INTRINSIC_CONTAMINANTS = contaminantListDataMapType(Petrolpark.asResource("intrinsic_contaminants"), Registries.FLUID),
-    FLUID_SHOWN_IF_ABSENT_CONTAMINANTS = contaminantListDataMapType(Petrolpark.asResource("shown_if_absent_contaminants"), Registries.FLUID);
+    FLUID_INTRINSIC_FLAGS = flagListDataMapType(Petrolpark.asResource("intrinsic_flags"), Registries.FLUID),
+    FLUID_SHOWN_IF_ABSENT_FLAGS = flagListDataMapType(Petrolpark.asResource("shown_if_absent_flags"), Registries.FLUID);
 
     public static final AdvancedDataMapType<BlockEntityType<?>, List<ResourceLocation>, DataMapValueRemover.Default<List<ResourceLocation>, BlockEntityType<?>>> BLOCK_ENTITY_ADVANCEMENTS = AdvancedDataMapType
         .builder(
@@ -44,18 +44,18 @@ public class PetrolparkDataMapTypes {
 
     @SubscribeEvent
     public static final void onRegisterDataMapTypes(RegisterDataMapTypesEvent event) {
-        event.register(ITEM_INTRINSIC_CONTAMINANTS);
-        event.register(ITEM_SHOWN_IF_ABSENT_CONTAMINANTS);
-        event.register(FLUID_INTRINSIC_CONTAMINANTS);
-        event.register(FLUID_SHOWN_IF_ABSENT_CONTAMINANTS);
+        event.register(ITEM_INTRINSIC_FLAGS);
+        event.register(ITEM_SHOWN_IF_ABSENT_FLAGS);
+        event.register(FLUID_INTRINSIC_FLAGS);
+        event.register(FLUID_SHOWN_IF_ABSENT_FLAGS);
         event.register(BLOCK_ENTITY_ADVANCEMENTS);
     };
 
-    public static final <T> AdvancedDataMapType<T, List<Holder<Contaminant>>, DataMapValueRemover.Default<List<Holder<Contaminant>>, T>> contaminantListDataMapType(ResourceLocation name, ResourceKey<Registry<T>> registry) {
+    public static final <T> AdvancedDataMapType<T, List<Holder<Flag>>, DataMapValueRemover.Default<List<Holder<Flag>>, T>> flagListDataMapType(ResourceLocation name, ResourceKey<Registry<T>> registry) {
         return AdvancedDataMapType.builder(
             name,
             registry,
-            Codec.list(Contaminant.CODEC)
+            Codec.list(Flag.CODEC)
         ).remover(DataMapValueRemover.Default.codec())
         .merger(DataMapValueMerger.listMerger())
         .build();

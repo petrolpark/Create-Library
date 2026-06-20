@@ -2,8 +2,8 @@ package com.petrolpark.core.recipe.recycling;
 
 import java.util.List;
 
-import com.petrolpark.core.contamination.Contamination;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.AbstractFlagPole;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.recipe.compression.ItemCompressionManager;
 import com.petrolpark.util.BigItemStack;
 
@@ -55,15 +55,15 @@ public interface RecyclingOutputsModifier extends Comparable<RecyclingOutputsMod
     };
 
     /**
-     * Propagates the {@link Contamination Contaminants} of the recycled Stack to the {@link RecyclingOutputs}
+     * Propagates the {@link AbstractFlagPole Flags} of the recycled Stack to the {@link RecyclingOutputs}
      */
-    public static RecyclingOutputsModifier CONTAMINANTS = new RecyclingOutputsModifier() {
+    public static RecyclingOutputsModifier FLAGS = new RecyclingOutputsModifier() {
 
         @Override
         public void modify(Level level, ItemStack input, RecyclingOutputs outputs) {
-            ItemContamination.get(input).streamAllContaminants().forEach(contaminant -> 
-                outputs.splitAll(contaminant.value().preservationProportion, output -> 
-                    ItemContamination.get(output.item).contaminate(contaminant)
+            ItemFlagPole.get(input).streamAllFlags().forEach(flag -> 
+                outputs.splitAll(flag.value().preservationProportion, output -> 
+                    ItemFlagPole.get(output.item).flag(flag)
                 )
             );
         };

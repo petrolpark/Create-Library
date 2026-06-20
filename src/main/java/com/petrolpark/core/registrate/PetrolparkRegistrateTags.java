@@ -39,9 +39,9 @@ public class PetrolparkRegistrateTags {
     @SuppressWarnings("deprecation")
     private static final void genItemTags(RegistrateTagsProvider<Item> provIn) {
         final CreateTagsProvider<Item> prov = new CreateTagsProvider<>(provIn, Item::builtInRegistryHolder);
-        final CreateTagAppender<Item> contaminableTagAppender = prov.tag(PetrolparkTags.Items.CONTAMINABLE.tag);
+        final CreateTagAppender<Item> flaggableTagAppender = prov.tag(PetrolparkTags.Items.FLAGGABLE.tag);
         
-        tagAllNonBlocksAndEntities(contaminableTagAppender, ResourceLocation.DEFAULT_NAMESPACE,
+        tagAllNonBlocksAndEntities(flaggableTagAppender, ResourceLocation.DEFAULT_NAMESPACE,
             Items.AIR,
             Items.SADDLE,
             Items.LEAD,
@@ -49,14 +49,14 @@ public class PetrolparkRegistrateTags {
             Items.KNOWLEDGE_BOOK,
             Items.DEBUG_STICK
         );
-        contaminableTagAppender
+        flaggableTagAppender
             .add(Items.STRING)
             .add(Items.NETHER_WART)
             .addTag(Tags.Items.SHULKER_BOXES)
             .addTag(Tags.Items.SEEDS);
-        optionalTagAllNonBlocksAndEntities(contaminableTagAppender, Petrolpark.MOD_ID, PetrolparkItems.MENU.get(), PetrolparkItems.RECIPE_BOOK.get());
-        optionalTagAllNonBlocksAndEntities(contaminableTagAppender, Create.ID);
-        optionalTagAll(contaminableTagAppender, Create.ID, item -> !(item instanceof BlockItem blockItem && blockItem.getBlock() instanceof KineticBlock));
+        optionalTagAllNonBlocksAndEntities(flaggableTagAppender, Petrolpark.MOD_ID, PetrolparkItems.MENU.get(), PetrolparkItems.RECIPE_BOOK.get());
+        optionalTagAllNonBlocksAndEntities(flaggableTagAppender, Create.ID);
+        optionalTagAll(flaggableTagAppender, Create.ID, item -> !(item instanceof BlockItem blockItem && blockItem.getBlock() instanceof KineticBlock));
     };
 
     public static final void optionalTagAllNonBlocksAndEntities(TagAppender<Item> tag, String namespace, Item ... exclusions) {

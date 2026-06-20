@@ -1,10 +1,10 @@
 package com.petrolpark.core.item;
 
-import com.petrolpark.core.contamination.IContamination;
+import com.petrolpark.core.flags.IFlagPole;
 
 public interface IItemStackDuck {
 
-    public IContamination<?, ?> getContamination();
+    public IFlagPole<?, ?> getFlags();
     
-    public void onContaminationSaved();
+    public void onFlagsSaved();
 };

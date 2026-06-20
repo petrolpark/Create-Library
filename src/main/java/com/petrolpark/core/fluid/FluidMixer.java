@@ -19,7 +19,7 @@ public class FluidMixer {
     };
 
     static {
-        //register(FluidContamination.MIXER); // Default Mixer which replicates vanilla behaviour
+        //register(FluidFlags.MIXER); // Default Mixer which replicates vanilla behaviour
     };
 
     /**

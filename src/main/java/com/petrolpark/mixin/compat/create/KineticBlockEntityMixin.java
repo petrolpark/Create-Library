@@ -16,7 +16,7 @@ import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.compat.create.core.block.composite.CompositeKineticBlockEntity;
 import com.petrolpark.compat.create.core.block.entity.IKineticBlockEntityDuck;
-import com.petrolpark.compat.create.core.block.entity.behaviour.ContaminationBehaviour;
+import com.petrolpark.compat.create.core.block.entity.behaviour.FlagPoleBehaviour;
 import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -64,8 +64,8 @@ public abstract class KineticBlockEntityMixin extends SmartBlockEntity implement
         at = @At("HEAD"),
         remap = false
     )
-    public void petrolpark$addContaminationBehaviour(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
-        if (PetrolparkTags.Items.CONTAMINABLE.matches(getBlockState().getBlock().asItem())) behaviours.add(new ContaminationBehaviour(this));
+    public void petrolpark$addFlagsBehaviour(List<BlockEntityBehaviour> behaviours, CallbackInfo ci) {
+        if (PetrolparkTags.Items.FLAGGABLE.matches(getBlockState().getBlock().asItem())) behaviours.add(new FlagPoleBehaviour(this));
     };
 
     @Inject(

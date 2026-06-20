@@ -3,8 +3,8 @@ package com.petrolpark;
 import static com.petrolpark.Petrolpark.REGISTRATE;
 
 import com.petrolpark.core.recipe.ingredient.advanced.CompoundAdvancedIngredient;
-import com.petrolpark.core.recipe.ingredient.advanced.ContaminatedAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.EnchantmentItemAdvancedIngredient;
+import com.petrolpark.core.recipe.ingredient.advanced.FlaggedAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.GenericAdvancedIngredientType;
 import com.petrolpark.core.recipe.ingredient.advanced.HolderSetFluidAdvancedIngredient;
 import com.petrolpark.core.recipe.ingredient.advanced.HolderSetItemAdvancedIngredient;
@@ -27,7 +27,7 @@ public class PetrolparkAdvancedIngredientTypes {
     public static final RegistryEntry<IAdvancedIngredientType<? super ItemStack>, ? extends IAdvancedIngredientType<? super ItemStack>>
     
     ITEM_PASS = REGISTRATE.itemAdvancedIngredientType("pass", PassAdvancedIngredient.TYPE),
-    ITEM_CONTAMINATED = REGISTRATE.itemAdvancedIngredientType("contaminated", ContaminatedAdvancedIngredient.TYPE);
+    ITEM_FLAGGED = REGISTRATE.itemAdvancedIngredientType("flagged", FlaggedAdvancedIngredient.TYPE);
     
     public static final RegistryEntry<IAdvancedIngredientType<? super ItemStack>, ? extends INamedAdvancedIngredientType<ItemStack>> 
     
@@ -45,7 +45,7 @@ public class PetrolparkAdvancedIngredientTypes {
 
     FLUID_PASS = REGISTRATE.fluidAdvancedIngredientType("pass", PassAdvancedIngredient.TYPE),
     FLUID_NOT = REGISTRATE.fluidAdvancedIngredientType("not", NotAdvancedIngredient::codec, NotAdvancedIngredient::streamCodec),
-    FLUID_CONTAMINATED = REGISTRATE.fluidAdvancedIngredientType("contaminated", ContaminatedAdvancedIngredient.TYPE);
+    FLUID_FLAGGED = REGISTRATE.fluidAdvancedIngredientType("flagged", FlaggedAdvancedIngredient.TYPE);
 
     public static final RegistryEntry<IAdvancedIngredientType<? super FluidStack>, ? extends INamedAdvancedIngredientType<FluidStack>> 
 

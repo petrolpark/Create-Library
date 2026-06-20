@@ -8,8 +8,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.data.loot.modifier.LootTableModification;
+import com.petrolpark.core.flags.Flag;
 import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
 import com.petrolpark.core.shop.Shop;
 import com.petrolpark.core.shop.offer.ShopOfferGenerator;
@@ -33,7 +33,7 @@ public class ModEvents {
     
     @SubscribeEvent
     public static final void onDataPackRegistry(DataPackRegistryEvent.NewRegistry event) {
-        event.dataPackRegistry(PetrolparkRegistries.Keys.CONTAMINANT, Contaminant.DIRECT_CODEC, Contaminant.DIRECT_CODEC);
+        event.dataPackRegistry(PetrolparkRegistries.Keys.FLAG, Flag.DIRECT_CODEC, Flag.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.LOOT_TABLE_MODIFICATION, LootTableModification.DIRECT_CODEC, LootTableModification.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.SHOP, Shop.DIRECT_CODEC, Shop.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.SHOP_OFFER_GENERATOR, ShopOfferGenerator.DIRECT_CODEC, ShopOfferGenerator.DIRECT_CODEC);

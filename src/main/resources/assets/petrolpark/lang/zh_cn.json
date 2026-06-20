@@ -29,21 +29,21 @@
 
     "block.petrolpark.tube": "管道",
 
-    "commands.petrolpark.contaminate.failed": "什么都没有发生。目标要么是手中空空如也，要么是无法添加污染",
-    "commands.petrolpark.contaminate.failed.entity": "%s不是该命令可作用的有效实体",
-    "commands.petrolpark.contaminate.failed.itemless": "%s什么都没拿",
-    "commands.petrolpark.contaminate.success.multiple": "已将污染%s添加到实体%s上",
-    "commands.petrolpark.contaminate.success.single": "已将污染%s添加到%s的物品上",
+    "commands.petrolpark.flag.failed": "什么都没有发生。目标要么是手中空空如也，要么是无法添加污染",
+    "commands.petrolpark.flag.failed.entity": "%s不是该命令可作用的有效实体",
+    "commands.petrolpark.flag.failed.itemless": "%s什么都没拿",
+    "commands.petrolpark.flag.success.multiple": "已将污染%s添加到实体%s上",
+    "commands.petrolpark.flag.success.single": "已将污染%s添加到%s的物品上",
 
-    "config.jade.plugin_petrolpark.contamination": "污染",
+    "config.jade.plugin_petrolpark.flags": "污染",
 
-    "contaminant.petrolpark.example_child": "示例（子）",
-    "contaminant.petrolpark.example_child.absent": "无示例（子）",
-    "contaminant.petrolpark.example_parent": "示例（父）",
-    "contaminant.petrolpark.example_parent.absent": "无示例（父）",
+    "flag.petrolpark.example_child": "示例（子）",
+    "flag.petrolpark.example_child.absent": "无示例（子）",
+    "flag.petrolpark.example_parent": "示例（父）",
+    "flag.petrolpark.example_parent.absent": "无示例（父）",
 
-    "create.item_attributes.has_contaminant": "拥有污染：%s",
-    "create.item_attributes.has_contaminant.inverted": "未拥有污染：%s",
+    "create.item_attributes.has_flag": "拥有污染：%s",
+    "create.item_attributes.has_flag.inverted": "未拥有污染：%s",
 
     "curios.identifier.petrolpark_badge": "徽章",
 

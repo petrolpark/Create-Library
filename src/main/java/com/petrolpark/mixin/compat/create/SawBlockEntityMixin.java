@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.IContamination;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.IFlagPole;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
@@ -54,14 +54,14 @@ public abstract class SawBlockEntityMixin extends BlockBreakingKineticBlockEntit
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    public void petrolpark$propagateContaminantsAndStartDecay(CallbackInfo ci, ItemStack input, List<? extends Recipe<?>> recipes) {
+    public void petrolpark$propagateFlagsAndStartDecay(CallbackInfo ci, ItemStack input, List<? extends Recipe<?>> recipes) {
         if (recipes.isEmpty()) return;
-        IContamination<?, ?> inputContamination = ItemContamination.get(petrolpark$lastItemProcessed);
+        IFlagPole<?, ?> inputFlags = ItemFlagPole.get(petrolpark$lastItemProcessed);
         for (int slot = 0; slot < inventory.getSlots(); slot++) {
             ItemStack stack = inventory.getStackInSlot(slot);
             ItemDecay.startDecay(stack);
             Level level = getLevel();
-            if (level != null && PetrolparkConfigs.server().createCuttingRecipesPropagateContaminants.get()) ItemContamination.get(stack).contaminateAll(inputContamination.streamAllContaminants());
+            if (level != null && PetrolparkConfigs.server().createCuttingRecipesPropagateFlags.get()) ItemFlagPole.get(stack).flagAll(inputFlags.streamAllFlags());
         };
     };
 };

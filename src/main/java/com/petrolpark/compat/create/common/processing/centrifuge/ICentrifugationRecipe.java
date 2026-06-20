@@ -9,7 +9,7 @@ import javax.annotation.Nonnull;
 import com.petrolpark.PetrolparkCriteriaTriggers;
 import com.petrolpark.compat.create.core.block.entity.behaviour.AdvancementBehaviour;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.IContamination;
+import com.petrolpark.core.flags.IFlagPole;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -121,7 +121,7 @@ public interface ICentrifugationRecipe {
                 recipeOutputItems.addAll(rollLuckyResults(centrifuge, centrifuge.getLevel().random));
                 for (ItemStack stack : getRemainingItems(remainderInput)) if (!stack.isEmpty()) recipeOutputItems.add(stack);
 
-				if (PetrolparkConfigs.server().centrifugePropagatesContaminants.get()) {
+				if (PetrolparkConfigs.server().centrifugePropagatesFlags.get()) {
 					final ItemStack[] itemInputs = new ItemStack[availableItems.getSlots()];
 					for (int slot = 0; slot < availableItems.getSlots(); slot++) {
 						itemInputs[slot] = availableItems.getStackInSlot(slot).copyWithCount(extractedItemsFromSlot[slot]);
@@ -134,7 +134,7 @@ public interface ICentrifugationRecipe {
 					};
 
 					final Level level = centrifuge.getLevel();
-					if (level != null) IContamination.perpetuate(Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfigs.server().createFluidContaminantWeight.get(), recipeOutputItems.stream(), Stream.of(denseOutputFluid, lightOutputFluid).dropWhile(FluidStack::isEmpty));
+					if (level != null) IFlagPole.perpetuate(Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfigs.server().createFluidFlagWeight.get(), recipeOutputItems.stream(), Stream.of(denseOutputFluid, lightOutputFluid).dropWhile(FluidStack::isEmpty));
 				};
 			};
 

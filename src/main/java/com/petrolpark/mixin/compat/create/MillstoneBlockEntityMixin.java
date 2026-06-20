@@ -14,8 +14,8 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehaviour;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.IContamination;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.IFlagPole;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
@@ -71,7 +71,7 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
 
     /**
      * Allow first-time lucky milling recipes to guarantee outputs the first time they are done by a player.
-     * Also start Decay of result ItemStacks, and propagate Contaminants.
+     * Also start Decay of result ItemStacks, and propagate Flags.
      */
     @WrapOperation(
         method = "Lcom/simibubi/create/content/kinetics/millstone/MillstoneBlockEntity;process()V",
@@ -91,10 +91,10 @@ public abstract class MillstoneBlockEntityMixin extends KineticBlockEntity {
             results = original.call(recipe, random);
         };
 
-        if (PetrolparkConfigs.server().createCrushingRecipesPropagateContaminants.get() && lastItemProcessed != null) {
-            IContamination<?, ?> inputContamination = ItemContamination.get(lastItemProcessed);
+        if (PetrolparkConfigs.server().createCrushingRecipesPropagateFlags.get() && lastItemProcessed != null) {
+            IFlagPole<?, ?> inputFlags = ItemFlagPole.get(lastItemProcessed);
             Level level = getLevel();
-            if (level != null) results.stream().map(ItemContamination::get).forEach(c -> c.contaminateAll(inputContamination.streamAllContaminants()));
+            if (level != null) results.stream().map(ItemFlagPole::get).forEach(c -> c.flagAll(inputFlags.streamAllFlags()));
         };
 
         results.forEach(ItemDecay::startDecay);

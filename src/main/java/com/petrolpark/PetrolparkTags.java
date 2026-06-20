@@ -1,7 +1,7 @@
 package com.petrolpark;
 
 import com.petrolpark.compat.Mods;
-import com.petrolpark.core.contamination.Contaminant;
+import com.petrolpark.core.flags.Flag;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.core.Holder;
@@ -75,23 +75,23 @@ public class PetrolparkTags {
         public static final TagKey<Block> VERTICAL_SLABS = TagKey.create(Registries.BLOCK, Mods.QUARK.asResource("vertical_slabs"));
     };
 
-    public enum Contaminants {
+    public enum Flags {
 
         HIDDEN,
         ;
 
-        public final TagKey<Contaminant> tag;
+        public final TagKey<Flag> tag;
 
-        Contaminants() {
-            tag = TagKey.create(PetrolparkRegistries.Keys.CONTAMINANT, Petrolpark.asResource(Lang.asId(name())));
+        Flags() {
+            tag = TagKey.create(PetrolparkRegistries.Keys.FLAG, Petrolpark.asResource(Lang.asId(name())));
         };
 
-        Contaminants(String path) {
-            tag = TagKey.create(PetrolparkRegistries.Keys.CONTAMINANT, Petrolpark.asResource(path));
+        Flags(String path) {
+            tag = TagKey.create(PetrolparkRegistries.Keys.FLAG, Petrolpark.asResource(path));
         };
 
-        public boolean matches(Holder<Contaminant> contaminant) {
-            return contaminant.is(tag);
+        public boolean matches(Holder<Flag> flag) {
+            return flag.is(tag);
         };
     };
 
@@ -136,7 +136,7 @@ public class PetrolparkTags {
 
     public enum Fluids {
 
-        CONTAMINABLE,
+        FLAGGABLE,
         ;
 
         public final TagKey<Fluid> tag;
@@ -166,7 +166,7 @@ public class PetrolparkTags {
 
     public enum Items {
 
-        CONTAMINABLE,
+        FLAGGABLE,
         SLIPPING_POTION_INGREDIENTS,
         ;
 

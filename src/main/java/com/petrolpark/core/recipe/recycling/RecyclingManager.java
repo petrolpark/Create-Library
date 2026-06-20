@@ -48,7 +48,7 @@ public class RecyclingManager {
      */
     static {
         registerModifier(RecyclingOutputsModifier.DURABILITY);
-        registerModifier(RecyclingOutputsModifier.CONTAMINANTS);
+        registerModifier(RecyclingOutputsModifier.FLAGS);
         registerModifier(RecyclingOutputsModifier.DECOMPRESSION);
     };
 

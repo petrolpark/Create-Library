@@ -1,6 +1,6 @@
 package com.petrolpark.event;
 
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.util.Lang;
 
@@ -19,9 +19,9 @@ public class ClientEvents {
         // Decay Times
         ItemDecay.getTooltip(event.getItemStack()).ifPresent(event.getToolTip()::add);
 
-        // Item Contamination
+        // Item Flags
         if (event.getEntity() == null) return; // Don't populate the Intrinsics map before the world has been loaded, as the Tags have not been loaded
-        Lang.addContaminants(event.getToolTip()::add, ItemContamination.get(event.getItemStack()));
+        Lang.addFlags(event.getToolTip()::add, ItemFlagPole.get(event.getItemStack()));
     };
 
     public static boolean isGameActive() {

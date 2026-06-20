@@ -1,7 +1,6 @@
 package com.petrolpark.compat.jei;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +8,7 @@ import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkBlocks;
+import com.petrolpark.PetrolparkItems;
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.SharedFeatureFlag;
@@ -35,14 +35,12 @@ import com.petrolpark.compat.jei.category.LiddedBasinCategory;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
 import com.petrolpark.compat.jei.category.MysteriousConversionCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
-import com.petrolpark.compat.jei.category.extension.WoodCraftingCategoryExtension;
 import com.petrolpark.compat.jei.ghost.PetrolparkGhostIngredientHandler;
-import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
-import com.petrolpark.compat.jei.ingredient.BlockStateIngredientType;
+import com.petrolpark.compat.jei.subtypeInterpreter.DoughItemSubtypeInterpreter;
+import com.petrolpark.compat.jei.subtypeInterpreter.WoodenItemSubtypeInterpreter;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
 import com.petrolpark.core.item.decay.drying.DryingRecipe;
-import com.petrolpark.core.item.wooden.WoodCraftingShapedRecipe;
 import com.petrolpark.core.recipe.CropFertilizingRecipe;
 import com.petrolpark.core.recipe.ExampleRecipe;
 import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
@@ -57,11 +55,10 @@ import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
-import mezz.jei.api.registration.IModIngredientRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
+import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponents;
@@ -76,7 +73,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 
 /**
  * For now, this library's JEI plugin relies heavily on Create, so is set up to load only when Create is loaded.
@@ -239,14 +235,9 @@ public class PetrolparkCreateJEI implements IModPlugin {
 	};
 
     @Override
-    public void registerIngredients(@Nonnull IModIngredientRegistration registration) {
-        registration.register(BiomeIngredientType.TYPE, Collections.emptySet(), BiomeIngredientType.HELPER, BiomeIngredientType.RENDERER, BiomeIngredientType.HELPER.getRegistry().byNameCodec());
-        registration.register(BlockStateIngredientType.TYPE, Collections.emptySet(), BlockStateIngredientType.HELPER, BlockStateIngredientType.RENDERER, BlockState.CODEC);
-    };
-    
-    @Override
-    public void registerVanillaCategoryExtensions(@Nonnull IVanillaCategoryExtensionRegistration registration) {
-        registration.getCraftingCategory().addExtension(WoodCraftingShapedRecipe.class, new WoodCraftingCategoryExtension());
+    public void registerItemSubtypes(@Nonnull ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(PetrolparkCreateBlocks.DOUGH.asItem(), DoughItemSubtypeInterpreter.INSTANCE);
+        if (SharedFeatureFlag.ROLLING_PIN.enabled()) registration.registerSubtypeInterpreter(PetrolparkItems.ROLLING_PIN.get(), WoodenItemSubtypeInterpreter.INSTANCE);
     };
 
     private <T extends Recipe<?>> CategoryBuilderImpl<T> builder(Class<? extends T> recipeClass) {

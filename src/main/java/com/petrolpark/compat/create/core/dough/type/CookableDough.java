@@ -78,6 +78,12 @@ public class CookableDough implements IDough, ICookableDough {
     };
 
     @Override
+    public String uniqueString() {
+        // TODO Auto-generated method stub
+        return null;
+    };
+
+    @Override
     public CookableDough.Type getType() {
         return type;
     };

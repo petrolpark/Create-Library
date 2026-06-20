@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.FluidContamination;
+import com.petrolpark.core.flags.FluidFlagPole;
 import com.petrolpark.util.Lang;
 import com.simibubi.create.foundation.utility.CreateLang;
 
@@ -19,8 +19,8 @@ public class CreateLangMixin {
         method = "Lcom/simibubi/create/foundation/utility/CreateLang;fluidName(Lnet/neoforged/neoforge/fluids/FluidStack;)Lnet/createmod/catnip/lang/LangBuilder;",
         at = @At("TAIL")
     )
-    private static LangBuilder petrolpark$addContaminants(LangBuilder original, FluidStack stack) {
-        if (!PetrolparkConfigs.client().createShowContaminantsInFluidName.get()) return original;
-        return Lang.appendContaminants(original, FluidContamination.get(stack));
+    private static LangBuilder petrolpark$addFlags(LangBuilder original, FluidStack stack) {
+        if (!PetrolparkConfigs.client().createShowFlagsInFluidName.get()) return original;
+        return Lang.appendFlags(original, FluidFlagPole.get(stack));
     };
 };

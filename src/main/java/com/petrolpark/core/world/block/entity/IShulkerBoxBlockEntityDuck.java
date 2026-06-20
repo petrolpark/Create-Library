@@ -2,14 +2,14 @@ package com.petrolpark.core.world.block.entity;
 
 import java.util.stream.Stream;
 
-import com.petrolpark.core.contamination.Contaminant;
-import com.petrolpark.core.contamination.GenericContamination;
+import com.petrolpark.core.flags.Flag;
+import com.petrolpark.core.flags.GenericFlagPole;
 
 import net.minecraft.core.Holder;
 
 public interface IShulkerBoxBlockEntityDuck {
     
-    public GenericContamination getContamination();
+    public GenericFlagPole getFlagPole();
 
-    public void contaminateAll(Stream<Holder<Contaminant>> contaminants);
+    public void flagAll(Stream<Holder<Flag>> flags);
 };

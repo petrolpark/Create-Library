@@ -8,8 +8,8 @@ import org.jetbrains.annotations.ApiStatus;
 import com.mojang.serialization.Codec;
 import com.petrolpark.core.badge.BadgeItem;
 import com.petrolpark.core.badge.BadgeItem.BadgeAward;
-import com.petrolpark.core.contamination.Contaminant;
-import com.petrolpark.core.contamination.Contamination;
+import com.petrolpark.core.flags.AbstractFlagPole;
+import com.petrolpark.core.flags.Flag;
 import com.petrolpark.core.item.decay.DecayTime;
 import com.petrolpark.core.item.decay.product.IDecayProduct;
 import com.petrolpark.core.recipe.bogglepattern.BogglePatternHelper;
@@ -44,9 +44,9 @@ public class PetrolparkDataComponentTypes {
         .networkSynchronized(ITeam.Provider.STREAM_CODEC)
     );
 
-    public static final DataComponentType<List<Holder<Contaminant>>> ORPHAN_CONTAMINANTS = register("contamination", builder -> builder
-        .persistent(Contamination.ORPHAN_HOLDER_LIST_CODEC)
-        .networkSynchronized(Contamination.ORPHAN_HOLDER_LIST_STREAM_CODEC)
+    public static final DataComponentType<List<Holder<Flag>>> ORPHAN_FLAGS = register("flags", builder -> builder
+        .persistent(AbstractFlagPole.ORPHAN_HOLDER_LIST_CODEC)
+        .networkSynchronized(AbstractFlagPole.ORPHAN_HOLDER_LIST_STREAM_CODEC)
     );
 
     public static final DataComponentType<RecipeReferenceDataComponent> RECIPE_REFERENCE = register("recipe_reference", builder -> builder

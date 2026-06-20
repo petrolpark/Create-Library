@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.equipment.sandPaper.SandPaperPolishingRecipe;
 
@@ -21,9 +21,9 @@ public class SandPaperPolishingRecipeMixin {
         at = @At("RETURN"),
         remap = false
     )
-    private static ItemStack petrolpark$propagateContaminantsAndStartDecay(ItemStack original, Level world, Vec3 position, ItemStack stack, ItemStack sandPaperStack) {
+    private static ItemStack petrolpark$propagateFlagsAndStartDecay(ItemStack original, Level world, Vec3 position, ItemStack stack, ItemStack sandPaperStack) {
         ItemDecay.startDecay(original);
-        if (PetrolparkConfigs.server().createSandingRecipesPropagateContaminants.get()) ItemContamination.get(original).contaminateAll(ItemContamination.get(stack).streamAllContaminants());
+        if (PetrolparkConfigs.server().createSandingRecipesPropagateFlags.get()) ItemFlagPole.get(original).flagAll(ItemFlagPole.get(stack).streamAllFlags());
         return original;
     };
 };

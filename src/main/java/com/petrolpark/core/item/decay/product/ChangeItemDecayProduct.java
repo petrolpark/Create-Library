@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.PetrolparkDecayProductTypes;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.util.CodecHelper;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -27,7 +27,7 @@ public record ChangeItemDecayProduct(ItemStack stack) implements IDecayProduct {
     @Override
     public ItemStack get(ItemStack stack) {
         ItemStack product = this.stack.copyWithCount(stack.getCount());
-        ItemContamination.perpetuateSingle(Stream.of(stack), Stream.of(product));
+        ItemFlagPole.perpetuateSingle(Stream.of(stack), Stream.of(product));
         return product;
     };
 

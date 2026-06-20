@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.ItemContamination;
-import com.petrolpark.core.contamination.recipe.IHandleContaminationMyselfRecipe;
+import com.petrolpark.core.flags.ItemFlagPole;
+import com.petrolpark.core.flags.recipe.IHandleFlagsMyselfRecipe;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.core.recipe.book.IBookRequiredRecipe;
 import com.petrolpark.core.recipe.book.RecipeBookItem;
@@ -41,7 +41,7 @@ public class CraftingMenuMixin {
     private ContainerLevelAccess access;
     
     /**
-     * Propagate Contaminants to the results of Crafted Items, if the configs say to do so.
+     * Propagate Flags to the results of Crafted Items, if the configs say to do so.
      * Also begin Item Decay.
      * @param menu
      * @param level
@@ -64,7 +64,7 @@ public class CraftingMenuMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT
     )
     @SuppressWarnings({"unchecked", "rawtypes"})
-    private static void petrolpark$propagateContaminantsAndStartDecay(
+    private static void petrolpark$propagateFlagsAndStartDecay(
         AbstractContainerMenu menu,
         Level level,
         Player player,
@@ -76,12 +76,12 @@ public class CraftingMenuMixin {
         if (!itemstack.isEmpty()) {
             ItemDecay.startDecay(itemstack);
             Optional<RecipeHolder<CraftingRecipe>> optional = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftinginput, level, recipe); // For mystery reasons this cannot be localcaptured
-            if (PetrolparkConfigs.server().craftingTablePropagatesContaminants.get() && optional.map(rh -> {
-                if (rh.value() instanceof IHandleContaminationMyselfRecipe contamHandled) {
-                    return !contamHandled.isContaminationHandled(craftinginput, level.registryAccess());
+            if (PetrolparkConfigs.server().craftingTablePropagatesFlags.get() && optional.map(rh -> {
+                if (rh.value() instanceof IHandleFlagsMyselfRecipe contamHandled) {
+                    return !contamHandled.isFlagsHandled(craftinginput, level.registryAccess());
                 } else return true;
             }).orElse(true)) {
-                ItemContamination.perpetuateSingle(craftSlots.getItems().stream(), itemstack);
+                ItemFlagPole.perpetuateSingle(craftSlots.getItems().stream(), itemstack);
             };
         };
     };

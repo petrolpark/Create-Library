@@ -15,7 +15,7 @@ import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.compat.create.core.block.entity.basin.IDifferentBasinBlockEntity;
 import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.IContamination;
+import com.petrolpark.core.flags.IFlagPole;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
@@ -44,7 +44,7 @@ public class BasinRecipeMixin {
     };
     
     /**
-     * Start {@link ItemDecay} and propagate Contaminants in Basin Recipes.
+     * Start {@link ItemDecay} and propagate Flags in Basin Recipes.
      */
     @Inject(
         method = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;Z)Z",
@@ -56,7 +56,7 @@ public class BasinRecipeMixin {
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    private static final void petrolpark$propagateContaminants(
+    private static final void petrolpark$propagateFlags(
         BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir,
         boolean isBasinRecipe, IItemHandler availableItems, IFluidHandler availableFluids, BlazeBurnerBlock.HeatLevel heat,
         List<ItemStack> recipeOutputItems, List<FluidStack> recipeOutputFluids,
@@ -67,7 +67,7 @@ public class BasinRecipeMixin {
         if (simulate) {
             recipeOutputItems.forEach(ItemDecay::startDecay);
 
-            if (PetrolparkConfigs.server().createBasinRecipesPropagateContaminants.get()) {
+            if (PetrolparkConfigs.server().createBasinRecipesPropagateFlags.get()) {
                 ItemStack[] itemInputs = new ItemStack[availableItems.getSlots()];
                 for (int slot = 0; slot < availableItems.getSlots(); slot++) {
                     itemInputs[slot] = availableItems.getStackInSlot(slot).copyWithCount(extractedItemsFromSlot[slot]);
@@ -80,7 +80,7 @@ public class BasinRecipeMixin {
                 };
 
                 Level level = basin.getLevel();
-                if (level != null) IContamination.perpetuate(Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfigs.server().createFluidContaminantWeight.get(), recipeOutputItems.stream(), recipeOutputFluids.stream());
+                if (level != null) IFlagPole.perpetuate(Stream.of(itemInputs), Stream.of(fluidInputs), PetrolparkConfigs.server().createFluidFlagWeight.get(), recipeOutputItems.stream(), recipeOutputFluids.stream());
             };
         };
     };

@@ -24,7 +24,7 @@ public class BlockStateIngredientType implements IIngredientType<BlockState> {
     public static final BlockStateIngredientType.Renderer RENDERER = new BlockStateIngredientType.Renderer();
 
     @Override
-    public Class<? extends BlockState> getIngredientClass() {
+    public Class<BlockState> getIngredientClass() {
         return BlockState.class;
     };
 

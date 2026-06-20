@@ -8,7 +8,6 @@ import java.util.function.Function;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.petrolpark.core.badge.Badge;
-import com.petrolpark.core.contamination.Contaminant;
 import com.petrolpark.core.data.loot.modifier.LootPoolEntryModifierType;
 import com.petrolpark.core.data.loot.modifier.LootTableModification;
 import com.petrolpark.core.data.loot.modifier.LootTableModifierType;
@@ -19,6 +18,7 @@ import com.petrolpark.core.data.reward.RewardType;
 import com.petrolpark.core.data.reward.entity.EntityRewardType;
 import com.petrolpark.core.data.reward.generator.RewardGeneratorType;
 import com.petrolpark.core.data.reward.team.TeamRewardType;
+import com.petrolpark.core.flags.Flag;
 import com.petrolpark.core.item.decay.product.DecayProductType;
 import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
 import com.petrolpark.core.recipe.bogglepattern.generator.BogglePatternGeneratorType;
@@ -168,7 +168,7 @@ public class PetrolparkRegistries {
     
     public static class Keys {
         // Core
-        public static final ResourceKey<Registry<Contaminant>> CONTAMINANT = key("contaminant");
+        public static final ResourceKey<Registry<Flag>> FLAG = key("flag");
         public static final ResourceKey<Registry<DecayProductType>> DECAY_PRODUCT_TYPE = key("decay_product_type");
         public static final ResourceKey<Registry<ITeam.ProviderType>> TEAM_PROVIDER_TYPE = key("team_provider_type");
         public static final ResourceKey<Registry<Badge>> BADGE = key("badge");

@@ -80,6 +80,6 @@
             "required": false,
             "id": "create:book_copy"
         },
-        "petrolpark:has_contaminant"
+        "petrolpark:has_flag"
     ]
 }

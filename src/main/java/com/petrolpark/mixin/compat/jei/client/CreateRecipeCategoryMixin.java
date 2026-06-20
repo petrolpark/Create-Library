@@ -4,7 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.petrolpark.compat.jei.ContaminationTooltipCallback;
+import com.petrolpark.compat.jei.FlagsTooltipCallback;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import mezz.jei.api.gui.builder.IRecipeSlotBuilder;
@@ -16,7 +16,7 @@ public class CreateRecipeCategoryMixin {
         method = "addFluidSlot",
         at = @At("TAIL")
     )
-    private static IRecipeSlotBuilder petrolpark$addContaminants(IRecipeSlotBuilder original) {
-        return original.addRichTooltipCallback(ContaminationTooltipCallback.INSTANCE);
+    private static IRecipeSlotBuilder petrolpark$addFlags(IRecipeSlotBuilder original) {
+        return original.addRichTooltipCallback(FlagsTooltipCallback.INSTANCE);
     };
 };

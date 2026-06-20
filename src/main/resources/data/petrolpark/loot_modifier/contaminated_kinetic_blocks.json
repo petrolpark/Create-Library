@@ -5,5 +5,5 @@
             "modid": "create"
         }
     ],
-    "type": "petrolpark:contaminated_kinetic_blocks"
+    "type": "petrolpark:flagged_kinetic_blocks"
 }

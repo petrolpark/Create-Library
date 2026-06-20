@@ -15,7 +15,7 @@ public class PetrolparkJade implements IWailaPlugin {
     public void registerClient(IWailaClientRegistration registration) {
 
         // Blocks
-        registration.registerBlockComponent(new ContaminationBlockComponentProvider(), Block.class);
+        registration.registerBlockComponent(new FlagsBlockComponentProvider(), Block.class);
         registration.registerBlockComponent(new DryingRackJadeBlockComponentProvider(), DryingRackBlock.class);
 
         // Items

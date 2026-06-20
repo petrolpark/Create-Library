@@ -8,8 +8,8 @@ import com.petrolpark.PetrolparkBuiltInLootTables;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.contamination.ContaminateHeldItemCommand;
-import com.petrolpark.core.contamination.ItemContamination;
+import com.petrolpark.core.flags.FlagHeldItemCommand;
+import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.item.decay.ItemDecay;
 import com.petrolpark.core.recipe.bogglepattern.BogglePatternCommand;
 import com.petrolpark.core.world.effect.shader.IShaderEffect;
@@ -57,7 +57,7 @@ public class CommonEvents {
     
     @SubscribeEvent
     public static void registerCommands(RegisterCommandsEvent event) {
-        ContaminateHeldItemCommand.register(event.getDispatcher(), event.getBuildContext());
+        FlagHeldItemCommand.register(event.getDispatcher(), event.getBuildContext());
         BogglePatternCommand.register(event.getDispatcher(), event.getBuildContext());
     };
 
@@ -76,7 +76,7 @@ public class CommonEvents {
     // GAMEPLAY
 
     /**
-     * Preserve Contaminants of Potions, and start decaying newly brewed Potions.
+     * Preserve Flags of Potions, and start decaying newly brewed Potions.
      * @param event
      */
     @SubscribeEvent
@@ -84,10 +84,10 @@ public class CommonEvents {
         for (int slot = 0; slot < 3; slot++) {
             ItemStack potion = event.getItem(slot);
             ItemDecay.startDecay(potion);
-            if (PetrolparkConfigs.server().brewingPropagatesContaminants.get()) ItemContamination.perpetuateSingle(
+            if (PetrolparkConfigs.server().brewingPropagatesFlags.get()) ItemFlagPole.perpetuateSingle(
                 Stream.of(event.getItem(3), potion)
                 .dropWhile(s -> 
-                    PetrolparkConfigs.server().brewingWaterBottleContaminantsIgnored.get()
+                    PetrolparkConfigs.server().brewingWaterBottleFlagsIgnored.get()
                     && s.getOrDefault(DataComponents.POTION_CONTENTS, PotionContents.EMPTY).potion()
                         .map(Potions.WATER::equals)
                         .orElse(false)

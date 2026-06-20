@@ -44,6 +44,11 @@ public interface IDough {
     @OnlyIn(Dist.CLIENT)
     public int tint();
 
+    /**
+     * A string as unique as needed (should include a namespace) to distinguish this Dough in JEI.
+     */
+    public String uniqueString();
+
     //TODO texture
 
     public IDoughType<?> getType();
