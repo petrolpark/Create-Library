@@ -7,10 +7,10 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.MapLike;
 import com.mojang.serialization.RecordBuilder;
-import com.petrolpark.core.codec.ContextualMapCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.IScratchSymbol;
+import com.petrolpark.util.codec.ContextualMapCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
 
 import io.netty.buffer.ByteBuf;
 

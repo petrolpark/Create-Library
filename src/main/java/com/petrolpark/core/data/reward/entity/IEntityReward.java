@@ -1,8 +1,8 @@
 package com.petrolpark.core.data.reward.entity;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.data.reward.ITypedReward;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;

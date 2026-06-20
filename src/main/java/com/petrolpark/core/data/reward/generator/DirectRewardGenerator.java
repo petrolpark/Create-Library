@@ -6,9 +6,9 @@ import java.util.stream.Collectors;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkRewardGeneratorTypes;
 import com.petrolpark.core.data.reward.IReward;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.registry.PetrolparkRewardGeneratorTypes;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;

@@ -1,8 +1,8 @@
 package com.petrolpark.core.badge;
 
-import com.petrolpark.PetrolparkAttachmentTypes;
-import com.petrolpark.PetrolparkDataComponentTypes;
-import com.petrolpark.PetrolparkLootItemFunctions;
+import com.petrolpark.registry.PetrolparkAttachmentTypes;
+import com.petrolpark.registry.PetrolparkDataComponentTypes;
+import com.petrolpark.registry.PetrolparkLootItemFunctions;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

@@ -11,7 +11,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.mojang.authlib.GameProfile;
-import com.petrolpark.core.inventory.extended.ExtendedInventory;
+import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventory;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.EntityType;

@@ -1,9 +1,9 @@
 package com.petrolpark.core.scratch.symbol.expression;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.core.codec.ContextualMapCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+import com.petrolpark.util.codec.ContextualMapCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;

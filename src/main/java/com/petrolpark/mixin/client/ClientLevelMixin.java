@@ -7,8 +7,8 @@ import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import com.petrolpark.client.rendering.world.BlendedBlockColorEvent;
-import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillContraptionEntity;
+import com.petrolpark.compat.create.shared.content.kinetics.horseMill.HorseMillContraptionEntity;
+import com.petrolpark.core.client.rendering.world.BlendedBlockColorEvent;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;

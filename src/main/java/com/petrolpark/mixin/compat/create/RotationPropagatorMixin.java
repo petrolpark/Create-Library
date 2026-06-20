@@ -20,9 +20,9 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import com.petrolpark.compat.create.core.block.composite.CompositeKineticBlockEntity;
-import com.petrolpark.compat.create.core.block.composite.CompositeKineticBlockEntity.CompositeKineticBlockEntityPart;
-import com.petrolpark.compat.create.core.block.entity.IKineticBlockEntityDuck;
+import com.petrolpark.compat.create.core.world.block.composite.CompositeKineticBlockEntity;
+import com.petrolpark.compat.create.core.world.block.composite.CompositeKineticBlockEntity.CompositeKineticBlockEntityPart;
+import com.petrolpark.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
 import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 

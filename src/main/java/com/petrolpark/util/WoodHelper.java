@@ -17,9 +17,9 @@ import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkDataComponentTypes;
-import com.petrolpark.client.creativemodetab.CustomTab.ITabEntry;
 import com.petrolpark.compat.Mods;
+import com.petrolpark.core.world.item.creativeModeTab.CustomTab.ITabEntry;
+import com.petrolpark.registry.PetrolparkDataComponentTypes;
 import com.simibubi.create.content.kinetics.waterwheel.WaterWheelRenderer;
 
 import io.netty.buffer.ByteBuf;

@@ -6,11 +6,11 @@ import java.util.Optional;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.compat.jei.category.FlagInfoCategory.FlagInfoRecipe;
 import com.petrolpark.core.flags.Flag;
 import com.petrolpark.core.flags.Flaggable;
 import com.petrolpark.core.flags.IFlagPole;
+import com.petrolpark.registry.PetrolparkRegistries;
 import com.petrolpark.util.Pair;
 
 import mezz.jei.api.ingredients.IIngredientType;

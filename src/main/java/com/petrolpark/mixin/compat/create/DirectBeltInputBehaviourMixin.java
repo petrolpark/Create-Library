@@ -4,8 +4,8 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.compat.create.core.item.directional.DirectionalTransportedItemStack;
-import com.petrolpark.compat.create.core.item.directional.IDirectionalOnBelt;
+import com.petrolpark.compat.create.core.world.item.directional.DirectionalTransportedItemStack;
+import com.petrolpark.compat.create.core.world.item.directional.IDirectionalOnBelt;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 

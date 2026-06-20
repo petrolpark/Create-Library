@@ -3,14 +3,14 @@ package com.petrolpark.core.scratch.symbol.block.control;
 import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.integerParameter;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.core.codec.ContextualCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
 import com.petrolpark.core.scratch.environment.ITickingEnvironment;
 import com.petrolpark.core.scratch.symbol.block.IScratchBlockInstance;
 import com.petrolpark.core.scratch.symbol.block.UnaryInstantiableBlockType;
+import com.petrolpark.util.codec.ContextualCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

@@ -2,7 +2,6 @@ package com.petrolpark.core.scratch.symbol.expression.world.block.pos;
 
 import static com.petrolpark.core.scratch.argument.DropdownArgument.axisParameter;
 
-import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.scratch.argument.DropdownArgument;
 import com.petrolpark.core.scratch.argument.DropdownArgument.DropdownParameter;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
@@ -10,6 +9,7 @@ import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParamet
 import com.petrolpark.core.scratch.classes.IntegerScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.BinaryExpressionType;
+import com.petrolpark.registry.scratch.PetrolparkScratchClasses;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction.Axis;

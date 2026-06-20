@@ -3,7 +3,7 @@ package com.petrolpark.core.world.block.soil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.PetrolparkBlockEntityTypes;
+import com.petrolpark.shared.registry.SharedBlockEntityTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -24,7 +24,7 @@ public class SoilBlock extends Block implements EntityBlock {
 
     @Override
     public void handlePrecipitation(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Biome.Precipitation precipitation) {
-        if (precipitation == Biome.Precipitation.RAIN) level.getBlockEntity(pos, PetrolparkBlockEntityTypes.SOIL.get()).ifPresent(be -> be.hydration.changeFluidAmount(10)); //TODO config
+        if (precipitation == Biome.Precipitation.RAIN) level.getBlockEntity(pos, SharedBlockEntityTypes.SOIL.get()).ifPresent(be -> be.hydration.changeFluidAmount(10)); //TODO config
     };
 
     @Override
@@ -36,7 +36,7 @@ public class SoilBlock extends Block implements EntityBlock {
     @Override
     @Nullable
     public BlockEntity newBlockEntity(@Nonnull BlockPos pos, @Nonnull BlockState state) {
-        return new SoilBlockEntity(PetrolparkBlockEntityTypes.SOIL.get(), pos, state);
+        return new SoilBlockEntity(SharedBlockEntityTypes.SOIL.get(), pos, state);
     };
     
 };

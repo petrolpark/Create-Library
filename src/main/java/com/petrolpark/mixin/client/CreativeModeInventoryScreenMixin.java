@@ -15,9 +15,9 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.PetrolparkClient;
-import com.petrolpark.client.creativemodetab.CustomTab;
-import com.petrolpark.client.creativemodetab.CustomTab.ITabEntry;
-import com.petrolpark.core.inventory.extended.ExtendedInventory;
+import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventory;
+import com.petrolpark.core.world.item.creativeModeTab.CustomTab;
+import com.petrolpark.core.world.item.creativeModeTab.CustomTab.ITabEntry;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;

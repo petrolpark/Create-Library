@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.petrolpark.core.recipe.recycling.RecyclingOutput;
-import com.petrolpark.core.recipe.recycling.RecyclingOutputs;
+import com.petrolpark.core.world.item.recycling.RecyclingOutput;
+import com.petrolpark.core.world.item.recycling.RecyclingOutputs;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 
 public class CreateRecyclingHelper {

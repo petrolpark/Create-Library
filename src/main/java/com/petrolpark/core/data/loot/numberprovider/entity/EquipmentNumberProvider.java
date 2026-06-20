@@ -6,10 +6,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.ContextToolNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;

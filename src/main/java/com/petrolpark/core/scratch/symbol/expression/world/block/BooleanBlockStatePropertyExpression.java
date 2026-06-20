@@ -4,11 +4,11 @@ import static com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.
 
 import java.util.Map;
 
-import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.ExpressionOrDropdownParameter;
 import com.petrolpark.core.scratch.classes.BooleanScratchClass;
 import com.petrolpark.core.scratch.environment.ILevelEnvironment;
+import com.petrolpark.registry.scratch.PetrolparkScratchClasses;
 
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;

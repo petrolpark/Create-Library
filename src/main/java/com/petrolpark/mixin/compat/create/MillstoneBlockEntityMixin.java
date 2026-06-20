@@ -11,12 +11,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.petrolpark.compat.create.core.recipe.firsttimelucky.FTLRecipesBehaviour;
-import com.petrolpark.compat.create.core.recipe.firsttimelucky.IFTLProcessingRecipe;
+import com.petrolpark.compat.create.core.data.recipe.firstTimeLucky.FTLRecipesBehaviour;
+import com.petrolpark.compat.create.core.data.recipe.firstTimeLucky.IFTLProcessingRecipe;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.flags.IFlagPole;
 import com.petrolpark.core.flags.ItemFlagPole;
-import com.petrolpark.core.item.decay.ItemDecay;
+import com.petrolpark.core.world.item.decay.ItemDecay;
 import com.simibubi.create.AllRecipeTypes;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.millstone.MillingRecipe;

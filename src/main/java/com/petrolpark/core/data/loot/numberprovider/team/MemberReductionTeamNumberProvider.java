@@ -4,11 +4,11 @@ import java.util.Collections;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.FunctionNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.core.data.loot.numberprovider.entity.EntityNumberProvider;
-import com.petrolpark.core.team.ITeam;
+import com.petrolpark.core.world.entity.player.team.ITeam;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.storage.loot.LootContext;

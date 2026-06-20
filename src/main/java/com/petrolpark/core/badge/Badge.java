@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.registry.PetrolparkRegistries;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.Util;

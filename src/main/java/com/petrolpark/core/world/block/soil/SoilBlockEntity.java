@@ -5,9 +5,9 @@ import javax.annotation.Nullable;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import com.petrolpark.PetrolparkBlockEntityTypes;
 import com.petrolpark.core.world.block.entity.BlockEntityBase;
 import com.petrolpark.core.world.fluid.InputOnlyFluidTank;
+import com.petrolpark.shared.registry.SharedBlockEntityTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -83,8 +83,8 @@ public class SoilBlockEntity extends BlockEntityBase {
 
     @SubscribeEvent
     public static final void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
-        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, PetrolparkBlockEntityTypes.SOIL.get(), SoilBlockEntity::getItemHandler);
-        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, PetrolparkBlockEntityTypes.SOIL.get(), SoilBlockEntity::getFluidHandler);
+        event.registerBlockEntity(Capabilities.ItemHandler.BLOCK, SharedBlockEntityTypes.SOIL.get(), SoilBlockEntity::getItemHandler);
+        event.registerBlockEntity(Capabilities.FluidHandler.BLOCK, SharedBlockEntityTypes.SOIL.get(), SoilBlockEntity::getFluidHandler);
     };
     
 };

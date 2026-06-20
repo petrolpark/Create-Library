@@ -5,9 +5,9 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Decoder;
-import com.petrolpark.RequiresCreate;
-import com.petrolpark.core.codec.EitherDecoder;
-import com.petrolpark.core.codec.RecordDecoderBuilder;
+import com.petrolpark.compat.create.RequiresCreate;
+import com.petrolpark.util.codec.EitherDecoder;
+import com.petrolpark.util.codec.RecordDecoderBuilder;
 
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryCodecs;

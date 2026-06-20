@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;

@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.function.Predicate;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkItems;
 import com.petrolpark.PetrolparkTags;
-import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.create.RequiresCreate;
 import com.petrolpark.core.badge.BadgeItem;
+import com.petrolpark.registry.PetrolparkItems;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.logistics.box.PackageItem;

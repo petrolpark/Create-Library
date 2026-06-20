@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.petrolpark.PetrolparkAttributes;
-import com.petrolpark.compat.create.common.kinetics.horseMill.HarnessEntity;
-import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillContraptionEntity;
+import com.petrolpark.compat.create.shared.content.kinetics.horseMill.HarnessEntity;
+import com.petrolpark.compat.create.shared.content.kinetics.horseMill.HorseMillContraptionEntity;
 import com.petrolpark.config.PetrolparkConfigs;
+import com.petrolpark.registry.PetrolparkAttributes;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.AgeableMob;

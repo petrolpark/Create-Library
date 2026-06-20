@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkAttributes;
 import com.petrolpark.config.PetrolparkConfigs;
+import com.petrolpark.registry.PetrolparkAttributes;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;

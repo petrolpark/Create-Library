@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.petrolpark.PetrolparkClient;
-import com.petrolpark.core.inventory.extended.ExtendedInventory;
-import com.petrolpark.core.inventory.extended.ExtendedInventoryClientHandler;
+import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventory;
+import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventoryClientHandler;
 
 import net.minecraft.client.gui.screens.recipebook.RecipeBookComponent;
 

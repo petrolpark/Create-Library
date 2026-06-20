@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.registry.PetrolparkRegistries;
 import com.petrolpark.util.GraphHelper;
 import com.petrolpark.util.GraphHelper.CircularReferenceException;
 

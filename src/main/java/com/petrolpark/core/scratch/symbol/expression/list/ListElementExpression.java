@@ -6,7 +6,6 @@ import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.i
 
 import java.util.List;
 
-import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
@@ -19,6 +18,7 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.BinaryGenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.ExpressionAndArguments;
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
+import com.petrolpark.registry.scratch.PetrolparkScratchExpressionTypes;
 
 public final class ListElementExpression<GENERIC_TYPE, GENERIC_ARGUMENT extends IScratchArgument<IScratchEnvironment, GENERIC_TYPE>> extends BinaryGenericExpression<
     IScratchEnvironment,

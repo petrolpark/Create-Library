@@ -14,9 +14,9 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.petrolpark.PetrolparkTags;
-import com.petrolpark.compat.create.core.block.composite.CompositeKineticBlockEntity;
-import com.petrolpark.compat.create.core.block.entity.IKineticBlockEntityDuck;
-import com.petrolpark.compat.create.core.block.entity.behaviour.FlagPoleBehaviour;
+import com.petrolpark.compat.create.core.world.block.composite.CompositeKineticBlockEntity;
+import com.petrolpark.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
+import com.petrolpark.compat.create.core.world.block.entity.behaviour.FlagPoleBehaviour;
 import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;

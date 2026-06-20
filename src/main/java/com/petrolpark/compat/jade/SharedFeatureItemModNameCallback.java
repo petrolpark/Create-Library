@@ -2,9 +2,9 @@ package com.petrolpark.compat.jade;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.shared.ISharedFeature;
+import com.petrolpark.shared.SharedFeatureFlag;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.world.item.BlockItem;

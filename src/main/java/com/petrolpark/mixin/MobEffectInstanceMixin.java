@@ -11,10 +11,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.petrolpark.core.world.effect.shader.ClientEffectHandler;
-import com.petrolpark.core.world.effect.shader.IShaderEffect;
-import com.petrolpark.core.world.effect.shader.packet.InitEffectShaderPacket;
-import com.petrolpark.core.world.effect.shader.packet.SyncMobEffectTotalDurationPacket;
+import com.petrolpark.core.client.effectShaders.ClientEffectHandler;
+import com.petrolpark.core.client.effectShaders.IShaderEffect;
+import com.petrolpark.core.client.effectShaders.packet.InitEffectShaderPacket;
+import com.petrolpark.core.client.effectShaders.packet.SyncMobEffectTotalDurationPacket;
 import com.petrolpark.util.mixininterfaces.IMobEffectInstanceMixin;
 
 import net.minecraft.core.Holder;

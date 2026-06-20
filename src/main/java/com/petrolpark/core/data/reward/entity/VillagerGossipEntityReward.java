@@ -3,9 +3,9 @@ package com.petrolpark.core.data.reward.entity;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.core.data.IEntityTarget;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
+import com.petrolpark.registry.PetrolparkRewardTypes;
 import com.petrolpark.util.Lang;
 import com.petrolpark.util.Lang.IndentedTooltipBuilder;
 

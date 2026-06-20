@@ -6,7 +6,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.petrolpark.PetrolparkDataComponentTypes;
+import com.petrolpark.registry.PetrolparkDataComponentTypes;
 import com.petrolpark.util.WoodHelper.Wood;
 
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;

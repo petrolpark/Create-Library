@@ -3,7 +3,6 @@ package com.petrolpark.core.scratch.symbol.expression.logic;
 import static com.petrolpark.core.scratch.ScratchParameters.parameters;
 import static com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.booleanParameter;
 
-import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.ExpressionOrDropdownParameter;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
@@ -11,7 +10,8 @@ import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
-import com.petrolpark.core.scratch.symbol.expression.TernaryGenericExpression;;
+import com.petrolpark.core.scratch.symbol.expression.TernaryGenericExpression;
+import com.petrolpark.registry.scratch.PetrolparkScratchExpressionTypes;;
 
 public final class ConditionalExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends TernaryGenericExpression<
     IScratchEnvironment,

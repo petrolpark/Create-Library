@@ -1,8 +1,8 @@
 package com.petrolpark.core.data.loot.numberprovider.team;
 
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
-import com.petrolpark.core.team.ITeam;
+import com.petrolpark.core.world.entity.player.team.ITeam;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 

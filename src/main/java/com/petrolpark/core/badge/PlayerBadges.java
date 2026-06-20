@@ -9,7 +9,7 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 public record PlayerBadges(Map<Badge, Date> badges) implements Iterable<Badge> {
 

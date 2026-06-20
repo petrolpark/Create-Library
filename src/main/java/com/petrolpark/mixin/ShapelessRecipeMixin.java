@@ -7,7 +7,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.flags.recipe.IHandleFlagsMyselfRecipe;
-import com.petrolpark.core.item.decay.ItemDecay;
+import com.petrolpark.core.world.item.decay.ItemDecay;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;

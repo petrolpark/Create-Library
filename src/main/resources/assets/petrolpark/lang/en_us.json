@@ -450,11 +450,11 @@
     "team_reward.petrolpark.members.all": "For all members:",
     "team_reward.petrolpark.members.count": "For %1$s members:",
     "team_reward.petrolpark.members.percentage": "For %1$s% of members:",
-    "team_reward.petrolpark.grant_shop_xp": "Receive %1$s XP for %2$s",
-    "team_reward.petrolpark.grant_shop_xp.unknown_amount": "Receive some XP for %2$s",
+    "team_reward.petrolpark.grant_restaurant_xp": "Receive %1$s XP for %2$s",
+    "team_reward.petrolpark.grant_restaurant_xp.unknown_amount": "Receive some XP for %2$s",
 
-    "shop.petrolpark.example": "Example Shop",
-    "shop.petrolpark.unknown": "Unknown Shop",
+    "restaurant.petrolpark.example": "Example Restaurant",
+    "restaurant.petrolpark.unknown": "Unknown Restaurant",
 
     "team.petrolpark.none": "No Team"
 }

@@ -8,9 +8,9 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.PetrolparkAttributes;
 import com.petrolpark.PetrolparkTags;
-import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.registry.PetrolparkAttributes;
+import com.petrolpark.shared.SharedFeatureFlag;
 
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;

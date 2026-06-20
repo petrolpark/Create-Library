@@ -9,7 +9,7 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.flags.IFlagPole;
 import com.petrolpark.core.flags.ItemFlagPole;
-import com.petrolpark.core.item.decay.ItemDecay;
+import com.petrolpark.core.world.item.decay.ItemDecay;
 import com.simibubi.create.foundation.recipe.RecipeApplier;
 
 import net.minecraft.world.item.ItemStack;

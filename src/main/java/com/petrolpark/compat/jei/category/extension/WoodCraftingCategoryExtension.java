@@ -6,7 +6,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.core.item.wooden.WoodCraftingShapedRecipe;
+import com.petrolpark.core.world.item.wooden.WoodCraftingShapedRecipe;
 import com.petrolpark.util.WoodHelper;
 import com.petrolpark.util.WoodHelper.Wood;
 

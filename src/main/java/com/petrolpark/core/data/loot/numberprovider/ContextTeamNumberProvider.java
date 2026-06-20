@@ -6,11 +6,11 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkLootContextParams;
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.team.TeamNumberProvider;
-import com.petrolpark.core.team.ITeam;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.core.world.entity.player.team.ITeam;
+import com.petrolpark.registry.PetrolparkLootContextParams;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;

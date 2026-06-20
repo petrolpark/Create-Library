@@ -7,7 +7,7 @@ import java.util.OptionalInt;
 import java.util.stream.Stream;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkAttributes;
+import com.petrolpark.registry.PetrolparkAttributes;
 
 import net.createmod.catnip.data.IntAttached;
 import net.minecraft.core.BlockPos;

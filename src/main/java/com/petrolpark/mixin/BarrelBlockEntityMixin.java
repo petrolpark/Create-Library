@@ -1,13 +1,13 @@
 package com.petrolpark.mixin;
 
-import static com.petrolpark.core.item.decay.ageing.AgeingContainerWrapper.ageingInVanillaBarrelsEnabled;
+import static com.petrolpark.shared.world.item.crafting.ageing.AgeingContainerWrapper.ageingInVanillaBarrelsEnabled;
 
 import javax.annotation.Nonnull;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import com.petrolpark.core.item.decay.ageing.AgeingContainerWrapper;
-import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
+import com.petrolpark.shared.world.item.crafting.ageing.AgeingContainerWrapper;
+import com.petrolpark.shared.world.item.crafting.ageing.AgeingRecipe;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemStack;

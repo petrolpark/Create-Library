@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.petrolpark.compat.create.PetrolparkCreateBlocks;
+import com.petrolpark.compat.create.shared.registry.SharedCreateBlocks;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelBlock;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
@@ -23,6 +23,6 @@ public class CrushingWheelBlockMixin {
         )
     )
     public boolean petrolpark$allowEncasedControllers(BlockEntry<CrushingWheelBlock> block, BlockState state, Operation<Boolean> original) {
-        return original.call(block, state) || PetrolparkCreateBlocks.ENCASED_CRUSHING_WHEEL_CONTROLLER.has(state);
+        return original.call(block, state) || SharedCreateBlocks.ENCASED_CRUSHING_WHEEL_CONTROLLER.has(state);
     };
 };

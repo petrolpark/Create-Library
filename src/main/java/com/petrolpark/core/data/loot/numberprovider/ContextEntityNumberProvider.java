@@ -7,9 +7,9 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.IEntityTarget;
 import com.petrolpark.core.data.loot.numberprovider.entity.EntityNumberProvider;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;

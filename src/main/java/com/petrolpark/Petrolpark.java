@@ -1,40 +1,62 @@
 package com.petrolpark;
 
-import java.lang.annotation.ElementType;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
-import com.petrolpark.compat.GetPetrolparkSharedFeatures;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.create.PetrolparkCreate;
 import com.petrolpark.compat.curios.PetrolparkCurios;
 import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.badge.Badges;
-import com.petrolpark.core.recipe.IPetrolparkRecipeTypes;
-import com.petrolpark.core.recipe.bogglepattern.BogglePattern;
-import com.petrolpark.core.recipe.compat.CompatRecipeManager;
-import com.petrolpark.core.team.scoreboard.ScoreboardTeamManager;
+import com.petrolpark.core.data.recipe.IPetrolparkRecipeTypes;
+import com.petrolpark.core.data.recipe.bogglePattern.BogglePattern;
+import com.petrolpark.core.data.recipe.compat.CompatRecipeManager;
+import com.petrolpark.core.registrate.AbstractPetrolparkRegistrate;
+import com.petrolpark.core.world.entity.player.team.scoreboard.ScoreboardTeamManager;
+import com.petrolpark.registry.PetrolparkAdvancedIngredientTypes;
+import com.petrolpark.registry.PetrolparkAttachmentTypes;
+import com.petrolpark.registry.PetrolparkAttributes;
+import com.petrolpark.registry.PetrolparkBogglePatternGeneratorTypes;
+import com.petrolpark.registry.PetrolparkCriteriaTriggers;
+import com.petrolpark.registry.PetrolparkDataComponentTypes;
+import com.petrolpark.registry.PetrolparkDataLoadingConditions;
+import com.petrolpark.registry.PetrolparkDataSubPredicates;
+import com.petrolpark.registry.PetrolparkDecayProductTypes;
+import com.petrolpark.registry.PetrolparkFeatureTypes;
+import com.petrolpark.registry.PetrolparkGlobalLootModifierSerializers;
+import com.petrolpark.registry.PetrolparkIngredientRandomizerTypes;
+import com.petrolpark.registry.PetrolparkItems;
+import com.petrolpark.registry.PetrolparkLootConditionTypes;
+import com.petrolpark.registry.PetrolparkLootItemFunctions;
+import com.petrolpark.registry.PetrolparkLootModifierTypes;
+import com.petrolpark.registry.PetrolparkNeoForgeIngredientTypes;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
+import com.petrolpark.registry.PetrolparkPackets;
+import com.petrolpark.registry.PetrolparkRecipeSerializers;
+import com.petrolpark.registry.PetrolparkRecipeTypes;
+import com.petrolpark.registry.PetrolparkRegistrateProviderTypes;
+import com.petrolpark.registry.PetrolparkRewardGeneratorTypes;
+import com.petrolpark.registry.PetrolparkRewardTypes;
+import com.petrolpark.registry.PetrolparkTeamProviderTypes;
+import com.petrolpark.registry.PetrolparkTradeListingReferenceTypes;
+import com.petrolpark.shared.GetPetrolparkSharedFeatures;
+import com.petrolpark.shared.Shared;
+import com.petrolpark.shared.SharedFeatureFlag;
 
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
 import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.fml.loading.FMLEnvironment;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.data.loading.DatagenModLoader;
-import net.neoforged.neoforgespi.language.ModFileScanData;
 
 @Mod(Petrolpark.MOD_ID)
 public class Petrolpark {
@@ -59,10 +81,10 @@ public class Petrolpark {
     public static final BogglePattern.Manager BOGGLE_PATTERNS = new BogglePattern.Manager();
 
     public Petrolpark(IEventBus modEventBus, ModContainer modContainer) {
-
-        initializeSharedFeatures();
         
         if (DatagenModLoader.isRunningDataGen()) PetrolparkDatagen.prepareDatagen();
+
+        Shared.init(modEventBus, modContainer);
 
         REGISTRATE.registerEventListeners(modEventBus);
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
@@ -72,8 +94,6 @@ public class Petrolpark {
         PetrolparkAdvancedIngredientTypes.register();
         PetrolparkAttachmentTypes.register(modEventBus);
         PetrolparkAttributes.register();
-        PetrolparkBlockEntityTypes.register();
-        PetrolparkBlocks.register();
         PetrolparkBogglePatternGeneratorTypes.register();
         PetrolparkCriteriaTriggers.register();
         PetrolparkDataComponentTypes.register(modEventBus);
@@ -83,15 +103,13 @@ public class Petrolpark {
         PetrolparkFeatureTypes.register();
         PetrolparkGlobalLootModifierSerializers.register();
         PetrolparkIngredientRandomizerTypes.register();
-        PetrolparkIngredientTypes.register();
+        PetrolparkNeoForgeIngredientTypes.register();
         PetrolparkItems.register();
         PetrolparkLootConditionTypes.register();
         PetrolparkLootItemFunctions.register();
         PetrolparkLootModifierTypes.register();
-        PetrolparkMobEffects.register();
         PetrolparkNumberProviderTypes.register();
         PetrolparkPackets.register();
-        PetrolparkParticleTypes.register();
         PetrolparkRecipeSerializers.register();
         PetrolparkRecipeTypes.register();
         IPetrolparkRecipeTypes.register(modEventBus);
@@ -152,36 +170,4 @@ public class Petrolpark {
             throw new RuntimeException();
         };
     };
-
-    private static final void initializeSharedFeatures() {
-        Petrolpark.LOGGER.info("Searching for Mods enabling Petrolpark's Shared Features");
-        for (final ModFileScanData scanData : ModList.get().getAllScanData()) {
-
-            scanData.getAnnotatedBy(GetPetrolparkSharedFeatures.class, ElementType.METHOD).forEach(data -> {
-                final String className = data.clazz().getClassName();
-                final String memberName = data.memberName().split("\\(")[0];
-                Petrolpark.LOGGER.info("Found suitable method " + memberName + "in class " + className);
-                try {
-                    final Class<?> clazz = Class.forName(className);
-                    final Mod mod = clazz.getAnnotation(Mod.class);
-                    if (mod == null) throw new IllegalArgumentException("@GetPetrolparkSharedFeatures method must be in @Mod class");
-                    Mods compatMod = Mods.LOOKUP.apply(mod.value());
-                    if (compatMod == null) compatMod = Mods.PETROLPARK; // Other Mods can enable Shared Features under the Petrolpark name
-                    final Method method = clazz.getMethod(memberName);
-                    if (Modifier.isStatic(method.getModifiers())) {
-                        if (method.invoke(null) instanceof SharedFeatureFlag[] flags) {
-                            for (SharedFeatureFlag flag : flags) flag.enable(compatMod);
-                        } else {
-                            throw new IllegalArgumentException("Must return an array of SharedFeatureFlag");
-                        };
-                    } else {
-                        throw new IllegalArgumentException("@GetPetrolparkSharedFeatures method must be static");
-                    };
-                } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-                    throw new IllegalArgumentException("Could not initialize Shared Features in class " + className, e);
-                };
-            });
-        };
-    };
-
 };

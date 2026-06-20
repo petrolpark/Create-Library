@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.petrolpark.PetrolparkDataMapTypes;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.core.flags.Flaggable.GenericFlaggable;
+import com.petrolpark.registry.PetrolparkDataMapTypes;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;

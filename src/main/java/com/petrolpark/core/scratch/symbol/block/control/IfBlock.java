@@ -2,9 +2,6 @@ package com.petrolpark.core.scratch.symbol.block.control;
 
 import static com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.booleanParameter;
 
-import com.petrolpark.PetrolparkScratchBlockTypes;
-import com.petrolpark.core.codec.ContextualCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrDropdownArgument.ExpressionOrDropdownParameter;
@@ -14,6 +11,9 @@ import com.petrolpark.core.scratch.procedure.ScratchProcedure;
 import com.petrolpark.core.scratch.symbol.block.IScratchBlock;
 import com.petrolpark.core.scratch.symbol.block.UnaryNestedProcedureBlock;
 import com.petrolpark.core.scratch.symbol.block.instance.SimpleNestedProcedureBlockInstance;
+import com.petrolpark.registry.scratch.PetrolparkScratchBlockTypes;
+import com.petrolpark.util.codec.ContextualCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
 
 import io.netty.buffer.ByteBuf;
 

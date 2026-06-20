@@ -1,9 +1,9 @@
 package com.petrolpark.core.data.reward.team;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.data.reward.ITypedReward;
-import com.petrolpark.core.team.ITeam;
+import com.petrolpark.core.world.entity.player.team.ITeam;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 

@@ -1,9 +1,9 @@
 package com.petrolpark.core.data.loot.numberprovider.itemstack;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;

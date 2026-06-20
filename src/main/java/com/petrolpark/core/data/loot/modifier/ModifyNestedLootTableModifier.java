@@ -2,7 +2,7 @@ package com.petrolpark.core.data.loot.modifier;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkLootModifierTypes;
+import com.petrolpark.registry.PetrolparkLootModifierTypes;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.storage.loot.LootPool;

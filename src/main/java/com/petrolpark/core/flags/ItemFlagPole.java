@@ -2,7 +2,7 @@ package com.petrolpark.core.flags;
 
 import java.util.stream.Stream;
 
-import com.petrolpark.core.item.IItemStackDuck;
+import com.petrolpark.core.world.item.IItemStackDuck;
 
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;

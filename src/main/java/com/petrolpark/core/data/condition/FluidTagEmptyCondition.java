@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkDataLoadingConditions;
+import com.petrolpark.registry.PetrolparkDataLoadingConditions;
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;

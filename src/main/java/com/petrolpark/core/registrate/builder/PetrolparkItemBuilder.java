@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.compat.Mods;
 import com.petrolpark.compat.create.PetrolparkCreate;
+import com.petrolpark.core.registrate.AbstractPetrolparkRegistrate;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.builders.ItemBuilder;
 import com.tterrag.registrate.providers.ProviderType;

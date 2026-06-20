@@ -2,13 +2,13 @@ package com.petrolpark.core.data.loot.numberprovider;
 
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.ItemStackNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.itemstack.LootItemStackNumberProviderType;
 import com.petrolpark.core.data.loot.numberprovider.team.LootTeamNumberProviderType;
 import com.petrolpark.core.data.loot.numberprovider.team.TeamNumberProvider;
-import com.petrolpark.core.team.ITeam;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.core.world.entity.player.team.ITeam;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;

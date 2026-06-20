@@ -1,7 +1,8 @@
 package com.petrolpark.compat.create;
 
-import com.petrolpark.PetrolparkBlocks;
-import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.compat.create.shared.registry.SharedCreateBlocks;
+import com.petrolpark.shared.SharedFeatureFlag;
+import com.petrolpark.shared.registry.SharedBlocks;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
 import com.tterrag.registrate.util.entry.RegistryEntry;
@@ -22,22 +23,22 @@ public class PetrolparkCreatePonderTags {
             .add(AllBlocks.CHAIN_CONVEYOR);
 
         if (SharedFeatureFlag.BLENDER.enabled()) registrateHelper.addToTag(AllCreatePonderTags.KINETIC_APPLIANCES)
-            .add(PetrolparkCreateBlocks.BLENDER);
+            .add(SharedCreateBlocks.BLENDER);
 
         if (SharedFeatureFlag.DRYING_RACK.enabled()) registrateHelper.addToTag(AllCreatePonderTags.ARM_TARGETS)
-            .add(PetrolparkBlocks.DRYING_RACK);
+            .add(SharedBlocks.DRYING_RACK);
         
         if (SharedFeatureFlag.HORSE_MILL.enabled()) {
             registrateHelper.addToTag(AllCreatePonderTags.KINETIC_SOURCES)
-                .add(PetrolparkCreateBlocks.HORSE_MILL_BEARING)
-                .add(PetrolparkCreateBlocks.HARNESS);
+                .add(SharedCreateBlocks.HORSE_MILL_BEARING)
+                .add(SharedCreateBlocks.HARNESS);
             registrateHelper.addToTag(AllCreatePonderTags.MOVEMENT_ANCHOR)
-                .add(PetrolparkCreateBlocks.HORSE_MILL_BEARING);
+                .add(SharedCreateBlocks.HORSE_MILL_BEARING);
             registrateHelper.addToTag(AllCreatePonderTags.CONTRAPTION_ACTOR)
-                .add(PetrolparkCreateBlocks.HARNESS);
+                .add(SharedCreateBlocks.HARNESS);
         };
 
         if (SharedFeatureFlag.MESH_BASIN.enabled()) registrateHelper.addToTag(AllCreatePonderTags.ARM_TARGETS)
-            .add(PetrolparkCreateBlocks.MESH_BASIN);
+            .add(SharedCreateBlocks.MESH_BASIN);
     };
 };

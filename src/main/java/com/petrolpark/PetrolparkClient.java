@@ -1,11 +1,12 @@
 package com.petrolpark;
 
-import com.petrolpark.client.texts.ClientTextsManager;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.create.PetrolparkCreateClient;
+import com.petrolpark.compat.create.registry.PetrolparkCreateClient;
 import com.petrolpark.compat.curios.PetrolparkCuriosClient;
 import com.petrolpark.compat.jei.PetrolparkJEI;
-import com.petrolpark.core.inventory.extended.ExtendedInventoryClientHandler;
+import com.petrolpark.core.client.ponder.PetrolparkPonderPlugin;
+import com.petrolpark.core.client.texts.ClientTextsManager;
+import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventoryClientHandler;
 import com.petrolpark.util.WoodHelperClient;
 
 import net.createmod.ponder.foundation.PonderIndex;

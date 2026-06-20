@@ -5,10 +5,10 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.PetrolparkRecipeTypes;
-import com.petrolpark.core.item.decay.IApplyDecayRecipe;
-import com.petrolpark.core.item.decay.ageing.AgeingContainerWrapper;
-import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
+import com.petrolpark.core.world.item.decay.IApplyDecayRecipe;
+import com.petrolpark.shared.registry.SharedRecipeTypes;
+import com.petrolpark.shared.world.item.crafting.ageing.AgeingContainerWrapper;
+import com.petrolpark.shared.world.item.crafting.ageing.AgeingRecipe;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
@@ -33,7 +33,7 @@ public abstract class SlotMixin {
         method = "Lnet/minecraft/world/inventory/Slot;onTake(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/ItemStack;)V"
     )
     public void petrolpark$removeAppliedDecay(Player player, ItemStack stack, Operation<Void> operation) {
-        if (AgeingContainerWrapper.isAgeingContainer(container)) IApplyDecayRecipe.withAppliedDecayRemoved(player.level(), PetrolparkRecipeTypes.AGEING.get(), stack);
+        if (AgeingContainerWrapper.isAgeingContainer(container)) IApplyDecayRecipe.withAppliedDecayRemoved(player.level(), SharedRecipeTypes.AGEING.get(), stack);
         operation.call(player, stack);
     };
 };

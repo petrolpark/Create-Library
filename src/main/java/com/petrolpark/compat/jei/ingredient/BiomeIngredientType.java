@@ -6,8 +6,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.client.rendering.PetrolparkGuiTexture;
 import com.petrolpark.compat.jei.JEITextureDrawable;
+import com.petrolpark.core.client.rendering.PetrolparkGuiTexture;
 
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;

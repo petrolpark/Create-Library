@@ -2,7 +2,7 @@ package com.petrolpark.core.flags;
 
 import java.util.ArrayList;
 
-import com.petrolpark.PetrolparkDataComponentTypes;
+import com.petrolpark.registry.PetrolparkDataComponentTypes;
 
 import net.minecraft.core.Holder;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;

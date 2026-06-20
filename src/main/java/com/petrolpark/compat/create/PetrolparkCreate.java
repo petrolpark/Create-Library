@@ -1,10 +1,34 @@
 package com.petrolpark.compat.create;
 
-import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
-import com.petrolpark.compat.create.core.block.entity.behaviour.AbstractRememberPlacerBehaviour;
-import com.petrolpark.compat.create.event.CreateEvents;
-import com.petrolpark.compat.create.event.CreateModEvents;
+import com.petrolpark.compat.create.core.event.CreateEvents;
+import com.petrolpark.compat.create.core.event.CreateModEvents;
+import com.petrolpark.compat.create.core.world.block.entity.behaviour.AbstractRememberPlacerBehaviour;
+import com.petrolpark.compat.create.registry.PetrolparkArmInteractionPointTypes;
+import com.petrolpark.compat.create.registry.PetrolparkCreateAdvancedIngredientTypes;
+import com.petrolpark.compat.create.registry.PetrolparkCreateAttachmentTypes;
+import com.petrolpark.compat.create.registry.PetrolparkCreateCompatRecipeDeserializers;
+import com.petrolpark.compat.create.registry.PetrolparkCreateDataComponentTypes;
+import com.petrolpark.compat.create.registry.PetrolparkCreateDoughTypes;
+import com.petrolpark.compat.create.registry.PetrolparkCreateGlobalLootModifierSerializers;
+import com.petrolpark.compat.create.registry.PetrolparkCreateRegistrateProviderTypes;
+import com.petrolpark.compat.create.registry.PetrolparkCreateRegistries;
+import com.petrolpark.compat.create.registry.PetrolparkDoughIngredientTypes;
+import com.petrolpark.compat.create.registry.PetrolparkDoughToppingTypes;
+import com.petrolpark.compat.create.registry.PetrolparkItemAttributeTypes;
+import com.petrolpark.compat.create.registry.PetrolparkMovementChecks;
+import com.petrolpark.compat.create.registry.PetrolparkOpenPipeEffectHandlers;
+import com.petrolpark.compat.create.shared.content.processing.extrusion.ExtrusionRecipe;
+import com.petrolpark.compat.create.shared.registry.SharedCreateItems;
+import com.petrolpark.compat.create.shared.registry.SharedCreateBlocks;
+import com.petrolpark.compat.create.shared.registry.SharedCreateCriterionTriggers;
+import com.petrolpark.compat.create.shared.registry.SharedCreateFluids;
+import com.petrolpark.compat.create.shared.registry.SharedCreateMenuTypes;
+import com.petrolpark.compat.create.shared.registry.SharedCreateRecipeTypes;
+import com.petrolpark.compat.create.shared.registry.SharedCreatePackets;
+import com.petrolpark.compat.create.shared.registry.PetrolparkMandrelAnimationTypes;
+import com.petrolpark.compat.create.shared.registry.SharedContraptionTypes;
+import com.petrolpark.compat.create.shared.registry.SharedCreateBlockEntityTypes;
+import com.petrolpark.compat.create.shared.registry.SharedCreateEntityTypes;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
@@ -24,7 +48,7 @@ public class PetrolparkCreate {
     public static final ExtrusionRecipe.MovementBehaviourProvider EXTRUSION_MOVEMENT_BEHAVIOUR_PROVIDER = new ExtrusionRecipe.MovementBehaviourProvider();
 
     static {
-        PetrolparkCreateRecipeTypes.init();
+        SharedCreateRecipeTypes.init();
     };
   
     public static void ctor(IEventBus modEventBus, IEventBus mainEventBus) {
@@ -36,19 +60,19 @@ public class PetrolparkCreate {
         // Registrations
         PetrolparkCreateAdvancedIngredientTypes.register();
         PetrolparkCreateAttachmentTypes.register(modEventBus);
-        PetrolparkCreateBlockEntityTypes.register();
-        PetrolparkCreateBlocks.register();
+        SharedCreateBlockEntityTypes.register();
+        SharedCreateBlocks.register();
         PetrolparkCreateCompatRecipeDeserializers.register();
-        PetrolparkCreateContraptionTypes.register();
-        PetrolparkCreateCriterionTriggers.register();
+        SharedContraptionTypes.register();
+        SharedCreateCriterionTriggers.register();
         PetrolparkCreateDataComponentTypes.register(modEventBus);
         PetrolparkCreateDoughTypes.register();
-        PetrolparkCreateEntityTypes.register();
-        PetrolparkCreateFluids.register();
+        SharedCreateEntityTypes.register();
+        SharedCreateFluids.register();
         PetrolparkCreateGlobalLootModifierSerializers.register();
-        PetrolparkCreateItems.register();
-        PetrolparkCreateMenuTypes.register();
-        PetrolparkCreatePackets.register();
+        SharedCreateItems.register();
+        SharedCreateMenuTypes.register();
+        SharedCreatePackets.register();
         PetrolparkCreateRegistrateProviderTypes.register();
         PetrolparkDoughIngredientTypes.register();
         PetrolparkDoughToppingTypes.register();

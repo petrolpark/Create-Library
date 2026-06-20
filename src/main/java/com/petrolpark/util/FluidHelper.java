@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Stream;
 
-import com.petrolpark.core.fluid.FluidMixer;
+import com.petrolpark.core.world.fluid.FluidMixer;
 
 import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.objects.ObjectLinkedOpenCustomHashSet;

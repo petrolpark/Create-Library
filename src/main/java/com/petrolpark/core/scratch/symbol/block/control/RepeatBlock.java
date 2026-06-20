@@ -4,11 +4,6 @@ import static com.petrolpark.core.scratch.argument.ContextArgument.contextParame
 import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.integerParameter;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkScratchBlockTypes;
-import com.petrolpark.PetrolparkScratchClasses;
-import com.petrolpark.core.codec.ContextualCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
-import com.petrolpark.core.codec.RecordContextualCodecBuilder;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.ContextArgument;
 import com.petrolpark.core.scratch.argument.ContextArgument.ContextParameter;
@@ -23,6 +18,11 @@ import com.petrolpark.core.scratch.symbol.block.UnaryInstantBlockType;
 import com.petrolpark.core.scratch.symbol.block.UnaryNestedProcedureBlock;
 import com.petrolpark.core.scratch.symbol.block.instance.NestedProcedureBlockInstance;
 import com.petrolpark.core.scratch.symbol.expression.UnaryExpressionType;
+import com.petrolpark.registry.scratch.PetrolparkScratchBlockTypes;
+import com.petrolpark.registry.scratch.PetrolparkScratchClasses;
+import com.petrolpark.util.codec.ContextualCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
+import com.petrolpark.util.codec.RecordContextualCodecBuilder;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.google.common.base.Strings;
-import com.petrolpark.AbstractPetrolparkRegistrate;
+import com.petrolpark.core.registrate.AbstractPetrolparkRegistrate;
 import com.petrolpark.util.BlockHelper;
 import com.petrolpark.util.Lang;
 

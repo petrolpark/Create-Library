@@ -2,7 +2,8 @@ package com.petrolpark.compat.jei;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.client.rendering.IGuiTexture;
+import com.petrolpark.core.client.rendering.IGuiTexture;
+
 import mezz.jei.api.gui.drawable.IDrawable;
 import net.minecraft.client.gui.GuiGraphics;
 

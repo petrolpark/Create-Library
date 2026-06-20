@@ -5,9 +5,6 @@ import java.util.Collections;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkBlocks;
-import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.compat.jei.category.FlagInfoCategory;
 import com.petrolpark.compat.jei.category.FlagInfoCategory.FlagInfoRecipe;
 import com.petrolpark.compat.jei.category.extension.WoodCraftingCategoryExtension;
@@ -16,9 +13,12 @@ import com.petrolpark.compat.jei.ingredient.BlockStateIngredientType;
 import com.petrolpark.compat.jei.ingredient.FlagIngredientType;
 import com.petrolpark.compat.jei.subtypeInterpreter.WoodenItemSubtypeInterpreter;
 import com.petrolpark.core.flags.Flaggables;
-import com.petrolpark.core.inventory.extended.ExtendedInventoryJeiGuiHandler;
-import com.petrolpark.core.item.wooden.WoodCraftingShapedRecipe;
-import com.petrolpark.core.recipe.book.RecipeBookItemJEICategoryCache;
+import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventoryJeiGuiHandler;
+import com.petrolpark.core.world.item.crafting.recipeBook.RecipeBookItemJEICategoryCache;
+import com.petrolpark.core.world.item.wooden.WoodCraftingShapedRecipe;
+import com.petrolpark.registry.PetrolparkRegistries;
+import com.petrolpark.shared.SharedFeatureFlag;
+import com.petrolpark.shared.registry.SharedBlocks;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
@@ -75,7 +75,7 @@ public class PetrolparkJEI implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
-        if (SharedFeatureFlag.DRYING_RACK.enabled()) registration.registerSubtypeInterpreter(PetrolparkBlocks.DRYING_RACK.asItem(), WoodenItemSubtypeInterpreter.INSTANCE);
+        if (SharedFeatureFlag.DRYING_RACK.enabled()) registration.registerSubtypeInterpreter(SharedBlocks.DRYING_RACK.asItem(), WoodenItemSubtypeInterpreter.INSTANCE);
     };
 
     @Override

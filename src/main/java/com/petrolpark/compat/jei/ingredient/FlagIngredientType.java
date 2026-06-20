@@ -5,8 +5,8 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.flags.Flag;
+import com.petrolpark.registry.PetrolparkRegistries;
 import com.petrolpark.util.Lang;
 
 import mezz.jei.api.ingredients.IIngredientRenderer;

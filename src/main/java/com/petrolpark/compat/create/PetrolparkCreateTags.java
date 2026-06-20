@@ -1,7 +1,7 @@
 package com.petrolpark.compat.create;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.core.recipe.ingredient.advanced.CreateItemAttributeAdvancedIngredient;
+import com.petrolpark.core.data.recipe.ingredient.advanced.CreateItemAttributeAdvancedIngredient;
 import com.petrolpark.util.Lang;
 import com.simibubi.create.api.registry.CreateRegistries;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttribute;

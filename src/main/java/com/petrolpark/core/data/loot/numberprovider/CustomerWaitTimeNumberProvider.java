@@ -5,9 +5,9 @@ import java.util.Set;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.PetrolparkLootContextParams;
-import com.petrolpark.PetrolparkNumberProviderTypes;
-import com.petrolpark.core.shop.customer.ICustomer;
+import com.petrolpark.core.world.item.restaurant.customer.ICustomer;
+import com.petrolpark.registry.PetrolparkLootContextParams;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;

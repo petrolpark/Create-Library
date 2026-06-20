@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.compat.ISharedFeature;
 import com.petrolpark.compat.Mods;
+import com.petrolpark.shared.ISharedFeature;
 import com.petrolpark.util.Lang;
 
 import mezz.jei.api.helpers.IModIdHelper;

@@ -1,0 +1,85 @@
+package com.petrolpark.compat.create.shared.registry;
+
+import static com.petrolpark.compat.create.PetrolparkCreate.REGISTRATE;
+
+import com.petrolpark.compat.create.RequiresCreate;
+import com.petrolpark.compat.create.shared.content.kinetics.VerticalBearingRenderer;
+import com.petrolpark.compat.create.shared.content.kinetics.VerticalBearingVisual;
+import com.petrolpark.compat.create.shared.content.kinetics.horseMill.HorseMillBearingBlockEntity;
+import com.petrolpark.compat.create.shared.content.kinetics.horseMill.ponder.HarnessWithCowDummyBlockEntity;
+import com.petrolpark.compat.create.shared.content.kinetics.horseMill.ponder.HarnessWithCowDummyRenderer;
+import com.petrolpark.compat.create.shared.content.processing.basinLid.BasinLidBlockEntity;
+import com.petrolpark.compat.create.shared.content.processing.blender.BlenderBlockEntity;
+import com.petrolpark.compat.create.shared.content.processing.blender.BlenderRenderer;
+import com.petrolpark.compat.create.shared.content.processing.blender.BlenderVisual;
+import com.petrolpark.compat.create.shared.content.processing.centrifuge.CentrifugeBlockEntity;
+import com.petrolpark.compat.create.shared.content.processing.centrifuge.CentrifugeRenderer;
+import com.petrolpark.compat.create.shared.content.processing.extrusion.ExtrusionDieBlockEntity;
+import com.petrolpark.compat.create.shared.content.processing.mandrel.MandrelBlockEntity;
+import com.petrolpark.compat.create.shared.content.processing.mandrel.MandrelRenderer;
+import com.petrolpark.compat.create.shared.content.processing.meshBasin.MeshBasinBlockEntity;
+import com.petrolpark.compat.create.shared.content.processing.meshBasin.MeshBasinRenderer;
+import com.petrolpark.compat.create.shared.content.redstone.programmer.RedstoneProgrammerBlockEntity;
+import com.petrolpark.compat.create.shared.content.redstone.programmer.RedstoneProgrammerBlockEntityRenderer;
+import com.petrolpark.shared.SharedFeatureFlag;
+import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
+import com.tterrag.registrate.util.entry.BlockEntityEntry;
+
+@RequiresCreate
+public class SharedCreateBlockEntityTypes {
+
+    public static final BlockEntityEntry<BasinLidBlockEntity> BASIN_LID = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.BASIN_LID, "basin_lid", BasinLidBlockEntity::new)
+        .validBlock(SharedCreateBlocks.BASIN_LID)
+        .register();
+
+    public static final BlockEntityEntry<BlenderBlockEntity> BLENDER = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.BLENDER, "blender", BlenderBlockEntity::new)
+        .visual(() -> BlenderVisual::new)
+        .validBlock(SharedCreateBlocks.BLENDER)
+        .renderer(() -> BlenderRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<CentrifugeBlockEntity> CENTRIFUGE = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.CENTRIFUGE, "centrifuge", CentrifugeBlockEntity::new)
+        .registerItemCapability(CentrifugeBlockEntity::getItemHandler)
+        .registerFluidCapability(CentrifugeBlockEntity::getFluidHandler)
+        .visual(() -> SingleAxisRotatingVisual.of(SharedPartialModels.CENTRIFUGE_COG), true)
+        .validBlock(SharedCreateBlocks.CENTRIFUGE)
+        .renderer(() -> CentrifugeRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<ExtrusionDieBlockEntity> EXTRUSION_DIE = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlockEntity::new)
+        .validBlock(SharedCreateBlocks.EXTRUSION_DIE)
+        .register();
+
+    public static final BlockEntityEntry<HorseMillBearingBlockEntity> HORSE_MILL_BEARING = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.HORSE_MILL, "horse_mill_bearing", HorseMillBearingBlockEntity::new)
+        .visual(() -> VerticalBearingVisual::new)
+        .validBlock(SharedCreateBlocks.HORSE_MILL_BEARING)
+        .renderer(() -> VerticalBearingRenderer::new)
+        .register();
+
+    // Only exists to render in Ponder
+    public static final BlockEntityEntry<HarnessWithCowDummyBlockEntity> HARNESS_WITH_COW_DUMMY = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.HORSE_MILL, "harness_with_cow_dummy", HarnessWithCowDummyBlockEntity::new)
+        .validBlock(SharedCreateBlocks.HARNESS_WITH_COW_DUMMY)
+        .renderer(() -> HarnessWithCowDummyRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<MandrelBlockEntity> MANDREL = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.MANDREL, "mandrel", MandrelBlockEntity::new)
+        .validBlock(SharedCreateBlocks.MANDREL)
+        .renderer(() -> MandrelRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<MeshBasinBlockEntity> MESH_BASIN = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.MESH_BASIN, "mesh_basin", MeshBasinBlockEntity::new)
+        .registerItemCapability(MeshBasinBlockEntity::getItemHandler)
+        .registerFluidCapability(MeshBasinBlockEntity::getFluidHandler)
+        .validBlock(SharedCreateBlocks.MESH_BASIN)
+        .renderer(() -> MeshBasinRenderer::new)
+        .register();
+
+    public static final BlockEntityEntry<RedstoneProgrammerBlockEntity> REDSTONE_PROGRAMMER = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.REDSTONE_PROGRAMMER, "redstone_programmer", RedstoneProgrammerBlockEntity::new)
+        .validBlock(SharedCreateBlocks.REDSTONE_PROGRAMMER)
+        .renderer(() -> RedstoneProgrammerBlockEntityRenderer::new)
+        .register();
+
+    public static final void register() {};
+
+    
+};

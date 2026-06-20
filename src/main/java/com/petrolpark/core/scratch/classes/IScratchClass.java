@@ -3,12 +3,12 @@ package com.petrolpark.core.scratch.classes;
 import java.util.Optional;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.scratch.argument.IExpressionScratchParameter;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.ExpressionAndArguments;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

@@ -3,8 +3,8 @@ package com.petrolpark.core.data.reward.generator;
 import java.util.List;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.data.reward.IReward;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;

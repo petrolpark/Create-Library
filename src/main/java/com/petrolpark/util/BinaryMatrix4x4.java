@@ -1,6 +1,6 @@
 package com.petrolpark.util;
 
-import com.petrolpark.core.recipe.bogglepattern.BogglePatternHelper;
+import com.petrolpark.core.data.recipe.bogglePattern.BogglePatternHelper;
 
 import net.minecraft.world.level.block.Rotation;
 

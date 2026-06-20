@@ -5,8 +5,8 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.petrolpark.compat.create.core.block.composite.CompositeKineticBlockEntity;
-import com.petrolpark.compat.create.core.block.entity.IKineticBlockEntityDuck;
+import com.petrolpark.compat.create.core.world.block.composite.CompositeKineticBlockEntity;
+import com.petrolpark.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 

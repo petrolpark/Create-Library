@@ -2,13 +2,13 @@ package com.petrolpark.core.scratch.symbol.expression;
 
 import static com.petrolpark.core.scratch.ScratchParameters.parameters;
 
-import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchArguments.None;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+import com.petrolpark.registry.scratch.PetrolparkScratchExpressionTypes;
 
 public final class MissingExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends GenericExpression<IScratchEnvironment, TYPE, ARGUMENT, TYPE, ScratchArguments.None<IScratchEnvironment>, ScratchParameters.None<IScratchEnvironment>> {
 

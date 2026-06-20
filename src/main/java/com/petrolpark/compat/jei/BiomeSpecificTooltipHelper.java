@@ -3,7 +3,7 @@ package com.petrolpark.compat.jei;
 import java.util.List;
 import java.util.stream.Stream;
 
-import com.petrolpark.core.recipe.IBiomeSpecificRecipe;
+import com.petrolpark.core.data.recipe.IBiomeSpecificRecipe;
 import com.petrolpark.util.Lang;
 
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;

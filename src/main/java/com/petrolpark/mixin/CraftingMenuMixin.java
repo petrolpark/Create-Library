@@ -12,13 +12,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.petrolpark.PetrolparkRecipeTypes;
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.flags.ItemFlagPole;
 import com.petrolpark.core.flags.recipe.IHandleFlagsMyselfRecipe;
-import com.petrolpark.core.item.decay.ItemDecay;
-import com.petrolpark.core.recipe.book.IBookRequiredRecipe;
-import com.petrolpark.core.recipe.book.RecipeBookItem;
+import com.petrolpark.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
+import com.petrolpark.core.world.item.crafting.recipeBook.RecipeBookItem;
+import com.petrolpark.core.world.item.decay.ItemDecay;
+import com.petrolpark.registry.PetrolparkRecipeTypes;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;

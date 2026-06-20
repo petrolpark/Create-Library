@@ -18,8 +18,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkAttachmentTypes;
-import com.petrolpark.PetrolparkCriteriaTriggers;
+import com.petrolpark.registry.PetrolparkAttachmentTypes;
+import com.petrolpark.registry.PetrolparkCriteriaTriggers;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.SubscribeEvent;

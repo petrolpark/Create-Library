@@ -5,7 +5,6 @@ import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.s
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
@@ -14,6 +13,7 @@ import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.argument.IScratchParameter;
 import com.petrolpark.core.scratch.environment.ILevelEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.TernaryExpressionType;
+import com.petrolpark.registry.scratch.PetrolparkScratchClasses;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;

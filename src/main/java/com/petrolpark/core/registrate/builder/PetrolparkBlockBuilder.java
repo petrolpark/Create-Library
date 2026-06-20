@@ -5,7 +5,7 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import com.google.gson.JsonElement;
-import com.petrolpark.AbstractPetrolparkRegistrate;
+import com.petrolpark.core.registrate.AbstractPetrolparkRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.builders.ItemBuilder;

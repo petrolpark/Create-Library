@@ -5,8 +5,8 @@ import java.util.List;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.registry.PetrolparkRegistries;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 

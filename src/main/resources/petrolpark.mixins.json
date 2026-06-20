@@ -46,6 +46,7 @@
         "compat.create.RotationPropagatorMixin",
         "compat.create.SandPaperPolishingRecipeMixin",
         "compat.create.SawBlockEntityMixin",
+        "compat.create.ServerLevelMixin",
         "compat.create.SharedDepotBlockMethodsMixin",
         "compat.create.StressGaugeBlockEntityMixin",
         "compat.create.TransportedItemStackMixin",

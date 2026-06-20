@@ -5,7 +5,7 @@ import javax.annotation.Nonnull;
 import com.mojang.serialization.Codec;
 import com.petrolpark.core.flags.Flag;
 import com.petrolpark.core.flags.ItemFlagPole;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.advancements.critereon.ItemSubPredicate;
 import net.minecraft.core.Holder;

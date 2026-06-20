@@ -8,7 +8,7 @@ import com.mojang.datafixers.Products.P1;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.storage.loot.LootPool;

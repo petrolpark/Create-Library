@@ -1,9 +1,9 @@
 package com.petrolpark.core.scratch.environment;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.scratch.environment.variable.IScratchScope;
 import com.petrolpark.core.scratch.symbol.IScratchSymbol;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 public interface IScratchEnvironment {
     

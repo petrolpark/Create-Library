@@ -3,9 +3,9 @@ package com.petrolpark.core.data.condition;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkDataLoadingConditions;
-import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.registry.PetrolparkDataLoadingConditions;
+import com.petrolpark.shared.SharedFeatureFlag;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.neoforged.neoforge.common.conditions.ICondition;
 

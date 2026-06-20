@@ -7,12 +7,12 @@ import java.util.List;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkRewardGeneratorTypes;
 import com.petrolpark.core.data.IEntityTarget;
 import com.petrolpark.core.data.loot.ILootTableAccessor;
 import com.petrolpark.core.data.reward.ContextEntityReward;
 import com.petrolpark.core.data.reward.IReward;
 import com.petrolpark.core.data.reward.entity.GiveItemEntityReward;
+import com.petrolpark.registry.PetrolparkRewardGeneratorTypes;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootContext;

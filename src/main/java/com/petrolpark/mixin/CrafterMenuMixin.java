@@ -7,8 +7,8 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.petrolpark.PetrolparkRecipeTypes;
-import com.petrolpark.core.recipe.book.IBookRequiredRecipe;
+import com.petrolpark.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
+import com.petrolpark.registry.PetrolparkRecipeTypes;
 
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.CrafterMenu;

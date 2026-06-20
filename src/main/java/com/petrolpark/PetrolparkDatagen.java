@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.badge.BadgeDataProvider;
 import com.petrolpark.core.registrate.PetrolparkRegistrateTags;
+import com.petrolpark.shared.SharedFeatureFlag;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataGenerator;

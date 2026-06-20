@@ -4,12 +4,12 @@ import java.util.Collections;
 import java.util.Set;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkLootContextParams;
-import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.core.data.reward.team.ITeamReward;
-import com.petrolpark.core.team.ITeam;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.core.world.entity.player.team.ITeam;
+import com.petrolpark.registry.PetrolparkLootContextParams;
+import com.petrolpark.registry.PetrolparkRewardTypes;
 import com.petrolpark.util.Lang.IndentedTooltipBuilder;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.level.storage.loot.LootContext;

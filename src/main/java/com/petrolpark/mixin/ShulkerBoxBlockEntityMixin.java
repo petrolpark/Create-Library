@@ -40,7 +40,7 @@ public abstract class ShulkerBoxBlockEntityMixin extends RandomizableContainerBl
 
     @Override
     public void flagAll(Stream<Holder<Flag>> flags) {
-        flags.flagAll(flags);
+        flagPole.flagAll(flags);
     };
 
     @Inject(

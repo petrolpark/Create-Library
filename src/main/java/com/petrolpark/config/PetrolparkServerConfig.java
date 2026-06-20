@@ -1,7 +1,7 @@
 package com.petrolpark.config;
 
-import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.Mods;
+import com.petrolpark.compat.create.RequiresCreate;
 import com.simibubi.create.api.stress.BlockStressValues;
 
 import net.createmod.catnip.config.ConfigBase;

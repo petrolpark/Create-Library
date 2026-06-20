@@ -20,8 +20,8 @@ import org.jetbrains.annotations.Nullable;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.petrolpark.PetrolparkDataMapTypes;
 import com.petrolpark.core.world.block.entity.BlockEntityTypeTagProvider;
+import com.petrolpark.registry.PetrolparkDataMapTypes;
 
 import net.minecraft.Util;
 import net.minecraft.advancements.Advancement;

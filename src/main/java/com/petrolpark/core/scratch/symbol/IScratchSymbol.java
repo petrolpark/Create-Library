@@ -1,10 +1,10 @@
 package com.petrolpark.core.scratch.symbol;
 
-import com.petrolpark.core.codec.ContextualMapCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+import com.petrolpark.util.codec.ContextualMapCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 

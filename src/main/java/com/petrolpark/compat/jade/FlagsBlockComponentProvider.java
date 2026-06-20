@@ -1,9 +1,9 @@
 package com.petrolpark.compat.jade;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.create.core.block.entity.behaviour.FlagPoleBehaviour;
+import com.petrolpark.compat.create.RequiresCreate;
+import com.petrolpark.compat.create.core.world.block.entity.behaviour.FlagPoleBehaviour;
 import com.petrolpark.core.flags.Flag;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 

@@ -9,9 +9,9 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
-import com.petrolpark.compat.create.core.block.entity.basin.AdvancedBasinOperatingBlockEntity;
-import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
+import com.petrolpark.compat.create.core.world.block.entity.basin.AdvancedBasinOperatingBlockEntity;
+import com.petrolpark.compat.create.shared.registry.SharedCreateRecipeTypes;
+import com.petrolpark.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
@@ -47,7 +47,7 @@ public abstract class MechanicalPressBlockEntityMixin extends BasinOperatingBloc
             && getBasin().filter(BasinBlockEntity::canContinueProcessing).isPresent()
         ) {
             if (advancedRecipeCacheKey == null) advancedRecipeCacheKey = new Object();
-            final List<Recipe<?>> juicingRecipes = AdvancedBasinOperatingBlockEntity.getMatchingRecipes(getBasin().get(), advancedRecipeCacheKey, this::matchBasinRecipe, rh -> rh.value().getType() == PetrolparkCreateRecipeTypes.JUICING.getType());
+            final List<Recipe<?>> juicingRecipes = AdvancedBasinOperatingBlockEntity.getMatchingRecipes(getBasin().get(), advancedRecipeCacheKey, this::matchBasinRecipe, rh -> rh.value().getType() == SharedCreateRecipeTypes.JUICING.getType());
             if (!juicingRecipes.isEmpty()) {
                 currentRecipe = juicingRecipes.get(0);
                 startProcessingBasin();
@@ -65,7 +65,7 @@ public abstract class MechanicalPressBlockEntityMixin extends BasinOperatingBloc
         )
     )
     public PressingBehaviour.Mode petrolpark$useMeshBasinOffset(PressingBehaviour.Mode mode) {
-        if (currentRecipe != null && currentRecipe.getType() == PetrolparkCreateRecipeTypes.JUICING.getType()) return PressingBehaviour.Mode.valueOf("PETROLPARK_MESH_BASIN");
+        if (currentRecipe != null && currentRecipe.getType() == SharedCreateRecipeTypes.JUICING.getType()) return PressingBehaviour.Mode.valueOf("PETROLPARK_MESH_BASIN");
         return mode;
     };
 
@@ -74,7 +74,7 @@ public abstract class MechanicalPressBlockEntityMixin extends BasinOperatingBloc
         at = @At("RETURN")
     )
     protected boolean petrolpark$matchJuicingRecipes(boolean original, RecipeHolder<? extends Recipe<?>> recipe) {
-        return original || recipe.value().getType() == PetrolparkCreateRecipeTypes.JUICING.getType();
+        return original || recipe.value().getType() == SharedCreateRecipeTypes.JUICING.getType();
     };
     
     @Override

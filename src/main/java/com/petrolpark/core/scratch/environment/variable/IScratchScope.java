@@ -1,7 +1,7 @@
 package com.petrolpark.core.scratch.environment.variable;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

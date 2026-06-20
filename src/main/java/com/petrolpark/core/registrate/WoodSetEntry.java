@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.function.IntConsumer;
 import java.util.stream.Stream;
 
-import com.petrolpark.client.creativemodetab.CustomTab.ITabEntry;
 import com.petrolpark.core.registrate.builder.PetrolparkBlockBuilder;
 import com.petrolpark.core.world.block.LogBlock;
+import com.petrolpark.core.world.item.creativeModeTab.CustomTab.ITabEntry;
 import com.petrolpark.util.BlockStateProviderHelper;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.providers.ProviderType;

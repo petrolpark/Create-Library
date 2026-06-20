@@ -5,7 +5,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorItemEvent;
+import com.petrolpark.compat.create.core.world.block.chainConveyor.ChainConveyorItemEvent;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainPackageInteractionPacket;
 

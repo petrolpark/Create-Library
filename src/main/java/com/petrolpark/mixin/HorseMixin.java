@@ -5,8 +5,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.PetrolparkAttributes;
-import com.petrolpark.compat.create.common.kinetics.horseMill.HorseMillProperties;
+import com.petrolpark.compat.create.shared.content.kinetics.horseMill.HorseMillProperties;
+import com.petrolpark.registry.PetrolparkAttributes;
 
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EntityType;

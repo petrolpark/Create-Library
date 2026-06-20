@@ -2,14 +2,14 @@ package com.petrolpark.core.scratch.symbol;
 
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkScratchClasses;
-import com.petrolpark.core.codec.ContextualCodec;
-import com.petrolpark.core.codec.RecordContextualCodecBuilder;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+import com.petrolpark.registry.scratch.PetrolparkScratchClasses;
+import com.petrolpark.util.codec.ContextualCodec;
+import com.petrolpark.util.codec.RecordContextualCodecBuilder;
 
 public interface IGenericScratchSymbol<ENVIRONMENT extends IScratchEnvironment, GENERIC_TYPE, GENERIC_ARGUMENT extends IScratchArgument<IScratchEnvironment, GENERIC_TYPE>, ARGUMENTS extends ScratchArguments<ENVIRONMENT, ?>, PARAMETERS extends ScratchParameters<ENVIRONMENT, ARGUMENTS>> extends IScratchSymbol<ENVIRONMENT, ARGUMENTS, PARAMETERS> {
     

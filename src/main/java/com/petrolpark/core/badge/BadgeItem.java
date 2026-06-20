@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkDataComponentTypes;
+import com.petrolpark.registry.PetrolparkDataComponentTypes;
 import com.petrolpark.util.ItemHelper;
 
 import io.netty.buffer.ByteBuf;

@@ -13,7 +13,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.petrolpark.config.PetrolparkConfigs;
 import com.petrolpark.core.flags.ItemFlagPole;
-import com.petrolpark.core.item.decay.ItemDecay;
+import com.petrolpark.core.world.item.decay.ItemDecay;
 
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.ContainerLevelAccess;

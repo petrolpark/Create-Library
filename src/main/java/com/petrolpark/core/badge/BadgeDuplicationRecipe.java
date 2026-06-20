@@ -2,7 +2,7 @@ package com.petrolpark.core.badge;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.PetrolparkRecipeSerializers;
+import com.petrolpark.registry.PetrolparkRecipeSerializers;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;

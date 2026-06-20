@@ -2,15 +2,15 @@ package com.petrolpark.core.scratch.symbol.expression;
 
 import java.util.function.Function;
 
-import com.petrolpark.core.codec.ContextualMapCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
-import com.petrolpark.core.codec.RecordContextualCodecBuilder;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.IGenericScratchSymbol;
+import com.petrolpark.util.codec.ContextualMapCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
+import com.petrolpark.util.codec.RecordContextualCodecBuilder;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 

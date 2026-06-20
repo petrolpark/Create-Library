@@ -2,8 +2,8 @@ package com.petrolpark.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import com.petrolpark.PetrolparkRecipeTypes;
-import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlock;
+import com.petrolpark.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlock;
+import com.petrolpark.registry.PetrolparkRecipeTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.crafting.RecipeHolder;

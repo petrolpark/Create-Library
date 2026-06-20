@@ -1,7 +1,7 @@
 package com.petrolpark.core.world.block;
 
-import com.petrolpark.compat.ISharedFeature;
-import com.petrolpark.compat.SharedFeatureFlag;
+import com.petrolpark.shared.ISharedFeature;
+import com.petrolpark.shared.SharedFeatureFlag;
 
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockBehaviour;

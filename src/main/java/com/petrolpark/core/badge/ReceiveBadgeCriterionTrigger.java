@@ -4,8 +4,8 @@ import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkCriteriaTriggers;
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.registry.PetrolparkCriteriaTriggers;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.advancements.Criterion;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;

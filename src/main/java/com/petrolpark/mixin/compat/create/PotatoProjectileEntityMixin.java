@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import com.petrolpark.compat.create.PetrolparkCreateCriterionTriggers;
+import com.petrolpark.compat.create.shared.registry.SharedCreateCriterionTriggers;
 import com.simibubi.create.content.equipment.potatoCannon.PotatoProjectileEntity;
 
 import net.minecraft.server.level.ServerPlayer;
@@ -35,6 +35,6 @@ public abstract class PotatoProjectileEntityMixin extends AbstractHurtingProject
         )
     )
     protected void petrolpark$triggerAdvancement(EntityHitResult ray, CallbackInfo ci) {
-        if (getOwner() instanceof ServerPlayer serverPlayer) PetrolparkCreateCriterionTriggers.POTATO_CANNON_HIT.get().trigger(serverPlayer, stack, ray.getEntity());
+        if (getOwner() instanceof ServerPlayer serverPlayer) SharedCreateCriterionTriggers.POTATO_CANNON_HIT.get().trigger(serverPlayer, stack, ray.getEntity());
     };
 };

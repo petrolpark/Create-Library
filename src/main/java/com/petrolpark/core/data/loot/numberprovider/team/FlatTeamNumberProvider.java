@@ -1,10 +1,10 @@
 package com.petrolpark.core.data.loot.numberprovider.team;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
-import com.petrolpark.core.team.ITeam;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.core.world.entity.player.team.ITeam;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;

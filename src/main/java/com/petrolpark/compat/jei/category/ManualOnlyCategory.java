@@ -2,8 +2,8 @@ package com.petrolpark.compat.jei.category;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.client.rendering.PetrolparkGuiTexture;
-import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
+import com.petrolpark.core.client.rendering.PetrolparkGuiTexture;
+import com.petrolpark.core.world.item.crafting.ManualOnlyCraftingRecipe;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;

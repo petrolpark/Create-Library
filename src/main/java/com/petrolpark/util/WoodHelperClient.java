@@ -12,7 +12,7 @@ import java.util.function.UnaryOperator;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.client.rendering.PetrolparkBakedModelHelper;
+import com.petrolpark.core.client.rendering.PetrolparkBakedModelHelper;
 import com.petrolpark.util.WoodHelper.Wood;
 
 import it.unimi.dsi.fastutil.objects.Reference2ReferenceOpenHashMap;

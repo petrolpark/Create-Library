@@ -7,44 +7,44 @@ import java.util.Optional;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkBlocks;
-import com.petrolpark.PetrolparkItems;
-import com.petrolpark.PetrolparkRecipeTypes;
-import com.petrolpark.RequiresCreate;
-import com.petrolpark.compat.SharedFeatureFlag;
-import com.petrolpark.compat.create.PetrolparkCreateBlocks;
-import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
-import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
-import com.petrolpark.compat.create.common.processing.centrifuge.CentrifugationRecipe;
-import com.petrolpark.compat.create.common.processing.centrifuge.PotionCentrifugation;
-import com.petrolpark.compat.create.common.processing.centrifuge.PotionCentrifugation.PotionCentrifugationRecipe;
-import com.petrolpark.compat.create.common.processing.extrusion.ExtrusionRecipe;
-import com.petrolpark.compat.create.common.processing.meshbasin.BoilingRecipe;
-import com.petrolpark.compat.create.common.redstone.programmer.RedstoneProgrammerScreen;
-import com.petrolpark.compat.jei.category.AgeingCategory;
-import com.petrolpark.compat.jei.category.BlendingCategory;
-import com.petrolpark.compat.jei.category.BoilingCategory;
-import com.petrolpark.compat.jei.category.CentrifugationCategory;
-import com.petrolpark.compat.jei.category.CropFertilizingCategory;
+import com.petrolpark.compat.create.RequiresCreate;
+import com.petrolpark.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
+import com.petrolpark.compat.create.shared.content.processing.centrifuge.CentrifugationRecipe;
+import com.petrolpark.compat.create.shared.content.processing.centrifuge.PotionCentrifugation;
+import com.petrolpark.compat.create.shared.content.processing.centrifuge.PotionCentrifugation.PotionCentrifugationRecipe;
+import com.petrolpark.compat.create.shared.content.processing.extrusion.ExtrusionRecipe;
+import com.petrolpark.compat.create.shared.content.processing.meshBasin.BoilingRecipe;
+import com.petrolpark.compat.create.shared.content.redstone.programmer.RedstoneProgrammerScreen;
+import com.petrolpark.compat.create.shared.registry.SharedCreateBlocks;
+import com.petrolpark.compat.create.shared.registry.SharedCreateRecipeTypes;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
-import com.petrolpark.compat.jei.category.DryingCategory;
-import com.petrolpark.compat.jei.category.ExtrusionCategory;
-import com.petrolpark.compat.jei.category.JuicingCategory;
-import com.petrolpark.compat.jei.category.LiddedBasinCategory;
 import com.petrolpark.compat.jei.category.ManualOnlyCategory;
-import com.petrolpark.compat.jei.category.MysteriousConversionCategory;
 import com.petrolpark.compat.jei.category.builder.PetrolparkCategoryBuilder;
+import com.petrolpark.compat.jei.category.shared.AgeingCategory;
+import com.petrolpark.compat.jei.category.shared.BlendingCategory;
+import com.petrolpark.compat.jei.category.shared.BoilingCategory;
+import com.petrolpark.compat.jei.category.shared.CentrifugationCategory;
+import com.petrolpark.compat.jei.category.shared.CropFertilizingCategory;
+import com.petrolpark.compat.jei.category.shared.DryingCategory;
+import com.petrolpark.compat.jei.category.shared.ExtrusionCategory;
+import com.petrolpark.compat.jei.category.shared.JuicingCategory;
+import com.petrolpark.compat.jei.category.shared.LiddedBasinCategory;
+import com.petrolpark.compat.jei.category.shared.MysteriousConversionCategory;
 import com.petrolpark.compat.jei.ghost.PetrolparkGhostIngredientHandler;
 import com.petrolpark.compat.jei.subtypeInterpreter.DoughItemSubtypeInterpreter;
 import com.petrolpark.compat.jei.subtypeInterpreter.WoodenItemSubtypeInterpreter;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.item.decay.ageing.AgeingRecipe;
-import com.petrolpark.core.item.decay.drying.DryingRecipe;
-import com.petrolpark.core.recipe.CropFertilizingRecipe;
-import com.petrolpark.core.recipe.ExampleRecipe;
-import com.petrolpark.core.recipe.crafting.ManualOnlyCraftingRecipe;
+import com.petrolpark.core.data.recipe.ExampleRecipe;
+import com.petrolpark.core.world.item.crafting.ManualOnlyCraftingRecipe;
 import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
+import com.petrolpark.shared.SharedFeatureFlag;
+import com.petrolpark.shared.registry.SharedBlocks;
+import com.petrolpark.shared.registry.SharedItems;
+import com.petrolpark.shared.registry.SharedRecipeTypes;
+import com.petrolpark.shared.world.item.crafting.CropFertilizingRecipe;
+import com.petrolpark.shared.world.item.crafting.ageing.AgeingRecipe;
+import com.petrolpark.shared.world.item.crafting.drying.DryingRecipe;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
@@ -92,7 +92,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
         CreateRecipeCategory<?>
 
         ageing = builder(AgeingRecipe.class)
-            .addTypedRecipes(PetrolparkRecipeTypes.AGEING::get)
+            .addTypedRecipes(SharedRecipeTypes.AGEING::get)
             .catalyst(() -> Items.BARREL)
             .itemIcon(Items.BARREL)
             .emptyBackground(125, 20)
@@ -125,7 +125,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
             .build("item_decay", DecayingItemCategory::new),
 
         cropFertilizing = builder(CropFertilizingRecipe.class)
-            .addTypedRecipes(PetrolparkRecipeTypes.CROP_FERTILIZING::get)
+            .addTypedRecipes(SharedRecipeTypes.CROP_FERTILIZING::get)
             .itemIcon(Items.BONE_MEAL)
             .emptyBackground(120, 125)
             .build("crop_fertilizing", CropFertilizingCategory::new),
@@ -151,10 +151,10 @@ public class PetrolparkCreateJEI implements IModPlugin {
         if (SharedFeatureFlag.BLENDER.enabled()) {
 
             blending = builder(BasinRecipe.class)
-                .addTypedRecipes(PetrolparkCreateRecipeTypes.BLENDING)
-                .catalyst(PetrolparkCreateBlocks.BLENDER::get)
+                .addTypedRecipes(SharedCreateRecipeTypes.BLENDING)
+                .catalyst(SharedCreateBlocks.BLENDER::get)
                 .catalyst(AllBlocks.BASIN::get)
-                .itemIcon(PetrolparkCreateBlocks.BLENDER)
+                .itemIcon(SharedCreateBlocks.BLENDER)
                 .emptyBackground(177, 85)
                 .build("blending", BlendingCategory::new);
         };
@@ -162,16 +162,16 @@ public class PetrolparkCreateJEI implements IModPlugin {
         if (SharedFeatureFlag.CENTRIFUGE.enabled()) {
 
             centrifugation = builder(CentrifugationRecipe.class)
-                .addTypedRecipes(PetrolparkCreateRecipeTypes.CENTRIFUGATION)
-                .catalyst(PetrolparkCreateBlocks.CENTRIFUGE::get)
-                .itemIcon(PetrolparkCreateBlocks.CENTRIFUGE)
+                .addTypedRecipes(SharedCreateRecipeTypes.CENTRIFUGATION)
+                .catalyst(SharedCreateBlocks.CENTRIFUGE::get)
+                .itemIcon(SharedCreateBlocks.CENTRIFUGE)
                 .emptyBackground(120, 115)
                 .build("centrifugation", CentrifugationCategory::new);
 
             if (PetrolparkConfigs.server().potionCentrifugation.get()) potionCentrifugation = builder(PotionCentrifugationRecipe.class)
                 .addRecipes(PotionCentrifugation.streamAllRecipes(Minecraft.getInstance().getConnection().potionBrewing())::toList)
-                .catalyst(PetrolparkCreateBlocks.CENTRIFUGE::get)
-                .doubleItemIcon(PetrolparkCreateBlocks.CENTRIFUGE::asStack, () -> PotionContents.createItemStack(Items.POTION, Potions.HEALING))
+                .catalyst(SharedCreateBlocks.CENTRIFUGE::get)
+                .doubleItemIcon(SharedCreateBlocks.CENTRIFUGE::asStack, () -> PotionContents.createItemStack(Items.POTION, Potions.HEALING))
                 .emptyBackground(120, 115)
                 .build("potion_centrifugation", CentrifugationCategory::new);
         };
@@ -179,40 +179,40 @@ public class PetrolparkCreateJEI implements IModPlugin {
         if (SharedFeatureFlag.MESH_BASIN.enabled()) {
 
             boiling = builder(BoilingRecipe.class)
-                .addTypedRecipes(PetrolparkCreateRecipeTypes.BOILING)
-                .catalyst(PetrolparkCreateBlocks.MESH_BASIN::get)
-                .itemIcon(PetrolparkCreateBlocks.MESH_BASIN.get())
+                .addTypedRecipes(SharedCreateRecipeTypes.BOILING)
+                .catalyst(SharedCreateBlocks.MESH_BASIN::get)
+                .itemIcon(SharedCreateBlocks.MESH_BASIN.get())
                 .emptyBackground(177, 81)
                 .build("boiling", BoilingCategory::new);
 
             juicing = builder(BasinRecipe.class)
-                .addTypedRecipes(PetrolparkCreateRecipeTypes.JUICING)
+                .addTypedRecipes(SharedCreateRecipeTypes.JUICING)
                 .catalyst(AllBlocks.MECHANICAL_PRESS::get)
-                .catalyst(PetrolparkCreateBlocks.MESH_BASIN::get)
-                .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), PetrolparkCreateBlocks.MESH_BASIN.get())
+                .catalyst(SharedCreateBlocks.MESH_BASIN::get)
+                .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), SharedCreateBlocks.MESH_BASIN.get())
 				.emptyBackground(177, 103)
 				.build("juicing", JuicingCategory::new);
         };
 
         if (SharedFeatureFlag.DRYING_RACK.enabled()) drying = builder(DryingRecipe.class)
-            .addTypedRecipes(PetrolparkRecipeTypes.DRYING::get)
-            .catalyst(PetrolparkBlocks.DRYING_RACK::get)
-            .itemIcon(PetrolparkBlocks.DRYING_RACK.get())
+            .addTypedRecipes(SharedRecipeTypes.DRYING::get)
+            .catalyst(SharedBlocks.DRYING_RACK::get)
+            .itemIcon(SharedBlocks.DRYING_RACK.get())
             .emptyBackground(125, 20)
             .build("drying", DryingCategory::new);
 
         if (SharedFeatureFlag.EXTRUSION.enabled()) extrusion = builder(ExtrusionRecipe.class)
-            .addTypedRecipes(PetrolparkCreateRecipeTypes.EXTRUSION)
-            .catalyst(PetrolparkCreateBlocks.EXTRUSION_DIE::get)
-            .itemIcon(PetrolparkCreateBlocks.EXTRUSION_DIE.get())
+            .addTypedRecipes(SharedCreateRecipeTypes.EXTRUSION)
+            .catalyst(SharedCreateBlocks.EXTRUSION_DIE::get)
+            .itemIcon(SharedCreateBlocks.EXTRUSION_DIE.get())
             .emptyBackground(177, 55)
             .build("extrusion", ExtrusionCategory::new);
 
         if (SharedFeatureFlag.BASIN_LID.enabled()) lidded_basin = builder(LiddedBasinRecipe.class)
-            .addTypedRecipes(PetrolparkCreateRecipeTypes.LIDDED_BASIN)
-            .catalyst(PetrolparkCreateBlocks.BASIN_LID::get)
+            .addTypedRecipes(SharedCreateRecipeTypes.LIDDED_BASIN)
+            .catalyst(SharedCreateBlocks.BASIN_LID::get)
             .catalyst(AllBlocks.BASIN::get)
-            .doubleItemIcon(PetrolparkCreateBlocks.BASIN_LID.get(), AllBlocks.BASIN.get())
+            .doubleItemIcon(SharedCreateBlocks.BASIN_LID.get(), AllBlocks.BASIN.get())
             .emptyBackground(177, 81)
             .build("lidded_basin", LiddedBasinCategory::new);
     };
@@ -236,8 +236,8 @@ public class PetrolparkCreateJEI implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(@Nonnull ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(PetrolparkCreateBlocks.DOUGH.asItem(), DoughItemSubtypeInterpreter.INSTANCE);
-        if (SharedFeatureFlag.ROLLING_PIN.enabled()) registration.registerSubtypeInterpreter(PetrolparkItems.ROLLING_PIN.get(), WoodenItemSubtypeInterpreter.INSTANCE);
+        registration.registerSubtypeInterpreter(SharedCreateBlocks.DOUGH.asItem(), DoughItemSubtypeInterpreter.INSTANCE);
+        if (SharedFeatureFlag.ROLLING_PIN.enabled()) registration.registerSubtypeInterpreter(SharedItems.ROLLING_PIN.get(), WoodenItemSubtypeInterpreter.INSTANCE);
     };
 
     private <T extends Recipe<?>> CategoryBuilderImpl<T> builder(Class<? extends T> recipeClass) {

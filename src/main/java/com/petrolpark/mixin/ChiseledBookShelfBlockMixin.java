@@ -9,8 +9,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.recipe.book.IRecipeBookProviderBlock;
-import com.petrolpark.core.recipe.book.RecipeBookItem;
+import com.petrolpark.core.world.item.crafting.recipeBook.IRecipeBookProviderBlock;
+import com.petrolpark.core.world.item.crafting.recipeBook.RecipeBookItem;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;

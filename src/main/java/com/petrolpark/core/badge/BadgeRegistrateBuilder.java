@@ -3,9 +3,9 @@ package com.petrolpark.core.badge;
 import java.util.Collection;
 import java.util.function.Supplier;
 
-import com.petrolpark.AbstractPetrolparkRegistrate;
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.compat.curios.PetrolparkCuriosSetup;
+import com.petrolpark.core.registrate.AbstractPetrolparkRegistrate;
+import com.petrolpark.registry.PetrolparkRegistries;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.providers.ProviderType;

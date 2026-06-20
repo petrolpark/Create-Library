@@ -2,8 +2,8 @@ package com.petrolpark.core.data.loot.numberprovider.entity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;

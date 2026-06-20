@@ -6,9 +6,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import com.petrolpark.PetrolparkRecipeTypes;
-import com.petrolpark.core.recipe.book.IBookRequiredRecipe;
-import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlock;
+import com.petrolpark.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
+import com.petrolpark.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlock;
+import com.petrolpark.registry.PetrolparkRecipeTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;

@@ -2,7 +2,7 @@ package com.petrolpark.core.scratch.world.block;
 
 import java.util.List;
 
-import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.create.RequiresCreate;
 import com.petrolpark.core.scratch.environment.ICreateDisplaySourceScratchEnvironment;
 import com.simibubi.create.api.behaviour.display.DisplaySource;
 import com.simibubi.create.content.redstone.displayLink.DisplayLinkContext;

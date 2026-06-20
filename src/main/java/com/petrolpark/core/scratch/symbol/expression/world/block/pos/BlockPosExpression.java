@@ -2,12 +2,12 @@ package com.petrolpark.core.scratch.symbol.expression.world.block.pos;
 
 import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.integerParameter;
 
-import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.ExpressionOrLiteralParameter;
 import com.petrolpark.core.scratch.classes.BlockPosScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.TernaryExpressionType;
+import com.petrolpark.registry.scratch.PetrolparkScratchClasses;
 
 import net.minecraft.core.BlockPos;
 

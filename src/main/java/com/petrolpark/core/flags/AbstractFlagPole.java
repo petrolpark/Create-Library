@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;

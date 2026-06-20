@@ -4,7 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.compat.create.core.tube.ClientTubePlacementHandler;
+import com.petrolpark.compat.create.core.world.block.tube.ClientTubePlacementHandler;
 import com.simibubi.create.content.equipment.goggles.GoggleOverlayRenderer;
 
 import net.minecraft.client.DeltaTracker;

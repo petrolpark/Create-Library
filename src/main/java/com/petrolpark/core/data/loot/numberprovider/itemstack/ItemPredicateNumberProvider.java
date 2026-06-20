@@ -2,10 +2,10 @@ package com.petrolpark.core.data.loot.numberprovider.itemstack;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.ConditionalNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.core.data.loot.numberprovider.entity.EntityPredicateNumberProvider;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.world.item.ItemStack;

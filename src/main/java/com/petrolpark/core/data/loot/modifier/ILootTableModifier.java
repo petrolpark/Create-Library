@@ -1,7 +1,7 @@
 package com.petrolpark.core.data.loot.modifier;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.level.storage.loot.LootTable;

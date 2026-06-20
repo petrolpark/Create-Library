@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;

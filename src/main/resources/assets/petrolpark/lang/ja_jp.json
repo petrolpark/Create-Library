@@ -431,11 +431,11 @@
     "team_reward.petrolpark.members.all": "全メンバーへの報酬:",
     "team_reward.petrolpark.members.count": "メンバー %1$s 人への報酬:",
     "team_reward.petrolpark.members.percentage": "メンバーの %1$s% への報酬:",
-    "team_reward.petrolpark.grant_shop_xp": "%2$s の経験値を %1$s 獲得",
-    "team_reward.petrolpark.grant_shop_xp.unknown_amount": "%2$s の経験値を獲得",
+    "team_reward.petrolpark.grant_restaurant_xp": "%2$s の経験値を %1$s 獲得",
+    "team_reward.petrolpark.grant_restaurant_xp.unknown_amount": "%2$s の経験値を獲得",
 
-    "shop.petrolpark.example": "ショップの例",
-    "shop.petrolpark.unknown": "不明なショップ",
+    "restaurant.petrolpark.example": "ショップの例",
+    "restaurant.petrolpark.unknown": "不明なショップ",
 
     "team.petrolpark.none": "チームなし"
 }

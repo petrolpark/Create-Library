@@ -5,8 +5,6 @@ import static com.petrolpark.core.scratch.argument.ExpressionArgument.listParame
 
 import java.util.List;
 
-import com.petrolpark.PetrolparkScratchClasses;
-import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
@@ -15,6 +13,8 @@ import com.petrolpark.core.scratch.classes.IntegerScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.UnaryGenericExpression;
+import com.petrolpark.registry.scratch.PetrolparkScratchClasses;
+import com.petrolpark.registry.scratch.PetrolparkScratchExpressionTypes;
 
 public final class ListLengthExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends UnaryGenericExpression<
     IScratchEnvironment,

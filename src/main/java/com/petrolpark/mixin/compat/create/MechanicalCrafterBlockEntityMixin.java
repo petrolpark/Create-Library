@@ -7,10 +7,10 @@ import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.petrolpark.PetrolparkRecipeTypes;
-import com.petrolpark.compat.create.PetrolparkCreateRecipeTypes;
-import com.petrolpark.core.recipe.RecipeHelper;
-import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
+import com.petrolpark.compat.create.registry.PetrolparkCreateRecipeTypes;
+import com.petrolpark.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
+import com.petrolpark.registry.PetrolparkRecipeTypes;
+import com.petrolpark.util.RecipeHelper;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.kinetics.crafter.MechanicalCrafterBlockEntity;
 import com.simibubi.create.content.kinetics.crafter.MechanicalCraftingInput;

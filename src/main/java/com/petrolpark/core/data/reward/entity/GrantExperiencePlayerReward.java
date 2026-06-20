@@ -2,10 +2,10 @@ package com.petrolpark.core.data.reward.entity;
 
 import com.mojang.serialization.MapCodec;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkRewardTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.registry.PetrolparkRewardTypes;
 import com.petrolpark.util.Lang.IndentedTooltipBuilder;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;

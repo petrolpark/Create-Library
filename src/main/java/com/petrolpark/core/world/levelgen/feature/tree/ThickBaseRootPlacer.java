@@ -7,7 +7,7 @@ import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkFeatureTypes;
+import com.petrolpark.registry.PetrolparkFeatureTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

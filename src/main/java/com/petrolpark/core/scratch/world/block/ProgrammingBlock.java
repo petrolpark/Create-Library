@@ -3,9 +3,9 @@ package com.petrolpark.core.scratch.world.block;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.compat.ISharedFeature;
-import com.petrolpark.compat.SharedFeatureFlag;
 import com.petrolpark.core.world.block.OrientedBlock;
+import com.petrolpark.shared.ISharedFeature;
+import com.petrolpark.shared.SharedFeatureFlag;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.EntityBlock;

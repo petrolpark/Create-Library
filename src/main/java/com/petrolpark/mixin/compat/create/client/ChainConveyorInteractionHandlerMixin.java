@@ -6,8 +6,8 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorArmInteractionPoint;
-import com.petrolpark.compat.create.core.chainconveyor.ChainConveyorItemEvent;
+import com.petrolpark.compat.create.core.world.block.chainConveyor.ChainConveyorArmInteractionPoint;
+import com.petrolpark.compat.create.core.world.block.chainConveyor.ChainConveyorItemEvent;
 import com.petrolpark.mixin.compat.create.accessor.client.ArmInteractionPointHandlerAccessor;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainPackageInteractionPacket;

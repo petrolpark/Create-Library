@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 
-import com.petrolpark.core.inventory.extended.ExtendedInventory.DelayedSlotPopulation;
+import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventory.DelayedSlotPopulation;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;

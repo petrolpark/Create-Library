@@ -4,7 +4,6 @@ import static com.petrolpark.core.scratch.argument.NestedProcedureArgument.proce
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.core.codec.ContextualCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
@@ -15,6 +14,7 @@ import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
 import com.petrolpark.core.scratch.procedure.ScratchProcedure;
 import com.petrolpark.core.scratch.symbol.block.instance.NestedProcedureBlockInstance;
+import com.petrolpark.util.codec.ContextualCodec;
 
 public abstract class UnaryNestedProcedureBlock<
     ENVIRONMENT extends IScratchEnvironment,

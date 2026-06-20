@@ -1,11 +1,11 @@
 package com.petrolpark.core.scratch.argument;
 
 import com.mojang.serialization.DataResult;
-import com.petrolpark.core.codec.ContextualCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.environment.variable.IVariableScratchEnvironment;
 import com.petrolpark.core.scratch.environment.variable.ScratchVariableIdentifier;
 import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
+import com.petrolpark.util.codec.ContextualCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 

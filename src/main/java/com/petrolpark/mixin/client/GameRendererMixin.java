@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkMobEffects;
-import com.petrolpark.core.world.effect.shader.IShaderEffect;
-import com.petrolpark.core.world.effect.shader.ShaderEffectReloadHandler;
+import com.petrolpark.core.client.effectShaders.IShaderEffect;
+import com.petrolpark.core.client.effectShaders.ShaderEffectReloadHandler;
+import com.petrolpark.shared.registry.SharedMobEffects;
 import com.petrolpark.util.mixininterfaces.IGameRendererMixin;
 import com.petrolpark.util.mixininterfaces.IMobEffectInstanceMixin;
 
@@ -46,7 +46,7 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
     )
     private void petrolpark$numbnessCancelsBobbing(PoseStack ms, float partialTicks, CallbackInfo ci) {
         Minecraft mc = Minecraft.getInstance();
-        if (mc.getCameraEntity() instanceof LivingEntity livingEntity && livingEntity.hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate())) ci.cancel();
+        if (mc.getCameraEntity() instanceof LivingEntity livingEntity && livingEntity.hasEffect(SharedMobEffects.NUMBNESS.getDelegate())) ci.cancel();
     };
 
     @Inject(

@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.petrolpark.client.ponder.instruction.HighlightTagInstruction;
+import com.petrolpark.core.client.ponder.instruction.HighlightTagInstruction;
 import com.petrolpark.mixin.compat.create.accessor.client.SimpleRenderElementAccessor;
 import net.createmod.ponder.foundation.PonderTag;
 import net.createmod.ponder.foundation.ui.PonderButton;

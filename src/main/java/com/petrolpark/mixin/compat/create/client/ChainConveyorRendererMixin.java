@@ -13,10 +13,10 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.petrolpark.PetrolparkItemDisplayContexts;
-import com.petrolpark.client.rendering.EmptySuperByteBuffer;
-import com.petrolpark.compat.create.PetrolparkPartialModels;
-import com.petrolpark.core.item.decay.ItemDecay;
+import com.petrolpark.compat.create.shared.registry.SharedPartialModels;
+import com.petrolpark.core.client.rendering.EmptySuperByteBuffer;
+import com.petrolpark.core.world.item.decay.ItemDecay;
+import com.petrolpark.registry.PetrolparkItemDisplayContexts;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorPackage;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorPackage.ChainConveyorPackagePhysicsData;
@@ -64,7 +64,7 @@ public abstract class ChainConveyorRendererMixin {
         )
     )
     public SuperByteBuffer wrapGetRigBuffer(PartialModel model, BlockState referenceState, Operation<SuperByteBuffer> original, ChainConveyorBlockEntity be, PoseStack ms, MultiBufferSource buffer, int overlay, BlockPos pos, ChainConveyorPackage box, float partialTicks) {
-        return PackageItem.isPackage(box.item) ? original.call(model, referenceState) : original.call(PetrolparkPartialModels.CHAIN_CONVEYOR_HOOK, referenceState);
+        return PackageItem.isPackage(box.item) ? original.call(model, referenceState) : original.call(SharedPartialModels.CHAIN_CONVEYOR_HOOK, referenceState);
     };
 
     @WrapOperation(

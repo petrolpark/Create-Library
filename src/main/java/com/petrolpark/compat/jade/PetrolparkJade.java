@@ -1,7 +1,7 @@
 package com.petrolpark.compat.jade;
 
-import com.petrolpark.core.item.decay.drying.rack.DryingRackBlock;
-import com.petrolpark.core.item.decay.drying.rack.DryingRackJadeBlockComponentProvider;
+import com.petrolpark.shared.world.item.crafting.drying.rack.DryingRackBlock;
+import com.petrolpark.shared.world.item.crafting.drying.rack.DryingRackJadeBlockComponentProvider;
 
 import net.minecraft.world.level.block.Block;
 import snownee.jade.api.IWailaClientRegistration;

@@ -6,7 +6,6 @@ import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.i
 
 import java.util.List;
 
-import com.petrolpark.PetrolparkScratchExpressionTypes;
 import com.petrolpark.core.scratch.argument.ExpressionArgument;
 import com.petrolpark.core.scratch.argument.ExpressionArgument.ExpressionParameter;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
@@ -17,6 +16,7 @@ import com.petrolpark.core.scratch.classes.IScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.GenericExpression;
 import com.petrolpark.core.scratch.symbol.expression.TernaryGenericExpression;
+import com.petrolpark.registry.scratch.PetrolparkScratchExpressionTypes;
 
 public final class ListElementOrFallbackExpression<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends TernaryGenericExpression<
     IScratchEnvironment,

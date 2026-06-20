@@ -1,11 +1,11 @@
 package com.petrolpark.core.scratch.symbol.block.instance;
 
-import com.petrolpark.core.codec.ContextualCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.argument.NestedProcedureArgument;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.ScratchProcedure;
+import com.petrolpark.util.codec.ContextualCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
 
 import io.netty.buffer.ByteBuf;
 

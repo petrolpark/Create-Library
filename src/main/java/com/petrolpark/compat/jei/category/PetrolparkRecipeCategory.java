@@ -2,9 +2,9 @@ package com.petrolpark.compat.jei.category;
 
 import com.petrolpark.compat.jei.BiomeSpecificTooltipHelper;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
-import com.petrolpark.core.recipe.IBiomeSpecificRecipe;
-import com.petrolpark.core.recipe.book.IBookRequiredRecipe;
-import com.petrolpark.core.recipe.book.RecipeBookItem;
+import com.petrolpark.core.data.recipe.IBiomeSpecificRecipe;
+import com.petrolpark.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
+import com.petrolpark.core.world.item.crafting.recipeBook.RecipeBookItem;
 import com.petrolpark.util.Lang;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 

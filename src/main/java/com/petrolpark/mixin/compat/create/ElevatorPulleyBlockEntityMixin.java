@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.petrolpark.PetrolparkTags;
-import com.petrolpark.compat.create.core.block.entity.behaviour.FlagPoleBehaviour;
+import com.petrolpark.compat.create.core.world.block.entity.behaviour.FlagPoleBehaviour;
 import com.simibubi.create.content.contraptions.elevator.ElevatorPulleyBlockEntity;
 import com.simibubi.create.content.contraptions.pulley.PulleyBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;

@@ -7,9 +7,9 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import com.petrolpark.PetrolparkMobEffects;
-import com.petrolpark.core.inventory.extended.ExtendedInventory;
-import com.petrolpark.core.inventory.extended.ExtendedInventoryClientHandler;
+import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventory;
+import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventoryClientHandler;
+import com.petrolpark.shared.registry.SharedMobEffects;
 
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.gui.Gui;
@@ -99,6 +99,6 @@ public abstract class GuiMixin {
         index = 10   
     )
     private boolean petrolpark$numbnessCancelsHeartFlashing(boolean renderHighlight) {
-        return renderHighlight && !getCameraPlayer().hasEffect(PetrolparkMobEffects.NUMBNESS.getDelegate());
+        return renderHighlight && !getCameraPlayer().hasEffect(SharedMobEffects.NUMBNESS.getDelegate());
     };
 };

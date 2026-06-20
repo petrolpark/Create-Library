@@ -141,6 +141,10 @@ public class Lang {
         return Component.translatable(Petrolpark.translationKey(keyEnd), args);
     };
 
+    public static final LangBuilder builder() {
+        return new LangBuilder(Petrolpark.MOD_ID);
+    };
+
     public static final String genericTranslationKey(String keyEnd) {
         return Petrolpark.translationKey("generic." + keyEnd);
     };

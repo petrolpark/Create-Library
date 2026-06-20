@@ -4,7 +4,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import com.petrolpark.PetrolparkItemDisplayContexts;
+import com.petrolpark.registry.PetrolparkItemDisplayContexts;
 import com.simibubi.create.content.logistics.depot.DepotRenderer;
 
 import net.minecraft.world.item.ItemDisplayContext;

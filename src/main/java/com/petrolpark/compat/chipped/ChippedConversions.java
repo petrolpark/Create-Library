@@ -5,9 +5,9 @@ import static com.petrolpark.compat.Mods.CHIPPED;
 import java.util.function.Supplier;
 
 import com.petrolpark.Petrolpark;
+import com.petrolpark.shared.world.GoldConversion.RegisterGoldBlockConversionEvent;
 import com.petrolpark.util.BlockHelper;
 import com.petrolpark.util.Conversion;
-import com.petrolpark.util.GoldHelper.RegisterGoldBlockConversionEvent;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;

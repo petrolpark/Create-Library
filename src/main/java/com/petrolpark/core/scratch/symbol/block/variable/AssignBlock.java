@@ -2,7 +2,6 @@ package com.petrolpark.core.scratch.symbol.block.variable;
 
 import static com.petrolpark.core.scratch.argument.VariableArgument.variable;
 
-import com.petrolpark.PetrolparkScratchBlockTypes;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.argument.IScratchArgument;
 import com.petrolpark.core.scratch.argument.IScratchParameter;
@@ -14,6 +13,7 @@ import com.petrolpark.core.scratch.environment.variable.IVariableScratchEnvironm
 import com.petrolpark.core.scratch.environment.variable.ScratchVariableIdentifier;
 import com.petrolpark.core.scratch.symbol.block.BinaryGenericInstantBlock;
 import com.petrolpark.core.scratch.symbol.block.IScratchBlock;
+import com.petrolpark.registry.scratch.PetrolparkScratchBlockTypes;
 
 public class AssignBlock<TYPE, ARGUMENT extends IScratchArgument<IScratchEnvironment, TYPE>> extends BinaryGenericInstantBlock<
     IVariableScratchEnvironment,

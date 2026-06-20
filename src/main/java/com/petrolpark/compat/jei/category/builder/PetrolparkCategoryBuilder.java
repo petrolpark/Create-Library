@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.create.RequiresCreate;
 import com.petrolpark.compat.jei.category.ITickableCategory;
 import com.petrolpark.compat.jei.category.PetrolparkRecipeCategory;
 import com.simibubi.create.compat.jei.CreateJEI;

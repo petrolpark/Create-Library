@@ -2,7 +2,6 @@ package com.petrolpark.core.registrate;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.AbstractPetrolparkRegistrate;
 import com.petrolpark.Petrolpark;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
 

@@ -2,7 +2,7 @@ package com.petrolpark.compat.jei.category;
 
 import java.util.List;
 
-import com.petrolpark.core.recipe.ExampleRecipe;
+import com.petrolpark.core.data.recipe.ExampleRecipe;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import mezz.jei.api.helpers.IJeiHelpers;

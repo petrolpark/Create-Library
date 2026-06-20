@@ -9,8 +9,8 @@ import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.petrolpark.core.flags.IFlagPole;
 import com.petrolpark.core.flags.ItemFlagPole;
-import com.petrolpark.core.item.IItemStackDuck;
-import com.petrolpark.core.item.decay.ItemDecay;
+import com.petrolpark.core.world.item.IItemStackDuck;
+import com.petrolpark.core.world.item.decay.ItemDecay;
 import com.petrolpark.util.ItemHelper;
 
 import net.minecraft.world.item.ItemStack;

@@ -6,9 +6,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
 
-import com.petrolpark.compat.create.PetrolparkCreateDataComponentTypes;
-import com.petrolpark.compat.create.core.dough.DoughData;
-import com.petrolpark.compat.create.core.dough.IDough;
+import com.petrolpark.compat.create.core.world.dough.DoughData;
+import com.petrolpark.compat.create.core.world.dough.IDough;
+import com.petrolpark.compat.create.registry.PetrolparkCreateDataComponentTypes;
 
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.ingredients.subtypes.UidContext;

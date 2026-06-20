@@ -3,7 +3,7 @@ package com.petrolpark.util;
 import java.util.List;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.petrolpark.RequiresCreate;
+import com.petrolpark.compat.create.RequiresCreate;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.minecraft.core.BlockPos;

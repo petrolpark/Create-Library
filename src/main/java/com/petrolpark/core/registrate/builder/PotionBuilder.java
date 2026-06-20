@@ -6,8 +6,8 @@ import java.util.stream.Stream;
 
 import org.apache.commons.lang3.function.TriConsumer;
 
-import com.petrolpark.AbstractPetrolparkRegistrate;
-import com.petrolpark.PetrolparkRegistrateProviderTypes;
+import com.petrolpark.core.registrate.AbstractPetrolparkRegistrate;
+import com.petrolpark.registry.PetrolparkRegistrateProviderTypes;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.providers.ProviderType;

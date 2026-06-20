@@ -4,8 +4,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import com.petrolpark.compat.create.core.item.directional.DirectionalTransportedItemStack;
-import com.petrolpark.compat.create.core.item.directional.IDirectionalOnBelt;
+import com.petrolpark.compat.create.core.world.item.directional.DirectionalTransportedItemStack;
+import com.petrolpark.compat.create.core.world.item.directional.IDirectionalOnBelt;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.logistics.depot.SharedDepotBlockMethods;
 

@@ -3,11 +3,11 @@ package com.petrolpark.core.data.loot.numberprovider.itemstack;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.PetrolparkRegistries;
 import com.petrolpark.core.data.loot.numberprovider.ContextToolNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
 import com.petrolpark.core.data.loot.numberprovider.entity.EntityNumberProvider;
 import com.petrolpark.core.data.loot.numberprovider.team.TeamNumberProvider;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;

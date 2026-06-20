@@ -94,8 +94,8 @@
 
     "reward.petrolpark.xp": "经验值",
 
-    "shop.petrolpark.example": "示例商店",
-    "shop.petrolpark.unknown": "位置商店",
+    "restaurant.petrolpark.example": "示例商店",
+    "restaurant.petrolpark.unknown": "位置商店",
 
     "team.petrolpark.none": "无队伍"
 }

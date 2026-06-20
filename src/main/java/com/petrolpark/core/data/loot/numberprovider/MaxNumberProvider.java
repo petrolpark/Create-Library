@@ -5,7 +5,7 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import com.petrolpark.PetrolparkNumberProviderTypes;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;

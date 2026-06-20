@@ -4,11 +4,11 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
-import com.petrolpark.core.codec.ContextualCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.procedure.IScratchContextProvider;
 import com.petrolpark.util.Lang;
+import com.petrolpark.util.codec.ContextualCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Direction.Axis;

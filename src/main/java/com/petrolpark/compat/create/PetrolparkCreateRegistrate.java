@@ -5,7 +5,7 @@ import java.util.Optional;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.compat.create.core.AbstractPetrolparkCreateRegistrate;
+import com.petrolpark.compat.create.core.registrate.AbstractPetrolparkCreateRegistrate;
 import com.tterrag.registrate.providers.ProviderType;
 import com.tterrag.registrate.providers.RegistrateProvider;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;

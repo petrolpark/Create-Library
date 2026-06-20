@@ -6,7 +6,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import com.petrolpark.PetrolparkAttributes;
+import com.petrolpark.registry.PetrolparkAttributes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;

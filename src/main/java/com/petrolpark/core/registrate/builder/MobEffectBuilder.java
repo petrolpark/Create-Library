@@ -3,9 +3,9 @@ package com.petrolpark.core.registrate.builder;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.petrolpark.AbstractPetrolparkRegistrate;
-import com.petrolpark.PetrolparkRegistrateProviderTypes;
+import com.petrolpark.core.registrate.AbstractPetrolparkRegistrate;
 import com.petrolpark.core.registrate.MobEffectEntry;
+import com.petrolpark.registry.PetrolparkRegistrateProviderTypes;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.providers.ProviderType;

@@ -6,8 +6,8 @@ import java.util.function.Consumer;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
-import com.petrolpark.compat.create.core.block.entity.basin.AdvancedBasinOperatingBlockEntity;
-import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
+import com.petrolpark.compat.create.core.world.block.entity.basin.AdvancedBasinOperatingBlockEntity;
+import com.petrolpark.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;

@@ -2,11 +2,11 @@ package com.petrolpark.core.scratch.symbol.block;
 
 import javax.annotation.Nullable;
 
-import com.petrolpark.core.codec.ContextualCodec;
-import com.petrolpark.core.codec.ContextualStreamCodec;
 import com.petrolpark.core.scratch.ScratchArguments;
 import com.petrolpark.core.scratch.ScratchParameters;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
+import com.petrolpark.util.codec.ContextualCodec;
+import com.petrolpark.util.codec.ContextualStreamCodec;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 

@@ -4,9 +4,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.petrolpark.PetrolparkDataComponentTypes;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
-import com.petrolpark.core.item.decay.product.NoDecayProduct;
+import com.petrolpark.core.world.item.decay.product.NoDecayProduct;
+import com.petrolpark.registry.PetrolparkDataComponentTypes;
 
 import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;

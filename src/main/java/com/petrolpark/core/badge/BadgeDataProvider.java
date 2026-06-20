@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.Petrolpark;
-import com.petrolpark.PetrolparkRegistries;
+import com.petrolpark.registry.PetrolparkRegistries;
 
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;

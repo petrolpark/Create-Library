@@ -5,8 +5,8 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkNumberProviderTypes;
 import com.petrolpark.core.data.loot.numberprovider.NumberEstimate;
+import com.petrolpark.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.Entity;

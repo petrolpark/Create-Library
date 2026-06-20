@@ -5,9 +5,9 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import com.petrolpark.PetrolparkLootModifierTypes;
-import com.petrolpark.util.CodecHelper;
+import com.petrolpark.registry.PetrolparkLootModifierTypes;
 import com.petrolpark.util.JsonHelper;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.resources.RegistryOps;

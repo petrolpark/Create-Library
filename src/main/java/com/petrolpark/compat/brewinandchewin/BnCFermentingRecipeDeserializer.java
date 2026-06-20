@@ -5,12 +5,12 @@ import java.util.Optional;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
 import com.petrolpark.Petrolpark;
-import com.petrolpark.RequiresCreate;
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.create.common.processing.basinlid.LiddedBasinRecipe;
+import com.petrolpark.compat.create.RequiresCreate;
+import com.petrolpark.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
 import com.petrolpark.config.PetrolparkConfigs;
-import com.petrolpark.core.codec.RecordDecoderBuilder;
-import com.petrolpark.core.recipe.compat.CompatRecipeDeserializer;
+import com.petrolpark.core.data.recipe.compat.CompatRecipeDeserializer;
+import com.petrolpark.util.codec.RecordDecoderBuilder;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 
 import net.minecraft.resources.ResourceLocation;

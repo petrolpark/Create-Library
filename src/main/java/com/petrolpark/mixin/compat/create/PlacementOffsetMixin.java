@@ -9,7 +9,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import com.petrolpark.compat.create.core.block.IReplaceableBlock;
+import com.petrolpark.compat.create.core.world.block.IReplaceableBlock;
 
 import net.createmod.catnip.placement.PlacementOffset;
 import net.createmod.catnip.platform.services.ModHooksHelper;

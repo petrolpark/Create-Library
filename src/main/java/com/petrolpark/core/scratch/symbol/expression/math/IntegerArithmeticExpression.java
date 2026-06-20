@@ -2,7 +2,6 @@ package com.petrolpark.core.scratch.symbol.expression.math;
 
 import static com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.integerParameter;
 
-import com.petrolpark.PetrolparkScratchClasses;
 import com.petrolpark.core.scratch.argument.DropdownArgument;
 import com.petrolpark.core.scratch.argument.DropdownArgument.DropdownParameter;
 import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument;
@@ -10,6 +9,7 @@ import com.petrolpark.core.scratch.argument.ExpressionOrLiteralArgument.Expressi
 import com.petrolpark.core.scratch.classes.IntegerScratchClass;
 import com.petrolpark.core.scratch.environment.IScratchEnvironment;
 import com.petrolpark.core.scratch.symbol.expression.TernaryExpressionType;
+import com.petrolpark.registry.scratch.PetrolparkScratchClasses;
 import com.petrolpark.util.Lang;
 
 import net.minecraft.network.chat.Component;

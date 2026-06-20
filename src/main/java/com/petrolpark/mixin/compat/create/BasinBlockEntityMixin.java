@@ -8,9 +8,9 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import com.petrolpark.compat.create.core.block.entity.basin.BelowBasinOperatingBlockEntity;
-import com.petrolpark.compat.create.core.block.entity.basin.DirectlyAboveBasinOperatingBlockEntity;
-import com.petrolpark.core.recipe.book.IRecipeBookAcceptorBlockEntity;
+import com.petrolpark.compat.create.core.world.block.entity.basin.BelowBasinOperatingBlockEntity;
+import com.petrolpark.compat.create.core.world.block.entity.basin.DirectlyAboveBasinOperatingBlockEntity;
+import com.petrolpark.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
 import com.petrolpark.mixin.compat.create.accessor.BasinOperatingBlockEntityAccessor;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;

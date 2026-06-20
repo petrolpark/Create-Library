@@ -2,10 +2,10 @@ package com.petrolpark.core.flags.recipe;
 
 import javax.annotation.Nonnull;
 
-import com.petrolpark.PetrolparkDataComponentTypes;
-import com.petrolpark.PetrolparkRecipeSerializers;
 import com.petrolpark.core.flags.IFlagPole;
 import com.petrolpark.core.flags.ItemFlagPole;
+import com.petrolpark.registry.PetrolparkDataComponentTypes;
+import com.petrolpark.registry.PetrolparkRecipeSerializers;
 import com.petrolpark.util.ItemHelper;
 
 import net.minecraft.core.HolderLookup;

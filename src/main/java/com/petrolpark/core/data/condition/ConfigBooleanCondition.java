@@ -7,8 +7,8 @@ import javax.annotation.Nonnull;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.util.CodecHelper;
 import com.petrolpark.util.Pair;
+import com.petrolpark.util.codec.CodecHelper;
 
 import net.createmod.catnip.config.ui.ConfigHelper;
 import net.createmod.catnip.config.ui.ConfigHelper.ConfigPath;

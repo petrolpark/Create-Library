@@ -4,7 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.PetrolparkDataSubPredicates;
+import com.petrolpark.registry.PetrolparkDataSubPredicates;
 
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.server.level.ServerLevel;
