@@ -11,11 +11,14 @@ import com.petrolpark.compat.jei.category.extension.WoodCraftingCategoryExtensio
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
 import com.petrolpark.compat.jei.ingredient.BlockStateIngredientType;
 import com.petrolpark.compat.jei.ingredient.FlagIngredientType;
+import com.petrolpark.compat.jei.subtypeInterpreter.RecipeBookItemSubtypeInterpreter;
+import com.petrolpark.compat.jei.subtypeInterpreter.RestaurantMenuItemSubtypeInterpreter;
 import com.petrolpark.compat.jei.subtypeInterpreter.WoodenItemSubtypeInterpreter;
 import com.petrolpark.core.flags.Flaggables;
 import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInventoryJeiGuiHandler;
 import com.petrolpark.core.world.item.crafting.recipeBook.RecipeBookItemJEICategoryCache;
 import com.petrolpark.core.world.item.wooden.WoodCraftingShapedRecipe;
+import com.petrolpark.registry.PetrolparkItems;
 import com.petrolpark.registry.PetrolparkRegistries;
 import com.petrolpark.shared.SharedFeatureFlag;
 import com.petrolpark.shared.registry.SharedBlocks;
@@ -70,11 +73,13 @@ public class PetrolparkJEI implements IModPlugin {
     public void registerIngredients(IModIngredientRegistration registration) {
         registration.register(BiomeIngredientType.TYPE, BiomeIngredientType.HELPER.streamAll().toList(), BiomeIngredientType.HELPER, BiomeIngredientType.RENDERER, BiomeIngredientType.HELPER.getRegistry().byNameCodec());
         registration.register(BlockStateIngredientType.TYPE, Collections.emptySet(), BlockStateIngredientType.HELPER, BlockStateIngredientType.RENDERER, BlockState.CODEC);
-        registration.register(FlagIngredientType.TYPE, FlagIngredientType.HELPER.streamAll().toList(), FlagIngredientType.HELPER, FlagIngredientType.EMPTY_RENDERER, FlagIngredientType.HELPER.getRegistry().byNameCodec());
+        registration.register(FlagIngredientType.TYPE, FlagIngredientType.HELPER.streamAll().toList(), FlagIngredientType.HELPER, FlagIngredientType.ICON_RENDERER, FlagIngredientType.HELPER.getRegistry().byNameCodec());
     };
 
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
+        registration.registerSubtypeInterpreter(PetrolparkItems.RECIPE_BOOK.get(), RecipeBookItemSubtypeInterpreter.INSTANCE);
+        registration.registerSubtypeInterpreter(PetrolparkItems.MENU.get(), RestaurantMenuItemSubtypeInterpreter.INSTANCE);
         if (SharedFeatureFlag.DRYING_RACK.enabled()) registration.registerSubtypeInterpreter(SharedBlocks.DRYING_RACK.asItem(), WoodenItemSubtypeInterpreter.INSTANCE);
     };
 

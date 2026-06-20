@@ -1,0 +1,34 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "fries"
+        },
+        {
+            "type": "neoforge:or",
+            "values": [
+                {
+                    "type": "petrolpark:fluid_tag_empty",
+                    "tag": "c:oil/cooking"
+                },
+                {
+                    "type": "neoforge:not",
+                    "value": {
+                        "type": "petrolpark:feature_enabled",
+                        "feature": "mesh_basin"
+                    }
+                }
+            ]
+        }
+
+    ],
+    "type": "minecraft:campfire_cooking",
+    "ingredient": {
+        "item": "petrolpark:shared/raw_fries"
+    },
+    "result": {
+        "id": "petrolpark:shared/fries"
+    },
+    "experience": 0.35,
+    "cookingtime": 600
+}

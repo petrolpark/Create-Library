@@ -1,0 +1,83 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"render_type": "cutout",
+	"textures": {
+		"particle": "create:block/fluid_tank_inner",
+		"fluid_tank": "create:block/fluid_tank_inner",
+		"mesh_basin": "petrolpark:block/shared/mesh_basin"
+	},
+	"elements": [
+		{
+			"from": [2, 0, 2],
+			"to": [14, 2, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 0, 2]},
+			"faces": {
+				"north": {"uv": [1, 7, 7, 8], "texture": "#mesh_basin"},
+				"east": {"uv": [1, 7, 7, 8], "texture": "#mesh_basin"},
+				"south": {"uv": [1, 7, 7, 8], "texture": "#mesh_basin"},
+				"west": {"uv": [1, 7, 7, 8], "texture": "#mesh_basin"},
+				"down": {"uv": [2, 2, 14, 14], "texture": "#fluid_tank", "cullface": "down"}
+			}
+		},
+		{
+			"from": [0, 10, 0],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 2, 0]},
+			"faces": {
+				"north": {"uv": [0, 0, 8, 3], "texture": "#mesh_basin", "cullface": "north"},
+				"east": {"uv": [0, 0, 8, 3], "texture": "#mesh_basin", "cullface": "east"},
+				"south": {"uv": [0, 0, 8, 3], "texture": "#mesh_basin", "cullface": "south"},
+				"west": {"uv": [0, 0, 8, 3], "texture": "#mesh_basin", "cullface": "west"},
+				"up": {"uv": [0, 8, 8, 16], "texture": "#mesh_basin", "cullface": "up"},
+				"down": {"uv": [0, 8, 8, 16], "texture": "#mesh_basin"}
+			}
+		},
+		{
+			"name": "Basin Inner",
+			"from": [2, 16, 2],
+			"to": [14, 2, 14],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 16, 2]},
+			"faces": {
+				"north": {"uv": [2, 14, 14, 0], "texture": "#fluid_tank"},
+				"east": {"uv": [2, 14, 14, 0], "texture": "#fluid_tank"},
+				"south": {"uv": [2, 14, 14, 0], "texture": "#fluid_tank"},
+				"west": {"uv": [2, 14, 14, 0], "texture": "#fluid_tank"},
+				"up": {"uv": [2, 2, 14, 14], "texture": "#fluid_tank"}
+			}
+		},
+		{
+			"from": [0, 2, 0],
+			"to": [16, 8, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [12, 2, 0]},
+			"faces": {
+				"north": {"uv": [0, 4, 8, 7], "texture": "#mesh_basin", "cullface": "north"},
+				"east": {"uv": [0, 4, 8, 7], "texture": "#mesh_basin", "cullface": "east"},
+				"south": {"uv": [0, 4, 8, 7], "texture": "#mesh_basin", "cullface": "south"},
+				"west": {"uv": [0, 4, 8, 7], "texture": "#mesh_basin", "cullface": "west"},
+				"up": {"uv": [0, 8, 8, 16], "texture": "#mesh_basin"},
+				"down": {"uv": [0, 8, 8, 16], "texture": "#mesh_basin"}
+			}
+		},
+		{
+			"from": [1, 8, 1],
+			"to": [15, 10, 15],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 8, 0]},
+			"faces": {
+				"north": {"uv": [0.5, 3, 7.5, 4], "texture": "#mesh_basin"},
+				"east": {"uv": [0.5, 3, 7.5, 4], "texture": "#mesh_basin"},
+				"south": {"uv": [0.5, 3, 7.5, 4], "texture": "#mesh_basin"},
+				"west": {"uv": [0.5, 3, 7.5, 4], "texture": "#mesh_basin"}
+			}
+		},
+		{
+			"from": [1.5, 9, 1.5],
+			"to": [14.5, 9, 14.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 8, 0]},
+			"faces": {
+				"up": {"uv": [8, 0, 14.5, 6.5], "texture": "#mesh_basin"}
+			}
+		}
+	]
+}

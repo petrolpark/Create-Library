@@ -1,0 +1,24 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "sunflower_oil"
+    },
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "mesh_basin"
+    }
+  ],
+  "type": "petrolpark:juicing",
+  "ingredients": [
+    {
+      "item": "minecraft:sunflower"
+    }
+  ],
+  "results": [
+    {
+      "id": "petrolpark:shared/sunflower_oil",
+      "amount": 250
+    }
+  ]
+}

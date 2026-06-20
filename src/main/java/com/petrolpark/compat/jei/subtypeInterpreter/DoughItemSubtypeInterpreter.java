@@ -1,7 +1,5 @@
 package com.petrolpark.compat.jei.subtypeInterpreter;
 
-import java.util.Optional;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
@@ -27,7 +25,7 @@ public class DoughItemSubtypeInterpreter implements ISubtypeInterpreter<ItemStac
 
     @Override
     public String getLegacyStringSubtypeInfo(ItemStack ingredient, UidContext context) {
-        return ingredient.getDescriptionId() + ".dough." + Optional.ofNullable(getSubtypeData(ingredient, context)).map(IDough::uniqueString).orElse("none");
+        return "";
     };
     
 };

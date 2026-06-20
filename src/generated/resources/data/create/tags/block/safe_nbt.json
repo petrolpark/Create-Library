@@ -1,7 +1,7 @@
 {
   "values": [
     {
-      "id": "petrolpark:horse_mill_bearing",
+      "id": "petrolpark:shared/horse_mill_bearing",
       "required": false
     }
   ]

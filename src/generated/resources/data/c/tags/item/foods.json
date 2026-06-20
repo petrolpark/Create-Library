@@ -1,19 +1,19 @@
 {
   "values": [
     {
-      "id": "petrolpark:butter",
+      "id": "petrolpark:shared/butter",
       "required": false
     },
     {
-      "id": "petrolpark:fries",
+      "id": "petrolpark:shared/fries",
       "required": false
     },
     {
-      "id": "petrolpark:mashed_potato",
+      "id": "petrolpark:shared/mashed_potato",
       "required": false
     },
     {
-      "id": "petrolpark:raw_fries",
+      "id": "petrolpark:shared/raw_fries",
       "required": false
     }
   ]

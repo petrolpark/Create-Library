@@ -1,0 +1,37 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"particle": "create:block/redstone_antenna",
+		"antenna": "create:block/redstone_antenna"
+	},
+	"elements": [
+		{
+			"name": "AntennaTop",
+			"from": [0, 8, 0],
+			"to": [1, 9, 1],
+			"faces": {
+				"up": {"uv": [1, 1, 2, 2], "texture": "#antenna"}
+			}
+		},
+		{
+			"name": "AntennaX",
+			"from": [-1, 0, 0],
+			"to": [2, 10, 1],
+			"faces": {
+				"north": {"uv": [0, 0, 3, 10], "texture": "#antenna"},
+				"south": {"uv": [0, 0, 3, 10], "texture": "#antenna"},
+				"down": {"uv": [0, 9, 3, 10], "texture": "#antenna"}
+			}
+		},
+		{
+			"name": "AntennaZ",
+			"from": [0, 0, -1],
+			"to": [1, 10, 2],
+			"faces": {
+				"east": {"uv": [0, 0, 3, 10], "texture": "#antenna"},
+				"west": {"uv": [0, 0, 3, 10], "texture": "#antenna"}
+			}
+		}
+	]
+}

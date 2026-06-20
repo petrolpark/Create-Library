@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "petrolpark:block/shared/harness/block"
+    },
+    "facing=south": {
+      "model": "petrolpark:block/shared/harness/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "petrolpark:block/shared/harness/block",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "petrolpark:block/shared/harness/block",
+      "y": 90
+    }
+  }
+}

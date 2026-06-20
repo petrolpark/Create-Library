@@ -1,11 +1,11 @@
 {
   "values": [
     {
-      "id": "petrolpark:mashed_potato_block",
+      "id": "petrolpark:shared/mashed_potato_block",
       "required": false
     },
     {
-      "id": "petrolpark:raw_fries_block",
+      "id": "petrolpark:shared/raw_fries_block",
       "required": false
     }
   ]

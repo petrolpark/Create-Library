@@ -40,7 +40,7 @@ public class SharedPotionBuilder<P> extends PotionBuilder<P> {
 
     @Override
     public PotionBuilder<PotionBuilder<P>> potion(String name, String potionName) {
-        return petrolparkOwner.sharedEntry(featureFlag, name, callback -> create(petrolparkOwner, this, featureFlag, name, potionName, callback));
+        return petrolparkOwner.sharedEntry(featureFlag, callback -> create(petrolparkOwner, this, featureFlag, name, potionName, callback));
     };
     
 };

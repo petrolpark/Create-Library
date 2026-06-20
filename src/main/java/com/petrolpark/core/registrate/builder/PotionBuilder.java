@@ -97,14 +97,14 @@ public class PotionBuilder<P> extends AbstractBuilder<Potion, Potion, P, PotionB
     };
 
     public PotionBuilder<PotionBuilder<P>> defaultLong(float durationMultiplier) {
-        return potion("long_" + getName(), potionName)
+        return potion(prepend("long_", getName()), potionName)
             .effect(effectInstanceBuilders.stream().map(b -> b.copy()
                 .duration((int)(b.duration() * durationMultiplier))
             )).recipe((r, b, e) -> b.addMix(get().getDelegate(), Items.REDSTONE, e.getDelegate()));
     };
 
     public PotionBuilder<PotionBuilder<P>> defaultStrong() {
-        return potion("strong_" + getName(), potionName)
+        return potion(prepend("strong_", getName()), potionName)
             .effect(effectInstanceBuilders.stream().map(b -> b.copy()
                 .amplifier(b.amplifier() + 1)
                 .duration(b.duration() / 2)
@@ -114,6 +114,12 @@ public class PotionBuilder<P> extends AbstractBuilder<Potion, Potion, P, PotionB
     @Override
     protected @NonnullType Potion createEntry() {
         return new Potion(getOwner().getModid() + "." + potionName, effectInstanceBuilders.stream().map(MobEffectBuilder.MobEffectInstanceBuilder::build).toArray(MobEffectInstance[]::new));
+    };
+
+    protected String prepend(String prefix, String path) {
+        final int index = path.lastIndexOf('/');
+        if (index == -1) return prefix + path;
+        return path.substring(0, index + 1) + prefix + path.substring(index + 1);
     };
     
 };

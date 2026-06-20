@@ -30,9 +30,8 @@ public enum SharedFeatureFlag implements StringRepresentable {
     PROGRAMMING_BLOCK,
     REDSTONE_PROGRAMMER,
     ROLLING_PIN,
-    SLIPPING,
+    SLIPPING, //TODO remove 26.1
     SPRING,
-    TORQUE_LIMITER,
 
     // first-order dependent 
     EXTRUSION(MESH),

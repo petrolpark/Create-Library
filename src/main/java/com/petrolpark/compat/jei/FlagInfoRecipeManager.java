@@ -32,7 +32,11 @@ public class FlagInfoRecipeManager<STACK> implements ISimpleRecipeManagerPlugin<
 
     @Override
     public boolean isHandledInput(ITypedIngredient<?> input) {
-        return flaggable.getFlagPoleOptional(input.cast(ingredientType).getIngredient()).filter(IFlagPole::hasAnyFlag).isPresent();
+        return Optional.ofNullable(input.cast(ingredientType))
+            .map(ITypedIngredient::getIngredient)
+            .flatMap(flaggable::getFlagPoleOptional)
+            .filter(IFlagPole::hasAnyFlag)
+            .isPresent();
     };
 
     @Override
@@ -42,7 +46,9 @@ public class FlagInfoRecipeManager<STACK> implements ISimpleRecipeManagerPlugin<
 
     @Override
     public List<FlagInfoRecipe<STACK>> getRecipesForInput(ITypedIngredient<?> input) {
-        final STACK ingredient = input.cast(ingredientType).getIngredient();
+        final ITypedIngredient<STACK> typedIngredient = input.cast(ingredientType);
+        if (typedIngredient == null) return Collections.emptyList();
+        final STACK ingredient = typedIngredient.getIngredient();
         final IFlagPole<?, STACK> flags = flaggable.getFlagPole(ingredient);
         if (flags == null) return Collections.emptyList();
         final Optional<Pair<STACK, IFlagPole<?, STACK>>> pair = Optional.of(Pair.of(ingredient, flags));

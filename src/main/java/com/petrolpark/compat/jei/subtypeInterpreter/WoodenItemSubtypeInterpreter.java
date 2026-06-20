@@ -1,7 +1,5 @@
 package com.petrolpark.compat.jei.subtypeInterpreter;
 
-import java.util.Optional;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +23,7 @@ public class WoodenItemSubtypeInterpreter implements ISubtypeInterpreter<ItemSta
 
     @Override
     public String getLegacyStringSubtypeInfo(ItemStack ingredient, UidContext context) {
-        return ingredient.getDescriptionId() + ".wood." + Optional.ofNullable(getSubtypeData(ingredient, context)).map(wood -> wood.namespace() + "." + wood.name()).orElse("none");
+        return "";
     };
     
 };

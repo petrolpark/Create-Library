@@ -1,7 +1,7 @@
 {
   "values": [
     {
-      "id": "petrolpark:skimmed_milk_bucket",
+      "id": "petrolpark:shared/skimmed_milk_bucket",
       "required": false
     }
   ]

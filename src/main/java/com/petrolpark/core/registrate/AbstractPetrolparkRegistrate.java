@@ -478,16 +478,16 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
 
     };
 
-    public <R2, T extends R2, P, BUILDER extends AbstractBuilder<R2, T, P, BUILDER>> BUILDER sharedEntry(SharedFeatureFlag featureFlag, String name, NonNullFunction<BuilderCallback, BUILDER> factory) {
+    public <R2, T extends R2, P, BUILDER extends AbstractBuilder<R2, T, P, BUILDER>> BUILDER sharedEntry(SharedFeatureFlag featureFlag, NonNullFunction<BuilderCallback, BUILDER> factory) {
         return factory.apply(new SharedFeatureBuilderCallback(featureFlag)).asOptional();
     };
 
     public <T extends BlockEntity> SharedBlockEntityBuilder<T, R> sharedBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {
-        return (SharedBlockEntityBuilder<T, R>)sharedEntry(featureFlag, name, callback -> SharedBlockEntityBuilder.create(self(), self(), featureFlag, name, callback, factory));
+        return (SharedBlockEntityBuilder<T, R>)sharedEntry(featureFlag, callback -> SharedBlockEntityBuilder.create(self(), self(), featureFlag, name, callback, factory));
     };
 
     public <T extends Block, P> SharedBlockBuilder<T, R> sharedBlock(SharedFeatureFlag featureFlag, String name, NonNullFunction<BlockBehaviour.Properties, T> factory) {
-        return (SharedBlockBuilder<T, R>)sharedEntry(featureFlag, name, callback -> SharedBlockBuilder.create(self(), self(), featureFlag, name, callback, factory));
+        return (SharedBlockBuilder<T, R>)sharedEntry(featureFlag, callback -> SharedBlockBuilder.create(self(), self(), featureFlag, getSharedPath(name), callback, factory));
     };
 
     public <T extends Block> SharedBlockBuilder<T, R> sharedBlock(SharedFeatureFlag featureFlag, String name, NonNullBiFunction<BlockBehaviour.Properties, SharedFeatureFlag, T> factory) {
@@ -495,7 +495,7 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
     };
 
     public <T extends Item, P> SharedItemBuilder<T, P> sharedItem(P parent, SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
-        return (SharedItemBuilder<T, P>)sharedEntry(featureFlag, name, callback -> new SharedItemBuilder<>(this, parent, featureFlag, name, callback, factory));
+        return (SharedItemBuilder<T, P>)sharedEntry(featureFlag, callback -> new SharedItemBuilder<>(this, parent, featureFlag, getSharedPath(name), callback, factory));
     };
 
     public <T extends Item> SharedItemBuilder<T, R> sharedItem(SharedFeatureFlag featureFlag, String name, NonNullFunction<Item.Properties, T> factory) {
@@ -507,11 +507,15 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
     };
 
     public <T extends MobEffect> SharedMobEffectBuilder<T, R> sharedMobEffect(SharedFeatureFlag featureFlag, String name, MobEffectBuilder.Factory<T> factory) {
-        return (SharedMobEffectBuilder<T, R>)sharedEntry(featureFlag, name, callback -> SharedMobEffectBuilder.create(self(), self(), featureFlag, name, callback, factory));
+        return (SharedMobEffectBuilder<T, R>)sharedEntry(featureFlag, callback -> SharedMobEffectBuilder.create(self(), self(), featureFlag, getSharedPath(name), callback, factory));
     };
 
     public <I extends RecipeInput, T extends Recipe<? extends I>> RegistryEntry<RecipeType<?>, SharedRecipeType<T>> sharedRecipeType(SharedFeatureFlag featureFlag, String name) {
         return simple(name, Registries.RECIPE_TYPE, () -> new SharedRecipeType<>(ResourceLocation.fromNamespaceAndPath(getModid(), name), featureFlag));
+    };
+
+    public String getSharedPath(String path) {
+        return path.startsWith("shared/") ? path : "shared/" + path;
     };
     
 };

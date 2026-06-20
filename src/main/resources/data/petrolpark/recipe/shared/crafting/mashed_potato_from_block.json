@@ -1,0 +1,18 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "potato_products"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "tag": "c:storage_blocks/mashed_potato"
+    }
+  ],
+  "result": {
+    "id": "petrolpark:shared/mashed_potato",
+    "count": 9
+  }
+}

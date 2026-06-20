@@ -1,11 +1,11 @@
 {
   "values": [
     {
-      "id": "petrolpark:sunflower_oil_bottle",
+      "id": "petrolpark:shared/sunflower_oil_bottle",
       "required": false
     },
     {
-      "id": "petrolpark:egg_white_bottle",
+      "id": "petrolpark:shared/egg_white_bottle",
       "required": false
     }
   ]

@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "extrusion"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ASA"
+  ],
+  "key": {
+    "S": {
+      "item": "petrolpark:shared/mesh"
+    },
+    "A": {
+      "tag": "c:nuggets/iron"
+    }
+  },
+  "result": {
+    "id": "create:filter"
+  }
+}

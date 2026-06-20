@@ -33,11 +33,11 @@ public class SharedPartialModels {
     COW_HARNESS = block("harness/cow"),
     HORSE_HARNESSS = block("harness/horse"),
     DONKEY_HARNESS = block("harness/donkey"),
-    COW_DUMMY_LEG = block("harness/cow_dummy_leg")
+    COW_DUMMY_LEG = block("harness/cow_dummy/leg")
     ;
 
     private static PartialModel block(String path) {
-        return PartialModel.of(Petrolpark.asResource("block/"+path));
+        return PartialModel.of(Petrolpark.asResource("shared/block/"+path));
     };
 
     public static final void register() {};

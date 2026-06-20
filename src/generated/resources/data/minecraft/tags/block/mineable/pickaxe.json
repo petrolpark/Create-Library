@@ -1,35 +1,35 @@
 {
   "values": [
     {
-      "id": "petrolpark:basin_lid",
+      "id": "petrolpark:shared/basin_lid",
       "required": false
     },
     {
-      "id": "petrolpark:blender",
+      "id": "petrolpark:shared/blender",
       "required": false
     },
     {
-      "id": "petrolpark:centrifuge",
+      "id": "petrolpark:shared/centrifuge",
       "required": false
     },
     {
-      "id": "petrolpark:extrusion_die",
+      "id": "petrolpark:shared/extrusion_die",
       "required": false
     },
     {
-      "id": "petrolpark:horse_mill_bearing",
+      "id": "petrolpark:shared/horse_mill_bearing",
       "required": false
     },
     {
-      "id": "petrolpark:mandrel",
+      "id": "petrolpark:shared/mandrel",
       "required": false
     },
     {
-      "id": "petrolpark:mesh_basin",
+      "id": "petrolpark:shared/mesh_basin",
       "required": false
     },
     {
-      "id": "petrolpark:redstone_programmer",
+      "id": "petrolpark:shared/redstone_programmer",
       "required": false
     }
   ]

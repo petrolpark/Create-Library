@@ -1,0 +1,32 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "egg_products"
+    },
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "mesh_basin"
+    }
+  ],
+  "type": "petrolpark:juicing",
+  "ingredients": [
+    {
+      "item": "minecraft:egg"
+    }
+  ],
+  "results": [
+    {
+      "id": "petrolpark:shared/eggshell",
+      "count": 1
+    },
+    {
+      "id": "petrolpark:shared/yolk",
+      "count": 1
+    },
+    {
+      "id": "petrolpark:shared/egg_white",
+      "amount": 250
+    }
+  ]
+}

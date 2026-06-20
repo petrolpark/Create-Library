@@ -1,0 +1,36 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "drying_rack"
+    }
+  ],
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "petrolpark:wood"
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "petrolpark:shared/drying_rack"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "petrolpark:blocks/shared/drying_rack"
+}

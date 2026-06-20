@@ -8,8 +8,8 @@
   "damage": 4,
   "knockback": 0.2,
   "items": [
-    "petrolpark:fries",
-    "petrolpark:raw_fries"
+    "petrolpark:shared/fries",
+    "petrolpark:shared/raw_fries"
   ],
   "velocity_multiplier": 1.2,
   "reload_ticks": 10,

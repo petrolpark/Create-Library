@@ -1,0 +1,26 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "mandrel"
+        },
+        {
+            "type": "neoforge:mod_loaded",
+            "modid": "create"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "FNF",
+        "F F",
+        "F F"
+    ],
+    "key": {
+        "N": {
+            "tag": "c:nuggets/iron"
+        }
+    },
+    "result": {
+        "id": "petrolpark:shared/mandrel"
+    }
+}

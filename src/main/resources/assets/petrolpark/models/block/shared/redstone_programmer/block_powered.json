@@ -1,0 +1,7 @@
+{
+	"parent": "petrolpark:block/redstone_programmer/block",
+	"textures": {
+		"programmer": "petrolpark:block/shared/redstone_programmer_powered",
+		"particle": "petrolpark:block/shared/redstone_programmer_powered"
+	}
+}

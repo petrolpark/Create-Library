@@ -124,8 +124,10 @@ public class SharedCreateBlocks {
         .register();
 
     public static final BlockEntry<HarnessWithCowDummyBlock> HARNESS_WITH_COW_DUMMY = REGISTRATE.sharedBlock(SharedFeatureFlag.HORSE_MILL, "harness_with_cow_dummy", HarnessWithCowDummyBlock::new)
-        .properties(BlockBehaviour.Properties::noOcclusion)
-        .register();
+        .properties(p -> p
+            .noOcclusion()
+            .noLootTable()
+        ).register();
 
     public static final BlockEntry<MandrelBlock> MANDREL = REGISTRATE.sharedBlock(SharedFeatureFlag.MANDREL, "mandrel", MandrelBlock::new)
         .initialProperties(SharedProperties::stone)

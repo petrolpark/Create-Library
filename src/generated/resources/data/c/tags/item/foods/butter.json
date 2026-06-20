@@ -1,7 +1,7 @@
 {
   "values": [
     {
-      "id": "petrolpark:butter",
+      "id": "petrolpark:shared/butter",
       "required": false
     }
   ]

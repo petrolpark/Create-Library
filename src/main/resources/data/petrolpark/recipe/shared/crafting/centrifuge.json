@@ -1,0 +1,24 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "centrifuge"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "C",
+        "T"
+    ],
+    "key": {
+        "C": {
+            "item": "create:cogwheel"
+        },
+        "T": {
+            "item": "create:fluid_tank"
+        }
+    },
+    "result": {
+        "id": "petrolpark:shared/centrifuge"
+    }
+}

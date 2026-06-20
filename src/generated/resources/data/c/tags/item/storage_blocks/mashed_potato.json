@@ -1,7 +1,7 @@
 {
   "values": [
     {
-      "id": "petrolpark:mashed_potato_block",
+      "id": "petrolpark:shared/mashed_potato_block",
       "required": false
     }
   ]

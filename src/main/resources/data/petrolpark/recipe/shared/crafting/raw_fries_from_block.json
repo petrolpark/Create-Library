@@ -1,0 +1,18 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "fries"
+    }
+  ],
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "petrolpark:shared/raw_fries_block"
+    }
+  ],
+  "result": {
+    "id": "petrolpark:shared/raw_fries",
+    "count": 5
+  }
+}

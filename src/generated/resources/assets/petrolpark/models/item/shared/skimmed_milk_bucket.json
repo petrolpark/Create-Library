@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "petrolpark:item/shared/skimmed_milk_bucket"
+  }
+}

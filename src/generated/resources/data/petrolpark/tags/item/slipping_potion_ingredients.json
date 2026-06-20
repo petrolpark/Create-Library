@@ -1,7 +1,7 @@
 {
   "values": [
     {
-      "id": "petrolpark:sunflower_oil_bottle",
+      "id": "petrolpark:shared/sunflower_oil_bottle",
       "required": false
     }
   ]

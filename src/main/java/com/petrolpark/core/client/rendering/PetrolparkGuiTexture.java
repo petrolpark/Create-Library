@@ -5,6 +5,8 @@ import javax.annotation.Nonnull;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.petrolpark.Petrolpark;
 
+import net.createmod.catnip.gui.UIRenderHelper;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
@@ -27,6 +29,8 @@ public enum PetrolparkGuiTexture implements IGuiTexture {
 	JEI_EXPLOSION("jei/widgets", 169, 0, 18, 21),
     JEI_NERD_EMOJI("jei/widgets", 115, 19, 16, 14),
     JEI_GLOBE("jei/widgets", 115 + 16, 19, 16, 14),
+	JEI_FLAG("jei/widgets", 64, 40, 16, 16),
+	JEI_FLAGPOLE("jei/widgets", 80, 40, 16, 16),
 
     // Extended Inventory
     INVENTORY_BACKGROUND("inventory", 0, 0, 9, 9, 64, 64),
@@ -113,6 +117,17 @@ public enum PetrolparkGuiTexture implements IGuiTexture {
 	@OnlyIn(Dist.CLIENT)
 	public void render(@Nonnull GuiGraphics graphics, int x, int y) {
 		graphics.blit(location, x, y, startX, startY, width, height, textureWidth, textureHeight);
+	};
+
+	@OnlyIn(Dist.CLIENT)
+	public void render(@Nonnull GuiGraphics graphics, int x, int y, int color) {
+		render(graphics, x, y, new Color(color));
+	};
+
+	@OnlyIn(Dist.CLIENT)
+	public void render(GuiGraphics graphics, int x, int y, Color c) {
+		bind();
+		UIRenderHelper.drawColoredTexture(graphics, c, x, y, startX, startY, width, height);
 	};
 
     @Override

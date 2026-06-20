@@ -16,6 +16,7 @@ import com.petrolpark.compat.create.shared.content.processing.extrusion.Extrusio
 import com.petrolpark.compat.create.shared.content.processing.meshBasin.BoilingRecipe;
 import com.petrolpark.compat.create.shared.content.redstone.programmer.RedstoneProgrammerScreen;
 import com.petrolpark.compat.create.shared.registry.SharedCreateBlocks;
+import com.petrolpark.compat.create.shared.registry.SharedCreateItems;
 import com.petrolpark.compat.create.shared.registry.SharedCreateRecipeTypes;
 import com.petrolpark.compat.jei.category.DecayingItemCategory;
 import com.petrolpark.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
@@ -40,7 +41,6 @@ import com.petrolpark.core.world.item.crafting.ManualOnlyCraftingRecipe;
 import com.petrolpark.mixin.compat.jei.client.ForgePluginFinderMixin;
 import com.petrolpark.shared.SharedFeatureFlag;
 import com.petrolpark.shared.registry.SharedBlocks;
-import com.petrolpark.shared.registry.SharedItems;
 import com.petrolpark.shared.registry.SharedRecipeTypes;
 import com.petrolpark.shared.world.item.crafting.CropFertilizingRecipe;
 import com.petrolpark.shared.world.item.crafting.ageing.AgeingRecipe;
@@ -237,7 +237,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
     @Override
     public void registerItemSubtypes(@Nonnull ISubtypeRegistration registration) {
         registration.registerSubtypeInterpreter(SharedCreateBlocks.DOUGH.asItem(), DoughItemSubtypeInterpreter.INSTANCE);
-        if (SharedFeatureFlag.ROLLING_PIN.enabled()) registration.registerSubtypeInterpreter(SharedItems.ROLLING_PIN.get(), WoodenItemSubtypeInterpreter.INSTANCE);
+        if (SharedFeatureFlag.ROLLING_PIN.enabled()) registration.registerSubtypeInterpreter(SharedCreateItems.ROLLING_PIN.get(), WoodenItemSubtypeInterpreter.INSTANCE);
     };
 
     private <T extends Recipe<?>> CategoryBuilderImpl<T> builder(Class<? extends T> recipeClass) {

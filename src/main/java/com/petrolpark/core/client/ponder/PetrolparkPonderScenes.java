@@ -16,7 +16,7 @@ public class PetrolparkPonderScenes {
     public static final void register(PonderSceneRegistrationHelper<ResourceLocation> helper) {
         final PonderSceneRegistrationHelper<RegistryEntry<?, ?>> itemProviderHelper = helper.withKeyFunction(RegistryEntry::getId);
 
-        if (SharedFeatureFlag.DRYING_RACK.enabled()) itemProviderHelper.addStoryBoard(SharedBlocks.DRYING_RACK, "processing/drying/rack", DryingRackScenes::dryingRack);
+        if (SharedFeatureFlag.DRYING_RACK.enabled()) itemProviderHelper.addStoryBoard(SharedBlocks.DRYING_RACK, "shared/processing/drying/rack", DryingRackScenes::dryingRack);
 
         itemProviderHelper.addStoryBoard(PetrolparkItems.RECIPE_BOOK, "recipe_book/vanilla", RecipeBookScenes::recipeBook);
         if (Mods.CREATE.isLoaded()) itemProviderHelper.addStoryBoard(PetrolparkItems.RECIPE_BOOK, "recipe_book/create", RecipeBookScenes::create);

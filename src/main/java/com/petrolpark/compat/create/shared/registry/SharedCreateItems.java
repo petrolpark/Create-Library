@@ -74,7 +74,7 @@ public class SharedCreateItems {
         ).tag(Tags.Items.DRINK_CONTAINING_BOTTLE)
         .register();
     
-    public static final ItemEntry<SequencedAssemblyItem> UNPROCESSED_MASHED_POTATO = REGISTRATE.item("unprocessed_mashed_potato", SequencedAssemblyItem::new)
+    public static final ItemEntry<SequencedAssemblyItem> UNPROCESSED_MASHED_POTATO = REGISTRATE.sharedItem(SharedFeatureFlag.POTATO_PRODUCTS, "unprocessed_mashed_potato", SequencedAssemblyItem::new)
         .defaultModel()
         .register();
 

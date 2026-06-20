@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "petrolpark:block/shared/blender/block"
+    }
+  }
+}

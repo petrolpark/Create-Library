@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "petrolpark:block/shared/mandrel/block",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "petrolpark:block/shared/mandrel/block"
+    },
+    "facing=south": {
+      "model": "petrolpark:block/shared/mandrel/block",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "petrolpark:block/shared/mandrel/block",
+      "y": 270
+    }
+  }
+}

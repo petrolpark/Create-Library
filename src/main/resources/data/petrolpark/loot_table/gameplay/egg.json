@@ -23,7 +23,7 @@
               }
             }
           ],
-          "name": "petrolpark:eggshell"
+          "name": "petrolpark:shared/eggshell"
         }
       ],
       "rolls": 1.0

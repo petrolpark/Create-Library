@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,waterlogged=false": {
+      "model": "petrolpark:block/shared/basin_lid",
+      "y": 90
+    },
+    "facing=east,waterlogged=true": {
+      "model": "petrolpark:block/shared/basin_lid",
+      "y": 90
+    },
+    "facing=north,waterlogged=false": {
+      "model": "petrolpark:block/shared/basin_lid"
+    },
+    "facing=north,waterlogged=true": {
+      "model": "petrolpark:block/shared/basin_lid"
+    },
+    "facing=south,waterlogged=false": {
+      "model": "petrolpark:block/shared/basin_lid",
+      "y": 180
+    },
+    "facing=south,waterlogged=true": {
+      "model": "petrolpark:block/shared/basin_lid",
+      "y": 180
+    },
+    "facing=west,waterlogged=false": {
+      "model": "petrolpark:block/shared/basin_lid",
+      "y": 270
+    },
+    "facing=west,waterlogged=true": {
+      "model": "petrolpark:block/shared/basin_lid",
+      "y": 270
+    }
+  }
+}

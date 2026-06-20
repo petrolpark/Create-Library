@@ -1,7 +1,7 @@
 {
   "values": [
     {
-      "id": "petrolpark:blood_bucket",
+      "id": "petrolpark:shared/blood_bucket",
       "required": false
     }
   ]

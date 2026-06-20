@@ -1,0 +1,30 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "potato_products"
+    },
+    {
+      "type": "neoforge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "type": "neoforge:tag",
+      "tag": "c:cream",
+      "amount": 400
+    },
+    {
+      "type": "neoforge:tag",
+      "tag": "c:milk/skimmed",
+      "amount": 100
+    }
+  ],
+  "results": [
+    {
+      "id": "petrolpark:shared/butter"
+    }
+  ]
+}

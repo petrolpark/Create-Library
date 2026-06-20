@@ -2,10 +2,6 @@
     "sources": [
       {
         "type": "single",
-        "resource": "petrolpark:fluid/cream"
-      },
-      {
-        "type": "single",
         "resource": "minecraft:entity/cow/cow"
       }
     ]

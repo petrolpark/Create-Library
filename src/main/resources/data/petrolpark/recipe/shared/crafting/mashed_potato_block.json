@@ -1,0 +1,22 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "potato_products"
+    }
+  ],
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "MMM",
+    "MMM",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "tag": "c:foods/mashed_potato"
+    }
+  },
+  "result": {
+    "id": "petrolpark:shared/mashed_potato_block"
+  }
+}

@@ -1,15 +1,15 @@
 {
   "values": [
     {
-      "id": "petrolpark:blood_bucket",
+      "id": "petrolpark:shared/blood_bucket",
       "required": false
     },
     {
-      "id": "petrolpark:cream_bucket",
+      "id": "petrolpark:shared/cream_bucket",
       "required": false
     },
     {
-      "id": "petrolpark:skimmed_milk_bucket",
+      "id": "petrolpark:shared/skimmed_milk_bucket",
       "required": false
     }
   ]

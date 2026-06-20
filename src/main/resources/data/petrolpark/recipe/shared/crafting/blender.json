@@ -1,0 +1,28 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "blender"
+        }
+    ],
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        "P",
+        "A",
+        "W"
+    ],
+    "key": {
+        "P": {
+            "tag": "create:propeller"
+        },
+        "A": {
+            "item": "create:andesite_alloy_block"
+        },
+        "W": {
+            "item": "create:cogwheel"
+        }
+    },
+    "result": {
+        "id": "petrolpark:shared/blender"
+    }
+}

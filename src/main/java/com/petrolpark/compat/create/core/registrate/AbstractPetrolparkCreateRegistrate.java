@@ -4,7 +4,6 @@ import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.create.core.world.dough.DoughData;
 import com.petrolpark.compat.create.core.world.dough.ingredient.DoughIngredient;
 import com.petrolpark.compat.create.registry.PetrolparkCreateRegistries;
@@ -42,7 +41,7 @@ public class AbstractPetrolparkCreateRegistrate<R extends AbstractPetrolparkCrea
     };
 
     public <T extends BlockEntity> SharedCreateBlockEntityBuilder<T, R> sharedCreateBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {
-        return (SharedCreateBlockEntityBuilder<T, R>)sharedEntry(featureFlag, name, callback -> SharedCreateBlockEntityBuilder.create(self(), self(), featureFlag, name, callback, factory));
+        return (SharedCreateBlockEntityBuilder<T, R>)sharedEntry(featureFlag, callback -> SharedCreateBlockEntityBuilder.create(self(), self(), featureFlag, getSharedPath(name), callback, factory));
     };
 
     public FluidBuilder<VirtualFluidWithContainer, R> coloredWaterFluid(String name, int color, ItemLike container) {
@@ -83,12 +82,12 @@ public class AbstractPetrolparkCreateRegistrate<R extends AbstractPetrolparkCrea
         return sharedVirtualFluid(featureFlag, name, stillTexture, flowingTexture, (properties, st, ft) -> new ColoredFluidType(properties, st, ft, color), p -> VirtualFluidWithContainer.createSource(p, bucket), p -> VirtualFluidWithContainer.createFlowing(p, bucket));
     };
 
-    public FluidBuilder<VirtualFluidWithContainer, R> sharedSingleTextureVirtualContainerFluid(SharedFeatureFlag featureFlag, String name, ItemLike bucket) {
-        return sharedVirtualFluid(featureFlag, name, Petrolpark.asResource("fluid/"+name), Petrolpark.asResource("fluid/"+name), CreateRegistrate::defaultFluidType, p -> VirtualFluidWithContainer.createSource(p, bucket), p -> VirtualFluidWithContainer.createFlowing(p, bucket));
+    public FluidBuilder<VirtualFluidWithContainer, R> sharedContainerFluid(SharedFeatureFlag featureFlag, String name, ResourceLocation stillTexture, ResourceLocation flowingTeture, ItemLike bucket) {
+        return sharedVirtualFluid(featureFlag, name, stillTexture, flowingTeture, CreateRegistrate::defaultFluidType, p -> VirtualFluidWithContainer.createSource(p, bucket), p -> VirtualFluidWithContainer.createFlowing(p, bucket));
     };
 
     public <T extends BaseFlowingFluid> FluidBuilder<T, R> sharedVirtualFluid(SharedFeatureFlag featureFlag, String name, ResourceLocation stillTexture, ResourceLocation flowingTexture, FluidBuilder.FluidTypeFactory typeFactory, NonNullFunction<BaseFlowingFluid.Properties, T> sourceFactory, NonNullFunction<BaseFlowingFluid.Properties, T> flowingFactory) {
-		return sharedEntry(featureFlag, name, c -> new VirtualFluidBuilder<>(self(), self(), name, c, stillTexture, flowingTexture, typeFactory, sourceFactory, flowingFactory)).asOptional();
+		return sharedEntry(featureFlag, c -> new VirtualFluidBuilder<>(self(), self(), name, c, stillTexture, flowingTexture, typeFactory, sourceFactory, flowingFactory)).asOptional();
 	};
 
     public RegistryEntry<IAdvancedIngredientType<? super DoughData>, NamedAdvancedIngredientType<DoughData>> doughIngredientType(String name, MapCodec<? extends DoughIngredient> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends DoughIngredient> streamCodec) {

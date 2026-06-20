@@ -3,6 +3,7 @@ package com.petrolpark.compat.create.shared.registry;
 import static com.petrolpark.PetrolparkTags.commonFluidTag;
 import static com.petrolpark.compat.create.PetrolparkCreate.REGISTRATE;
 
+import com.petrolpark.Petrolpark;
 import com.petrolpark.PetrolparkTags;
 import com.petrolpark.core.world.fluid.VirtualFluidWithContainer;
 import com.petrolpark.shared.SharedFeatureFlag;
@@ -17,7 +18,7 @@ public class SharedCreateFluids {
     BLOOD = REGISTRATE.sharedColoredWaterContainerFluid(SharedFeatureFlag.BLOOD, "blood", 0xFFD10000, SharedCreateItems.BLOOD_BUCKET)
         .tag(commonFluidTag("blood"))
         .register(),
-    CREAM = REGISTRATE.sharedSingleTextureVirtualContainerFluid(SharedFeatureFlag.MILK_PRODUCTS, "cream", SharedCreateItems.CREAM_BUCKET)
+    CREAM = REGISTRATE.sharedContainerFluid(SharedFeatureFlag.MILK_PRODUCTS, "cream", Petrolpark.asResource("block/shared/cream"), Petrolpark.asResource("block/shared/cream"), SharedCreateItems.CREAM_BUCKET)
         .tag(commonFluidTag("cream"))
         .register(),
     EGG_WHITE = REGISTRATE.sharedColoredWaterContainerFluid(SharedFeatureFlag.EGG_PRODUCTS, "egg_white", 0xFFf3ff4f, SharedCreateItems.EGG_WHITE_BOTTLE)

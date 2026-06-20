@@ -1,23 +1,23 @@
 {
   "values": [
     {
-      "id": "petrolpark:drying_rack",
+      "id": "petrolpark:shared/drying_rack",
       "required": false
     },
     {
-      "id": "petrolpark:blender",
+      "id": "petrolpark:shared/blender",
       "required": false
     },
     {
-      "id": "petrolpark:horse_mill_bearing",
+      "id": "petrolpark:shared/horse_mill_bearing",
       "required": false
     },
     {
-      "id": "petrolpark:mandrel",
+      "id": "petrolpark:shared/mandrel",
       "required": false
     },
     {
-      "id": "petrolpark:redstone_programmer",
+      "id": "petrolpark:shared/redstone_programmer",
       "required": false
     }
   ]

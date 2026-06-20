@@ -1,0 +1,60 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"textures": {
+		"particle": "block/piston_top_sticky",
+		"end": "block/piston_top_sticky",
+		"side": "block/piston_side",
+		"harness": "petrolpark:block/shared/harness"
+	},
+	"elements": [
+		{
+			"from": [0, 0, 14],
+			"to": [16, 16, 16],
+			"rotation": {"angle": 0, "axis": "y", "origin": [0, 0, 14]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#harness"},
+				"east": {"uv": [0, 0, 16, 2], "rotation": 270, "texture": "#side"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#end"},
+				"west": {"uv": [0, 0, 16, 2], "rotation": 90, "texture": "#side"},
+				"up": {"uv": [0, 0, 16, 2], "rotation": 180, "texture": "#side"},
+				"down": {"uv": [0, 0, 16, 2], "texture": "#side"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, -135, 0],
+			"scale": [0.3, 0.3, 0.3]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 135, 0],
+			"translation": [2, 0, 0],
+			"scale": [0.5, 0.5, 0.5]
+		},
+		"fixed": {
+			"rotation": [0, -90, 0],
+			"translation": [-2, -1, 0],
+			"scale": [0.5, 0.5, 0.5]
+		}
+	}
+}

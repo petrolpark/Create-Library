@@ -71,6 +71,7 @@
         "ItemStackMixin",
         "LivingEntityMixin",
         "MobEffectInstanceMixin",
+        "ModelProviderMixin",
         "MultiPlayerGameModeMixin",
         "PlayerMixin",
         "RecipeManagerMixin",

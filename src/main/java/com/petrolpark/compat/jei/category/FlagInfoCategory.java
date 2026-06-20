@@ -16,7 +16,6 @@ import com.petrolpark.util.Pair;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
-import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
@@ -24,9 +23,6 @@ import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
-import mezz.jei.common.Internal;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -41,7 +37,7 @@ public class FlagInfoCategory<STACK> extends AbstractRecipeCategory<FlagInfoReci
     final IIngredientType<STACK> ingredientType;
 
     public FlagInfoCategory(IGuiHelper guiHelper, IIngredientType<STACK> ingredientType, mezz.jei.api.recipe.RecipeType<FlagInfoRecipe<STACK>> recipeType) {
-        super(recipeType, Lang.translate("recipe.flags"), Internal.getTextures().getInfoIcon(), 170, 125);
+        super(recipeType, Lang.translate("recipe.flags"), new FlagIngredientType.Icon(0xFF55B7F7), 170, 120);
         this.ingredientType = ingredientType;
     };
 
@@ -53,9 +49,10 @@ public class FlagInfoCategory<STACK> extends AbstractRecipeCategory<FlagInfoReci
             .addIngredient(ingredientType, recipe.stack().get().getFirst())
             .setStandardSlotBackground();
 
-        // Hidden "output": Flag
-        builder.addOutputSlot()
-            .addIngredient(FlagIngredientType.TYPE, recipe.flag().value());
+        builder.addOutputSlot(recipe.stack().isPresent() ? 20 : 0, 3)
+            .addIngredient(FlagIngredientType.TYPE, recipe.flag().value())
+            .setBackground(FlagIngredientType.BACKGROUND, -1, -1)
+            .setCustomRenderer(FlagIngredientType.TYPE, FlagIngredientType.FULL_RENDERER);
 
         // Output: children
         int children = 0;
@@ -65,40 +62,40 @@ public class FlagInfoCategory<STACK> extends AbstractRecipeCategory<FlagInfoReci
                 .setCustomRenderer(FlagIngredientType.TYPE, FlagIngredientType.FULL_RENDERER)
                 .setSlotName("child_" + children++);
         };
+
+        // Input: parents
+        int parents = 0;
+        for (Holder<Flag> parent : recipe.flag().value().getParents()) {
+            builder.addInputSlot()
+                .addIngredient(FlagIngredientType.TYPE, parent.value())
+                .setCustomRenderer(FlagIngredientType.TYPE, FlagIngredientType.FULL_RENDERER)
+                .setSlotName("parent" + parents++);
+        };
     };
 
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, FlagInfoRecipe<STACK> recipe, IFocusGroup focuses) {
-        //TODO make these better
-        // builder.addScrollBoxWidget(164, 27, 3, 45)
-        //     .setContents(recipe.flag().value().getChildren().stream().<FormattedText>map(Flag::getNameColored).toList());
-        // builder.addScrollBoxWidget(164, 27, 3, 90)
-        //     .setContents(recipe.flag().value().getParents().stream().<FormattedText>map(Flag::getNameColored).toList());
-    
-        final List<IRecipeSlotDrawable> childrenSlots = builder.getRecipeSlots().getSlots().stream().filter(slot -> slot.getSlotName().map(name -> name.startsWith("child")).orElse(false)).toList();
+        builder.addText(translate("preservationProportion", Lang.ONE_DP_DF.format(recipe.flag().value().getPreservationProportion() * 100)), getWidth(), getHeight())
+            .setPosition(0, 20)
+            .setColor(0xFF808080);
 
-        final CustomScrollGridRecipeWidget widget = new CustomScrollGridRecipeWidget(1, 3, childrenSlots, new IDrawable() {
+        builder.addText(translate("children"), getWidth(), getHeight())
+            .setPosition(0, 30)
+            .setColor(0xFF808080);
+        final List<IRecipeSlotDrawable> childSlots = builder.getRecipeSlots().getSlots().stream().filter(slot -> slot.getSlotName().map(name -> name.startsWith("child")).orElse(false)).toList();
+        final CustomScrollGridRecipeWidget childrenWidget = new CustomScrollGridRecipeWidget(1, 3, childSlots, FlagIngredientType.BACKGROUND);
+        childrenWidget.setPosition(0, 40);
+        builder.addSlottedWidget(childrenWidget, childSlots);
+        builder.addInputHandler(childrenWidget);
 
-            @Override
-            public int getWidth() {
-                return 164;
-            };
-
-            @Override
-            public int getHeight() {
-                return 10;
-            };
-
-            @Override
-            public void draw(GuiGraphics guiGraphics, int xOffset, int yOffset) {
-                
-            };
-                
-        });
-        widget.setPosition(3, 45);
-
-        builder.addSlottedWidget(widget, childrenSlots);
-        builder.addInputHandler(widget);
+        builder.addText(translate("parents"), getWidth(), getHeight())
+            .setPosition(0, 77)
+            .setColor(0xFF808080);
+        final List<IRecipeSlotDrawable> parentSlots = builder.getRecipeSlots().getSlots().stream().filter(slot -> slot.getSlotName().map(name -> name.startsWith("parent")).orElse(false)).toList();
+        final CustomScrollGridRecipeWidget parentsWidget = new CustomScrollGridRecipeWidget(1, 3, parentSlots, FlagIngredientType.BACKGROUND);
+        parentsWidget.setPosition(0, 87);
+        builder.addSlottedWidget(parentsWidget, parentSlots);
+        builder.addInputHandler(parentsWidget);
     };
 
     @Override
@@ -124,17 +121,7 @@ public class FlagInfoCategory<STACK> extends AbstractRecipeCategory<FlagInfoReci
         };
     };
 
-    @Override
-    public void draw(FlagInfoRecipe<STACK> recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        guiGraphics.drawString(Minecraft.getInstance().font, Flag.getNameColored(recipe.flag()), recipe.stack().isPresent() ? 20 : 0, 3, 0xFFFFFF);
-        guiGraphics.drawString(Minecraft.getInstance().font, translate("preservationProportion", Lang.ONE_DP_DF.format(recipe.flag().value().getPreservationProportion() * 100)), 0, 20, 0xFF808080, false);
-        guiGraphics.drawString(Minecraft.getInstance().font, translate("children"), 0, 32, 0xFF808080, false);
-        guiGraphics.drawString(Minecraft.getInstance().font, translate("parents"), 0, 77, 0xFF808080, false);
-        guiGraphics.fill(0, 42, 153, 75, 0xFF8B8B8B);
-        guiGraphics.fill(0, 87, 153, 120, 0xFF8B8B8B);
-    };
-
-    protected final Component translate(String suffix, Object ... args) {
+    public static final Component translate(String suffix, Object ... args) {
         return Lang.translate("jei.flags." + suffix, args);
     };
 
