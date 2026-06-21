@@ -6,8 +6,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.petrolpark.Petrolpark;
 import com.petrolpark.compat.jei.category.FlagInfoCategory;
-import com.petrolpark.compat.jei.category.FlagInfoCategory.FlagInfoRecipe;
+import com.petrolpark.compat.jei.category.IntrinsicFlagsCategory;
 import com.petrolpark.compat.jei.category.extension.WoodCraftingCategoryExtension;
+import com.petrolpark.compat.jei.category.recipeManagerPlugin.FlagInfoRecipeManager;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
 import com.petrolpark.compat.jei.ingredient.BlockStateIngredientType;
 import com.petrolpark.compat.jei.ingredient.FlagIngredientType;
@@ -19,13 +20,14 @@ import com.petrolpark.core.world.entity.player.extendedInventory.ExtendedInvento
 import com.petrolpark.core.world.item.crafting.recipeBook.RecipeBookItemJEICategoryCache;
 import com.petrolpark.core.world.item.wooden.WoodCraftingShapedRecipe;
 import com.petrolpark.registry.PetrolparkItems;
-import com.petrolpark.registry.PetrolparkRegistries;
 import com.petrolpark.shared.SharedFeatureFlag;
 import com.petrolpark.shared.registry.SharedBlocks;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.registration.IAdvancedRegistration;
 import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IModIngredientRegistration;
@@ -34,7 +36,8 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
-import mezz.jei.common.util.RegistryUtil;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
@@ -53,15 +56,24 @@ public class PetrolparkJEI implements IModPlugin {
 
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new FlagInfoCategory<>(registration.getJeiHelpers().getGuiHelper(), VanillaTypes.ITEM_STACK, FlagInfoCategory.ITEM_RECIPE_TYPE));
+        final IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
+
+        registration.addRecipeCategories(new FlagInfoCategory(guiHelper));
+        registration.addRecipeCategories(new IntrinsicFlagsCategory<>(guiHelper, Registries.ITEM.location(), VanillaTypes.ITEM_STACK, IntrinsicFlagsCategory.ITEM_RECIPE_TYPE));
+        registration.addRecipeCategories(new IntrinsicFlagsCategory<>(guiHelper, Registries.FLUID.location(), NeoForgeTypes.FLUID_STACK, IntrinsicFlagsCategory.FLUID_RECIPE_TYPE));
+
+        BiomeIngredientType.HELPER.registerTagInfoCategory(registration);
+        FlagIngredientType.HELPER.registerTagInfoCategory(registration);
     };
 
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(FlagInfoCategory.ITEM_RECIPE_TYPE, RegistryUtil.getRegistry(PetrolparkRegistries.Keys.FLAG).holders()
-            .map(FlagInfoRecipe::forItemStacks)
-            .toList()
-        );
+        FlagInfoCategory.addRecipes(registration);
+        registration.addRecipes(IntrinsicFlagsCategory.ITEM_RECIPE_TYPE, IntrinsicFlagsCategory.getAllRecipes(BuiltInRegistries.ITEM, Flaggables.ITEM));
+        registration.addRecipes(IntrinsicFlagsCategory.FLUID_RECIPE_TYPE, IntrinsicFlagsCategory.getAllRecipes(BuiltInRegistries.FLUID, Flaggables.FLUID));
+
+        BiomeIngredientType.HELPER.addTagRecipes(registration);
+        FlagIngredientType.HELPER.addTagRecipes(registration);
     };
 
     @Override
@@ -71,9 +83,9 @@ public class PetrolparkJEI implements IModPlugin {
 
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
-        registration.register(BiomeIngredientType.TYPE, BiomeIngredientType.HELPER.streamAll().toList(), BiomeIngredientType.HELPER, BiomeIngredientType.RENDERER, BiomeIngredientType.HELPER.getRegistry().byNameCodec());
+        registration.register(BiomeIngredientType.TYPE, BiomeIngredientType.HELPER.streamAll().toList(), BiomeIngredientType.HELPER, BiomeIngredientType.RENDERER, BiomeIngredientType.HELPER.codec());
         registration.register(BlockStateIngredientType.TYPE, Collections.emptySet(), BlockStateIngredientType.HELPER, BlockStateIngredientType.RENDERER, BlockState.CODEC);
-        registration.register(FlagIngredientType.TYPE, FlagIngredientType.HELPER.streamAll().toList(), FlagIngredientType.HELPER, FlagIngredientType.ICON_RENDERER, FlagIngredientType.HELPER.getRegistry().byNameCodec());
+        registration.register(FlagIngredientType.TYPE, FlagIngredientType.HELPER.streamAll().toList(), FlagIngredientType.HELPER, FlagIngredientType.ICON_RENDERER, FlagIngredientType.HELPER.codec());
     };
 
     @Override
@@ -85,7 +97,8 @@ public class PetrolparkJEI implements IModPlugin {
 
     @Override
     public void registerAdvanced(IAdvancedRegistration registration) {
-        registration.addTypedRecipeManagerPlugin(FlagInfoCategory.ITEM_RECIPE_TYPE, new FlagInfoRecipeManager<>(Flaggables.ITEM, VanillaTypes.ITEM_STACK));
+        registration.addTypedRecipeManagerPlugin(FlagInfoCategory.RECIPE_TYPE, new FlagInfoRecipeManager<>(Flaggables.ITEM, VanillaTypes.ITEM_STACK));
+        registration.addTypedRecipeManagerPlugin(FlagInfoCategory.RECIPE_TYPE, new FlagInfoRecipeManager<>(Flaggables.FLUID, NeoForgeTypes.FLUID_STACK));
     };
 
     @Override

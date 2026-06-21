@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create;
+package com.petrolpark.compat.create.core.client.ponder;
 
 import com.petrolpark.compat.create.core.world.block.chainConveyor.ChainConveyorScenes;
 import com.petrolpark.compat.create.core.world.block.crushingWheel.CrushingWheelScenes;

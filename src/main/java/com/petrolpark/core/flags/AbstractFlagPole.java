@@ -140,7 +140,7 @@ public abstract class AbstractFlagPole<OBJECT, OBJECT_STACK> implements IFlagPol
 
     @Override
     public boolean isIntrinsic(Holder<Flag> flagHolder) {
-        return getFlaggable().getShownIfAbsentFlags(getType()).contains(flagHolder);
+        return getFlaggable().getIntrinsicFlags(getType()).contains(flagHolder);
     };
 };
 

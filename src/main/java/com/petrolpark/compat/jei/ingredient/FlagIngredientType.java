@@ -6,6 +6,7 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.petrolpark.compat.jei.ingredient.FlagIngredientType.FlagHolderHolder;
 import com.petrolpark.core.client.rendering.PetrolparkGuiTexture;
 import com.petrolpark.core.flags.Flag;
 import com.petrolpark.registry.PetrolparkRegistries;
@@ -17,13 +18,14 @@ import mezz.jei.api.ingredients.IIngredientType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.TooltipFlag;
 
-public class FlagIngredientType implements IIngredientType<Flag> {
+public class FlagIngredientType implements IIngredientType<FlagHolderHolder> {
 
     public static final FlagIngredientType TYPE = new FlagIngredientType();
-    public static final RegistryIngredientHelper<Flag> HELPER = new RegistryIngredientHelper<>(TYPE, PetrolparkRegistries.Keys.FLAG);
+    public static final HolderIngredientHelper<Flag, FlagHolderHolder> HELPER = new HolderIngredientHelper<>(TYPE, PetrolparkRegistries.Keys.FLAG, FlagHolderHolder::new);
     public static final FlagIngredientType.EmptyRenderer EMPTY_RENDERER = new FlagIngredientType.EmptyRenderer();
     public static final FlagIngredientType.IconRenderer ICON_RENDERER = new FlagIngredientType.IconRenderer();
     public static final FlagIngredientType.FullRenderer FULL_RENDERER = new FlagIngredientType.FullRenderer();
@@ -47,22 +49,24 @@ public class FlagIngredientType implements IIngredientType<Flag> {
         
     };
 
+    public record FlagHolderHolder(Holder<Flag> holder) implements HolderIngredientHelper.HolderHolder<Flag> {};
+
     @Override
-    public Class<Flag> getIngredientClass() {
-        return Flag.class;
+    public Class<FlagHolderHolder> getIngredientClass() {
+        return FlagHolderHolder.class;
     };
 
     @ParametersAreNonnullByDefault
-    public static class EmptyRenderer implements IIngredientRenderer<Flag> {
+    public static class EmptyRenderer implements IIngredientRenderer<FlagHolderHolder> {
 
         @Override
-        public void render(GuiGraphics guiGraphics, Flag ingredient) {
+        public void render(GuiGraphics guiGraphics, FlagHolderHolder ingredient) {
             
         };
 
         @Override
-        public List<Component> getTooltip(Flag ingredient, TooltipFlag tooltipFlag) {
-            return Collections.singletonList(Flag.getNameColored(HELPER.wrapAsHolder(ingredient)));
+        public List<Component> getTooltip(FlagHolderHolder ingredient, TooltipFlag tooltipFlag) {
+            return Collections.singletonList(Flag.getNameColored(ingredient.holder()));
         };
 
     };
@@ -71,8 +75,8 @@ public class FlagIngredientType implements IIngredientType<Flag> {
     public static class IconRenderer extends EmptyRenderer {
 
         @Override
-        public void render(GuiGraphics guiGraphics, Flag ingredient) {
-            render(guiGraphics, 0xFF000000 | ingredient.getColor());
+        public void render(GuiGraphics guiGraphics, FlagHolderHolder ingredient) {
+            render(guiGraphics, 0xFF000000 | ingredient.value().getColor());
         };
 
         public void render(GuiGraphics guiGraphics, int color) {
@@ -86,9 +90,9 @@ public class FlagIngredientType implements IIngredientType<Flag> {
     public static class FullRenderer extends EmptyRenderer {
 
         @Override
-        public void render(GuiGraphics guiGraphics, Flag ingredient) {
+        public void render(GuiGraphics guiGraphics, FlagHolderHolder ingredient) {
             final Font font = Minecraft.getInstance().font;
-            guiGraphics.drawString(font, Lang.shorten(Flag.getName(HELPER.wrapAsHolder(ingredient)).getString(), font, 148), 1, 0, ingredient.getColor());
+            guiGraphics.drawString(font, Lang.shorten(Flag.getName(ingredient.holder()).getString(), font, 148), 1, 0, ingredient.value().getColor());
         };
 
         @Override

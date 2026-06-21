@@ -1,7 +1,7 @@
 package com.petrolpark;
 
 import com.petrolpark.compat.Mods;
-import com.petrolpark.compat.create.registry.PetrolparkCreateClient;
+import com.petrolpark.compat.create.PetrolparkCreateClient;
 import com.petrolpark.compat.curios.PetrolparkCuriosClient;
 import com.petrolpark.compat.jei.PetrolparkJEI;
 import com.petrolpark.core.client.ponder.PetrolparkPonderPlugin;

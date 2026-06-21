@@ -1,4 +1,4 @@
-package com.petrolpark.compat.create;
+package com.petrolpark.compat.create.core.client.ponder;
 
 import com.petrolpark.compat.create.shared.registry.SharedCreateBlocks;
 import com.petrolpark.shared.SharedFeatureFlag;

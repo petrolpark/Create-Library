@@ -1026,7 +1026,6 @@
       "id": "petrolpark:shared/centrifuge",
       "required": false
     },
-    "petrolpark:dough",
     {
       "id": "petrolpark:shared/extrusion_die",
       "required": false
@@ -1038,6 +1037,7 @@
     {
       "id": "petrolpark:shared/mandrel",
       "required": false
-    }
+    },
+    "petrolpark:dough"
   ]
 }

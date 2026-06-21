@@ -1,4 +1,4 @@
-package com.petrolpark.compat.jei;
+package com.petrolpark.compat.jei.category.recipeManagerPlugin;
 
 import java.util.Collections;
 import java.util.List;
@@ -7,7 +7,7 @@ import java.util.Optional;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.petrolpark.compat.jei.category.FlagInfoCategory.FlagInfoRecipe;
-import com.petrolpark.core.flags.Flag;
+import com.petrolpark.compat.jei.ingredient.FlagIngredientType.FlagHolderHolder;
 import com.petrolpark.core.flags.Flaggable;
 import com.petrolpark.core.flags.IFlagPole;
 import com.petrolpark.registry.PetrolparkRegistries;
@@ -17,10 +17,9 @@ import mezz.jei.api.ingredients.IIngredientType;
 import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.api.recipe.advanced.ISimpleRecipeManagerPlugin;
 import mezz.jei.common.util.RegistryUtil;
-import net.minecraft.core.Holder;
 
 @ParametersAreNonnullByDefault
-public class FlagInfoRecipeManager<STACK> implements ISimpleRecipeManagerPlugin<FlagInfoRecipe<STACK>> {
+public class FlagInfoRecipeManager<STACK> implements ISimpleRecipeManagerPlugin<FlagInfoRecipe> {
 
     protected final Flaggable<?, STACK> flaggable;
     protected final IIngredientType<STACK> ingredientType;
@@ -45,32 +44,28 @@ public class FlagInfoRecipeManager<STACK> implements ISimpleRecipeManagerPlugin<
     };
 
     @Override
-    public List<FlagInfoRecipe<STACK>> getRecipesForInput(ITypedIngredient<?> input) {
+    public List<FlagInfoRecipe> getRecipesForInput(ITypedIngredient<?> input) {
         final ITypedIngredient<STACK> typedIngredient = input.cast(ingredientType);
         if (typedIngredient == null) return Collections.emptyList();
         final STACK ingredient = typedIngredient.getIngredient();
         final IFlagPole<?, STACK> flags = flaggable.getFlagPole(ingredient);
         if (flags == null) return Collections.emptyList();
-        final Optional<Pair<STACK, IFlagPole<?, STACK>>> pair = Optional.of(Pair.of(ingredient, flags));
+        final Optional<Pair<ITypedIngredient<?>, IFlagPole<?, ?>>> pair = Optional.of(Pair.of(typedIngredient, flags));
         return flags.streamAllFlags()
-            .map(flag -> new FlagInfoRecipe<>(pair, flag))
+            .map(flag -> new FlagInfoRecipe(pair, new FlagHolderHolder(flag)))
             .toList();
     };
 
     @Override
-    public List<FlagInfoRecipe<STACK>> getRecipesForOutput(ITypedIngredient<?> output) {
+    public List<FlagInfoRecipe> getRecipesForOutput(ITypedIngredient<?> output) {
         return getRecipesForInput(output);
     };
 
     @Override
-    public List<FlagInfoRecipe<STACK>> getAllRecipes() {
+    public List<FlagInfoRecipe> getAllRecipes() {
         return RegistryUtil.getRegistry(PetrolparkRegistries.Keys.FLAG).holders()
-            .map(this::createUnboundRecipe)
+            .map(FlagInfoRecipe::new)
             .toList();
-    };
-
-    protected FlagInfoRecipe<STACK> createUnboundRecipe(Holder<Flag> flag) {
-        return new FlagInfoRecipe<>(Optional.empty(), flag);
     };
     
 };

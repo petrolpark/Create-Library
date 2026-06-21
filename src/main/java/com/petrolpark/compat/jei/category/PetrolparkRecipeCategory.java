@@ -2,6 +2,7 @@ package com.petrolpark.compat.jei.category;
 
 import com.petrolpark.compat.jei.BiomeSpecificTooltipHelper;
 import com.petrolpark.compat.jei.ingredient.BiomeIngredientType;
+import com.petrolpark.compat.jei.ingredient.BiomeIngredientType.BiomeHolderHolder;
 import com.petrolpark.core.data.recipe.IBiomeSpecificRecipe;
 import com.petrolpark.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
 import com.petrolpark.core.world.item.crafting.recipeBook.RecipeBookItem;
@@ -38,7 +39,7 @@ public abstract class PetrolparkRecipeCategory<T extends Recipe<?>> extends Crea
         if (!(recipe instanceof IBiomeSpecificRecipe biomeRecipe)) return;
         if (biomeRecipe.getAllowedBiomes().map(HolderSet::size).orElse(0) != 0) builder.addSlot(RecipeIngredientRole.RENDER_ONLY, x, y)
             .setBackground(getRenderedSlot(), -1, -1)
-            .addIngredients(BiomeIngredientType.TYPE, BiomeSpecificTooltipHelper.getAllBiomes(biomeRecipe).toList())
+            .addIngredients(BiomeIngredientType.TYPE, BiomeSpecificTooltipHelper.streamAllBiomes(biomeRecipe).map(BiomeHolderHolder::new).toList())
             .addRichTooltipCallback(BiomeSpecificTooltipHelper.getAllowedBiomeList(biomeRecipe)); 
     };
 

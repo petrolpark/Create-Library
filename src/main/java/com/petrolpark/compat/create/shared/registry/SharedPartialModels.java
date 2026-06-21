@@ -37,7 +37,7 @@ public class SharedPartialModels {
     ;
 
     private static PartialModel block(String path) {
-        return PartialModel.of(Petrolpark.asResource("shared/block/"+path));
+        return PartialModel.of(Petrolpark.asResource("block/shared/"+path));
     };
 
     public static final void register() {};

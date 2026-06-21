@@ -1,7 +1,7 @@
-package com.petrolpark.compat.create.registry;
+package com.petrolpark.compat.create;
 
-import com.petrolpark.compat.create.PetrolparkCreatePonderPlugin;
 import com.petrolpark.compat.create.core.client.offGridTiling.OffGridTilingMetadataSection;
+import com.petrolpark.compat.create.core.client.ponder.PetrolparkCreatePonderPlugin;
 import com.petrolpark.compat.create.core.data.recipe.RecipeBookProviderHighlighter;
 import com.petrolpark.compat.create.core.event.CreateClientEvents;
 import com.petrolpark.compat.create.core.event.CreateClientModEvents;

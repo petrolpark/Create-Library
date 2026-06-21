@@ -1,9 +1,11 @@
 package com.petrolpark.core.flags;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.petrolpark.PetrolparkTags;
@@ -109,12 +111,17 @@ public interface IFlagPole<OBJECT, OBJECT_STACK> {
     public Stream<Holder<Flag>> streamOrphanExtrinsicFlags();
 
     public default Stream<Holder<Flag>> streamShownFlags() {
-        List<Holder<Flag>> shownIfAbsent = streamShownAbsentFlags().toList();
-        return streamAllFlags().dropWhile(PetrolparkTags.Flags.HIDDEN::matches).dropWhile(shownIfAbsent::contains);
+        final Set<Holder<Flag>> shownIfAbsent = streamShownAbsentFlags().collect(Collectors.toSet());
+        return streamAllFlags()
+            .filter(Predicate.not(PetrolparkTags.Flags.HIDDEN::matches))
+            .filter(Predicate.not(shownIfAbsent::contains))
+            .filter(flag -> flag.value().getParents().stream().noneMatch(this::has));
     };
 
     public default Stream<Holder<Flag>> streamShownAbsentFlags() {
-        return streamShownIfAbsentFlags().dropWhile(this::has).dropWhile(PetrolparkTags.Flags.HIDDEN::matches);
+        return streamShownIfAbsentFlags()
+            .filter(Predicate.not(this::has))
+            .filter(Predicate.not(PetrolparkTags.Flags.HIDDEN::matches));
     };
 
     public boolean flag(Holder<Flag> flagHolder);

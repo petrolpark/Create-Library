@@ -7,40 +7,44 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.petrolpark.compat.jei.JEITextureDrawable;
+import com.petrolpark.compat.jei.ingredient.BiomeIngredientType.BiomeHolderHolder;
 import com.petrolpark.core.client.rendering.PetrolparkGuiTexture;
 
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.biome.Biome;
 
-public class BiomeIngredientType implements IIngredientType<Biome> {
+public class BiomeIngredientType implements IIngredientType<BiomeHolderHolder> {
 
     public static final BiomeIngredientType TYPE = new BiomeIngredientType();
-    public static final RegistryIngredientHelper<Biome> HELPER = new RegistryIngredientHelper<>(TYPE, Registries.BIOME, "biome");
+    public static final HolderIngredientHelper<Biome, BiomeHolderHolder> HELPER = new HolderIngredientHelper<>(TYPE, Registries.BIOME, BiomeHolderHolder::new, "biome");
     public static final Renderer RENDERER = new BiomeIngredientType.Renderer();
 
     @Override
-    public Class<Biome> getIngredientClass() {
-        return Biome.class;
+    public Class<BiomeHolderHolder> getIngredientClass() {
+        return BiomeHolderHolder.class;
     };
 
-    public static class Renderer implements IIngredientRenderer<Biome> {
+    public record BiomeHolderHolder(Holder<Biome> holder) implements HolderIngredientHelper.HolderHolder<Biome> {};
+
+    public static class Renderer implements IIngredientRenderer<BiomeHolderHolder> {
 
         private final JEITextureDrawable globe = JEITextureDrawable.of(PetrolparkGuiTexture.JEI_GLOBE);
 
         @Override
-        public void render(@Nonnull GuiGraphics guiGraphics, @Nonnull Biome ingredient) {
+        public void render(@Nonnull GuiGraphics guiGraphics, @Nonnull BiomeHolderHolder ingredient) {
             globe.draw(guiGraphics, 0, 1);
         };
 
         @Override
-        public List<Component> getTooltip(@Nonnull Biome ingredient, @Nonnull TooltipFlag tooltipFlag) {
+        public List<Component> getTooltip(@Nonnull BiomeHolderHolder ingredient, @Nonnull TooltipFlag tooltipFlag) {
             ResourceLocation rl = HELPER.getResourceLocation(ingredient);
             if (rl == null) return Collections.emptyList();
             List<Component> tooltip = new ArrayList<>(tooltipFlag.isAdvanced() ? 2 : 1);

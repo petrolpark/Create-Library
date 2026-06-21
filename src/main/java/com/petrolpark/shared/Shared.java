@@ -23,7 +23,7 @@ import net.neoforged.neoforgespi.language.ModFileScanData;
 
 public class Shared {
     
-    public static final void init(IEventBus modEventBus, ModContainer modContainer) {
+    public static final void ctor(IEventBus modEventBus, ModContainer modContainer) {
 
         initializeSharedFeatures();
 
@@ -35,7 +35,6 @@ public class Shared {
         SharedParticleTypes.register();
         SharedRecipeSerializers.register();
         SharedRecipeTypes.register();
-    
     };
 
     private static final void initializeSharedFeatures() {

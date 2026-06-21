@@ -2,7 +2,7 @@ package com.petrolpark.compat.create.core.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.petrolpark.compat.create.registry.PetrolparkCreateClient;
+import com.petrolpark.compat.create.PetrolparkCreateClient;
 import com.petrolpark.core.event.ClientEvents;
 
 import net.createmod.catnip.animation.AnimationTickHolder;

@@ -1,11 +1,11 @@
 {
   "values": [
     {
-      "id": "petrolpark:flowing_blood",
+      "id": "petrolpark:shared/flowing_blood",
       "required": false
     },
     {
-      "id": "petrolpark:blood",
+      "id": "petrolpark:shared/blood",
       "required": false
     }
   ]

@@ -11,27 +11,26 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.Registries;
+import net.minecraft.core.HolderSet;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
 
 public class BiomeSpecificTooltipHelper {
 
-    public static final Stream<Biome> getAllBiomes(IBiomeSpecificRecipe recipe) {
+    public static final Stream<Holder<Biome>> streamAllBiomes(IBiomeSpecificRecipe recipe) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) return Stream.empty();
-        return recipe.getAllowedBiomes().map(op -> op.stream().map(Holder::value)).orElse(Stream.empty());
+        return recipe.getAllowedBiomes().stream().flatMap(HolderSet::stream);
     };
     
     public static final IRecipeSlotRichTooltipCallback getAllowedBiomeList(IBiomeSpecificRecipe recipe) {
         Minecraft minecraft = Minecraft.getInstance();
         ClientLevel level = minecraft.level;
         if (level == null) return (view, tooltip) -> {};
-        RegistryAccess registryAccess = level.registryAccess();
-        List<ResourceLocation> biomes = getAllBiomes(recipe).map(biome -> registryAccess.registryOrThrow(Registries.BIOME).getKey(biome)).toList();
+        List<ResourceLocation> biomes = streamAllBiomes(recipe).map(Holder::getKey).map(ResourceKey::location).toList();
         return (view, tooltip) -> {
             if (!biomes.isEmpty()) tooltip.add(Component.EMPTY);
             tooltip.add(Lang.translate("recipe.biome_specific").withStyle(ChatFormatting.WHITE));

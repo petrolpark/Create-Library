@@ -71,6 +71,12 @@ public class Lang {
         return Component.literal(shorten(component.getString(), font, maxWidth)).withStyle(component.getStyle());
     };
 
+    public static final String prependPath(String prefix, String path) {
+        final int index = path.lastIndexOf('/');
+        if (index == -1) return prefix + path;
+        return path.substring(0, index + 1) + prefix + path.substring(index + 1);
+    };
+
     public static Component shortList(List<? extends Component> elements, int maxTextWidth) {
         return shortList(elements, maxTextWidth, Minecraft.getInstance().font);
     };

@@ -28,7 +28,7 @@ public abstract class BuiltInRegistryFlaggable<OBJECT, OBJECT_STACK> extends Fla
 
     @Override
     public final Collection<Holder<Flag>> getIntrinsicFlags(OBJECT object) {
-        return Optional.ofNullable(builtInRegistry.wrapAsHolder(object).getData(intrinsicFlagsDataMapType)).orElseGet(Collections::emptyList);
+        return Optional.ofNullable(builtInRegistry.wrapAsHolder(object).getData(intrinsicFlagsDataMapType)).map(BuiltInRegistryFlaggable::withChildren).orElseGet(Collections::emptySet);
     };
 
     @Override
@@ -58,7 +58,7 @@ public abstract class BuiltInRegistryFlaggable<OBJECT, OBJECT_STACK> extends Fla
             .collect(Collectors.toMap(Pair::getFirst, Pair::getSecond));
     };
 
-    public static Set<Holder<Flag>> withChildren(Set<Holder<Flag>> flags) {
+    public static Set<Holder<Flag>> withChildren(Collection<Holder<Flag>> flags) {
         return Stream.concat(flags.stream(), flags.stream().map(Holder::value).map(Flag::getChildren).flatMap(Set::stream)).collect(Collectors.toSet()); 
     };
     

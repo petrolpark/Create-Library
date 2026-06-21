@@ -87,7 +87,7 @@ public class AbstractPetrolparkCreateRegistrate<R extends AbstractPetrolparkCrea
     };
 
     public <T extends BaseFlowingFluid> FluidBuilder<T, R> sharedVirtualFluid(SharedFeatureFlag featureFlag, String name, ResourceLocation stillTexture, ResourceLocation flowingTexture, FluidBuilder.FluidTypeFactory typeFactory, NonNullFunction<BaseFlowingFluid.Properties, T> sourceFactory, NonNullFunction<BaseFlowingFluid.Properties, T> flowingFactory) {
-		return sharedEntry(featureFlag, c -> new VirtualFluidBuilder<>(self(), self(), name, c, stillTexture, flowingTexture, typeFactory, sourceFactory, flowingFactory)).asOptional();
+		return sharedEntry(featureFlag, c -> new VirtualFluidBuilder<>(self(), self(), getSharedPath(name), c, stillTexture, flowingTexture, typeFactory, sourceFactory, flowingFactory)).asOptional();
 	};
 
     public RegistryEntry<IAdvancedIngredientType<? super DoughData>, NamedAdvancedIngredientType<DoughData>> doughIngredientType(String name, MapCodec<? extends DoughIngredient> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends DoughIngredient> streamCodec) {

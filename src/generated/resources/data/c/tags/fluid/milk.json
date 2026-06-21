@@ -1,11 +1,11 @@
 {
   "values": [
     {
-      "id": "petrolpark:flowing_skimmed_milk",
+      "id": "petrolpark:shared/flowing_skimmed_milk",
       "required": false
     },
     {
-      "id": "petrolpark:skimmed_milk",
+      "id": "petrolpark:shared/skimmed_milk",
       "required": false
     }
   ]
