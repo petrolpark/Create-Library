@@ -197,7 +197,7 @@ publishing {
         mavenJava(MavenPublication) {
             from components.java
 
-            groupId = mod_id // Not com.petrolpark but just petrolpark
+            groupId = mod_id // Not petrolpark.mc.library but just petrolpark
             artifactId = "${mod_id}-${minecraft_version}" // Your mod's artifact ID
         }
     }

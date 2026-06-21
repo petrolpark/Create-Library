@@ -1,9 +1,9 @@
 {
     "required": "true",
-    "package": "com.petrolpark.mixin",
+    "package": "petrolpark.mc.library.mixin",
     "compatibilityLevel": "JAVA_21",
     "refmap": "petrolpark.refmap.json",
-    "plugin": "com.petrolpark.mixin.plugin.PetrolparkMixinPlugin",
+    "plugin": "petrolpark.mc.library.mixin.plugin.PetrolparkMixinPlugin",
     "mixins": [
         "accessor.AbstractBuilderAccessor",
         "compat.create.accessor.BasinBlockEntityAccessor",
