@@ -4,7 +4,6 @@ import java.util.Optional;
 
 import org.jetbrains.annotations.NotNull;
 
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateEntityTypes;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.ControlledContraptionEntity;
 import com.simibubi.create.content.contraptions.IControlContraption;
@@ -34,6 +33,7 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.event.tick.EntityTickEvent;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateEntityTypes;
 
 public class HorseMillContraptionEntity extends ControlledContraptionEntity {
 

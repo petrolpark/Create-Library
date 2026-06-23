@@ -8,13 +8,12 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import petrolpark.mc.library.PetrolparkTags;
-
 import it.unimi.dsi.fastutil.objects.Object2DoubleArrayMap;
 import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
+import petrolpark.mc.library.PetrolparkTags;
 
 /**
  * A specific instance of a flaggable object, with the specific Flags that object posseses.
@@ -103,7 +102,7 @@ public interface IFlagPole<OBJECT, OBJECT_STACK> {
 
     /**
      * Stream all Flags in this FlagPole that:<ul>
-     * <li>Are not {@link FlagPole#streamIntrinsicFlags() intrinsic}
+     * <li>Are not {@link IFlagPole#isIntrinsic(Holder) intrinsic}
      * <li>Have no children in this FlagPole</ul>
      * Note that this is the minimum set of Flags needed to uniquely define a FlagPole.
      * @return Distinct Stream of Flags 
@@ -111,6 +110,7 @@ public interface IFlagPole<OBJECT, OBJECT_STACK> {
     public Stream<Holder<Flag>> streamOrphanExtrinsicFlags();
 
     public default Stream<Holder<Flag>> streamShownFlags() {
+        //TODO cache and make not shit
         final Set<Holder<Flag>> shownIfAbsent = streamShownAbsentFlags().collect(Collectors.toSet());
         return streamAllFlags()
             .filter(Predicate.not(PetrolparkTags.Flags.HIDDEN::matches))

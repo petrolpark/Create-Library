@@ -12,13 +12,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.flags.ItemFlagPole;
-import petrolpark.mc.library.core.flags.recipe.IHandleFlagsMyselfRecipe;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
-import petrolpark.mc.library.core.world.item.decay.ItemDecay;
-import petrolpark.mc.library.registry.PetrolparkRecipeTypes;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
@@ -33,6 +26,13 @@ import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.flags.ItemFlagPole;
+import petrolpark.mc.library.core.flags.recipe.IHandleFlagsMyselfRecipe;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
+import petrolpark.mc.library.core.world.item.decay.ItemDecay;
+import petrolpark.mc.library.registry.PetrolparkRecipeTypes;
 
 @Mixin(CraftingMenu.class)
 public class CraftingMenuMixin {
@@ -78,7 +78,7 @@ public class CraftingMenuMixin {
             Optional<RecipeHolder<CraftingRecipe>> optional = level.getRecipeManager().getRecipeFor(RecipeType.CRAFTING, craftinginput, level, recipe); // For mystery reasons this cannot be localcaptured
             if (PetrolparkConfigs.server().craftingTablePropagatesFlags.get() && optional.map(rh -> {
                 if (rh.value() instanceof IHandleFlagsMyselfRecipe contamHandled) {
-                    return !contamHandled.isFlagsHandled(craftinginput, level.registryAccess());
+                    return !contamHandled.areFlagsHandled(craftinginput, level.registryAccess());
                 } else return true;
             }).orElse(true)) {
                 ItemFlagPole.perpetuateSingle(craftSlots.getItems().stream(), itemstack);

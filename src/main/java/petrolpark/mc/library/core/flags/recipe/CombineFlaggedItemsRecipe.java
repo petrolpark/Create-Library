@@ -1,12 +1,7 @@
 package petrolpark.mc.library.core.flags.recipe;
 
 import javax.annotation.Nonnull;
-
-import petrolpark.mc.library.core.flags.IFlagPole;
-import petrolpark.mc.library.core.flags.ItemFlagPole;
-import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
-import petrolpark.mc.library.registry.PetrolparkRecipeSerializers;
-import petrolpark.mc.library.util.ItemHelper;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
@@ -15,7 +10,13 @@ import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+import petrolpark.mc.library.core.flags.IFlagPole;
+import petrolpark.mc.library.core.flags.ItemFlagPole;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
+import petrolpark.mc.library.registry.PetrolparkRecipeSerializers;
+import petrolpark.mc.library.util.ItemHelper;
 
+@ParametersAreNonnullByDefault
 public class CombineFlaggedItemsRecipe extends CustomRecipe implements IHandleFlagsMyselfRecipe<CraftingInput> {
 
     public CombineFlaggedItemsRecipe(CraftingBookCategory category) {
@@ -23,7 +24,7 @@ public class CombineFlaggedItemsRecipe extends CustomRecipe implements IHandleFl
     };
 
     @Override
-    public boolean matches(@Nonnull CraftingInput input, @Nonnull Level level) {
+    public boolean matches(CraftingInput input, @Nonnull Level level) {
         ItemStack firstStack = ItemStack.EMPTY;
         boolean atLeastTwo = false;
         boolean atLeastOneFlag = false;
@@ -41,7 +42,7 @@ public class CombineFlaggedItemsRecipe extends CustomRecipe implements IHandleFl
     };
 
     @Override
-    public ItemStack assemble(@Nonnull CraftingInput input, @Nonnull HolderLookup.Provider registries) {
+    public ItemStack assemble(CraftingInput input, HolderLookup.Provider registries) {
         ItemStack result = ItemStack.EMPTY;
         int count = 0;
         for (ItemStack stack : input.items()) {
@@ -68,7 +69,7 @@ public class CombineFlaggedItemsRecipe extends CustomRecipe implements IHandleFl
     };
 
     @Override
-    public boolean isFlagsHandled(CraftingInput input, HolderLookup.Provider registries) {
+    public boolean areFlagsHandled(CraftingInput input, HolderLookup.Provider registries) {
         return true;
     };
     

@@ -4,21 +4,9 @@ import java.util.function.Function;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
-import petrolpark.mc.library.compat.create.core.world.dough.ingredient.DoughIngredient;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistries;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.GenericAdvancedIngredientType;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredientType;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.INamedAdvancedIngredientType;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ITypelessAdvancedIngredient;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.NamedAdvancedIngredientType;
-import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
-import petrolpark.mc.library.core.registrate.builder.shared.SharedCreateBlockEntityBuilder;
-import petrolpark.mc.library.core.world.fluid.ColoredFluidType;
-import petrolpark.mc.library.core.world.fluid.VirtualFluidWithContainer;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
+import com.simibubi.create.api.registry.CreateRegistries;
 import com.simibubi.create.content.fluids.VirtualFluid;
+import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.VirtualFluidBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
@@ -33,11 +21,29 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
+import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
+import petrolpark.mc.library.compat.create.core.world.dough.ingredient.DoughIngredient;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistries;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.GenericAdvancedIngredientType;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredientType;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.INamedAdvancedIngredientType;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ITypelessAdvancedIngredient;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.NamedAdvancedIngredientType;
+import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
+import petrolpark.mc.library.core.registrate.builder.shared.SharedCreateBlockEntityBuilder;
+import petrolpark.mc.library.core.world.fluid.ColoredFluidType;
+import petrolpark.mc.library.core.world.fluid.VirtualFluidWithContainer;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
 
 public class AbstractPetrolparkCreateRegistrate<R extends AbstractPetrolparkCreateRegistrate<R>> extends AbstractPetrolparkRegistrate<R> {
 
     protected AbstractPetrolparkCreateRegistrate(String modid) {
         super(modid);
+    };
+
+    public <T extends ItemAttributeType> RegistryEntry<ItemAttributeType, T> itemAttributeType(String name, T type) {
+        return simple(name, CreateRegistries.ITEM_ATTRIBUTE_TYPE, () -> type);
     };
 
     public <T extends BlockEntity> SharedCreateBlockEntityBuilder<T, R> sharedCreateBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {

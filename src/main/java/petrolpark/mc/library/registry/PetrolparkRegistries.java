@@ -7,14 +7,28 @@ import java.util.function.Function;
 
 import org.jetbrains.annotations.ApiStatus;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.ClientPacketListener;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.registries.NewRegistryEvent;
+import net.neoforged.neoforge.registries.RegistryBuilder;
+import net.neoforged.neoforge.server.ServerLifecycleHooks;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.badge.Badge;
 import petrolpark.mc.library.core.data.loot.modifier.LootPoolEntryModifierType;
 import petrolpark.mc.library.core.data.loot.modifier.LootTableModification;
 import petrolpark.mc.library.core.data.loot.modifier.LootTableModifierType;
-import petrolpark.mc.library.core.data.loot.numberprovider.entity.LootEntityNumberProviderType;
-import petrolpark.mc.library.core.data.loot.numberprovider.itemstack.LootItemStackNumberProviderType;
-import petrolpark.mc.library.core.data.loot.numberprovider.team.LootTeamNumberProviderType;
+import petrolpark.mc.library.core.data.numberProvider.entity.LootEntityNumberProviderType;
+import petrolpark.mc.library.core.data.numberProvider.itemStack.LootItemStackNumberProviderType;
+import petrolpark.mc.library.core.data.numberProvider.team.LootTeamNumberProviderType;
 import petrolpark.mc.library.core.data.recipe.bogglePattern.BogglePattern;
 import petrolpark.mc.library.core.data.recipe.bogglePattern.generator.BogglePatternGeneratorType;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredientType;
@@ -34,21 +48,6 @@ import petrolpark.mc.library.core.world.item.decay.product.DecayProductType;
 import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
 import petrolpark.mc.library.core.world.item.restaurant.offer.RestaurantOfferGenerator;
 import petrolpark.mc.library.experimental.trade.ITradeListingReference;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientPacketListener;
-import net.minecraft.core.Holder;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
-import net.minecraft.core.RegistryAccess;
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.registries.NewRegistryEvent;
-import net.neoforged.neoforge.registries.RegistryBuilder;
-import net.neoforged.neoforge.server.ServerLifecycleHooks;
 
 @EventBusSubscriber
 public class PetrolparkRegistries {

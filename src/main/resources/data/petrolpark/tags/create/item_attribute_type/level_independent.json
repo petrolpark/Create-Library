@@ -80,6 +80,8 @@
             "required": false,
             "id": "create:book_copy"
         },
-        "petrolpark:has_flag"
+        "petrolpark:flagged",
+        "petrolpark:is_anvil_repair_item",
+        "petrolpark:wood"
     ]
 }

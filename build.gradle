@@ -116,6 +116,9 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+    flatDir {
+        dirs "../petrolpark_local_maven/petrolpark/mc/pquality/pquality/${pquality_version}"
+    }
 }
 
 dependencies {
@@ -143,6 +146,8 @@ dependencies {
     runtimeOnly("top.theillusivec4.curios:curios-neoforge:${curios_version}+${minecraft_version}")
     // Jade
     implementation("maven.modrinth:jade:15.10.0+neoforge")
+    // pquality
+    implementation("petrolpark.mc.pquality:pquality:${pquality_version}")
 
     // TESTING ONLY
 

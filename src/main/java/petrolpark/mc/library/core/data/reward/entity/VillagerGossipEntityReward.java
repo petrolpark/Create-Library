@@ -2,12 +2,6 @@ package petrolpark.mc.library.core.data.reward.entity;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.data.IEntityTarget;
-import petrolpark.mc.library.core.data.loot.numberprovider.NumberEstimate;
-import petrolpark.mc.library.registry.PetrolparkRewardTypes;
-import petrolpark.mc.library.util.Lang;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -20,6 +14,12 @@ import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.data.IEntityTarget;
+import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
+import petrolpark.mc.library.registry.PetrolparkRewardTypes;
+import petrolpark.mc.library.util.Lang;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
 /**
  * <p>{@code petrolpark:villager_gossip}</p>

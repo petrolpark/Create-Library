@@ -1,12 +1,13 @@
 package petrolpark.mc.library.util;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import petrolpark.mc.library.core.world.item.decay.ItemDecay;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
@@ -18,9 +19,11 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -30,6 +33,7 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import petrolpark.mc.library.core.world.item.decay.ItemDecay;
 
 public class ItemHelper {
 
@@ -119,5 +123,38 @@ public class ItemHelper {
             if (entry instanceof NestedLootTable nestedTable) return nestedTable.contents.right().stream().flatMap(ItemHelper::streamPossibleItems);
             return Stream.empty();
         });
+    };
+
+    private static Set<Item> KNOWN_ANVIL_REPAIR_ITEMS = null;
+
+    public static final Set<Item> getKnownAnvilRepairItems() {
+        if (KNOWN_ANVIL_REPAIR_ITEMS == null) {
+            final List<ItemStack> repairableStacks = BuiltInRegistries.ITEM.stream()
+                .map(ItemStack::new)
+                .filter(stack -> stack.getItem().isRepairable(stack))
+                .toList();
+            KNOWN_ANVIL_REPAIR_ITEMS = BuiltInRegistries.ITEM.stream()
+                .map(ItemStack::new)
+                .filter(stack -> repairableStacks.stream().anyMatch(repairable -> repairable.getItem().isValidRepairItem(repairable, stack)))
+                .map(ItemStack::getItem)
+                .collect(Collectors.toUnmodifiableSet());
+        };
+        return KNOWN_ANVIL_REPAIR_ITEMS;
+    };
+
+    private static Set<Item> KNOWN_ANIMAL_FOODS = null;
+
+    public static final Set<Item> getKnownAnimalFoods(Level level) {
+        if (KNOWN_ANIMAL_FOODS == null) {
+            final List<Animal> animals = BuiltInRegistries.ENTITY_TYPE.stream()
+                .<Animal>mapMulti((type, consumer) -> { if (type.create(level) instanceof Animal animal) consumer.accept(animal); })
+                .toList();
+            KNOWN_ANIMAL_FOODS = BuiltInRegistries.ITEM.stream()
+                .map(ItemStack::new)
+                .filter(stack -> animals.stream().anyMatch(animal -> animal.isFood(stack)))
+                .map(ItemStack::getItem)
+                .collect(Collectors.toUnmodifiableSet());
+        };
+        return KNOWN_ANIMAL_FOODS;
     };
 };

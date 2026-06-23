@@ -3,37 +3,38 @@ package petrolpark.mc.library.registry;
 import static petrolpark.mc.library.Petrolpark.REGISTRATE;
 
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.core.data.loot.numberprovider.ConditionalNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.ContextEntityNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.ContextTeamNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.ContextToolNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.CustomerWaitTimeNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.DataComponentNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.MaxNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.MeanNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.MinNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.PolynomialNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.ProductNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.SigmoidNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.SumNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.entity.AttributeEntityNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.entity.EntityPredicateNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.entity.EquipmentNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.entity.ExperienceLevelNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.entity.FlatEntityNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.entity.LootEntityNumberProviderType;
-import petrolpark.mc.library.core.data.loot.numberprovider.itemstack.CountItemStackNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.itemstack.EnchantmentLevelItemStackNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.itemstack.FlatItemStackNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.itemstack.ItemPredicateNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.itemstack.LootItemStackNumberProviderType;
-import petrolpark.mc.library.core.data.loot.numberprovider.team.FlatTeamNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.team.LootTeamNumberProviderType;
-import petrolpark.mc.library.core.data.loot.numberprovider.team.MemberCountTeamNumberProvider;
-import petrolpark.mc.library.core.data.loot.numberprovider.team.MemberReductionTeamNumberProvider;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
+import petrolpark.mc.library.core.data.numberProvider.ConditionalNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.ContextEntityNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.ContextTeamNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.ContextToolNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.CustomerWaitTimeNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.DataComponentNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.MaxNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.MeanNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.MinNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.PolynomialNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.ProductNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.SigmoidNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.SumNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.entity.AttributeEntityNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.entity.EntityPredicateNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.entity.EquipmentNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.entity.ExperienceLevelNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.entity.FlatEntityNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.entity.LootEntityNumberProviderType;
+import petrolpark.mc.library.core.data.numberProvider.itemStack.CountItemStackNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.itemStack.EnchantmentLevelItemStackNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.itemStack.FlatItemStackNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.itemStack.ItemPredicateNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.itemStack.LootItemStackNumberProviderType;
+import petrolpark.mc.library.core.data.numberProvider.itemStack.QualityItemStackNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.team.FlatTeamNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.team.LootTeamNumberProviderType;
+import petrolpark.mc.library.core.data.numberProvider.team.MemberCountTeamNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.team.MemberReductionTeamNumberProvider;
 
 public class PetrolparkNumberProviderTypes {
     
@@ -68,7 +69,8 @@ public class PetrolparkNumberProviderTypes {
     ITEM_DATA_COMPONENT = REGISTRATE.lootItemStackNumberProviderType("component", DataComponentNumberProvider.CODEC),
     ENCHANTMENT_LEVEL = REGISTRATE.lootItemStackNumberProviderType("enchantment_level", EnchantmentLevelItemStackNumberProvider.CODEC),
     FLAT_ITEM_STACK = REGISTRATE.lootItemStackNumberProviderType("flat", FlatItemStackNumberProvider.CODEC),
-    ITEM_PREDICATE = REGISTRATE.lootItemStackNumberProviderType("predicate", ItemPredicateNumberProvider.CODEC);
+    ITEM_PREDICATE = REGISTRATE.lootItemStackNumberProviderType("predicate", ItemPredicateNumberProvider.CODEC),
+    ITEM_QUALITY = REGISTRATE.lootItemStackNumberProviderType("quality", QualityItemStackNumberProvider.CODEC);
 
     public static final RegistryEntry<LootTeamNumberProviderType, LootTeamNumberProviderType>
 

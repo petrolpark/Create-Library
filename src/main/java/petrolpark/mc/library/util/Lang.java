@@ -14,10 +14,6 @@ import java.util.stream.Stream;
 
 import org.spongepowered.include.com.google.common.base.Strings;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.flags.Flag;
-import petrolpark.mc.library.core.flags.IFlagPole;
-
 import net.createmod.catnip.lang.LangBuilder;
 import net.minecraft.Util;
 import net.minecraft.client.Minecraft;
@@ -35,6 +31,9 @@ import net.minecraft.world.entity.ai.gossip.GossipType;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.Rarity;
 import net.neoforged.neoforge.common.Tags;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.flags.Flag;
+import petrolpark.mc.library.core.flags.IFlagPole;
 
 public class Lang {
 
@@ -48,6 +47,12 @@ public class Lang {
     static {
         ONE_DP_DF.setMinimumFractionDigits(1);
         ONE_DP_DF.setMaximumFractionDigits(1);
+    };
+
+    public static final DecimalFormat TWO_DP_DF = new DecimalFormat();
+    static {
+        TWO_DP_DF.setMinimumFractionDigits(2);
+        TWO_DP_DF.setMaximumFractionDigits(2);
     }
     
     public static String asId(String string) {

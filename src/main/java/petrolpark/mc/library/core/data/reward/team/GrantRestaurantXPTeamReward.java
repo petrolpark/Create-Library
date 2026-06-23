@@ -6,15 +6,6 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.data.loot.numberprovider.NumberEstimate;
-import petrolpark.mc.library.core.world.entity.player.team.ITeam;
-import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.core.world.item.restaurant.RestaurantsData;
-import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
-import petrolpark.mc.library.registry.PetrolparkLootContextParams;
-import petrolpark.mc.library.registry.PetrolparkRewardTypes;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -25,6 +16,15 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
+import petrolpark.mc.library.core.world.entity.player.team.ITeam;
+import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
+import petrolpark.mc.library.core.world.item.restaurant.RestaurantsData;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
+import petrolpark.mc.library.registry.PetrolparkLootContextParams;
+import petrolpark.mc.library.registry.PetrolparkRewardTypes;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
 public record GrantRestaurantXPTeamReward(Holder<Restaurant> restaurant, NumberProvider amount) implements ITeamReward {
 

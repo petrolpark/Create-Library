@@ -8,11 +8,6 @@ import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.core.data.loot.numberprovider.NumberEstimate;
-import petrolpark.mc.library.core.data.reward.entity.IEntityReward;
-import petrolpark.mc.library.core.world.entity.player.team.ITeam;
-import petrolpark.mc.library.registry.PetrolparkRewardTypes;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
@@ -21,6 +16,11 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
+import petrolpark.mc.library.core.data.reward.entity.IEntityReward;
+import petrolpark.mc.library.core.world.entity.player.team.ITeam;
+import petrolpark.mc.library.registry.PetrolparkRewardTypes;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
 /**
  * Rewards a proportion of members of a {@link ITeam} with an {@link IEntityReward}.

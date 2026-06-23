@@ -211,10 +211,14 @@
     "petrolpark.dataPack.extended_inventory.report_bugs": "Click here to report any bugs you experience. ",
     "petrolpark.dataPack.extended_inventory.safe_mode": "If you want to be a big help, disable safe mode (click here) and report any modded menus that do / don't cause issues, so they can be tagged as working / not working in safe mode.",
 
-    "petrolpark.item_attributes.has_flag": "Has flag: %s",
-    "petrolpark.item_attributes.has_flag.inverted": "Doesn't have flag: %s",
-    "petrolpark.item_attributes.is_compressed": "Is compressed %s",
-    "petrolpark.item_attributes.is_compressed.inverted": "Is not compressed %s",
+    "petrolpark.item_attributes.compressed": "is compressed %s",
+    "petrolpark.item_attributes.compressed.inverted": "is not compressed %s",
+    "petrolpark.item_attributes.is_animal_food": "is food for an amimal",
+    "petrolpark.item_attributes.is_animal_food.inverted": "is not food for an animal",
+    "petrolpark.item_attributes.is_anvil_repair_material": "used for Anvil repairs",
+    "petrolpark.item_attributes.is_anvil_repair_material.inverted": "not used for Anvil repairs",
+    "petrolpark.item_attributes.wood": "made of %1$s wood",
+    "petrolpark.item_attributes.wood.inverted": "not made of %1$s wood",
 
     "petrolpark.jei.flags.intrinsic": "This ingredient is always %1$s",
     "petrolpark.jei.flags.extrinsic": "This stack is %1$s",
@@ -457,5 +461,16 @@
     "restaurant.petrolpark.example": "Example Restaurant",
     "restaurant.petrolpark.unknown": "Unknown Restaurant",
 
-    "team.petrolpark.none": "No Team"
+    "team.petrolpark.none": "No Team",
+
+    "tag.block.petrolpark.cannot_convert_to_gold": "Unconvertible to Gold",
+    "tag.entity_type.petrolpark.doesnt_bleed": "Doesn't Bleed",
+    "tag.flag.petrolpark.hidden": "Hidden from Tooltips",
+    "tag.fluid.petrolpark.flaggable": "Flaggable",
+    "tag.item.petrolpark.flaggable": "Flaggable",
+    "tag.item.petrolpark.slipping_potion_ingredients": "Slipping Potion Ingredients",
+    "tag.mob_effect.petrolpark.cancels_hurt_effects": "Prevents Injury Effects",
+    "tag.mob_effect.petrolpark.causes_infertility": "Causes Infertility",
+    "tag.mob_effect.petrolpark.prevents_aggravating": "Prevents Aggravating Self",
+    "tag.mob_effect.petrolpark.prevents_aggravating_others": "Prevents Aggravating Others"
 }

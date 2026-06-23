@@ -9,11 +9,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.core.data.loot.numberprovider.NumberEstimate;
-import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
-import petrolpark.mc.library.util.Lang;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 import net.minecraft.advancements.critereon.EnchantmentPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
@@ -39,6 +34,11 @@ import net.minecraft.world.level.storage.loot.functions.EnchantRandomlyFunction;
 import net.minecraft.world.level.storage.loot.functions.EnchantWithLevelsFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.neoforged.neoforge.common.CommonHooks;
+import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
+import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
+import petrolpark.mc.library.util.Lang;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 public record EnchantmentItemAdvancedIngredient(EnchantmentPredicate enchantments) implements ItemAdvancedIngredient {
 

@@ -20,7 +20,6 @@ import com.mojang.serialization.DynamicOps;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.util.Lang;
 
 import io.netty.buffer.ByteBuf;
 import net.createmod.catnip.codecs.stream.CatnipStreamCodecBuilders;
@@ -38,6 +37,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.properties.WoodType;
 import net.neoforged.neoforge.common.util.TriState;
+import petrolpark.mc.library.util.Lang;
 
 public class CodecHelper {
 
@@ -61,8 +61,8 @@ public class CodecHelper {
     };
 
     public static final Codec<Integer> POS_INT = Codec.intRange(0, Integer.MAX_VALUE);
-
     public static final Codec<Float> POS_FLOAT = Codec.floatRange(0f, Float.MAX_VALUE);
+    public static final Codec<Double> POS_DOUBLE = Codec.doubleRange(0f, Double.MAX_VALUE);
 
     public static <T extends ByteBuf, S extends Enum<S>> StreamCodec<T, S> enumStream(Class<S> clazz) {
         return new StreamCodec<>() {

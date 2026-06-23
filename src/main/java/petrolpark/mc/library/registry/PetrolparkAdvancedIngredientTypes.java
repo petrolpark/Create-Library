@@ -2,6 +2,10 @@ package petrolpark.mc.library.registry;
 
 import static petrolpark.mc.library.Petrolpark.REGISTRATE;
 
+import com.tterrag.registrate.util.entry.RegistryEntry;
+
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.CompoundAdvancedIngredient;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.EnchantmentItemAdvancedIngredient;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.FlaggedAdvancedIngredient;
@@ -15,10 +19,6 @@ import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ItemItemAdvanc
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.NotAdvancedIngredient;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.PassAdvancedIngredient;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.TagItemAdvancedIngredient;
-import com.tterrag.registrate.util.entry.RegistryEntry;
-
-import net.minecraft.world.item.ItemStack;
-import net.neoforged.neoforge.fluids.FluidStack;
 
 public class PetrolparkAdvancedIngredientTypes {
 

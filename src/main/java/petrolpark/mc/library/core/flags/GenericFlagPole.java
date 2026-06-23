@@ -3,6 +3,7 @@ package petrolpark.mc.library.core.flags;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.RegistryOps;
 
 /**
  * A {@link AbstractFlagPole} not tied to any specific object. When these are used, the developer will have to manage loading and saving them themselves.
@@ -22,12 +23,12 @@ public class GenericFlagPole extends AbstractFlagPole<Object, Object> {
 
     public GenericFlagPole readNBT(Tag tag, HolderLookup.Provider registries) {
         orphanFlags.clear();
-        ORPHAN_HOLDER_LIST_CODEC.parse(NbtOps.INSTANCE, tag).ifSuccess(ls -> ls.stream().map(orphanFlags::add));
+        ORPHAN_HOLDER_LIST_CODEC.parse(RegistryOps.create(NbtOps.INSTANCE, registries), tag).ifSuccess(ls -> ls.stream().map(orphanFlags::add));
         return this;
     };
 
     public Tag writeNBT(HolderLookup.Provider registries) {
-        return ORPHAN_HOLDER_LIST_CODEC.encodeStart(NbtOps.INSTANCE, getOrphanHolderList()).getOrThrow();
+        return ORPHAN_HOLDER_LIST_CODEC.encodeStart(RegistryOps.create(NbtOps.INSTANCE, registries), getOrphanHolderList()).getOrThrow();
     };
 
     @Override

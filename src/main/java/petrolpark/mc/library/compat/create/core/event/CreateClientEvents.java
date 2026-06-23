@@ -2,8 +2,6 @@ package petrolpark.mc.library.compat.create.core.event;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.compat.create.PetrolparkCreateClient;
-import petrolpark.mc.library.core.event.ClientEvents;
 
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.render.DefaultSuperRenderTypeBuffer;
@@ -13,6 +11,8 @@ import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
+import petrolpark.mc.library.compat.create.PetrolparkCreateClient;
+import petrolpark.mc.library.core.event.ClientEvents;
 
 public class CreateClientEvents {
     

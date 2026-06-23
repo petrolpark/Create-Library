@@ -1,14 +1,13 @@
 package petrolpark.mc.library.core.event;
 
-import petrolpark.mc.library.core.flags.ItemFlagPole;
-import petrolpark.mc.library.core.world.item.decay.ItemDecay;
-import petrolpark.mc.library.util.Lang;
-
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import petrolpark.mc.library.core.flags.ItemFlagPole;
+import petrolpark.mc.library.core.world.item.decay.ItemDecay;
+import petrolpark.mc.library.util.Lang;
 
 @EventBusSubscriber(Dist.CLIENT)
 public class ClientEvents {

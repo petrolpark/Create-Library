@@ -5,12 +5,12 @@ import java.util.function.DoubleSupplier;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateDataMapTypes;
-import petrolpark.mc.library.core.data.loot.numberprovider.entity.EntityNumberProvider;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.phys.Vec3;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateDataMapTypes;
+import petrolpark.mc.library.core.data.numberProvider.entity.EntityNumberProvider;
 
 public record HorseMillProperties(Vec3 positionOffset, EntityNumberProvider maxSpeed, EntityNumberProvider stressCapacity, Optional<ResourceLocation> harnessModelLocation) {
     

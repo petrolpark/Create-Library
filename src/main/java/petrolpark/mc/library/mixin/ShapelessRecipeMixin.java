@@ -1,18 +1,20 @@
 package petrolpark.mc.library.mixin;
 
+import javax.annotation.Nonnull;
+
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.flags.ItemFlagPole;
-import petrolpark.mc.library.core.flags.recipe.IHandleFlagsMyselfRecipe;
-import petrolpark.mc.library.core.world.item.decay.ItemDecay;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.ShapelessRecipe;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.flags.ItemFlagPole;
+import petrolpark.mc.library.core.flags.recipe.IHandleFlagsMyselfRecipe;
+import petrolpark.mc.library.core.world.item.decay.ItemDecay;
 
 /**
  * Allow Shapeless Recipes to propagate the Flags of the Ingredients to the result.
@@ -31,7 +33,7 @@ public abstract class ShapelessRecipeMixin implements IHandleFlagsMyselfRecipe<C
     };
 
     @Override
-    public boolean isFlagsHandled(CraftingInput input, HolderLookup.Provider registrie) {
+    public boolean areFlagsHandled(@Nonnull CraftingInput input, @Nonnull HolderLookup.Provider registrie) {
         return PetrolparkConfigs.server().shapelessCraftingPropagatesFlags.get();
     };
     

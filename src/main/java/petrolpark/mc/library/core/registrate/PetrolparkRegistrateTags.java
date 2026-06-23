@@ -3,7 +3,9 @@ package petrolpark.mc.library.core.registrate;
 import java.util.Arrays;
 import java.util.function.Predicate;
 
+import com.simibubi.create.AllItems;
 import com.simibubi.create.Create;
+import com.simibubi.create.content.contraptions.mounted.MinecartContraptionItem;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.logistics.box.PackageItem;
 import com.simibubi.create.foundation.data.TagGen.CreateTagAppender;
@@ -16,12 +18,16 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.tags.TagsProvider.TagAppender;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ArmorStandItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BoatItem;
+import net.minecraft.world.item.EndCrystalItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemFrameItem;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.MinecartItem;
 import net.minecraft.world.item.SpawnEggItem;
+import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.Tags;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.PetrolparkTags;
@@ -55,16 +61,19 @@ public class PetrolparkRegistrateTags {
             .addTag(Tags.Items.SHULKER_BOXES)
             .addTag(Tags.Items.SEEDS);
         optionalTagAllNonBlocksAndEntities(flaggableTagAppender, Petrolpark.MOD_ID, PetrolparkItems.MENU.get(), PetrolparkItems.RECIPE_BOOK.get());
-        optionalTagAllNonBlocksAndEntities(flaggableTagAppender, Create.ID);
+        optionalTagAllNonBlocksAndEntities(flaggableTagAppender, Create.ID, AllItems.SCHEDULE, AllItems.SHOPPING_LIST, AllItems.EMPTY_SCHEMATIC, AllItems.SCHEMATIC_AND_QUILL, AllItems.SCHEMATIC, AllItems.BELT_CONNECTOR);
         optionalTagAll(flaggableTagAppender, Create.ID, item -> !(item instanceof BlockItem blockItem && blockItem.getBlock() instanceof KineticBlock));
     };
 
-    public static final void optionalTagAllNonBlocksAndEntities(TagAppender<Item> tag, String namespace, Item ... exclusions) {
+    @SuppressWarnings("deprecation")
+    public static final void optionalTagAllNonBlocksAndEntities(TagAppender<Item> tag, String namespace, ItemLike ... exclusions) {
         optionalTagAll(tag, namespace, item ->
             item instanceof BlockItem
             || item instanceof PackageItem
             || item instanceof BadgeItem
-            || Arrays.stream(exclusions).anyMatch(item::equals)
+            || item instanceof MinecartContraptionItem
+            || item.builtInRegistryHolder().is(Tags.Items.BUCKETS)
+            || Arrays.stream(exclusions).map(ItemLike::asItem).anyMatch(item::equals)
         );
     };
 
@@ -83,6 +92,9 @@ public class PetrolparkRegistrateTags {
             || item instanceof MinecartItem
             || item instanceof BoatItem
             || item instanceof SpawnEggItem
+            || item instanceof ItemFrameItem
+            || item instanceof ArmorStandItem
+            || item instanceof EndCrystalItem
             || Arrays.stream(exclusions).anyMatch(item::equals)
         );
     };
