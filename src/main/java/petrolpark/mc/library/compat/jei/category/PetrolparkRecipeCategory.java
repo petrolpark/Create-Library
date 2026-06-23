@@ -1,12 +1,5 @@
 package petrolpark.mc.library.compat.jei.category;
 
-import petrolpark.mc.library.compat.jei.BiomeSpecificTooltipHelper;
-import petrolpark.mc.library.compat.jei.ingredient.BiomeIngredientType;
-import petrolpark.mc.library.compat.jei.ingredient.BiomeIngredientType.BiomeHolderHolder;
-import petrolpark.mc.library.core.data.recipe.IBiomeSpecificRecipe;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
-import petrolpark.mc.library.util.Lang;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -20,6 +13,13 @@ import net.minecraft.core.HolderSet;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import petrolpark.mc.library.compat.jei.BiomeSpecificTooltipHelper;
+import petrolpark.mc.library.compat.jei.ingredient.BiomeIngredientType;
+import petrolpark.mc.library.compat.jei.ingredient.BiomeIngredientType.BiomeHolderHolder;
+import petrolpark.mc.library.core.data.recipe.IBiomeSpecificRecipe;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
+import petrolpark.mc.library.util.Lang;
 
 public abstract class PetrolparkRecipeCategory<T extends Recipe<?>> extends CreateRecipeCategory<T> {
 
@@ -54,7 +54,7 @@ public abstract class PetrolparkRecipeCategory<T extends Recipe<?>> extends Crea
         builder.addInputSlot(x, y)
             .setBackground(getRenderedSlot(), -1, -1)
             .addItemStack(RecipeBookItem.of(recipeHolder, recipeType.getUid()))
-            .addRichTooltipCallback((view, tooltip) -> tooltip.add(Lang.translate("recipe.book_required").withStyle(ChatFormatting.GOLD)));
+            .addRichTooltipCallback((view, tooltip) -> tooltip.add(Lang.translate("gui.jei.bookRequired").withStyle(ChatFormatting.GOLD)));
     };;
 
     protected RegistryAccess getRegistryAccess() {

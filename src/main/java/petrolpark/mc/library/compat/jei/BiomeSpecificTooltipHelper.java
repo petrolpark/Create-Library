@@ -3,9 +3,6 @@ package petrolpark.mc.library.compat.jei;
 import java.util.List;
 import java.util.stream.Stream;
 
-import petrolpark.mc.library.core.data.recipe.IBiomeSpecificRecipe;
-import petrolpark.mc.library.util.Lang;
-
 import mezz.jei.api.gui.ingredient.IRecipeSlotRichTooltipCallback;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
@@ -16,6 +13,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.biome.Biome;
+import petrolpark.mc.library.core.data.recipe.IBiomeSpecificRecipe;
+import petrolpark.mc.library.util.Lang;
 
 public class BiomeSpecificTooltipHelper {
 
@@ -33,7 +32,7 @@ public class BiomeSpecificTooltipHelper {
         List<ResourceLocation> biomes = streamAllBiomes(recipe).map(Holder::getKey).map(ResourceKey::location).toList();
         return (view, tooltip) -> {
             if (!biomes.isEmpty()) tooltip.add(Component.EMPTY);
-            tooltip.add(Lang.translate("recipe.biome_specific").withStyle(ChatFormatting.WHITE));
+            tooltip.add(Lang.translate("gui.jei.biomeSpecific").withStyle(ChatFormatting.WHITE));
             biomes.forEach(biome -> tooltip.add(Component.translatable(biome.toLanguageKey("biome")).withStyle(ChatFormatting.GRAY)));
         };
     };

@@ -173,8 +173,6 @@
     "minecraft:writable_book",
     "minecraft:written_book",
     "minecraft:mace",
-    "minecraft:item_frame",
-    "minecraft:glow_item_frame",
     "minecraft:baked_potato",
     "minecraft:poisonous_potato",
     "minecraft:map",
@@ -192,14 +190,12 @@
     "minecraft:rabbit_stew",
     "minecraft:rabbit_foot",
     "minecraft:rabbit_hide",
-    "minecraft:armor_stand",
     "minecraft:iron_horse_armor",
     "minecraft:golden_horse_armor",
     "minecraft:diamond_horse_armor",
     "minecraft:leather_horse_armor",
     "minecraft:mutton",
     "minecraft:cooked_mutton",
-    "minecraft:end_crystal",
     "minecraft:chorus_fruit",
     "minecraft:popped_chorus_fruit",
     "minecraft:beetroot",
@@ -655,18 +651,6 @@
       "required": false
     },
     {
-      "id": "create:minecart_contraption",
-      "required": false
-    },
-    {
-      "id": "create:furnace_minecart_contraption",
-      "required": false
-    },
-    {
-      "id": "create:chest_minecart_contraption",
-      "required": false
-    },
-    {
       "id": "create:linked_controller",
       "required": false
     },
@@ -700,26 +684,6 @@
     },
     {
       "id": "create:package_filter",
-      "required": false
-    },
-    {
-      "id": "create:schedule",
-      "required": false
-    },
-    {
-      "id": "create:shopping_list",
-      "required": false
-    },
-    {
-      "id": "create:empty_schematic",
-      "required": false
-    },
-    {
-      "id": "create:schematic_and_quill",
-      "required": false
-    },
-    {
-      "id": "create:schematic",
       "required": false
     },
     {

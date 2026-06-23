@@ -8,6 +8,6 @@
             "required": false,
             "id": "create:has_enchant"
         },
-        "petrolpark:has_flag"
+        "petrolpark:flagged"
     ]
 }

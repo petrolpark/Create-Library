@@ -5,17 +5,6 @@ import java.util.Optional;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.jei.category.FlagInfoCategory.FlagInfoRecipe;
-import petrolpark.mc.library.compat.jei.ingredient.FlagIngredientType;
-import petrolpark.mc.library.compat.jei.ingredient.FlagIngredientType.FlagHolderHolder;
-import petrolpark.mc.library.compat.jei.widget.CustomScrollGridRecipeWidget;
-import petrolpark.mc.library.core.flags.Flag;
-import petrolpark.mc.library.core.flags.IFlagPole;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
-import petrolpark.mc.library.util.Lang;
-import petrolpark.mc.library.util.Pair;
-
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotDrawable;
@@ -31,6 +20,16 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.common.util.RegistryUtil;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.jei.category.FlagInfoCategory.FlagInfoRecipe;
+import petrolpark.mc.library.compat.jei.ingredient.FlagIngredientType;
+import petrolpark.mc.library.compat.jei.ingredient.FlagIngredientType.FlagHolderHolder;
+import petrolpark.mc.library.compat.jei.widget.CustomScrollGridRecipeWidget;
+import petrolpark.mc.library.core.flags.Flag;
+import petrolpark.mc.library.core.flags.IFlagPole;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
+import petrolpark.mc.library.util.Lang;
+import petrolpark.mc.library.util.Pair;
 
 @ParametersAreNonnullByDefault
 public class FlagInfoCategory extends AbstractRecipeCategory<FlagInfoRecipe> {
@@ -124,7 +123,7 @@ public class FlagInfoCategory extends AbstractRecipeCategory<FlagInfoRecipe> {
     };
 
     public static final Component translate(String suffix, Object ... args) {
-        return Lang.translate("jei.flags." + suffix, args);
+        return Lang.translate("gui.jei.flags." + suffix, args);
     };
 
     public record FlagInfoRecipe(Optional<Pair<ITypedIngredient<?>, IFlagPole<?, ?>>> stackAndFlagPole, FlagHolderHolder flag) {

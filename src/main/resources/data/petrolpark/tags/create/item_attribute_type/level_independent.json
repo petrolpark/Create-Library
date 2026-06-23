@@ -81,7 +81,7 @@
             "id": "create:book_copy"
         },
         "petrolpark:flagged",
-        "petrolpark:is_anvil_repair_item",
+        "petrolpark:is_anvil_repair_material",
         "petrolpark:wood"
     ]
 }
