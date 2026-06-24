@@ -5,6 +5,18 @@ import java.util.function.Supplier;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
+
+import net.minecraft.resources.ResourceLocation;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.EventPriority;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModLoadingContext;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.fml.loading.FMLEnvironment;
+import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.data.loading.DatagenModLoader;
 import petrolpark.mc.library.compat.Mods;
 import petrolpark.mc.library.compat.create.PetrolparkCreate;
 import petrolpark.mc.library.compat.curios.PetrolparkCurios;
@@ -45,18 +57,6 @@ import petrolpark.mc.library.registry.PetrolparkTradeListingReferenceTypes;
 import petrolpark.mc.library.shared.GetPetrolparkSharedFeatures;
 import petrolpark.mc.library.shared.Shared;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
-
-import net.minecraft.resources.ResourceLocation;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.EventPriority;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModLoadingContext;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.neoforged.fml.loading.FMLEnvironment;
-import net.neoforged.neoforge.common.NeoForge;
-import net.neoforged.neoforge.data.loading.DatagenModLoader;
 
 @Mod(Petrolpark.MOD_ID)
 public class Petrolpark {

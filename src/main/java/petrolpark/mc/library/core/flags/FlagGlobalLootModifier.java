@@ -14,7 +14,6 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
-import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
 import net.neoforged.neoforge.common.loot.LootModifier;
 
 public class FlagGlobalLootModifier extends LootModifier {
@@ -44,7 +43,7 @@ public class FlagGlobalLootModifier extends LootModifier {
     };
 
     @Override
-    public MapCodec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<FlagGlobalLootModifier> codec() {
         return CODEC;
     };
 

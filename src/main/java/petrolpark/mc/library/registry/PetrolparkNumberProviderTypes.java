@@ -41,10 +41,10 @@ public class PetrolparkNumberProviderTypes {
     public static final RegistryEntry<LootNumberProviderType, LootNumberProviderType>
     
     MAX = REGISTRATE.functionLootNumberProviderType("max", MaxNumberProvider::new),
-    MIN = REGISTRATE.functionLootNumberProviderType("max", MinNumberProvider::new),
-    SUM = REGISTRATE.functionLootNumberProviderType("max", SumNumberProvider::new),
-    PRODUCT = REGISTRATE.functionLootNumberProviderType("max", ProductNumberProvider::new),
-    MEAN = REGISTRATE.functionLootNumberProviderType("max", MeanNumberProvider::new),
+    MIN = REGISTRATE.functionLootNumberProviderType("min", MinNumberProvider::new),
+    SUM = REGISTRATE.functionLootNumberProviderType("sum", SumNumberProvider::new),
+    PRODUCT = REGISTRATE.functionLootNumberProviderType("product", ProductNumberProvider::new),
+    MEAN = REGISTRATE.functionLootNumberProviderType("mean", MeanNumberProvider::new),
     POLYNOMIAL = REGISTRATE.lootNumberProviderType("polynomial", PolynomialNumberProvider.CODEC),
     SIGMOID = REGISTRATE.lootNumberProviderType("sigmoid", SigmoidNumberProvider.CODEC),
     CONDITIONAL = REGISTRATE.lootNumberProviderType("conditional", ConditionalNumberProvider.CODEC),

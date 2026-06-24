@@ -1,6 +1,6 @@
 {
   "parent": "create:item/mechanical_bearing",
   "textures": {
-    "side": "petrolpark:block/horse_mill_bearing_side"
+    "side": "petrolpark:block/shared/horse_mill_bearing_side"
   }
 }

@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.registry.PetrolparkLootConditionTypes;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -15,17 +15,18 @@ import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.predicates.LootItemConditionType;
+import petrolpark.mc.library.registry.PetrolparkLootConditionTypes;
 
-public record ParameterSuppliedLootCondition(List<LootContextParam<Object>> params) implements LootItemCondition {
+public record ParameterSuppliedLootCondition(List<LootContextParam<?>> params) implements LootItemCondition {
 
-    protected static final Map<ResourceLocation, LootContextParam<Object>> KNOWN_PARAMS = new HashMap<>();
+    protected static final Map<ResourceLocation, LootContextParam<?>> KNOWN_PARAMS = new HashMap<>();
 
     public static final MapCodec<ParameterSuppliedLootCondition> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        ResourceLocation.CODEC.xmap(KNOWN_PARAMS::get, LootContextParam::getName).listOf().fieldOf("parameters").forGetter(ParameterSuppliedLootCondition::params)
+        ResourceLocation.CODEC.<LootContextParam<?>>comapFlatMap(ParameterSuppliedLootCondition::get, LootContextParam::getName).listOf().fieldOf("parameters").forGetter(ParameterSuppliedLootCondition::params)
     ).apply(instance, ParameterSuppliedLootCondition::new));
 
     @SuppressWarnings("unchecked")
-    public static final void makeKnown(Collection<LootContextParam<? extends Object>> params) {
+    public static final void makeKnown(Collection<LootContextParam<?>> params) {
         for (LootContextParam<? extends Object> param : params) makeKnown((LootContextParam<Object>) param);
     };
 
@@ -48,8 +49,9 @@ public record ParameterSuppliedLootCondition(List<LootContextParam<Object>> para
         ));
     };
 
-    public static final LootContextParam<?> byName(String name) {
-        return KNOWN_PARAMS.get(ResourceLocation.parse(name));
+    public static final DataResult<LootContextParam<?>> get(ResourceLocation id) {
+        final LootContextParam<?> param = KNOWN_PARAMS.get(id);
+        return param == null ? DataResult.error(() -> "No such LootContextParam '" + id.toString() + "'") : DataResult.success(param);
     };
 
     @Override

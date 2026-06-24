@@ -10,7 +10,7 @@
   "items": "#c:storage_blocks/mashed_potato",
   "on_block_hit": {
     "type": "create:place_block_on_ground",
-    "block": "petrolpark:mashed_potato_block"
+    "block": "petrolpark:shared/mashed_potato_block"
   },
   "velocity_multiplier": 0.8,
   "reload_ticks": 15,

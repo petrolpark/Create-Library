@@ -1,3 +1,3 @@
 {
-    "parent": "petrolpark:block/mesh_basin/block"
+    "parent": "petrolpark:block/shared/mesh_basin/block"
 }

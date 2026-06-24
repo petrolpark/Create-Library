@@ -116,6 +116,14 @@ repositories {
             includeGroup "maven.modrinth"
         }
     }
+    exclusiveContent { // Sable Companion
+        forRepository {
+            maven { url = "https://maven.ryanhcode.dev/releases" }
+        }
+        filter {
+            includeGroup("dev.ryanhcode.sable-companion")
+        }
+    }
     flatDir {
         dirs "../petrolpark_local_maven/petrolpark/mc/pquality/pquality/${pquality_version}"
     }
@@ -133,6 +141,8 @@ dependencies {
     // Ponder/Flywhel (also bundled)
     jarJar(implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}"))
     jarJar(runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"))
+    // Sable companion (also bundled)
+    jarJar(api("dev.ryanhcode.sable-companion:sable-companion-common-${minecraft_version}:${sable_companion_version}"))
 
     // SOFT DEPENDENCIES
 

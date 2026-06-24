@@ -21,7 +21,7 @@
         "facing": "north"
       },
       "apply": {
-        "model": "#petrolpark:block/shared/harness/cow_dummy/block"
+        "model": "petrolpark:block/shared/harness/cow_dummy/block"
       }
     },
     {
@@ -47,7 +47,7 @@
         "facing": "east"
       },
       "apply": {
-        "model": "#petrolpark:block/shared/harness/cow_dummy/block",
+        "model": "petrolpark:block/shared/harness/cow_dummy/block",
         "y": 90
       }
     },
@@ -74,7 +74,7 @@
         "facing": "south"
       },
       "apply": {
-        "model": "#petrolpark:block/shared/harness/cow_dummy/block",
+        "model": "petrolpark:block/shared/harness/cow_dummy/block",
         "y": 180
       }
     },
@@ -101,7 +101,7 @@
         "facing": "west"
       },
       "apply": {
-        "model": "#petrolpark:block/shared/harness/cow_dummy/block",
+        "model": "petrolpark:block/shared/harness/cow_dummy/block",
         "y": 270
       }
     }
