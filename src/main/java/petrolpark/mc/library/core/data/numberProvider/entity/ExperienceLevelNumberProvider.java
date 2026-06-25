@@ -20,13 +20,18 @@ public class ExperienceLevelNumberProvider implements EntityNumberProvider {
 
     @Override
     public float getFloat(Entity entity, LootContext lootContext) {
+        return getInt(entity, lootContext);
+    };
+
+    @Override
+    public int getInt(Entity entity, LootContext lootContext) {
         if (entity instanceof Player player) return player.experienceLevel;
-        return 0f;
+        return 0;
     };
 
     @Override
     public NumberEstimate getEstimate() {
-        return NumberEstimate.ranged(0f, 100f, true);
+        return NumberEstimate.POSITIVE;
     };
 
     @Override

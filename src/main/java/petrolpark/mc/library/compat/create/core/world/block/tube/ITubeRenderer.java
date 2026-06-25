@@ -1,20 +1,19 @@
 package petrolpark.mc.library.compat.create.core.world.block.tube;
 
-import dev.engine_room.flywheel.lib.model.baked.PartialModel;
-
 import java.util.Arrays;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import petrolpark.mc.library.util.MathsHelper;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.createmod.catnip.animation.AnimationTickHolder;
 //import com.simibubi.create.foundation.render.CachedBufferer;
 import net.createmod.catnip.render.CachedBuffers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.Vec3;
+import petrolpark.mc.library.util.MathsHelper;
 
 public interface ITubeRenderer<T extends SmartBlockEntity> {
 
@@ -30,12 +29,12 @@ public interface ITubeRenderer<T extends SmartBlockEntity> {
         Arrays.fill(segmentScales, 1f);
         modifySegmentScales(be, segmentScales, partialTicks);
         for (int i = 0; i < spline.getPoints().size() - 1; i++) {
-            float scale = segmentScales[i];
+            final float scale = segmentScales[i];
+            final Vec3 tangent = spline.getTangents().get(i);
             CachedBuffers.partial(segmentModels[i % segmentModels.length], be.getBlockState())
-                .translateBack(Vec3.atLowerCornerOf(be.getBlockPos()))
-                .translate(spline.getPoints().get(i))
-                .rotateY((float) MathsHelper.azimuth(spline.getTangents().get(i)))
-                .rotateX((float) MathsHelper.inclination(spline.getTangents().get(i)))
+                .translate(spline.getPoints().get(i).subtract(Vec3.atLowerCornerOf(be.getBlockPos())))
+                .rotateY((float) MathsHelper.azimuth(tangent))
+                .rotateX((float) MathsHelper.inclination(tangent))
                 .scale(scale, 1f, scale)
                 .light(light)
                 .renderInto(ms, vc);

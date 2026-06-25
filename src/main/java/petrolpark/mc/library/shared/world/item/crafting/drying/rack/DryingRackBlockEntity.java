@@ -3,23 +3,23 @@ package petrolpark.mc.library.shared.world.item.crafting.drying.rack;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import petrolpark.mc.library.core.world.item.decay.IApplyDecayRecipe;
-import petrolpark.mc.library.core.world.item.decay.ItemDecay;
-import petrolpark.mc.library.core.world.item.wooden.WoodenBlockEntity;
-import petrolpark.mc.library.shared.registry.SharedRecipeTypes;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import petrolpark.mc.library.core.world.item.decay.IApplyDecayRecipe;
+import petrolpark.mc.library.core.world.item.decay.ItemDecay;
+import petrolpark.mc.library.core.world.item.wooden.WoodenBlockEntity;
+import petrolpark.mc.library.shared.registry.SharedRecipeTypes;
 
-public class DryingRackBlockEntity extends WoodenBlockEntity {
+public class DryingRackBlockEntity extends WoodenBlockEntity implements Clearable {
 
     public final ItemStackHandler inv = new ItemStackHandler() {
 
@@ -62,6 +62,11 @@ public class DryingRackBlockEntity extends WoodenBlockEntity {
 
     public ItemStackHandler getItemHandler(@Nullable Direction face) {
         return inv;
+    };
+
+    @Override
+    public void clearContent() {
+        inv.setStackInSlot(0, ItemStack.EMPTY);
     };
 
     @Override

@@ -42,6 +42,11 @@ public record EntityPredicateNumberProvider(EntityPredicate predicate, EntityNum
     ).apply(instance, EntityPredicateNumberProvider::new));
 
     @Override
+    public int getInt(Entity entity, LootContext lootContext) {
+        return (predicate().matches(lootContext.getLevel(), null, entity) ? pass : fail).getInt(entity, lootContext);
+    };
+
+    @Override
     public float getFloat(Entity entity, LootContext lootContext) {
         return (predicate().matches(lootContext.getLevel(), null, entity) ? pass : fail).getFloat(entity, lootContext);
     };

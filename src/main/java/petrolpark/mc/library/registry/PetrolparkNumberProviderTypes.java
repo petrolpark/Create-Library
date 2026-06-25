@@ -20,6 +20,7 @@ import petrolpark.mc.library.core.data.numberProvider.ProductNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.SigmoidNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.SumNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.AttributeEntityNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.entity.EntityEffectDurationNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.EntityPredicateNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.EquipmentNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.ExperienceLevelNumberProvider;
@@ -59,6 +60,7 @@ public class PetrolparkNumberProviderTypes {
     
     ATTRIBUTE = REGISTRATE.lootEntityNumberProviderType("attribute", AttributeEntityNumberProvider.CODEC),
     ENTITY_PREDICATE = REGISTRATE.lootEntityNumberProviderType("predicate", EntityPredicateNumberProvider.CODEC),
+    EFFECT_DURATION = REGISTRATE.lootEntityNumberProviderType("effect_duration", EntityEffectDurationNumberProvider.CODEC),
     EQUIPMENT = REGISTRATE.lootEntityNumberProviderType("equipment_property", EquipmentNumberProvider.CODEC),
     EXPERIENCE_LEVEL = REGISTRATE.lootEntityNumberProviderType("experience_level", MapCodec.unit(ExperienceLevelNumberProvider::new)),
     FLAT_ENTITY = REGISTRATE.lootEntityNumberProviderType("flat", FlatEntityNumberProvider.CODEC);

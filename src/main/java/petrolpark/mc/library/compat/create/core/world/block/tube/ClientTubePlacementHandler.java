@@ -6,14 +6,6 @@ import java.util.List;
 import com.mojang.blaze3d.platform.InputConstants;
 import com.mojang.blaze3d.platform.Window;
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.compat.create.PetrolparkCreateClient;
-import petrolpark.mc.library.compat.create.RequiresCreate;
-import petrolpark.mc.library.registry.PetrolparkKeyBinds;
-import petrolpark.mc.library.util.BlockFace;
-import petrolpark.mc.library.util.Lang;
-import petrolpark.mc.library.util.Pair;
-import petrolpark.mc.library.util.RayHelper;
-import petrolpark.mc.library.util.RayHelper.CustomHitResult;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.compat.Mods;
 import com.simibubi.create.foundation.gui.RemovedGuiUtils;
@@ -21,6 +13,8 @@ import com.simibubi.create.foundation.mixin.accessor.MouseHandlerAccessor;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import com.simibubi.create.infrastructure.config.CClient;
 
+import dev.ryanhcode.sable.companion.SableCompanion;
+import dev.ryanhcode.sable.companion.SubLevelAccess;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.gui.element.GuiGameElement;
 import net.createmod.catnip.platform.CatnipServices;
@@ -34,6 +28,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.LayeredDraw;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Position;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -48,6 +43,14 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
+import petrolpark.mc.library.compat.create.PetrolparkCreateClient;
+import petrolpark.mc.library.compat.create.RequiresCreate;
+import petrolpark.mc.library.registry.PetrolparkKeyBinds;
+import petrolpark.mc.library.util.BlockFace;
+import petrolpark.mc.library.util.Lang;
+import petrolpark.mc.library.util.Pair;
+import petrolpark.mc.library.util.RayHelper;
+import petrolpark.mc.library.util.RayHelper.CustomHitResult;
 
 @OnlyIn(Dist.CLIENT)
 @RequiresCreate
@@ -70,12 +73,13 @@ public class ClientTubePlacementHandler {
 
     @SubscribeEvent
     public static final void tick(ClientTickEvent.Pre event) {
-        Minecraft mc = Minecraft.getInstance();
-        ClientLevel level = mc.level;
-        LocalPlayer player = mc.player;
+        final Minecraft mc = Minecraft.getInstance();
+        final ClientLevel level = mc.level;
+        final LocalPlayer player = mc.player;
 
         if (level == null ||
             player == null ||
+            mc.screen != null || // Don't prevent button clicks when paused
             !(ItemStack.isSameItem(player.getItemInHand(InteractionHand.MAIN_HAND), currentStack) || AllItems.WRENCH.isIn(player.getMainHandItem())) ||
             currentStack.isEmpty() ||
             (start != null && level.getBlockState(start.getPos()).getBlock() != tubeBlock
@@ -114,7 +118,10 @@ public class ClientTubePlacementHandler {
         // Check there are enough Items
         canAfford = spline.checkCanAfford(mc.player, currentStack.getItem(), tubeBlock);
 
-        if (controlPointBoxes.isEmpty()) controlPointBoxes = spline.getControlPoints().stream().map(v -> new AABB(v.subtract(3 / 32d, 3 / 32d, 3 / 32d), v.add(3 / 32d, 3 / 32d, 3 / 32d))).toList();
+        if (controlPointBoxes.isEmpty() || SableCompanion.INSTANCE.getContaining(level, start.getPos()) != null) controlPointBoxes = spline.getControlPoints().stream() // Refresh if we don't know or we're on a Sable contraption so expect positions to change
+            .map(v -> SableCompanion.INSTANCE.projectOutOfSubLevel(level, (Position)v))
+            .map(v -> new AABB(v.subtract(3 / 32d, 3 / 32d, 3 / 32d), v.add(3 / 32d, 3 / 32d, 3 / 32d)))
+            .toList();
 
         // Locate targeted Control Point, or move it if there already is one
         if (!draggingSelectedControlPoint && !controlPointBoxes.isEmpty()) {
@@ -230,6 +237,7 @@ public class ClientTubePlacementHandler {
     @SubscribeEvent
     public static final void onUseMouse(InputEvent.MouseButton.Pre event) {
         final Minecraft mc = Minecraft.getInstance();
+        final ClientLevel level = mc.level;
         final LocalPlayer player = mc.player;
 
         if (player == null || spline == null) return; 
@@ -238,7 +246,7 @@ public class ClientTubePlacementHandler {
         
         if (targetedControlPoint > 0 && targetedControlPoint < spline.getControlPoints().size() - 1 && event.getButton() == InputConstants.MOUSE_BUTTON_RIGHT && draggingSelectedControlPoint == (event.getAction() == InputConstants.RELEASE)) {
             draggingSelectedControlPoint = !draggingSelectedControlPoint;
-            distanceToSelectedControlPoint = player.getEyePosition().distanceTo(spline.getControlPoints().get(targetedControlPoint));
+            distanceToSelectedControlPoint = Math.sqrt(SableCompanion.INSTANCE.distanceSquaredWithSubLevels(level, player.getEyePosition(), spline.getControlPoints().get(targetedControlPoint)));
             resetTTL();
         };
     };
@@ -277,10 +285,16 @@ public class ClientTubePlacementHandler {
     };
 
     protected static final void relocateControlPoint() {
-        Minecraft mc = Minecraft.getInstance();
-        ClientLevel level = mc.level;
-        LocalPlayer player = mc.player;
-        if (level != null && player != null && spline.moveControlPoint(targetedControlPoint, player.getEyePosition().add(player.getViewVector(AnimationTickHolder.getPartialTicks()).scale(distanceToSelectedControlPoint)))) {
+        final Minecraft mc = Minecraft.getInstance();
+        final ClientLevel level = mc.level;
+        final LocalPlayer player = mc.player;
+        if (level == null || player == null) return;
+
+        final SubLevelAccess subLevel = SableCompanion.INSTANCE.getContaining(level, start.getPos());
+        final Vec3 globalPos = SableCompanion.INSTANCE.getEyePositionInterpolated(player, AnimationTickHolder.getPartialTicks()).add(player.getViewVector(AnimationTickHolder.getPartialTicks()).scale(distanceToSelectedControlPoint));
+        final Vec3 localPos = subLevel == null ? globalPos : subLevel.logicalPose().transformPositionInverse(globalPos);
+
+        if (spline.moveControlPoint(targetedControlPoint, localPos)) {
             controlPointBoxes = new ArrayList<>(); // All control points need to be moved
             level.playSound(player, player.getOnPos(), SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.BLOCKS, 0.25f, 0.1f);
             revalidateSpline(mc);
@@ -297,7 +311,7 @@ public class ClientTubePlacementHandler {
             spline = null;
             if (manualPlacement && player != null) player.displayClientMessage(Lang.translate("tube.connect_another", stack.getHoverName()), true);
             resetTTL();
-        } else if (spline == null) { // If placing the second Block
+        } else if (spline == null && start.getPos().distSqr(location.getPos()) <= TubeSpline.MAX_SQUARE_SEPARATION) { // If placing the second Block
             if (!ItemStack.isSameItemSameComponents(stack, currentStack)) {
                 cancel();
                 return;

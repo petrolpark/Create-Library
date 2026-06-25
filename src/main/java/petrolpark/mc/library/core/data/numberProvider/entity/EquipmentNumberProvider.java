@@ -48,6 +48,12 @@ public record EquipmentNumberProvider(EquipmentSlot slot, ItemStackNumberProvide
     };
 
     @Override
+    public int getInt(Entity entity, LootContext lootContext) {
+        if (entity instanceof LivingEntity livingEntity) return value.getInt(livingEntity.getItemBySlot(slot), lootContext);
+        return 0;
+    };
+
+    @Override
     public float getMaxFloat(Entity entity, LootContext lootContext) {
         if (entity instanceof LivingEntity livingEntity) return value.getMaxFloat(livingEntity.getItemBySlot(slot), lootContext);
         return 0f;

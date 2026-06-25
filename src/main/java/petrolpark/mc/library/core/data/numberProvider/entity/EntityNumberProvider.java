@@ -39,6 +39,10 @@ public interface EntityNumberProvider extends LootContextUser {
 
     public float getFloat(Entity entity, LootContext lootContext);
 
+    public default int getInt(Entity entity, LootContext lootContext) {
+        return (int)getFloat(entity, lootContext);
+    };
+
     /**
      * Get the approximate bounds for the {@link EntityNumberProvider#getFloat(Entity, LootContext) output} of this {@link EntityNumberProvider} on a best-effort basis.
      * @see NumberEstimate#unknown() 

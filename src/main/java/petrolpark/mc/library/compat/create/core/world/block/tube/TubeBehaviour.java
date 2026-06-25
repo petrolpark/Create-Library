@@ -6,14 +6,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.BiConsumer;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.create.RequiresCreate;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.util.BigItemStack;
-import petrolpark.mc.library.util.BlockFace;
-import petrolpark.mc.library.util.ItemHelper;
-import petrolpark.mc.library.util.NBTHelper;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -39,6 +31,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.create.RequiresCreate;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
+import petrolpark.mc.library.util.BigItemStack;
+import petrolpark.mc.library.util.BlockFace;
+import petrolpark.mc.library.util.ItemHelper;
+import petrolpark.mc.library.util.NBTHelper;
 
 @RequiresCreate
 public class TubeBehaviour extends BlockEntityBehaviour {
@@ -62,6 +62,11 @@ public class TubeBehaviour extends BlockEntityBehaviour {
 
     public boolean isController() {
         return controller;
+    };
+
+    @Override
+    public void initialize() {
+        if (spline != null) connect(spline); // Make sure structural blocks are there
     };
 
     /**

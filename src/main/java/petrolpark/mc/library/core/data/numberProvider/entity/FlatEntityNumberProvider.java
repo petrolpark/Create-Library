@@ -32,6 +32,11 @@ public record FlatEntityNumberProvider(NumberProvider numberProvider) implements
     public static final MapCodec<FlatEntityNumberProvider> CODEC = CodecHelper.singleFieldMap(NumberProviders.CODEC, "provider", FlatEntityNumberProvider::numberProvider, FlatEntityNumberProvider::new);
 
     @Override
+    public int getInt(Entity entity, LootContext lootContext) {
+        return numberProvider().getInt(lootContext);
+    };
+
+    @Override
     public float getFloat(Entity entity, LootContext lootContext) {
         return numberProvider().getFloat(lootContext);
     };

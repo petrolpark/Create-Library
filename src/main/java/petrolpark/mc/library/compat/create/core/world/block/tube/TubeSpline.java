@@ -1,16 +1,11 @@
 package petrolpark.mc.library.compat.create.core.world.block.tube;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
-
-import petrolpark.mc.library.compat.create.RequiresCreate;
-import petrolpark.mc.library.util.BlockFace;
-import petrolpark.mc.library.util.ClampedCubicSpline;
-import petrolpark.mc.library.util.Lang;
-import petrolpark.mc.library.util.MathsHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.createmod.catnip.codecs.stream.CatnipStreamCodecs;
@@ -27,6 +22,11 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import petrolpark.mc.library.compat.create.RequiresCreate;
+import petrolpark.mc.library.util.BlockFace;
+import petrolpark.mc.library.util.ClampedCubicSpline;
+import petrolpark.mc.library.util.Lang;
+import petrolpark.mc.library.util.MathsHelper;
 
 /**
  * A Clamped Cubic Spline with each end in the middle of a Block Face
@@ -36,6 +36,7 @@ public class TubeSpline extends ClampedCubicSpline {
 
     public static final double MAX_LENGTH = 32d;
     public static final double MAX_VOLUME = 256d;
+    public static final int MAX_SQUARE_SEPARATION = 64;
     public static final int MAX_CONTROL_POINTS = 16;
 
     // Inputs
@@ -65,8 +66,23 @@ public class TubeSpline extends ClampedCubicSpline {
     };
 
     @Override
+    public boolean moveControlPoint(int controlPointIndex, Vec3 newLocation) {
+        if (MathsHelper.volume(MathsHelper.expandToInclude(occupiedVolume, newLocation)) > MAX_VOLUME) return false;
+        return super.moveControlPoint(controlPointIndex, newLocation);
+    };
+
+    @Override
     public void recalculate() {
         blockedPositions = new HashSet<>();
+
+        // Check not too far
+        if (start.getPos().distSqr(end.getPos()) > MAX_SQUARE_SEPARATION) {
+            points = new ArrayList<>();
+            tangents = new ArrayList<>();
+            occupiedVolume = new AABB(0d, 0d, 0d, 0d, 0d, 0d);
+            return;
+        };
+
         super.recalculate();
 
         // Check its not too sharp
@@ -121,6 +137,8 @@ public class TubeSpline extends ClampedCubicSpline {
             result = TubePlacementResult.WRONG_FACE;
         } else if (controlPoints.size() > MAX_CONTROL_POINTS) {
             result = TubePlacementResult.TOO_MANY_POINTS;
+        } else if (start.getPos().distSqr(end.getPos()) > MAX_SQUARE_SEPARATION) {
+            result = TubePlacementResult.TOO_FAR;
         } else if (totalLength >= MAX_LENGTH) {
             result = TubePlacementResult.TOO_LONG;
         } else if (totalLength <= 1d || start.equals(end)) {
@@ -168,7 +186,7 @@ public class TubeSpline extends ClampedCubicSpline {
 
     public static enum TubePlacementResult {
         // In order of decreasing priority
-        WRONG_BLOCK, WRONG_FACE, TOO_MANY_POINTS, TOO_LONG, TOO_SHORT, TOO_BIG, TOO_SHARP, TOO_POOR, POINTS_TOO_CLOSE, BLOCKED, SUCCESS(true),
+        WRONG_BLOCK, WRONG_FACE, TOO_MANY_POINTS, TOO_FAR, TOO_LONG, TOO_SHORT, TOO_BIG, TOO_SHARP, TOO_POOR, POINTS_TOO_CLOSE, BLOCKED, SUCCESS(true),
         ;
 
         public final boolean success;
