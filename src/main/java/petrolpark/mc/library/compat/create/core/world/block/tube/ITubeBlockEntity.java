@@ -20,6 +20,7 @@ public interface ITubeBlockEntity extends Clearable {
 
     @Override
     public default void clearContent() {
-        getTube().disconnect((t, s) -> {});
+        final TubeBehaviour tube = getTube();
+        if (tube.isController()) tube.disconnect((b, s) -> {});
     };
 };

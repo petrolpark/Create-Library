@@ -87,6 +87,13 @@ public class ItemHelper {
         return removed;
     };
 
+    public static final ItemStack removeItem(IItemHandler inv, Predicate<ItemStack> test, boolean simulate) {
+        for (int slot = 0; slot < inv.getSlots(); slot++) {
+            if (test.test(inv.getStackInSlot(slot))) return inv.extractItem(slot, 1, simulate);
+        };
+        return ItemStack.EMPTY;
+    };
+
     public static final void give(Entity entity, Stream<ItemStack> stacks) {
         if (entity instanceof InventoryCarrier hasInv) {
             stacks.forEach(stack -> entity.spawnAtLocation(ItemHandlerHelper.insertItemStacked(new InvWrapper(hasInv.getInventory()), stack, false)));

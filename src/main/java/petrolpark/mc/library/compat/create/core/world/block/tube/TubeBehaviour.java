@@ -66,7 +66,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
 
     @Override
     public void initialize() {
-        if (spline != null) connect(spline); // Make sure structural blocks are there
+        if (getSpline() != null) connect(getSpline()); // Make sure structural blocks are there
     };
 
     /**
@@ -142,7 +142,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
             });
             // Remove tube structural blocks
             if (getSpline() != null) for (BlockPos pos : getSpline().getBlockedPositions()) {
-                getWorld().destroyBlock(pos, true);
+                getWorld().destroyBlock(pos, false);
             };
             sendDestroyTubeParticles();
             playSound(true);
@@ -220,8 +220,10 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         super.tick();
         if (initializationTicks > 0) {
             initializationTicks--;
-            if (controller && initializationTicks == 1 && getSpline() != null) for (BlockPos pos : getSpline().getBlockedPositions()) {
-                getWorld().getBlockEntity(pos, PetrolparkCreateBlockEntityTypes.TUBE_STRUCTURE.get()).ifPresent(be -> be.setController(getPos()));
+            if (controller && initializationTicks == 1 && getSpline() != null) {
+                for (BlockPos pos : getSpline().getBlockedPositions()) {
+                    getWorld().getBlockEntity(pos, PetrolparkCreateBlockEntityTypes.TUBE_STRUCTURE.get()).ifPresent(be -> be.setController(getPos()));
+                };
             };
             tubeBlockEntity.invalidateTubeRenderBoundingBox();
         };

@@ -10,13 +10,12 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.Clearable;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import petrolpark.mc.library.compat.create.RequiresCreate;
 
 @RequiresCreate
-public class TubeStructuralBlockEntity extends SmartBlockEntity implements Clearable {
+public class TubeStructuralBlockEntity extends SmartBlockEntity {
 
     protected BlockPos controllerPos;
 
@@ -35,14 +34,6 @@ public class TubeStructuralBlockEntity extends SmartBlockEntity implements Clear
 
     public void setController(BlockPos controllerPos) {
         this.controllerPos = controllerPos;
-    };
-
-    /**
-     * When about to be removed, e.g. as part of a Simulated Contraption, don't spew tubes everywhere
-     */
-    @Override
-    public void clearContent() {
-        TubeBehaviour.get(getLevel(), controllerPos).ifPresent(behaviour -> behaviour.disconnect((s, l) -> {}));
     };
 
     @Override

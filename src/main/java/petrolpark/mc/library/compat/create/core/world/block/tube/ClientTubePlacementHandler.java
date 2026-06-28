@@ -34,7 +34,10 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
@@ -45,6 +48,7 @@ import net.neoforged.neoforge.client.event.InputEvent;
 import net.neoforged.neoforge.client.event.RenderHighlightEvent;
 import petrolpark.mc.library.compat.create.PetrolparkCreateClient;
 import petrolpark.mc.library.compat.create.RequiresCreate;
+import petrolpark.mc.library.compat.create.util.BlueprintOverlayHelper;
 import petrolpark.mc.library.registry.PetrolparkKeyBinds;
 import petrolpark.mc.library.util.BlockFace;
 import petrolpark.mc.library.util.Lang;
@@ -72,7 +76,7 @@ public class ClientTubePlacementHandler {
     protected static boolean canAfford = true;
 
     @SubscribeEvent
-    public static final void tick(ClientTickEvent.Pre event) {
+    public static final void tickPre(ClientTickEvent.Pre event) {
         final Minecraft mc = Minecraft.getInstance();
         final ClientLevel level = mc.level;
         final LocalPlayer player = mc.player;
@@ -138,6 +142,18 @@ public class ClientTubePlacementHandler {
 
         // Show message
         player.displayClientMessage(spline.result.translate(currentStack), true);
+    };
+
+    @SubscribeEvent
+    public static final void tickPost(ClientTickEvent.Post event) {
+        final Minecraft mc = Minecraft.getInstance();
+        final Player player = mc.player;
+        if (player == null || spline == null) return;
+
+        // Render required Items
+        final Item requiredItem = ((Block)tubeBlock).asItem();
+        final int requiredCount = tubeBlock.getItemsForTubeLength(spline.getLength());
+        BlueprintOverlayHelper.displayRequiredItems(requiredItem, requiredCount, player.hasInfiniteMaterials() || player.getInventory().countItem(requiredItem) >= requiredCount);
     };
 
     public static final LayeredDraw.Layer OVERLAY = ClientTubePlacementHandler::renderOverlay;

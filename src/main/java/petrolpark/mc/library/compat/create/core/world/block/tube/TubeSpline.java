@@ -179,7 +179,7 @@ public class TubeSpline extends ClampedCubicSpline {
     };
 
     public boolean checkCanAfford(Player player, Item requiredItem, ITubeBlock block) {
-        boolean canAfford = player.getAbilities().instabuild || player.getInventory().countItem(requiredItem) >= block.getItemsForTubeLength(getLength());
+        boolean canAfford = player.hasInfiniteMaterials() || player.getInventory().countItem(requiredItem) >= block.getItemsForTubeLength(getLength());
         if (!canAfford && (result == null || result.ordinal() > TubePlacementResult.TOO_POOR.ordinal())) result = TubePlacementResult.TOO_POOR;
         return canAfford;
     };

@@ -3,11 +3,11 @@ package petrolpark.mc.library.compat.create.core.world.block.composite;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
-import petrolpark.mc.library.util.NBTHelper;
 import com.simibubi.create.content.kinetics.KineticNetwork;
 import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
@@ -30,8 +30,12 @@ import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
+import petrolpark.mc.library.util.NBTHelper;
 
 public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
 
@@ -383,6 +387,16 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
             return getBlockPos().asLong() ^ ((long)getIndex() << 9l); // y coord only likely to take up first 9 bits
         };
 
+    };
+
+    /**
+     * Stream all KineticBlockEntities at that position, whether simple or {@link CompositeKineticBlockEntityPart part} of a {@link CompositeKineticBlockEntity}
+     */
+    public static final Stream<KineticBlockEntity> streamAny(LevelReader level, BlockPos pos) {
+        final BlockEntity be = level.getBlockEntity(pos);
+        if (be instanceof KineticBlockEntity kbe) return Stream.of(kbe);
+        if (be instanceof CompositeKineticBlockEntity ckbe) return ckbe.getParts().stream().map(Function.identity());
+        return Stream.empty();
     };
 
     public static final void addMultiParts(KineticBlockEntity from, BlockPos neighborPos, Consumer<KineticBlockEntity> beAdder) {

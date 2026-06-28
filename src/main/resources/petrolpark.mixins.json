@@ -91,6 +91,7 @@
     "client": [
         "client.CreativeModeInventoryScreenMixin",
         "compat.create.accessor.client.ArmInteractionPointHandlerAccessor",
+        "compat.create.accessor.client.BlueprintOverlayRendererAccessor",
         "compat.create.accessor.client.ChainConveyorOBBAccessor",
         "compat.create.accessor.client.OutlineEntryAccessor",
         "compat.create.accessor.client.OutlineParamsAccessor",
