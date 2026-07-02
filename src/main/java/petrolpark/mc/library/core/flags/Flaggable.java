@@ -9,6 +9,11 @@ import javax.annotation.Nullable;
 import net.minecraft.core.Holder;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 
+/**
+ * Instances of {@link Flaggable} represent whole classes of flaggable objects.
+ * They define how to obtain a {@link IFlagPole} for a given object, and what the intrinsic and shown-if-absent Flags are for that object.
+ * @see Flaggables Built-in Flaggables
+ */
 public abstract class Flaggable<OBJECT, OBJECT_STACK> {
 
     public abstract boolean isFlaggable(OBJECT object);
@@ -43,7 +48,7 @@ public abstract class Flaggable<OBJECT, OBJECT_STACK> {
         @Override
         public IFlagPole<Object, Object> getFlagPole(Object stack) {
             return null;
-        }
+        };
 
         @Override
         public Collection<Holder<Flag>> getIntrinsicFlags(Object object) {

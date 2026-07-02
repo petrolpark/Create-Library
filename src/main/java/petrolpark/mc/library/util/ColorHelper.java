@@ -9,6 +9,7 @@ import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Sheep;
+import net.minecraft.world.entity.animal.TropicalFish;
 import net.minecraft.world.entity.monster.Shulker;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.ChunkPos;
@@ -86,27 +87,31 @@ public class ColorHelper {
         return (c <= 0.0031308) ? (12.92 * c) : (1.055 * Math.pow(c, 1/2.4) - 0.055);
     };
 
-    public static final @Nullable DyeColor getColor(LivingEntity entity) {
+    public static final @Nullable DyeColor getColor(LivingEntity entity, boolean secondary) {
         if (entity instanceof Sheep sheep) return sheep.getColor();
         if (entity instanceof Shulker shulker) return shulker.getColor();
-        final GetEntityColorEvent event = new GetEntityColorEvent(entity);
+        if (entity instanceof TropicalFish tropicalFish) return secondary ? tropicalFish.getPatternColor() : tropicalFish.getBaseColor();
+        final GetEntityColorEvent event = new GetEntityColorEvent(entity, secondary);
         NeoForge.EVENT_BUS.post(event);
         return event.getColor();
     };
 
-    public static final void setColor(LivingEntity entity, @Nullable DyeColor color) {
+    public static final void setColor(LivingEntity entity, @Nullable DyeColor color, boolean secondary) {
         if (entity instanceof Sheep sheep && color != null) sheep.setColor(color);
         if (entity instanceof Shulker shulker) shulker.setVariant(Optional.ofNullable(color));
-        final SetEntityColorEvent event = new SetEntityColorEvent(entity, color);
+        final SetEntityColorEvent event = new SetEntityColorEvent(entity, color, secondary);
         NeoForge.EVENT_BUS.post(event);
     };
 
+    /**
+     * @see SetEntityColorEvent
+     */
     public static final class GetEntityColorEvent extends LivingEvent {
 
         @Nullable
         protected DyeColor color;
 
-        public GetEntityColorEvent(LivingEntity entity) {
+        public GetEntityColorEvent(LivingEntity entity, boolean secondary) {
             super(entity);
         };
 
@@ -118,20 +123,41 @@ public class ColorHelper {
             return color;
         };
 
+        /**
+         * Whether we are interested in the secondary color of the entity. This is applicable to {@link TropicalFish}, for example, which have a primary and secondary color.
+         * If an entity only has one color, this can be ignored.
+         */
+        public boolean isSecondary() {
+            return false;
+        };
+
     };
 
+    /**
+     * @see GetEntityColorEvent
+     */
     public static final class SetEntityColorEvent extends LivingEvent implements ICancellableEvent {
 
         @Nullable
         protected final DyeColor color;
+        protected final boolean secondary;
 
-        public SetEntityColorEvent(LivingEntity entity, DyeColor color) {
+        public SetEntityColorEvent(LivingEntity entity, DyeColor color, boolean secondary) {
             super(entity);
             this.color = color;
+            this.secondary = secondary;
         };
 
         public @Nullable DyeColor getColor() {
             return color;
+        };
+
+        /**
+         * Whether we are interested in the secondary color of the entity. This is applicable to {@link TropicalFish}, for example, which have a primary and secondary color.
+         * If an entity only has one color, this can be ignored.
+         */
+        public boolean isSecondary() {
+            return secondary;
         };
 
     };

@@ -1,10 +1,5 @@
 package petrolpark.mc.library.compat.create.core.world.block.tube;
 
-import petrolpark.mc.library.compat.create.RequiresCreate;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreatePackets;
-import petrolpark.mc.library.experimental.actionrecord.packet.recordable.AlwaysEnterRecordablePacketPayload;
-import petrolpark.mc.library.util.ItemHelper;
-
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -15,6 +10,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import petrolpark.mc.library.compat.create.RequiresCreate;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreatePackets;
+import petrolpark.mc.library.experimental.actionrecord.packet.recordable.AlwaysEnterRecordablePacketPayload;
+import petrolpark.mc.library.util.ItemHelper;
 
 @RequiresCreate
 public class BuildTubePacket implements ServerboundPacketPayload, AlwaysEnterRecordablePacketPayload {

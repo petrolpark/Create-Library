@@ -5,20 +5,6 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipe;
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipeParams;
-import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.blender.BlendingRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.CentrifugationRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.extrusion.ExtrusionRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.mandrel.MandrelRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.BoilingRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.JuicingRecipe;
-import petrolpark.mc.library.core.data.recipe.IPetrolparkRecipeTypes;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
-import petrolpark.mc.library.shared.world.item.crafting.SharedRecipeType;
-import petrolpark.mc.library.util.Lang;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
 
@@ -30,13 +16,29 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.registries.DeferredHolder;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipe;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipeParams;
+import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.blender.BlendingRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.CentrifugationRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.extrusion.ExtrusionRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.mandrel.MandrelRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.BoilingRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.FilteringRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.JuicingRecipe;
+import petrolpark.mc.library.core.data.recipe.IPetrolparkRecipeTypes;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.shared.world.item.crafting.SharedRecipeType;
+import petrolpark.mc.library.util.Lang;
 
 public enum SharedCreateRecipeTypes implements IPetrolparkRecipeTypes, IRecipeTypeInfo {
 
     BLENDING(SharedFeatureFlag.BLENDER, BlendingRecipe.Serializer::new),
+    BOILING(SharedFeatureFlag.MESH_BASIN, BoilingRecipe.Serializer::new),
     CENTRIFUGATION(SharedFeatureFlag.CENTRIFUGE, CentrifugationRecipe::new),
     EXTRUSION(SharedFeatureFlag.EXTRUSION, ExtrusionRecipe.Serializer::new),
-    BOILING(SharedFeatureFlag.MESH_BASIN, BoilingRecipe.Serializer::new),
+    FILTERING(SharedFeatureFlag.MESH_BASIN, FilteringRecipe.Serializer::new),
     JUICING(SharedFeatureFlag.MESH_BASIN, JuicingRecipe.Serializer::new),
     LIDDED_BASIN(SharedFeatureFlag.BASIN_LID, LiddedBasinRecipe.Serializer::new),
     MANDREL(SharedFeatureFlag.MANDREL, MandrelRecipe.Serializer::new),

@@ -17,13 +17,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.core.world.item.recycling.IRecyclableRecipe;
-import petrolpark.mc.library.core.world.item.recycling.RecyclingManager;
-import petrolpark.mc.library.core.world.item.recycling.RecyclingOutputs;
-import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
-import petrolpark.mc.library.registry.PetrolparkRecipeSerializers;
-import petrolpark.mc.library.util.WoodHelper;
-import petrolpark.mc.library.util.WoodHelper.Wood;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -38,9 +31,17 @@ import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.item.crafting.ShapedRecipePattern;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.Tags;
+import petrolpark.mc.library.core.world.item.recycling.IRecyclableRecipe;
+import petrolpark.mc.library.core.world.item.recycling.RecyclingManager;
+import petrolpark.mc.library.core.world.item.recycling.RecyclingOutputs;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
+import petrolpark.mc.library.registry.PetrolparkRecipeSerializers;
+import petrolpark.mc.library.util.WoodHelper;
+import petrolpark.mc.library.util.WoodHelper.Wood;
 
 public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclableRecipe {
 
+    //TODO move to WoodHelper
     public static final Ingredient PLANKS_INGREDIENT = Ingredient.of(ItemTags.PLANKS);
     public static final Ingredient SLAB_INGREDIENT = Ingredient.of(ItemTags.WOODEN_SLABS);
     public static final Ingredient STAIRS_INGREDIENT = Ingredient.of(ItemTags.WOODEN_STAIRS);

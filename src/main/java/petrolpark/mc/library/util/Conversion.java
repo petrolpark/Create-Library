@@ -43,7 +43,12 @@ import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.bus.api.Event;
+import petrolpark.mc.library.shared.world.GoldConversion;
 
+/**
+ * A context-(i.e. Level and, optionally, Player)-aware transformation of an object (built-in Conversions are for Items, ItemStacks, BlockStates, Blocks and Entities).
+ * @see GoldConversion
+ */
 @FunctionalInterface
 public interface Conversion<T> {
     
@@ -631,7 +636,10 @@ public interface Conversion<T> {
 
         @Override
         public ConversionResult<Entity> convert(Level level, Entity object, @Nullable Player player) {
-            if (object instanceof LivingEntity living) ColorHelper.setColor(living, convert(object, ColorHelper.getColor(living)));
+            if (object instanceof LivingEntity living) {
+                ColorHelper.setColor(living, convert(object, ColorHelper.getColor(living, false)), false);
+                ColorHelper.setColor(living, convert(object, ColorHelper.getColor(living, true)), true);
+            };
             return pass(object);
         };
     };

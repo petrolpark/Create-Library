@@ -6,6 +6,10 @@ import java.util.List;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
+/**
+ * Extension to {@link ItemStack} that allows for a count greater than {@link ItemStack#getMaxStackSize()}.
+ * More comprehensive than Create's own {@link com.simibubi.create.content.logistics.BigItemStack BigItemStack}.
+ */
 public class BigItemStack {
 
     public static final BigItemStack EMPTY = new BigItemStack(ItemStack.EMPTY);

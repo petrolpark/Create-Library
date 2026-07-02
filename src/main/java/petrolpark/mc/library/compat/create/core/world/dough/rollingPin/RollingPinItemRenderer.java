@@ -3,21 +3,17 @@ package petrolpark.mc.library.compat.create.core.world.dough.rollingPin;
 import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateItems;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateItems;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
 
-@EventBusSubscriber(Dist.CLIENT)
 public class RollingPinItemRenderer implements IClientItemExtensions {
 
     @Override
@@ -36,8 +32,7 @@ public class RollingPinItemRenderer implements IClientItemExtensions {
         return false;
     };
 
-    @SubscribeEvent
-    public static final void onRegisterClientItemExtensions(RegisterClientExtensionsEvent event) {
+    public static final void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
         if (SharedFeatureFlag.ROLLING_PIN.enabled()) event.registerItem(new RollingPinItemRenderer(), SharedCreateItems.ROLLING_PIN.get());
     };
 };

@@ -6,6 +6,10 @@ import net.minecraft.core.Direction;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.phys.Vec3;
 
+/**
+ * @deprecated Use {@link net.createmod.catnip.math.BlockFace} instead.
+ */
+@Deprecated
 public class BlockFace extends Pair<BlockPos, Direction> {
 
     public static final StreamCodec<ByteBuf, BlockFace> STREAM_CODEC = StreamCodec.composite(

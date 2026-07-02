@@ -7,6 +7,9 @@ import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 
 import net.minecraft.world.item.ItemStack;
 
+/**
+ * {@link ArmBlockEntity} duck interface for Petrolpark Library's {@link ChainConveyorArmInteractionPoint}.
+ */
 public interface IArmBlockEntityDuck {
     
     public List<ArmInteractionPoint> getInputs();

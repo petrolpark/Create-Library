@@ -6,12 +6,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import petrolpark.mc.library.compat.jei.ingredient.FlagIngredientType.FlagHolderHolder;
-import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
-import petrolpark.mc.library.core.flags.Flag;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
-import petrolpark.mc.library.util.Lang;
-
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;
@@ -21,13 +15,27 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.TooltipFlag;
+import petrolpark.mc.library.compat.jei.ingredient.FlagIngredientType.FlagHolderHolder;
+import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
+import petrolpark.mc.library.core.flags.Flag;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
+import petrolpark.mc.library.util.Lang;
 
+/**
+ * {@link Flag} {@link IIngredientType}
+ */
 public class FlagIngredientType implements IIngredientType<FlagHolderHolder> {
 
     public static final FlagIngredientType TYPE = new FlagIngredientType();
     public static final HolderIngredientHelper<Flag, FlagHolderHolder> HELPER = new HolderIngredientHelper<>(TYPE, PetrolparkRegistries.Keys.FLAG, FlagHolderHolder::new);
     public static final FlagIngredientType.EmptyRenderer EMPTY_RENDERER = new FlagIngredientType.EmptyRenderer();
+    /**
+     * Renders a Flag icon in its color.
+     */
     public static final FlagIngredientType.IconRenderer ICON_RENDERER = new FlagIngredientType.IconRenderer();
+    /**
+     * Renders the name of the Flag in its color, shortened to fit within 150 pixels. The background is not rendered, so this should be used with {@link #BACKGROUND}.
+     */
     public static final FlagIngredientType.FullRenderer FULL_RENDERER = new FlagIngredientType.FullRenderer();
 
     public static final IDrawable BACKGROUND = new IDrawable() {
@@ -86,6 +94,9 @@ public class FlagIngredientType implements IIngredientType<FlagHolderHolder> {
         
     };
 
+    /**
+     * @see FlagIngredientType#FULL_RENDERER
+     */
     @ParametersAreNonnullByDefault
     public static class FullRenderer extends EmptyRenderer {
 

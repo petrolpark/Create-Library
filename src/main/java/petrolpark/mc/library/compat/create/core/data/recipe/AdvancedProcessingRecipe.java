@@ -8,10 +8,6 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.compat.create.core.data.recipe.firstTimeLucky.IFTLProcessingRecipe;
-import petrolpark.mc.library.core.data.recipe.IBiomeSpecificRecipe;
-import petrolpark.mc.library.core.data.recipe.INamedRecipe;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
 import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
@@ -33,6 +29,10 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
 import net.neoforged.neoforge.fluids.FluidStack;
+import petrolpark.mc.library.compat.create.core.data.recipe.firstTimeLucky.IFTLProcessingRecipe;
+import petrolpark.mc.library.core.data.recipe.IBiomeSpecificRecipe;
+import petrolpark.mc.library.core.data.recipe.INamedRecipe;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
 
 public abstract class AdvancedProcessingRecipe<I extends RecipeInput> extends ProcessingRecipe<I, AdvancedProcessingRecipeParams> implements IBookRequiredRecipe, IBiomeSpecificRecipe, IFTLProcessingRecipe<AdvancedProcessingRecipe<I>> {
 

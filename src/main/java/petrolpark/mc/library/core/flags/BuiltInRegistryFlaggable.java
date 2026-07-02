@@ -11,15 +11,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import petrolpark.mc.library.util.Pair;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.neoforged.neoforge.registries.datamaps.DataMapType;
+import petrolpark.mc.library.util.Pair;
 
+/**
+ * A {@link Flaggable} that is backed by a built-in  (i.e. not datapack-defined) {@link Registry}, and uses {@link DataMapType}s to store the intrinsic and shown-if-absent Flags for each object in the registry.
+ */
 public abstract class BuiltInRegistryFlaggable<OBJECT, OBJECT_STACK> extends Flaggable<OBJECT, OBJECT_STACK> {
 
     public final Registry<OBJECT> builtInRegistry;

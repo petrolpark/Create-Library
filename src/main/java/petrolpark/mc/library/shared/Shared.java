@@ -5,6 +5,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.ModList;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforgespi.language.ModFileScanData;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.compat.Mods;
 import petrolpark.mc.library.shared.registry.SharedBlockEntityTypes;
@@ -15,12 +20,9 @@ import petrolpark.mc.library.shared.registry.SharedParticleTypes;
 import petrolpark.mc.library.shared.registry.SharedRecipeSerializers;
 import petrolpark.mc.library.shared.registry.SharedRecipeTypes;
 
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.ModList;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.neoforgespi.language.ModFileScanData;
-
+/**
+ * Register any objects {@link SharedFeatureFlag shared} between dependent mods.
+ */
 public class Shared {
     
     public static final void ctor(IEventBus modEventBus, ModContainer modContainer) {

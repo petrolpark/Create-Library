@@ -4,7 +4,6 @@ import static com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorIn
 import static com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler.selectedConnection;
 import static com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorInteractionHandler.selectedLift;
 
-import petrolpark.mc.library.mixin.compat.create.accessor.client.ArmInteractionPointHandlerAccessor;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.AllItems;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
@@ -16,15 +15,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.phys.AABB;
-import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.InputEvent;
+import petrolpark.mc.library.mixin.compat.create.accessor.client.ArmInteractionPointHandlerAccessor;
 
-@EventBusSubscriber(Dist.CLIENT)
-public class ChainConveyorArmInteractionHandler {
+public class ChainConveyorArmInteractionClientHandler {
     
     @SubscribeEvent(priority = EventPriority.HIGH) // Needs to be before Create's ChainConveyorInteractionHandler
     public static final void onRightClickInput(InputEvent.InteractionKeyMappingTriggered event) {

@@ -16,7 +16,9 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import petrolpark.mc.library.PetrolparkTags;
 
 /**
- * A specific instance of a flaggable object, with the specific Flags that object posseses.
+ * A specific instance of a flaggable object, storing the specific Flags that object posseses.
+ * @see Flaggable The class of flaggable objects this FlagPole is for
+ * @see Flag
  */
 public interface IFlagPole<OBJECT, OBJECT_STACK> {
 
@@ -29,7 +31,7 @@ public interface IFlagPole<OBJECT, OBJECT_STACK> {
      * @param outputs
      * @see IFlagPole#perpetuate(Stream, Stream, Function) If you have a faster way of getting the FlagPole
      */
-    public static void perpetuate(Stream<Object> inputs, Stream<Object> outputs) {
+    public static <OBJECT> void perpetuate(Stream<OBJECT> inputs, Stream<OBJECT> outputs) {
         perpetuate(inputs, outputs, object -> get(object).orElse(null));
     };
 
@@ -90,6 +92,9 @@ public interface IFlagPole<OBJECT, OBJECT_STACK> {
 
     public double getAmount();
 
+    /**
+     * Called whenever the {@link IFlagPole} is changed, to save the changes to the underlying object.
+     */
     public void save();
 
     public boolean has(Holder<Flag> flagHolder);
@@ -103,8 +108,8 @@ public interface IFlagPole<OBJECT, OBJECT_STACK> {
     /**
      * Stream all Flags in this FlagPole that:<ul>
      * <li>Are not {@link IFlagPole#isIntrinsic(Holder) intrinsic}
-     * <li>Have no children in this FlagPole</ul>
-     * Note that this is the minimum set of Flags needed to uniquely define a FlagPole.
+     * <li>Have no parents in this FlagPole</ul>
+     * This is the minimum set of Flags needed to uniquely define a FlagPole instance.
      * @return Distinct Stream of Flags 
      */
     public Stream<Holder<Flag>> streamOrphanExtrinsicFlags();

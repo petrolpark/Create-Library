@@ -14,8 +14,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.client.rendering.PetrolparkBakedModelHelper;
 import com.simibubi.create.foundation.model.BakedModelHelper;
 
 import net.createmod.catnip.data.Iterate;
@@ -39,9 +37,6 @@ import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.RenderTypeGroup;
 import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
@@ -50,8 +45,9 @@ import net.neoforged.neoforge.client.model.data.ModelProperty;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.client.rendering.PetrolparkBakedModelHelper;
 
-@EventBusSubscriber(Dist.CLIENT)
 public class DoughModel extends BakedModelWrapper<BakedModel> {
 
     public static final ModelProperty<DoughRenderer> DOUGH_PROPERTY = new ModelProperty<>();
@@ -134,7 +130,6 @@ public class DoughModel extends BakedModelWrapper<BakedModel> {
 
     };
 
-    @SubscribeEvent
     public static final void onRegisterGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
         event.register(DoughModel.Loader.ID, DoughModel.Loader.INSTANCE);
     };

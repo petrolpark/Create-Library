@@ -6,10 +6,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.jei.PetrolparkJEI;
-import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
-import petrolpark.mc.library.registry.PetrolparkItems;
 import com.simibubi.create.compat.Mods;
 
 import mezz.jei.gui.overlay.bookmarks.PreviewTooltipComponent;
@@ -26,10 +22,18 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.KnowledgeBookItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.jei.PetrolparkJEI;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
+import petrolpark.mc.library.registry.PetrolparkItems;
 
+/**
+ * Not to be confused with the vanilla {@link KnowledgeBookItem}.
+ */
 public class RecipeBookItem extends Item {
 
     public static final Stream<RecipeHolder<?>> streamProvidedRecipes(Level level, ItemStack stack) {

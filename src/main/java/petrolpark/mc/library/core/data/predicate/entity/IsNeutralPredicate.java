@@ -4,7 +4,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.registry.PetrolparkDataSubPredicates;
 
 import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.server.level.ServerLevel;
@@ -17,7 +16,16 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.animal.Panda;
 import net.minecraft.world.phys.Vec3;
+import petrolpark.mc.library.registry.PetrolparkDataSubPredicates;
 
+/**
+ * <p>{@code petrolpark:is_neutral}</p>
+ * 
+ * Whether an entity is "neutral", determined on a best-effort basis.
+ * "Neutral" means that the mob will attack the player if provoked, but will not attack the player on sight.
+ * 
+ * @author petrolpark
+ */
 public final class IsNeutralPredicate implements EntitySubPredicate {
 
     public static final IsNeutralPredicate INSTANCE = new IsNeutralPredicate();

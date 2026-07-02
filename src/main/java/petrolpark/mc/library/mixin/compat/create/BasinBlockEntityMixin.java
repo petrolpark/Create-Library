@@ -8,20 +8,22 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import petrolpark.mc.library.compat.create.core.world.block.entity.basin.BelowBasinOperatingBlockEntity;
-import petrolpark.mc.library.compat.create.core.world.block.entity.basin.DirectlyAboveBasinOperatingBlockEntity;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
-import petrolpark.mc.library.mixin.compat.create.accessor.BasinOperatingBlockEntityAccessor;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import petrolpark.mc.library.compat.create.core.world.block.entity.basin.BelowBasinOperatingBlockEntity;
+import petrolpark.mc.library.compat.create.core.world.block.entity.basin.DirectlyAboveBasinOperatingBlockEntity;
+import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.FilteringRecipeBehaviour;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
+import petrolpark.mc.library.mixin.compat.create.accessor.BasinOperatingBlockEntityAccessor;
 
 @Mixin(BasinBlockEntity.class)
 public abstract class BasinBlockEntityMixin extends SmartBlockEntity implements IRecipeBookAcceptorBlockEntity {
@@ -42,7 +44,8 @@ public abstract class BasinBlockEntityMixin extends SmartBlockEntity implements 
     public Optional<BasinOperatingBlockEntity> petrolpark$getOtherOperators(Operation<Optional<BasinOperatingBlockEntity>> operation) {
         return operation.call()
             .or(() -> level.getBlockEntity(getBlockPos().above()) instanceof DirectlyAboveBasinOperatingBlockEntity bobe ? Optional.of(bobe) : Optional.empty())
-            .or(() -> level.getBlockEntity(getBlockPos().below()) instanceof BelowBasinOperatingBlockEntity bboe ? Optional.of(bboe) : Optional.empty());
+            .or(() -> level.getBlockEntity(getBlockPos().below()) instanceof BelowBasinOperatingBlockEntity bboe ? Optional.of(bboe) : Optional.empty())
+            .or(() -> Optional.ofNullable(BlockEntityBehaviour.get(level, getBlockPos().above(), FilteringRecipeBehaviour.TYPE)).map(FilteringRecipeBehaviour::getOperator));
     };
 
     @Override

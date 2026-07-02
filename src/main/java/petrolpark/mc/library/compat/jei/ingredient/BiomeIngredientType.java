@@ -6,10 +6,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.compat.jei.JEITextureDrawable;
-import petrolpark.mc.library.compat.jei.ingredient.BiomeIngredientType.BiomeHolderHolder;
-import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
-
 import mezz.jei.api.ingredients.IIngredientRenderer;
 import mezz.jei.api.ingredients.IIngredientType;
 import net.minecraft.ChatFormatting;
@@ -20,7 +16,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.biome.Biome;
+import petrolpark.mc.library.compat.jei.JEITextureDrawable;
+import petrolpark.mc.library.compat.jei.ingredient.BiomeIngredientType.BiomeHolderHolder;
+import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
 
+/**
+ * {@link Biome} {@link IIngredientType}
+ */
 public class BiomeIngredientType implements IIngredientType<BiomeHolderHolder> {
 
     public static final BiomeIngredientType TYPE = new BiomeIngredientType();

@@ -8,9 +8,6 @@ import java.util.stream.Collectors;
 import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
-import petrolpark.mc.library.util.GraphHelper;
-import petrolpark.mc.library.util.GraphHelper.CircularReferenceException;
 
 import net.minecraft.Util;
 import net.minecraft.core.Holder;
@@ -29,7 +26,13 @@ import net.minecraft.util.ExtraCodecs;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
+import petrolpark.mc.library.util.GraphHelper;
+import petrolpark.mc.library.util.GraphHelper.CircularReferenceException;
 
+/**
+ * <a href="https://github.com/petrolpark/Create-Library/wiki/Flags"> Wiki article
+ */
 @EventBusSubscriber
 public class Flag {
 

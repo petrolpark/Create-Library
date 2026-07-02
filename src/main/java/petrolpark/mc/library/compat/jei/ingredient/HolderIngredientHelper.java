@@ -9,7 +9,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.Codec;
-import petrolpark.mc.library.compat.jei.ingredient.HolderIngredientHelper.HolderHolder;
 
 import mezz.jei.api.ingredients.IIngredientHelper;
 import mezz.jei.api.ingredients.IIngredientType;
@@ -28,10 +27,17 @@ import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import petrolpark.mc.library.compat.jei.ingredient.HolderIngredientHelper.HolderHolder;
 
 /**
- * JEI sorts Ingredient Types based on the Class of ingredient. Seeing as we want to preserve the Holder that wraps data-registered objects,
+ * <p>
+ * An {@link IIngredientHelper} for data-pack registered objects.
+ * The type of the Helper and the associated {@link IIngredientType} should be subclass of {@link HolderHolder}, which wraps a {@link Holder} of the data-registered object.
+ * </p>
+ * JEI sorts {@link IIngredientType}s based on the Class of ingredient. Seeing as we want to preserve the Holder that wraps data-registered objects,
  * but generic types are lost at runtime, we need to wrap the Holder, which is why we need this HolderHolder nonsense.
+ * @see BiomeIngredientType#HELPER
+ * @see FlagIngredientType#HELPER
  */
 @ParametersAreNonnullByDefault
 public class HolderIngredientHelper<T, H extends HolderHolder<T>> implements IIngredientHelper<H> {

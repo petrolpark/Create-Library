@@ -3,11 +3,6 @@ package petrolpark.mc.library.compat.create.shared.content.processing.meshBasin;
 import java.util.concurrent.CompletableFuture;
 
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedBasinRecipe;
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipe;
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipeParams;
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipe.BasinBuilder;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
@@ -19,6 +14,10 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedBasinRecipe;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipe;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipeParams;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 
 public class BoilingRecipe extends AdvancedBasinRecipe {
     
@@ -58,7 +57,7 @@ public class BoilingRecipe extends AdvancedBasinRecipe {
     };
 
     /**
-     * The base class for Deep Frying recipe generation.
+     * The base class for Boiling recipe generation.
      * Addons should extend this and use the {@link ProcessingRecipeGen#create} methods to make recipes.
      */
     public static abstract class Gen extends AdvancedBasinRecipe.Gen<BoilingRecipe> {
@@ -73,7 +72,7 @@ public class BoilingRecipe extends AdvancedBasinRecipe {
         };
 
         @Override
-        protected BasinBuilder<BoilingRecipe> getBuilder(ResourceLocation id) {
+        protected AdvancedProcessingRecipe.BasinBuilder<BoilingRecipe> getBuilder(ResourceLocation id) {
             return builder(id);
         };
 

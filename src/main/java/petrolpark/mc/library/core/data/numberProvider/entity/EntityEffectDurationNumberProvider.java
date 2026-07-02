@@ -18,7 +18,7 @@ import petrolpark.mc.library.util.codec.CodecHelper;
  * <p>{@code petrolpark:effect_duration}</p>
  * 
  * Get the remaining number of ticks the entity has a MobEffect for, or {@code 0} if they do not have the MobEffect.
- * If the effect is infinite, return {@link Integer#MAX_VALUE}
+ * If the effect is infinite, return {@link Integer#MAX_VALUE}.
  * 
  * Arguments:
  * <ul>
