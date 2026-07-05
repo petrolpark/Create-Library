@@ -1,9 +1,19 @@
 package petrolpark.mc.library.compat.create.core.event;
 
+import com.simibubi.create.AllItems;
+import com.simibubi.create.AllTags.AllItemTags;
+
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
+import net.neoforged.neoforge.event.tick.EntityTickEvent;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.compat.create.core.world.block.CopycatBlockConversion;
 import petrolpark.mc.library.compat.create.core.world.block.chainConveyor.ChainConveyorItemEvent;
 import petrolpark.mc.library.compat.create.core.world.block.crushingWheel.EncasedCrushingWheelControllerBlock;
+import petrolpark.mc.library.compat.create.core.world.block.entity.press.PressingRecipeSearchEvent;
+import petrolpark.mc.library.compat.create.core.world.dough.DoughRecipes;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HorseMillContraptionEntity;
 import petrolpark.mc.library.compat.create.shared.content.processing.blender.BlenderBlockEntity;
 import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.CentrifugationEvent;
@@ -16,14 +26,6 @@ import petrolpark.mc.library.shared.world.GoldConversion;
 import petrolpark.mc.library.shared.world.GoldConversion.RegisterGoldBlockStateConversionEvent;
 import petrolpark.mc.library.shared.world.GoldConversion.RegisterGoldItemConversionEvent;
 import petrolpark.mc.library.util.Conversion;
-import com.simibubi.create.AllItems;
-import com.simibubi.create.AllTags.AllItemTags;
-
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.SingleRecipeInput;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
-import net.neoforged.neoforge.event.tick.EntityTickEvent;
 
 public class CreateEvents {
 
@@ -72,5 +74,10 @@ public class CreateEvents {
     @SubscribeEvent
     public static final void onEntityTickPost(EntityTickEvent.Post event) {
         HorseMillContraptionEntity.onEntityTickPost(event);
+    };
+
+    @SubscribeEvent
+    public static final void onPressingRecipeSearch(PressingRecipeSearchEvent event) {
+        DoughRecipes.onPressingRecipeSearch(event);
     };
 };

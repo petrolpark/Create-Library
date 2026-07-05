@@ -6,45 +6,6 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.create.RequiresCreate;
-import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.CentrifugationRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.PotionCentrifugation;
-import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.PotionCentrifugation.PotionCentrifugationRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.extrusion.ExtrusionRecipe;
-import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.BoilingRecipe;
-import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerScreen;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateItems;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
-import petrolpark.mc.library.compat.jei.category.DecayingItemCategory;
-import petrolpark.mc.library.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
-import petrolpark.mc.library.compat.jei.category.ManualOnlyCategory;
-import petrolpark.mc.library.compat.jei.category.builder.PetrolparkCategoryBuilder;
-import petrolpark.mc.library.compat.jei.category.shared.AgeingCategory;
-import petrolpark.mc.library.compat.jei.category.shared.BlendingCategory;
-import petrolpark.mc.library.compat.jei.category.shared.BoilingCategory;
-import petrolpark.mc.library.compat.jei.category.shared.CentrifugationCategory;
-import petrolpark.mc.library.compat.jei.category.shared.CropFertilizingCategory;
-import petrolpark.mc.library.compat.jei.category.shared.DryingCategory;
-import petrolpark.mc.library.compat.jei.category.shared.ExtrusionCategory;
-import petrolpark.mc.library.compat.jei.category.shared.JuicingCategory;
-import petrolpark.mc.library.compat.jei.category.shared.LiddedBasinCategory;
-import petrolpark.mc.library.compat.jei.category.shared.MysteriousConversionCategory;
-import petrolpark.mc.library.compat.jei.ghost.PetrolparkGhostIngredientHandler;
-import petrolpark.mc.library.compat.jei.subtypeInterpreter.DoughItemSubtypeInterpreter;
-import petrolpark.mc.library.compat.jei.subtypeInterpreter.WoodenItemSubtypeInterpreter;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.data.recipe.ExampleRecipe;
-import petrolpark.mc.library.core.world.item.crafting.ManualOnlyCraftingRecipe;
-import petrolpark.mc.library.mixin.compat.jei.client.ForgePluginFinderMixin;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
-import petrolpark.mc.library.shared.registry.SharedBlocks;
-import petrolpark.mc.library.shared.registry.SharedRecipeTypes;
-import petrolpark.mc.library.shared.world.item.crafting.CropFertilizingRecipe;
-import petrolpark.mc.library.shared.world.item.crafting.ageing.AgeingRecipe;
-import petrolpark.mc.library.shared.world.item.crafting.drying.DryingRecipe;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
@@ -73,6 +34,46 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.create.RequiresCreate;
+import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.CentrifugationRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.PotionCentrifugation;
+import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.PotionCentrifugation.PotionCentrifugationRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.extrusion.ExtrusionRecipe;
+import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.BoilingRecipe;
+import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerScreen;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateItems;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
+import petrolpark.mc.library.compat.jei.category.DecayingItemCategory;
+import petrolpark.mc.library.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
+import petrolpark.mc.library.compat.jei.category.ManualOnlyCategory;
+import petrolpark.mc.library.compat.jei.category.builder.PetrolparkCategoryBuilder;
+import petrolpark.mc.library.compat.jei.category.shared.AgeingCategory;
+import petrolpark.mc.library.compat.jei.category.shared.BlendingCategory;
+import petrolpark.mc.library.compat.jei.category.shared.BoilingCategory;
+import petrolpark.mc.library.compat.jei.category.shared.CentrifugationCategory;
+import petrolpark.mc.library.compat.jei.category.shared.CropFertilizingCategory;
+import petrolpark.mc.library.compat.jei.category.shared.DryingCategory;
+import petrolpark.mc.library.compat.jei.category.shared.ExtrusionCategory;
+import petrolpark.mc.library.compat.jei.category.shared.FilteringCategory;
+import petrolpark.mc.library.compat.jei.category.shared.JuicingCategory;
+import petrolpark.mc.library.compat.jei.category.shared.LiddedBasinCategory;
+import petrolpark.mc.library.compat.jei.category.shared.MysteriousConversionCategory;
+import petrolpark.mc.library.compat.jei.ghost.PetrolparkGhostIngredientHandler;
+import petrolpark.mc.library.compat.jei.subtypeInterpreter.DoughItemSubtypeInterpreter;
+import petrolpark.mc.library.compat.jei.subtypeInterpreter.WoodenItemSubtypeInterpreter;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.data.recipe.ExampleRecipe;
+import petrolpark.mc.library.core.world.item.crafting.ManualOnlyCraftingRecipe;
+import petrolpark.mc.library.mixin.compat.jei.client.ForgePluginFinderMixin;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.shared.registry.SharedBlocks;
+import petrolpark.mc.library.shared.registry.SharedRecipeTypes;
+import petrolpark.mc.library.shared.world.item.crafting.CropFertilizingRecipe;
+import petrolpark.mc.library.shared.world.item.crafting.ageing.AgeingRecipe;
+import petrolpark.mc.library.shared.world.item.crafting.drying.DryingRecipe;
 
 /**
  * For now, this library's JEI plugin relies heavily on Create, so is set up to load only when Create is loaded.
@@ -146,7 +147,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
         //     .emptyBackground(122, 20)
         //     .build("gold_conversion", ItemsExampleCategory::new);
 
-        CreateRecipeCategory<?> blending, centrifugation, potionCentrifugation, boiling, juicing, drying, extrusion, lidded_basin;
+        CreateRecipeCategory<?> blending, centrifugation, potionCentrifugation, boiling, juicing, filtering, drying, extrusion, lidded_basin;
 
         if (SharedFeatureFlag.BLENDER.enabled()) {
 
@@ -192,6 +193,14 @@ public class PetrolparkCreateJEI implements IModPlugin {
                 .doubleItemIcon(AllBlocks.MECHANICAL_PRESS.get(), SharedCreateBlocks.MESH_BASIN.get())
 				.emptyBackground(177, 103)
 				.build("juicing", JuicingCategory::new);
+
+            filtering = builder(BasinRecipe.class)
+                .addTypedRecipes(SharedCreateRecipeTypes.FILTERING)
+                .catalyst(AllBlocks.SPOUT::get)
+                .catalyst(SharedCreateBlocks.MESH_BASIN::get)
+                .doubleItemIcon(AllBlocks.SPOUT.get(), SharedCreateBlocks.MESH_BASIN.get())
+				.emptyBackground(177, 103)
+				.build("filtering", FilteringCategory::new);
         };
 
         if (SharedFeatureFlag.DRYING_RACK.enabled()) drying = builder(DryingRecipe.class)

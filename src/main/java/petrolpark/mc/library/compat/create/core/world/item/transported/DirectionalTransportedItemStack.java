@@ -1,31 +1,33 @@
-package petrolpark.mc.library.compat.create.core.world.item.directional;
+package petrolpark.mc.library.compat.create.core.world.item.transported;
 
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.compat.create.RequiresCreate;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.compat.create.RequiresCreate;
 
 @RequiresCreate
-public class DirectionalTransportedItemStack extends TransportedItemStack {
+public class DirectionalTransportedItemStack extends SpecialTransportedItemStack {
 
     @Nullable
     protected Rotation rotation; // Rotation from South
 
     public DirectionalTransportedItemStack(ItemStack stack) {
         super(stack);
-        rotation = stack.getItem() instanceof IDirectionalOnBelt item ? item.rotationForPlacement(stack) : null;
+        rotation = stack.getItem() instanceof IDirectionalBeltItem item ? item.rotationForPlacement(stack) : null;
         if (rotation == null) rotation = Rotation.NONE;
         refreshAngle();
     };
@@ -126,5 +128,12 @@ public class DirectionalTransportedItemStack extends TransportedItemStack {
         if (rotation != null) nbt.putInt("Rotation", rotation.ordinal());
         return nbt;
 	};
+
+    @Override
+    public void deserializeNBT(CompoundTag nbt, Provider registries) {
+        if (nbt.contains("Rotation", Tag.TAG_INT)) {
+            setRotation(Rotation.values()[nbt.getInt("Rotation")]);
+        };
+    };
     
 };

@@ -1,6 +1,7 @@
 package petrolpark.mc.library.mixin.compat.create;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -9,19 +10,23 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import petrolpark.mc.library.compat.create.core.world.block.entity.basin.AdvancedBasinOperatingBlockEntity;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
 import com.simibubi.create.content.kinetics.press.MechanicalPressBlockEntity;
 import com.simibubi.create.content.kinetics.press.PressingBehaviour;
+import com.simibubi.create.content.kinetics.press.PressingRecipe;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.neoforged.neoforge.common.NeoForge;
+import petrolpark.mc.library.compat.create.core.world.block.entity.basin.AdvancedBasinOperatingBlockEntity;
+import petrolpark.mc.library.compat.create.core.world.block.entity.press.PressingRecipeSearchEvent;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
 
 @Mixin(MechanicalPressBlockEntity.class)
 public abstract class MechanicalPressBlockEntityMixin extends BasinOperatingBlockEntity implements IRecipeBookAcceptorBlockEntity {
@@ -81,5 +86,13 @@ public abstract class MechanicalPressBlockEntityMixin extends BasinOperatingBloc
     public void onAvailableRecipesChanged() {
         advancedRecipeCacheKey = new Object();
         basinChecker.scheduleUpdate();
+    };
+
+    @ModifyReturnValue(
+        method = "getRecipe",
+        at = @At("RETURN")
+    )
+    public Optional<RecipeHolder<PressingRecipe>> petrolpark$searchPressingRecipes(Optional<RecipeHolder<PressingRecipe>> original, ItemStack item) {
+        return original.or(() -> Optional.ofNullable(NeoForge.EVENT_BUS.post(new PressingRecipeSearchEvent((MechanicalPressBlockEntity)(Object)this, item)).getRecipe()));
     };
 };

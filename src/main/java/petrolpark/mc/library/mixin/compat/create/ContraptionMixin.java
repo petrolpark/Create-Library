@@ -8,7 +8,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import petrolpark.mc.library.compat.create.core.world.item.directional.DirectionalTransportedItemStack;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
@@ -21,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
+import petrolpark.mc.library.compat.create.core.world.item.transported.DirectionalTransportedItemStack;
 
 @Mixin(Contraption.class)
 public class ContraptionMixin {
@@ -34,13 +34,13 @@ public class ContraptionMixin {
             value = "INVOKE",
             target = "Lcom/simibubi/create/content/contraptions/StructureTransform;apply(Lnet/minecraft/world/level/block/entity/BlockEntity;)V"
         ),
-        locals = LocalCapture.CAPTURE_FAILSOFT,
+        locals = LocalCapture.CAPTURE_FAILEXCEPTION,
         remap = false
     )
     public void petrolpark$rotateDirectionalStacks(Level world, StructureTransform transform, CallbackInfo ci, boolean var2, boolean var3[], int var4, int var5, boolean nonBrittles, Iterator<StructureBlockInfo> var7, StructureBlockInfo block, BlockPos targetPos, BlockState state, BlockState blockState, boolean verticalRotation, BlockEntity blockEntity) {
         if (blockEntity instanceof SmartBlockEntity sbe) {
             TransportedItemStackHandlerBehaviour behaviour = sbe.getBehaviour(TransportedItemStackHandlerBehaviour.TYPE);
-            if (behaviour != null) behaviour.handleProcessingOnAllItems(stack -> {
+            if (behaviour != null) behaviour.handleCenteredProcessingOnAllItems(Float.MAX_VALUE, stack -> {
                 if (stack instanceof DirectionalTransportedItemStack directionalStack) {
                     if (transform.rotationAxis == Axis.Y) directionalStack.rotate(transform.rotation);
                     return TransportedResult.convertTo(directionalStack);

@@ -21,6 +21,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorStandItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.BoatItem;
+import net.minecraft.world.item.BucketItem;
 import net.minecraft.world.item.EndCrystalItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemFrameItem;
@@ -48,6 +49,7 @@ public class PetrolparkRegistrateTags {
         final CreateTagAppender<Item> flaggableTagAppender = prov.tag(PetrolparkTags.Items.FLAGGABLE.tag);
         
         tagAllNonBlocksAndEntities(flaggableTagAppender, ResourceLocation.DEFAULT_NAMESPACE,
+            // Exclusions
             Items.AIR,
             Items.SADDLE,
             Items.LEAD,
@@ -95,6 +97,7 @@ public class PetrolparkRegistrateTags {
             || item instanceof ItemFrameItem
             || item instanceof ArmorStandItem
             || item instanceof EndCrystalItem
+            || item instanceof BucketItem
             || Arrays.stream(exclusions).anyMatch(item::equals)
         );
     };

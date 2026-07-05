@@ -4,10 +4,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 
-import petrolpark.mc.library.compat.create.core.world.item.directional.DirectionalTransportedItemStack;
-import petrolpark.mc.library.compat.create.core.world.item.directional.IDirectionalOnBelt;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.logistics.depot.SharedDepotBlockMethods;
+
+import petrolpark.mc.library.compat.create.core.world.item.transported.DirectionalTransportedItemStack;
+import petrolpark.mc.library.compat.create.core.world.item.transported.ISpecialBeltItem;
 
 /**
  * Handle the manual addition of {@link DirectionalTransportedItemStack}s to Depots by Players.
@@ -25,7 +26,7 @@ public class SharedDepotBlockMethodsMixin {
         remap = false
     )
     private static TransportedItemStack petrolpark$makeDirectionalItem(TransportedItemStack transported) {
-        if (transported.stack.getItem() instanceof IDirectionalOnBelt directionalItem) return directionalItem.makeDirectionalTransportedItemStack(transported);
+        if (transported.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) return specialBeltItem.makeTransportedItemStack(transported);
         return transported;
     };
 };

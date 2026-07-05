@@ -1,8 +1,7 @@
 package petrolpark.mc.library.compat.create.shared.registry;
 
-import petrolpark.mc.library.Petrolpark;
-
 import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import petrolpark.mc.library.Petrolpark;
 
 public class SharedPartialModels {
     
@@ -15,6 +14,9 @@ public class SharedPartialModels {
     DEPLOYER_HAND_PAPER = block("deployer/hand_paper"),
     DEPLOYER_HAND_SCISSORS = block("deployer/hand_scissors"),
     DEPLOYER_HAND_SWEARING = block("deployer/hand_swearing"),
+
+    // Rolling Pin Holder
+    ROLLING_PIN_HOLDER_ARMS = block("rolling_pin_holder/arms"),
 
     // Redstone Programmer
     REDSTONE_PROGRAMMER_CYLINDER = block("redstone_programmer/cylinder"),

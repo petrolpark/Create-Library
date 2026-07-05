@@ -1,4 +1,4 @@
-package petrolpark.mc.library.compat.create.core.world.dough;
+package petrolpark.mc.library.compat.create.core.world.dough.client;
 
 import javax.annotation.Nonnull;
 
@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import petrolpark.mc.library.compat.create.core.world.dough.DoughBlockEntity;
 
 public class DoughBlockEntityRenderer implements BlockEntityRenderer<DoughBlockEntity> {
 
@@ -17,7 +18,7 @@ public class DoughBlockEntityRenderer implements BlockEntityRenderer<DoughBlockE
 
     @Override
     public void render(@Nonnull DoughBlockEntity be, float partialTicks, @Nonnull PoseStack ms, @Nonnull MultiBufferSource bufferSource, int light, int overlay) {
-        be.renderingData.render(be.getBlockState(), partialTicks, ms, bufferSource.getBuffer(RenderType.SOLID), light);
+        be.getRenderer().render(be.getBlockState(), partialTicks, ms, bufferSource.getBuffer(RenderType.SOLID), light);
     };
     
 };

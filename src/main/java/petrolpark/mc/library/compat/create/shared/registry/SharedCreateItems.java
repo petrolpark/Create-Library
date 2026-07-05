@@ -5,16 +5,6 @@ import static petrolpark.mc.library.PetrolparkTags.commonItemTag;
 
 import java.util.function.Supplier;
 
-import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.RollingPinItem;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistrateProviderTypes;
-import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
-import petrolpark.mc.library.core.world.item.FluidContainerItem;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
-import petrolpark.mc.library.shared.registry.SharedFoods;
-import petrolpark.mc.library.shared.world.item.SharedBucketItem;
-import petrolpark.mc.library.shared.world.item.SharedDrinkableFluidContainerItem;
-import petrolpark.mc.library.shared.world.item.SharedMilkCurativeBucketItem;
 import com.simibubi.create.api.equipment.potatoCannon.PotatoCannonProjectileType;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.builders.ItemBuilder;
@@ -29,6 +19,17 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
+import petrolpark.mc.library.PetrolparkTags;
+import petrolpark.mc.library.compat.create.core.world.dough.cookieCutter.SharedCookieCutterItem;
+import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.RollingPinItem;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistrateProviderTypes;
+import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
+import petrolpark.mc.library.core.world.item.FluidContainerItem;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.shared.registry.SharedFoods;
+import petrolpark.mc.library.shared.world.item.SharedBucketItem;
+import petrolpark.mc.library.shared.world.item.SharedDrinkableFluidContainerItem;
+import petrolpark.mc.library.shared.world.item.SharedMilkCurativeBucketItem;
 
 public class SharedCreateItems {
 
@@ -36,6 +37,10 @@ public class SharedCreateItems {
         .properties(p -> p
             .stacksTo(1)
         ).register();
+
+    public static final ItemEntry<SharedCookieCutterItem> CIRCLE_COOKIE_CUTTER = REGISTRATE.sharedItem(SharedFeatureFlag.CIRCLE_COOKIE_CUTTER, "circle_cookie_cutter", SharedCookieCutterItem::new)
+        .defaultModel()
+        .register();
 
     public static final ItemEntry<SharedBucketItem>
     
@@ -91,6 +96,7 @@ public class SharedCreateItems {
         ));
     };
 
+    //TODO deal with Flags in fluid handler
     public static final <R extends AbstractPetrolparkRegistrate<R>> ItemBuilder<SharedBucketItem, R> sharedBucketItem(R registrate, SharedFeatureFlag featureFlag, String name, Supplier<FluidEntry<? extends Fluid>> fluid) {
         return registrate.sharedItem(featureFlag, name + "_bucket", (p, f) -> new SharedBucketItem(f, fluid.get().get(), p))
             .fluidCapability((stack, v) -> new FluidBucketWrapper(stack))

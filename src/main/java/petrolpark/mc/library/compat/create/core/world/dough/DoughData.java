@@ -1,5 +1,7 @@
 package petrolpark.mc.library.compat.create.core.world.dough;
 
+import static petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes.DOUGH;
+
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -8,10 +10,6 @@ import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.compat.create.core.world.dough.topping.IDoughTopping;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
-import petrolpark.mc.library.util.Neither;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -19,8 +17,11 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
+import petrolpark.mc.library.compat.create.core.world.dough.topping.IDoughTopping;
+import petrolpark.mc.library.util.Neither;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
-public record DoughData(IDough dough, float thickness, byte width, byte length, Neither<DoughData.Cuts, DoughData.Toppings> decoration, boolean madeByPlayer) {
+public record DoughData(IDough dough, float thickness, byte width, byte length, Neither<DoughData.Cuts, DoughData.Toppings> decoration, boolean madeByPlayer, boolean madeByAutomation) {
 
     public static final byte MAX_WIDTH = (byte)4;
 
@@ -30,16 +31,18 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
         CodecHelper.byteRanged((byte)1, MAX_WIDTH).fieldOf("width").forGetter(DoughData::width),
         CodecHelper.byteRanged((byte)1, MAX_WIDTH).fieldOf("length").forGetter(DoughData::length),
         Neither.fieldCodec(DoughData.Cuts.CODEC, DoughData.Toppings.CODEC, "decoration").forGetter(DoughData::decoration),
-        Codec.BOOL.optionalFieldOf("player_made", false).forGetter(DoughData::madeByPlayer)
+        Codec.BOOL.optionalFieldOf("player_made", false).forGetter(DoughData::madeByPlayer),
+        Codec.BOOL.optionalFieldOf("automated", false).forGetter(DoughData::madeByAutomation)
     ).apply(instance, DoughData::new));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, DoughData> STREAM_CODEC = StreamCodec.composite(
+    public static final StreamCodec<RegistryFriendlyByteBuf, DoughData> STREAM_CODEC = CodecHelper.compositeStreamCodec(
         IDough.STREAM_CODEC, DoughData::dough,
         ByteBufCodecs.FLOAT, DoughData::thickness,
         ByteBufCodecs.BYTE, DoughData::width,
         ByteBufCodecs.BYTE, DoughData::length,
         Neither.streamCodec(DoughData.Cuts.STREAM_CODEC, DoughData.Toppings.STREAM_CODEC), DoughData::decoration,
         ByteBufCodecs.BOOL, DoughData::madeByPlayer,
+        ByteBufCodecs.BOOL, DoughData::madeByAutomation,
         DoughData::new
     );
 
@@ -52,7 +55,7 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
     };
 
     public DoughData rolled(byte width, byte length, boolean byPlayer) {
-        if (width >= 1 && width <= MAX_WIDTH && length >= 1 && length <= MAX_WIDTH && decoration().isEmpty()) return new DoughData(dough(), width() * length() * thickness() / ((float)width * (float)length), width, length, decoration(), byPlayer);
+        if (width >= 1 && width <= MAX_WIDTH && length >= 1 && length <= MAX_WIDTH && decoration().isEmpty()) return new DoughData(dough(), width() * length() * thickness() / ((float)width * (float)length), width, length, decoration(), madeByPlayer() || byPlayer, madeByAutomation() || !byPlayer);
         return this;
     };
 
@@ -62,7 +65,7 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
      */
     public DoughData forItem() {
         if (decoration.isRight()) return this; // Preserve Toppings
-        return new DoughData(dough(), thickness() * remainingArea(), (byte)1, (byte)1, Neither.neither(), madeByPlayer());
+        return new DoughData(dough(), thickness() * remainingArea(), (byte)1, (byte)1, Neither.neither(), madeByPlayer(), madeByAutomation());
     };
 
     public float remainingArea() {
@@ -77,12 +80,12 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
 
     public DoughData withDough(IDough dough) {
         if (dough.equals(dough())) return this;
-        return new DoughData(dough, thickness(), width(), length(), decoration(), madeByPlayer());
+        return new DoughData(dough, thickness(), width(), length(), decoration(), madeByPlayer(), madeByAutomation());
     };
 
     public DoughData withThickness(float thickness) {
         if (Float.compare(thickness, thickness()) == 0) return this;
-        return new DoughData(dough(), thickness, width(), length(), decoration(), madeByPlayer());
+        return new DoughData(dough(), thickness, width(), length(), decoration(), madeByPlayer(), madeByAutomation());
     };
 
     public DoughData withNewTopping(Holder<IDoughTopping> topping) {
@@ -91,21 +94,21 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
 
     public DoughData withNewTopping(DoughData.Toppings.Entry topping) {
         if (!decoration().isRight() || decoration().right().filter(toppings -> toppings.has(topping.topping())).isPresent()) return this;
-        return new DoughData(dough(), thickness(), width(), length(), decoration().mapRight(toppings -> toppings.with(topping)), madeByPlayer());
+        return new DoughData(dough(), thickness(), width(), length(), decoration().mapRight(toppings -> toppings.with(topping)), madeByPlayer(), madeByAutomation());
     };
 
     public DoughData withoutTopping(Holder<IDoughTopping> topping) {
         if (decoration().right().filter(toppings -> !toppings.has(topping)).isPresent()) return this;
-        return new DoughData(dough(), thickness(), width(), length(), decoration().mapRight(toppings -> toppings.without(topping)), madeByPlayer());
+        return new DoughData(dough(), thickness(), width(), length(), decoration().mapRight(toppings -> toppings.without(topping)), madeByPlayer(), madeByAutomation());
     };
 
     public DoughData madeByPlayer(boolean madeByPlayer) {
-        return madeByPlayer == madeByPlayer() ? this : new DoughData(dough(), thickness(), width(), length(), decoration(), madeByPlayer);  
+        return madeByPlayer == madeByPlayer() ? this : new DoughData(dough(), thickness(), width(), length(), decoration(), madeByPlayer(), madeByAutomation());  
     };
 
     @Nullable
     public static final DoughData get(ItemStack stack) {
-        return stack.get(PetrolparkCreateDataComponentTypes.DOUGH);
+        return stack.get(DOUGH);
     };
     
     public record Cuts(List<DoughData.Cuts.Entry> cuts) {
@@ -161,4 +164,5 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
             return toppings().stream().map(DoughData.Toppings.Entry::topping).anyMatch(topping::equals);
         };
     };
+
 };

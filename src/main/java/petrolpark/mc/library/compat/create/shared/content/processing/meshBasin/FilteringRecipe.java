@@ -54,6 +54,11 @@ public class FilteringRecipe extends AdvancedBasinRecipe {
         return NonNullList.create();
     };
 
+    @Override
+    protected boolean canSpecifyDuration() {
+        return false;
+    };
+
     public SizedFluidIngredient getInputFluid() {
         return super.getFluidIngredients().get(0);
     };

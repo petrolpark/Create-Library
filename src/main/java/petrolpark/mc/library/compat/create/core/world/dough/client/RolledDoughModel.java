@@ -1,4 +1,4 @@
-package petrolpark.mc.library.compat.create.core.world.dough;
+package petrolpark.mc.library.compat.create.core.world.dough.client;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -48,11 +48,11 @@ import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.client.rendering.PetrolparkBakedModelHelper;
 
-public class DoughModel extends BakedModelWrapper<BakedModel> {
+public class RolledDoughModel extends BakedModelWrapper<BakedModel> {
 
     public static final ModelProperty<DoughRenderer> DOUGH_PROPERTY = new ModelProperty<>();
 
-    public DoughModel(BakedModel originalModel) {
+    public RolledDoughModel(BakedModel originalModel) {
         super(originalModel);
     };
     
@@ -91,7 +91,7 @@ public class DoughModel extends BakedModelWrapper<BakedModel> {
     };
 
     @Override
-    public DoughModel applyTransform(@Nonnull ItemDisplayContext cameraTransformType, @Nonnull PoseStack poseStack, boolean applyLeftHandTransform) {
+    public RolledDoughModel applyTransform(@Nonnull ItemDisplayContext cameraTransformType, @Nonnull PoseStack poseStack, boolean applyLeftHandTransform) {
         super.applyTransform(cameraTransformType, poseStack, applyLeftHandTransform);
         return this;
     };
@@ -107,31 +107,31 @@ public class DoughModel extends BakedModelWrapper<BakedModel> {
         return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(MissingTextureAtlasSprite.getLocation());
     };
 
-    public record Unbaked(BlockModel baseModel) implements IUnbakedGeometry<DoughModel.Unbaked> {
+    public record Unbaked(BlockModel baseModel) implements IUnbakedGeometry<RolledDoughModel.Unbaked> {
 
         @Override
-        public DoughModel bake(@Nonnull IGeometryBakingContext context, @Nonnull ModelBaker baker, @Nonnull Function<Material, TextureAtlasSprite> spriteGetter, @Nonnull ModelState modelState, @Nonnull ItemOverrides overrides) {
+        public RolledDoughModel bake(@Nonnull IGeometryBakingContext context, @Nonnull ModelBaker baker, @Nonnull Function<Material, TextureAtlasSprite> spriteGetter, @Nonnull ModelState modelState, @Nonnull ItemOverrides overrides) {
             baseModel().resolveParents(baker::getModel);
-            return new DoughModel(baseModel().bake(baker, spriteGetter, modelState));
+            return new RolledDoughModel(baseModel().bake(baker, spriteGetter, modelState));
         };
 
     };
 
-    public static class Loader implements IGeometryLoader<DoughModel.Unbaked> {
+    public static class Loader implements IGeometryLoader<RolledDoughModel.Unbaked> {
 
         public static final ResourceLocation ID = Petrolpark.asResource("dough");
-        public static final DoughModel.Loader INSTANCE = new DoughModel.Loader();
+        public static final RolledDoughModel.Loader INSTANCE = new RolledDoughModel.Loader();
 
         @Override
-        public DoughModel.Unbaked read(@Nonnull JsonObject jsonObject, @Nonnull JsonDeserializationContext deserializationContext) throws JsonParseException {
+        public RolledDoughModel.Unbaked read(@Nonnull JsonObject jsonObject, @Nonnull JsonDeserializationContext deserializationContext) throws JsonParseException {
             if (!jsonObject.has("base")) throw new JsonParseException("Must specify a base");
-            return new DoughModel.Unbaked(deserializationContext.deserialize(jsonObject.get("base"), BlockModel.class));
+            return new RolledDoughModel.Unbaked(deserializationContext.deserialize(jsonObject.get("base"), BlockModel.class));
         };
 
     };
 
     public static final void onRegisterGeometryLoaders(ModelEvent.RegisterGeometryLoaders event) {
-        event.register(DoughModel.Loader.ID, DoughModel.Loader.INSTANCE);
+        event.register(RolledDoughModel.Loader.ID, RolledDoughModel.Loader.INSTANCE);
     };
     
 };

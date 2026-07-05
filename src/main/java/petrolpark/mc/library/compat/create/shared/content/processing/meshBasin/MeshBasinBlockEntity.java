@@ -3,13 +3,6 @@ package petrolpark.mc.library.compat.create.shared.content.processing.meshBasin;
 import java.util.List;
 import java.util.Optional;
 
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedBasinRecipe;
-import petrolpark.mc.library.compat.create.core.world.block.entity.basin.AdvancedBasinOperatingBlockEntity;
-import petrolpark.mc.library.compat.create.core.world.block.entity.basin.IDifferentBasinBlockEntity;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
-import petrolpark.mc.library.mixin.compat.create.accessor.BasinBlockEntityAccessor;
-import petrolpark.mc.library.mixin.compat.create.accessor.BasinOperatingBlockEntityAccessor;
 import com.simibubi.create.content.fluids.FluidFX;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
@@ -40,12 +33,20 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandlerModifiable;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedBasinRecipe;
+import petrolpark.mc.library.compat.create.core.world.block.entity.basin.AdvancedBasinOperatingBlockEntity;
+import petrolpark.mc.library.compat.create.core.world.block.entity.basin.IDifferentBasinBlockEntity;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.IRecipeBookAcceptorBlockEntity;
+import petrolpark.mc.library.mixin.compat.create.accessor.BasinBlockEntityAccessor;
+import petrolpark.mc.library.mixin.compat.create.accessor.BasinOperatingBlockEntityAccessor;
 
 public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferentBasinBlockEntity, IRecipeBookAcceptorBlockEntity {
 
     protected int selfProcessingTicksRemaining = -1;
     protected Recipe<?> currentSelfRecipe = null;
-    protected Object selfRecipeCacheKey = new Object();
+    protected Object boilingRecipeCacheKey = new Object();
+    protected Object filteringRecipeCacheKey = new Object();
 
     public MeshBasinBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -132,7 +133,7 @@ public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferent
     };
 
     public List<Recipe<?>> getMatchingSelfRecipes() {
-        return AdvancedBasinOperatingBlockEntity.getMatchingRecipes(this, selfRecipeCacheKey, r -> BasinRecipe.match(this, r), this::matchStaticFiltersForSelfProcessing);
+        return AdvancedBasinOperatingBlockEntity.getMatchingRecipes(this, boilingRecipeCacheKey, r -> BasinRecipe.match(this, r), this::matchStaticFiltersForSelfProcessing);
     };
 
     protected Optional<ProcessingRecipe<?, ?>> getCurrentSelfProcessingRecipe() {
@@ -193,7 +194,8 @@ public class MeshBasinBlockEntity extends BasinBlockEntity implements IDifferent
 
     @Override
     public void onAvailableRecipesChanged() {
-        selfRecipeCacheKey = new Object();
+        boilingRecipeCacheKey = new Object();
+        filteringRecipeCacheKey = new Object();
         updateSelfRecipe();
     };
 

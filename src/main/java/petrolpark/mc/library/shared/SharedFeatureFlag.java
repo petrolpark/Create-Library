@@ -12,7 +12,9 @@ import net.minecraft.util.StringRepresentable;
 import petrolpark.mc.library.PetrolparkTags;
 import petrolpark.mc.library.compat.Mods;
 import petrolpark.mc.library.compat.create.core.world.block.chainConveyor.ChainConveyorArmInteractionPoint;
+import petrolpark.mc.library.compat.create.core.world.dough.DoughBlock;
 import petrolpark.mc.library.compat.create.core.world.dough.IDough;
+import petrolpark.mc.library.compat.create.core.world.dough.cookieCutter.CookieCutterItem;
 import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.RollingPinItem;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HarnessBlock;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HorseMillBearingBlock;
@@ -91,6 +93,16 @@ public enum SharedFeatureFlag implements StringRepresentable {
      */
     CENTRIFUGE,
     /**
+     * Registers the Circular Cookie Cutter item
+     * @see CookieCutterItem
+     */
+    CIRCLE_COOKIE_CUTTER,
+    /**
+     * Registers the Dough block and some Ponders
+     * @see DoughBlock
+     */
+    DOUGH,
+    /**
      * Registers the Drying Rack block and default recipe.
      * @see DryingRackBlock
      * @see DryingRecipe
@@ -131,12 +143,6 @@ public enum SharedFeatureFlag implements StringRepresentable {
      */
     REDSTONE_PROGRAMMER,
     /**
-     * Registers the Rolling Pin item and its default recipes.
-     * Technically doesn't require Create, but as {@link IDough} does, it's rather useless without.
-     * @see RollingPinItem
-     */
-    ROLLING_PIN,
-    /**
      * Registers the {@link SharedMobEffects#SLIPPING Slipping effect and potions}.
      * The {@link PetrolparkAttributes#SLIPPERINESS corresponding attribute} is always registered, even if this flag is not enabled.
      */
@@ -176,6 +182,12 @@ public enum SharedFeatureFlag implements StringRepresentable {
      * If Create is present, also registers the {@link SharedCreateItems#UNPROCESSED_MASHED_POTATO sequence assembly recipe} for Mashed Potato.
      */
     POTATO_PRODUCTS(MILK_PRODUCTS),
+        /**
+     * Registers the Rolling Pin item and its default recipes.
+     * Technically doesn't require Create, but as {@link IDough} does, it's rather useless without.
+     * @see RollingPinItem
+     */
+    ROLLING_PIN(DOUGH),
     /**
      * Register the {@link SharedCreateFluids#SUNFLOWER_OIL Sunflower Oil fluid} and the default recipe to obtain it.
      * Requires Create.
@@ -185,8 +197,9 @@ public enum SharedFeatureFlag implements StringRepresentable {
     // SECOND-ORDER DEPENDENT
 
     /**
-     * Registers the {@link SharedItems#FRIES Fries item} and {@link SharedBlocks#RAW_FRIES_BLOCK block}, and the {@link SharedFeatureFlag#EXTRUSION extrusion} recipe to obtain them.
-     * Requires Create.
+     * Registers the {@link SharedItems#FRIES Fries item}, {@link SharedBlocks#RAW_FRIES_BLOCK block} and {@link SharedItems#RAW_FRIES Raw Fries item}, and the Smelting/Smoking/Campfire Cooking recipe to cook them
+     * If Create is present, enables the {@link SharedFeatureFlag#EXTRUSION extrusion} recipe to obtain the Raw Fries Block.
+     * If {@link SharedFeatureFlag#MESH_BASIN} is enabled, disables the cooking recipes and enables the default deep-frying recipe. 
      */
     FRIES(POTATO_PRODUCTS, EXTRUSION)
     ;

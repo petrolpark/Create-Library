@@ -1,5 +1,13 @@
 package petrolpark.mc.library.compat.create.core.client.ponder;
 
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.Create;
+import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
+import com.tterrag.registrate.util.entry.ItemProviderEntry;
+import com.tterrag.registrate.util.entry.RegistryEntry;
+
+import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
+import net.minecraft.resources.ResourceLocation;
 import petrolpark.mc.library.compat.create.core.world.block.chainConveyor.ChainConveyorScenes;
 import petrolpark.mc.library.compat.create.core.world.block.crushingWheel.CrushingWheelScenes;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.ponder.HorseMillScenes;
@@ -11,14 +19,6 @@ import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.M
 import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerPonderScenes;
 import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.Create;
-import com.simibubi.create.infrastructure.ponder.AllCreatePonderTags;
-import com.tterrag.registrate.util.entry.ItemProviderEntry;
-import com.tterrag.registrate.util.entry.RegistryEntry;
-
-import net.createmod.ponder.api.registration.PonderSceneRegistrationHelper;
-import net.minecraft.resources.ResourceLocation;
 
 public class PetrolparkCreatePonderScenes {
     
@@ -51,14 +51,16 @@ public class PetrolparkCreatePonderScenes {
 		if (SharedFeatureFlag.EXTRUSION.enabled()) itemProviderHelper.forComponents(SharedCreateBlocks.EXTRUSION_DIE)
 			.addStoryBoard("shared/processing/extrusion", ExtrusionScenes::extrusionDie, AllCreatePonderTags.CONTRAPTION_ACTOR);
 
-		if (SharedFeatureFlag.HORSE_MILL.enabled()) {
-			itemProviderHelper.forComponents(SharedCreateBlocks.HORSE_MILL_BEARING, SharedCreateBlocks.HARNESS)
+		if (SharedFeatureFlag.HORSE_MILL.enabled()) itemProviderHelper.forComponents(SharedCreateBlocks.HORSE_MILL_BEARING, SharedCreateBlocks.HARNESS)
 				.addStoryBoard("shared/kinetics/horse_mill", HorseMillScenes::horseMill);
-		};
 	
-		if (SharedFeatureFlag.MESH_BASIN.enabled()) itemProviderHelper.forComponents(SharedCreateBlocks.MESH_BASIN)
-			.addStoryBoard("shared/processing/mesh_basin/juicing", MeshBasinScenes::juicing)
-			.addStoryBoard("shared/processing/mesh_basin/boiling", MeshBasinScenes::boiling);
+		if (SharedFeatureFlag.MESH_BASIN.enabled()) {
+			itemProviderHelper.forComponents(SharedCreateBlocks.MESH_BASIN)
+				.addStoryBoard("shared/processing/mesh_basin/juicing", MeshBasinScenes::juicing)
+				.addStoryBoard("shared/processing/mesh_basin/boiling", MeshBasinScenes::boiling);
+			itemProviderHelper.forComponents(SharedCreateBlocks.MESH_BASIN, AllBlocks.SPOUT)
+				.addStoryBoard("shared/processing/mesh_basin/filtering", MeshBasinScenes::filtering, extras -> extras.orderAfter(Create.ID, "spout"));
+		};
 
 		if (SharedFeatureFlag.REDSTONE_PROGRAMMER.enabled()) itemProviderHelper.forComponents(SharedCreateBlocks.REDSTONE_PROGRAMMER)
 			.addStoryBoard("shared/redstone/programmer", RedstoneProgrammerPonderScenes::redstoneProgrammer, AllCreatePonderTags.REDSTONE);

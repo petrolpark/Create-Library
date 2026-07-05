@@ -93,18 +93,9 @@
     "minecraft:painting",
     "minecraft:golden_apple",
     "minecraft:enchanted_golden_apple",
-    "minecraft:bucket",
-    "minecraft:water_bucket",
-    "minecraft:lava_bucket",
     "minecraft:snowball",
     "minecraft:leather",
     "minecraft:milk_bucket",
-    "minecraft:pufferfish_bucket",
-    "minecraft:salmon_bucket",
-    "minecraft:cod_bucket",
-    "minecraft:tropical_fish_bucket",
-    "minecraft:axolotl_bucket",
-    "minecraft:tadpole_bucket",
     "minecraft:brick",
     "minecraft:clay_ball",
     "minecraft:paper",
@@ -990,6 +981,7 @@
       "id": "petrolpark:shared/centrifuge",
       "required": false
     },
+    "petrolpark:dough",
     {
       "id": "petrolpark:shared/extrusion_die",
       "required": false
@@ -1000,6 +992,10 @@
     },
     {
       "id": "petrolpark:shared/mandrel",
+      "required": false
+    },
+    {
+      "id": "petrolpark:shared/rolling_pin_holder",
       "required": false
     },
     "petrolpark:dough"

@@ -1,0 +1,16 @@
+{
+    "neoforge:conditions": [
+        {
+            "type": "petrolpark:feature_enabled",
+            "feature": "circle_cookie_cutter"
+        }
+    ],
+    "type": "minecraft:stonecutting",
+    "ingredient": {
+        "tag": "c:plates/iron"
+    },
+    "result": {
+        "count": 1,
+        "id": "petrolpark:shared/circle_cookie_cutter"
+    }
+}

@@ -4,13 +4,13 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import petrolpark.mc.library.compat.create.core.world.item.directional.DirectionalTransportedItemStack;
-import petrolpark.mc.library.compat.create.core.world.item.directional.IDirectionalOnBelt;
 import com.simibubi.create.content.kinetics.belt.behaviour.DirectBeltInputBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.ItemStack;
+import petrolpark.mc.library.compat.create.core.world.item.transported.ISpecialBeltItem;
+import petrolpark.mc.library.compat.create.core.world.item.transported.SpecialTransportedItemStack;
 
 @Mixin(DirectBeltInputBehaviour.class)
 public class DirectBeltInputBehaviourMixin {
@@ -20,8 +20,8 @@ public class DirectBeltInputBehaviourMixin {
         remap = false
     )
     public ItemStack petrolpark$insertDirectional(TransportedItemStack stack, Direction side, boolean simulate, Operation<ItemStack> original) {
-        if (!(stack instanceof DirectionalTransportedItemStack) && stack.stack.getItem() instanceof IDirectionalOnBelt directionalItem) { // If not already cast to a Directional transported stack
-           stack = directionalItem.makeDirectionalTransportedItemStack(stack);
+        if (!(stack instanceof SpecialTransportedItemStack) && stack.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) { // If not already cast to a Directional transported stack
+           stack = specialBeltItem.makeTransportedItemStack(stack);
         };
         return original.call(stack, side, simulate);
     };

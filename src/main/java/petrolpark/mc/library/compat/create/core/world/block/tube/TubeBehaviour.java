@@ -34,7 +34,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.compat.create.RequiresCreate;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlocks;
 import petrolpark.mc.library.util.BigItemStack;
 import petrolpark.mc.library.util.BlockFace;
 import petrolpark.mc.library.util.ItemHelper;
@@ -106,7 +106,7 @@ public class TubeBehaviour extends BlockEntityBehaviour {
         this.spline = spline;
         middleControlPoints = getSpline().getMiddleControlPoints();
         for (BlockPos pos : getSpline().getBlockedPositions()) {
-            getWorld().setBlock(pos, SharedCreateBlocks.TUBE_STRUCTURE.getDefaultState(), 3);
+            getWorld().setBlock(pos, PetrolparkCreateBlocks.TUBE_STRUCTURE.getDefaultState(), 3);
         };
         initializationTicks = 3; // Delay to link structural blocks to the controller
         get(getWorld(), otherEndPos).ifPresent(tube -> {

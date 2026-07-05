@@ -1,5 +1,11 @@
 package petrolpark.mc.library.compat.create.core.world.dough.cookieCutter;
 
-public class CookieCutterItem {
+import net.minecraft.world.item.Item;
+
+public class CookieCutterItem extends Item {
+
+    public CookieCutterItem(Item.Properties properties) {
+        super(properties);
+    };
     
 };

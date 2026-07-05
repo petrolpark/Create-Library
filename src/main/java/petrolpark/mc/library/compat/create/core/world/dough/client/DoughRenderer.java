@@ -1,4 +1,4 @@
-package petrolpark.mc.library.compat.create.core.world.dough;
+package petrolpark.mc.library.compat.create.core.world.dough.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -9,7 +9,6 @@ import net.createmod.catnip.render.SuperByteBuffer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.Level;
@@ -18,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
 
 public class DoughRenderer {
 
@@ -64,7 +64,7 @@ public class DoughRenderer {
                 oldLength = data.length();
                 oldThickness = data.thickness();
             };
-            rollingProgress += 0.5f;
+            rollingProgress += 0.2f;
             if (rollingProgress > 1f) rollingProgress = 1f;
         };
     };
@@ -96,26 +96,25 @@ public class DoughRenderer {
         if (data == null) return;
         final Minecraft mc = Minecraft.getInstance();
         final ClientLevel level = mc.level;
-        if (level == null || !(mc.getBlockRenderer().getBlockModel(baseState) instanceof DoughModel baseModel)) return;
+        if (level == null || !(mc.getBlockRenderer().getBlockModel(baseState) instanceof RolledDoughModel baseModel)) return;
 
         final TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(data.dough().textureLocation());
         final int color = data.dough().tint();
 
         if (data.decoration().isEmpty()) {
 
-            if (cachedBuffer == null || rollingProgress < 1f) {
+            if (rollingProgress < 1f) {
 
-                final BakedModel scaledModel = baseModel.getShaped(getAABB(partialTicks), sprite, level.getRandom());
+                SuperBufferFactory.getInstance().createForBlock(baseModel.getShaped(getAABB(partialTicks), sprite, level.getRandom()), Blocks.AIR.defaultBlockState())
+                    .light(light)
+                    .color(color)
+                    .renderInto(ms, builder);
+                return;
 
-                if (rollingProgress < 1f) {
-                    SuperBufferFactory.getInstance().createForBlock(scaledModel, Blocks.AIR.defaultBlockState())
-                        .light(light)
-                        .color(color)
-                        .renderInto(ms, builder);
-                    return;
-                } else {
-                    cachedBuffer = SuperBufferFactory.getInstance().createForBlock(scaledModel, Blocks.AIR.defaultBlockState());
-                }
+            } else if (cachedBuffer == null) {
+
+                cachedBuffer = SuperBufferFactory.getInstance().createForBlock(baseModel.getShaped(getAABB(1f), sprite, level.getRandom()), Blocks.AIR.defaultBlockState());
+            
             };
 
             cachedBuffer
@@ -123,6 +122,8 @@ public class DoughRenderer {
                 .color(color)
                 .renderInto(ms, builder);
         };
+        
+        // TODO toppings and cuts
         
     };
     

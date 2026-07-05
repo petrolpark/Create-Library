@@ -2,15 +2,15 @@ package petrolpark.mc.library.compat.create.core.world.dough;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.IRollableBlock;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
-import petrolpark.mc.library.core.world.block.IPickUpPutDownBlock;
 import com.simibubi.create.foundation.block.IBE;
+import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -25,7 +25,13 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.FlagPoleBehaviour;
+import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.IRollableBlock;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
+import petrolpark.mc.library.core.flags.ItemFlagPole;
+import petrolpark.mc.library.core.world.block.IPickUpPutDownBlock;
 
+@ParametersAreNonnullByDefault
 public class DoughBlock extends Block implements IBE<DoughBlockEntity>, IRollableBlock, IPickUpPutDownBlock {
 
     public DoughBlock(BlockBehaviour.Properties properties) {
@@ -44,6 +50,12 @@ public class DoughBlock extends Block implements IBE<DoughBlockEntity>, IRollabl
         return stack;
     };
 
+    @Override
+    public void setPlacedBy(Level level, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack stack) {
+        super.setPlacedBy(level, pos, state, placer, stack);
+        BlockEntityBehaviour.get(level, pos, FlagPoleBehaviour.TYPE).getFlagPole().flagAll(ItemFlagPole.get(stack).streamOrphanExtrinsicFlags());
+    };
+
     @SuppressWarnings("null")
     public static final int getColor(BlockState state, @Nullable BlockAndTintGetter level, @Nullable BlockPos pos, int tintIndex) {
         return level == null && pos == null ? -1 : level.getBlockEntity(pos, PetrolparkCreateBlockEntityTypes.DOUGH.get()).map(be -> be.doughData.dough().tint()).orElse(-1);
@@ -55,9 +67,9 @@ public class DoughBlock extends Block implements IBE<DoughBlockEntity>, IRollabl
     };
 
     @Override
-    public void rollingPinRoll(Level level, BlockPos pos, Direction horizontalLookingDirection, boolean byPlayer) {
+    public void rollingPinRoll(Level level, BlockPos pos, Direction horizontalLookingDirection, boolean automated) {
         final boolean lengthwise = horizontalLookingDirection.getAxis() == Axis.Z;
-        withBlockEntityDo(level, pos, be -> be.modifyDough(dough -> dough.isRollable(lengthwise) ? dough.rolled(lengthwise, byPlayer) : dough));
+        withBlockEntityDo(level, pos, be -> be.modifyDough(dough -> dough.isRollable(lengthwise) ? dough.rolled(lengthwise, automated) : dough));
     };
 
     @Override

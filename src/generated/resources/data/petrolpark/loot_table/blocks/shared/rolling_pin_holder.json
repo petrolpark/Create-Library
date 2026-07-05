@@ -1,0 +1,27 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "petrolpark:feature_enabled",
+      "feature": "rolling_pin"
+    }
+  ],
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "petrolpark:shared/rolling_pin_holder"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "petrolpark:blocks/shared/rolling_pin_holder"
+}

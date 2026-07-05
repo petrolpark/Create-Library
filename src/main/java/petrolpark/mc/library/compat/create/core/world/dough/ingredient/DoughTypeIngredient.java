@@ -3,6 +3,9 @@ package petrolpark.mc.library.compat.create.core.world.dough.ingredient;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.MapCodec;
+
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
 import petrolpark.mc.library.compat.create.core.world.dough.IDough;
 import petrolpark.mc.library.compat.create.registry.PetrolparkDoughIngredientTypes;
@@ -10,9 +13,6 @@ import petrolpark.mc.library.core.data.recipe.ingredient.advanced.INamedAdvanced
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 import petrolpark.mc.library.util.Neither;
 import petrolpark.mc.library.util.codec.CodecHelper;
-
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 
 public record DoughTypeIngredient(IDough dough) implements DoughIngredient {
 
@@ -36,7 +36,7 @@ public record DoughTypeIngredient(IDough dough) implements DoughIngredient {
 
     @Override
     public Stream<DoughData> streamExamples() {
-        return Stream.of(new DoughData(dough(), 4f, (byte)1, (byte)1, Neither.neither(), false));
+        return Stream.of(new DoughData(dough(), 4f, (byte)1, (byte)1, Neither.neither(), false, false));
     };
 
     @Override

@@ -7,6 +7,7 @@ import petrolpark.mc.library.compat.create.core.client.offGridTiling.OffGridTili
 import petrolpark.mc.library.compat.create.core.client.ponder.PetrolparkCreatePonderPlugin;
 import petrolpark.mc.library.compat.create.core.data.recipe.RecipeBookProviderHighlighter;
 import petrolpark.mc.library.compat.create.core.event.CreateClientEvents;
+import petrolpark.mc.library.compat.create.core.event.CreateClientModEvents;
 import petrolpark.mc.library.compat.create.core.world.block.chainConveyor.ChainConveyorArmInteractionClientHandler;
 import petrolpark.mc.library.compat.create.core.world.block.tube.ClientTubePlacementHandler;
 import petrolpark.mc.library.compat.create.shared.registry.SharedPartialModels;
@@ -24,6 +25,7 @@ public class PetrolparkCreateClient {
         mainEventBus.register(ClientTubePlacementHandler.class);
         mainEventBus.register(ChainConveyorArmInteractionClientHandler.class);
         mainEventBus.register(RECIPE_BOOK_PROVIDER_HIGHLIGHTER);
+        modEventBus.register(CreateClientModEvents.class);
         modEventBus.addListener(PetrolparkCreateClient::clientInit);
 
         OffGridTilingMetadataSection.init();

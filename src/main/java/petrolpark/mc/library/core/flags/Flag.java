@@ -27,8 +27,10 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import petrolpark.mc.library.registry.PetrolparkRegistries;
+import petrolpark.mc.library.util.ColorHelper;
 import petrolpark.mc.library.util.GraphHelper;
 import petrolpark.mc.library.util.GraphHelper.CircularReferenceException;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 /**
  * <a href="https://github.com/petrolpark/Create-Library/wiki/Flags"> Wiki article
@@ -38,9 +40,9 @@ public class Flag {
 
     public static final Codec<Flag> DIRECT_CODEC = ExtraCodecs.catchDecoderException(RecordCodecBuilder.create(instance -> 
         instance.group(
-            Codec.floatRange(0f, 1f).fieldOf("preservation_proportion").forGetter(Flag::getPreservationProportion),
-            Codec.intRange(0, 16777215).fieldOf("color").forGetter(Flag::getColor),
-            Codec.intRange(0, 16777215).fieldOf("absent_color").forGetter(Flag::getAbsentColor),
+            CodecHelper.UNIT_INTERVAL_FLOAT.fieldOf("preservation_proportion").forGetter(Flag::getPreservationProportion),
+            ColorHelper.INT_CODEC.fieldOf("color").forGetter(Flag::getColor),
+            ColorHelper.INT_CODEC.fieldOf("absent_color").forGetter(Flag::getAbsentColor),
             RegistryCodecs.homogeneousList(PetrolparkRegistries.Keys.FLAG).optionalFieldOf("children", HolderSet.direct()).forGetter(Flag::getDirectChildrenHolders)
         ).apply(instance, Flag::new)
     ));

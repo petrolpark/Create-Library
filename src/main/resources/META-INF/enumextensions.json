@@ -10,7 +10,7 @@
             "enum": "net/minecraft/world/item/ItemDisplayContext",
             "name": "PETROLPARK_DRYING_RACK",
             "constructor": "(ILjava/lang/String;Ljava/lang/String;)V",
-            "parameters": [ -1, "petrolpark:belt", "FIXED" ]
+            "parameters": [ -1, "petrolpark:drying_rack", "FIXED" ]
         }
     ]
 }

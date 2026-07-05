@@ -64,6 +64,8 @@ public class CodecHelper {
     public static final Codec<Float> POS_FLOAT = Codec.floatRange(0f, Float.MAX_VALUE);
     public static final Codec<Double> POS_DOUBLE = Codec.doubleRange(0f, Double.MAX_VALUE);
 
+    public static final Codec<Float> UNIT_INTERVAL_FLOAT = Codec.floatRange(0f, 1f);
+
     public static <T extends ByteBuf, S extends Enum<S>> StreamCodec<T, S> enumStream(Class<S> clazz) {
         return new StreamCodec<>() {
 

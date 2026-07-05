@@ -18,6 +18,9 @@ import net.minecraft.Util;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType.EntityFactory;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
@@ -32,6 +35,7 @@ import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ITypelessAdvan
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.NamedAdvancedIngredientType;
 import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
 import petrolpark.mc.library.core.registrate.builder.shared.SharedCreateBlockEntityBuilder;
+import petrolpark.mc.library.core.registrate.builder.shared.SharedCreateEntityBuilder;
 import petrolpark.mc.library.core.world.fluid.ColoredFluidType;
 import petrolpark.mc.library.core.world.fluid.VirtualFluidWithContainer;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
@@ -48,6 +52,10 @@ public class AbstractPetrolparkCreateRegistrate<R extends AbstractPetrolparkCrea
 
     public <T extends BlockEntity> SharedCreateBlockEntityBuilder<T, R> sharedCreateBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {
         return (SharedCreateBlockEntityBuilder<T, R>)sharedEntry(featureFlag, callback -> SharedCreateBlockEntityBuilder.create(self(), self(), featureFlag, getSharedPath(name), callback, factory));
+    };
+
+    public <T extends Entity> SharedCreateEntityBuilder<T, R> sharedCreateEntity(SharedFeatureFlag featureFlag, String name, EntityFactory<T> factory, MobCategory classification) {
+        return (SharedCreateEntityBuilder<T, R>)sharedEntry(featureFlag, callback -> SharedCreateEntityBuilder.create(self(), self(), featureFlag, getSharedPath(name), callback, factory, classification));
     };
 
     public FluidBuilder<VirtualFluidWithContainer, R> coloredWaterFluid(String name, int color, ItemLike container) {

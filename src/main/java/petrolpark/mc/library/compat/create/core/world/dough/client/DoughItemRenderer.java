@@ -1,4 +1,4 @@
-package petrolpark.mc.library.compat.create.core.world.dough;
+package petrolpark.mc.library.compat.create.core.world.dough.client;
 
 import java.time.Duration;
 import java.util.concurrent.ExecutionException;
@@ -8,8 +8,6 @@ import javax.annotation.Nonnull;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
 
 import dev.engine_room.flywheel.lib.transform.TransformStack;
 import net.minecraft.client.Minecraft;
@@ -19,13 +17,13 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderDispatcher;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
+import petrolpark.mc.library.compat.create.core.world.dough.DoughBlockEntity;
+import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
 
-@EventBusSubscriber(Dist.CLIENT)
 public class DoughItemRenderer extends BlockEntityWithoutLevelRenderer implements IClientItemExtensions {
 
     protected static final Cache<DoughData, DoughBlockEntity> CACHE = CacheBuilder.newBuilder()
@@ -72,7 +70,6 @@ public class DoughItemRenderer extends BlockEntityWithoutLevelRenderer implement
         ms.popPose();
     };
 
-    @SubscribeEvent
     public static final void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
         final Minecraft mc = Minecraft.getInstance();
         event.registerItem(new DoughItemRenderer(mc.getBlockEntityRenderDispatcher()), SharedCreateBlocks.DOUGH.get().asItem());

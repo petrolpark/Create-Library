@@ -7,11 +7,6 @@ import java.util.function.UnaryOperator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDoughTypes;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.util.Neither;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
@@ -27,6 +22,15 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.FlagPoleBehaviour;
+import petrolpark.mc.library.compat.create.core.world.dough.client.DoughRenderer;
+import petrolpark.mc.library.compat.create.core.world.dough.client.RolledDoughModel;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDoughTypes;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
+import petrolpark.mc.library.util.Neither;
 
 public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
 
@@ -34,12 +38,12 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
     protected VoxelShape shape = null;
 
     // Client stuff
-    protected final DoughRenderer renderingData = new DoughRenderer();
+    protected final DoughRenderer renderer = new DoughRenderer();
 
-    protected DoughBlockEntity(DoughData data) {
+    public DoughBlockEntity(DoughData data) {
         this(PetrolparkCreateBlockEntityTypes.DOUGH.get(), BlockPos.ZERO, SharedCreateBlocks.DOUGH.getDefaultState());
         this.doughData = data;
-        renderingData.setFrom(data);
+        renderer.setFrom(data);
     };
 
     public DoughBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -48,17 +52,17 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
-        
+        behaviours.add(new FlagPoleBehaviour(this));
     };
 
     @Override
     public void tick() {
         super.tick();
         if (doughData == null) { // Templrary
-            doughData = new DoughData(PetrolparkCreateDoughTypes.TEST.get(), 4f, (byte)1, (byte)1, Neither.neither(), false); // TEMP
+            doughData = new DoughData(PetrolparkCreateDoughTypes.TEST.get(), 4f, (byte)1, (byte)1, Neither.neither(), false, false); // TEMP
             onDoughChanged();
         };
-        renderingData.tick(getLevel());
+        renderer.tick(getLevel());
     };
 
     public Optional<VoxelShape> getVoxelShape() {
@@ -72,16 +76,20 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
     public void modifyDough(UnaryOperator<DoughData> operator) {
         final DoughData modified = operator.apply(doughData);
         if (!modified.equals(doughData)) {
-            if (doughData.width() != modified.width() || doughData.length() != modified.length() || doughData.thickness() != modified.thickness()) renderingData.rollingProgress = 0f;
+            if (doughData.width() != modified.width() || doughData.length() != modified.length() || doughData.thickness() != modified.thickness()) renderer.rollingProgress = 0f;
             doughData = modified;
             onDoughChanged();
         };
     };
 
     public void onDoughChanged() {
-        renderingData.update(doughData);
+        renderer.update(doughData);
         shape = null;
         setChanged();
+    };
+
+    public DoughRenderer getRenderer() {
+        return renderer;
     };
 
     @Override
@@ -101,7 +109,7 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
 
     @Override
     public ModelData getModelData() {
-        return doughData == null ? ModelData.EMPTY : ModelData.builder().with(DoughModel.DOUGH_PROPERTY, renderingData).build();
+        return doughData == null ? ModelData.EMPTY : ModelData.builder().with(RolledDoughModel.DOUGH_PROPERTY, renderer).build();
     };
 
     @Override
@@ -109,7 +117,7 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
         super.read(tag, registries, clientPacket);
 
         doughData = DoughData.CODEC.parse(NbtOps.INSTANCE, tag.getCompound("Dough")).resultOrPartial().orElse(null);
-        renderingData.setFrom(doughData);
+        renderer.setFrom(doughData);
     };
 
     @Override
@@ -122,12 +130,13 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
     @Override
     protected void applyImplicitComponents(@Nonnull DataComponentInput componentInput) {
         doughData = componentInput.get(PetrolparkCreateDataComponentTypes.DOUGH);
-        renderingData.setFrom(doughData);
+        renderer.setFrom(doughData);
     };
 
     @Override
     protected void collectImplicitComponents(@Nonnull DataComponentMap.Builder components) {
         components.set(PetrolparkCreateDataComponentTypes.DOUGH, doughData == null ? null : doughData.forItem());
+        components.set(PetrolparkDataComponentTypes.ORPHAN_FLAGS, getBehaviour(FlagPoleBehaviour.TYPE).getFlagPole().streamOrphanExtrinsicFlags().toList());
     };
     
 };

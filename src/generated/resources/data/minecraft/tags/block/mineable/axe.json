@@ -19,6 +19,10 @@
     {
       "id": "petrolpark:shared/redstone_programmer",
       "required": false
+    },
+    {
+      "id": "petrolpark:shared/rolling_pin_holder",
+      "required": false
     }
   ]
 }

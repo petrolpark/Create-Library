@@ -30,6 +30,7 @@ public class PetrolparkMixinPlugin implements IMixinConfigPlugin {
 
     @Override
     public void onLoad(String mixinPackage) {
+        requireMultipleMods("client.BasinCategoryMixin", "jei", "create");
         requireMultipleMods("client.ForgePluginFinderMixin", "jei", "create");
         requireMultipleMods("client.CreateRecipeCategoryMixin", "jei", "create");
     };

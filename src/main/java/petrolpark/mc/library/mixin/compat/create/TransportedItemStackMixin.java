@@ -4,15 +4,13 @@ import org.spongepowered.asm.mixin.Mixin;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import petrolpark.mc.library.compat.create.RequiresCreate;
-import petrolpark.mc.library.compat.create.core.world.item.directional.DirectionalTransportedItemStack;
-import petrolpark.mc.library.compat.create.core.world.item.directional.IDirectionalOnBelt;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.world.level.block.Rotation;
+import petrolpark.mc.library.compat.create.RequiresCreate;
+import petrolpark.mc.library.compat.create.core.world.item.transported.ISpecialBeltItem;
+import petrolpark.mc.library.compat.create.core.world.item.transported.SpecialTransportedItemStack;
 
 @RequiresCreate
 @Mixin(TransportedItemStack.class)
@@ -24,12 +22,10 @@ public class TransportedItemStackMixin {
     )
     private static TransportedItemStack petrolpark$readDirectional(CompoundTag nbt, HolderLookup.Provider registries, Operation<TransportedItemStack> original) {
         TransportedItemStack stack = original.call(nbt, registries);
-        if (stack.stack.getItem() instanceof IDirectionalOnBelt directionalItem) {
-            DirectionalTransportedItemStack directionalStack = directionalItem.makeDirectionalTransportedItemStack(stack);
-            if (nbt.contains("Rotation", Tag.TAG_INT)) {
-                directionalStack.setRotation(Rotation.values()[nbt.getInt("Rotation")]);
-            };
-            return directionalStack;
+        if (stack.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) {
+            SpecialTransportedItemStack specialStack = specialBeltItem.makeTransportedItemStack(stack);
+            specialStack.deserializeNBT(nbt, registries);
+            return specialStack;
         };
         return stack;
     };

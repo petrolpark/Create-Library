@@ -6,8 +6,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Predicate;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.util.RecipeHelper;
 import com.simibubi.create.content.processing.basin.BasinBlockEntity;
 import com.simibubi.create.content.processing.basin.BasinOperatingBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
@@ -26,6 +24,8 @@ import net.neoforged.neoforge.capabilities.Capabilities.FluidHandler;
 import net.neoforged.neoforge.capabilities.Capabilities.ItemHandler;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.util.RecipeHelper;
 
 public abstract class AdvancedBasinOperatingBlockEntity extends BasinOperatingBlockEntity {
 
@@ -34,7 +34,7 @@ public abstract class AdvancedBasinOperatingBlockEntity extends BasinOperatingBl
     };
 
     @SuppressWarnings("null")
-    public static List<Recipe<?>> getMatchingRecipes(BasinBlockEntity basin, Object recipeCacheKey, Predicate<Recipe<?>> matchRecipeFilter, Predicate<RecipeHolder<?>> matchStaticFilters) {
+    public static final List<Recipe<?>> getMatchingRecipes(BasinBlockEntity basin, Object recipeCacheKey, Predicate<Recipe<?>> matchRecipeFilter, Predicate<RecipeHolder<?>> matchStaticFilters) {
         final List<Recipe<?>> list = new ArrayList<>();
         final Level level = basin.getLevel();
         if (level == null) return list;

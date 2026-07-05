@@ -1,16 +1,33 @@
 package petrolpark.mc.library.compat.create.shared.registry;
 
-import static petrolpark.mc.library.Petrolpark.REGISTRATE;
+import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
+import static petrolpark.mc.library.compat.create.PetrolparkCreate.REGISTRATE;
 import static petrolpark.mc.library.core.registrate.PetrolparkTagGen.axeOrPickaxe;
 import static petrolpark.mc.library.core.registrate.PetrolparkTagGen.pickaxeOnly;
-import static com.simibubi.create.api.behaviour.movement.MovementBehaviour.movementBehaviour;
 
+import com.simibubi.create.AllBlocks;
+import com.simibubi.create.AllTags.AllBlockTags;
+import com.simibubi.create.api.stress.BlockStressValues;
+import com.simibubi.create.content.processing.basin.BasinMovementBehaviour;
+import com.simibubi.create.foundation.data.AssetLookup;
+import com.simibubi.create.foundation.data.BlockStateGen;
+import com.simibubi.create.foundation.data.ModelGen;
+import com.simibubi.create.foundation.data.SharedProperties;
+import com.tterrag.registrate.util.entry.BlockEntry;
+
+import net.minecraft.world.level.block.state.BlockBehaviour;
+import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import petrolpark.mc.library.PetrolparkTags;
 import petrolpark.mc.library.compat.create.PetrolparkCreate;
-import petrolpark.mc.library.compat.create.core.world.block.crushingWheel.EncasedCrushingWheelControllerBlock;
-import petrolpark.mc.library.compat.create.core.world.block.tube.TubeStructuralBlock;
 import petrolpark.mc.library.compat.create.core.world.dough.DoughBlock;
 import petrolpark.mc.library.compat.create.core.world.dough.DoughItem;
+import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.holder.RollingPinHolderBlock;
+import petrolpark.mc.library.compat.create.core.world.item.SharedAssemblyOperatorBlockItem;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HarnessBlock;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HarnessMovementBehaviour;
@@ -26,24 +43,6 @@ import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.Re
 import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerBlockItem;
 import petrolpark.mc.library.config.PetrolparkStressConfig;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.AllTags.AllBlockTags;
-import com.simibubi.create.api.stress.BlockStressValues;
-import com.simibubi.create.content.processing.basin.BasinMovementBehaviour;
-import com.simibubi.create.foundation.data.AssetLookup;
-import com.simibubi.create.foundation.data.BlockStateGen;
-import com.simibubi.create.foundation.data.ModelGen;
-import com.simibubi.create.foundation.data.SharedProperties;
-import com.tterrag.registrate.util.entry.BlockEntry;
-
-import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 
 public class SharedCreateBlocks {
 
@@ -90,10 +89,6 @@ public class SharedCreateBlocks {
         .properties(p -> p
             .stacksTo(1)
         ).build()
-        .register();
-
-    public static final BlockEntry<EncasedCrushingWheelControllerBlock> ENCASED_CRUSHING_WHEEL_CONTROLLER = REGISTRATE.block("encased_crushing_wheel_controller", EncasedCrushingWheelControllerBlock::new)
-        .initialProperties(AllBlocks.CRUSHING_WHEEL_CONTROLLER)
         .register();
 
     public static final BlockEntry<ExtrusionDieBlock> EXTRUSION_DIE = REGISTRATE.sharedBlock(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlock::new)
@@ -145,14 +140,6 @@ public class SharedCreateBlocks {
         .item()
         .build()
         .register();
-    
-    public static final BlockEntry<TubeStructuralBlock> TUBE_STRUCTURE = REGISTRATE.block("tube", TubeStructuralBlock::new)
-        .properties(p -> p
-            .noCollission()
-            .noLootTable()
-            .pushReaction(PushReaction.DESTROY)
-        ).blockstate((c, p) -> {})
-        .register();
 
     public static final BlockEntry<RedstoneProgrammerBlock> REDSTONE_PROGRAMMER = REGISTRATE.sharedBlock(SharedFeatureFlag.REDSTONE_PROGRAMMER, "redstone_programmer", RedstoneProgrammerBlock::new)
         .initialProperties(SharedProperties::wooden)
@@ -170,6 +157,19 @@ public class SharedCreateBlocks {
         ).transform(axeOrPickaxe())
         .item(RedstoneProgrammerBlockItem::new)
         .build()
+        .register();
+
+    public static final BlockEntry<RollingPinHolderBlock> ROLLING_PIN_HOLDER = REGISTRATE.sharedBlock(SharedFeatureFlag.ROLLING_PIN, "rolling_pin_holder", RollingPinHolderBlock::new)
+        .sharedItem(SharedAssemblyOperatorBlockItem::new)
+        .tag(PetrolparkTags.Items.FLAGGABLE.tag)
+        .transform(ModelGen.customItemModel())
+        .initialProperties(AllBlocks.MECHANICAL_PRESS)
+        .properties(p -> p
+            .noOcclusion()
+            .mapColor(MapColor.PODZOL)
+        ).blockstate(BlockStateGen.horizontalAxisBlockProvider(true))
+        .transform(axeOrPickaxe())
+        .transform(PetrolparkStressConfig.setImpact(2.0d))
         .register();
 
     public static final void register() {};

@@ -1,8 +1,5 @@
 package petrolpark.mc.library.compat.create.core.world.block.crushingWheel;
 
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.config.PetrolparkConfigs;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.decoration.encasing.EncasedBlock;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
@@ -30,6 +27,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.neoforged.neoforge.event.entity.player.UseItemOnBlockEvent;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlocks;
+import petrolpark.mc.library.config.PetrolparkConfigs;
 
 public class EncasedCrushingWheelControllerBlock extends CrushingWheelControllerBlock implements EncasedBlock, IWrenchable {
 
@@ -40,7 +40,7 @@ public class EncasedCrushingWheelControllerBlock extends CrushingWheelController
             || !AllBlocks.BRASS_CASING.isIn(event.getItemStack())
         ) return;
         if (!event.getLevel().isClientSide()) {
-            SharedCreateBlocks.ENCASED_CRUSHING_WHEEL_CONTROLLER.get().handleEncasing(state, event.getLevel(), event.getPos(), event.getItemStack(), event.getPlayer(), event.getHand(), event.getUseOnContext().getHitResult());
+            PetrolparkCreateBlocks.ENCASED_CRUSHING_WHEEL_CONTROLLER.get().handleEncasing(state, event.getLevel(), event.getPos(), event.getItemStack(), event.getPlayer(), event.getHand(), event.getUseOnContext().getHitResult());
             AllBlocks.SHAFT.get().playEncaseSound(event.getLevel(), event.getPos());     
         };
         event.cancelWithResult(ItemInteractionResult.SUCCESS);

@@ -3,14 +3,14 @@ package petrolpark.mc.library.compat.create.core.world.dough.ingredient;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.MapCodec;
+
+import io.netty.buffer.ByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.AdvancedIngredientGenericType;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.INamedAdvancedIngredientType;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
-
-import io.netty.buffer.ByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 
 public final class PlayerMadeDoughIngredient implements DoughIngredient {
 

@@ -4,6 +4,7 @@ import java.util.Collections;
 
 import javax.annotation.Nonnull;
 
+import com.mojang.datafixers.util.Function3;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import com.tterrag.registrate.providers.loot.RegistrateBlockLootTables;
@@ -26,7 +27,7 @@ import petrolpark.mc.library.core.registrate.builder.PetrolparkBlockBuilder;
 import petrolpark.mc.library.core.registrate.dataGen.RegistrateConditionalLootTableProvider;
 import petrolpark.mc.library.core.registrate.dataGen.RegistrateConditionalLootTableProvider.ConditionalLootType;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
-import petrolpark.mc.library.shared.world.item.SharedFeatureBlockItem;
+import petrolpark.mc.library.shared.world.item.SharedBlockItem;
 
 public class SharedBlockBuilder<T extends Block, P> extends PetrolparkBlockBuilder<T, P> {
 
@@ -45,9 +46,13 @@ public class SharedBlockBuilder<T extends Block, P> extends PetrolparkBlockBuild
         this.featureFlag = featureFlag;
     };
 
+    public <I extends Item> SharedItemBuilder<I, BlockBuilder<T, P>> sharedItem(Function3<? super T, Item.Properties, SharedFeatureFlag, I> factory) {
+        return item((b, p) -> factory.apply(b, p, featureFlag));
+    };
+
     @Override
     public SharedItemBuilder<BlockItem, BlockBuilder<T, P>> item() {
-        return item(SharedFeatureBlockItem.of(featureFlag));
+        return item(SharedBlockItem.of(featureFlag));
     };
 
     /**

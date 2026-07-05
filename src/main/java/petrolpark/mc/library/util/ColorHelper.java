@@ -4,6 +4,10 @@ import java.util.Optional;
 
 import javax.annotation.Nullable;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.createmod.catnip.theme.Color;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.util.Mth;
@@ -19,8 +23,26 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.ICancellableEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.entity.living.LivingEvent;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 public class ColorHelper {
+
+    public static final Codec<Color> CODEC = Codec.withAlternative(
+        RecordCodecBuilder.create(instance -> instance.group(
+            Codec.intRange(0, 255).fieldOf("r").forGetter(Color::getRed),
+            Codec.intRange(0, 255).fieldOf("g").forGetter(Color::getGreen),
+            Codec.intRange(0, 255).fieldOf("b").forGetter(Color::getBlue),
+            Codec.intRange(0, 255).optionalFieldOf("a", 255).forGetter(Color::getAlpha)
+        ).apply(instance, Color::new)),
+        RecordCodecBuilder.create(instance -> instance.group(
+            CodecHelper.UNIT_INTERVAL_FLOAT.fieldOf("r").forGetter(Color::getRedAsFloat),
+            CodecHelper.UNIT_INTERVAL_FLOAT.fieldOf("g").forGetter(Color::getGreenAsFloat),
+            CodecHelper.UNIT_INTERVAL_FLOAT.fieldOf("b").forGetter(Color::getBlueAsFloat),
+            CodecHelper.UNIT_INTERVAL_FLOAT.optionalFieldOf("a", 1f).forGetter(Color::getAlphaAsFloat)
+        ).apply(instance, Color::new))
+    );
+
+    public static final Codec<Integer> INT_CODEC = Codec.withAlternative(Codec.INT, CODEC.xmap(Color::getRGB, Color::new));
     
     public static final boolean isFullyTransparent(int argb) {
         return (((argb >> 16) & 0xff) == 0);
