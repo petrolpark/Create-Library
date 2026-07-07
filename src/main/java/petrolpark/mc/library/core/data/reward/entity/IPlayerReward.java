@@ -1,11 +1,14 @@
 package petrolpark.mc.library.core.data.reward.entity;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.jetbrains.annotations.ApiStatus;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 
+@ParametersAreNonnullByDefault
 public interface IPlayerReward extends IEntityReward {
 
     public void rewardPlayer(Player player, LootContext context, float multiplier);

@@ -12,6 +12,8 @@ import net.minecraft.world.phys.Vec3;
 
 public class MathsHelper {
 
+    public static final Vec3 VOXEL_BLOCK_CENTER = new Vec3(8d, 8d, 8d);
+
     public static final int floorLog(int x, int base) {
         int result = 0;
         while (x >= base) {

@@ -19,12 +19,14 @@ import petrolpark.mc.library.core.data.numberProvider.PolynomialNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.ProductNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.SigmoidNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.SumNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.entity.AnimalMoodEntityNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.AttributeEntityNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.EntityEffectDurationNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.EntityPredicateNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.EquipmentNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.ExperienceLevelNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.FlatEntityNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.entity.HealthEntityNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.entity.LootEntityNumberProviderType;
 import petrolpark.mc.library.core.data.numberProvider.itemStack.CountItemStackNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.itemStack.EnchantmentLevelItemStackNumberProvider;
@@ -58,12 +60,14 @@ public class PetrolparkNumberProviderTypes {
 
     public static final RegistryEntry<LootEntityNumberProviderType, LootEntityNumberProviderType>
     
+    ANIMAL_MOOD = REGISTRATE.lootEntityNumberProviderType("animal_mood", MapCodec.unit(AnimalMoodEntityNumberProvider::new)),
     ATTRIBUTE = REGISTRATE.lootEntityNumberProviderType("attribute", AttributeEntityNumberProvider.CODEC),
     ENTITY_PREDICATE = REGISTRATE.lootEntityNumberProviderType("predicate", EntityPredicateNumberProvider.CODEC),
     EFFECT_DURATION = REGISTRATE.lootEntityNumberProviderType("effect_duration", EntityEffectDurationNumberProvider.CODEC),
     EQUIPMENT = REGISTRATE.lootEntityNumberProviderType("equipment_property", EquipmentNumberProvider.CODEC),
     EXPERIENCE_LEVEL = REGISTRATE.lootEntityNumberProviderType("experience_level", MapCodec.unit(ExperienceLevelNumberProvider::new)),
-    FLAT_ENTITY = REGISTRATE.lootEntityNumberProviderType("flat", FlatEntityNumberProvider.CODEC);
+    FLAT_ENTITY = REGISTRATE.lootEntityNumberProviderType("flat", FlatEntityNumberProvider.CODEC),
+    HEALTH = REGISTRATE.lootEntityNumberProviderType("health", HealthEntityNumberProvider.CODEC);
 
     public static final RegistryEntry<LootItemStackNumberProviderType, LootItemStackNumberProviderType>
     

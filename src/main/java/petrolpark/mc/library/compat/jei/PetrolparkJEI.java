@@ -4,25 +4,6 @@ import java.util.Collections;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.jei.category.FlagInfoCategory;
-import petrolpark.mc.library.compat.jei.category.IntrinsicFlagsCategory;
-import petrolpark.mc.library.compat.jei.category.extension.WoodCraftingCategoryExtension;
-import petrolpark.mc.library.compat.jei.category.recipeManagerPlugin.FlagInfoRecipeManager;
-import petrolpark.mc.library.compat.jei.ingredient.BiomeIngredientType;
-import petrolpark.mc.library.compat.jei.ingredient.BlockStateIngredientType;
-import petrolpark.mc.library.compat.jei.ingredient.FlagIngredientType;
-import petrolpark.mc.library.compat.jei.subtypeInterpreter.RecipeBookItemSubtypeInterpreter;
-import petrolpark.mc.library.compat.jei.subtypeInterpreter.RestaurantMenuItemSubtypeInterpreter;
-import petrolpark.mc.library.compat.jei.subtypeInterpreter.WoodenItemSubtypeInterpreter;
-import petrolpark.mc.library.core.flags.Flaggables;
-import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventoryJeiGuiHandler;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItemJEICategoryCache;
-import petrolpark.mc.library.core.world.item.wooden.WoodCraftingShapedRecipe;
-import petrolpark.mc.library.registry.PetrolparkItems;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
-import petrolpark.mc.library.shared.registry.SharedBlocks;
-
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
 import mezz.jei.api.constants.VanillaTypes;
@@ -41,6 +22,24 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.bus.api.IEventBus;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.jei.category.FlagInfoCategory;
+import petrolpark.mc.library.compat.jei.category.IntrinsicFlagsCategory;
+import petrolpark.mc.library.compat.jei.category.extension.WoodCraftingCategoryExtension;
+import petrolpark.mc.library.compat.jei.category.recipeManagerPlugin.FlagInfoRecipeManager;
+import petrolpark.mc.library.compat.jei.ingredient.BiomeIngredientType;
+import petrolpark.mc.library.compat.jei.ingredient.BlockStateIngredientType;
+import petrolpark.mc.library.compat.jei.ingredient.FlagIngredientType;
+import petrolpark.mc.library.compat.jei.subtypeInterpreter.RecipeBookItemSubtypeInterpreter;
+import petrolpark.mc.library.compat.jei.subtypeInterpreter.RestaurantMenuItemSubtypeInterpreter;
+import petrolpark.mc.library.compat.jei.subtypeInterpreter.WoodenItemSubtypeInterpreter;
+import petrolpark.mc.library.core.flags.Flaggables;
+import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventoryJeiGuiHandler;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItemJEICategoryCache;
+import petrolpark.mc.library.core.world.item.wooden.WoodCraftingShapedRecipe;
+import petrolpark.mc.library.registry.PetrolparkItems;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.shared.registry.SharedBlocks;
 
 @JeiPlugin
 @ParametersAreNonnullByDefault
@@ -91,7 +90,7 @@ public class PetrolparkJEI implements IModPlugin {
     @Override
     public void registerItemSubtypes(ISubtypeRegistration registration) {
         registration.registerSubtypeInterpreter(PetrolparkItems.RECIPE_BOOK.get(), RecipeBookItemSubtypeInterpreter.INSTANCE);
-        registration.registerSubtypeInterpreter(PetrolparkItems.MENU.get(), RestaurantMenuItemSubtypeInterpreter.INSTANCE);
+        registration.registerSubtypeInterpreter(PetrolparkItems.ORDER_BOOK.get(), RestaurantMenuItemSubtypeInterpreter.INSTANCE);
         if (SharedFeatureFlag.DRYING_RACK.enabled()) registration.registerSubtypeInterpreter(SharedBlocks.DRYING_RACK.asItem(), WoodenItemSubtypeInterpreter.INSTANCE);
     };
 

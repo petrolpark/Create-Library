@@ -6,6 +6,7 @@ import com.mojang.serialization.MapCodec;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
@@ -49,6 +50,12 @@ public record FlatEntityNumberProvider(NumberProvider numberProvider) implements
     @Override
     public LootEntityNumberProviderType getEntityNumberProviderType() {
         return PetrolparkNumberProviderTypes.FLAT_ENTITY.get();
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        EntityNumberProvider.super.validate(context);
+        numberProvider().validate(context.forChild(".flat_provider"));
     };
     
 };

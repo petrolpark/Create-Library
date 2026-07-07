@@ -1,11 +1,12 @@
 package petrolpark.mc.library.core.data.recipe.ingredient.randomizer;
 
 import com.mojang.serialization.Codec;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
 
-import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 public interface IngredientRandomizer extends LootContextUser {
 
@@ -18,7 +19,7 @@ public interface IngredientRandomizer extends LootContextUser {
 
     public static final Codec<IngredientRandomizer> CODEC = null;
     
-    public Ingredient generate(LootContext context);
+    public IAdvancedIngredient<? super ItemStack> generate(LootContext context);
 
     public IngredientRandomizerType getType();
 };

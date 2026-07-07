@@ -5,11 +5,11 @@ import java.util.Optional;
 import com.google.gson.JsonElement;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.Decoder;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.brewinandchewin.BnCFermentingRecipeDeserializer;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.Recipe;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.brewinandchewin.BnCFermentingRecipeDeserializer;
 
 /**
  * Convert Recipes added by other mods to Recipes in your own mod by emulating their Codecs and reading the JSON files as they are loaded.
@@ -26,7 +26,7 @@ public interface CompatRecipeDeserializer<R extends Recipe<?>> {
     /**
      * Decoder that should emulate the Codec used by the other mod's {@link Recipe#getSerializer() Recipe Serializer}.
      * This Decoder should return a {@link DataResult#error} if there is a formatting issue with the Recipe,
-     * but a {@link DataResult#success} containing an empty Optional if there is nothing unexpected with the JSON but it cannot be converted
+     * but a {@link DataResult#successMultiplier} containing an empty Optional if there is nothing unexpected with the JSON but it cannot be converted
      * (for example, if the other mod's Recipe may optionally include Fluids but your Recipe cannot).
      */
     public Decoder<Optional<R>> decoder();

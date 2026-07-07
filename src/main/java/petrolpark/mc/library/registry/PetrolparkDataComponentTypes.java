@@ -6,6 +6,17 @@ import java.util.function.UnaryOperator;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
+
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponentType.Builder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.badge.BadgeItem;
 import petrolpark.mc.library.core.badge.BadgeItem.BadgeAward;
@@ -20,17 +31,6 @@ import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
 import petrolpark.mc.library.core.world.item.restaurant.RestaurantsData;
 import petrolpark.mc.library.util.WoodHelper;
 import petrolpark.mc.library.util.codec.CodecHelper;
-
-import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponentType;
-import net.minecraft.core.component.DataComponentType.Builder;
-import net.minecraft.core.registries.Registries;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.world.level.block.Rotation;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
-import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class PetrolparkDataComponentTypes {
     private static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Petrolpark.MOD_ID);
@@ -78,7 +78,7 @@ public class PetrolparkDataComponentTypes {
     );
 
     public static final DataComponentType<Holder<Restaurant>> RESTAURANT = register("restaurant", builder -> builder
-        .persistent(Restaurant.CODEC)
+        .persistent(Restaurant.ID_CODEC)
         .networkSynchronized(Restaurant.STREAM_CODEC)
     );
 

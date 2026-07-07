@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.numberProvider.team;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import net.minecraft.world.level.storage.loot.LootContext;
 import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
@@ -12,6 +14,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public class MemberCountTeamNumberProvider implements TeamNumberProvider {
 
     @Override

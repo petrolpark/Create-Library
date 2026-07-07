@@ -30,3 +30,4 @@ src/generated/resources/.cache/
 .vscode
 .DS_Store
 
+.github/copilot-instructions.md

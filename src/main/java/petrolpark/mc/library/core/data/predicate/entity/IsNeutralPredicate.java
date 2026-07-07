@@ -23,6 +23,7 @@ import petrolpark.mc.library.registry.PetrolparkDataSubPredicates;
  * 
  * Whether an entity is "neutral", determined on a best-effort basis.
  * "Neutral" means that the mob will attack the player if provoked, but will not attack the player on sight.
+ * No arguments.
  * 
  * @author petrolpark
  */

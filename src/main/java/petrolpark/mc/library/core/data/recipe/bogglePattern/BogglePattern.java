@@ -6,10 +6,6 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.data.recipe.bogglePattern.generator.IBogglePatternGenerator;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -24,12 +20,16 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.data.recipe.bogglePattern.generator.IBogglePatternGenerator;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 @ApiStatus.Experimental
 public class BogglePattern {
 
     public static final Codec<BogglePattern> DIRECT_CODEC = CodecHelper.singleField(IBogglePatternGenerator.CODEC, "generator", BogglePattern::getGenerator, BogglePattern::new);
-    public static final Codec<BogglePattern> DIRECT_NETWORK_CODEC = CodecHelper.singleField(IBogglePatternGenerator.NETWORK_CODEC, "generator", BogglePattern::getGenerator, BogglePattern::new);
+    public static final Codec<BogglePattern> NETWORK_DIRECT_CODEC = CodecHelper.singleField(IBogglePatternGenerator.NETWORK_CODEC, "generator", BogglePattern::getGenerator, BogglePattern::new);
 
     protected final IBogglePatternGenerator generator;
     private Integer pattern;

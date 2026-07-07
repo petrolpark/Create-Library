@@ -7,17 +7,19 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import petrolpark.mc.library.util.codec.CodecHelper;
 
+@ParametersAreNonnullByDefault
 public abstract class FunctionNumberProvider implements IEstimableNumberProvider {
 
     protected static final Map<LootNumberProviderType, FunctionNumberProvider.Factory<?>> FACTORIES = new HashMap<>();
@@ -49,12 +51,12 @@ public abstract class FunctionNumberProvider implements IEstimableNumberProvider
     };
 
     @Override
-    public final float getFloat(@Nonnull LootContext lootContext) {
+    public final float getFloat( LootContext lootContext) {
         return applyFloat(lootContext, children.stream().mapToDouble(child -> child.getFloat(lootContext)));
     };
 
     @Override
-    public final int getInt(@Nonnull LootContext lootContext) {
+    public final int getInt(LootContext lootContext) {
         return applyInt(lootContext, children.stream().mapToInt(child -> child.getInt(lootContext)));
     };
 
@@ -66,6 +68,14 @@ public abstract class FunctionNumberProvider implements IEstimableNumberProvider
     @Override
     public final float getMaxFloat(LootContext context) {
         return applyFloat(context, children.stream().mapToDouble(p -> NumberEstimate.getMax(context, p)));
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        IEstimableNumberProvider.super.validate(context);
+        for (int i = 0; i < getChildren().size(); i++) {
+            getChildren().get(i).validate(context.forChild(".child[" + i + "]"));
+        };
     };
 
     public abstract float applyFloat(LootContext lootContext, DoubleStream childResults);

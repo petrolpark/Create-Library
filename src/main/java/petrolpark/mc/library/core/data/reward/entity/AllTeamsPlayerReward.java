@@ -1,15 +1,18 @@
 package petrolpark.mc.library.core.data.reward.entity;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.MapCodec;
+
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import petrolpark.mc.library.core.data.reward.team.ITeamReward;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
 import petrolpark.mc.library.registry.PetrolparkRewardTypes;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 import petrolpark.mc.library.util.codec.CodecHelper;
-
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.storage.loot.LootContext;
 
 /**
  * <p>{@code petrolpark:}</p>
@@ -22,6 +25,7 @@ import net.minecraft.world.level.storage.loot.LootContext;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public record AllTeamsPlayerReward(ITeamReward reward) implements IPlayerReward {
 
     public static final MapCodec<AllTeamsPlayerReward> CODEC = CodecHelper.singleFieldMap(ITeamReward.CODEC, "reward", AllTeamsPlayerReward::reward, AllTeamsPlayerReward::new);
@@ -47,6 +51,12 @@ public record AllTeamsPlayerReward(ITeamReward reward) implements IPlayerReward 
     @Override
     public EntityRewardType getType() {
         return PetrolparkRewardTypes.ALL_TEAMS.get();
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        IPlayerReward.super.validate(context);
+        reward().validate(context.forChild(".team_reward"));
     };
     
 };

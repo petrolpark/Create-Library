@@ -1,6 +1,9 @@
 package petrolpark.mc.library.core.world.item.restaurant;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
@@ -9,18 +12,14 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.Holder;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.core.world.item.restaurant.order.RestaurantOrder;
 
 public class RestaurantsData extends HashMap<Holder<Restaurant>, RestaurantsData.TeamRestaurant> {
 
-    public static final Codec<RestaurantsData> CODEC = Codec.unboundedMap(Restaurant.CODEC, TeamRestaurant.CODEC).xmap(RestaurantsData::fromMap, Function.identity());
-    public static final StreamCodec<RegistryFriendlyByteBuf, RestaurantsData> STREAM_CODEC = ByteBufCodecs.map(RestaurantsData::new, Restaurant.STREAM_CODEC, TeamRestaurant.STREAM_CODEC);
+    public static final Codec<RestaurantsData> CODEC = Codec.unboundedMap(Restaurant.ID_CODEC, TeamRestaurant.CODEC).xmap(RestaurantsData::fromMap, Function.identity());
 
     public static RestaurantsData fromMap(Map<Holder<Restaurant>, RestaurantsData.TeamRestaurant> map) {
         RestaurantsData teamRestaurants = new RestaurantsData(map.size());
@@ -50,28 +49,26 @@ public class RestaurantsData extends HashMap<Holder<Restaurant>, RestaurantsData
     };
 
     protected TeamRestaurant defaultEntry() {
-        return new TeamRestaurant(0, Optional.empty());
+        return new TeamRestaurant(0, Optional.empty(), Collections.emptyList());
     };
 
+    //TODO mutable and immutable version
     protected static class TeamRestaurant {
 
         public static final Codec<TeamRestaurant> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Codec.INT.fieldOf("xp").forGetter(TeamRestaurant::getXp),
-            Codec.STRING.optionalFieldOf("customName").forGetter(TeamRestaurant::getCustomName)
+            Codec.STRING.optionalFieldOf("custom_name").forGetter(TeamRestaurant::getCustomName),
+            RestaurantOrder.CODEC.listOf().fieldOf("menu").forGetter(TeamRestaurant::getMenu)
         ).apply(instance, TeamRestaurant::new));
-
-        public static final StreamCodec<FriendlyByteBuf, TeamRestaurant> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.INT, TeamRestaurant::getXp,
-            ByteBufCodecs.optional(ByteBufCodecs.STRING_UTF8), TeamRestaurant::getCustomName,
-            TeamRestaurant::new
-        );
 
         public int xp;
         public Optional<String> customName;
+        protected List<RestaurantOrder> menu;
 
-        public TeamRestaurant(int xp, Optional<String> customName) {
+        public TeamRestaurant(int xp, Optional<String> customName, List<RestaurantOrder> menuOrders) {
             this.customName = customName;
             this.xp = xp;
+            this.menu = new ArrayList<>(menuOrders);
         };
 
         public int getXp() {
@@ -80,6 +77,10 @@ public class RestaurantsData extends HashMap<Holder<Restaurant>, RestaurantsData
 
         public Optional<String> getCustomName() {
             return customName;
+        };
+
+        public List<RestaurantOrder> getMenu() {
+            return menu;
         };
     };
 };

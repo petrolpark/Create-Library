@@ -1,17 +1,19 @@
 package petrolpark.mc.library.core.data.numberProvider.itemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-
-import petrolpark.mc.library.core.data.numberProvider.ConditionalNumberProvider;
-import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
-import petrolpark.mc.library.core.data.numberProvider.entity.EntityPredicateNumberProvider;
-import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.ConditionalNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
+import petrolpark.mc.library.core.data.numberProvider.entity.EntityPredicateNumberProvider;
+import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 
 /**
  * <p>{@code petrolpark:predicate}</p>
@@ -29,8 +31,8 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
  * 
  * @see ConditionalNumberProvider Generic equivalent
  * @see EntityPredicateNumberProvider Entity equivalent
- * 
  */
+@ParametersAreNonnullByDefault
 public record ItemPredicateNumberProvider(ItemPredicate predicate, ItemStackNumberProvider pass, ItemStackNumberProvider fail) implements ItemStackNumberProvider {
     
     public static final MapCodec<ItemPredicateNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -52,5 +54,12 @@ public record ItemPredicateNumberProvider(ItemPredicate predicate, ItemStackNumb
     @Override
     public LootItemStackNumberProviderType getItemStackNumberProviderType() {
         return PetrolparkNumberProviderTypes.ITEM_PREDICATE.get();
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        ItemStackNumberProvider.super.validate(context);
+        pass().validate(context.forChild(".pass"));
+        fail().validate(context.forChild(".fail"));
     };
 };

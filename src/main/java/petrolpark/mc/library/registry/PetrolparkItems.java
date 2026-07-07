@@ -2,15 +2,15 @@ package petrolpark.mc.library.registry;
 
 import static petrolpark.mc.library.Petrolpark.REGISTRATE;
 
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
-import petrolpark.mc.library.core.world.item.restaurant.RestaurantMenuItem;
 import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.tags.ItemTags;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
+import petrolpark.mc.library.core.world.item.restaurant.RestaurantOrderBookItem;
 
 public class PetrolparkItems {
     
-    public static final ItemEntry<RestaurantMenuItem> MENU = REGISTRATE.item("menu", RestaurantMenuItem::new)
+    public static final ItemEntry<RestaurantOrderBookItem> ORDER_BOOK = REGISTRATE.item("order_book", RestaurantOrderBookItem::new)
         .defaultModel()
         .register();
 

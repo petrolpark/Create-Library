@@ -6,11 +6,6 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.core.world.entity.player.team.ITeam;
-import petrolpark.mc.library.core.world.entity.player.team.ITeamBoundItem;
-import petrolpark.mc.library.registry.PetrolparkAttachmentTypes;
-import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
-
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -26,12 +21,14 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.core.world.entity.player.team.ITeam;
+import petrolpark.mc.library.core.world.entity.player.team.ITeamBoundItem;
+import petrolpark.mc.library.registry.PetrolparkAttachmentTypes;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
 
-public class RestaurantMenuItem extends Item implements ITeamBoundItem {
+public class RestaurantOrderBookItem extends Item implements ITeamBoundItem {
 
-    public static final String RESTAURANT_TAG_KEY = "Restaurant";
-
-    public RestaurantMenuItem(Properties properties) {
+    public RestaurantOrderBookItem(Properties properties) {
         super(properties);
     };
 

@@ -1,15 +1,12 @@
 package petrolpark.mc.library.core.data.numberProvider;
 
-import java.util.Set;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import javax.annotation.Nonnull;
-
-import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -35,6 +32,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
  * @see EntityPredicateNumberProvider Entity equivalent
  * @see ItemStackNumberProvider Item Stack equivalent
  */
+@ParametersAreNonnullByDefault
 public record ConditionalNumberProvider(LootItemCondition condition, NumberProvider pass, NumberProvider fail) implements IEstimableNumberProvider {
 
     public static final MapCodec<ConditionalNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -48,12 +46,12 @@ public record ConditionalNumberProvider(LootItemCondition condition, NumberProvi
     };
 
     @Override
-    public float getFloat(@Nonnull LootContext lootContext) {
+    public float getFloat(LootContext lootContext) {
         return get(lootContext).getFloat(lootContext);
     };
 
     @Override
-    public int getInt(@Nonnull LootContext lootContext) {
+    public int getInt(LootContext lootContext) {
         return get(lootContext).getInt(lootContext);
     };
 
@@ -73,8 +71,11 @@ public record ConditionalNumberProvider(LootItemCondition condition, NumberProvi
     };
 
     @Override
-    public Set<LootContextParam<?>> getReferencedContextParams() {
-        return Sets.union(condition().getReferencedContextParams(), Sets.union(pass().getReferencedContextParams(), fail().getReferencedContextParams()));
+    public void validate(ValidationContext context) {
+        IEstimableNumberProvider.super.validate(context);
+        condition().validate(context.forChild(".condition"));
+        pass().validate(context.forChild(".pass"));
+        fail().validate(context.forChild(".fail"));
     };
     
 };

@@ -2,6 +2,9 @@ package petrolpark.mc.library.core.data.reward;
 
 import com.mojang.serialization.MapCodec;
 
-public record RewardType(String translationKey, MapCodec<? extends IReward> codec) implements INamedRewardType {
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+
+public record RewardType(String translationKey, MapCodec<? extends IReward> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends IReward> streamCodec) implements INamedRewardType {
     
 };

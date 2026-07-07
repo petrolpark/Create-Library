@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.numberProvider.team;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
@@ -22,6 +24,7 @@ import petrolpark.mc.library.registry.PetrolparkRegistries;
  * @see EntityNumberProvider Entity equivalent
  * @see ItemStackNumberProvider Item Stack equivalent
  */
+@ParametersAreNonnullByDefault
 public interface TeamNumberProvider extends LootContextUser {
 
     /**
@@ -37,6 +40,10 @@ public interface TeamNumberProvider extends LootContextUser {
     );
     
     public float getFloat(ITeam team, LootContext context);
+
+    public default int getInt(ITeam team, LootContext lootContext) {
+        return (int)getFloat(team, lootContext);
+    };
 
     /**
      * Get the approximate bounds for the {@link TeamNumberProvider#getFloat(ITeam, LootContext) output} of this {@link TeamNumberProvider} on a best-effort basis.

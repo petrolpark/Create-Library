@@ -5,11 +5,12 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
+import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 
 /**
  * <p>{@code petrolpark:max}</p>
@@ -23,6 +24,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public class MaxNumberProvider extends FunctionNumberProvider {
 
     public MaxNumberProvider(List<NumberProvider> children) {

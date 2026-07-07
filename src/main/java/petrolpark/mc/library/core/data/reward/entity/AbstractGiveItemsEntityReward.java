@@ -6,9 +6,10 @@ import java.util.function.BiFunction;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.datafixers.Products;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.util.ItemHelper;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +17,10 @@ import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.neoforged.neoforge.common.conditions.ConditionalOps;
+import petrolpark.mc.library.util.ItemHelper;
 
+@Deprecated //TODO replace with INVENTORY LootContextParam
+@ParametersAreNonnullByDefault
 public abstract class AbstractGiveItemsEntityReward implements IEntityReward {
 
     protected static <REWARD extends AbstractGiveItemsEntityReward> Products.P1<RecordCodecBuilder.Mu<REWARD>, List<LootItemFunction>> lateItemFunctionsField(RecordCodecBuilder.Instance<REWARD> instance) {

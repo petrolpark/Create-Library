@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.numberProvider.itemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
@@ -22,6 +24,7 @@ import petrolpark.mc.library.registry.PetrolparkRegistries;
  * @see EntityNumberProvider Entity equivalent
  * @see TeamNumberProvider Team equivalent
  */
+@ParametersAreNonnullByDefault
 public interface ItemStackNumberProvider extends LootContextUser {
 
     /**

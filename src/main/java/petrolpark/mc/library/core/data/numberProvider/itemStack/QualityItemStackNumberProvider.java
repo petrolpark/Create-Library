@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.numberProvider.itemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
@@ -11,6 +13,12 @@ import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
 import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 import petrolpark.mc.library.util.Lang;
 
+/**
+ * <p>{@code petrolpark:quality}</p>
+ * 
+ * @author petrolpark
+ */
+@ParametersAreNonnullByDefault
 public record QualityItemStackNumberProvider(QualityValue value) implements ItemStackNumberProvider {
 
     public static final MapCodec<QualityItemStackNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(

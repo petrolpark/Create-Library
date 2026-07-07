@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.ConditionalNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
@@ -59,6 +60,13 @@ public record EntityPredicateNumberProvider(EntityPredicate predicate, EntityNum
     @Override
     public LootEntityNumberProviderType getEntityNumberProviderType() {
         return PetrolparkNumberProviderTypes.ENTITY_PREDICATE.get();
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        EntityNumberProvider.super.validate(context);
+        pass.validate(context.forChild(".pass"));
+        fail.validate(context.forChild(".fail"));
     };
     
 };

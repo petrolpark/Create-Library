@@ -7,10 +7,6 @@ import java.util.Set;
 import com.google.common.collect.Sets;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.core.world.item.restaurant.offer.RestaurantOffer;
-import petrolpark.mc.library.core.world.item.restaurant.offer.RestaurantOfferGenerator;
-import petrolpark.mc.library.core.world.item.restaurant.offer.order.RestaurantOrderModifierEntry;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Holder;
@@ -21,39 +17,44 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.RegistryFileCodec;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootContextUser;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.core.world.item.restaurant.order.RestaurantOrderGenerator;
+import petrolpark.mc.library.core.world.item.restaurant.order.RestaurantOrderModifier;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 public class Restaurant {
 
     public static final Codec<Restaurant> DIRECT_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance -> 
         instance.group(
             Codec.STRING.fieldOf("name").forGetter(Restaurant::getTranslationKey),
-            Codec.list(OfferGeneratorEntry.CODEC).fieldOf("offer_generators").forGetter(Restaurant::getOfferGeneratorEntries),
-            Codec.list(RestaurantOrderModifierEntry.CODEC).optionalFieldOf("global_order_modifiers", Collections.emptyList()).forGetter(Restaurant::getGlobalOrderModifierEntries),
-            EntityPredicate.CODEC.optionalFieldOf("customers", null).forGetter(Restaurant::getCustomerEntities)
+            Codec.list(OrderGeneratorEntry.CODEC).fieldOf("order_generators").forGetter(Restaurant::getOfferGeneratorEntries),
+            Codec.list(RestaurantOrderModifier.CODEC).optionalFieldOf("global_order_modifiers", Collections.emptyList()).forGetter(Restaurant::getGlobalOrderModifiers),
+            EntityPredicate.CODEC.optionalFieldOf("customers", EntityPredicate.Builder.entity().build()).forGetter(Restaurant::getCustomerEntities),
+            NumberProviders.CODEC.fieldOf("xp_required_for_level").forGetter(Restaurant::getXpRequiredForLevel)
         ).apply(instance, Restaurant::new)
-    ));
+    ));  
 
-    public static final Codec<Holder<Restaurant>> CODEC = RegistryFileCodec.create(PetrolparkRegistries.Keys.RESTAURANT, DIRECT_CODEC);
+    public static final Codec<Holder<Restaurant>> ID_CODEC = RegistryFileCodec.create(PetrolparkRegistries.Keys.RESTAURANT, DIRECT_CODEC, false);
     public static final StreamCodec<RegistryFriendlyByteBuf, Holder<Restaurant>> STREAM_CODEC = ByteBufCodecs.holderRegistry(PetrolparkRegistries.Keys.RESTAURANT);
     
     protected final String translationKey;
-    public final List<OfferGeneratorEntry> offerGeneratorEntries;
-    protected final List<RestaurantOrderModifierEntry> globalOrderModifierEntries;
+    public final List<OrderGeneratorEntry> offerGeneratorEntries;
+    protected final List<RestaurantOrderModifier> globalOrderModifiers;
 
     public final EntityPredicate customerEntities;
+    protected final NumberProvider xpRequired;
 
-    public Restaurant(String translationKey, List<OfferGeneratorEntry> offerGeneratorEntries, List<RestaurantOrderModifierEntry> globalOrderModifierEntries, EntityPredicate customerEntities) {
+    public Restaurant(String translationKey, List<OrderGeneratorEntry> offerGeneratorEntries, List<RestaurantOrderModifier> globalOrderModifierEntries, EntityPredicate customerEntities, NumberProvider xpRequired) {
         this.translationKey = translationKey;
         this.offerGeneratorEntries = offerGeneratorEntries;
-        this.globalOrderModifierEntries = globalOrderModifierEntries;
+        this.globalOrderModifiers = globalOrderModifierEntries;
         this.customerEntities = customerEntities;
+        this.xpRequired = xpRequired;
     };
 
     public String getTranslationKey() {
@@ -65,44 +66,33 @@ public class Restaurant {
         return Component.translatable(getTranslationKey());
     };
 
-    public List<OfferGeneratorEntry> getOfferGeneratorEntries() {
+    public List<OrderGeneratorEntry> getOfferGeneratorEntries() {
         return offerGeneratorEntries;
     };
 
-    public List<RestaurantOrderModifierEntry> getGlobalOrderModifierEntries() {
-        return globalOrderModifierEntries;
+    public List<RestaurantOrderModifier> getGlobalOrderModifiers() {
+        return globalOrderModifiers;
     };
 
     public EntityPredicate getCustomerEntities() {
         return customerEntities;
     };
 
-    public RestaurantOffer generateOffer(LootContext context) {
-        float totalWeight = 0f;
-        float[] weights = new float[offerGeneratorEntries.size()];
-        for (int i = 0; i < offerGeneratorEntries.size(); i++) {
-            OfferGeneratorEntry generator = offerGeneratorEntries.get(i);
-            weights[i] = totalWeight;
-            totalWeight += generator.weight.getFloat(context);
-        };
-        float roll = context.getRandom().nextFloat() * totalWeight;
-        for (int i = 0; i < offerGeneratorEntries.size(); i++) {
-            if (roll > weights[i]) return offerGeneratorEntries.get(i).generator.generate(context, this);
-        };
-        return RestaurantOffer.EMPTY;
+    public NumberProvider getXpRequiredForLevel() {
+        return xpRequired;
     };
 
     public boolean canServe(ServerPlayer player, Entity entity) {
         return customerEntities.matches(player, entity);
     };
 
-    public static record OfferGeneratorEntry(RestaurantOfferGenerator generator, NumberProvider weight) implements LootContextUser {
+    public static record OrderGeneratorEntry(RestaurantOrderGenerator generator, NumberProvider weight) implements LootContextUser {
 
-        public static final Codec<OfferGeneratorEntry> CODEC = RecordCodecBuilder.create(instance -> 
+        public static final Codec<OrderGeneratorEntry> CODEC = RecordCodecBuilder.create(instance -> 
             instance.group(
-                RestaurantOfferGenerator.DIRECT_CODEC.fieldOf("generator").forGetter(OfferGeneratorEntry::generator),
-                NumberProviders.CODEC.fieldOf("weight").forGetter(OfferGeneratorEntry::weight)
-            ).apply(instance, OfferGeneratorEntry::new)
+                RestaurantOrderGenerator.UNVALIDATED_DIRECT_CODEC.fieldOf("generator").forGetter(OrderGeneratorEntry::generator),
+                NumberProviders.CODEC.fieldOf("weight").forGetter(OrderGeneratorEntry::weight)
+            ).apply(instance, OrderGeneratorEntry::new)
         );
 
         @Override

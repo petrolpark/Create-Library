@@ -5,6 +5,8 @@ import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -22,6 +24,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public class ProductNumberProvider extends FunctionNumberProvider {
 
     public ProductNumberProvider(List<NumberProvider> children) {

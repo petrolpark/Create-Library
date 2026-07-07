@@ -1,23 +1,23 @@
 package petrolpark.mc.library.core.data.reward;
 
-import java.util.Collections;
-import java.util.Set;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import petrolpark.mc.library.core.data.IEntityTarget;
 import petrolpark.mc.library.core.data.reward.entity.IEntityReward;
 import petrolpark.mc.library.registry.PetrolparkRewardTypes;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
-import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
-
+@ParametersAreNonnullByDefault
 public record ContextEntityReward(IEntityTarget target, IEntityReward reward) implements IReward {
 
     public static final MapCodec<ContextEntityReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -58,8 +58,9 @@ public record ContextEntityReward(IEntityTarget target, IEntityReward reward) im
     };
 
     @Override
-    public Set<LootContextParam<?>> getReferencedContextParams() {
-        return Collections.singleton(target.getReferencedParam());
+    public void validate(ValidationContext context) {
+        IReward.super.validate(context);
+        reward().validate(context.forChild(".entity_reward"));
     };
     
 };

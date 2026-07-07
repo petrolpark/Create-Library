@@ -62,7 +62,7 @@ public class PetrolparkRegistrateTags {
             .add(Items.NETHER_WART)
             .addTag(Tags.Items.SHULKER_BOXES)
             .addTag(Tags.Items.SEEDS);
-        optionalTagAllNonBlocksAndEntities(flaggableTagAppender, Petrolpark.MOD_ID, PetrolparkItems.MENU.get(), PetrolparkItems.RECIPE_BOOK.get());
+        optionalTagAllNonBlocksAndEntities(flaggableTagAppender, Petrolpark.MOD_ID, PetrolparkItems.ORDER_BOOK.get(), PetrolparkItems.RECIPE_BOOK.get());
         optionalTagAllNonBlocksAndEntities(flaggableTagAppender, Create.ID, AllItems.SCHEDULE, AllItems.SHOPPING_LIST, AllItems.EMPTY_SCHEMATIC, AllItems.SCHEMATIC_AND_QUILL, AllItems.SCHEMATIC, AllItems.BELT_CONNECTOR);
         optionalTagAll(flaggableTagAppender, Create.ID, item -> !(item instanceof BlockItem blockItem && blockItem.getBlock() instanceof KineticBlock));
     };

@@ -8,7 +8,7 @@ import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.badge.PlayerBadges;
 import petrolpark.mc.library.core.data.loot.wish.PlayerWishList;
 import petrolpark.mc.library.core.world.entity.player.team.singleplayer.SinglePlayerTeam;
-import petrolpark.mc.library.core.world.item.restaurant.customer.EntityCustomer;
+import petrolpark.mc.library.core.world.item.restaurant.customer.MobCustomer;
 
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
@@ -40,8 +40,8 @@ public class PetrolparkAttachmentTypes {
 			::build
 	);
 
-	public static final Supplier<AttachmentType<EntityCustomer>> ENTITY_CUSTOMER = ATTACHMENT_TYPES.register(
-		"customer", AttachmentType.builder(EntityCustomer::create).serialize(EntityCustomer.ATTACHMENT_SERIALIZER)::build
+	public static final Supplier<AttachmentType<MobCustomer>> ENTITY_CUSTOMER = ATTACHMENT_TYPES.register(
+		"customer", AttachmentType.builder(MobCustomer::create).serialize(MobCustomer.ATTACHMENT_SERIALIZER)::build
 	);
 
 	@ApiStatus.Internal

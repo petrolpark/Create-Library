@@ -1,15 +1,17 @@
 package petrolpark.mc.library.core.data.numberProvider.itemStack;
 
-import com.mojang.serialization.MapCodec;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
-import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
-import petrolpark.mc.library.util.codec.CodecHelper;
+import com.mojang.serialization.MapCodec;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
+import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
+import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 /**
  * <p>{@code petrolpark:flat}</p>
@@ -25,6 +27,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public record FlatItemStackNumberProvider(NumberProvider numberProvider) implements ItemStackNumberProvider {
 
     public static final MapCodec<FlatItemStackNumberProvider> CODEC = CodecHelper.singleFieldMap(NumberProviders.CODEC, "provider", FlatItemStackNumberProvider::numberProvider, FlatItemStackNumberProvider::new);
@@ -42,6 +45,12 @@ public record FlatItemStackNumberProvider(NumberProvider numberProvider) impleme
     @Override
     public LootItemStackNumberProviderType getItemStackNumberProviderType() {
         return PetrolparkNumberProviderTypes.FLAT_ITEM_STACK.get();
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        ItemStackNumberProvider.super.validate(context);
+        numberProvider().validate(context.forChild(".flat_provider"));
     };
     
 };

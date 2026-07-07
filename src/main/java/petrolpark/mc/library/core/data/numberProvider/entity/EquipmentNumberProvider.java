@@ -1,7 +1,5 @@
 package petrolpark.mc.library.core.data.numberProvider.entity;
 
-import java.util.Set;
-
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.MapCodec;
@@ -12,7 +10,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import petrolpark.mc.library.core.data.numberProvider.ContextToolNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
 import petrolpark.mc.library.core.data.numberProvider.itemStack.ItemStackNumberProvider;
@@ -65,13 +63,14 @@ public record EquipmentNumberProvider(EquipmentSlot slot, ItemStackNumberProvide
     };
 
     @Override
-    public Set<LootContextParam<?>> getReferencedContextParams() {
-        return value.getReferencedContextParams();
+    public LootEntityNumberProviderType getEntityNumberProviderType() {
+        return PetrolparkNumberProviderTypes.EQUIPMENT.get();
     };
 
     @Override
-    public LootEntityNumberProviderType getEntityNumberProviderType() {
-        return PetrolparkNumberProviderTypes.EQUIPMENT.get();
+    public void validate(ValidationContext context) {
+        EntityNumberProvider.super.validate(context);
+        value().validate(context.forChild(".equipment"));
     };
     
 };

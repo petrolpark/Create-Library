@@ -1,7 +1,7 @@
 package petrolpark.mc.library.core.world.item.restaurant.customer;
 
 import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.core.world.item.restaurant.offer.RestaurantOffer;
+import petrolpark.mc.library.core.world.item.restaurant.order.RestaurantOffer;
 import petrolpark.mc.library.registry.PetrolparkLootContextParams;
 
 import net.minecraft.network.chat.Component;

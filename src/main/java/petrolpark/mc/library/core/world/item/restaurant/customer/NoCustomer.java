@@ -1,10 +1,9 @@
 package petrolpark.mc.library.core.world.item.restaurant.customer;
 
-import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.core.world.item.restaurant.offer.RestaurantOffer;
-
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.storage.loot.LootParams.Builder;
+import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
+import petrolpark.mc.library.core.world.item.restaurant.order.RestaurantOffer;
 
 public class NoCustomer implements ICustomer {
 

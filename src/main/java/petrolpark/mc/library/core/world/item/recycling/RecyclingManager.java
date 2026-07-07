@@ -9,9 +9,6 @@ import java.util.TreeSet;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.registry.PetrolparkRecipeTypes;
-
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
@@ -26,6 +23,9 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import petrolpark.mc.library.PetrolparkTags;
+import petrolpark.mc.library.core.world.item.IDeletableItem;
+import petrolpark.mc.library.registry.PetrolparkRecipeTypes;
 
 @EventBusSubscriber
 public class RecyclingManager {
@@ -106,6 +106,8 @@ public class RecyclingManager {
             .map(RecipeHolder::value)
             .map(IRecyclingRecipe::outputs);
         if (simpleRecyclingOptional.isPresent()) return simpleRecyclingOptional.get().copy();
+
+        if (stack.getItem() instanceof IDeletableItem) return RecyclingOutputs.empty();
 
         final List<RecyclingOutputs> recyclableRecipeOutputs = level.getRecipeManager().getRecipes().stream()
             .map(RecipeHolder::value)

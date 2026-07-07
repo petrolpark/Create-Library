@@ -1,12 +1,15 @@
 package petrolpark.mc.library.core.data.reward.team;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.Codec;
+
+import net.minecraft.world.level.storage.loot.LootContext;
 import petrolpark.mc.library.core.data.reward.ITypedReward;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
 import petrolpark.mc.library.registry.PetrolparkRegistries;
 
-import net.minecraft.world.level.storage.loot.LootContext;
-
+@ParametersAreNonnullByDefault
 public interface ITeamReward extends ITypedReward<TeamRewardType> {
 
     /**

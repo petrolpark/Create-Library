@@ -5,16 +5,11 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.data.loot.ILootTableAccessor;
-import petrolpark.mc.library.registry.PetrolparkRewardTypes;
-import petrolpark.mc.library.util.ItemHelper;
-import petrolpark.mc.library.util.Lang;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
-import petrolpark.mc.library.util.RenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -26,6 +21,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.data.loot.ILootTableAccessor;
+import petrolpark.mc.library.registry.PetrolparkRewardTypes;
+import petrolpark.mc.library.util.ItemHelper;
+import petrolpark.mc.library.util.Lang;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
+import petrolpark.mc.library.util.RenderHelper;
 
 /**
  * <p>{@code petrolpark:give_loot}</p>
@@ -39,6 +41,7 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public class GiveLootEntityReward extends AbstractGiveItemsEntityReward implements ILootTableAccessor {
 
     public static final ResourceLocation DIE_TEXTURE = Petrolpark.asResource("item/gui/die");

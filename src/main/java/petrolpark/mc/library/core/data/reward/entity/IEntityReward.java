@@ -1,12 +1,15 @@
 package petrolpark.mc.library.core.data.reward.entity;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.Codec;
-import petrolpark.mc.library.core.data.reward.ITypedReward;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.level.storage.loot.LootContext;
+import petrolpark.mc.library.core.data.reward.ITypedReward;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
 
+@ParametersAreNonnullByDefault
 public interface IEntityReward extends ITypedReward<EntityRewardType> {
 
     /**

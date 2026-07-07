@@ -31,7 +31,7 @@ public record GrantRestaurantXPTeamReward(Holder<Restaurant> restaurant, NumberP
     public static final ResourceLocation RESTAURANT_EXPERIENCE_ORBS_TEXTURE = Petrolpark.asResource("item/gui/restaurant_experience_orbs");
 
     public static final MapCodec<GrantRestaurantXPTeamReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        Restaurant.CODEC.fieldOf("restaurant").forGetter(GrantRestaurantXPTeamReward::restaurant),
+        Restaurant.ID_CODEC.fieldOf("restaurant").forGetter(GrantRestaurantXPTeamReward::restaurant),
         NumberProviders.CODEC.fieldOf("amount").forGetter(GrantRestaurantXPTeamReward::amount)
     ).apply(instance, GrantRestaurantXPTeamReward::new));
 

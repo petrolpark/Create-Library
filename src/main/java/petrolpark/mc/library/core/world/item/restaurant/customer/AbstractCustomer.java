@@ -3,9 +3,6 @@ package petrolpark.mc.library.core.world.item.restaurant.customer;
 import javax.annotation.Nonnull;
 
 import com.mojang.datafixers.util.Pair;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.core.world.item.restaurant.offer.RestaurantOffer;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
@@ -13,6 +10,9 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
+import petrolpark.mc.library.core.world.item.restaurant.order.RestaurantOffer;
 
 public abstract class AbstractCustomer implements ICustomer, INBTSerializable<CompoundTag> {
 
@@ -60,7 +60,7 @@ public abstract class AbstractCustomer implements ICustomer, INBTSerializable<Co
         if (openOffer != null) RestaurantOffer.CODEC.encodeStart(NbtOps.INSTANCE, openOffer)
             .resultOrPartial(Petrolpark.LOGGER::warn)
             .ifPresent(t -> tag.put("Offer", t));
-        if (restaurant != null) tag.put("Restaurant", Restaurant.CODEC.encodeStart(NbtOps.INSTANCE, restaurant).getOrThrow());
+        if (restaurant != null) tag.put("Restaurant", Restaurant.ID_CODEC.encodeStart(NbtOps.INSTANCE, restaurant).getOrThrow());
         return tag;
     };
 
@@ -75,7 +75,7 @@ public abstract class AbstractCustomer implements ICustomer, INBTSerializable<Co
             .resultOrPartial(Petrolpark.LOGGER::warn)
             .map(Pair::getFirst)
             .ifPresent(s -> openOffer = s);
-        if (nbt.contains("Restaurant", Tag.TAG_STRING)) restaurant = Restaurant.CODEC.parse(NbtOps.INSTANCE, nbt.getCompound("Restaurant")).resultOrPartial(Petrolpark.LOGGER::warn).get();
+        if (nbt.contains("Restaurant", Tag.TAG_STRING)) restaurant = Restaurant.ID_CODEC.parse(NbtOps.INSTANCE, nbt.getCompound("Restaurant")).resultOrPartial(Petrolpark.LOGGER::warn).get();
     };
 
     public void tick() {

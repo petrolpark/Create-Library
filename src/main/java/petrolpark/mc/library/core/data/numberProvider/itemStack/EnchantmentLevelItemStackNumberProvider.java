@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.numberProvider.itemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.core.Holder;
@@ -21,6 +23,7 @@ import petrolpark.mc.library.util.codec.CodecHelper;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public record EnchantmentLevelItemStackNumberProvider(Holder<Enchantment> enchantment) implements ItemStackNumberProvider {
 
     public static final MapCodec<EnchantmentLevelItemStackNumberProvider> CODEC = CodecHelper.singleFieldMap(Enchantment.CODEC, "enchantment", EnchantmentLevelItemStackNumberProvider::enchantment, EnchantmentLevelItemStackNumberProvider::new);

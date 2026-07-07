@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
@@ -13,6 +15,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
@@ -25,6 +28,7 @@ import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 /**
  * Rewards a proportion of members of a {@link ITeam} with an {@link IEntityReward}.
  */
+@ParametersAreNonnullByDefault
 public record MembersTeamReward(IEntityReward reward, Either<NumberProvider, NumberProvider> who, boolean random) implements ITeamReward {
 
     public static final MapCodec<MembersTeamReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -70,6 +74,12 @@ public record MembersTeamReward(IEntityReward reward, Either<NumberProvider, Num
     @Override
     public TeamRewardType getType() {
         return PetrolparkRewardTypes.MEMBERS.get();
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        ITeamReward.super.validate(context);
+        reward().validate(context.forChild(".member_reward"));
     };
     
 };

@@ -1,14 +1,29 @@
 package petrolpark.mc.library.util;
 
+import static petrolpark.mc.library.util.MathsHelper.VOXEL_BLOCK_CENTER;
+
+import java.util.EnumMap;
+import java.util.Map;
+
+import javax.annotation.ParametersAreNonnullByDefault;
+
+import org.apache.commons.lang3.mutable.MutableObject;
+
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import net.minecraft.Util;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
+import net.minecraft.core.Vec3i;
 import net.minecraft.util.StringRepresentable;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 
+@ParametersAreNonnullByDefault
 public enum Orientation implements StringRepresentable {
 
     DOWN_NORTH("down_north", Direction.DOWN, Direction.NORTH),
@@ -37,11 +52,17 @@ public enum Orientation implements StringRepresentable {
     EAST_SOUTH("east_south", Direction.EAST, Direction.SOUTH);
     
     public final String name;
+
     public final Direction top;
     public final Direction front;
+    public final Direction right;
+
+    public final Vec3 topVec;
+    public final Vec3 frontVec;
+    public final Vec3 rightVec;
 
     private static final Int2ObjectMap<Orientation> LOOKUP = Util.make(new Int2ObjectOpenHashMap<>(values().length), map -> {
-        for (Orientation orientation : values()) map.put(lookupKey(orientation.top, orientation.front), orientation);
+        for (final Orientation orientation : values()) map.put(lookupKey(orientation.top, orientation.front), orientation);
     });
 
     public static final Orientation fromTopAndFront(Direction top, Direction front) {
@@ -53,6 +74,13 @@ public enum Orientation implements StringRepresentable {
         this.name = name;
         this.top = top;
         this.front = front;
+
+        final Vec3i rightVector = top.getNormal().cross(front.getNormal());
+        right = Direction.fromDelta(rightVector.getX(), rightVector.getY(), rightVector.getZ());
+
+        topVec = Vec3.atLowerCornerOf(top.getNormal());
+        frontVec = Vec3.atLowerCornerOf(front.getNormal());
+        rightVec = Vec3.atLowerCornerOf(right.getNormal());
     };
 
     @Override
@@ -77,5 +105,50 @@ public enum Orientation implements StringRepresentable {
     public Orientation mirror(Mirror mirror) {
         return fromTopAndFront(mirror.mirror(top), mirror.mirror(front));
     };
+
+    public Vec3 transform(Vec3 point) {
+        return rightVec.scale(point.x()).add(topVec.scale(point.y())).add(frontVec.scale(point.z()));
+    };
+
+    public static class OrientedVoxelShaper {
+
+        protected final Map<Orientation, VoxelShape> shapes;
+
+        public OrientedVoxelShaper(VoxelShape shape) {
+            shapes = new EnumMap<>(Orientation.class);
+            for (final Orientation orientation : values()) {
+                shapes.put(orientation, rotateShape(shape, orientation));
+            };
+        };
+
+        public VoxelShape get(Orientation orientation) {
+            return shapes.get(orientation);
+        };
+
+        public static VoxelShape rotateShape(VoxelShape shape, Orientation orientation) {
+            if (orientation == UP_SOUTH) return shape;
+
+            final MutableObject<VoxelShape> result = new MutableObject<>(Shapes.empty());
+
+            shape.forAllBoxes((x1, y1, z1, x2, y2, z2) -> {
+                final Vec3 v1 = orientation.transform(new Vec3(x1, y1, z1).scale(16d).subtract(VOXEL_BLOCK_CENTER)).add(VOXEL_BLOCK_CENTER);
+                final Vec3 v2 = orientation.transform(new Vec3(x2, y2, z2).scale(16d).subtract(VOXEL_BLOCK_CENTER)).add(VOXEL_BLOCK_CENTER);
+
+                final VoxelShape rotated = Block.box(
+                    Math.min(v1.x(), v2.x()),
+                    Math.min(v1.y(), v2.y()),
+                    Math.min(v1.z(), v2.z()),
+                    Math.max(v1.x(), v2.x()),
+                    Math.max(v1.y(), v2.y()),
+                    Math.max(v1.z(), v2.z())
+                );
+                result.setValue(Shapes.or(result.getValue(), rotated));
+            });
+
+            return result.getValue();
+        };
+
+    };
+    
 };
 

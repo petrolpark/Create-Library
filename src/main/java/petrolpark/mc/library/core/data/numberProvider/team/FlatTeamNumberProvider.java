@@ -1,8 +1,11 @@
 package petrolpark.mc.library.core.data.numberProvider.team;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.MapCodec;
 
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
@@ -24,6 +27,7 @@ import petrolpark.mc.library.util.codec.CodecHelper;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public record FlatTeamNumberProvider(NumberProvider numberProvider) implements TeamNumberProvider {
 
     public static final MapCodec<FlatTeamNumberProvider> CODEC = CodecHelper.singleFieldMap(NumberProviders.CODEC, "provider", FlatTeamNumberProvider::numberProvider, FlatTeamNumberProvider::new);
@@ -41,6 +45,12 @@ public record FlatTeamNumberProvider(NumberProvider numberProvider) implements T
     @Override
     public LootTeamNumberProviderType getTeamNumberProviderType() {
         return PetrolparkNumberProviderTypes.FLAT_TEAM.get();
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        TeamNumberProvider.super.validate(context);
+        numberProvider().validate(context.forChild(".flat_provider"));
     };
     
 };

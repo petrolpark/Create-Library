@@ -2,11 +2,14 @@ package petrolpark.mc.library.core.data.numberProvider.team;
 
 import java.util.Collections;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import petrolpark.mc.library.core.data.numberProvider.FunctionNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
@@ -27,6 +30,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public record MemberReductionTeamNumberProvider(EntityNumberProvider value, LootNumberProviderType function) implements TeamNumberProvider {
 
     public static final MapCodec<MemberReductionTeamNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -47,6 +51,12 @@ public record MemberReductionTeamNumberProvider(EntityNumberProvider value, Loot
     @Override
     public LootTeamNumberProviderType getTeamNumberProviderType() {
         return PetrolparkNumberProviderTypes.MEMBER_REDUCTION.get();
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        TeamNumberProvider.super.validate(context);
+        value().validate(context.forChild(".member_number_provider"));
     };
     
 };

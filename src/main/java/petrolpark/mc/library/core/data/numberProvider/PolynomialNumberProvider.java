@@ -2,12 +2,13 @@ package petrolpark.mc.library.core.data.numberProvider;
 
 import java.util.List;
 
-import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.world.level.storage.loot.LootContext;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
@@ -26,6 +27,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public record PolynomialNumberProvider(NumberProvider value, List<NumberProvider> coefficients) implements IEstimableNumberProvider {
 
     public static final MapCodec<PolynomialNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -34,7 +36,7 @@ public record PolynomialNumberProvider(NumberProvider value, List<NumberProvider
     ).apply(instance, PolynomialNumberProvider::new));
 
     @Override
-    public float getFloat(@Nonnull LootContext lootContext) {
+    public float getFloat(LootContext lootContext) {
         float total = 0f;
         float value = value().getFloat(lootContext);
         int power = 0;
@@ -46,7 +48,7 @@ public record PolynomialNumberProvider(NumberProvider value, List<NumberProvider
     };
 
     @Override
-    public int getInt(@Nonnull LootContext lootContext) {
+    public int getInt(LootContext lootContext) {
         int total = 0;
         int value = value().getInt(lootContext);
         int power = 0;
@@ -72,7 +74,7 @@ public record PolynomialNumberProvider(NumberProvider value, List<NumberProvider
     @Override
     public float getMaxFloat(LootContext context) {
         float total = 0f;
-        float value = NumberEstimate.getMax(context, value());
+        float value = NumberEstimate.getMax(context, value()); //TODO scrap
         int power = 0;
         for (NumberProvider coeff : coefficients()) {
             total += NumberEstimate.getMax(context, coeff) * Math.pow(value, power);
@@ -84,6 +86,15 @@ public record PolynomialNumberProvider(NumberProvider value, List<NumberProvider
     @Override
     public LootNumberProviderType getType() {
         return PetrolparkNumberProviderTypes.POLYNOMIAL.get();
+    };
+
+    @Override
+    public void validate(ValidationContext context) {
+        IEstimableNumberProvider.super.validate(context);
+        value().validate(context.forChild(".value"));
+        for (int i = 0; i < coefficients().size(); i++) {
+            coefficients().get(i).validate(context.forChild(".coefficient[" + i + "]"));
+        };
     };
     
 };

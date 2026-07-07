@@ -1,15 +1,12 @@
 package petrolpark.mc.library.core.data.numberProvider;
 
-import java.util.Set;
+import javax.annotation.ParametersAreNonnullByDefault;
 
-import javax.annotation.Nonnull;
-
-import com.google.common.collect.Sets;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.world.level.storage.loot.LootContext;
-import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import net.minecraft.world.level.storage.loot.ValidationContext;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
@@ -31,6 +28,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider midpoint, NumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<SigmoidNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
@@ -40,7 +38,7 @@ public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider m
     ).apply(instance, SigmoidNumberProvider::new));
 
     @Override
-    public float getFloat(@Nonnull LootContext lootContext) {
+    public float getFloat(LootContext lootContext) {
         float shallowness = this.shallowness.getFloat(lootContext);
         if (shallowness == 0f) return 1f;
         return 1f / (1f + (float)Math.exp((midpoint.getFloat(lootContext) - value.getFloat(lootContext)) / shallowness));
@@ -64,8 +62,11 @@ public record SigmoidNumberProvider(NumberProvider shallowness, NumberProvider m
     };
 
     @Override
-    public Set<LootContextParam<?>> getReferencedContextParams() {
-        return Sets.union(shallowness.getReferencedContextParams(), midpoint.getReferencedContextParams());
+    public void validate(ValidationContext context) {
+        IEstimableNumberProvider.super.validate(context);
+        shallowness().validate(context.forChild(".shallowness"));
+        midpoint().validate(context.forChild(".midpoint"));
+        value().validate(context.forChild(".value"));
     };
     
 };

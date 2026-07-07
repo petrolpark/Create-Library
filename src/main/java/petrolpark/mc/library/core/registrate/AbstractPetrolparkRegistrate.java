@@ -105,6 +105,8 @@ import petrolpark.mc.library.core.data.reward.generator.IRewardGenerator;
 import petrolpark.mc.library.core.data.reward.generator.RewardGeneratorType;
 import petrolpark.mc.library.core.data.reward.team.ITeamReward;
 import petrolpark.mc.library.core.data.reward.team.TeamRewardType;
+import petrolpark.mc.library.core.data.stringProvider.StringProvider;
+import petrolpark.mc.library.core.data.stringProvider.StringProviderType;
 import petrolpark.mc.library.core.registrate.builder.MobEffectBuilder;
 import petrolpark.mc.library.core.registrate.builder.PetrolparkBlockBuilder;
 import petrolpark.mc.library.core.registrate.builder.PetrolparkBlockEntityBuilder;
@@ -294,6 +296,10 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
 
     public RegistryEntry<LootPoolEntryModifierType, LootPoolEntryModifierType> lootPoolEntryModifierType(String name, MapCodec<? extends ILootPoolEntryModifier> codec) {
         return simple(name, PetrolparkRegistries.Keys.LOOT_POOL_ENTRY_MODIFIER_TYPE, () -> new LootPoolEntryModifierType(codec));
+    };
+
+    public RegistryEntry<StringProviderType, StringProviderType> stringProviderType(String name, MapCodec<? extends StringProvider> codec) {
+        return simple(name, PetrolparkRegistries.Keys.STRING_PROVIDER_TYPE, () -> new StringProviderType(codec));
     };
 
     public RegistryEntry<SoundEvent, SoundEvent> soundEvent(String name, float range) {

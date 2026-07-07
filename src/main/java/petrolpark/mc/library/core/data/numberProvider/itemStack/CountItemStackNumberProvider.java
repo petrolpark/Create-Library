@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.numberProvider.itemStack;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
@@ -12,6 +14,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
  * 
  * @author petrolpark
  */
+@ParametersAreNonnullByDefault
 public class CountItemStackNumberProvider implements ItemStackNumberProvider {
 
     @Override

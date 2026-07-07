@@ -6,16 +6,6 @@ import java.util.concurrent.Executor;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
-import petrolpark.mc.library.core.client.effectShaders.ShaderEffectReloadHandler;
-import petrolpark.mc.library.core.data.loot.modifier.LootTableModification;
-import petrolpark.mc.library.core.data.recipe.bogglePattern.BogglePattern;
-import petrolpark.mc.library.core.flags.Flag;
-import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.core.world.item.restaurant.offer.RestaurantOfferGenerator;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -27,17 +17,41 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
+import petrolpark.mc.library.core.client.effectShaders.ShaderEffectReloadHandler;
+import petrolpark.mc.library.core.data.loot.modifier.LootTableModification;
+import petrolpark.mc.library.core.data.recipe.bogglePattern.BogglePattern;
+import petrolpark.mc.library.core.data.reward.IReward;
+import petrolpark.mc.library.core.data.reward.generator.IRewardGenerator;
+import petrolpark.mc.library.core.flags.Flag;
+import petrolpark.mc.library.core.world.entity.animal.mood.AnimalMoodModifier;
+import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
+import petrolpark.mc.library.core.world.item.restaurant.order.RestaurantOrderGenerator;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 @EventBusSubscriber(modid = Petrolpark.MOD_ID)
 public class ModEvents {
     
     @SubscribeEvent
     public static final void onDataPackRegistry(DataPackRegistryEvent.NewRegistry event) {
+        // Core
         event.dataPackRegistry(PetrolparkRegistries.Keys.FLAG, Flag.DIRECT_CODEC, Flag.DIRECT_CODEC);
-        event.dataPackRegistry(PetrolparkRegistries.Keys.LOOT_TABLE_MODIFICATION, LootTableModification.DIRECT_CODEC, LootTableModification.DIRECT_CODEC);
+        
+        // Loot/Data
+        event.dataPackRegistry(PetrolparkRegistries.Keys.LOOT_TABLE_MODIFICATION, LootTableModification.DIRECT_CODEC);
+        
+        // Rewards
+        event.dataPackRegistry(PetrolparkRegistries.Keys.REWARD_GENERATOR, IRewardGenerator.DIRECT_CODEC, IRewardGenerator.DIRECT_CODEC);
+        event.dataPackRegistry(PetrolparkRegistries.Keys.REWARD, IReward.DIRECT_CODEC, IReward.DIRECT_CODEC);
+        
+        // Restaurants
         event.dataPackRegistry(PetrolparkRegistries.Keys.RESTAURANT, Restaurant.DIRECT_CODEC, Restaurant.DIRECT_CODEC);
-        event.dataPackRegistry(PetrolparkRegistries.Keys.RESTAURANT_OFFER_GENERATOR, RestaurantOfferGenerator.DIRECT_CODEC, RestaurantOfferGenerator.DIRECT_CODEC);
-        event.dataPackRegistry(PetrolparkRegistries.Keys.BOGGLE_PATTERN, BogglePattern.DIRECT_CODEC, BogglePattern.DIRECT_NETWORK_CODEC);
+        event.dataPackRegistry(PetrolparkRegistries.Keys.RESTAURANT_ORDER_GENERATOR, RestaurantOrderGenerator.DIRECT_CODEC, RestaurantOrderGenerator.UNVALIDATED_DIRECT_CODEC);
+        
+        // Misc
+        event.dataPackRegistry(PetrolparkRegistries.Keys.ANIMAL_MOOD_MODIFIER, AnimalMoodModifier.DIRECT_CODEC, AnimalMoodModifier.UNVALIDATED_DIRECT_CODEC);
+        event.dataPackRegistry(PetrolparkRegistries.Keys.BOGGLE_PATTERN, BogglePattern.DIRECT_CODEC, BogglePattern.NETWORK_DIRECT_CODEC);
     };
 
     /**
