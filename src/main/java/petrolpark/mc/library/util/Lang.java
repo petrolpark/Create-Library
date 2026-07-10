@@ -164,6 +164,10 @@ public class Lang {
         return genericTranslationKey("math." + key);
     };
 
+    public static final Component advancedIngredient(String keyEnd, Object... translationArgs) {
+        return Component.translatable("advancedIngredient." + Petrolpark.MOD_ID + "." + keyEnd, translationArgs);
+    };
+
     public static Component generic(String keyEnd, Object... translationArgs) {
         return Component.translatable(genericTranslationKey(keyEnd), translationArgs);
     };

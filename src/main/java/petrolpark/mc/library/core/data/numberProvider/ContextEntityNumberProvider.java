@@ -30,7 +30,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 public record ContextEntityNumberProvider(IEntityTarget target, EntityNumberProvider value) implements IEstimableNumberProvider {
 
     public static final MapCodec<ContextEntityNumberProvider> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        IEntityTarget.CODEC.fieldOf("target").forGetter(ContextEntityNumberProvider::target),
+        IEntityTarget.STRICT_CODEC.fieldOf("target").forGetter(ContextEntityNumberProvider::target),
         EntityNumberProvider.CODEC.fieldOf("value").forGetter(ContextEntityNumberProvider::value)
     ).apply(instance, ContextEntityNumberProvider::new));
 

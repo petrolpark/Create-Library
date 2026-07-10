@@ -27,8 +27,10 @@ import petrolpark.mc.library.core.world.entity.player.team.ITeam;
 import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeReferenceDataComponent;
 import petrolpark.mc.library.core.world.item.decay.DecayTime;
 import petrolpark.mc.library.core.world.item.decay.product.IDecayProduct;
-import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.core.world.item.restaurant.RestaurantsData;
+import petrolpark.mc.library.core.world.restaurant.Restaurant;
+import petrolpark.mc.library.core.world.restaurant.RestaurantsData;
+import petrolpark.mc.library.core.world.restaurant.order.ClientRestaurantOrder;
+import petrolpark.mc.library.core.world.restaurant.order.IRestaurantOrder;
 import petrolpark.mc.library.util.WoodHelper;
 import petrolpark.mc.library.util.codec.CodecHelper;
 
@@ -55,6 +57,8 @@ public class PetrolparkDataComponentTypes {
         .networkSynchronized(RecipeReferenceDataComponent.STREAM_CODEC)
     );
 
+    // DECAY
+
     public static final DataComponentType<IDecayProduct> DECAY_PRODUCT = register("decay_product", builder -> builder
         .persistent(IDecayProduct.CODEC)
         .networkSynchronized(IDecayProduct.STREAM_CODEC)
@@ -68,6 +72,23 @@ public class PetrolparkDataComponentTypes {
         .networkSynchronized(ByteBufCodecs.VAR_LONG)
     );
 
+    // RESTAURANTS
+
+    /**
+     * Reference to a {@link Restaurant}
+     */
+    public static final DataComponentType<Holder<Restaurant>> RESTAURANT = register("restaurant", builder -> builder
+        .persistent(Restaurant.CODEC)
+        .networkSynchronized(Restaurant.STREAM_CODEC)
+    );
+
+    public static final DataComponentType<IRestaurantOrder> RESTAURANT_ORDER = register("restaurant_order", builder -> builder
+        .persistent(IRestaurantOrder.SERVER_CODEC)
+        .networkSynchronized(ClientRestaurantOrder.STREAM_CODEC)
+    );
+
+    // MISC
+
     public static final DataComponentType<Integer> BOGGLE_PATTERN = register("boggle_pattern", builder -> builder
         .persistent(BogglePatternHelper.SHORT_CODEC)
         .networkSynchronized(BogglePatternHelper.SHORT_STREAM_CODEC)
@@ -77,11 +98,6 @@ public class PetrolparkDataComponentTypes {
         .persistent(LootItemFunctions.CODEC)
     );
 
-    public static final DataComponentType<Holder<Restaurant>> RESTAURANT = register("restaurant", builder -> builder
-        .persistent(Restaurant.ID_CODEC)
-        .networkSynchronized(Restaurant.STREAM_CODEC)
-    );
-
     public static final DataComponentType<WoodHelper.Wood> WOOD = register("wood", builder -> builder
         .persistent(WoodHelper.Wood.CODEC)
         .networkSynchronized(WoodHelper.Wood.STREAM_CODEC)
@@ -89,7 +105,7 @@ public class PetrolparkDataComponentTypes {
 
     // TEAMS
 
-    public static final DataComponentType<RestaurantsData> TEAM_RESTAURANTS = register("team_restaurants", builder -> builder
+    public static final DataComponentType<RestaurantsData> RESTAURANTS_DATA = register("team_restaurants", builder -> builder
         .persistent(RestaurantsData.CODEC)
     );
 

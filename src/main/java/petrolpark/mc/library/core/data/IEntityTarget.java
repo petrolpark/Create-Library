@@ -1,12 +1,19 @@
 package petrolpark.mc.library.core.data;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
 
+import io.netty.buffer.ByteBuf;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.Entity;
@@ -22,9 +29,13 @@ public interface IEntityTarget extends StringRepresentable {
     
     public static final Map<ResourceLocation, LootContextParam<? extends Entity>> CUSTOM = new HashMap<>();
 
-    public static final Codec<IEntityTarget> CODEC = Codec.stringResolver(IEntityTarget::getSerializedName, IEntityTarget::getByName);
+    public static final Codec<IEntityTarget> STRICT_CODEC = Codec.stringResolver(IEntityTarget::getSerializedName, s -> getByName(s, true));
+    public static final Codec<IEntityTarget> CODEC = Codec.stringResolver(IEntityTarget::getSerializedName, s -> getByName(s, false));
+    public static final StreamCodec<ByteBuf, IEntityTarget> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(s -> getByName(s, false), IEntityTarget::getSerializedName);
 
-    public static final IEntityTarget CONTEXT_THIS = Targets.TARGETS.computeIfAbsent(EntityTarget.THIS.name(), s -> new BuiltIn(EntityTarget.THIS));
+    public static final IEntityTarget NONE = Targets.TARGETS.computeIfAbsent("none", $ -> new None());
+    
+    public static final IEntityTarget CONTEXT_THIS = Targets.TARGETS.computeIfAbsent(EntityTarget.THIS.name(), $ -> new BuiltIn(EntityTarget.THIS));
 
     public static void register(LootContextParam<? extends Entity> lootContextParam) {
         CUSTOM.put(lootContextParam.getName(), lootContextParam);
@@ -36,18 +47,19 @@ public interface IEntityTarget extends StringRepresentable {
         return Component.translatable(Util.makeDescriptionId("loot_context_param", param.getName()));
     };
 
-    public Entity get(LootContext context);
+    public @Nullable Entity get(LootContext context);
 
-    public LootContextParam<? extends Entity> getReferencedParam();
+    public Set<LootContextParam<? extends Entity>> getReferencedParam();
 
-    public static IEntityTarget getByName(String name) {
+    public static IEntityTarget getByName(String name, boolean strict) {
         try {
             EntityTarget builtInTarget = EntityTarget.getByName(name);
             return Targets.TARGETS.computeIfAbsent(name, s -> new BuiltIn(builtInTarget));
         } catch (IllegalArgumentException e) {
             LootContextParam<? extends Entity> param = CUSTOM.get(ResourceLocation.parse(name));
             if (param != null) return Targets.TARGETS.putIfAbsent(name, new Custom(param));
-            throw new IllegalArgumentException("Unknown contextual Entity: " + name);
+            if (strict) throw new IllegalArgumentException("Unknown contextual Entity: " + name);
+            return NONE;
         }
     };
 
@@ -85,8 +97,8 @@ public interface IEntityTarget extends StringRepresentable {
         };
 
         @Override
-        public LootContextParam<? extends Entity> getReferencedParam() {
-            return target.getParam();
+        public Set<LootContextParam<? extends Entity>> getReferencedParam() {
+            return Collections.singleton(target.getParam());
         };
 
     };
@@ -115,8 +127,33 @@ public interface IEntityTarget extends StringRepresentable {
         };
 
         @Override
-        public LootContextParam<? extends Entity> getReferencedParam() {
-            return param;
+        public Set<LootContextParam<? extends Entity>> getReferencedParam() {
+            return Collections.singleton(param);
+        };
+
+    };
+
+    static class None implements IEntityTarget {
+
+        @Override
+        public Component getName() {
+            return Component.translatable("loot_context_param.petrolpark.none");
+        };
+
+        @Override
+        public String getSerializedName() {
+            return "none";
+        };
+
+        @Override
+        @Nullable
+        public Entity get(LootContext context) {
+            return null;
+        };
+
+        @Override
+        public Set<LootContextParam<? extends Entity>> getReferencedParam() {
+            return Collections.emptySet();
         };
 
     };

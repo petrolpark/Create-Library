@@ -26,8 +26,8 @@ import petrolpark.mc.library.core.data.reward.IReward;
 import petrolpark.mc.library.core.data.reward.generator.IRewardGenerator;
 import petrolpark.mc.library.core.flags.Flag;
 import petrolpark.mc.library.core.world.entity.animal.mood.AnimalMoodModifier;
-import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.core.world.item.restaurant.order.RestaurantOrderGenerator;
+import petrolpark.mc.library.core.world.restaurant.Restaurant;
+import petrolpark.mc.library.core.world.restaurant.order.RestaurantOrderGenerator;
 import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 @EventBusSubscriber(modid = Petrolpark.MOD_ID)

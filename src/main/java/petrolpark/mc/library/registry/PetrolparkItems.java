@@ -6,7 +6,7 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 
 import net.minecraft.tags.ItemTags;
 import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
-import petrolpark.mc.library.core.world.item.restaurant.RestaurantOrderBookItem;
+import petrolpark.mc.library.core.world.restaurant.RestaurantOrderBookItem;
 
 public class PetrolparkItems {
     

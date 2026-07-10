@@ -1,9 +1,15 @@
 package petrolpark.mc.library.util;
 
+import java.util.function.Function;
+
+import com.mojang.serialization.DataResult;
+
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
+import net.minecraft.util.ProblemReporter;
 import net.minecraft.world.level.storage.loot.LootContextUser;
 import net.minecraft.world.level.storage.loot.ValidationContext;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
 
 public class DataValidationHelper {
     
@@ -34,5 +40,15 @@ public class DataValidationHelper {
             .ifRight(list -> {
                 for (int i = 0; i < list.size(); i++) validateHolder(list.get(i), context, childString + "[" + i + "]");
             });
+    };
+
+    public static final <T extends LootContextUser> Function<T, DataResult<T>> validateParamSet(LootContextParamSet params, String name) {
+        return object -> {
+            final ProblemReporter.Collector problemReporterCollector = new ProblemReporter.Collector();
+            object.validate(new ValidationContext(problemReporterCollector, params));
+            return problemReporterCollector.getReport()
+                .map(error -> DataResult.<T>error(() -> "Validation error in " + name + ": " + error))
+                .orElseGet(() -> DataResult.success(object));
+        };
     };
 };

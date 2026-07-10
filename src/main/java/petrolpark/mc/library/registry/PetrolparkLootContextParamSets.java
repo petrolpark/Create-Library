@@ -28,5 +28,16 @@ public class PetrolparkLootContextParamSets {
         .optional(PetrolparkLootContextParams.CUSTOMER_ENTITY) // Entity who made the order
     );
 
+    public static final LootContextParamSet ADVANCEMENT_RESTAURANT = REGISTRATE.lootContextParamSet("advancement_restaurant", builder -> builder
+        .required(LootContextParams.THIS_ENTITY)
+        .required(LootContextParams.ORIGIN)
+        .required(PetrolparkLootContextParams.RESTAURANT)
+        .required(PetrolparkLootContextParams.TEAM)
+    );
+
+    public static final LootContextParamSet RESTAURANT_XP_CALCULATION = REGISTRATE.lootContextParamSet("restaurant_xp_calculation", builder -> builder
+        .required(PetrolparkLootContextParams.RESTAURANT_LEVEL)
+    );
+
     public static final void register() {};
 };

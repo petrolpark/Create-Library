@@ -98,13 +98,18 @@ import petrolpark.mc.library.core.data.recipe.ingredient.advanced.NamedAdvancedI
 import petrolpark.mc.library.core.data.recipe.ingredient.randomizer.IngredientRandomizer;
 import petrolpark.mc.library.core.data.recipe.ingredient.randomizer.IngredientRandomizerType;
 import petrolpark.mc.library.core.data.reward.IReward;
-import petrolpark.mc.library.core.data.reward.RewardType;
-import petrolpark.mc.library.core.data.reward.entity.EntityRewardType;
+import petrolpark.mc.library.core.data.reward.ISimpleReward;
+import petrolpark.mc.library.core.data.reward.RewardAndInfoType;
+import petrolpark.mc.library.core.data.reward.StandardRewardType;
+import petrolpark.mc.library.core.data.reward.entity.EntityRewardAndInfoType;
 import petrolpark.mc.library.core.data.reward.entity.IEntityReward;
+import petrolpark.mc.library.core.data.reward.entity.ISimpleEntityReward;
 import petrolpark.mc.library.core.data.reward.generator.IRewardGenerator;
 import petrolpark.mc.library.core.data.reward.generator.RewardGeneratorType;
+import petrolpark.mc.library.core.data.reward.info.IRewardInfo;
+import petrolpark.mc.library.core.data.reward.info.WrappedRewardInfo;
 import petrolpark.mc.library.core.data.reward.team.ITeamReward;
-import petrolpark.mc.library.core.data.reward.team.TeamRewardType;
+import petrolpark.mc.library.core.data.reward.team.TeamRewardAndInfoType;
 import petrolpark.mc.library.core.data.stringProvider.StringProvider;
 import petrolpark.mc.library.core.data.stringProvider.StringProviderType;
 import petrolpark.mc.library.core.registrate.builder.MobEffectBuilder;
@@ -392,19 +397,58 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
         return simple(name, PetrolparkRegistries.Keys.REWARD_GENERATOR_TYPE, () -> new RewardGeneratorType(codec));
     };
 
-    public RegistryEntry<RewardType, RewardType> rewardType(String name, MapCodec<? extends IReward> codec) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(getModid(), name);
-        return simple(name, PetrolparkRegistries.Keys.REWARD_TYPE, () -> new RewardType(Util.makeDescriptionId("reward", id), codec));
+    public <T extends IReward.Type> RegistryEntry<IReward.Type, T> rewardType(String name, NonNullSupplier<T> factory) {
+        return simple(name, PetrolparkRegistries.Keys.REWARD_TYPE, factory);
     };
 
-    public RegistryEntry<EntityRewardType, EntityRewardType> entityRewardType(String name, MapCodec<? extends IEntityReward> codec) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(getModid(), name);
-        return simple(name, PetrolparkRegistries.Keys.ENTITY_REWARD_TYPE, () -> new EntityRewardType(Util.makeDescriptionId("entity_reward", id), codec));
+    public RegistryEntry<IReward.Type, StandardRewardType> rewardType(String name, MapCodec<? extends IReward> codec) {
+        return rewardType(name, () -> new StandardRewardType(codec));
     };
 
-    public RegistryEntry<TeamRewardType, TeamRewardType> teamRewardType(String name, MapCodec<? extends ITeamReward> codec) {
-        ResourceLocation id = ResourceLocation.fromNamespaceAndPath(getModid(), name);
-        return simple(name, PetrolparkRegistries.Keys.TEAM_REWARD_TYPE, () -> new TeamRewardType(Util.makeDescriptionId("team_reward", id), codec));
+    public <T extends IRewardInfo.Type> RegistryEntry<IRewardInfo.Type, T> rewardInfoType(String name, NonNullSupplier<T> factory) {
+        return simple(name, PetrolparkRegistries.Keys.REWARD_INFO_TYPE, factory);
+    };
+
+    public RegistryEntry<IReward.Type, RewardAndInfoType> rewardAndInfoTypes(String name, MapCodec<? extends IReward> rewardCodec, MapCodec<? extends IRewardInfo> infoCodec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends IRewardInfo> infoStreamCodec) {
+        final RewardAndInfoType type = new RewardAndInfoType(ResourceLocation.fromNamespaceAndPath(getModid(), name).toLanguageKey("reward"), rewardCodec, infoCodec, infoStreamCodec);
+        rewardInfoType(name, () -> type);
+        return rewardType(name, () -> type);
+    };
+
+    public RegistryEntry<IReward.Type, RewardAndInfoType> simpleRewardType(String name, MapCodec<? extends ISimpleReward> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends ISimpleReward> streamCodec) {
+        return rewardAndInfoTypes(name, codec, codec, streamCodec);
+    };
+
+    public <I extends WrappedRewardInfo> RegistryEntry<IReward.Type, RewardAndInfoType> rewardAndWrappedInfoTypes(String name, MapCodec<? extends IReward> rewardCodec, NonNullFunction<IRewardInfo, I> infoFactory) {
+        return rewardAndInfoTypes(name, rewardCodec, WrappedRewardInfo.codec(infoFactory), WrappedRewardInfo.streamCodec(infoFactory));
+    };
+
+    public <T extends IEntityReward.Type> RegistryEntry<IEntityReward.Type, T> entityRewardType(String name, NonNullSupplier<T> factory) {
+        return simple(name, PetrolparkRegistries.Keys.ENTITY_REWARD_TYPE, factory);
+    };
+
+    public RegistryEntry<IEntityReward.Type, EntityRewardAndInfoType> entityRewardAndInfoTypes(String name, MapCodec<? extends IEntityReward> rewardCodec, MapCodec<? extends IRewardInfo> infoCodec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends IRewardInfo> infoStreamCodec) {
+        final EntityRewardAndInfoType type = new EntityRewardAndInfoType(ResourceLocation.fromNamespaceAndPath(getModid(), name).toLanguageKey("reward"), rewardCodec, infoCodec, infoStreamCodec);
+        rewardInfoType(name, () -> type);
+        return entityRewardType(name, () -> type);
+    };
+
+    public <I extends WrappedRewardInfo> RegistryEntry<IEntityReward.Type, EntityRewardAndInfoType> entityRewardAndWrappedInfoTypes(String name, MapCodec<? extends IEntityReward> rewardCodec, NonNullFunction<IRewardInfo, I> infoFactory) {
+        return entityRewardAndInfoTypes(name, rewardCodec, WrappedRewardInfo.codec(infoFactory), WrappedRewardInfo.streamCodec(infoFactory));
+    };
+
+    public RegistryEntry<IEntityReward.Type, EntityRewardAndInfoType> simpleEntityRewardType(String name, MapCodec<? extends ISimpleEntityReward> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends ISimpleEntityReward> streamCodec) {
+        return entityRewardAndInfoTypes(name, codec, codec, streamCodec);
+    };
+
+    public <T extends ITeamReward.Type> RegistryEntry<ITeamReward.Type, T> teamRewardType(String name, NonNullSupplier<T> factory) {
+        return simple(name, PetrolparkRegistries.Keys.TEAM_REWARD_TYPE, factory);
+    };
+
+    public RegistryEntry<ITeamReward.Type, TeamRewardAndInfoType> teamRewardAndInfoTypes(String name, MapCodec<? extends ITeamReward> rewardCodec, MapCodec<? extends IRewardInfo> infoCodec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends IRewardInfo> infoStreamCodec) {
+        final TeamRewardAndInfoType type = new TeamRewardAndInfoType(ResourceLocation.fromNamespaceAndPath(getModid(), name).toLanguageKey("reward"), rewardCodec, infoCodec, infoStreamCodec);
+        rewardInfoType(name, () -> type);
+        return teamRewardType(name, () -> type);
     };
 
     public RegistryEntry<BogglePatternGeneratorType, BogglePatternGeneratorType> bogglePatternGeneratorType(String name, MapCodec<? extends IBogglePatternGenerator> codec, MapCodec<? extends IBogglePatternGenerator> directCodec) {

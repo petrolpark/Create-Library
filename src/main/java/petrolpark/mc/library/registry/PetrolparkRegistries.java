@@ -34,11 +34,11 @@ import petrolpark.mc.library.core.data.recipe.bogglePattern.generator.BogglePatt
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredientType;
 import petrolpark.mc.library.core.data.recipe.ingredient.randomizer.IngredientRandomizerType;
 import petrolpark.mc.library.core.data.reward.IReward;
-import petrolpark.mc.library.core.data.reward.RewardType;
-import petrolpark.mc.library.core.data.reward.entity.EntityRewardType;
+import petrolpark.mc.library.core.data.reward.entity.IEntityReward;
 import petrolpark.mc.library.core.data.reward.generator.IRewardGenerator;
 import petrolpark.mc.library.core.data.reward.generator.RewardGeneratorType;
-import petrolpark.mc.library.core.data.reward.team.TeamRewardType;
+import petrolpark.mc.library.core.data.reward.info.IRewardInfo;
+import petrolpark.mc.library.core.data.reward.team.ITeamReward;
 import petrolpark.mc.library.core.data.stringProvider.StringProviderType;
 import petrolpark.mc.library.core.flags.Flag;
 import petrolpark.mc.library.core.scratch.classes.IScratchClassType;
@@ -49,8 +49,8 @@ import petrolpark.mc.library.core.scratch.symbol.expression.IScratchExpression;
 import petrolpark.mc.library.core.world.entity.animal.mood.AnimalMoodModifier;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
 import petrolpark.mc.library.core.world.item.decay.product.DecayProductType;
-import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.core.world.item.restaurant.order.RestaurantOrderGenerator;
+import petrolpark.mc.library.core.world.restaurant.Restaurant;
+import petrolpark.mc.library.core.world.restaurant.order.RestaurantOrderGenerator;
 import petrolpark.mc.library.experimental.trade.ITradeListingReference;
 
 @EventBusSubscriber
@@ -136,9 +136,10 @@ public class PetrolparkRegistries {
 
     // Rewards
     public static final Registry<RewardGeneratorType> REWARD_GENERATOR_TYPES = simple(Keys.REWARD_GENERATOR_TYPE);
-    public static final Registry<RewardType> REWARD_TYPES = simple(Keys.REWARD_TYPE);
-    public static final Registry<EntityRewardType> ENTITY_REWARD_TYPES = simple(Keys.ENTITY_REWARD_TYPE);
-    public static final Registry<TeamRewardType> TEAM_REWARD_TYPES = simple(Keys.TEAM_REWARD_TYPE);
+    public static final Registry<IReward.Type> REWARD_TYPES = simple(Keys.REWARD_TYPE);
+    public static final Registry<IRewardInfo.Type> REWARD_INFO_TYPES = simple(Keys.REWARD_INFO_TYPE);
+    public static final Registry<IEntityReward.Type> ENTITY_REWARD_TYPES = simple(Keys.ENTITY_REWARD_TYPE);
+    public static final Registry<ITeamReward.Type> TEAM_REWARD_TYPES = simple(Keys.TEAM_REWARD_TYPE);
 
     // Misc
     public static final Registry<BogglePatternGeneratorType> BOGGLE_PATTERN_GENERATOR_TYPES = simple(Keys.BOGGLE_PATTERN_GENERATOR_TYPE);
@@ -203,9 +204,10 @@ public class PetrolparkRegistries {
         
         // Rewards
         public static final ResourceKey<Registry<RewardGeneratorType>> REWARD_GENERATOR_TYPE = key("reward_generator_type");
-        public static final ResourceKey<Registry<RewardType>> REWARD_TYPE = key("reward_type");
-        public static final ResourceKey<Registry<EntityRewardType>> ENTITY_REWARD_TYPE = key("entity_reward_type");
-        public static final ResourceKey<Registry<TeamRewardType>> TEAM_REWARD_TYPE = key("team_reward_type");
+        public static final ResourceKey<Registry<IReward.Type>> REWARD_TYPE = key("reward_type");
+        public static final ResourceKey<Registry<IRewardInfo.Type>> REWARD_INFO_TYPE = key("reward_info_type");
+        public static final ResourceKey<Registry<IEntityReward.Type>> ENTITY_REWARD_TYPE = key("entity_reward_type");
+        public static final ResourceKey<Registry<ITeamReward.Type>> TEAM_REWARD_TYPE = key("team_reward_type");
         public static final ResourceKey<Registry<IRewardGenerator>> REWARD_GENERATOR = key("reward_generator");
         public static final ResourceKey<Registry<IReward>> REWARD = key("reward");
 

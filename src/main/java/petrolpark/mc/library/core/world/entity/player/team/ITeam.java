@@ -9,11 +9,6 @@ import org.jetbrains.annotations.ApiStatus;
 import com.mojang.authlib.GameProfile;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.core.world.entity.player.team.scoreboard.ScoreboardTeam;
-import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
-import petrolpark.mc.library.registry.PetrolparkTeamProviderTypes;
-import petrolpark.mc.library.util.Lang;
 
 import net.createmod.catnip.net.base.ClientboundPacketPayload;
 import net.createmod.catnip.platform.CatnipServices;
@@ -31,6 +26,11 @@ import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
 import net.neoforged.neoforge.common.NeoForge;
+import petrolpark.mc.library.core.world.entity.player.team.scoreboard.ScoreboardTeam;
+import petrolpark.mc.library.core.world.restaurant.Restaurant;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
+import petrolpark.mc.library.registry.PetrolparkTeamProviderTypes;
+import petrolpark.mc.library.util.Lang;
 
 /**
  * A collection of Players acting as one entity.

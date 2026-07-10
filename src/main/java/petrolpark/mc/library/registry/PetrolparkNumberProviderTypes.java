@@ -38,6 +38,7 @@ import petrolpark.mc.library.core.data.numberProvider.team.FlatTeamNumberProvide
 import petrolpark.mc.library.core.data.numberProvider.team.LootTeamNumberProviderType;
 import petrolpark.mc.library.core.data.numberProvider.team.MemberCountTeamNumberProvider;
 import petrolpark.mc.library.core.data.numberProvider.team.MemberReductionTeamNumberProvider;
+import petrolpark.mc.library.core.data.numberProvider.team.RestaurantTeamNumberProvider;
 
 public class PetrolparkNumberProviderTypes {
     
@@ -83,6 +84,7 @@ public class PetrolparkNumberProviderTypes {
     FLAT_TEAM = REGISTRATE.lootTeamNumberProviderType("flat", FlatTeamNumberProvider.CODEC),
     MEMBER_COUNT = REGISTRATE.lootTeamNumberProviderType("member_count", MapCodec.unit(MemberCountTeamNumberProvider::new)),
     MEMBER_REDUCTION = REGISTRATE.lootTeamNumberProviderType("member_reduction", MemberReductionTeamNumberProvider.CODEC),
+    RESTAURANT = REGISTRATE.lootTeamNumberProviderType("restaurant", RestaurantTeamNumberProvider.CODEC),
     TEAM_DATA_COMPONENT = REGISTRATE.lootTeamNumberProviderType("component", DataComponentNumberProvider.CODEC);
 
     public static final void register() {};

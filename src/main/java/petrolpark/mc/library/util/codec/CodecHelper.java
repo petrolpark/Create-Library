@@ -31,6 +31,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.VarInt;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.entity.ai.gossip.GossipType;
 import net.minecraft.world.entity.animal.horse.Markings;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ChunkPos;
@@ -40,6 +41,19 @@ import net.neoforged.neoforge.common.util.TriState;
 import petrolpark.mc.library.util.Lang;
 
 public class CodecHelper {
+
+    public static final Codec<Integer> POS_INT = Codec.intRange(0, Integer.MAX_VALUE);
+    public static final Codec<Float> POS_FLOAT = Codec.floatRange(0f, Float.MAX_VALUE);
+    public static final Codec<Double> POS_DOUBLE = Codec.doubleRange(0f, Double.MAX_VALUE);
+    public static final Codec<Float> UNIT_INTERVAL_FLOAT = Codec.floatRange(0f, 1f);
+
+    public static final Codec<Markings> HORSE_MARKINGS = Codec.stringResolver(markings -> Lang.asId(markings.name()), name -> Stream.of(Markings.values()).filter(markings -> Lang.asId(markings.name()).equals(name)).findFirst().orElse(null));
+
+    public static final StreamCodec<FriendlyByteBuf, ChunkPos> CHUNK_POS_STREAM = StreamCodec.of(FriendlyByteBuf::writeChunkPos, FriendlyByteBuf::readChunkPos);
+    public static final StreamCodec<ByteBuf, GossipType> GOSSIP_TYPE_STREAM = CatnipStreamCodecBuilders.ofEnum(GossipType.class);
+    public static final StreamCodec<ByteBuf, Rotation> ROTATION_STREAM = CatnipStreamCodecBuilders.ofEnum(Rotation.class);
+    public static final StreamCodec<ByteBuf, TriState> TRI_STATE_STREAM = CatnipStreamCodecBuilders.ofEnum(TriState.class);
+    public static final StreamCodec<ByteBuf, WoodType> WOOD_TYPE_STREAM = ByteBufCodecs.STRING_UTF8.map(WoodType.TYPES::get, WoodType::name);
 
     public static <OBJECT, FIELD> Codec<OBJECT> singleField(Codec<FIELD> fieldCodec, String fieldName, Function<OBJECT, FIELD> getter, Function<FIELD, OBJECT> constructor) {
         return RecordCodecBuilder.create(instance -> instance.group(
@@ -59,12 +73,6 @@ public class CodecHelper {
             return DataResult.success(list.get(0));
         }));
     };
-
-    public static final Codec<Integer> POS_INT = Codec.intRange(0, Integer.MAX_VALUE);
-    public static final Codec<Float> POS_FLOAT = Codec.floatRange(0f, Float.MAX_VALUE);
-    public static final Codec<Double> POS_DOUBLE = Codec.doubleRange(0f, Double.MAX_VALUE);
-
-    public static final Codec<Float> UNIT_INTERVAL_FLOAT = Codec.floatRange(0f, 1f);
 
     public static <T extends ByteBuf, S extends Enum<S>> StreamCodec<T, S> enumStream(Class<S> clazz) {
         return new StreamCodec<>() {
@@ -370,14 +378,4 @@ public class CodecHelper {
         INT_BOUNDS_STREAM_CODEC, EnchantmentPredicate::level,
         EnchantmentPredicate::new
     );
-
-    public static final StreamCodec<FriendlyByteBuf, ChunkPos> CHUNK_POS_STREAM_CODEC = StreamCodec.of(FriendlyByteBuf::writeChunkPos, FriendlyByteBuf::readChunkPos);
-
-    public static final StreamCodec<ByteBuf, WoodType> WOOD_TYPE_STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(WoodType.TYPES::get, WoodType::name);
-
-    public static final Codec<Markings> HORSE_MARKINGS_CODEC = Codec.stringResolver(markings -> Lang.asId(markings.name()), name -> Stream.of(Markings.values()).filter(markings -> Lang.asId(markings.name()).equals(name)).findFirst().orElse(null));
-
-    public static final StreamCodec<ByteBuf, TriState> TRI_STATE_STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(TriState.class);
-
-    public static final StreamCodec<ByteBuf, Rotation> ROTATION_STREAM_CODEC = CatnipStreamCodecBuilders.ofEnum(Rotation.class);
 };

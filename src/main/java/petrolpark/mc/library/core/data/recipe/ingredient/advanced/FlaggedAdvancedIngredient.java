@@ -7,10 +7,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.core.flags.Flag;
-import petrolpark.mc.library.core.flags.IFlagPole;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 import net.minecraft.core.Holder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -24,6 +20,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
+import petrolpark.mc.library.core.flags.Flag;
+import petrolpark.mc.library.core.flags.IFlagPole;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 public record FlaggedAdvancedIngredient(Holder<Flag> flag) implements IAdvancedIngredient<MutableDataComponentHolder>, IForcingItemAdvancedIngredient {
 

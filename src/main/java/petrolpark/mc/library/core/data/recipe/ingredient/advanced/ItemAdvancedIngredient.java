@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -21,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 public interface ItemAdvancedIngredient extends IAdvancedIngredient<ItemStack>, IForcingItemAdvancedIngredient {
 
@@ -36,6 +36,8 @@ public interface ItemAdvancedIngredient extends IAdvancedIngredient<ItemStack>, 
 
     public static final StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super ItemStack>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE)
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::streamCodec);
+
+    public static final IAdvancedIngredient<? super ItemStack> IMPOSSIBLE = NotAdvancedIngredient.of(PassAdvancedIngredient.INSTANCE);
 
     @Override
     public boolean test(ItemStack stack);

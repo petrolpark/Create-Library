@@ -4,13 +4,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
 
-import petrolpark.mc.library.core.world.item.restaurant.Restaurant;
-import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
-
 import mezz.jei.api.ingredients.subtypes.ISubtypeInterpreter;
 import mezz.jei.api.ingredients.subtypes.UidContext;
 import net.minecraft.core.Holder;
 import net.minecraft.world.item.ItemStack;
+import petrolpark.mc.library.core.world.restaurant.Restaurant;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
 
 @ParametersAreNonnullByDefault
 public class RestaurantMenuItemSubtypeInterpreter implements ISubtypeInterpreter<ItemStack> {

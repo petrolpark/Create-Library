@@ -20,9 +20,8 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
 import net.neoforged.neoforge.common.conditions.ConditionalOps;
 import petrolpark.mc.library.core.data.IEntityTarget;
 import petrolpark.mc.library.core.data.loot.ILootTableAccessor;
-import petrolpark.mc.library.core.data.reward.ContextEntityReward;
+import petrolpark.mc.library.core.data.reward.GiveItemReward;
 import petrolpark.mc.library.core.data.reward.IReward;
-import petrolpark.mc.library.core.data.reward.entity.GiveItemEntityReward;
 import petrolpark.mc.library.registry.PetrolparkRewardGeneratorTypes;
 
 /**
@@ -35,7 +34,7 @@ public record LootTableRewardGenerator(IEntityTarget target, List<LootItemFuncti
 
     public static final MapCodec<LootTableRewardGenerator> CODEC = RecordCodecBuilder.mapCodec(instance ->
         instance.group(
-            IEntityTarget.CODEC.fieldOf("target").forGetter(LootTableRewardGenerator::target),
+            IEntityTarget.STRICT_CODEC.fieldOf("target").forGetter(LootTableRewardGenerator::target),
             ConditionalOps.decodeListWithElementConditions(LootItemFunctions.ROOT_CODEC).optionalFieldOf("late_functions", Collections.emptyList()).forGetter(LootTableRewardGenerator::lateFunctions)
         ).and(ILootTableAccessor.lootTableField(instance).t1())
         .apply(instance, LootTableRewardGenerator::new)
@@ -43,8 +42,8 @@ public record LootTableRewardGenerator(IEntityTarget target, List<LootItemFuncti
 
     @Override
     public Stream<Holder<IReward>> generate(LootContext context) {
-        List<Holder<IReward>> rewards = new ArrayList<>();
-        getLootTable(context).getRandomItems(context, stack -> rewards.add(Holder.direct(new ContextEntityReward(target, new GiveItemEntityReward(stack, lateFunctions())))));
+        final List<Holder<IReward>> rewards = new ArrayList<>();
+        getLootTable(context).getRandomItems(context, stack -> rewards.add(Holder.direct(new GiveItemReward(stack, lateFunctions()))));
         return rewards.stream();
     };
 

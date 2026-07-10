@@ -1,15 +1,19 @@
 package petrolpark.mc.library.core.data.reward.entity;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.MapCodec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.registry.PetrolparkRewardTypes;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
+import petrolpark.mc.library.registry.PetrolparkRewardTypes;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 /**
  * <p>{@code petrolpark:unlock_trade}</p>
@@ -23,15 +27,17 @@ import net.minecraft.world.level.storage.loot.LootContext;
  * 
  * @author petrolpark
  */
-public record UnlockTradeEntityReward(MerchantOffer trade) implements IEntityReward {
+@ParametersAreNonnullByDefault
+public record UnlockTradeEntityReward(MerchantOffer trade) implements ISimpleEntityReward {
 
-    public static final MapCodec<UnlockTradeEntityReward> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
-        MerchantOffer.CODEC.fieldOf("trade").forGetter(UnlockTradeEntityReward::trade)
-    ).apply(instance, UnlockTradeEntityReward::new));
-
+    public static final MapCodec<UnlockTradeEntityReward> CODEC = CodecHelper.singleFieldMap(MerchantOffer.CODEC, "trade", UnlockTradeEntityReward::trade, UnlockTradeEntityReward::new);
+    public static final StreamCodec<RegistryFriendlyByteBuf, UnlockTradeEntityReward> STREAM_CODEC = StreamCodec.composite(MerchantOffer.STREAM_CODEC, UnlockTradeEntityReward::trade, UnlockTradeEntityReward::new);
+    
     @Override
-    public void reward(Entity entity, LootContext context, float multiplier) {
-        if (entity instanceof Merchant merchant) merchant.getOffers().add(trade);
+    public boolean reward(Entity entity, LootContext context, float multiplier, boolean simulate) {
+        if (!(entity instanceof Merchant merchant)) return false;
+        if (!simulate) merchant.getOffers().add(trade);
+        return true;
     };
 
     @Override
@@ -54,7 +60,7 @@ public record UnlockTradeEntityReward(MerchantOffer trade) implements IEntityRew
     };
 
     @Override
-    public EntityRewardType getType() {
+    public EntityRewardAndInfoType getType() {
         return PetrolparkRewardTypes.UNLOCK_TRADE.get();
     };
     

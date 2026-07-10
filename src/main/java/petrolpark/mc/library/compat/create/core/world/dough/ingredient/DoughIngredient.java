@@ -6,6 +6,11 @@ import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
+
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistries;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
@@ -13,11 +18,6 @@ import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngre
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.INamedAdvancedIngredientType;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ItemAdvancedIngredient;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.PassAdvancedIngredient;
-
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.network.codec.ByteBufCodecs;
-import net.minecraft.network.codec.StreamCodec;
 
 public interface DoughIngredient extends IAdvancedIngredient<DoughData> {
 
@@ -29,7 +29,7 @@ public interface DoughIngredient extends IAdvancedIngredient<DoughData> {
         .byNameCodec()
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::codec);
 
-    public static final Codec<IAdvancedIngredient<? super DoughData>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, Codec.unit(PassAdvancedIngredient.INSTANCE)));
+    public static final Codec<IAdvancedIngredient<? super DoughData>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, Codec.unit(PassAdvancedIngredient.PASS)));
 
     public static final Codec<IAdvancedIngredient<DoughData>> STRICT_CODEC = CODEC.comapFlatMap(DoughIngredient::cast, Function.identity());
 

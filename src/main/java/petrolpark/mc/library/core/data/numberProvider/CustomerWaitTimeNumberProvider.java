@@ -8,7 +8,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
 import net.minecraft.world.level.storage.loot.providers.number.LootNumberProviderType;
-import petrolpark.mc.library.core.world.item.restaurant.customer.ICustomer;
+import petrolpark.mc.library.core.world.restaurant.customer.ICustomer;
 import petrolpark.mc.library.registry.PetrolparkLootContextParams;
 import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 

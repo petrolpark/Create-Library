@@ -9,11 +9,11 @@ import javax.annotation.Nonnull;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.common.util.TriState;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 /**
  * Extension to {@link Either} that permits <i>neither</i> value, in addition to just the left or just the right.
@@ -285,7 +285,7 @@ public sealed interface Neither<L, R> permits Neither.Left, Neither.Right, Neith
 
         @Override
         public Neither<L, R> decode(@Nonnull B buffer) {
-            final TriState state = CodecHelper.TRI_STATE_STREAM_CODEC.decode(buffer);
+            final TriState state = CodecHelper.TRI_STATE_STREAM.decode(buffer);
             if (state.isTrue()) return Neither.left(leftCodec.decode(buffer));
             if (state.isFalse()) return Neither.right(rightCodec.decode(buffer));
             return Neither.neither();
@@ -293,7 +293,7 @@ public sealed interface Neither<L, R> permits Neither.Left, Neither.Right, Neith
 
         @Override
         public void encode(@Nonnull B buffer, @Nonnull Neither<L, R> value) {
-            CodecHelper.TRI_STATE_STREAM_CODEC.encode(buffer, value.isLeft() ? TriState.TRUE : value.isRight() ? TriState.FALSE : TriState.DEFAULT);
+            CodecHelper.TRI_STATE_STREAM.encode(buffer, value.isLeft() ? TriState.TRUE : value.isRight() ? TriState.FALSE : TriState.DEFAULT);
             value.ifLeft(l -> leftCodec.encode(buffer, l));
             value.ifRight(r -> rightCodec.encode(buffer, r));
         };

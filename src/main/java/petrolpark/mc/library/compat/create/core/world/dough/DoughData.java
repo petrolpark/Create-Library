@@ -129,7 +129,7 @@ public record DoughData(IDough dough, float thickness, byte width, byte length, 
                 DoughCut.STREAM_CODEC, DoughData.Cuts.Entry::cut,
                 ByteBufCodecs.BYTE, DoughData.Cuts.Entry::x,
                 ByteBufCodecs.BYTE, DoughData.Cuts.Entry::y,
-                CodecHelper.ROTATION_STREAM_CODEC, DoughData.Cuts.Entry::rotation,
+                CodecHelper.ROTATION_STREAM, DoughData.Cuts.Entry::rotation,
                 DoughData.Cuts.Entry::new
             );
         };

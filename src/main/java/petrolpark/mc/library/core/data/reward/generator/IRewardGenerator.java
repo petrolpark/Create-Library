@@ -21,7 +21,7 @@ public interface IRewardGenerator extends LootContextUser {
      */
     static final Codec<IRewardGenerator> TYPED_CODEC = PetrolparkRegistries.REWARD_GENERATOR_TYPES
         .byNameCodec()
-        .dispatch(IRewardGenerator::getType, RewardGeneratorType::codec);
+        .dispatch("reward_generator_type", IRewardGenerator::getType, RewardGeneratorType::codec);
 
     public static final Codec<IRewardGenerator> DIRECT_CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, DirectRewardGenerator.INLINE_CODEC));
 

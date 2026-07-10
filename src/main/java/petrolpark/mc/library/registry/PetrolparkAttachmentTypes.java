@@ -4,16 +4,15 @@ import java.util.function.Supplier;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.badge.PlayerBadges;
-import petrolpark.mc.library.core.data.loot.wish.PlayerWishList;
-import petrolpark.mc.library.core.world.entity.player.team.singleplayer.SinglePlayerTeam;
-import petrolpark.mc.library.core.world.item.restaurant.customer.MobCustomer;
-
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.attachment.AttachmentType;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.badge.PlayerBadges;
+import petrolpark.mc.library.core.data.loot.wish.PlayerWishList;
+import petrolpark.mc.library.core.world.entity.player.team.singleplayer.SinglePlayerTeam;
+import petrolpark.mc.library.core.world.restaurant.customer.MobCustomer;
 
 public class PetrolparkAttachmentTypes {
     private static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES = DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, Petrolpark.MOD_ID);

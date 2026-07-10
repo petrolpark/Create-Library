@@ -1,9 +1,17 @@
 package petrolpark.mc.library.core.data.numberProvider;
 
 import java.text.DecimalFormat;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+
+import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -12,6 +20,7 @@ import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import petrolpark.mc.library.util.Lang;
+import petrolpark.mc.library.util.Neither;
 
 public sealed abstract class NumberEstimate permits NumberEstimate.Exact, NumberEstimate.Range, NumberEstimate.Unknown {
 
@@ -21,10 +30,18 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
     public static final NumberEstimate E = exactly((float)Math.E);
     public static final NumberEstimate UNKNOWN = new Unknown();
 
+    public static final MapCodec<NumberEstimate> fieldCodec(final String key) {
+        return Neither.fieldCodec(NumberEstimate.Exact.CODEC, NumberEstimate.Range.CODEC, key).xmap(NumberEstimate::unwrap, NumberEstimate::wrap);
+    };
+
+    public static final StreamCodec<ByteBuf, NumberEstimate> STREAM_CODEC = Neither.streamCodec(NumberEstimate.Exact.STREAM_CODEC, NumberEstimate.Range.STREAM_CODEC).map(NumberEstimate::unwrap, NumberEstimate::wrap);
+
+    @Deprecated
     public static float getMax(LootContext context, NumberProvider provider) {
         return getMax(context, provider, 10);
     };
 
+    @Deprecated
     public static float getMax(LootContext context, NumberProvider provider, int rolls) {
         return switch (provider) {
             case IEstimableNumberProvider estimable -> estimable.getMaxFloat(context);
@@ -89,7 +106,7 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         return ranged(min, max, false);
     };
 
-    public final boolean approximate;
+    private final boolean approximate;
 
     protected NumberEstimate(boolean approximate) {
         this.approximate = approximate;  
@@ -102,6 +119,10 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
 
     @OnlyIn(Dist.CLIENT)
     public abstract Component getComponent(DecimalFormat df);
+
+    public final boolean approximate() {
+        return approximate;
+    };
 
     public abstract float min();
 
@@ -135,11 +156,30 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
 
     public abstract IntStream streamPossibleInts();
 
+    protected abstract Neither<NumberEstimate.Exact, NumberEstimate.Range> wrap();
+
+    private static final NumberEstimate unwrap(Neither<NumberEstimate.Exact, NumberEstimate.Range> neither) {
+        return neither.map(Function.identity(), Function.identity()).orElse(UNKNOWN);
+    };
+
     public boolean unknown() {
         return this == UNKNOWN;
     };
 
     public static final class Exact extends NumberEstimate {
+
+        private static final Codec<NumberEstimate.Exact> CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                Codec.FLOAT.fieldOf("value").forGetter(NumberEstimate.Exact::min),
+                Codec.BOOL.optionalFieldOf("approximate", false).forGetter(NumberEstimate::approximate)
+            ).apply(instance, NumberEstimate.Exact::new)
+        );
+
+        private static final StreamCodec<ByteBuf, NumberEstimate.Exact> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.FLOAT, NumberEstimate.Exact::min,
+            ByteBufCodecs.BOOL, NumberEstimate.Exact::approximate,
+            NumberEstimate.Exact::new
+        );
 
         public final float value;
 
@@ -166,55 +206,55 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         @Override
         public NumberEstimate add(NumberEstimate estimate) {
             return switch (estimate) {
-                case Exact exact -> new Exact(this.value + exact.value, approximate || estimate.approximate);
+                case Exact exact -> new Exact(this.value + exact.value, approximate() || estimate.approximate);
                 case Range range -> range.add(this);
                 case Unknown unknown -> UNKNOWN;
             };
         };
 
         @Override
-        public NumberEstimate add(float value) {
-            return new Exact(this.value + value, approximate);
+        public NumberEstimate.Exact add(float value) {
+            return new Exact(this.value + value, approximate());
         };
 
         @Override
         public NumberEstimate multiply(NumberEstimate estimate) {
             return switch (estimate) {
-                case Exact exact -> new Exact(this.value * exact.value, approximate || estimate.approximate);
+                case Exact exact -> new Exact(this.value * exact.value, approximate() || estimate.approximate);
                 case Range range -> range.multiply(this);
                 case Unknown unknown -> UNKNOWN;
             };
         };
 
         @Override
-        public NumberEstimate multiply(float value) {
-            return new Exact(this.value * value, approximate);
+        public NumberEstimate.Exact multiply(float value) {
+            return new Exact(this.value * value, approximate());
         };
 
         @Override
-        public NumberEstimate reciprocal() {
-            return new Exact(1f / this.value, approximate);
+        public NumberEstimate.Exact reciprocal() {
+            return new Exact(1f / this.value, approximate());
         };
 
         @Override
-        public NumberEstimate negative() {
-            return new Exact(-this.value, approximate);
+        public NumberEstimate.Exact negative() {
+            return new Exact(-this.value, approximate());
         };
 
         @Override
-        public NumberEstimate pow(float exponent) {
-            return new Exact((float)Math.pow(value, exponent), approximate);
+        public NumberEstimate.Exact pow(float exponent) {
+            return new Exact((float)Math.pow(value, exponent), approximate());
         };
 
         @Override
-        public NumberEstimate exp() {
-            return new Exact((float)Math.exp(value), approximate);
+        public NumberEstimate.Exact exp() {
+            return new Exact((float)Math.exp(value), approximate());
         };
 
         @Override
         public NumberEstimate or(NumberEstimate estimate) {
             if (estimate instanceof Range range) return range.or(this);
-            else if (estimate instanceof Exact exact) return ranged(Math.min(value, exact.value), Math.max(value, exact.value), approximate || estimate.approximate);
+            else if (estimate instanceof Exact exact) return ranged(Math.min(value, exact.value), Math.max(value, exact.value), approximate() || estimate.approximate());
             else return UNKNOWN;
         };
 
@@ -223,9 +263,29 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
             return IntStream.of((int)value);
         };
 
+        @Override
+        protected Neither<NumberEstimate.Exact, NumberEstimate.Range> wrap() {
+            return Neither.left(this);
+        };
+
     };
 
     public static final class Range extends NumberEstimate {
+
+        private static final Codec<NumberEstimate.Range> CODEC = RecordCodecBuilder.create(instance ->
+            instance.group(
+                Codec.FLOAT.optionalFieldOf("min", Float.NaN).forGetter(NumberEstimate.Range::min),
+                Codec.FLOAT.optionalFieldOf("max", Float.NaN).forGetter(NumberEstimate.Range::max),
+                Codec.BOOL.optionalFieldOf("approximate", false).forGetter(NumberEstimate::approximate)
+            ).apply(instance, NumberEstimate.Range::new)
+        );
+
+        private static final StreamCodec<ByteBuf, NumberEstimate.Range> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.FLOAT, NumberEstimate.Range::min,
+            ByteBufCodecs.FLOAT, NumberEstimate.Range::max,
+            ByteBufCodecs.BOOL, NumberEstimate.Range::approximate,
+            NumberEstimate.Range::new
+        );
 
         public final float min;
         public final float max;
@@ -238,7 +298,7 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
 
         @Override
         public Component getComponent(DecimalFormat df) {
-            return Lang.range(min, max, approximate, df);
+            return Lang.range(min, max, approximate(), df);
         };
 
         @Override
@@ -254,63 +314,63 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         @Override
         public NumberEstimate add(NumberEstimate estimate) {
             return switch (estimate) {
-                case Exact exact -> ranged(min + exact.value, max + exact.value, approximate || estimate.approximate);
-                case Range range -> ranged(min + range.min, max + range.max, approximate || estimate.approximate);
+                case Exact exact -> ranged(min + exact.value, max + exact.value, approximate() || estimate.approximate());
+                case Range range -> ranged(min + range.min, max + range.max, approximate() || estimate.approximate());
                 case Unknown unknown -> UNKNOWN;
             };
         };
 
         @Override
         public NumberEstimate add(float value) {
-            return ranged(min + value, max + value, approximate);
+            return ranged(min + value, max + value, approximate());
         };
 
         @Override
         public NumberEstimate multiply(NumberEstimate estimate) {
             return switch (estimate) {
-                case Exact exact -> ranged(min * exact.value, max * exact.value, approximate || estimate.approximate);
-                case Range range -> ranged(min * range.min, max * range.max, approximate || estimate.approximate);
+                case Exact exact -> ranged(min * exact.value, max * exact.value, approximate() || estimate.approximate());
+                case Range range -> ranged(min * range.min, max * range.max, approximate() || estimate.approximate());
                 case Unknown unknown -> UNKNOWN;
             };
         };
 
         @Override
         public NumberEstimate multiply(float value) {
-            return ranged(min * value, max * value, approximate);
+            return ranged(min * value, max * value, approximate());
         };
         
         @Override
         public NumberEstimate reciprocal() {
-            return ranged(1f / max, 1f / min, approximate);
+            return ranged(1f / max, 1f / min, approximate());
         };
 
         @Override
         public NumberEstimate negative() {
-            return ranged(-max, -min, approximate);
+            return ranged(-max, -min, approximate());
         };
 
         @Override
         public NumberEstimate pow(float exponent) {
             float a = (float)Math.pow(min, exponent);
             float b = (float)Math.pow(max, exponent);
-            return ranged(Math.min(a, b), Math.min(a, b), approximate);
+            return ranged(Math.min(a, b), Math.min(a, b), approximate());
         };
 
         @Override
         public NumberEstimate exp() {
-            return ranged((float)Math.exp(min), (float)Math.exp(max), approximate);
+            return ranged((float)Math.exp(min), (float)Math.exp(max), approximate());
         };
 
         @Override
         public NumberEstimate or(NumberEstimate estimate) {
             if (estimate instanceof Exact exact) {
                 if (exact.value > max) {
-                    return ranged(min, exact.value, approximate || estimate.approximate);
+                    return ranged(min, exact.value, approximate() || estimate.approximate());
                 } else if (exact.value < min) {
-                    return ranged(exact.value, max, approximate || estimate.approximate);
+                    return ranged(exact.value, max, approximate() || estimate.approximate());
                 } else return this;
             } else if (estimate instanceof Range range) {
-                return ranged(Math.min(min, range.min), Math.max(max, range.max), approximate || estimate.approximate);
+                return ranged(Math.min(min, range.min), Math.max(max, range.max), approximate() || estimate.approximate());
             } else return UNKNOWN;
         };
 
@@ -318,6 +378,11 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         public IntStream streamPossibleInts() {
             if (min == Float.NaN || max == Float.NaN) return IntStream.empty();
             return IntStream.range((int)min(), (int)max());
+        };
+
+        @Override
+        protected Neither<Exact, Range> wrap() {
+            return Neither.right(this);
         };
     };
 
@@ -388,6 +453,11 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         @Override
         public IntStream streamPossibleInts() {
             return IntStream.empty();
+        };
+
+        @Override
+        protected Neither<Exact, Range> wrap() {
+            return Neither.neither();
         };
 
     };

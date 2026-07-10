@@ -2,11 +2,18 @@ package petrolpark.mc.library.registry;
 
 import java.util.Locale;
 
+import net.createmod.catnip.net.base.BasePacketPayload;
+import net.createmod.catnip.net.base.CatnipPacketRegistry;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.server.level.ServerLevel;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.client.effectShaders.packet.InitEffectShaderPacket;
 import petrolpark.mc.library.core.client.effectShaders.packet.RemoveAllEffectShadersPacket;
 import petrolpark.mc.library.core.client.effectShaders.packet.RemoveEffectShaderPacket;
 import petrolpark.mc.library.core.client.effectShaders.packet.SyncMobEffectTotalDurationPacket;
+import petrolpark.mc.library.core.client.ponder.WatchedPonderPacket;
 import petrolpark.mc.library.core.client.texts.ReplyTextPacket;
 import petrolpark.mc.library.core.client.texts.RequestTextPacket;
 import petrolpark.mc.library.core.data.loot.wish.WishGrantedPacket;
@@ -21,13 +28,6 @@ import petrolpark.mc.library.experimental.actionrecord.packet.entrant.ICustomPac
 import petrolpark.mc.library.experimental.actionrecord.packet.entrant.PacketEntrants;
 import petrolpark.mc.library.experimental.actionrecord.packet.recordable.RecordablePacketPayload;
 
-import net.createmod.catnip.net.base.BasePacketPayload;
-import net.createmod.catnip.net.base.CatnipPacketRegistry;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
-import net.minecraft.server.level.ServerLevel;
-
 public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, ICustomPacketPayloadEntrant<RecordablePacketPayload> {
     
 	// Client -> server
@@ -35,6 +35,7 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
     BIND_TEAM_BLOCK(BindTeamBlockPacket.class, BindTeamBlockPacket.STREAM_CODEC),
 	REQUEST_INVENTORY_FULL_STATE(RequestInventoryFullStatePacket.class, RequestInventoryFullStatePacket.STREAM_CODEC, false),
 	REPLY_TEXT(ReplyTextPacket.class, ReplyTextPacket.STREAM_CODEC, false),
+	WATCH_PONDER(WatchedPonderPacket.class, WatchedPonderPacket.STREAM_CODEC, false),
 
 	// Server -> client
 	SINGLE_PLAYER_TEAM_COMPONENT_CHANGED(SinglePlayerTeamComponentChangedPacket.class, SinglePlayerTeamComponentChangedPacket.STREAM_CODEC, false),
