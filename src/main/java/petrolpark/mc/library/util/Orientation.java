@@ -4,6 +4,7 @@ import static petrolpark.mc.library.util.MathsHelper.VOXEL_BLOCK_CENTER;
 
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
@@ -19,6 +20,7 @@ import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Mirror;
 import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -65,6 +67,19 @@ public enum Orientation implements StringRepresentable {
         for (final Orientation orientation : values()) map.put(lookupKey(orientation.top, orientation.front), orientation);
     });
 
+    private static final Int2ObjectMap<Orientation> EDGE_ORIENTATION_LOOKUP = Util.make(new Int2ObjectOpenHashMap<>(values().length), map -> {
+        for (final Orientation orientation : values())
+            map.put(lookupKey(orientation.top, orientation.front), orientation.top.ordinal() > orientation.front.ordinal()
+                ? fromTopAndFront(orientation.front, orientation.top)
+                : orientation
+            );
+    });
+
+    public static final Orientation[] EDGE_ORIENTATIONS = Stream.of(values()).filter(o -> o.asEdge() == o).toArray(Orientation[]::new);
+
+    public static final EnumProperty<Orientation> ORIENTATION_PROPERTY = EnumProperty.create("orientation", Orientation.class);
+    public static final EnumProperty<Orientation> EDGE_ORIENTATION_PROPERTY = EnumProperty.create("orientation", Orientation.class, orientation -> orientation.top.ordinal() < orientation.front.ordinal());
+
     public static final Orientation fromTopAndFront(Direction top, Direction front) {
         if (top.getAxis() == front.getAxis()) throw new IllegalArgumentException("Front and top of an orientation must be different axes");
         return LOOKUP.get(lookupKey(top, front));
@@ -92,6 +107,10 @@ public enum Orientation implements StringRepresentable {
         return (top.ordinal() << 3) | front.ordinal();
     };
 
+    public Direction[] topAndFront() {
+        return new Direction[]{top, front};
+    };
+
     public Orientation rotate(Axis axis, Rotation rotation) {
         Direction top = this.top;
         Direction front = this.front;
@@ -104,6 +123,10 @@ public enum Orientation implements StringRepresentable {
 
     public Orientation mirror(Mirror mirror) {
         return fromTopAndFront(mirror.mirror(top), mirror.mirror(front));
+    };
+
+    public Orientation asEdge() {
+        return EDGE_ORIENTATION_LOOKUP.get(lookupKey(top, front));
     };
 
     public Vec3 transform(Vec3 point) {

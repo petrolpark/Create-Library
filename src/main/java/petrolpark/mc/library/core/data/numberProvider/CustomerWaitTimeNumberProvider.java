@@ -26,8 +26,9 @@ public class CustomerWaitTimeNumberProvider implements IEstimableNumberProvider 
     public float getFloat(LootContext context) {
         ICustomer customer = context.getParam(PetrolparkLootContextParams.CUSTOMER);
         if (customer == null) return 1f;
-        if (customer.getOrderTime() == ICustomer.INFINITE_ORDER_TIME) return 1f;
-        return 1f - ((float)customer.getElapsedOrderTime() / (float)customer.getOrderTime());
+        //if (customer.getOrderTime() == ICustomer.INFINITE_ORDER_TIME) return 1f;
+        //return 1f - ((float)customer.getElapsedOrderTime() / (float)customer.getOrderTime());
+        return 0f; //TODO
     };
 
     @Override

@@ -37,7 +37,9 @@ public interface ItemAdvancedIngredient extends IAdvancedIngredient<ItemStack>, 
     public static final StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super ItemStack>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE)
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::streamCodec);
 
-    public static final IAdvancedIngredient<? super ItemStack> IMPOSSIBLE = NotAdvancedIngredient.of(PassAdvancedIngredient.INSTANCE);
+    public static IAdvancedIngredient<? super ItemStack> impossible() {
+        return NotAdvancedIngredient.of(PassAdvancedIngredient.INSTANCE);
+    };
 
     @Override
     public boolean test(ItemStack stack);

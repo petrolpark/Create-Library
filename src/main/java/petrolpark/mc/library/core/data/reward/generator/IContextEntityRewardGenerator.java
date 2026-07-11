@@ -1,12 +1,10 @@
 package petrolpark.mc.library.core.data.reward.generator;
 
+import java.util.HashSet;
 import java.util.Set;
 
-import petrolpark.mc.library.core.data.IEntityTarget;
-
-import java.util.Collections;
-
 import net.minecraft.world.level.storage.loot.parameters.LootContextParam;
+import petrolpark.mc.library.core.data.IEntityTarget;
 
 public interface IContextEntityRewardGenerator extends IRewardGenerator {
 
@@ -14,6 +12,6 @@ public interface IContextEntityRewardGenerator extends IRewardGenerator {
 
     @Override
     public default Set<LootContextParam<?>> getReferencedContextParams() {
-        return Collections.singleton(target().getReferencedParam());
+        return new HashSet<>(target().getReferencedParam());
     };
 };

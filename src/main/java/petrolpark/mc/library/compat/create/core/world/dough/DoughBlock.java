@@ -8,11 +8,11 @@ import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -25,6 +25,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.neoforged.neoforge.common.util.FakePlayer;
 import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.FlagPoleBehaviour;
 import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.IRollableBlock;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
@@ -62,14 +63,14 @@ public class DoughBlock extends Block implements IBE<DoughBlockEntity>, IRollabl
     };
 
     @Override
-    public boolean canBeRollingPinRolled(Level level, BlockPos pos, Direction horizontalLookingDirection) {
-        return getBlockEntityOptional(level, pos).map(be -> be.doughData.isRollable(horizontalLookingDirection.getAxis() == Axis.Z)).orElse(false);
+    public boolean canBeRollingPinRolled(UseOnContext context) {
+        return getBlockEntityOptional(context.getLevel(), context.getClickedPos()).map(be -> be.doughData.isRollable(context.getHorizontalDirection().getAxis() == Axis.Z)).orElse(false);
     };
 
     @Override
-    public void rollingPinRoll(Level level, BlockPos pos, Direction horizontalLookingDirection, boolean automated) {
-        final boolean lengthwise = horizontalLookingDirection.getAxis() == Axis.Z;
-        withBlockEntityDo(level, pos, be -> be.modifyDough(dough -> dough.isRollable(lengthwise) ? dough.rolled(lengthwise, automated) : dough));
+    public void rollingPinRoll(UseOnContext context) {
+        final boolean lengthwise = context.getHorizontalDirection().getAxis() == Axis.Z;
+        withBlockEntityDo(context.getLevel(), context.getClickedPos(), be -> be.modifyDough(dough -> dough.isRollable(lengthwise) ? dough.rolled(lengthwise, context.getPlayer() != null && !(context.getPlayer() instanceof FakePlayer)) : dough));
     };
 
     @Override

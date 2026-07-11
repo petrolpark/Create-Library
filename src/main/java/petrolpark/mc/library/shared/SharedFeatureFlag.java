@@ -109,7 +109,7 @@ public enum SharedFeatureFlag implements StringRepresentable {
      */
     DRYING_RACK,
     /**
-     * Registers {@link SharedItems#EGGSHELL Eggshell} and {@link SharedItems#YOLK Yolk item}s, the {@link SharedCreateFluids#EGG_WHITES Egg White fluid} (if Create is present), and a {@link JuicingRecipe} recipe to obtain them if {@link SharedFeatureFlag#MESH_BASIN} is enabled.
+     * Registers {@link SharedItems#EGGSHELL Eggshell} and {@link SharedItems#YOLK Yolk item}s, the {@link SharedCreateFluids#EGG_WHITE Egg White fluid} (if Create is present), and a {@link JuicingRecipe} recipe to obtain them if {@link SharedFeatureFlag#MESH_BASIN} is enabled.
      * Also enables a chance of creating an Eggshell when a thrown egg lands.
      * @see CommonEvents#onProjectileImpact Eggshells landing
      * @see SharedLootTables#EGG

@@ -29,7 +29,7 @@ public interface DoughIngredient extends IAdvancedIngredient<DoughData> {
         .byNameCodec()
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::codec);
 
-    public static final Codec<IAdvancedIngredient<? super DoughData>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, Codec.unit(PassAdvancedIngredient.PASS)));
+    public static final Codec<IAdvancedIngredient<? super DoughData>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, Codec.unit(PassAdvancedIngredient.INSTANCE)));
 
     public static final Codec<IAdvancedIngredient<DoughData>> STRICT_CODEC = CODEC.comapFlatMap(DoughIngredient::cast, Function.identity());
 

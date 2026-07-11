@@ -4,7 +4,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.MapCodec;
 
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.loot.LootContext;
 import petrolpark.mc.library.core.data.reward.info.IRewardInfo;
 import petrolpark.mc.library.core.data.reward.info.WrappedRewardInfo;
@@ -30,7 +30,7 @@ public record AllTeamsPlayerReward(ITeamReward reward) implements IPlayerReward,
     public static final MapCodec<AllTeamsPlayerReward> CODEC = CodecHelper.singleFieldMap(ITeamReward.CODEC, "reward", AllTeamsPlayerReward::reward, AllTeamsPlayerReward::new);
 
     @Override
-    public boolean rewardPlayer(Player player, LootContext context, float multiplier, boolean simulate) {
+    public boolean rewardPlayer(ServerPlayer player, LootContext context, float multiplier, boolean simulate) {
         if (ITeam.streamAll(player).findAny().isEmpty()) return true; // Not in any teams
         return ITeam.streamAll(player).filter(team -> reward().reward(team, context, multiplier, simulate)).count() > 0l;
     };

@@ -28,7 +28,7 @@ public record FromArrayIngredientRandomizer(List<FromArrayIngredientRandomizer.E
 
     @Override
     public IAdvancedIngredient<? super ItemStack> generate(LootContext context) {
-        if (entries().size() == 0) return ItemAdvancedIngredient.IMPOSSIBLE;
+        if (entries().size() == 0) return ItemAdvancedIngredient.impossible();
         if (entries().size() == 1) return entries().get(1).ingredient();
 
         final List<FromArrayIngredientRandomizer.RolledEntry> weightedEntries = entries().stream().map(FromArrayIngredientRandomizer.roll(context)).toList();
@@ -39,7 +39,7 @@ public record FromArrayIngredientRandomizer(List<FromArrayIngredientRandomizer.E
             if (value <= 0f) return entry.ingredient();
         };
 
-        return ItemAdvancedIngredient.IMPOSSIBLE; // Unreachable
+        return ItemAdvancedIngredient.impossible(); // Unreachable
     };
 
     @Override

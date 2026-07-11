@@ -11,9 +11,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableMap;
-import petrolpark.mc.library.core.world.block.multiPart.MultiPartBlock.IPart;
-import petrolpark.mc.library.mixin.accessor.BlockAccessor;
-import petrolpark.mc.library.util.RayHelper;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceKey;
@@ -45,6 +42,9 @@ import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.common.CommonHooks;
+import petrolpark.mc.library.core.world.block.multiPart.MultiPartBlock.IPart;
+import petrolpark.mc.library.mixin.accessor.BlockAccessor;
+import petrolpark.mc.library.util.RayHelper;
 
 @ParametersAreNonnullByDefault
 public abstract class MultiPartBlock<PART extends IPart> extends Block {
@@ -61,6 +61,10 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
     public abstract Collection<PART> getParts(BlockState state);
 
     public abstract BlockState withoutPart(BlockState state, PART part);
+
+    public boolean canSurviveWithout(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid, PART part) {
+        return true;
+    };
 
     @Nullable
     public PART getTargetedPart(BlockState state, BlockPos pos, Entity entity) {
@@ -113,7 +117,7 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
     @Override
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         final PART part = getTargetedPart(state, pos, player);
-        if (part != null) {
+        if (part != null && canSurviveWithout(state, level, pos, player, willHarvest, fluid, part)) {
             level.setBlock(pos, withoutPart(state, part), 11);
             if (willHarvest) { // Actual Block breaking is cancelled, so do it here
                 player.awardStat(Stats.BLOCK_MINED.get(this));

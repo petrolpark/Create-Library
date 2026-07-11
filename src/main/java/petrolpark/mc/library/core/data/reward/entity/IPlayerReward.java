@@ -6,7 +6,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.storage.loot.LootContext;
 
 @ParametersAreNonnullByDefault
@@ -15,7 +14,7 @@ public interface IPlayerReward extends IEntityReward {
     public boolean rewardPlayer(ServerPlayer player, LootContext context, float multiplier, boolean simulate);
     
     /**
-     * @deprecated Override {@link IPlayerReward#rewardPlayer(Player, LootContext, float)} instead.
+     * @deprecated Override {@link IPlayerReward#rewardPlayer} instead.
      */
     @Override
     @Deprecated

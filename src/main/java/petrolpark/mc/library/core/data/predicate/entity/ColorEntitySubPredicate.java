@@ -27,7 +27,7 @@ import petrolpark.mc.library.util.ColorHelper;
  * <ul>
  * <li>{@code colors} - List of {@link DyeColor}s to match against. If empty, then the entity must also be colorless (which is true of all other vanilla entities than those mentioned). Note that Sheep are never colorless.
  * <li>{@code secondary} - Whether to check the secondary color of the entity (defaults to {@code false}). This is only applicable to Tropical Fish by default, which have a primary and secondary color.
- * </li>
+ * </ul>
  * 
  * @author petrolpark
  */

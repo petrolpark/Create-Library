@@ -56,7 +56,7 @@ public class MeanNumberProvider extends FunctionNumberProvider {
             if (estimate.unknown()) return estimate;
             min += estimate.min();
             max += estimate.max();
-            approximate |= estimate.approximate;
+            approximate |= estimate.approximate();
         };
         return NumberEstimate.ranged(min / estimates.size(), max / estimates.size(), approximate);
     };

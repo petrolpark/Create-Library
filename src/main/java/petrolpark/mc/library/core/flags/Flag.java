@@ -33,7 +33,7 @@ import petrolpark.mc.library.util.GraphHelper.CircularReferenceException;
 import petrolpark.mc.library.util.codec.CodecHelper;
 
 /**
- * <a href="https://github.com/petrolpark/Create-Library/wiki/Flags"> Wiki article
+ * <a href="https://github.com/petrolpark/Create-Library/wiki/Flags"> Wiki article </a>
  */
 @EventBusSubscriber
 public class Flag {

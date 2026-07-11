@@ -28,8 +28,9 @@ import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
  * <li> {@code item} - {@link ItemStack} to give to the recipient
  * </ul>
  * 
+ * <p>Note that the {@link AbstractGiveItemsReward#itemFunctions() late LootItemFunctions} are not carried to the client at all.</p>
+ * 
  * @author petrolpark
- * @apiNote The {@link AbstractGiveItemsReward#itemFunctions() late LootItemFunctions} are not carried to the client at all
  */
 @ParametersAreNonnullByDefault
 public class GiveItemReward extends AbstractGiveItemsReward implements ISimpleReward {

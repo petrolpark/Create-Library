@@ -14,7 +14,7 @@ import petrolpark.mc.library.util.Orientation;
 
 public abstract class OrientedBlock extends Block {
 
-    public static final EnumProperty<Orientation> ORIENTATION = EnumProperty.create("orientation", Orientation.class);
+    public static final EnumProperty<Orientation> ORIENTATION = Orientation.ORIENTATION_PROPERTY;
 
     public OrientedBlock(BlockBehaviour.Properties properties) {
         super(properties);

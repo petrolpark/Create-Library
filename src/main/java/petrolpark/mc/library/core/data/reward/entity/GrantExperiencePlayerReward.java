@@ -10,7 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.entity.player.Player;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
@@ -42,7 +42,7 @@ public record GrantExperiencePlayerReward(NumberProvider amount) implements IPla
     public static final MapCodec<GrantExperiencePlayerReward> CODEC = CodecHelper.singleFieldMap(NumberProviders.CODEC, "amount", GrantExperiencePlayerReward::amount, GrantExperiencePlayerReward::new);
 
     @Override
-    public boolean rewardPlayer(Player player, LootContext context, float multiplier, boolean simulate) {
+    public boolean rewardPlayer(ServerPlayer player, LootContext context, float multiplier, boolean simulate) {
         if (!simulate) player.giveExperiencePoints((int)(amount.getFloat(context) * multiplier));
         return true;
     };

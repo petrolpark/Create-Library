@@ -26,7 +26,7 @@ public interface CompatRecipeDeserializer<R extends Recipe<?>> {
     /**
      * Decoder that should emulate the Codec used by the other mod's {@link Recipe#getSerializer() Recipe Serializer}.
      * This Decoder should return a {@link DataResult#error} if there is a formatting issue with the Recipe,
-     * but a {@link DataResult#successMultiplier} containing an empty Optional if there is nothing unexpected with the JSON but it cannot be converted
+     * but a {@link DataResult#success} containing an empty Optional if there is nothing unexpected with the JSON but it cannot be converted
      * (for example, if the other mod's Recipe may optionally include Fluids but your Recipe cannot).
      */
     public Decoder<Optional<R>> decoder();

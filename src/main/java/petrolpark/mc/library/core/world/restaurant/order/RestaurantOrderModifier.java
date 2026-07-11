@@ -30,11 +30,12 @@ public record RestaurantOrderModifier(
     IAdvancedIngredient<? super ItemStack> ingredient,
     NumberProvider successMultiplier, NumberProvider failureMultiplier,
     IRestaurantOrder.Entry.Visibility visibility, boolean persistsToMenu
+    //TODO comment
 ) implements IRestaurantOrder.Entry, LootContextUser {
 
     public static final Codec<RestaurantOrderModifier> CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance -> 
         instance.group(
-            ItemAdvancedIngredient.CODEC.optionalFieldOf("requirement", PassAdvancedIngredient.PASS).forGetter(RestaurantOrderModifier::ingredient),
+            ItemAdvancedIngredient.CODEC.optionalFieldOf("requirement", PassAdvancedIngredient.INSTANCE).forGetter(RestaurantOrderModifier::ingredient),
             NumberProviders.CODEC.fieldOf("success").forGetter(RestaurantOrderModifier::successMultiplier),
             NumberProviders.CODEC.optionalFieldOf("failure", ConstantValue.exactly(0f)).forGetter(RestaurantOrderModifier::failureMultiplier)
         ).and(IRestaurantOrder.Entry.commonFields(instance))

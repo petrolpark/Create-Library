@@ -20,9 +20,6 @@ import com.llamalad7.mixinextras.sugar.Local;
 import com.llamalad7.mixinextras.sugar.Share;
 import com.llamalad7.mixinextras.sugar.ref.LocalIntRef;
 import com.llamalad7.mixinextras.sugar.ref.LocalRef;
-import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity;
-import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity.CompositeKineticBlockEntityPart;
-import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
 import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
@@ -30,6 +27,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity;
+import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity.CompositeKineticBlockEntityPart;
+import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
 
 @Mixin(RotationPropagator.class)
 public class RotationPropagatorMixin {
@@ -37,6 +37,21 @@ public class RotationPropagatorMixin {
     @Shadow
     private static void propagateMissingSource(KineticBlockEntity updateTE) {
         throw new AssertionError();
+    };
+
+    @WrapOperation(
+        method = "getRotationSpeedModifier",
+        at = @At(
+            value = "INVOKE",
+            target = "propagateRotationTo"
+        )
+    )
+    private static float petrolpark$checkSymmetricalPropagation(KineticBlockEntity from, KineticBlockEntity to, BlockState stateFrom, BlockState stateTo, BlockPos diff,  boolean connectedViaAxes, boolean connectedViaCogs, Operation<Float> original) {
+        float custom = original.call(from, to, stateFrom, stateTo, diff, connectedViaAxes, connectedViaCogs);
+        if (custom != 0f) return custom;
+        custom = original.call(to, from, stateTo, stateFrom, BlockPos.ZERO.subtract(diff), connectedViaAxes, connectedViaCogs);
+        if (custom == 0f) return custom;
+        return 1f / custom;
     };
   
     @Inject(

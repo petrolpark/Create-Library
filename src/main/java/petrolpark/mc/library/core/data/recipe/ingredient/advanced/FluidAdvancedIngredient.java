@@ -18,7 +18,7 @@ public interface FluidAdvancedIngredient extends IAdvancedIngredient<FluidStack>
         .byNameCodec()
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::codec);
 
-    public static final Codec<IAdvancedIngredient<? super FluidStack>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, Codec.unit(PassAdvancedIngredient.PASS)));
+    public static final Codec<IAdvancedIngredient<? super FluidStack>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, Codec.unit(PassAdvancedIngredient.INSTANCE)));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super FluidStack>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.ADVANCED_FLUID_INGREDIENT_TYPE)
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::streamCodec);

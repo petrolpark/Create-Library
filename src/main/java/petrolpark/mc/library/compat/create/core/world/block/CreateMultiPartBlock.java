@@ -2,8 +2,6 @@ package petrolpark.mc.library.compat.create.core.world.block;
 
 import org.jetbrains.annotations.Nullable;
 
-import petrolpark.mc.library.compat.create.core.world.block.CreateMultiPartBlock.ICreatePart;
-import petrolpark.mc.library.core.world.block.multiPart.MultiPartBlock;
 import com.simibubi.create.api.schematic.requirement.SpecialBlockItemRequirement;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.schematics.requirement.ItemRequirement;
@@ -15,6 +13,8 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import petrolpark.mc.library.compat.create.core.world.block.CreateMultiPartBlock.ICreatePart;
+import petrolpark.mc.library.core.world.block.multiPart.MultiPartBlock;
 
 public abstract class CreateMultiPartBlock<PART extends ICreatePart> extends MultiPartBlock<PART> implements SpecialBlockItemRequirement, IWrenchable {
     
@@ -27,7 +27,7 @@ public abstract class CreateMultiPartBlock<PART extends ICreatePart> extends Mul
         final Player player = context.getPlayer();
         if (player != null) {
             final PART part = clipperCache.get(state).clip(context.getClickedPos(), player);
-            if (part != null) {
+            if (part != null && canSurviveWithout(state, context.getLevel(), context.getClickedPos(), player, true, context.getLevel().getFluidState(context.getClickedPos()), part)) {
                 if (context.getLevel() instanceof ServerLevel serverLevel && !player.isCreative())
                     getPartDrops(part, state, serverLevel, context.getClickedPos(), serverLevel.getBlockEntity(context.getClickedPos()), player, context.getItemInHand())
                         .forEach(stack -> player.getInventory().placeItemBackInInventory(stack));

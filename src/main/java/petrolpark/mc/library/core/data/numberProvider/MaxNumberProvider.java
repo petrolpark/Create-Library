@@ -50,7 +50,7 @@ public class MaxNumberProvider extends FunctionNumberProvider {
             if (estimate.unknown()) return estimate;
             min = Math.max(min, estimate.min());
             max = Math.max(max, estimate.max());
-            approximate |= estimate.approximate;
+            approximate |= estimate.approximate();
         };
         return NumberEstimate.ranged(min, max, approximate);
     };
