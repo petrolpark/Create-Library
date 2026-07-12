@@ -11,6 +11,18 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public interface IReplaceableBlock {
 
+    public static boolean canReplace(Level level, BlockPos pos, BlockState existingState, BlockState newState, Player player) {
+        if (existingState.getBlock() instanceof IReplaceableBlock replaceableExisting) {
+            final BlockState replaced = replaceableExisting.getReplacedState(level, pos, existingState, newState, player);
+            if (replaced != null) return true;
+        };
+        if (newState.getBlock() instanceof IReplaceableBlock replaceableNew) {
+            final BlockState replaced = replaceableNew.getReplacedState(level, pos, existingState, newState, player);
+            if (replaced != null) return true;
+        };
+        return existingState.canBeReplaced();
+    };
+
     public default boolean canBeReplaced(Level level, BlockPos pos, BlockState existingState, BlockState newState, Player player) {
         return getReplacedState(level, pos, existingState, newState, player) != null;
     };

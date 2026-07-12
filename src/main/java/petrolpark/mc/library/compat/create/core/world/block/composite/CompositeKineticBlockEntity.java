@@ -44,7 +44,7 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
     };
 
     // Should not change in order
-    public abstract List<CompositeKineticBlockEntityPart> getParts();
+    public abstract List<? extends CompositeKineticBlockEntityPart> getParts();
 
     @Override
     public void setLevel(@Nonnull Level level) {
@@ -227,6 +227,11 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
         @Override
         public final boolean isVirtual() {
             return CompositeKineticBlockEntity.this.isVirtual();
+        };
+
+        @Override
+        public boolean isValidBlockState(@Nonnull BlockState state) {
+            return CompositeKineticBlockEntity.super.isValidBlockState(state);
         };
 
         public final void queueRotationIndicators() {

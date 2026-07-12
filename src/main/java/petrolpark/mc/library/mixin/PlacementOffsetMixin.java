@@ -1,4 +1,4 @@
-package petrolpark.mc.library.mixin.compat.create;
+package petrolpark.mc.library.mixin;
 
 import java.util.function.Function;
 
@@ -9,7 +9,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import petrolpark.mc.library.compat.create.core.world.block.IReplaceableBlock;
 
 import net.createmod.catnip.placement.PlacementOffset;
 import net.createmod.catnip.platform.services.ModHooksHelper;
@@ -21,6 +20,7 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
+import petrolpark.mc.library.compat.create.core.world.block.IReplaceableBlock;
 
 @Mixin(PlacementOffset.class)
 public abstract class PlacementOffsetMixin {
@@ -57,10 +57,12 @@ public abstract class PlacementOffsetMixin {
     )
     public boolean petrolpark$replaceState(ModHooksHelper hooks, Player player, Level level, BlockPos pos, BlockState newState, Operation<Boolean> original) {
         final BlockState existingState = level.getBlockState(pos);
-        if (existingState.getBlock() instanceof IReplaceableBlock replaceableBlock) {
-            return original.call(hooks,player, level, pos, replaceableBlock.getReplacedState(level, pos, existingState, newState, player));
-        } else if (newState.getBlock() instanceof IReplaceableBlock replaceableBlock) {
-            return original.call(hooks, player, level, pos, replaceableBlock.getReplacedState(level, pos, existingState, newState, player));
+        if (!existingState.canBeReplaced()) {
+            if (existingState.getBlock() instanceof IReplaceableBlock replaceableBlock) {
+                return original.call(hooks,player, level, pos, replaceableBlock.getReplacedState(level, pos, existingState, newState, player));
+            } else if (newState.getBlock() instanceof IReplaceableBlock replaceableBlock) {
+                return original.call(hooks, player, level, pos, replaceableBlock.getReplacedState(level, pos, existingState, newState, player));
+            };
         };
         return original.call(hooks, player, level, pos, newState);
     };

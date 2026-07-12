@@ -9,6 +9,8 @@ import java.util.stream.Stream;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.apache.commons.lang3.mutable.MutableObject;
+import org.joml.Matrix3f;
+import org.joml.Quaternionf;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -63,22 +65,25 @@ public enum Orientation implements StringRepresentable {
     public final Vec3 frontVec;
     public final Vec3 rightVec;
 
+    /** Rotation from the default {@code UP_SOUTH} orientation to this orientation. */
+    public final Quaternionf rotationFromUpSouth;
+
     private static final Int2ObjectMap<Orientation> LOOKUP = Util.make(new Int2ObjectOpenHashMap<>(values().length), map -> {
         for (final Orientation orientation : values()) map.put(lookupKey(orientation.top, orientation.front), orientation);
     });
 
     private static final Int2ObjectMap<Orientation> EDGE_ORIENTATION_LOOKUP = Util.make(new Int2ObjectOpenHashMap<>(values().length), map -> {
         for (final Orientation orientation : values())
-            map.put(lookupKey(orientation.top, orientation.front), orientation.top.ordinal() > orientation.front.ordinal()
-                ? fromTopAndFront(orientation.front, orientation.top)
-                : orientation
+            map.put(lookupKey(orientation.top, orientation.front), orientation.top.getAxis().ordinal() < orientation.front.getAxis().ordinal()
+                ? orientation
+                : fromTopAndFront(orientation.front, orientation.top)
             );
     });
 
-    public static final Orientation[] EDGE_ORIENTATIONS = Stream.of(values()).filter(o -> o.asEdge() == o).toArray(Orientation[]::new);
+    public static final Orientation[] EDGE_ORIENTATIONS = Stream.of(values()).filter(o -> o.top.getAxis().ordinal() < o.front.getAxis().ordinal()).toArray(Orientation[]::new);
 
     public static final EnumProperty<Orientation> ORIENTATION_PROPERTY = EnumProperty.create("orientation", Orientation.class);
-    public static final EnumProperty<Orientation> EDGE_ORIENTATION_PROPERTY = EnumProperty.create("orientation", Orientation.class, orientation -> orientation.top.ordinal() < orientation.front.ordinal());
+    public static final EnumProperty<Orientation> EDGE_ORIENTATION_PROPERTY = EnumProperty.create("orientation", Orientation.class, orientation -> orientation.top.getAxis().ordinal() < orientation.front.getAxis().ordinal());
 
     public static final Orientation fromTopAndFront(Direction top, Direction front) {
         if (top.getAxis() == front.getAxis()) throw new IllegalArgumentException("Front and top of an orientation must be different axes");
@@ -96,6 +101,12 @@ public enum Orientation implements StringRepresentable {
         topVec = Vec3.atLowerCornerOf(top.getNormal());
         frontVec = Vec3.atLowerCornerOf(front.getNormal());
         rightVec = Vec3.atLowerCornerOf(right.getNormal());
+
+        rotationFromUpSouth = new Quaternionf().setFromNormalized(new Matrix3f(
+            (float) rightVec.x(), (float) rightVec.y(), (float) rightVec.z(),
+            (float) topVec.x(), (float) topVec.y(), (float) topVec.z(),
+            (float) frontVec.x(), (float) frontVec.y(), (float) frontVec.z()
+        ));
     };
 
     @Override
