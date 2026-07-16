@@ -7,6 +7,7 @@ import com.mojang.serialization.MapCodec;
 import com.simibubi.create.api.registry.CreateRegistries;
 import com.simibubi.create.content.fluids.VirtualFluid;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
+import com.simibubi.create.foundation.data.CreateBlockEntityBuilder;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.VirtualFluidBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
@@ -49,6 +50,10 @@ public class AbstractPetrolparkCreateRegistrate<R extends AbstractPetrolparkCrea
     public <T extends ItemAttributeType> RegistryEntry<ItemAttributeType, T> itemAttributeType(String name, T type) {
         return simple(name, CreateRegistries.ITEM_ATTRIBUTE_TYPE, () -> type);
     };
+
+    public <T extends BlockEntity> CreateBlockEntityBuilder<T, R> createBlockEntity(String name, BlockEntityFactory<T> factory) {
+		return (CreateBlockEntityBuilder<T, R>)entry(name, (callback) -> CreateBlockEntityBuilder.create(self(), self(), name, callback, factory));
+	};
 
     public <T extends BlockEntity> SharedCreateBlockEntityBuilder<T, R> sharedCreateBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {
         return (SharedCreateBlockEntityBuilder<T, R>)sharedEntry(featureFlag, callback -> SharedCreateBlockEntityBuilder.create(self(), self(), featureFlag, getSharedPath(name), callback, factory));

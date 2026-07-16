@@ -60,6 +60,12 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
 
     public abstract Collection<PART> getParts(BlockState state);
 
+    /**
+     * Get the BlockState with the given part removed
+     * @param state
+     * @param part This is guaranteed to be {@link MultiPartBlock#getParts(BlockState) a part} of the given BlockState
+     * @return BlockState without the given part, respecting waterlogging. Can be air.
+     */
     public abstract BlockState withoutPart(BlockState state, PART part);
 
     public boolean canSurviveWithout(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid, PART part) {

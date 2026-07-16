@@ -179,6 +179,12 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
         return (PetrolparkBlockEntityBuilder<T, P>)entry(name, callback -> PetrolparkBlockEntityBuilder.create(this, parent, name, callback, factory));
     };
 
+    public <T extends BlockEntity> PetrolparkBlockEntityBuilder<T, R> uninstantiableBlockEntity(String name) {
+        return blockEntity(self(), name, (type, pos, state) -> {
+            throw new IllegalStateException("Cannot instantiate " + name);
+        });
+    };
+
     // No default lang
     @Override
     public <T extends Entity, P> PetrolparkEntityBuilder<T, P> entity(P parent, String name, EntityFactory<T> factory, MobCategory classification) {

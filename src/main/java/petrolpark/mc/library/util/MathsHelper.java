@@ -5,6 +5,7 @@ import java.util.Comparator;
 import org.apache.commons.math3.fraction.BigFraction;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.Vec3i;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.AABB;
@@ -108,5 +109,21 @@ public class MathsHelper {
 
     public static final int properWholeInt(BigFraction fraction) {
         return clampInt(properWhole(fraction));
+    };
+
+    public static final Axis getSecondaryAxis(Axis primaryAxis, boolean secondaryAxisIsFirst) {
+        return switch (primaryAxis) {
+            case X -> secondaryAxisIsFirst ? Axis.Y : Axis.Z;
+            case Y -> secondaryAxisIsFirst ? Axis.X : Axis.Z;
+            case Z -> secondaryAxisIsFirst ? Axis.X : Axis.Y;
+        };
+    };
+
+    public static final Axis getTertiaryAxis(Axis primaryAxis, boolean secondaryAxisIsFirst) {
+        return switch (primaryAxis) {
+            case X -> secondaryAxisIsFirst ? Axis.Z : Axis.Y;
+            case Y -> secondaryAxisIsFirst ? Axis.Z : Axis.X;
+            case Z -> secondaryAxisIsFirst ? Axis.Y : Axis.X;
+        };
     };
 };

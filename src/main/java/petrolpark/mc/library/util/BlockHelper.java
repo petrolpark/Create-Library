@@ -77,6 +77,12 @@ public class BlockHelper {
         return base.setValue(property, toCopy.getValue(property));
     };
 
+    /**
+     * Copy the values of all BlockState properties from {@code toCopy} to {@code base}, as long as {@code base} posseses that property.
+     * If it does not, that property is ignored.
+     * @param base
+     * @param toCopy
+     */
     public static final BlockState copyAll(BlockState base, BlockState toCopy) {
         for (Property<?> property : toCopy.getProperties()) {
             if (base.hasProperty(property)) base = copyUnchecked(base, toCopy, property);
