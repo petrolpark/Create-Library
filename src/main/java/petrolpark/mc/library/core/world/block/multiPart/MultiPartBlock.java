@@ -6,10 +6,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.google.common.base.Suppliers;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.core.BlockPos;
@@ -49,13 +51,14 @@ import petrolpark.mc.library.util.RayHelper;
 @ParametersAreNonnullByDefault
 public abstract class MultiPartBlock<PART extends IPart> extends Block {
 
-    protected final Map<BlockState, VoxelShape> shapeCache;
-    protected final Map<BlockState, Clipper<PART>> clipperCache;
+    protected final Supplier<Map<BlockState, VoxelShape>> shapeCache;
+    protected final Supplier<Map<BlockState, Clipper<PART>>> clipperCache;
 
     public MultiPartBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        shapeCache = getShapeForEachState(state -> getParts(state).stream().map(IPart::shape).reduce(Shapes.empty(), Shapes::or));
-        clipperCache = stateDefinition.getPossibleStates().stream().collect(ImmutableMap.toImmutableMap(Function.identity(), state -> Clipper.of(getParts(state))));
+        // Lazily-resolving
+        shapeCache = Suppliers.memoize(() -> getShapeForEachState(state -> getParts(state).stream().map(IPart::shape).reduce(Shapes.empty(), Shapes::or)));
+        clipperCache = Suppliers.memoize(() -> stateDefinition.getPossibleStates().stream().collect(ImmutableMap.toImmutableMap(Function.identity(), state -> Clipper.of(getParts(state)))));
     };
 
     public abstract Collection<PART> getParts(BlockState state);
@@ -74,7 +77,7 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
 
     @Nullable
     public PART getTargetedPart(BlockState state, BlockPos pos, Entity entity) {
-        return clipperCache.get(state).clip(pos, entity);
+        return clipperCache.get().get(state).clip(pos, entity);
     };
 
     @Override
@@ -97,7 +100,7 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
     };
 
     public VoxelShape getFullShape(BlockState state) {
-        return shapeCache.get(state);
+        return shapeCache.get().get(state);
     };
 
     @Override

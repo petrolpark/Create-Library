@@ -1,5 +1,8 @@
 {
   "values": [
-    "petrolpark:horse_mill_contraption"
+    {
+      "id": "petrolpark:shared/horse_mill_contraption",
+      "required": false
+    }
   ]
 }

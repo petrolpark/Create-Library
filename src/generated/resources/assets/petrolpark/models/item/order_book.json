@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "petrolpark:item/menu"
+    "layer0": "petrolpark:item/order_book"
   }
 }

@@ -26,7 +26,7 @@ public abstract class CreateMultiPartBlock<PART extends ICreatePart> extends Mul
     public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
         final Player player = context.getPlayer();
         if (player != null) {
-            final PART part = clipperCache.get(state).clip(context.getClickedPos(), player);
+            final PART part = clipperCache.get().get(state).clip(context.getClickedPos(), player);
             if (part != null && canSurviveWithout(state, context.getLevel(), context.getClickedPos(), player, true, context.getLevel().getFluidState(context.getClickedPos()), part)) {
                 if (context.getLevel() instanceof ServerLevel serverLevel && !player.isCreative())
                     getPartDrops(part, state, serverLevel, context.getClickedPos(), serverLevel.getBlockEntity(context.getClickedPos()), player, context.getItemInHand())

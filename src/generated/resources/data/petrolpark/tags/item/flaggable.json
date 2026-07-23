@@ -326,6 +326,10 @@
       "required": false
     },
     {
+      "id": "petrolpark:shared/circle_cookie_cutter",
+      "required": false
+    },
+    {
       "id": "petrolpark:shared/blood_bucket",
       "required": false
     },

@@ -141,7 +141,7 @@ dependencies {
     // Ponder/Flywhel (also bundled)
     jarJar(implementation("net.createmod.ponder:ponder-neoforge:${ponder_version}+mc${minecraft_version}"))
     jarJar(runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"))
-    // Sable companion (also bundled)
+    // Sable companion (also also bundled)
     jarJar(api("dev.ryanhcode.sable-companion:sable-companion-common-${minecraft_version}:${sable_companion_version}"))
 
     // SOFT DEPENDENCIES

@@ -126,4 +126,14 @@ public class MathsHelper {
             case Z -> secondaryAxisIsFirst ? Axis.Y : Axis.X;
         };
     };
+
+    public static final boolean isSecondaryAxis(Axis primaryAxis, Axis axis) {
+        if (primaryAxis == axis) throw new IllegalArgumentException("Expected different axes");
+        return axis == Axis.X || (primaryAxis == Axis.X && axis == Axis.Y);
+    };
+
+    public static final boolean isTertiaryAxis(Axis primaryAxis, Axis axis) {
+        if (primaryAxis == axis) throw new IllegalArgumentException("Expected different axes");
+        return axis == Axis.Z || (primaryAxis == Axis.Z && axis == Axis.Y);
+    };
 };

@@ -82,6 +82,10 @@ public class Lang {
         return path.substring(0, index + 1) + prefix + path.substring(index + 1);
     };
 
+    public static final ResourceLocation prependLocation(String prefix, ResourceLocation rl) {
+        return rl.withPath(path -> prependPath(prefix, path));
+    };
+
     public static Component shortList(List<? extends Component> elements, int maxTextWidth) {
         return shortList(elements, maxTextWidth, Minecraft.getInstance().font);
     };
