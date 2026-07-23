@@ -1,6 +1,7 @@
 package petrolpark.mc.library.mixin.compat.jei.client;
 
 import java.util.Arrays;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -17,11 +18,11 @@ import petrolpark.mc.library.shared.SharedFeatureFlag;
 import petrolpark.mc.library.util.Lang;
 
 import mezz.jei.api.helpers.IModIdHelper;
-import mezz.jei.api.ingredients.IIngredientHelper;
+import mezz.jei.api.ingredients.ITypedIngredient;
 import mezz.jei.library.helpers.ModIdHelper;
 import net.minecraft.world.item.ItemStack;
 
-@Mixin(ModIdHelper.class)
+@Mixin(value = ModIdHelper.class, remap = false)
 public abstract class ModIdHelperMixin implements IModIdHelper {
 
     private static final String SHARED_FEATURE_ID_KEY = Petrolpark.MOD_ID + "shared";
@@ -31,16 +32,21 @@ public abstract class ModIdHelperMixin implements IModIdHelper {
         method = "Lmezz/jei/library/helpers/ModIdHelper;getModNameForTooltip(Lmezz/jei/api/ingredients/ITypedIngredient;)Ljava/util/Optional;",
         at = @At(
             value = "INVOKE",
-            target = "Lmezz/jei/api/ingredients/IIngredientHelper;getDisplayModId(Ljava/lang/Object;)Ljava/lang/String;"
-        )
+            target = "Ljava/util/function/Function;apply(Ljava/lang/Object;)Ljava/lang/Object;",
+            ordinal = 0
+        ),
+        require = 1
     )
-    @SuppressWarnings("rawtypes")
-    public String petrolpark$getSharedFeatureModIds(IIngredientHelper instance, Object ingredient, Operation<String> original) {
-        if (ingredient instanceof ItemStack stack && stack.getItem() instanceof ISharedFeature sharedFeature) {
+    private Object petrolpark$getSharedFeatureModIds(Function<?, ?> instance, Object argument, Operation<Object> original) {
+        Object jeiResult = original.call(instance, argument);
+        if (argument instanceof ITypedIngredient<?> typedIngredient
+            && typedIngredient.getIngredient() instanceof ItemStack stack
+            && stack.getItem() instanceof ISharedFeature sharedFeature
+        ) {
             SharedFeatureFlag featureFlag = sharedFeature.getSharedFeatureFlag();
             if (featureFlag.enabled()) return SHARED_FEATURE_ID_KEY + DELIMITER + featureFlag.streamUsers().map(Mods::getId).collect(Collectors.joining(DELIMITER));
         };
-        return original.call(instance, ingredient);
+        return jeiResult;
     };
     
     @WrapMethod(
