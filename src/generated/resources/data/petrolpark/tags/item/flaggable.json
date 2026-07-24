@@ -1001,7 +1001,6 @@
     {
       "id": "petrolpark:shared/rolling_pin_holder",
       "required": false
-    },
-    "petrolpark:dough"
+    }
   ]
 }

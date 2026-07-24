@@ -4,19 +4,19 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.INamedAdvancedIngredientType;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ItemAdvancedIngredient;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlocks;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.INamedAdvancedIngredientType;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ItemAdvancedIngredient;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 public record DoughItemAdvancedIngredient(List<IAdvancedIngredient<DoughData>> doughIngredients) implements ItemAdvancedIngredient {
 
@@ -51,7 +51,7 @@ public record DoughItemAdvancedIngredient(List<IAdvancedIngredient<DoughData>> d
             stream = ingredient.modifyExamples(stream);
         };
         return stream.map(data -> {
-            final ItemStack stack = SharedCreateBlocks.DOUGH.asStack();
+            final ItemStack stack = PetrolparkCreateBlocks.DOUGH.asStack();
             stack.set(PetrolparkCreateDataComponentTypes.DOUGH, data);
             return stack;
         });
@@ -65,7 +65,7 @@ public record DoughItemAdvancedIngredient(List<IAdvancedIngredient<DoughData>> d
             stream = ingredient.modifyCounterExamples(stream);
         };
         return stream.map(data -> {
-            final ItemStack stack = SharedCreateBlocks.DOUGH.asStack();
+            final ItemStack stack = PetrolparkCreateBlocks.DOUGH.asStack();
             stack.set(PetrolparkCreateDataComponentTypes.DOUGH, data);
             return stack;
         });

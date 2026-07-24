@@ -10,13 +10,12 @@ import petrolpark.mc.library.compat.create.core.world.block.crushingWheel.Encase
 import petrolpark.mc.library.compat.create.core.world.block.tube.TubeStructuralBlockEntity;
 import petrolpark.mc.library.compat.create.core.world.dough.DoughBlockEntity;
 import petrolpark.mc.library.compat.create.core.world.dough.client.DoughBlockEntityRenderer;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
 
 @RequiresCreate
 public class PetrolparkCreateBlockEntityTypes {
 
     public static final BlockEntityEntry<DoughBlockEntity> DOUGH = REGISTRATE.<DoughBlockEntity>blockEntity("dough", DoughBlockEntity::new)
-        .validBlock(SharedCreateBlocks.DOUGH)
+        .validBlock(PetrolparkCreateBlocks.DOUGH)
         .renderer(() -> DoughBlockEntityRenderer::new)
         .register();
 

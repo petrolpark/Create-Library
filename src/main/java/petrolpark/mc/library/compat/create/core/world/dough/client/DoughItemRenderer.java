@@ -21,8 +21,8 @@ import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
 import net.neoforged.neoforge.client.extensions.common.RegisterClientExtensionsEvent;
 import petrolpark.mc.library.compat.create.core.world.dough.DoughBlockEntity;
 import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlocks;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
 
 public class DoughItemRenderer extends BlockEntityWithoutLevelRenderer implements IClientItemExtensions {
 
@@ -72,7 +72,7 @@ public class DoughItemRenderer extends BlockEntityWithoutLevelRenderer implement
 
     public static final void onRegisterClientExtensions(RegisterClientExtensionsEvent event) {
         final Minecraft mc = Minecraft.getInstance();
-        event.registerItem(new DoughItemRenderer(mc.getBlockEntityRenderDispatcher()), SharedCreateBlocks.DOUGH.get().asItem());
+        event.registerItem(new DoughItemRenderer(mc.getBlockEntityRenderDispatcher()), PetrolparkCreateBlocks.DOUGH.get().asItem());
     };
     
 };

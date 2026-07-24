@@ -36,6 +36,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.compat.create.RequiresCreate;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlocks;
 import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
 import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.CentrifugationRecipe;
 import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.PotionCentrifugation;
@@ -245,7 +246,7 @@ public class PetrolparkCreateJEI implements IModPlugin {
 
     @Override
     public void registerItemSubtypes(@Nonnull ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(SharedCreateBlocks.DOUGH.asItem(), DoughItemSubtypeInterpreter.INSTANCE);
+        registration.registerSubtypeInterpreter(PetrolparkCreateBlocks.DOUGH.asItem(), DoughItemSubtypeInterpreter.INSTANCE);
         if (SharedFeatureFlag.ROLLING_PIN.enabled()) registration.registerSubtypeInterpreter(SharedCreateItems.ROLLING_PIN.get(), WoodenItemSubtypeInterpreter.INSTANCE);
     };
 

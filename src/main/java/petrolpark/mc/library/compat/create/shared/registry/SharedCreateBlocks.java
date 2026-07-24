@@ -24,8 +24,6 @@ import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import petrolpark.mc.library.PetrolparkTags;
 import petrolpark.mc.library.compat.create.PetrolparkCreate;
-import petrolpark.mc.library.compat.create.core.world.dough.DoughBlock;
-import petrolpark.mc.library.compat.create.core.world.dough.DoughItem;
 import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.holder.RollingPinHolderBlock;
 import petrolpark.mc.library.compat.create.core.world.item.SharedAssemblyOperatorBlockItem;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
@@ -77,18 +75,6 @@ public class SharedCreateBlocks {
         .tag(PetrolparkTags.Items.FLAGGABLE.tag)
         .onRegister(PetrolparkCreate::registerTooltip)
         .build()
-        .register();
-
-    public static final BlockEntry<DoughBlock> DOUGH = REGISTRATE.block("dough", DoughBlock::new)
-        .properties(p -> p
-            .noOcclusion()
-            .instabreak()
-        ).color(() -> () -> DoughBlock::getColor) // For particles
-        .item(DoughItem::new)
-        .tag(PetrolparkTags.Items.FLAGGABLE.tag)
-        .properties(p -> p
-            .stacksTo(1)
-        ).build()
         .register();
 
     public static final BlockEntry<ExtrusionDieBlock> EXTRUSION_DIE = REGISTRATE.sharedBlock(SharedFeatureFlag.EXTRUSION, "extrusion_die", ExtrusionDieBlock::new)

@@ -26,9 +26,9 @@ import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.Fla
 import petrolpark.mc.library.compat.create.core.world.dough.client.DoughRenderer;
 import petrolpark.mc.library.compat.create.core.world.dough.client.RolledDoughModel;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlocks;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDoughTypes;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
 import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
 import petrolpark.mc.library.util.Neither;
 
@@ -41,7 +41,7 @@ public class DoughBlockEntity extends SmartBlockEntity implements Nameable {
     protected final DoughRenderer renderer = new DoughRenderer();
 
     public DoughBlockEntity(DoughData data) {
-        this(PetrolparkCreateBlockEntityTypes.DOUGH.get(), BlockPos.ZERO, SharedCreateBlocks.DOUGH.getDefaultState());
+        this(PetrolparkCreateBlockEntityTypes.DOUGH.get(), BlockPos.ZERO, PetrolparkCreateBlocks.DOUGH.getDefaultState());
         this.doughData = data;
         renderer.setFrom(data);
     };
