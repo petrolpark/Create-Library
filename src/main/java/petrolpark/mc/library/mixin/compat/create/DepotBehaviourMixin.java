@@ -36,7 +36,7 @@ public abstract class DepotBehaviourMixin extends BlockEntityBehaviour {
         remap = false
     )
     public ItemStack petrolpark$insertSpecialTransportedItemStack(TransportedItemStack heldItem, boolean simulate, Operation<ItemStack> original) {
-        if (!(heldItem instanceof SpecialTransportedItemStack) && heldItem.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) {
+        if (heldItem != null && !(heldItem instanceof SpecialTransportedItemStack) && heldItem.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) {
             heldItem = specialBeltItem.makeTransportedItemStack(heldItem);
         };
         return original.call(heldItem, simulate);
@@ -46,7 +46,7 @@ public abstract class DepotBehaviourMixin extends BlockEntityBehaviour {
         method = "setHeldItem"
     )
     public void petrolpark$setSpecialTransportedItemStack(TransportedItemStack newItem, Operation<Void> original) {
-        if (!(newItem instanceof SpecialTransportedItemStack) && newItem.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) {
+        if (newItem != null && !(newItem instanceof SpecialTransportedItemStack) && newItem.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) {
             newItem = specialBeltItem.makeTransportedItemStack(newItem);
             if (this.heldItem != null && this.heldItem instanceof DirectionalTransportedItemStack directionalExistingItem && newItem instanceof DirectionalTransportedItemStack directionalNewItemStack) {
                 directionalNewItemStack.setRotation(directionalExistingItem.getRotation());
