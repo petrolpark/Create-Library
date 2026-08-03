@@ -1,9 +1,12 @@
 package petrolpark.mc.library.compat.create.core.world.block;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import petrolpark.mc.library.compat.create.core.world.block.CreateMultiPartBlock.ICreatePart;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
@@ -18,6 +21,8 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import petrolpark.mc.library.compat.create.core.world.block.CreateMultiPartBlock.ICreatePart;
+import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity;
 
 /**
  * Largely copied from {@link KineticBlock Create source code}.
@@ -47,6 +52,27 @@ public abstract class MultiPartKineticBlock<PART extends ICreatePart> extends Cr
 	@Override
 	public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
 		return false;
+	};
+
+	@Override
+	public void switchBlockState(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState oldState, @Nonnull BlockState newState) {
+		if (level.isClientSide() || areStatesKineticallyEquivalent(oldState, newState)) return;
+
+		final List<KineticBlockEntity> kbes = switch (level.getBlockEntity(pos)) {
+			case null -> Collections.emptyList();
+			case KineticBlockEntity kbe -> Collections.singletonList(kbe);
+			case CompositeKineticBlockEntity ckbe -> new ArrayList<>(ckbe.getParts());
+			default -> Collections.emptyList();
+		};
+
+		for (KineticBlockEntity kbe : kbes) {
+			if (kbe.hasNetwork()) kbe.getOrCreateNetwork().remove(kbe);
+            kbe.detachKinetics();
+            kbe.removeSource();
+            kbe.updateSpeed = true;
+		};
+
+		super.switchBlockState(level, pos, oldState, newState);
 	};
 
 	protected abstract boolean areStatesKineticallyEquivalent(BlockState oldState, BlockState newState);

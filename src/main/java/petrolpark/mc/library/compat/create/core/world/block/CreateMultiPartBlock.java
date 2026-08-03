@@ -17,7 +17,7 @@ import petrolpark.mc.library.compat.create.core.world.block.CreateMultiPartBlock
 import petrolpark.mc.library.core.world.block.multiPart.MultiPartBlock;
 
 public abstract class CreateMultiPartBlock<PART extends ICreatePart> extends MultiPartBlock<PART> implements SpecialBlockItemRequirement, IWrenchable {
-    
+
     protected CreateMultiPartBlock(BlockBehaviour.Properties properties) {
         super(properties);
     };
@@ -31,7 +31,7 @@ public abstract class CreateMultiPartBlock<PART extends ICreatePart> extends Mul
                 if (context.getLevel() instanceof ServerLevel serverLevel && !player.isCreative())
                     getPartDrops(part, state, serverLevel, context.getClickedPos(), serverLevel.getBlockEntity(context.getClickedPos()), player, context.getItemInHand())
                         .forEach(stack -> player.getInventory().placeItemBackInInventory(stack));
-                context.getLevel().setBlock(context.getClickedPos(), withoutPart(state, part), 11);
+                switchBlockState(context.getLevel(), context.getClickedPos(), state, withoutPart(state, part));
                 return InteractionResult.SUCCESS;
             };
         };
