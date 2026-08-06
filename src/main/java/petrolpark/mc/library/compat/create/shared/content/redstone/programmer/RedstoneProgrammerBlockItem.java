@@ -9,10 +9,6 @@ import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.Codec;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
-import petrolpark.mc.library.core.world.block.IPickUpPutDownBlock;
-import petrolpark.mc.library.shared.ISharedFeature;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
 import com.simibubi.create.content.redstone.link.LinkBehaviour;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
@@ -38,6 +34,10 @@ import net.minecraft.world.level.LevelAccessor;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
+import petrolpark.mc.library.core.world.block.IPickUpPutDownBlock;
+import petrolpark.mc.library.shared.ISharedFeature;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
 
 @ParametersAreNonnullByDefault
 public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFeature {
@@ -56,7 +56,7 @@ public class RedstoneProgrammerBlockItem extends BlockItem implements ISharedFea
         final LinkBehaviour linkBehaviour = BlockEntityBehaviour.get(context.getLevel(), context.getClickedPos(), LinkBehaviour.TYPE);
         if (linkBehaviour != null) {
             final Couple<Frequency> frequency = linkBehaviour.getNetworkKey();
-            if (frequency.both(freq -> !freq.getStack().isEmpty())) {
+            if (!frequency.both(freq -> freq.getStack().isEmpty())) {
                 final Optional<ItemStackRedstoneProgram> programOp = getProgram(stack, player.level(), player);
                 if (programOp.isPresent()) return programOp.get().tryAddNewChannel(frequency, player, false) ? InteractionResult.SUCCESS : InteractionResult.FAIL;
             };
