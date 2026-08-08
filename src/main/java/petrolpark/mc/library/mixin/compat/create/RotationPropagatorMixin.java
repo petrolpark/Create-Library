@@ -24,12 +24,14 @@ import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity;
 import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity.CompositeKineticBlockEntityPart;
 import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
+import petrolpark.mc.library.compat.create.core.world.block.entity.IOverridableKineticBlockEntity;
 
 @Mixin(RotationPropagator.class)
 public class RotationPropagatorMixin {
@@ -210,5 +212,54 @@ public class RotationPropagatorMixin {
         final KineticBlockEntity sourceBE = kbe == currentBE ? neighbourBE : currentBE;
         ((IKineticBlockEntityDuck)kbe).setSourceIndex((sourceBE instanceof CompositeKineticBlockEntityPart part) ? part.getIndex() : null);
         original.call(kbe, source);
+    };
+
+    /**
+     * Trick definition of incompatible {@link RotationPropagator#propagateNewSource} line 232
+     */
+    @ModifyExpressionValue(
+        method = "propagateNewSource",
+        at = @At(
+            value = "INVOKE",
+            target = "signum",
+            ordinal = 1
+        )
+    )
+    private static float petrolpark$compatibleOverridable(float original, KineticBlockEntity currentTE, @Local(ordinal = 1) KineticBlockEntity neighbourTE, @Local(ordinal = 2) float newSpeed) {
+        if (
+            IOverridableKineticBlockEntity.isSourceOverridable(currentTE)
+            || IOverridableKineticBlockEntity.isSourceOverridable(neighbourTE)
+        ) return Math.signum(newSpeed);
+        return original;
+    };
+
+    @ModifyExpressionValue(
+        method = "propagateNewSource",
+        at = @At(
+            value = "INVOKE",
+            target = "abs",
+            ordinal = 3
+        )
+    )
+    private static float petrolpark$overrideCurrent(float original, KineticBlockEntity currentTE, @Local(ordinal = 0) float speedOfCurrent, @Local(ordinal = 3) float oppositeSpeed) {
+        if (IOverridableKineticBlockEntity.isSourceOverridable(currentTE)
+            && Mth.abs(speedOfCurrent) < Mth.abs(oppositeSpeed) // Prevent recursion if speeds already match
+        )
+            return 0f;
+        else 
+            return original;
+    };
+
+    @ModifyExpressionValue(
+        method = "propagateNewSource",
+        at = @At(
+            value = "INVOKE",
+            target = "abs",
+            ordinal = 5
+        )
+    )
+    private static float petrolpark$overrideNeighbour(float original, KineticBlockEntity currentTE, @Local(ordinal = 1) KineticBlockEntity neighbourTE) {
+        if (IOverridableKineticBlockEntity.isSourceOverridable(neighbourTE)) return 0f;
+        return original;
     };
 };
