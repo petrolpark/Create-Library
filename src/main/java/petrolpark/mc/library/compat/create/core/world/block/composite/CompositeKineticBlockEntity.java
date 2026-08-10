@@ -36,6 +36,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
+import petrolpark.mc.library.compat.create.core.world.block.entity.IOverridableKineticBlockEntity;
 import petrolpark.mc.library.util.NBTHelper;
 
 public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
@@ -373,7 +374,7 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
             } else if (hasSource()) {
 
                 // Staying below Overpowered speed
-                if (Math.abs(prevSpeed) >= Math.abs(speed)) {
+                if (Math.abs(prevSpeed) >= Math.abs(speed) && !IOverridableKineticBlockEntity.isSourceOverridable(this)) {
                     if (Math.signum(prevSpeed) != Math.signum(speed)) level.destroyBlock(getBlockPos(), true);
                     return;
                 };
