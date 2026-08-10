@@ -2,10 +2,9 @@ package petrolpark.mc.library.compat.create.core.world.block.composite;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.simibubi.create.AllBlocks;
 import com.simibubi.create.content.kinetics.base.HorizontalKineticBlock;
-import com.simibubi.create.content.kinetics.base.IRotate;
 
-import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
@@ -17,6 +16,9 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 
+/**
+ * Largely copied from {@link HorizontalKineticBlock Create source code}
+ */
 @ParametersAreNonnullByDefault
 public abstract class HorizontalCompositeKineticBlock extends CompositeKineticBlock {
 
@@ -28,35 +30,14 @@ public abstract class HorizontalCompositeKineticBlock extends CompositeKineticBl
 
     @Override
 	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-		builder.add(HORIZONTAL_FACING);
-		super.createBlockStateDefinition(builder);
+		super.createBlockStateDefinition(builder.add(HORIZONTAL_FACING));
 	};
 
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
-        final Direction preferred = getPreferredHorizontalFacing(context);
+        final Direction preferred = AllBlocks.MECHANICAL_PRESS.get().getPreferredHorizontalFacing(context); // Just any old HorizontalKineticBlock - getPreferredHorizontalFacing isn't static
 		if (preferred != null) return defaultBlockState().setValue(HORIZONTAL_FACING, preferred.getOpposite());
 		return defaultBlockState().setValue(HORIZONTAL_FACING, context.getHorizontalDirection().getOpposite());
-	};
-
-    /**
-     * Copied from {@link HorizontalKineticBlock#getPreferredHorizontalFacing Creat source code}
-     */
-	public Direction getPreferredHorizontalFacing(BlockPlaceContext context) {
-		Direction preferredSide = null;
-		for (Direction side : Iterate.horizontalDirections) {
-			BlockState blockState = context.getLevel().getBlockState(context.getClickedPos().relative(side));
-			if (blockState.getBlock() instanceof IRotate rotate) {
-				if (rotate.hasShaftTowards(context.getLevel(), context.getClickedPos().relative(side), blockState, side.getOpposite()))
-					if (preferredSide != null && preferredSide.getAxis() != side.getAxis()) {
-						preferredSide = null;
-						break;
-					} else {
-						preferredSide = side;
-					};
-			};
-		};
-		return preferredSide;
 	};
 
 	@Override

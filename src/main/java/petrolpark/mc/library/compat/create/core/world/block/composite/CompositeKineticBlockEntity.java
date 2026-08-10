@@ -31,6 +31,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -227,6 +228,11 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
         @Override
         public final boolean isVirtual() {
             return CompositeKineticBlockEntity.this.isVirtual();
+        };
+
+        @Override
+        protected Block getStressConfigKey() {
+            return CompositeKineticBlockEntity.super.getBlockState().getBlock();
         };
 
         @Override
