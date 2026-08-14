@@ -24,6 +24,7 @@ import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,6 +33,7 @@ import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeK
 import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity.CompositeKineticBlockEntityPart;
 import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
 import petrolpark.mc.library.compat.create.core.world.block.entity.IOverridableKineticBlockEntity;
+import petrolpark.mc.library.compat.create.core.world.block.entity.ISplitShaftKineticBlockEntity;
 
 @Mixin(RotationPropagator.class)
 public class RotationPropagatorMixin {
@@ -54,6 +56,15 @@ public class RotationPropagatorMixin {
         custom = original.call(to, from, stateTo, stateFrom, BlockPos.ZERO.subtract(diff), connectedViaAxes, connectedViaCogs);
         if (custom == 0f) return custom;
         return 1f / custom;
+    };
+
+    @Inject(
+        method = "getAxisModifier",
+        at = @At("HEAD"),
+        cancellable = true
+    )
+    private static void petrolpark$interfaceSplitShaftBlockEntityAxisModifiers(KineticBlockEntity be, Direction direction, CallbackInfoReturnable<Float> cir) {
+        if (be instanceof ISplitShaftKineticBlockEntity ssbe) cir.setReturnValue(ssbe.getRotationSpeedModifier(direction));
     };
   
     @Inject(

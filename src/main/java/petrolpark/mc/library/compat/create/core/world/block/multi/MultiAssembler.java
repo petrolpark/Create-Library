@@ -3,11 +3,14 @@ package petrolpark.mc.library.compat.create.core.world.block.multi;
 import java.util.EnumMap;
 import java.util.Optional;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 
+@ApiStatus.Experimental
 public abstract class MultiAssembler<M extends IMulti<? super M>> {
 
     /**

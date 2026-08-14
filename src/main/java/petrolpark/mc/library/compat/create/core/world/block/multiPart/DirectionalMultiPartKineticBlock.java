@@ -1,9 +1,8 @@
-package petrolpark.mc.library.compat.create.core.world.block.composite;
+package petrolpark.mc.library.compat.create.core.world.block.multiPart;
 
 import javax.annotation.Nonnull;
 
 import com.simibubi.create.AllBlocks;
-import com.simibubi.create.content.kinetics.base.DirectionalKineticBlock;
 
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
@@ -16,15 +15,13 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import petrolpark.mc.library.compat.create.core.world.block.multiPart.CreateMultiPartBlock.ICreatePart;
 
-/**
- * Largely copied from {@link DirectionalKineticBlock}
- */
-public abstract class DirectionalCompositeKineticBlock extends CompositeKineticBlock {
-    
+public abstract class DirectionalMultiPartKineticBlock<PART extends ICreatePart> extends MultiPartKineticBlock<PART> {
+
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-	public DirectionalCompositeKineticBlock(BlockBehaviour.Properties properties) {
+	public DirectionalMultiPartKineticBlock(BlockBehaviour.Properties properties) {
 		super(properties);
 	};
 
@@ -56,4 +53,5 @@ public abstract class DirectionalCompositeKineticBlock extends CompositeKineticB
 	public BlockState mirror(@Nonnull BlockState state, @Nonnull Mirror mirrorIn) {
 		return state.rotate(mirrorIn.getRotation(state.getValue(FACING)));
 	};
+    
 };

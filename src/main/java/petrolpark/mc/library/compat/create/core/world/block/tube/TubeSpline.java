@@ -40,7 +40,7 @@ public class TubeSpline extends ClampedCubicSpline {
     public static final int MAX_CONTROL_POINTS = 16;
 
     // Inputs
-    public final BlockFace start;
+    public final BlockFace start; //TODO replace 1.6.0
     public final BlockFace end;
 
     // Input parameters

@@ -1,10 +1,10 @@
 package petrolpark.mc.library.config;
 
-import petrolpark.mc.library.compat.Mods;
-import petrolpark.mc.library.compat.create.RequiresCreate;
 import com.simibubi.create.api.stress.BlockStressValues;
 
 import net.createmod.catnip.config.ConfigBase;
+import petrolpark.mc.library.compat.Mods;
+import petrolpark.mc.library.compat.create.RequiresCreate;
 
 public class PetrolparkServerConfig extends ConfigBase {
 
@@ -37,6 +37,7 @@ public class PetrolparkServerConfig extends ConfigBase {
     public final ConfigGroup compatibility = group(0, "compatibility");
         // Create
         public final ConfigGroup create = group(1, "create");
+            public final PetrolparkStressConfig stress = nested(2, PetrolparkStressConfig::new);
             public final ConfigBool createEncasedCrushingWheels = b(true, "encasedCrushingWheels", "Crushing Wheels can be encased in Brass Casing, allowing a Recipe filter to be set");
             public final ConfigBool createArmsTargetChainConveyors = b(false, "armsTargetChainConveyors", "[Must be enabled by a dependent]", "Whether Mechanical Arms can take from and place on Chain Conveyors");
             public final ConfigBool createChainConveyorDrying = b(true, "chainConveyorDrying", "Whether Drying Recipes can be done on Chain Conveyors");
@@ -62,7 +63,6 @@ public class PetrolparkServerConfig extends ConfigBase {
 
     @RequiresCreate
     private final void createConfigs() {
-        final PetrolparkStressConfig stress = nested(0, PetrolparkStressConfig::new);
 		BlockStressValues.CAPACITIES.registerProvider(stress::getCapacity);
 		BlockStressValues.IMPACTS.registerProvider(stress::getImpact);
     };

@@ -12,7 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import petrolpark.mc.library.compat.create.core.world.block.CreateMultiPartBlock;
+import petrolpark.mc.library.compat.create.core.world.block.multiPart.CreateMultiPartBlock;
 
 @ParametersAreNonnullByDefault
 public abstract class MultiPartCompositeKineticBlock<PART extends CreateMultiPartBlock.ICreatePart> extends CreateMultiPartBlock<PART> implements ICompositeKineticBlock {

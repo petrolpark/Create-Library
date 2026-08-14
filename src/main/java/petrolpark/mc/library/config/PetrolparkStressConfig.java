@@ -8,8 +8,6 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.Nullable;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.create.RequiresCreate;
 import com.simibubi.create.infrastructure.config.CStress;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
@@ -22,11 +20,11 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.common.ModConfigSpec;
 import net.neoforged.neoforge.common.ModConfigSpec.ConfigValue;
+import petrolpark.mc.library.Petrolpark;
 
 /**
  * Copied from {@link CStress Create source code}.
  */
-@RequiresCreate
 public class PetrolparkStressConfig extends ConfigBase {
 
     private static final Object2DoubleMap<ResourceLocation> DEFAULT_IMPACTS = new Object2DoubleOpenHashMap<>();

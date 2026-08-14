@@ -54,7 +54,7 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
     protected final Supplier<Map<BlockState, VoxelShape>> shapeCache;
     protected final Supplier<Map<BlockState, Clipper<PART>>> clipperCache;
 
-    public MultiPartBlock(BlockBehaviour.Properties properties) {
+    protected MultiPartBlock(BlockBehaviour.Properties properties) {
         super(properties);
         // Lazily-resolving
         shapeCache = Suppliers.memoize(() -> getShapeForEachState(state -> getParts(state).stream().map(IPart::shape).reduce(Shapes.empty(), Shapes::or)));

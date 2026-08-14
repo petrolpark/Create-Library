@@ -1,10 +1,13 @@
 package petrolpark.mc.library.compat.create.core.world.block.multi;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BehaviourType;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
+@ApiStatus.Experimental
 public abstract class MultiBehaviour<M extends IMulti<? super M>> extends BlockEntityBehaviour implements IMultiBehaviour<M> {
 
     public MultiBehaviour(SmartBlockEntity be) {

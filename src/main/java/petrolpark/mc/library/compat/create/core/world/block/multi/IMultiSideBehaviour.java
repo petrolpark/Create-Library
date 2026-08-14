@@ -1,7 +1,10 @@
 package petrolpark.mc.library.compat.create.core.world.block.multi;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import net.minecraft.core.Direction;
 
+@ApiStatus.Experimental
 public interface IMultiSideBehaviour<M extends IMulti<? super M>> extends IMultiBehaviour<M> {
     
     /**
