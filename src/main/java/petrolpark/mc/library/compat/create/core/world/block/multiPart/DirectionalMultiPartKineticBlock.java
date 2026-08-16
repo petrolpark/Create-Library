@@ -21,7 +21,7 @@ public abstract class DirectionalMultiPartKineticBlock<PART extends ICreatePart>
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
 
-	public DirectionalMultiPartKineticBlock(BlockBehaviour.Properties properties) {
+	protected DirectionalMultiPartKineticBlock(BlockBehaviour.Properties properties) {
 		super(properties);
 	};
 
@@ -41,6 +41,11 @@ public abstract class DirectionalMultiPartKineticBlock<PART extends ICreatePart>
                 : nearestLookingDirection.getOpposite());
 		};
 		return defaultBlockState().setValue(FACING, preferred.getOpposite());
+	};
+
+	@Override
+	protected boolean areStatesKineticallyEquivalent(@Nonnull BlockState oldState, @Nonnull BlockState newState) {
+		return oldState.getValue(FACING) == newState.getValue(FACING);
 	};
 
 	@Override

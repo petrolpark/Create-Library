@@ -16,9 +16,9 @@ import net.minecraft.world.level.material.FluidState;
 import petrolpark.mc.library.compat.create.core.world.block.multiPart.CreateMultiPartBlock.ICreatePart;
 
 @ParametersAreNonnullByDefault
-public abstract class WaterloggedDirectionalMultiPartKineticBlock<PART extends ICreatePart> extends DirectionalMultiPartKineticBlock<PART> implements ProperWaterloggedBlock {
-
-    protected WaterloggedDirectionalMultiPartKineticBlock(BlockBehaviour.Properties properties) {
+public abstract class WaterloggedMultiPartKineticBlock<PART extends ICreatePart> extends MultiPartKineticBlock<PART> implements ProperWaterloggedBlock {
+    
+    protected WaterloggedMultiPartKineticBlock(BlockBehaviour.Properties properties) {
         super(properties);
         registerDefaultState(defaultBlockState().setValue(WATERLOGGED, false));
     };
@@ -39,9 +39,13 @@ public abstract class WaterloggedDirectionalMultiPartKineticBlock<PART extends I
     };
 
     @Override
+    protected boolean areStatesKineticallyEquivalent(BlockState oldState, BlockState newState) {
+        return oldState.setValue(WATERLOGGED, false) == newState.setValue(WATERLOGGED, false);
+    };
+
+    @Override
     protected BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         updateWater(level, state, pos);
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
     };
-    
 };

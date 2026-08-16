@@ -1,10 +1,11 @@
 package petrolpark.mc.library.util;
 
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class FunctionHelper {
     
-    public static final <T> Supplier<T> memoizeNonNull(Supplier<T> delegate) {
+    public static final <T> Supplier<T> memoizeNonNull(final Supplier<T> delegate) {
 
         return new Supplier<>() {
             private volatile T value;
@@ -28,10 +29,17 @@ public class FunctionHelper {
         };
     };
 
-    public static final <T> Supplier<T> withFallback(Supplier<T> delegate, Supplier<T> fallback) {
+    public static final <T> Supplier<T> withFallback(final Supplier<? extends T> delegate, final Supplier<? extends T> fallback) {
         return () -> {
-            T value = delegate.get();
+            final T value = delegate.get();
             return value == null ? fallback.get() : value;
+        };
+    };
+
+    public static final <T, R> Function<T, R> withFallback(final Function<? super T, ? extends R> primary, final Function<? super T, ? extends R> fallback) {
+        return x -> {
+            final R result = primary.apply(x);
+            return result == null ? fallback.apply(x) : result;
         };
     };
 };

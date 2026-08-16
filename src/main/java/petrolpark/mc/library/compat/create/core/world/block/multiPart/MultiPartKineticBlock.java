@@ -9,12 +9,10 @@ import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import petrolpark.mc.library.compat.create.core.world.block.multiPart.CreateMultiPartBlock.ICreatePart;
@@ -45,11 +43,6 @@ public abstract class MultiPartKineticBlock<PART extends ICreatePart> extends Cr
 	};
 
 	@Override
-	public boolean hasShaftTowards(LevelReader world, BlockPos pos, BlockState state, Direction face) {
-		return false;
-	};
-
-	@Override
 	public void switchBlockState(@Nonnull Level level, @Nonnull BlockPos pos, @Nonnull BlockState oldState, @Nonnull BlockState newState) {
 		if (!level.isClientSide() && (
 				newState.getBlock() != this ||
@@ -64,7 +57,7 @@ public abstract class MultiPartKineticBlock<PART extends ICreatePart> extends Cr
 		KineticBlockEntity.switchToBlockState(level, pos, newState);
 	};
 
-	protected abstract boolean areStatesKineticallyEquivalent(BlockState oldState, BlockState newState);
+	protected abstract boolean areStatesKineticallyEquivalent(@Nonnull BlockState oldState, @Nonnull BlockState newState);
 
 	@Override
 	public void updateIndirectNeighbourShapes(@Nonnull BlockState stateIn, @Nonnull LevelAccessor worldIn, @Nonnull BlockPos pos, int flags, int count) {
