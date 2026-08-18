@@ -34,6 +34,7 @@ import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeK
 import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
 import petrolpark.mc.library.compat.create.core.world.block.entity.IOverridableKineticBlockEntity;
 import petrolpark.mc.library.compat.create.core.world.block.entity.ISplitShaftKineticBlockEntity;
+import petrolpark.mc.library.util.KineticsHelper;
 
 @Mixin(RotationPropagator.class)
 public class RotationPropagatorMixin {
@@ -249,12 +250,13 @@ public class RotationPropagatorMixin {
         at = @At(
             value = "INVOKE",
             target = "abs",
-            ordinal = 3
+            ordinal = 2
         )
     )
-    private static float petrolpark$overrideCurrent(float original, KineticBlockEntity currentTE, @Local(ordinal = 0) float speedOfCurrent, @Local(ordinal = 3) float oppositeSpeed) {
-        if (IOverridableKineticBlockEntity.isSourceOverridable(currentTE)
+    private static float petrolpark$overrideNeighbour(float original, KineticBlockEntity currentTE, @Local(ordinal = 1) KineticBlockEntity neighbourTE, @Local(ordinal = 0) float speedOfCurrent, @Local(ordinal = 3) float oppositeSpeed) {
+        if (IOverridableKineticBlockEntity.isSourceOverridable(neighbourTE)
             && Mth.abs(speedOfCurrent) < Mth.abs(oppositeSpeed) // Prevent recursion if speeds already match
+            && !KineticsHelper.isOrCanBePoweredBy(currentTE, neighbourTE)
         )
             return 0f;
         else 
@@ -266,11 +268,42 @@ public class RotationPropagatorMixin {
         at = @At(
             value = "INVOKE",
             target = "abs",
+            ordinal = 3
+        )
+    )
+    private static float petrolpark$overrideCurrent(float original, KineticBlockEntity currentTE, @Local(ordinal = 1) KineticBlockEntity neighbourTE, @Local(ordinal = 0) float speedOfCurrent, @Local(ordinal = 3) float oppositeSpeed) {
+        if (IOverridableKineticBlockEntity.isSourceOverridable(currentTE)
+            && Mth.abs(speedOfCurrent) < Mth.abs(oppositeSpeed) // Prevent recursion if speeds already match
+            && !KineticsHelper.isOrCanBePoweredBy(neighbourTE, currentTE)
+        )
+            return 0f;
+        else 
+            return original;
+    };
+
+    @ModifyExpressionValue(
+        method = "propagateNewSource",
+        at = @At(
+            value = "INVOKE",
+            target = "abs",
+            ordinal = 4
+        )
+    )
+    private static float petrolpark$overrideCurrent(float original, KineticBlockEntity currentTE, @Local(ordinal = 1) KineticBlockEntity neighbourTE) {
+        if (IOverridableKineticBlockEntity.isSourceOverridable(neighbourTE)) return 0f;
+        return original;
+    };
+
+    @ModifyExpressionValue(
+        method = "propagateNewSource",
+        at = @At(
+            value = "INVOKE",
+            target = "abs",
             ordinal = 5
         )
     )
-    private static float petrolpark$overrideNeighbour(float original, KineticBlockEntity currentTE, @Local(ordinal = 1) KineticBlockEntity neighbourTE) {
-        if (IOverridableKineticBlockEntity.isSourceOverridable(neighbourTE)) return 0f;
+    private static float petrolpark$overrideNeighbour(float original, KineticBlockEntity currentTE) {
+        if (IOverridableKineticBlockEntity.isSourceOverridable(currentTE)) return 0f;
         return original;
     };
 };

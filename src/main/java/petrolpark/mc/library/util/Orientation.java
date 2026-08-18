@@ -131,6 +131,10 @@ public enum Orientation implements StringRepresentable {
         return new Direction[]{top, front};
     };
 
+    public Orientation opposite() {
+        return fromTopAndFront(top.getOpposite(), front.getOpposite());
+    };
+
     public Orientation rotate(Axis axis, Rotation rotation) {
         Direction top = this.top;
         Direction front = this.front;
@@ -157,6 +161,7 @@ public enum Orientation implements StringRepresentable {
      * renders the correct edge, but with "front" and "top" swapped relative to this orientation's true pose.
      */
     public Orientation asEdgeBlockStateRotation() {
+        if (this != asEdge()) throw new IllegalStateException("Not an edge!");
         return switch (this) {
             case UP_SOUTH -> SOUTH_UP;
             case UP_NORTH -> NORTH_UP;
@@ -164,6 +169,26 @@ public enum Orientation implements StringRepresentable {
             case DOWN_NORTH -> NORTH_DOWN;
             default -> this;
         };
+    };
+    
+    /**
+     * Applies this {@link Orientation}'s {@link #blockStateXRotation} then {@link #blockStateYRotation} to {@code direction},
+     * matching how a baked model is actually rotated (via {@code x} then {@code y}) to reach this {@link Orientation}.
+     */
+    public Direction rotateByBlockState(Direction direction) {
+        for (int i = 0; i < (blockStateXRotation / 90) % 4; i++) direction = direction.getClockWise(Axis.X);
+        for (int i = 0; i < (blockStateYRotation / 90) % 4; i++) direction = direction.getClockWise(Axis.Y);
+        return direction;
+    };
+
+    /**
+     * The inverse of {@link #rotateByBlockState(Direction)} - finds which direction, before this {@link Orientation}'s
+     * blockstate rotation is applied, ends up facing {@code direction} afterwards.
+     */
+    public Direction unrotateByBlockState(Direction direction) {
+        for (int i = 0; i < (blockStateYRotation / 90) % 4; i++) direction = direction.getCounterClockWise(Axis.Y);
+        for (int i = 0; i < (blockStateXRotation / 90) % 4; i++) direction = direction.getCounterClockWise(Axis.X);
+        return direction;
     };
 
     public Vec3 transform(Vec3 point) {
