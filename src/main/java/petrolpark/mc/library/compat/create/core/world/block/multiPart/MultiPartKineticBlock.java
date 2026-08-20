@@ -3,14 +3,17 @@ package petrolpark.mc.library.compat.create.core.world.block.multiPart;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.IRotate;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -58,6 +61,17 @@ public abstract class MultiPartKineticBlock<PART extends ICreatePart> extends Cr
 	};
 
 	protected abstract boolean areStatesKineticallyEquivalent(@Nonnull BlockState oldState, @Nonnull BlockState newState);
+
+	@Override
+	public InteractionResult onWrenched(BlockState state, UseOnContext context) {
+		final Level level = context.getLevel();
+		final BlockPos pos = context.getClickedPos();
+		final BlockState rotated = getRotatedBlockState(state, context.getClickedFace());
+		if (!rotated.canSurvive(level, context.getClickedPos())) return InteractionResult.PASS;
+		switchBlockState(level, pos, state, updateAfterWrenched(rotated, context));
+		if (level.getBlockState(pos) != state) IWrenchable.playRotateSound(level, pos);
+		return InteractionResult.SUCCESS;
+	};
 
 	@Override
 	public void updateIndirectNeighbourShapes(@Nonnull BlockState stateIn, @Nonnull LevelAccessor worldIn, @Nonnull BlockPos pos, int flags, int count) {
