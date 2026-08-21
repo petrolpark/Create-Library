@@ -12,15 +12,15 @@ import petrolpark.mc.library.util.function.ObjInt2IntFunction;
 
 public class OptionalQuality {
 
-    static ObjDouble2DoubleFunction<IFlagPole<?, ?>> flagPoleDoubleMultiplier, flagPoleDoubleBigMultiplier, flagPoleDoubleReducer = (fp, b) -> b; 
-    static ObjInt2IntFunction<IFlagPole<?, ?>> flagPoleIntMultiplier, flagPoleIntBigMultiplier, flagPoleIntReducer = (fp, b) -> b; 
-    static ObjFloat2FloatFunction<IFlagPole<?, ?>> flagPoleFloatMultiplier, flagPoleFloatBigMultiplier, flagPoleFloatReducer = (fp, b) -> b;
-    static BiFunction<IFlagPole<?, ?>, Fraction, Fraction> flagPoleFractionMultiplier, flagPoleFractionBigMultiplier, flagPoleFractionReducer = (fp, b) -> b;
+    static ObjDouble2DoubleFunction<IFlagPole<?, ?>> flagPoleDoubleMultiplier = (fp, b) -> b, flagPoleDoubleBigMultiplier = (fp, b) -> b, flagPoleDoubleReducer = (fp, b) -> b; 
+    static ObjInt2IntFunction<IFlagPole<?, ?>> flagPoleIntMultiplier = (fp, b) -> b, flagPoleIntBigMultiplier = (fp, b) -> b, flagPoleIntReducer = (fp, b) -> b; 
+    static ObjFloat2FloatFunction<IFlagPole<?, ?>> flagPoleFloatMultiplier = (fp, b) -> b, flagPoleFloatBigMultiplier = (fp, b) -> b, flagPoleFloatReducer = (fp, b) -> b;
+    static BiFunction<IFlagPole<?, ?>, Fraction, Fraction> flagPoleFractionMultiplier = (fp, b) -> b, flagPoleFractionBigMultiplier = (fp, b) -> b, flagPoleFractionReducer = (fp, b) -> b;
 
-    static ObjDouble2DoubleFunction<ItemStack> itemStackDoubleMultiplier, itemStackDoubleBigMultiplier, itemStackDoubleReducer = (s, b) -> b; 
-    static ObjInt2IntFunction<ItemStack> itemStackIntMultiplier, itemStackIntBigMultiplier, itemStackIntReducer = (s, b) -> b; 
-    static ObjFloat2FloatFunction<ItemStack> itemStackFloatMultiplier, itemStackFloatBigMultiplier, itemStackFloatReducer = (s, b) -> b;
-    static BiFunction<ItemStack, Fraction, Fraction> itemStackFractionMultiplier, itemStackFractionBigMultiplier, itemStackFractionReducer = (s, b) -> b;
+    static ObjDouble2DoubleFunction<ItemStack> itemStackDoubleMultiplier = (s, b) -> b, itemStackDoubleBigMultiplier = (s, b) -> b, itemStackDoubleReducer = (s, b) -> b; 
+    static ObjInt2IntFunction<ItemStack> itemStackIntMultiplier = (s, b) -> b, itemStackIntBigMultiplier = (s, b) -> b, itemStackIntReducer = (s, b) -> b; 
+    static ObjFloat2FloatFunction<ItemStack> itemStackFloatMultiplier = (s, b) -> b, itemStackFloatBigMultiplier = (s, b) -> b, itemStackFloatReducer = (s, b) -> b;
+    static BiFunction<ItemStack, Fraction, Fraction> itemStackFractionMultiplier = (s, b) -> b, itemStackFractionBigMultiplier = (s, b) -> b, itemStackFractionReducer = (s, b) -> b;
   
     public static final double multiply(IFlagPole<?, ?> flagPole, double base) {
         return flagPoleDoubleMultiplier.apply(flagPole, base);
