@@ -80,7 +80,8 @@ public class ItemCompressionManager {
 
         // STACK COMPRESSIBLE ITEMS
         BuiltInRegistries.ITEM.stream()
-            .map(item -> item instanceof StackCompressibleItem sci ? sci : null)
+            .filter(item -> item instanceof StackCompressibleItem)
+            .map(item -> (StackCompressibleItem)item)
             .forEach(item -> COMPRESSIONS.put(new ItemStack(item), new CompressionRecipe(Ingredient.of(item), item.getMaxStackSize(new ItemStack(item)), new ItemStack(item.compressedItem))));
 
         COMPRESSIONS.replaceAll((stack, compression) -> compression == IItemCompression.NONE ? null : compression);

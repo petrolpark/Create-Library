@@ -4,7 +4,7 @@
             "position_offset": [0.0, 0.0, 0.625],
             "max_speed": 0.2,
             "stress_capacity": 512,
-            "harness_model": "petrolpark:block/harness/cow"
+            "harness_model": "petrolpark:block/shared/harness/cow"
         },
         "#petrolpark:has_horse_mill_properties_of/horse": {
             "position_offset": [0.0, 0.0, 0.6875],
@@ -18,25 +18,25 @@
                 "attribute": "petrolpark:horse.mill_stress_capacity",
                 "base": true
             },
-            "harness_model": "petrolpark:block/harness/horse"
+            "harness_model": "petrolpark:block/shared/harness/horse"
         },
         "#petrolpark:has_horse_mill_properties_of/undead_horse": {
             "position_offset": [0.0, 0.0, 0.6875],
             "max_speed": 0.2,
             "stress_capacity": 1024,
-            "harness_model": "petrolpark:block/harness/horse"
+            "harness_model": "petrolpark:block/shared/harness/horse"
         },
         "#petrolpark:has_horse_mill_properties_of/donkey": {
             "position_offset": [0.0, 0.0, 0.625],
             "max_speed": 0.3,
             "stress_capacity": 1024,
-            "harness_model": "petrolpark:block/harness/donkey"
+            "harness_model": "petrolpark:block/shared/harness/donkey"
         },
         "#petrolpark:has_horse_mill_properties_of/mule": {
             "position_offset": [0.0, 0.0, 0.625],
             "max_speed": 0.2,
             "stress_capacity": 2048,
-            "harness_model": "petrolpark:block/harness/donkey"
+            "harness_model": "petrolpark:block/shared/harness/donkey"
         }
 
     }

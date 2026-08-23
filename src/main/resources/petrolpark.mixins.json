@@ -6,6 +6,7 @@
     "plugin": "petrolpark.mc.library.mixin.plugin.PetrolparkMixinPlugin",
     "mixins": [
         "accessor.AbstractBuilderAccessor",
+        "accessor.BlockAccessor",
         "compat.create.accessor.BasinBlockEntityAccessor",
         "compat.create.accessor.BasinOperatingBlockEntityAccessor",
         "compat.create.accessor.ContraptionAccessor",

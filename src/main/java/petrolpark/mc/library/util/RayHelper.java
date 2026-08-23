@@ -4,6 +4,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
+import dev.ryanhcode.sable.companion.SableCompanion;
+import dev.ryanhcode.sable.companion.SubLevelAccess;
+import dev.ryanhcode.sable.companion.math.Pose3dc;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
@@ -128,15 +131,20 @@ public class RayHelper {
     };
 
     public static final int getHit(List<AABB> boxes, Entity entity) {
-        Vec3 view = entity.getViewVector(1f);
-        Vec3 ray = entity.getEyePosition().add(view.scale(getBlockReach(entity)));
+        final Vec3 view = entity.getViewVector(1f);
+        final Vec3 ray = entity.getEyePosition().add(view.scale(getBlockReach(entity)));
         return getHit(boxes, entity.getEyePosition(), ray);
     };
 
     public static final int getHitPositioned(List<AABB> boxes, Vec3 offset, Entity entity) {
-        Vec3 view = entity.getViewVector(1f);
-        Vec3 ray = entity.getEyePosition().add(view.scale(getBlockReach(entity)));
-        return getHit(boxes, entity.getEyePosition().subtract(offset), ray.subtract(offset));
+        final Vec3 view = entity.getViewVector(1f);
+        final Vec3 ray = entity.getEyePosition().add(view.scale(getBlockReach(entity)));
+        final SubLevelAccess subLevel = SableCompanion.INSTANCE.getContaining(entity.level(), offset);
+        if (subLevel != null) {
+            final Pose3dc pose = subLevel.logicalPose();
+            return getHit(boxes, pose.transformPositionInverse(entity.getEyePosition()).subtract(offset), pose.transformPositionInverse(ray).subtract(offset));
+        } else
+            return getHit(boxes, entity.getEyePosition().subtract(offset), ray.subtract(offset));
     };
     
 };
