@@ -3,7 +3,6 @@ package petrolpark.mc.library.core.client.rendering;
 import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import petrolpark.mc.library.Petrolpark;
 
 import net.createmod.catnip.gui.UIRenderHelper;
 import net.createmod.catnip.theme.Color;
@@ -11,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.Petrolpark;
 
 public enum PetrolparkGuiTexture implements IGuiTexture {
 

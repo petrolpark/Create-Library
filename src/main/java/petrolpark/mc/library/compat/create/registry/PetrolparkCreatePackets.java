@@ -2,20 +2,21 @@ package petrolpark.mc.library.compat.create.registry;
 
 import java.util.Locale;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.create.core.world.block.tube.BuildTubePacket;
-
 import net.createmod.catnip.net.base.BasePacketPayload;
 import net.createmod.catnip.net.base.BasePacketPayload.PacketTypeProvider;
 import net.createmod.catnip.net.base.CatnipPacketRegistry;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.create.core.world.block.tube.BuildTubePacket;
+import petrolpark.mc.library.compat.create.core.world.item.valueSettings.ItemValueSettingsPacket;
 
 public enum PetrolparkCreatePackets implements PacketTypeProvider {
 
 	// Client -> server
     BUILD_TUBE(BuildTubePacket.class, BuildTubePacket.STREAM_CODEC),
+	ITEM_VALUE_SETTINGS(ItemValueSettingsPacket.class, ItemValueSettingsPacket.STREAM_CODEC),
 
 	// Server -> client
 	;

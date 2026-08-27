@@ -48,6 +48,7 @@ import petrolpark.mc.library.core.scratch.symbol.block.IScratchBlock;
 import petrolpark.mc.library.core.scratch.symbol.expression.IScratchExpression;
 import petrolpark.mc.library.core.world.entity.animal.mood.AnimalMoodModifier;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
+import petrolpark.mc.library.core.world.item.crafting.pocket.crafter.IPocketCrafter;
 import petrolpark.mc.library.core.world.item.decay.product.DecayProductType;
 import petrolpark.mc.library.core.world.restaurant.Restaurant;
 import petrolpark.mc.library.core.world.restaurant.order.RestaurantOrderGenerator;
@@ -113,6 +114,7 @@ public class PetrolparkRegistries {
     public static final Registry<ITeam.ProviderType> TEAM_PROVIDER_TYPES = simple(Keys.TEAM_PROVIDER_TYPE);
     public static final Registry<Badge> BADGES = simple(Keys.BADGE);
     public static final Registry<ITradeListingReference.Type> TRADE_LISTING_REFERENCE_TYPES = simple(Keys.TRADE_LISTING_REFERENCE_TYPE);
+    public static final Registry<IPocketCrafter<?>> POCKET_CRAFTERS = simple(Keys.POCKET_CRAFTER);
 
     // Scratch
     public static final Registry<IScratchClassType> SCRATCH_CLASSES = simple(Keys.SCRATCH_CLASS_TYPE);
@@ -180,6 +182,7 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<ITeam.ProviderType>> TEAM_PROVIDER_TYPE = key("team_provider_type");
         public static final ResourceKey<Registry<Badge>> BADGE = key("badge");
         public static final ResourceKey<Registry<ITradeListingReference.Type>> TRADE_LISTING_REFERENCE_TYPE = key("trade_listing_reference_type");
+        public static final ResourceKey<Registry<IPocketCrafter<?>>> POCKET_CRAFTER = key("pocket_crafter");
 
         // Scratch
         public static final ResourceKey<Registry<IScratchClassType>> SCRATCH_CLASS_TYPE = key("scratch_class_type");

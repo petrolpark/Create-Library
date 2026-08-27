@@ -12,11 +12,6 @@ import javax.annotation.Nonnull;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgram.Channel;
-import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgram.PlayMode;
-import petrolpark.mc.library.compat.jei.ghost.IConditionalGhostSlot;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 import com.simibubi.create.foundation.gui.AllIcons;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
@@ -33,6 +28,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.Slot;
+import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgram.Channel;
+import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgram.PlayMode;
+import petrolpark.mc.library.compat.jei.ghost.IConditionalGhostSlot;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
 
 public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<RedstoneProgrammerMenu> {
 
@@ -538,7 +538,7 @@ public class RedstoneProgrammerScreen extends AbstractSimiContainerScreen<Redsto
     };
 
     @Override
-    protected void renderSlotHighlight(@Nonnull GuiGraphics guiGraphics, @Nonnull Slot slot, int mouseX, int mouseY, float partialTick) {
+    public void renderSlotHighlight(@Nonnull GuiGraphics guiGraphics, @Nonnull Slot slot, int mouseX, int mouseY, float partialTick) {
         if (slot instanceof IConditionalGhostSlot ghostSlot && ghostSlot.canSetGhostItem()) return;
         super.renderSlotHighlight(guiGraphics, slot, mouseX, mouseY, partialTick);
     };
