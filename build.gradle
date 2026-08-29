@@ -126,6 +126,7 @@ repositories {
     }
     flatDir {
         dirs "../petrolpark_local_maven/petrolpark/mc/pquality/pquality/${pquality_version}"
+        dirs "../petrolpark_local_maven/vectorwing/farmersdelight/FarmersDelight/${minecraft_version}-${farmers_delight_version}"
     }
 }
 
@@ -158,6 +159,8 @@ dependencies {
     implementation("maven.modrinth:jade:15.10.0+neoforge")
     // pquality
     implementation("petrolpark.mc.pquality:pquality:${pquality_version}")
+    // Farmer's Delight
+    implementation("vectorwing.farmersdelight:FarmersDelight-${minecraft_version}:${farmers_delight_version}")
 
     // TESTING ONLY
 

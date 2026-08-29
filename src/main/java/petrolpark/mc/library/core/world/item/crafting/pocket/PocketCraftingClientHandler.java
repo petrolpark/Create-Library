@@ -5,23 +5,33 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.lwjgl.glfw.GLFW;
 
 import it.unimi.dsi.fastutil.Hash;
+import it.unimi.dsi.fastutil.ints.Int2IntArrayMap;
+import it.unimi.dsi.fastutil.ints.Int2IntMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import it.unimi.dsi.fastutil.objects.ObjectOpenCustomHashSet;
 import net.createmod.catnip.animation.AnimationTickHolder;
 import net.createmod.catnip.data.Pair;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ContainerScreenEvent;
 import net.neoforged.neoforge.client.event.RenderTooltipEvent;
@@ -42,7 +52,8 @@ public class PocketCraftingClientHandler {
 
     protected final Int2ObjectMap<Int2ObjectMap<Slot>> menuSlots = new Int2ObjectArrayMap<>();
     protected final Int2ObjectMap<SlotGrid> menuGrids = new Int2ObjectArrayMap<>();
-    protected @Nullable IPocketCrafter<?> activeCrafter = null;
+
+    // SLOT SELECTION
 
     protected @Nullable Slot hoveredSlot = null;
     protected @Nullable Slot dragStartSlot = null;
@@ -51,13 +62,24 @@ public class PocketCraftingClientHandler {
     protected final Set<Slot> existingInputSlots = new ObjectOpenCustomHashSet<>(SLOT_HASH_STRATEGY);
     protected final Set<Slot> inputSlotsToModify = new ObjectOpenCustomHashSet<>(SLOT_HASH_STRATEGY);
     protected boolean removeInputSlotsToModify = false;
-
-    protected final Int2ObjectMap<IInterpretedSlot> interpretedSlots = new Int2ObjectArrayMap<>();
-
-    protected final List<BorderTexturePlacement> inputBorderTexturePlacements = new ArrayList<>();
     protected final Set<Slot> allInputSlots = new ObjectOpenCustomHashSet<>(SLOT_HASH_STRATEGY);
 
+    protected final Int2ObjectMap<List<IInterpretedSlot<?>>> slotInterpretations = new Int2ObjectArrayMap<>();
+    protected final Int2IntMap selectedSlotInterpretations = new Int2IntArrayMap();
+
+    // RECIPE
+
+    protected @Nullable ActiveCrafter<?> activeCrafter = null;
+    protected ItemStack toolStack = ItemStack.EMPTY;
+    protected int selectedRecipe = 0;
+    protected @Nullable PocketCrafting.Result craftingResult = null;
+
+    // RENDERING
+
+    protected final List<BorderTexturePlacement> inputBorderTexturePlacements = new ArrayList<>();
+
     protected int outputTooltipX, outputTooltipY;
+    protected final List<Component> tooltipLines = new ArrayList<>();
 
     public PocketCraftingClientHandler(Minecraft mc) {
         this.mc = mc;
@@ -74,7 +96,7 @@ public class PocketCraftingClientHandler {
         existingInputSlots.clear();
         inputSlotsToModify.clear();
 
-        interpretedSlots.clear();
+        slotInterpretations.clear();
         inputSlotsToModify.clear();
 
         inputBorderTexturePlacements.clear();
@@ -109,10 +131,10 @@ public class PocketCraftingClientHandler {
         // Set last dragged Slot
         final Slot dragStartSlot = this.dragStartSlot;
         if (dragStartSlot != null && dragEndSlot != hoveredSlot) { // If dragging
-            final SlotGrid dragGrid = menuGrids.get(dragStartSlot.index);
-            if (dragGrid != null && menuGrids.get(hoveredSlot.index) == dragGrid) {
+            final SlotGrid dragGrid = menuGrids.get(PocketCrafting.getIndex(dragStartSlot));
+            if (dragGrid != null && menuGrids.get(PocketCrafting.getIndex(hoveredSlot)) == dragGrid) {
                 dragEndSlot = hoveredSlot;
-                calculateInputSlots();
+                calculateInputSlots(event.getContainerScreen());
             };
         };
     };
@@ -213,12 +235,12 @@ public class PocketCraftingClientHandler {
 
     @SubscribeEvent
     public void onKeyPressed(ScreenEvent.KeyPressed.Pre event) {
+        if (!(event.getScreen() instanceof AbstractContainerScreen)) return;
 
         // TEMP
         if (event.getKeyCode() == GLFW.GLFW_KEY_C) {
-            activeCrafter = new CraftingPocketCrafter();
+            activeCrafter = new ActiveCrafter<>(new CraftingPocketCrafter());
         };
-
 
         if (activeCrafter == null) return;
         if (event.getKeyCode() == GLFW.GLFW_KEY_ESCAPE)
@@ -231,7 +253,48 @@ public class PocketCraftingClientHandler {
         cancel();
     };
 
-    public void calculateInputSlots() {
+    public void calculateTooltipLines() {
+        tooltipLines.clear();
+        final ActiveCrafter<?> activeCrafter = this.activeCrafter;
+        if (activeCrafter == null) return;
+
+        if (!allInputSlots.isEmpty() && activeCrafter.recipes().isEmpty())
+            tooltipLines.add(Component.translatable(Petrolpark.translationKey("pocketCrafting.tooltip.noRecipe")).withStyle(ChatFormatting.RED));
+        
+        if (craftingResult != null)
+            craftingResult.addToTooltip(tooltipLines::add);
+
+        if (hoveredSlot != null && existingInputSlots.contains(hoveredSlot))
+            tooltipLines.add(Component.translatable(Petrolpark.translationKey("pocketCrafting.control.deselectInput")).withStyle(ChatFormatting.GRAY));
+        else
+            tooltipLines.add(Component.translatable(Petrolpark.translationKey("pocketCrafting.control.selectInput")).withStyle(ChatFormatting.GRAY));
+
+        if (craftingResult != null && craftingResult.successful())
+            tooltipLines.add(Component.translatable(Petrolpark.translationKey("pocketCrafting.control.craft")));
+
+        tooltipLines.add(Component.translatable(Petrolpark.translationKey("pocketCrafting.control.cancel")).withStyle(ChatFormatting.GRAY));
+    };
+
+    public void calculateRecipes(AbstractContainerScreen<?> screen) {
+        final ActiveCrafter<?> activeCrafter = this.activeCrafter;
+        if (activeCrafter == null) return;
+        final ClientLevel level = mc.level;
+        if (level == null) return;
+        final LocalPlayer player = mc.player;
+        if (player == null) return;
+
+        activeCrafter.calculateRecipes(
+            new IPocketCraftingContext.Client.Impl(level, player, screen.getMenu(), toolStack),
+            allInputSlots.stream()
+                .mapToInt(PocketCrafting::getIndex)
+                .<IInterpretedSlot<?>>mapToObj(index -> slotInterpretations.get(index).get(selectedSlotInterpretations.get(index)))
+                .toList()
+        );
+
+        calculateTooltipLines();
+    };
+
+    public void calculateInputSlots(AbstractContainerScreen<?> screen) {
         final Slot dragStartSlot = this.dragStartSlot;
         final Slot dragEndSlot = this.dragEndSlot;
         if (dragStartSlot == null || dragEndSlot == null) return; // Should never fail
@@ -265,7 +328,31 @@ public class PocketCraftingClientHandler {
             allInputSlots.addAll(inputSlotsToModify);
         };
 
+        final ActiveCrafter<?> activeCrafter = this.activeCrafter;
+        final ClientLevel level = mc.level;
+        final LocalPlayer player = mc.player;
+        if (activeCrafter != null && level != null && player != null) {
+            final IPocketCraftingContext context = new IPocketCraftingContext.Client.Impl(level, player, screen.getMenu(), toolStack);
+            for (Slot slot : allInputSlots) {
+                calculateSlotInterpretation(context, activeCrafter.crafter(), slot);
+            };
+        };
+
+        calculateRecipes(screen);
         calculateInputSlotsToRender();
+    };
+
+    public void calculateSlotInterpretation(@Nonnull IPocketCraftingContext context, @Nonnull IPocketCrafter<?> crafter, @Nonnull Slot slot) {
+        final int slotIndex = PocketCrafting.getIndex(slot);
+        final List<IInterpretedSlot<?>> previousInterpretations = slotInterpretations.get(slotIndex);
+        final int previousInterpretationIndex = selectedSlotInterpretations.get(slotIndex);
+        final List<IInterpretedSlot<?>> interpretations = crafter.getSlotInterpretations(context, slot);
+        slotInterpretations.put(slotIndex, interpretations);
+        if (previousInterpretations != null && previousInterpretationIndex >= 0 && previousInterpretationIndex < previousInterpretations.size()) {
+            final IInterpretedSlot<?> previousInterpretation = previousInterpretations.get(previousInterpretationIndex);
+            final int interpretationIndex = interpretations.indexOf(previousInterpretation);
+            selectedSlotInterpretations.put(slotIndex, interpretationIndex != -1 ? interpretationIndex : 0);
+        };
     };
 
     public void calculateInputSlotsToRender() {
@@ -330,6 +417,18 @@ public class PocketCraftingClientHandler {
         return textures;
     };
 
+    public record ActiveCrafter<R extends Recipe<?>>(IPocketCrafter<R> crafter, List<RecipeHolder<? extends R>> recipes) {
+
+        public ActiveCrafter(IPocketCrafter<R> crafter) {
+            this(crafter, new ArrayList<>());  
+        };
+
+        public void calculateRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot<?>> slots) {
+            recipes().clear();
+            recipes().addAll(crafter().getRecipes(context, slots));
+        };
+    };
+
     public record BorderTexturePlacement(int x, int y, int uIndex, int vIndex) {
 
     };
@@ -338,7 +437,7 @@ public class PocketCraftingClientHandler {
 
         @Override
         public int hashCode(Slot o) {
-            return o.index;
+            return PocketCrafting.getIndex(o);
         };
 
         @Override
@@ -346,7 +445,7 @@ public class PocketCraftingClientHandler {
             if (a == null) return b == null;
             if (b == null)
                 return false;
-            return a.index == b.index;
+            return PocketCrafting.getIndex(a) == PocketCrafting.getIndex(b);
         };
         
     };

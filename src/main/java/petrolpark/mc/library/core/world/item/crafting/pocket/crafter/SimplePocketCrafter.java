@@ -26,10 +26,10 @@ public abstract class SimplePocketCrafter<I extends RecipeInput, R extends Recip
     public abstract Stream<RecipeType<? extends R>> streamRecipeTypes();
     
     @Nullable
-    public abstract I createRecipeInput(IPocketCraftingContext context, List<IInterpretedSlot> slots);
+    public abstract I createRecipeInput(IPocketCraftingContext context, List<IInterpretedSlot<?>> slots);
 
     @Override
-    public List<RecipeHolder<? extends R>> getRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot> slots) {
+    public List<RecipeHolder<? extends R>> getRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot<?>> slots) {
         final I input = createRecipeInput(context, slots);
         if (input == null) return Collections.emptyList();
         return streamRecipeTypes()
@@ -38,7 +38,7 @@ public abstract class SimplePocketCrafter<I extends RecipeInput, R extends Recip
     };
 
     @Override
-    public PocketCrafting.Result craft(IPocketCraftingContext context, boolean simulate, RecipeHolder<? extends R> recipeHolder, List<IInterpretedSlot> inputSlots, Slot outputSlot) {
+    public PocketCrafting.Result craft(IPocketCraftingContext context, boolean simulate, RecipeHolder<? extends R> recipeHolder, List<IInterpretedSlot<?>> inputSlots, Slot outputSlot) {
         final I input = createRecipeInput(context, inputSlots);
         if (input == null) return PocketCrafting.Result.FAIL;
         final ItemStack result = getResult(context.registries(), input, recipeHolder);

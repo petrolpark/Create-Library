@@ -91,11 +91,19 @@
 
     "curios.identifier.petrolpark_badge": "Badge",
 
-    "death.attack.petrolpark.blender": "%1$s was made into a milkshake",
-    "death.attack.petrolpark.extrusion_die": "%1$s extrusion died",
+    "death.attack.petrolpark.shared.alcohol_poisoning": "%1$s died of alcohol poisoning",
+    "death.attack.petrolpark.shared.blender": "%1$s was made into a milkshake",
+    "death.attack.petrolpark.shared.extrusion_die": "%1$s extrusion died",
+    "death.attack.petrolpark.shared.headache": "%1$s died of a splitting migraine",
 
     "dough.petrolpark.pasta_dough": "test dough",
 
+    "effect.petrolpark.shared.crying": "Crying",
+    "effect.petrolpark.shared.crying.description": "Release tears, with Ghasts releasing Ghast Tears",
+    "effect.petrolpark.shared.hangover": "Hangover",
+    "effect.petrolpark.shared.hangover.description": "Loud noises cause damage",
+    "effect.petrolpark.shared.inebriation": "Inebriation",
+    "effect.petrolpark.shared.inebriation.description": "Boosts strength and knockback, causes slipping (of the feet and mouse), can cause nausea, blindness and poison at higher levels, and leads to a hangover if slept with",
     "effect.petrolpark.shared.midas_touch": "Midas Touch",
     "effect.petrolpark.shared.midas_touch.description": "Everything touched turns to gold",
     "effect.petrolpark.miners_luck": "Miners' Luck",
@@ -321,6 +329,15 @@
     "petrolpark.packet_payload.build_tube": "Connect tubes between %1$s and %2$s",
     "petrolpark.packet_payload.bind_team_item": "Bind Team %1$s to main hand item", 
     "petrolpark.packet_payload.bind_team_block": "Bind Team %1$s to block at %2$s",
+
+    "petrolpark.pocketCrafting.control.cancel": "[esc] Cancel",
+    "petrolpark.pocketCrafting.control.selectInput": "[Right-click] Select input",
+    "petrolpark.pocketCrafting.control.deselectInput": "[Right-click] Deselect input",
+    "petrolpark.pocketCrafting.control.craft": "[Left-click] Craft",
+    "petrolpark.pocketCrafting.crafter.crafting": "Crafting",
+    "petrolpark.pocketCrafting.slotInterpretation.item": "Item",
+    "petrolpark.pocketCrafting.slotInterpretation.fluid": "Extracted Fluid",
+    "petrolpark.pocketCrafting.tooltip.noRecipe": "No recipe found for selection",
 
     "petrolpark.ponder.basin_lid.header": "Processing items with a lidded Basin",
     "petrolpark.ponder.basin_lid.text_1": "With a Basin and Basin Lid, some recipes can be automated",

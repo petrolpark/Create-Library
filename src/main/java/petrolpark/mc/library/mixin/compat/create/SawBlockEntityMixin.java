@@ -4,26 +4,30 @@ import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.flags.IFlagPole;
-import petrolpark.mc.library.core.flags.ItemFlagPole;
-import petrolpark.mc.library.core.world.item.decay.ItemDecay;
 import com.simibubi.create.content.kinetics.base.BlockBreakingKineticBlockEntity;
 import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
+import petrolpark.mc.library.PetrolparkTags;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.flags.IFlagPole;
+import petrolpark.mc.library.core.flags.ItemFlagPole;
+import petrolpark.mc.library.core.world.item.decay.ItemDecay;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.shared.world.effect.CryingMobEffect;
 
 @Mixin(value = SawBlockEntity.class, remap = false)
 public abstract class SawBlockEntityMixin extends BlockBreakingKineticBlockEntity {
@@ -36,32 +40,29 @@ public abstract class SawBlockEntityMixin extends BlockBreakingKineticBlockEntit
     @Shadow
     public ProcessingInventory inventory;
 
-    @Unique
-    ItemStack petrolpark$lastItemProcessed;
-
     @Inject(
         method = "applyRecipe()V",
-        at = @At("HEAD"),
-        remap = false
-    )
-    public void petrolpark$storeInputItem(CallbackInfo ci) {
-        petrolpark$lastItemProcessed = inventory.getStackInSlot(0);
-    };
-
-    @Inject(
-        method = "applyRecipe()V",
-        at = @At("RETURN"),
+        at = @At("TAIL"),
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
+    @SuppressWarnings("null")
     public void petrolpark$propagateFlagsAndStartDecay(CallbackInfo ci, ItemStack input, List<? extends Recipe<?>> recipes) {
         if (recipes.isEmpty()) return;
-        IFlagPole<?, ?> inputFlags = ItemFlagPole.get(petrolpark$lastItemProcessed);
+
+        // Propagate Flags
+        final IFlagPole<?, ?> inputFlags = ItemFlagPole.get(input);
         for (int slot = 0; slot < inventory.getSlots(); slot++) {
             ItemStack stack = inventory.getStackInSlot(slot);
             ItemDecay.startDecay(stack);
             Level level = getLevel();
             if (level != null && PetrolparkConfigs.server().createCuttingRecipesPropagateFlags.get()) ItemFlagPole.get(stack).flagAll(inputFlags.streamAllFlags());
+        };
+
+        // Make nearby entities cry
+        if (SharedFeatureFlag.CRYING.enabled() && PetrolparkTags.Items.CUTTING_CAUSES_CRYING.matches(input)) {
+            getLevel().getEntitiesOfClass(LivingEntity.class, new AABB(getBlockPos()).inflate(4d))
+                .forEach(entity -> entity.addEffect(CryingMobEffect.getDefaultInstance()));
         };
     };
 };

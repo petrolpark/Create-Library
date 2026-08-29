@@ -118,6 +118,7 @@
         "client.GameRendererMixin",
         "client.GuiMixin",
         "client.MinecraftMixin",
+        "client.MouseHandlerMixin",
         "client.RecipeBookComponentMixin",
         "client.CreativeModeInventoryScreenMixin",
         "client.GameRendererMixin",

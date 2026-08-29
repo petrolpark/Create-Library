@@ -5,12 +5,15 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.createmod.catnip.data.Pair;
+import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.inventory.Slot;
 
 public class PocketCrafting {
@@ -33,7 +36,7 @@ public class PocketCrafting {
             final SlotGrid grid = new SlotGrid();
             row.add(slot);
             grid.slots.add(slot);
-            grids.put(slot.index, grid);
+            grids.put(getIndex(slot), grid);
 
             // Expand as far to the right as possible
             Slot rightSlot = positionedSlots.get(slot.y).get(slot.x + 18);
@@ -42,7 +45,7 @@ public class PocketCrafting {
                 row.add(rightSlot);
                 grid.width++;
                 grid.slots.add(rightSlot);
-                grids.put(rightSlot.index, grid);
+                grids.put(getIndex(rightSlot), grid);
                 rightSlot = positionedSlots.get(slot.y).get(rightSlot.x + 18);
             };
 
@@ -58,13 +61,20 @@ public class PocketCrafting {
                 for (Slot belowSlot : nextRow) {
                     unsortedSlots.remove(belowSlot);
                     grid.slots.add(belowSlot);
-                    grids.put(belowSlot.index, grid);
+                    grids.put(getIndex(belowSlot), grid);
                 };
                 row = nextRow;
             };
         };
 
         return Pair.of(positionedSlots, grids);
+    };
+
+    public static int getIndex(Slot slot) {
+        if (slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
+            //TODO
+        };
+        return slot.index;
     };
 
     public static class SlotGrid {
@@ -93,5 +103,7 @@ public class PocketCrafting {
         };
 
         public boolean successful();
+
+        public default void addToTooltip(Consumer<Component> tooltip) {};
     };
 };
