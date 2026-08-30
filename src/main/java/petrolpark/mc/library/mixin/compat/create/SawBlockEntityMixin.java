@@ -14,19 +14,16 @@ import com.simibubi.create.content.kinetics.saw.SawBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
 import petrolpark.mc.library.PetrolparkTags;
 import petrolpark.mc.library.config.PetrolparkConfigs;
 import petrolpark.mc.library.core.flags.IFlagPole;
 import petrolpark.mc.library.core.flags.ItemFlagPole;
 import petrolpark.mc.library.core.world.item.decay.ItemDecay;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
 import petrolpark.mc.library.shared.world.effect.CryingMobEffect;
 
 @Mixin(value = SawBlockEntity.class, remap = false)
@@ -46,7 +43,6 @@ public abstract class SawBlockEntityMixin extends BlockBreakingKineticBlockEntit
         locals = LocalCapture.CAPTURE_FAILSOFT,
         remap = false
     )
-    @SuppressWarnings("null")
     public void petrolpark$propagateFlagsAndStartDecay(CallbackInfo ci, ItemStack input, List<? extends Recipe<?>> recipes) {
         if (recipes.isEmpty()) return;
 
@@ -60,9 +56,8 @@ public abstract class SawBlockEntityMixin extends BlockBreakingKineticBlockEntit
         };
 
         // Make nearby entities cry
-        if (SharedFeatureFlag.CRYING.enabled() && PetrolparkTags.Items.CUTTING_CAUSES_CRYING.matches(input)) {
-            getLevel().getEntitiesOfClass(LivingEntity.class, new AABB(getBlockPos()).inflate(4d))
-                .forEach(entity -> entity.addEffect(CryingMobEffect.getDefaultInstance()));
+        if (PetrolparkTags.Items.CUTTING_CAUSES_CRYING.matches(input)) {
+            CryingMobEffect.applyInRange(getLevel(), getBlockPos());
         };
     };
 };

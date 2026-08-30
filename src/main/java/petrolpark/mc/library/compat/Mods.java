@@ -36,6 +36,7 @@ public enum Mods implements StringRepresentable {
     CREATE_BITTERBALLEN("create_bic_bit"),
     CREATE_CONNECTED,
     CREATE_DIESEL_GENERATORS("createdieselgenerators"),
+    CREATE_ESTROGEN("createestrogen"),
     CREATE_GEARS_N_KINETICS("gnkinetics"),
     CURIOS,
     JEI,

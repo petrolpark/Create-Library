@@ -50,6 +50,7 @@
         "compat.create.SharedDepotBlockMethodsMixin",
         "compat.create.StressGaugeBlockEntityMixin",
         "compat.create.TransportedItemStackMixin",
+        "compat.farmersdelight.CuttingBoardBlockEntityMixin",
         "compat.jade.HorseStatsProviderMixin",
         "AbstractContainerMenuMixin",
         "AbstractCookingRecipeMixin",

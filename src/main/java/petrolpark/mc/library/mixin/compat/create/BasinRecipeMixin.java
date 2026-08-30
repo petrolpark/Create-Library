@@ -19,12 +19,10 @@ import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.burner.BlazeBurnerBlock;
 
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
@@ -123,7 +121,6 @@ public class BasinRecipeMixin {
         method = "Lcom/simibubi/create/content/processing/basin/BasinRecipe;apply(Lcom/simibubi/create/content/processing/basin/BasinBlockEntity;Lnet/minecraft/world/item/crafting/Recipe;Z)Z",
         at = @At("TAIL")
     )
-    @SuppressWarnings("null")
     private static final void petrolpark$causeCrying(BasinBlockEntity basin, Recipe<?> recipe, boolean test, CallbackInfoReturnable<Boolean> cir, @Share("causeCrying") LocalBooleanRef causeCrying) {
         if (
             SharedFeatureFlag.CRYING.enabled() &&
@@ -132,7 +129,6 @@ public class BasinRecipeMixin {
             ((BasinBlockEntityAccessor)basin).callGetOperator()
                 .filter(be -> be.getType() == SharedCreateBlockEntityTypes.BLENDER.get()).isPresent()
         )
-            basin.getLevel().getEntitiesOfClass(LivingEntity.class, new AABB(basin.getBlockPos()).inflate(4f))
-                .forEach(entity -> entity.addEffect(CryingMobEffect.getDefaultInstance()));
+            CryingMobEffect.applyInRange(basin.getLevel(), basin.getBlockPos());
     };
 };
