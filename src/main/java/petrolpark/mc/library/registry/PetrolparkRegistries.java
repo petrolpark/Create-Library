@@ -154,7 +154,8 @@ public class PetrolparkRegistries {
     @ApiStatus.Internal
     @SuppressWarnings("deprecation")
 	public static <T> Registry<T> register(ResourceKey<Registry<T>> key, boolean hasIntrusiveHolders) {
-		RegistryBuilder<T> builder = new RegistryBuilder<>(key).sync(true);
+		final RegistryBuilder<T> builder = new RegistryBuilder<>(key)
+            .sync(true);
 
 		if (hasIntrusiveHolders) builder.withIntrusiveHolders();
 

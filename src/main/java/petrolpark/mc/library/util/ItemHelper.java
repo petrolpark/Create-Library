@@ -23,6 +23,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -131,6 +132,18 @@ public class ItemHelper {
             if (entry instanceof NestedLootTable nestedTable) return nestedTable.contents.right().stream().flatMap(ItemHelper::streamPossibleItems);
             return Stream.empty();
         });
+    };
+    
+    public static void insertStartingWithSlot(Inventory inventory, ItemStack stack, int startingSlot) {
+        int slot = startingSlot;
+        while (true) {
+            if (slot >= inventory.items.size()) slot = 0;
+            if (slot == startingSlot) {
+                inventory.player.drop(stack, false);
+                return;
+            };
+            if (inventory.add(slot, stack)) return;
+        }
     };
 
     @Deprecated

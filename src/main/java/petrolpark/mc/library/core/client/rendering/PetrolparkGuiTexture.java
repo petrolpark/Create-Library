@@ -47,6 +47,10 @@ public enum PetrolparkGuiTexture implements IGuiTexture {
     // Creative Mode Tab
 	CREATIVE_MODE_TAB_BLANK_ROW("creative_inventory", 0, 0, 162, 18),
 
+	// Recipe arrow
+	RECIPE_ARROW("sprites/arrow", 0, 0, 18, 16, 36, 16),
+	RECIPE_ARROW_FAIL("sprites/arrow", 18, 0, 18, 16, 36, 16),
+
     // Redstone Programmer
     REDSTONE_PROGRAMMER("redstone_programmer/background", 256, 226),
 	REDSTONE_PROGRAMMER_NOTE_BORDER_MIDDLE("redstone_programmer/widgets", 192, 0, 4, 18),

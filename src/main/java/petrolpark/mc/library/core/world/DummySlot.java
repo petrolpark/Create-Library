@@ -4,14 +4,19 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 
 public final class DummySlot extends Slot {
 
-    public DummySlot(DummyContainer container, int slot) {
-        super(container, slot, 0, 0);
+    public DummySlot(Container container, int slot) {
+        this(container, slot, 0, 0);
+    };
+
+    public DummySlot(Container container, int slot, int x, int y) {
+        super(container, slot, x, y);
     };
 
     @Override
