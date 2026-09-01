@@ -322,10 +322,6 @@
       "required": false
     },
     {
-      "id": "petrolpark:shared/rolling_pin",
-      "required": false
-    },
-    {
       "id": "petrolpark:shared/circle_cookie_cutter",
       "required": false
     },
@@ -985,7 +981,6 @@
       "id": "petrolpark:shared/centrifuge",
       "required": false
     },
-    "petrolpark:dough",
     {
       "id": "petrolpark:shared/extrusion_die",
       "required": false
@@ -996,10 +991,6 @@
     },
     {
       "id": "petrolpark:shared/mandrel",
-      "required": false
-    },
-    {
-      "id": "petrolpark:shared/rolling_pin_holder",
       "required": false
     }
   ]

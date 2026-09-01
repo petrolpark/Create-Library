@@ -6,12 +6,6 @@ import java.util.List;
 import javax.annotation.Nonnull;
 
 import com.mojang.datafixers.util.Either;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateFluids;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.compat.jei.category.PetrolparkRecipeCategory;
-import petrolpark.mc.library.core.data.recipe.ExampleRecipe;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.foundation.gui.AllGuiTextures;
 
@@ -21,9 +15,18 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.FluidStack;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.PetrolparkTags;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateFluids;
+import petrolpark.mc.library.compat.jei.category.PetrolparkRecipeCategory;
+import petrolpark.mc.library.core.data.recipe.ExampleRecipe;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
 
 public class MysteriousConversionCategory extends PetrolparkRecipeCategory<ExampleRecipe> {
 
@@ -31,6 +34,7 @@ public class MysteriousConversionCategory extends PetrolparkRecipeCategory<Examp
 
 	static {
 		if (SharedFeatureFlag.BLENDER.enabled() && SharedFeatureFlag.BLOOD.enabled()) RECIPES.add(new RecipeHolder<>(Petrolpark.asResource("blood_from_blender"), new ExampleRecipe(Either.left(Ingredient.of(SharedCreateBlocks.BLENDER)), Either.right(new FluidStack(SharedCreateFluids.BLOOD.get().getSource(), 250)))));
+        if (SharedFeatureFlag.CRYING.enabled()) RECIPES.add(new RecipeHolder<>(Petrolpark.asResource("ghast_tears_from_crying"), new ExampleRecipe(Either.left(Ingredient.of(PetrolparkTags.Items.CUTTING_CAUSES_CRYING.tag)), Either.left(new ItemStack(Items.GHAST_TEAR)))));
     };
 
     public MysteriousConversionCategory(CreateRecipeCategory.Info<ExampleRecipe> info, IJeiHelpers helpers) {

@@ -19,7 +19,6 @@ import mezz.jei.api.registration.IGuiHandlerRegistration;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.registration.ISubtypeRegistration;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponents;
@@ -36,7 +35,6 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Blocks;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.compat.create.RequiresCreate;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlocks;
 import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
 import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.CentrifugationRecipe;
 import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.PotionCentrifugation;
@@ -45,7 +43,6 @@ import petrolpark.mc.library.compat.create.shared.content.processing.extrusion.E
 import petrolpark.mc.library.compat.create.shared.content.processing.meshBasin.BoilingRecipe;
 import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerScreen;
 import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateItems;
 import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 import petrolpark.mc.library.compat.jei.category.DecayingItemCategory;
 import petrolpark.mc.library.compat.jei.category.DecayingItemCategory.DecayingItemRecipe;
@@ -63,8 +60,6 @@ import petrolpark.mc.library.compat.jei.category.shared.JuicingCategory;
 import petrolpark.mc.library.compat.jei.category.shared.LiddedBasinCategory;
 import petrolpark.mc.library.compat.jei.category.shared.MysteriousConversionCategory;
 import petrolpark.mc.library.compat.jei.ghost.PetrolparkGhostIngredientHandler;
-import petrolpark.mc.library.compat.jei.subtypeInterpreter.DoughItemSubtypeInterpreter;
-import petrolpark.mc.library.compat.jei.subtypeInterpreter.WoodenItemSubtypeInterpreter;
 import petrolpark.mc.library.config.PetrolparkConfigs;
 import petrolpark.mc.library.core.data.recipe.ExampleRecipe;
 import petrolpark.mc.library.core.world.item.crafting.ManualOnlyCraftingRecipe;
@@ -243,12 +238,6 @@ public class PetrolparkCreateJEI implements IModPlugin {
 	public void registerRecipeCatalysts(@Nonnull IRecipeCatalystRegistration registration) {
 		ALL_CATEGORIES.forEach(c -> c.registerCatalysts(registration));
 	};
-
-    @Override
-    public void registerItemSubtypes(@Nonnull ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(PetrolparkCreateBlocks.DOUGH.asItem(), DoughItemSubtypeInterpreter.INSTANCE);
-        if (SharedFeatureFlag.ROLLING_PIN.enabled()) registration.registerSubtypeInterpreter(SharedCreateItems.ROLLING_PIN.get(), WoodenItemSubtypeInterpreter.INSTANCE);
-    };
 
     private <T extends Recipe<?>> CategoryBuilderImpl<T> builder(Class<? extends T> recipeClass) {
         return new CategoryBuilderImpl<>(recipeClass);

@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.registrate;
 
+import static petrolpark.mc.library.PetrolparkTags.commonItemTag;
+
 import java.util.Arrays;
 import java.util.function.Predicate;
 
@@ -46,8 +48,12 @@ public class PetrolparkRegistrateTags {
     @SuppressWarnings("deprecation")
     private static final void genItemTags(RegistrateTagsProvider<Item> provIn) {
         final CreateTagsProvider<Item> prov = new CreateTagsProvider<>(provIn, Item::builtInRegistryHolder);
+
+        prov.tag(PetrolparkTags.Items.CUTTING_CAUSES_CRYING.tag)
+            .addTag(commonItemTag("crops/onion"))
+            .addTag(commonItemTag("foods/onion"));
+
         final CreateTagAppender<Item> flaggableTagAppender = prov.tag(PetrolparkTags.Items.FLAGGABLE.tag);
-        
         tagAllNonBlocksAndEntities(flaggableTagAppender, ResourceLocation.DEFAULT_NAMESPACE,
             // Exclusions
             Items.AIR,

@@ -33,7 +33,6 @@
 
     "biome.petrolpark.unknown": "Unknown Biome",
 
-    "block.petrolpark.dough": "Dough",
     "block.petrolpark.tube": "Tube Segment",
     "block.petrolpark.shared.basin_lid": "Basin Lid",
     "block.petrolpark.shared.blender": "Blender",
@@ -70,7 +69,6 @@
     "block.petrolpark.shared.redstone_programmer.remove_bar": "Remove bar",
     "block.petrolpark.shared.redstone_programmer.remove_bar.hint": "Shift-click to remove a single note",
     "block.petrolpark.shared.redstone_programmer.editor": "Editor",
-    "block.petrolpark.shared.rolling_pin_holder": "Rolling Pin Holder",
     
     "commands.petrolpark.bogglepattern.list": "There are %s registered Boggle Patterns: %s",
     "commands.petrolpark.bogglepattern.show": "Boggle Pattern %s is:",
@@ -95,8 +93,6 @@
     "death.attack.petrolpark.shared.blender": "%1$s was made into a milkshake",
     "death.attack.petrolpark.shared.extrusion_die": "%1$s extrusion died",
     "death.attack.petrolpark.shared.headache": "%1$s died of a splitting migraine",
-
-    "dough.petrolpark.pasta_dough": "test dough",
 
     "effect.petrolpark.shared.crying": "Crying",
     "effect.petrolpark.shared.crying.description": "Release tears, with Ghasts releasing Ghast Tears",
@@ -146,12 +142,6 @@
     "advancedIngredient.petrolpark.holder_set.inverse": "Is none of:",
     "advancedIngredient.petrolpark.tag": "Tagged: %1$s",
     "advancedIngredient.petrolpark.tag.inverse": "Not Tagged: %1$s",
-    "advancedIngredient.dough.petrolpark.player_made": "Not made entirely automatically",
-    "advancedIngredient.dough.petrolpark.player_made.inverse": "Made entirely automatically",
-    "advancedIngredient.dough.petrolpark.thickness": "Thickness is %1$s pixels",
-    "advancedIngredient.dough.petrolpark.topping": "Topped with %1$s",
-    "advancedIngredient.dough.petrolpark.topping.inverse": "Not topped with %1$s",
-    "advancedIngredient.dough.petrolpark.type.inverse": "Not %1$s",
 
     "item.minecraft.lingering_potion.effect.petrolpark.shared.slipping": "Lingering Potion of Slipping",
     "item.minecraft.potion.effect.petrolpark.shared.slipping": "Potion of Slipping",
@@ -167,7 +157,6 @@
     "item.petrolpark.menu.team_selection": "Select Team for %1$s",
     "item.petrolpark.shared.blood_bucket": "Blood Bucket",
     "item.petrolpark.shared.butter": "Stick of Butter",
-    "item.petrolpark.shared.circle_cookie_cutter": "Circle Cookie Cutter",
     "item.petrolpark.shared.cream_bucket": "Cream Bucket",
     "item.petrolpark.shared.drying_rack": "%1$s Drying Rack",
     "item.petrolpark.shared.eggshell": "Eggshell",
@@ -176,7 +165,6 @@
     "item.petrolpark.shared.mashed_potato": "Mashed Potato",
     "item.petrolpark.shared.mesh": "Mesh",
     "item.petrolpark.shared.raw_fries": "Raw Fries",
-    "item.petrolpark.shared.rolling_pin": "%1$s Rolling Pin",
     "item.petrolpark.shulker_belt": "Shulker Belt",
     "item.petrolpark.shared.skimmed_milk_bucket": "Skimmed Milk Bucket",
     "item.petrolpark.shared.sunflower_oil_bottle": "Sunflower Oil Bottle",
@@ -306,8 +294,6 @@
     "petrolpark.gui.goggles.centrifuge": "Centrifuge Contents",
     "petrolpark.gui.goggles.centrifuge.inner": "Inner Chamber:",
     "petrolpark.gui.goggles.centrifuge.outer": "Outer Chamber:",
-    "petrolpark.gui.goggles.rolling_pin_holder.no_rolling_pin": "No Rolling Pin",
-    "petrolpark.gui.goggles.rolling_pin_holder.no_rolling_pin.info": "There is no _Rolling Pin_ loaded. _Right-Click_ with one to add it.",
     "petrolpark.gui.threshold_switch.stress_capacity_percentage": "%1$s%% Capacity",
 
     "petrolpark.key.hotbar.10": "Hotbar Slot 10",

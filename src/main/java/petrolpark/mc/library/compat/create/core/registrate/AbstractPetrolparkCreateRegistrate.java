@@ -1,9 +1,5 @@
 package petrolpark.mc.library.compat.create.core.registrate;
 
-import java.util.function.Function;
-
-import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.simibubi.create.api.registry.CreateRegistries;
 import com.simibubi.create.content.fluids.VirtualFluid;
 import com.simibubi.create.content.logistics.item.filter.attribute.ItemAttributeType;
@@ -15,9 +11,6 @@ import com.tterrag.registrate.builders.FluidBuilder;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 
-import net.minecraft.Util;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType.EntityFactory;
@@ -25,15 +18,6 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
-import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
-import petrolpark.mc.library.compat.create.core.world.dough.ingredient.DoughIngredient;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistries;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.GenericAdvancedIngredientType;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredientType;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.INamedAdvancedIngredientType;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ITypelessAdvancedIngredient;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.NamedAdvancedIngredientType;
 import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
 import petrolpark.mc.library.core.registrate.builder.shared.SharedCreateBlockEntityBuilder;
 import petrolpark.mc.library.core.registrate.builder.shared.SharedCreateEntityBuilder;
@@ -108,21 +92,4 @@ public class AbstractPetrolparkCreateRegistrate<R extends AbstractPetrolparkCrea
     public <T extends BaseFlowingFluid> FluidBuilder<T, R> sharedVirtualFluid(SharedFeatureFlag featureFlag, String name, ResourceLocation stillTexture, ResourceLocation flowingTexture, FluidBuilder.FluidTypeFactory typeFactory, NonNullFunction<BaseFlowingFluid.Properties, T> sourceFactory, NonNullFunction<BaseFlowingFluid.Properties, T> flowingFactory) {
 		return sharedEntry(featureFlag, c -> new VirtualFluidBuilder<>(self(), self(), getSharedPath(name), c, stillTexture, flowingTexture, typeFactory, sourceFactory, flowingFactory)).asOptional();
 	};
-
-    public RegistryEntry<IAdvancedIngredientType<? super DoughData>, NamedAdvancedIngredientType<DoughData>> doughIngredientType(String name, MapCodec<? extends DoughIngredient> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends DoughIngredient> streamCodec) {
-        return simple(name, PetrolparkCreateRegistries.Keys.DOUGH_INGREDIENT_TYPE, () -> new NamedAdvancedIngredientType<>(Util.makeDescriptionId("advancedIngredient.dough", ResourceLocation.fromNamespaceAndPath(getModid(), name)), codec, streamCodec));
-    };
-
-    public RegistryEntry<IAdvancedIngredientType<? super DoughData>, IAdvancedIngredientType<? super DoughData>> doughIngredientType(String name, IAdvancedIngredientType<? super DoughData> type) {
-        return simple(name, PetrolparkCreateRegistries.Keys.DOUGH_INGREDIENT_TYPE, () -> type);
-    };
-
-
-    public RegistryEntry<IAdvancedIngredientType<? super DoughData>, INamedAdvancedIngredientType<DoughData>> doughIngredientType(String name, NonNullFunction<String, INamedAdvancedIngredientType<DoughData>> typeFactory) {
-        return simple(name, PetrolparkCreateRegistries.Keys.DOUGH_INGREDIENT_TYPE, () -> typeFactory.apply(Util.makeDescriptionId("advancedIngredient", ResourceLocation.fromNamespaceAndPath(getModid(), name))));
-    };
-
-    public <TYPELESS_INGREDIENT extends ITypelessAdvancedIngredient<DoughData>> RegistryEntry<IAdvancedIngredientType<? super DoughData>, GenericAdvancedIngredientType<DoughData, TYPELESS_INGREDIENT>> doughIngredientType(String name, Function<Codec<IAdvancedIngredient<? super DoughData>>, MapCodec<TYPELESS_INGREDIENT>> codecFactory, Function<StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super DoughData>>, StreamCodec<? super RegistryFriendlyByteBuf, TYPELESS_INGREDIENT>> streamCodecFactory) {
-        return genericAdvancedIngredientType(PetrolparkCreateRegistries.Keys.DOUGH_INGREDIENT_TYPE, DoughIngredient.CODEC, DoughIngredient.STREAM_CODEC, name, codecFactory, streamCodecFactory);
-    };
 };

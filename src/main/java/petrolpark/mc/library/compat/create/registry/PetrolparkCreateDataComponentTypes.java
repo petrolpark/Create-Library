@@ -5,17 +5,15 @@ import java.util.function.UnaryOperator;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.create.core.world.dough.DoughData;
-import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgram;
-import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerBlockItem.ItemStackRedstoneProgram;
-
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponentType.Builder;
 import net.minecraft.core.registries.Registries;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgram;
+import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerBlockItem.ItemStackRedstoneProgram;
 
 public class PetrolparkCreateDataComponentTypes {
     private static final DeferredRegister.DataComponents DATA_COMPONENTS = DeferredRegister.createDataComponents(Registries.DATA_COMPONENT_TYPE, Petrolpark.MOD_ID);
@@ -28,11 +26,6 @@ public class PetrolparkCreateDataComponentTypes {
     public static final DataComponentType<ItemStackRedstoneProgram> REDSTONE_PROGRAM = register(
         "redstone_program",
         builder -> builder.persistent(RedstoneProgram.codec(ItemStackRedstoneProgram::new)).networkSynchronized(RedstoneProgram.streamCodec(ItemStackRedstoneProgram::new))
-    );
-
-    public static final DataComponentType<DoughData> DOUGH = register(
-        "dough",
-        builder -> builder.persistent(DoughData.CODEC).networkSynchronized(DoughData.STREAM_CODEC)
     );
 
     private static <T> DataComponentType<T> register(String name, UnaryOperator<Builder<T>> builder) {

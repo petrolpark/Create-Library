@@ -12,8 +12,6 @@ import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.compat.create.core.world.block.CopycatBlockConversion;
 import petrolpark.mc.library.compat.create.core.world.block.chainConveyor.ChainConveyorItemEvent;
 import petrolpark.mc.library.compat.create.core.world.block.crushingWheel.EncasedCrushingWheelControllerBlock;
-import petrolpark.mc.library.compat.create.core.world.block.entity.press.PressingRecipeSearchEvent;
-import petrolpark.mc.library.compat.create.core.world.dough.DoughRecipes;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HorseMillContraptionEntity;
 import petrolpark.mc.library.compat.create.shared.content.processing.blender.BlenderBlockEntity;
 import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.CentrifugationEvent;
@@ -74,10 +72,5 @@ public class CreateEvents {
     @SubscribeEvent
     public static final void onEntityTickPost(EntityTickEvent.Post event) {
         HorseMillContraptionEntity.onEntityTickPost(event);
-    };
-
-    @SubscribeEvent
-    public static final void onPressingRecipeSearch(PressingRecipeSearchEvent event) {
-        DoughRecipes.onPressingRecipeSearch(event);
     };
 };
