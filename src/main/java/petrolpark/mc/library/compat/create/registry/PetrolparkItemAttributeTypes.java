@@ -17,7 +17,6 @@ public class PetrolparkItemAttributeTypes {
     
     public static final RegistryEntry<ItemAttributeType, SimplePetrolparkItemAttribute>
     
-    IS_ANVIL_REPAIR_MATERIAL = REGISTRATE.simpleItemAttributeType("is_anvil_repair_material", (stack, level) -> ItemHelper.getKnownAnvilRepairItems().contains(stack.getItem())),
     IS_ANIMAL_FOOD = REGISTRATE.simpleItemAttributeType("is_animal_food", (stack, level) -> ItemHelper.getKnownAnimalFoods(level).contains(stack.getItem()));
 
     public static final RegistryEntry<ItemAttributeType, FlaggedItemAttribute.Type> FLAGGED = REGISTRATE.itemAttributeType("flagged", new FlaggedItemAttribute.Type());

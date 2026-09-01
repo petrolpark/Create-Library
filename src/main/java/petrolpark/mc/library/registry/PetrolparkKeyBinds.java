@@ -2,16 +2,18 @@ package petrolpark.mc.library.registry;
 
 import org.lwjgl.glfw.GLFW;
 
-import petrolpark.mc.library.Petrolpark;
-
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterKeyMappingsEvent;
+import petrolpark.mc.library.Petrolpark;
 
 @EventBusSubscriber(Dist.CLIENT)
 public enum PetrolparkKeyBinds {
+
+	//TEMP
+	POCKET_CRAFTING("qEFFWE", GLFW.GLFW_KEY_C),
     
 	// Tubes
     TUBE_BUILD("tube.build", GLFW.GLFW_KEY_ENTER),
@@ -32,18 +34,18 @@ public enum PetrolparkKeyBinds {
     ;
 
 	public KeyMapping keybind;
-	private String description;
-	private int key;
+	public final String description;
+	public final int defaultKey;
 
 	private PetrolparkKeyBinds(String description, int defaultKey) {
 		this.description = Petrolpark.MOD_ID + ".key." + description;
-		this.key = defaultKey;
+		this.defaultKey = defaultKey;
 	};
 
     @SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event) {
 		for (PetrolparkKeyBinds key : values()) {
-			key.keybind = new KeyMapping(key.description, key.key, "Petrolpark's Library");
+			key.keybind = new KeyMapping(key.description, key.defaultKey, "Petrolpark's Library");
 			event.register(key.keybind);
 		};
 	}

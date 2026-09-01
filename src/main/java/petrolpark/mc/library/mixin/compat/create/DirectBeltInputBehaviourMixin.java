@@ -20,7 +20,7 @@ public class DirectBeltInputBehaviourMixin {
         remap = false
     )
     public ItemStack petrolpark$insertDirectional(TransportedItemStack stack, Direction side, boolean simulate, Operation<ItemStack> original) {
-        if (!(stack instanceof SpecialTransportedItemStack) && stack.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) { // If not already cast to a Directional transported stack
+        if (stack != null && !(stack instanceof SpecialTransportedItemStack) && stack.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) { // If not already cast to a Directional transported stack
            stack = specialBeltItem.makeTransportedItemStack(stack);
         };
         return original.call(stack, side, simulate);

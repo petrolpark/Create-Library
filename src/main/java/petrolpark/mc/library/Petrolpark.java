@@ -47,6 +47,7 @@ import petrolpark.mc.library.registry.PetrolparkLootModifierTypes;
 import petrolpark.mc.library.registry.PetrolparkNeoForgeIngredientTypes;
 import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 import petrolpark.mc.library.registry.PetrolparkPackets;
+import petrolpark.mc.library.registry.PetrolparkPocketCrafters;
 import petrolpark.mc.library.registry.PetrolparkRecipeSerializers;
 import petrolpark.mc.library.registry.PetrolparkRecipeTypes;
 import petrolpark.mc.library.registry.PetrolparkRegistrateProviderTypes;
@@ -110,6 +111,7 @@ public class Petrolpark {
         PetrolparkLootModifierTypes.register();
         PetrolparkNumberProviderTypes.register();
         PetrolparkPackets.register();
+        PetrolparkPocketCrafters.register();
         PetrolparkRecipeSerializers.register();
         PetrolparkRecipeTypes.register();
         IPetrolparkRecipeTypes.register(modEventBus);
@@ -136,8 +138,8 @@ public class Petrolpark {
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
-        return new SharedFeatureFlag[]{};
-        //return new SharedFeatureFlag[]{SharedFeatureFlag.ROLLING_PIN};
+        //return new SharedFeatureFlag[]{};
+        return new SharedFeatureFlag[]{SharedFeatureFlag.CENTRIFUGE, SharedFeatureFlag.INEBRIATION, SharedFeatureFlag.CRYING};
     };
 
     private void init(final FMLCommonSetupEvent event) {

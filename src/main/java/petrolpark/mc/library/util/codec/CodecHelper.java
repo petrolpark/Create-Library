@@ -1,5 +1,6 @@
 package petrolpark.mc.library.util.codec;
 
+import java.nio.ByteBuffer;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -46,6 +47,7 @@ public class CodecHelper {
     public static final Codec<Float> POS_FLOAT = Codec.floatRange(0f, Float.MAX_VALUE);
     public static final Codec<Double> POS_DOUBLE = Codec.doubleRange(0f, Double.MAX_VALUE);
     public static final Codec<Float> UNIT_INTERVAL_FLOAT = Codec.floatRange(0f, 1f);
+    public static final Codec<byte[]> BYTE_ARRAY = Codec.BYTE_BUFFER.xmap(ByteBuffer::array, ByteBuffer::wrap);
 
     public static final Codec<Markings> HORSE_MARKINGS = Codec.stringResolver(markings -> Lang.asId(markings.name()), name -> Stream.of(Markings.values()).filter(markings -> Lang.asId(markings.name()).equals(name)).findFirst().orElse(null));
 

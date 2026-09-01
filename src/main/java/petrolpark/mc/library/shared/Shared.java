@@ -12,6 +12,7 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.neoforgespi.language.ModFileScanData;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.compat.Mods;
+import petrolpark.mc.library.shared.registry.SharedAttachmentTypes;
 import petrolpark.mc.library.shared.registry.SharedBlockEntityTypes;
 import petrolpark.mc.library.shared.registry.SharedBlocks;
 import petrolpark.mc.library.shared.registry.SharedItems;
@@ -30,6 +31,7 @@ public class Shared {
         initializeSharedFeatures();
 
         // Registration
+        SharedAttachmentTypes.register(modEventBus);
         SharedBlockEntityTypes.register();
         SharedBlocks.register();
         SharedItems.register();

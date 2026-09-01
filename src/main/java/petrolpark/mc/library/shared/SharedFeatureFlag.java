@@ -98,6 +98,10 @@ public enum SharedFeatureFlag implements StringRepresentable {
      */
     CIRCLE_COOKIE_CUTTER,
     /**
+     * Registers the Crying mob effect, and obtaining it when cutting onions
+     */
+    CRYING,
+    /**
      * Registers the Dough block and some Ponders
      * @see DoughBlock
      */
@@ -128,6 +132,10 @@ public enum SharedFeatureFlag implements StringRepresentable {
      * @see HarnessBlock
      */
     HORSE_MILL,
+    /**
+     * Registers the {@link SharedMobEffects#INEBRIATION Inebriation} and {@link SharedMobEffects#HANGOVER Hangover} effects
+     */
+    INEBRIATION,
     /**
      * Registers the {@link SharedItems#MESH Mesh item}, which is just used as a crafting ingredient for {@link SharedFeatureFlag#MESH_BASIN Mesh Basin} and {@link SharedFeatureFlag#EXTRUSION Extrusion Die}.
      */

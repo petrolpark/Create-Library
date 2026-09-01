@@ -3,7 +3,7 @@ package petrolpark.mc.library.core.world.block.soil;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import petrolpark.mc.library.shared.registry.SharedBlockEntityTypes;
+import org.jetbrains.annotations.ApiStatus;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
@@ -15,7 +15,9 @@ import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
+import petrolpark.mc.library.shared.registry.SharedBlockEntityTypes;
 
+@ApiStatus.Experimental
 public class SoilBlock extends Block implements EntityBlock {
 
     public SoilBlock(BlockBehaviour.Properties properties) {

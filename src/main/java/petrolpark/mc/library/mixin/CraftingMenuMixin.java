@@ -29,10 +29,8 @@ import net.minecraft.world.level.Level;
 import petrolpark.mc.library.config.PetrolparkConfigs;
 import petrolpark.mc.library.core.flags.ItemFlagPole;
 import petrolpark.mc.library.core.flags.recipe.IHandleFlagsMyselfRecipe;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.IBookRequiredRecipe;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
+import petrolpark.mc.library.core.world.item.crafting.BookRequiredCraftingRecipe;
 import petrolpark.mc.library.core.world.item.decay.ItemDecay;
-import petrolpark.mc.library.registry.PetrolparkRecipeTypes;
 
 @Mixin(CraftingMenu.class)
 public class CraftingMenuMixin {
@@ -95,13 +93,9 @@ public class CraftingMenuMixin {
     )
     private static Optional<RecipeHolder<CraftingRecipe>> petrolpark$addBookRequiredRecipes(Optional<RecipeHolder<CraftingRecipe>> original, AbstractContainerMenu menu, Level level, Player player, CraftingContainer craftSlots, ResultContainer resultSlots, @Nullable RecipeHolder<CraftingRecipe> lastRecipe) {
         ServerPlayer serverPlayer = (ServerPlayer)player;
-        return original.or(() -> level.getRecipeManager()
-            .getRecipeFor(PetrolparkRecipeTypes.CRAFTING_BOOK_REQUIRED.get(), craftSlots.asCraftInput(), level)
-            .filter(rh -> 
-                serverPlayer.getRecipeBook().contains(rh) // Player has used the Recipe Book to add the Recipe to their (Minecraft) Recipe Book
-                || player.getInventory().hasAnyMatching(stack -> RecipeBookItem.streamProvidedRecipes(level, stack).anyMatch(rh::equals)) // Player is carrying the Recipe Book
-                || menu instanceof CraftingMenu craftingMenu && craftingMenu.access.evaluate((l, pos) -> IBookRequiredRecipe.hasRequiredBook(l, pos, rh), false) // Crafting Table block is adjacent to Bookshelf supplying Recipe Book
-            ).map(rh -> new RecipeHolder<>(rh.id(), (CraftingRecipe)rh.value()))
+        return original.or(() -> BookRequiredCraftingRecipe.streamMatching(level, craftSlots.asCraftInput(), serverPlayer.getRecipeBook(), player, menu)
+            .findFirst()
+            .map(rh -> new RecipeHolder<>(rh.id(), (CraftingRecipe)rh.value()))
         );  
     };
 };

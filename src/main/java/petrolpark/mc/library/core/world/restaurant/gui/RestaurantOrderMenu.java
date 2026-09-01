@@ -1,10 +1,13 @@
 package petrolpark.mc.library.core.world.restaurant.gui;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.ItemStack;
 
+@ParametersAreNonnullByDefault
 public class RestaurantOrderMenu extends AbstractContainerMenu {
 
     protected RestaurantOrderMenu(MenuType<?> menuType, int containerId) {

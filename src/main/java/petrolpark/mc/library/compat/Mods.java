@@ -5,9 +5,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import com.google.common.base.Strings;
-import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
-import petrolpark.mc.library.util.BlockHelper;
-import petrolpark.mc.library.util.Lang;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
@@ -16,6 +13,9 @@ import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.ModList;
 import net.neoforged.fml.loading.FMLLoader;
 import net.neoforged.neoforgespi.language.IModInfo;
+import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
+import petrolpark.mc.library.util.BlockHelper;
+import petrolpark.mc.library.util.Lang;
 
 public enum Mods implements StringRepresentable {
 
@@ -33,7 +33,10 @@ public enum Mods implements StringRepresentable {
     BIG_CANNONS("createbigcannons"),
     BREWIN_AND_CHEWIN("brewinandchewin"),
     CHIPPED,
+    CREATE_BITTERBALLEN("create_bic_bit"),
     CREATE_CONNECTED,
+    CREATE_DIESEL_GENERATORS("createdieselgenerators"),
+    CREATE_ESTROGEN("createestrogen"),
     CREATE_GEARS_N_KINETICS("gnkinetics"),
     CURIOS,
     JEI,

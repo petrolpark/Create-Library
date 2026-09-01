@@ -28,7 +28,7 @@ public abstract class BeltInventoryMixin {
         remap = false
     )
     public void petrolpark$makeDirectionalStack(TransportedItemStack stack, Operation<Void> original) {
-        if (!(stack instanceof SpecialTransportedItemStack) && stack.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) {
+        if (stack != null && !(stack instanceof SpecialTransportedItemStack) && stack.stack.getItem() instanceof ISpecialBeltItem specialBeltItem) {
             stack = specialBeltItem.makeTransportedItemStack(stack);
         };
         original.call(stack);

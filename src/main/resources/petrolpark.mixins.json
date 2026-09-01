@@ -6,6 +6,7 @@
     "plugin": "petrolpark.mc.library.mixin.plugin.PetrolparkMixinPlugin",
     "mixins": [
         "accessor.AbstractBuilderAccessor",
+        "accessor.BlockAccessor",
         "compat.create.accessor.BasinBlockEntityAccessor",
         "compat.create.accessor.BasinOperatingBlockEntityAccessor",
         "compat.create.accessor.ContraptionAccessor",
@@ -49,6 +50,7 @@
         "compat.create.SharedDepotBlockMethodsMixin",
         "compat.create.StressGaugeBlockEntityMixin",
         "compat.create.TransportedItemStackMixin",
+        "compat.farmersdelight.CuttingBoardBlockEntityMixin",
         "compat.jade.HorseStatsProviderMixin",
         "AbstractContainerMenuMixin",
         "AbstractCookingRecipeMixin",
@@ -117,6 +119,7 @@
         "client.GameRendererMixin",
         "client.GuiMixin",
         "client.MinecraftMixin",
+        "client.MouseHandlerMixin",
         "client.RecipeBookComponentMixin",
         "client.CreativeModeInventoryScreenMixin",
         "client.GameRendererMixin",

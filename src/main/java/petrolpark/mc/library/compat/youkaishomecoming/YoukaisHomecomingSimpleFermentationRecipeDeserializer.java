@@ -3,6 +3,12 @@ package petrolpark.mc.library.compat.youkaishomecoming;
 import java.util.Optional;
 
 import com.mojang.serialization.Decoder;
+
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.compat.Mods;
 import petrolpark.mc.library.compat.create.RequiresCreate;
@@ -10,12 +16,6 @@ import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.Li
 import petrolpark.mc.library.core.data.recipe.compat.CompatRecipeDeserializer;
 import petrolpark.mc.library.util.codec.CodecHelper;
 import petrolpark.mc.library.util.codec.RecordDecoderBuilder;
-
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 @RequiresCreate
 public class YoukaisHomecomingSimpleFermentationRecipeDeserializer implements CompatRecipeDeserializer<LiddedBasinRecipe> {

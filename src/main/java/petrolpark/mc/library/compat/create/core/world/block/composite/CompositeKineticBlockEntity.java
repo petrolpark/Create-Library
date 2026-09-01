@@ -31,10 +31,12 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
+import petrolpark.mc.library.compat.create.core.world.block.entity.IOverridableKineticBlockEntity;
 import petrolpark.mc.library.util.NBTHelper;
 
 public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
@@ -230,6 +232,11 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
         };
 
         @Override
+        protected Block getStressConfigKey() {
+            return CompositeKineticBlockEntity.super.getBlockState().getBlock();
+        };
+
+        @Override
         public boolean isValidBlockState(@Nonnull BlockState state) {
             return CompositeKineticBlockEntity.super.isValidBlockState(state);
         };
@@ -367,7 +374,7 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
             } else if (hasSource()) {
 
                 // Staying below Overpowered speed
-                if (Math.abs(prevSpeed) >= Math.abs(speed)) {
+                if (Math.abs(prevSpeed) >= Math.abs(speed) && !IOverridableKineticBlockEntity.isSourceOverridable(this)) {
                     if (Math.signum(prevSpeed) != Math.signum(speed)) level.destroyBlock(getBlockPos(), true);
                     return;
                 };

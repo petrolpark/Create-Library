@@ -54,7 +54,7 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
     protected final Supplier<Map<BlockState, VoxelShape>> shapeCache;
     protected final Supplier<Map<BlockState, Clipper<PART>>> clipperCache;
 
-    public MultiPartBlock(BlockBehaviour.Properties properties) {
+    protected MultiPartBlock(BlockBehaviour.Properties properties) {
         super(properties);
         // Lazily-resolving
         shapeCache = Suppliers.memoize(() -> getShapeForEachState(state -> getParts(state).stream().map(IPart::shape).reduce(Shapes.empty(), Shapes::or)));
@@ -127,7 +127,7 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
     public boolean onDestroyedByPlayer(BlockState state, Level level, BlockPos pos, Player player, boolean willHarvest, FluidState fluid) {
         final PART part = getTargetedPart(state, pos, player);
         if (part != null && canSurviveWithout(state, level, pos, player, willHarvest, fluid, part)) {
-            level.setBlock(pos, withoutPart(state, part), 11);
+            switchBlockState(level, pos, state, withoutPart(state, part));
             if (willHarvest) { // Actual Block breaking is cancelled, so do it here
                 player.awardStat(Stats.BLOCK_MINED.get(this));
                 player.causeFoodExhaustion(0.05f);
@@ -136,6 +136,10 @@ public abstract class MultiPartBlock<PART extends IPart> extends Block {
             return false;
         };
         return super.onDestroyedByPlayer(state, level, pos, player, willHarvest, fluid);
+    };
+    
+    protected void switchBlockState(Level level, BlockPos pos, BlockState oldState, BlockState newState) {
+        level.setBlock(pos, newState, 11);
     };
 
     @SuppressWarnings("null")

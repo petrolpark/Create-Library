@@ -2,7 +2,8 @@ package petrolpark.mc.library.compat.create.core.world.block.multi;
 
 import java.util.Optional;
 
-import petrolpark.mc.library.util.BlockHelper;
+import org.jetbrains.annotations.ApiStatus;
+
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
@@ -10,7 +11,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.util.INBTSerializable;
+import petrolpark.mc.library.util.BlockHelper;
 
+@ApiStatus.Experimental
 public interface IMulti<M extends IMulti<? super M>> extends INBTSerializable<CompoundTag> {
     
     public IMultiType<? extends M> getMultiType();

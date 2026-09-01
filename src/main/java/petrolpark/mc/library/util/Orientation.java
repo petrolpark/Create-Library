@@ -30,36 +30,43 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 @ParametersAreNonnullByDefault
 public enum Orientation implements StringRepresentable {
 
-    DOWN_NORTH("down_north", Direction.DOWN, Direction.NORTH),
-    DOWN_SOUTH("down_south", Direction.DOWN, Direction.SOUTH),
-    DOWN_WEST("down_west", Direction.DOWN, Direction.WEST),
-    DOWN_EAST("down_east", Direction.DOWN, Direction.EAST),
-    UP_NORTH("up_north", Direction.UP, Direction.NORTH),
-    UP_SOUTH("up_south", Direction.UP, Direction.SOUTH),
-    UP_WEST("up_west", Direction.UP, Direction.WEST),
-    UP_EAST("up_east", Direction.UP, Direction.EAST),
-    NORTH_DOWN("north_down", Direction.NORTH, Direction.DOWN),
-    NORTH_UP("north_up", Direction.NORTH, Direction.UP),
-    NORTH_WEST("north_west", Direction.NORTH, Direction.WEST),
-    NORTH_EAST("north_east", Direction.NORTH, Direction.EAST),
-    SOUTH_DOWN("south_down", Direction.SOUTH, Direction.DOWN),
-    SOUTH_UP("south_up", Direction.SOUTH, Direction.UP),
-    SOUTH_WEST("south_west", Direction.SOUTH, Direction.WEST),
-    SOUTH_EAST("south_east", Direction.SOUTH, Direction.EAST),
-    WEST_DOWN("west_down", Direction.WEST, Direction.DOWN),
-    WEST_UP("west_up", Direction.WEST, Direction.UP),
-    WEST_NORTH("west_north", Direction.WEST, Direction.NORTH),
-    WEST_SOUTH("west_south", Direction.WEST, Direction.SOUTH),
-    EAST_DOWN("east_down", Direction.EAST, Direction.DOWN),
-    EAST_UP("east_up", Direction.EAST, Direction.UP),
-    EAST_NORTH("east_north", Direction.EAST, Direction.NORTH),
-    EAST_SOUTH("east_south", Direction.EAST, Direction.SOUTH);
-    
+    DOWN_NORTH("down_north", Direction.DOWN, Direction.NORTH, 180, 0),
+    DOWN_SOUTH("down_south", Direction.DOWN, Direction.SOUTH, 180, 180),
+    DOWN_WEST("down_west", Direction.DOWN, Direction.WEST, 180, 270),
+    DOWN_EAST("down_east", Direction.DOWN, Direction.EAST, 180, 90),
+    UP_NORTH("up_north", Direction.UP, Direction.NORTH, 0, 180),
+    UP_SOUTH("up_south", Direction.UP, Direction.SOUTH, 0, 0),
+    UP_WEST("up_west", Direction.UP, Direction.WEST, 0, 90),
+    UP_EAST("up_east", Direction.UP, Direction.EAST, 0, 270),
+    NORTH_DOWN("north_down", Direction.NORTH, Direction.DOWN, 270, 270),
+    NORTH_UP("north_up", Direction.NORTH, Direction.UP, 90, 270),
+    NORTH_WEST("north_west", Direction.NORTH, Direction.WEST, 180, 270),
+    NORTH_EAST("north_east", Direction.NORTH, Direction.EAST, 0, 270),
+    SOUTH_DOWN("south_down", Direction.SOUTH, Direction.DOWN, 270, 90),
+    SOUTH_UP("south_up", Direction.SOUTH, Direction.UP, 90, 90),
+    SOUTH_WEST("south_west", Direction.SOUTH, Direction.WEST, 0, 90),
+    SOUTH_EAST("south_east", Direction.SOUTH, Direction.EAST, 180, 90),
+    WEST_DOWN("west_down", Direction.WEST, Direction.DOWN, 270, 180),
+    WEST_UP("west_up", Direction.WEST, Direction.UP, 90, 180),
+    WEST_NORTH("west_north", Direction.WEST, Direction.NORTH, 0, 180),
+    WEST_SOUTH("west_south", Direction.WEST, Direction.SOUTH, 180, 180),
+    EAST_DOWN("east_down", Direction.EAST, Direction.DOWN, 270, 0),
+    EAST_UP("east_up", Direction.EAST, Direction.UP, 90, 0),
+    EAST_NORTH("east_north", Direction.EAST, Direction.NORTH, 180, 0),
+    EAST_SOUTH("east_south", Direction.EAST, Direction.SOUTH, 0, 0);
+
     public final String name;
 
     public final Direction top;
     public final Direction front;
     public final Direction right;
+
+    /**
+     * The blockstate {@code x} then {@code y} rotation (each a multiple of 90) rendering this orientation from a
+     * model authored as {@link #UP_SOUTH} (if {@link #top} is vertical) or {@link #EAST_SOUTH} (otherwise)
+     */
+    public final int blockStateXRotation;
+    public final int blockStateYRotation;
 
     public final Vec3 topVec;
     public final Vec3 frontVec;
@@ -90,10 +97,12 @@ public enum Orientation implements StringRepresentable {
         return LOOKUP.get(lookupKey(top, front));
     };
 
-    private Orientation(String name, Direction top, Direction front) {
+    private Orientation(String name, Direction top, Direction front, int x, int y) {
         this.name = name;
         this.top = top;
         this.front = front;
+        this.blockStateXRotation = x;
+        this.blockStateYRotation = y;
 
         final Vec3i rightVector = top.getNormal().cross(front.getNormal());
         right = Direction.fromDelta(rightVector.getX(), rightVector.getY(), rightVector.getZ());
@@ -122,6 +131,10 @@ public enum Orientation implements StringRepresentable {
         return new Direction[]{top, front};
     };
 
+    public Orientation opposite() {
+        return fromTopAndFront(top.getOpposite(), front.getOpposite());
+    };
+
     public Orientation rotate(Axis axis, Rotation rotation) {
         Direction top = this.top;
         Direction front = this.front;
@@ -140,8 +153,50 @@ public enum Orientation implements StringRepresentable {
         return EDGE_ORIENTATION_LOOKUP.get(lookupKey(top, front));
     };
 
+    /**
+     * The {@link Orientation} whose {@link #blockStateXRotation}/{@link #blockStateYRotation} to use when rendering
+     * this {@link Orientation} from a single model authored as {@link #EAST_SOUTH}. For most orientations this is
+     * just {@code this}, but {@code UP_SOUTH}, {@code UP_NORTH}, {@code DOWN_SOUTH} and {@code DOWN_NORTH} aren't
+     * reachable from {@code EAST_SOUTH} at all, so their front/top-swapped counterpart is used instead - which
+     * renders the correct edge, but with "front" and "top" swapped relative to this orientation's true pose.
+     */
+    public Orientation asEdgeBlockStateRotation() {
+        if (this != asEdge()) throw new IllegalStateException("Not an edge!");
+        return switch (this) {
+            case UP_SOUTH -> SOUTH_UP;
+            case UP_NORTH -> NORTH_UP;
+            case DOWN_SOUTH -> SOUTH_DOWN;
+            case DOWN_NORTH -> NORTH_DOWN;
+            default -> this;
+        };
+    };
+    
+    /**
+     * Applies this {@link Orientation}'s {@link #blockStateXRotation} then {@link #blockStateYRotation} to {@code direction},
+     * matching how a baked model is actually rotated (via {@code x} then {@code y}) to reach this {@link Orientation}.
+     */
+    public Direction rotateByBlockState(Direction direction) {
+        for (int i = 0; i < (blockStateXRotation / 90) % 4; i++) direction = direction.getClockWise(Axis.X);
+        for (int i = 0; i < (blockStateYRotation / 90) % 4; i++) direction = direction.getClockWise(Axis.Y);
+        return direction;
+    };
+
+    /**
+     * The inverse of {@link #rotateByBlockState(Direction)} - finds which direction, before this {@link Orientation}'s
+     * blockstate rotation is applied, ends up facing {@code direction} afterwards.
+     */
+    public Direction unrotateByBlockState(Direction direction) {
+        for (int i = 0; i < (blockStateYRotation / 90) % 4; i++) direction = direction.getCounterClockWise(Axis.Y);
+        for (int i = 0; i < (blockStateXRotation / 90) % 4; i++) direction = direction.getCounterClockWise(Axis.X);
+        return direction;
+    };
+
     public Vec3 transform(Vec3 point) {
         return rightVec.scale(point.x()).add(topVec.scale(point.y())).add(frontVec.scale(point.z()));
+    };
+
+    public boolean isTopVertical() {
+        return top.getAxis() == Axis.Y;
     };
 
     public static class OrientedVoxelShaper {

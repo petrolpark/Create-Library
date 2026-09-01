@@ -45,8 +45,8 @@ public class PetrolparkCreatePonderScenes {
 		if (SharedFeatureFlag.CENTRIFUGE.enabled()) itemProviderHelper.forComponents(SharedCreateBlocks.CENTRIFUGE)
 			.addStoryBoard("shared/processing/centrifuge", CentrifugeScenes::centrifuge);
 
-		itemProviderHelper.forComponents(AllBlocks.CRUSHING_WHEEL)
-			.addStoryBoard("shared/processing/crushing_wheel_filtering", CrushingWheelScenes::filtering);
+		itemProviderHelper.forComponents(AllBlocks.BRASS_CASING, AllBlocks.CRUSHING_WHEEL)
+			.addStoryBoard("crushing_wheel_filtering", CrushingWheelScenes::filtering);
 			
 		if (SharedFeatureFlag.EXTRUSION.enabled()) itemProviderHelper.forComponents(SharedCreateBlocks.EXTRUSION_DIE)
 			.addStoryBoard("shared/processing/extrusion", ExtrusionScenes::extrusionDie, AllCreatePonderTags.CONTRAPTION_ACTOR);

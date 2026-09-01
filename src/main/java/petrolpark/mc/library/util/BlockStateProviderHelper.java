@@ -1,6 +1,6 @@
 package petrolpark.mc.library.util;
 
-import petrolpark.mc.library.Petrolpark;
+import java.util.function.UnaryOperator;
 
 import net.minecraft.core.Direction.Axis;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -12,11 +12,14 @@ import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import net.neoforged.neoforge.client.model.generators.ModelFile;
 import net.neoforged.neoforge.client.model.generators.ModelFile.UncheckedModelFile;
 import net.neoforged.neoforge.client.model.generators.ModelProvider;
+import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder;
+import net.neoforged.neoforge.client.model.generators.VariantBlockStateBuilder.PartialBlockstate;
+import petrolpark.mc.library.Petrolpark;
 
 public class BlockStateProviderHelper {
 
     public static final void randomizedRotationLogBlock(BlockStateProvider prov, RotatedPillarBlock block) {
-        randomizedRotationAxisBlock(prov, block, prov.blockTexture(block), extend(prov.blockTexture(block), "_top"));
+        randomizedRotationAxisBlock(prov, block, prov.blockTexture(block), prov.blockTexture(block).withSuffix("_top"));
     };
 
     public static final void randomizedRotationAxisBlock(BlockStateProvider prov, RotatedPillarBlock block, ResourceLocation side, ResourceLocation end) {
@@ -51,8 +54,44 @@ public class BlockStateProviderHelper {
             .texture("end", end);
     };
 
-    private static final ResourceLocation extend(ResourceLocation rl, String suffix) {
-        return ResourceLocation.fromNamespaceAndPath(rl.getNamespace(), rl.getPath() + suffix);
+    /**
+     * @param builder
+     * @param model {@code east_south}-oriented model
+     */
+    public static VariantBlockStateBuilder edgeOrientedBlock(VariantBlockStateBuilder builder, ModelFile model) {
+        return edgeOrientedBlock(builder, UnaryOperator.identity(), model);
+    };
+
+    /**
+     * @param builder
+     * @param statePredicate
+     * @param model {@code east_south}-oriented model
+     */
+    public static final VariantBlockStateBuilder edgeOrientedBlock(VariantBlockStateBuilder builder, UnaryOperator<PartialBlockstate> statePredicate, ModelFile model) {
+        for (Orientation orientation : Orientation.EDGE_ORIENTATIONS) {
+            final Orientation rotation = orientation.asEdgeBlockStateRotation();
+            builder = statePredicate.apply(builder.partialState()).with(Orientation.EDGE_ORIENTATION_PROPERTY, orientation).modelForState()
+                .modelFile(model).rotationX(rotation.blockStateXRotation).rotationY(rotation.blockStateYRotation).addModel();
+        };
+        return builder;
+    };
+
+    /**
+     * Adds a rotated {@link net.neoforged.neoforge.client.model.generators.ConfiguredModel ConfiguredModel} for every
+     * {@link Orientation}, against {@link Orientation#ORIENTATION_PROPERTY}, preserving true orientation (front/top
+     * are never swapped, unlike {@link #edgeOrientedBlock(VariantBlockStateBuilder, ModelFile)}).
+     * <p>
+     * {@code upSouthModel} must be authored as {@link Orientation#UP_SOUTH UP_SOUTH} and {@code eastSouthModel} as
+     * {@link Orientation#EAST_SOUTH EAST_SOUTH} - each orientation's {@link Orientation#blockStateXRotation} and {@link Orientation#blockStateYRotation}
+     * are relative to whichever of those 2 is vertical, so we pick the matching model per orientation.
+     */
+    public static final VariantBlockStateBuilder orientedBlock(VariantBlockStateBuilder builder, ModelFile upSouthModel, ModelFile eastSouthModel) {
+        for (Orientation orientation : Orientation.values()) {
+            final ModelFile model = orientation.isTopVertical() ? upSouthModel : eastSouthModel;
+            builder = builder.partialState().with(Orientation.ORIENTATION_PROPERTY, orientation).modelForState()
+                .modelFile(model).rotationX(orientation.blockStateXRotation).rotationY(orientation.blockStateYRotation).addModel();
+        };
+        return builder;
     };
 
     private static final ResourceLocation key(Block block) {

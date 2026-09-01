@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.reward.info;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import com.mojang.serialization.MapCodec;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 
@@ -9,6 +11,7 @@ import net.minecraft.network.codec.StreamCodec;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 import petrolpark.mc.library.util.codec.CodecHelper;
 
+@ParametersAreNonnullByDefault
 public abstract class WrappedRewardInfo implements INamedRewardInfo {
 
     public static final <I extends WrappedRewardInfo> MapCodec<I> codec(NonNullFunction<IRewardInfo, I> factory) {

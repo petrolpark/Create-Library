@@ -1,0 +1,22 @@
+{
+    "values": [
+        "minecraft:step",
+        "minecraft:swim",
+        "minecraft:flap",
+        "minecraft:projectile_land",
+        "minecraft:hit_ground",
+        "minecraft:splash",
+        "minecraft:item_interact_finish",
+        "minecraft:elytra_glide",
+        "minecraft:unequip",
+        "minecraft:entity_dismount",
+        "minecraft:equip",
+        "minecraft:entity_interact",
+        "minecraft:entity_mount",
+        "minecraft:block_change",
+        "minecraft:block_destroy",
+        "minecraft:block_place",
+        "minecraft:fluid_place",
+        "minecraft:entity_place"
+    ]
+}

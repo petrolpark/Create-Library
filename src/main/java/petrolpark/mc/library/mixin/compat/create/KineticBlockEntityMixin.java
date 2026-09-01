@@ -13,10 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity;
-import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
-import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.FlagPoleBehaviour;
 import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -29,6 +25,11 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import petrolpark.mc.library.PetrolparkTags;
+import petrolpark.mc.library.compat.create.core.world.block.composite.CompositeKineticBlockEntity;
+import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlockEntityDuck;
+import petrolpark.mc.library.compat.create.core.world.block.entity.IOverridableKineticBlockEntity;
+import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.FlagPoleBehaviour;
 
 @Mixin(KineticBlockEntity.class)
 public abstract class KineticBlockEntityMixin extends SmartBlockEntity implements IKineticBlockEntityDuck {
@@ -36,6 +37,9 @@ public abstract class KineticBlockEntityMixin extends SmartBlockEntity implement
     @Unique
     @Nullable
     public Integer sourceIndex;
+
+    @Unique
+    protected boolean sourceOverridable;
 
     @Shadow
     public abstract void setNetwork(@Nullable Long networkIn);
@@ -57,6 +61,11 @@ public abstract class KineticBlockEntityMixin extends SmartBlockEntity implement
     @Override
     public void setSourceIndex(@Nullable Integer sourceIndex) {
         this.sourceIndex = sourceIndex;
+    };
+
+    @Override
+    public boolean isSourceOverridable() {
+        return sourceOverridable;
     };
 
     @Inject(
@@ -105,6 +114,15 @@ public abstract class KineticBlockEntityMixin extends SmartBlockEntity implement
     };
 
     @Inject(
+        method = "setSource",
+        at = @At("TAIL"),
+        locals = LocalCapture.CAPTURE_FAILHARD
+    )
+    public void petrolpark$setSourceOverridable(BlockPos source, CallbackInfo ci, BlockEntity be, KineticBlockEntity sourceBE) {
+        sourceOverridable = IOverridableKineticBlockEntity.isSourceOverridable(sourceBE);
+    };
+
+    @Inject(
         method = "removeSource",
         at = @At("HEAD")
     )
@@ -130,6 +148,7 @@ public abstract class KineticBlockEntityMixin extends SmartBlockEntity implement
     protected void petrolpark$readSourceIndex(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
         if (compound.contains("SourceIndex", Tag.TAG_INT)) sourceIndex = compound.getInt("SourceIndex");
         else sourceIndex = null;
+        if (compound.contains("SourceOverridable", Tag.TAG_BYTE)) sourceOverridable = true;
     };
 
     @Inject(
@@ -141,5 +160,6 @@ public abstract class KineticBlockEntityMixin extends SmartBlockEntity implement
     )
     protected void petrolpark$writeSourceIndex(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket, CallbackInfo ci) {
         if (sourceIndex != null) compound.putInt("SourceIndex", sourceIndex);
+        if (sourceOverridable) compound.putBoolean("SourceOverridable", true);
     };
 };

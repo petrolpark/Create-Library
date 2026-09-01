@@ -1,5 +1,6 @@
 package petrolpark.mc.library.util;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -132,21 +133,10 @@ public class ItemHelper {
         });
     };
 
-    private static Set<Item> KNOWN_ANVIL_REPAIR_ITEMS = null;
-
+    @Deprecated
     public static final Set<Item> getKnownAnvilRepairItems() {
-        if (KNOWN_ANVIL_REPAIR_ITEMS == null) {
-            final List<ItemStack> repairableStacks = BuiltInRegistries.ITEM.stream()
-                .map(ItemStack::new)
-                .filter(stack -> stack.getItem().isRepairable(stack))
-                .toList();
-            KNOWN_ANVIL_REPAIR_ITEMS = BuiltInRegistries.ITEM.stream()
-                .map(ItemStack::new)
-                .filter(stack -> repairableStacks.stream().anyMatch(repairable -> repairable.getItem().isValidRepairItem(repairable, stack)))
-                .map(ItemStack::getItem)
-                .collect(Collectors.toUnmodifiableSet());
-        };
-        return KNOWN_ANVIL_REPAIR_ITEMS;
+        return Collections.emptySet();
+        //TODO rework example items for pquality
     };
 
     private static Set<Item> KNOWN_ANIMAL_FOODS = null;

@@ -9,13 +9,6 @@ import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.ICentrifugationRecipe;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.compat.create.shared.registry.SharedPartialModels;
-import petrolpark.mc.library.compat.jei.category.PetrolparkRecipeCategory;
-import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
-import petrolpark.mc.library.shared.ISharedFeature;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 import com.simibubi.create.compat.jei.category.animations.AnimatedKinetics;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
@@ -34,6 +27,13 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
+import petrolpark.mc.library.compat.create.shared.content.processing.centrifuge.ICentrifugationRecipe;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
+import petrolpark.mc.library.compat.create.shared.registry.SharedPartialModels;
+import petrolpark.mc.library.compat.jei.category.PetrolparkRecipeCategory;
+import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
+import petrolpark.mc.library.shared.ISharedFeature;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
 
 public class CentrifugationCategory<R extends Recipe<?> & ICentrifugationRecipe> extends PetrolparkRecipeCategory<R> implements ISharedFeature {
 
@@ -105,7 +105,7 @@ public class CentrifugationCategory<R extends Recipe<?> & ICentrifugationRecipe>
         centrifuge.draw(graphics, 40, 60);
 
         AllGuiTextures.JEI_DOWN_ARROW.render(graphics, 34, 9);
-        if (!recipe.getFluidIngredients().isEmpty() || !recipe.getIngredients().isEmpty()) PetrolparkGuiTexture.JEI_SHORT_DOWN_ARROW.render(graphics, 38, 70);
+        if (recipe.getFluidIngredients().size() >= 2 || !recipe.getRollableResults().isEmpty()) PetrolparkGuiTexture.JEI_SHORT_DOWN_ARROW.render(graphics, 38, 70);
         if (!recipe.getDenseOutputFluid().isEmpty()) PetrolparkGuiTexture.JEI_SHORT_RIGHT_ARROW.render(graphics, 72, 38);
     };
 

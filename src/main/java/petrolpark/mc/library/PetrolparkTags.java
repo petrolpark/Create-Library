@@ -1,10 +1,5 @@
 package petrolpark.mc.library;
 
-import petrolpark.mc.library.compat.Mods;
-import petrolpark.mc.library.core.flags.Flag;
-import petrolpark.mc.library.registry.PetrolparkRegistries;
-import petrolpark.mc.library.util.Lang;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,8 +19,13 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
+import petrolpark.mc.library.compat.Mods;
+import petrolpark.mc.library.core.flags.Flag;
+import petrolpark.mc.library.registry.PetrolparkRegistries;
+import petrolpark.mc.library.util.Lang;
 
 public class PetrolparkTags {
 
@@ -76,26 +76,6 @@ public class PetrolparkTags {
         public static final TagKey<Block> VERTICAL_SLABS = TagKey.create(Registries.BLOCK, Mods.QUARK.asResource("vertical_slabs"));
     };
 
-    public enum Flags {
-
-        HIDDEN,
-        ;
-
-        public final TagKey<Flag> tag;
-
-        Flags() {
-            tag = TagKey.create(PetrolparkRegistries.Keys.FLAG, Petrolpark.asResource(Lang.asId(name())));
-        };
-
-        Flags(String path) {
-            tag = TagKey.create(PetrolparkRegistries.Keys.FLAG, Petrolpark.asResource(path));
-        };
-
-        public boolean matches(Holder<Flag> flag) {
-            return flag.is(tag);
-        };
-    };
-
     public enum BlockEntityTypes {
 
         ;
@@ -135,6 +115,26 @@ public class PetrolparkTags {
         };
     };
 
+    public enum Flags {
+
+        HIDDEN,
+        ;
+
+        public final TagKey<Flag> tag;
+
+        Flags() {
+            tag = TagKey.create(PetrolparkRegistries.Keys.FLAG, Petrolpark.asResource(Lang.asId(name())));
+        };
+
+        Flags(String path) {
+            tag = TagKey.create(PetrolparkRegistries.Keys.FLAG, Petrolpark.asResource(path));
+        };
+
+        public boolean matches(Holder<Flag> flag) {
+            return flag.is(tag);
+        };
+    };
+
     public enum Fluids {
 
         FLAGGABLE,
@@ -165,8 +165,16 @@ public class PetrolparkTags {
         COOKING_OILS = commonFluidTag("oil/cooking");
     };
 
+    public class GameEvents {
+
+        public static final TagKey<GameEvent>
+
+        DOESNT_TRIGGER_HANGOVER = TagKey.create(Registries.GAME_EVENT, Petrolpark.asResource("doesnt_trigger_hangover"));
+    };
+
     public enum Items {
 
+        CUTTING_CAUSES_CRYING,
         FLAGGABLE,
         SLIPPING_POTION_INGREDIENTS,
         ;

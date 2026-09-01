@@ -11,11 +11,9 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.world.item.compression.IItemCompressionSequence.EmptyItemCompressionSequence;
-
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.ItemStack;
@@ -29,6 +27,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 import net.neoforged.neoforge.common.util.ItemStackMap;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.world.item.StackCompressibleItem;
+import petrolpark.mc.library.core.world.item.compression.IItemCompressionSequence.EmptyItemCompressionSequence;
 
 @EventBusSubscriber
 public class ItemCompressionManager {
@@ -52,6 +53,8 @@ public class ItemCompressionManager {
 
     public static final void reload(RecipeManager recipeManager) {
         COMPRESSIONS.clear();
+
+        // CRAFTING COMPRESSIONS
         singleInputRecipes.clear(); // Retains memory size from before
         for (CompressionRecipe compression : recipeManager.getRecipes().stream()
             .map(RecipeHolder::value)
@@ -74,6 +77,13 @@ public class ItemCompressionManager {
                 };
             };
         };
+
+        // STACK COMPRESSIBLE ITEMS
+        BuiltInRegistries.ITEM.stream()
+            .filter(item -> item instanceof StackCompressibleItem)
+            .map(item -> (StackCompressibleItem)item)
+            .forEach(item -> COMPRESSIONS.put(new ItemStack(item), new CompressionRecipe(Ingredient.of(item), item.getMaxStackSize(new ItemStack(item)), new ItemStack(item.compressedItem))));
+
         COMPRESSIONS.replaceAll((stack, compression) -> compression == IItemCompression.NONE ? null : compression);
         rebuildCompressionSequences();
     };

@@ -5,9 +5,6 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipe;
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipeParams;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 import com.simibubi.create.api.data.recipe.ProcessingRecipeGen;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
@@ -22,6 +19,10 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipe;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipeParams;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 
 public class CentrifugationRecipe extends AdvancedProcessingRecipe<RecipeInput> implements ICentrifugationRecipe {
 
@@ -82,6 +83,10 @@ public class CentrifugationRecipe extends AdvancedProcessingRecipe<RecipeInput> 
     @Override
     public FluidStack getLightOutputFluid() {
         return getFluidResults().size() >= 2 ? getFluidResults().get(1) : FluidStack.EMPTY;
+    };
+
+    public static final AdvancedProcessingRecipe.Builder<CentrifugationRecipe> builder() {
+        return builder(Petrolpark.asResource("dont_register_me"));
     };
 
     public static final AdvancedProcessingRecipe.Builder<CentrifugationRecipe> builder(ResourceLocation id) {

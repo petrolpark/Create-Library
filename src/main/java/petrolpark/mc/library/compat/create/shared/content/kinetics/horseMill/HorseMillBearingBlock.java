@@ -3,9 +3,6 @@ package petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlockEntityTypes;
-import petrolpark.mc.library.shared.ISharedFeature;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -30,6 +27,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft
 .world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlockEntityTypes;
+import petrolpark.mc.library.shared.ISharedFeature;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
 
 public class HorseMillBearingBlock extends KineticBlock implements IBE<HorseMillBearingBlockEntity>, ISharedFeature {
 
@@ -48,7 +48,8 @@ public class HorseMillBearingBlock extends KineticBlock implements IBE<HorseMill
     @Override
     @Nullable
     public BlockState getStateForPlacement(@Nonnull BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getNearestLookingVerticalDirection().getOpposite());
+        final Player player = context.getPlayer();
+        return defaultBlockState().setValue(FACING, player != null && player.isShiftKeyDown() ? context.getNearestLookingVerticalDirection().getOpposite() : context.getNearestLookingVerticalDirection());
     };
 
     @Override
