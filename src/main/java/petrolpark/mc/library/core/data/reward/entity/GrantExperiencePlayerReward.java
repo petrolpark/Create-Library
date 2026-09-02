@@ -75,13 +75,13 @@ public record GrantExperiencePlayerReward(NumberProvider amount) implements IPla
 
         @Override
         public EntityRewardAndInfoType getRewardInfoType() {
-            return PetrolparkRewardTypes.GRANT_EXPERIENCE.get();
+            return PetrolparkRewardTypes.ENTITY_GRANT_EXPERIENCE.get();
         };
     };
 
     @Override
     public EntityRewardAndInfoType getType() {
-        return PetrolparkRewardTypes.GRANT_EXPERIENCE.get();
+        return PetrolparkRewardTypes.ENTITY_GRANT_EXPERIENCE.get();
     };
     
 };

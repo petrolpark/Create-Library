@@ -301,37 +301,95 @@ public class Lang {
         };
     };
 
-    public static class IndentedTooltipBuilder {
+    public interface IndentedTooltipBuilder {
 
-        protected List<Component> components;
-        protected int indents = 0;
+        public IndentedTooltipBuilder indent();
 
-        public IndentedTooltipBuilder(List<Component> components) {
-            this.components = components;
+        public IndentedTooltipBuilder unindent();
+
+        public IndentedTooltipBuilder add(Component component);
+
+        public IndentedTooltipBuilder addAll(Stream<Component> components);
+    
+        public static class Impl implements IndentedTooltipBuilder {
+
+            protected List<Component> components;
+            protected int indents = 0;
+
+            public Impl(List<Component> components) {
+                this.components = components;
+            };
+
+            @Override
+            public IndentedTooltipBuilder.Impl indent() {
+                indents++;
+                return this;
+            };
+
+            @Override
+            public IndentedTooltipBuilder.Impl unindent() {
+                indents--;
+                return this;
+            };
+
+            @Override
+            public IndentedTooltipBuilder.Impl add(Component component) {
+                components.add(withIndent(component));
+                return this;
+            };
+
+            @Override
+            public IndentedTooltipBuilder.Impl addAll(Stream<Component> components) {
+                this.components.addAll(components.map(this::withIndent).toList());
+                return this;
+            };
+
+            protected Component withIndent(Component unindentedComponent) {
+                return Component.literal(Strings.repeat(" ", indents)).append(unindentedComponent);
+            };
+        
         };
+        
+        public static class OneLine implements IndentedTooltipBuilder {
+          
+            protected MutableComponent component = Component.empty();
+            protected Boolean lastActionAddedComponent = null;
 
-        public IndentedTooltipBuilder indent() {
-            indents++;
-            return this;
-        };
+            @Override
+            public IndentedTooltipBuilder.OneLine indent() {
+                if (lastActionAddedComponent != null && lastActionAddedComponent && component.getSiblings().size() > 0) component.getSiblings().removeLast(); // Remove the last ", "
+                component = component.append(" (");
+                lastActionAddedComponent = null;
+                return this;
+            };
 
-        public IndentedTooltipBuilder unindent() {
-            indents--;
-            return this;
-        };
+            @Override
+            public IndentedTooltipBuilder.OneLine unindent() {
+                if (lastActionAddedComponent != null && lastActionAddedComponent && component.getSiblings().size() > 0) component.getSiblings().removeLast(); // Remove the last ", "
+                component = component.append(") ");
+                lastActionAddedComponent = false;
+                return this;
+            };
 
-        public IndentedTooltipBuilder add(Component component) {
-            components.add(withIndent(component));
-            return this;
-        };
+            @Override
+            public IndentedTooltipBuilder.OneLine add(Component component) {
+                if (lastActionAddedComponent != null && !lastActionAddedComponent) this.component.append(", "); // Add after an unindent
+                this.component = this.component.append(component).append(", ");
+                lastActionAddedComponent = true;
+                return this;
+            };
 
-        public IndentedTooltipBuilder addAll(Stream<Component> components) {
-            this.components.addAll(components.map(this::withIndent).toList());
-            return this;
-        };
+            @Override
+            public IndentedTooltipBuilder.OneLine addAll(Stream<Component> components) {
+                components.forEach(this::add);
+                return this;
+            };
 
-        protected Component withIndent(Component unindentedComponent) {
-            return Component.literal(Strings.repeat(" ", indents)).append(unindentedComponent);
+            public Component build() {
+                if (lastActionAddedComponent != null && lastActionAddedComponent && component.getSiblings().size() > 0) component.getSiblings().removeLast(); // Remove the last ", "
+                return component;
+            };
+
         };
     };
 };

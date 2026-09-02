@@ -7,6 +7,7 @@ import java.util.function.Function;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import com.mojang.brigadier.arguments.ArgumentType;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.tterrag.registrate.AbstractRegistrate;
@@ -25,6 +26,8 @@ import net.minecraft.advancements.critereon.EntitySubPredicate;
 import net.minecraft.advancements.critereon.EntitySubPredicates;
 import net.minecraft.advancements.critereon.EntitySubPredicates.EntityVariantPredicateType;
 import net.minecraft.advancements.critereon.ItemSubPredicate;
+import net.minecraft.commands.synchronization.ArgumentTypeInfo;
+import net.minecraft.commands.synchronization.ArgumentTypeInfos;
 import net.minecraft.core.Registry;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -102,14 +105,17 @@ import petrolpark.mc.library.core.data.reward.ISimpleReward;
 import petrolpark.mc.library.core.data.reward.RewardAndInfoType;
 import petrolpark.mc.library.core.data.reward.StandardRewardType;
 import petrolpark.mc.library.core.data.reward.entity.EntityRewardAndInfoType;
+import petrolpark.mc.library.core.data.reward.entity.EntityRewardType;
 import petrolpark.mc.library.core.data.reward.entity.IEntityReward;
 import petrolpark.mc.library.core.data.reward.entity.ISimpleEntityReward;
 import petrolpark.mc.library.core.data.reward.generator.IRewardGenerator;
 import petrolpark.mc.library.core.data.reward.generator.RewardGeneratorType;
 import petrolpark.mc.library.core.data.reward.info.IRewardInfo;
+import petrolpark.mc.library.core.data.reward.info.RewardInfoType;
 import petrolpark.mc.library.core.data.reward.info.WrappedRewardInfo;
 import petrolpark.mc.library.core.data.reward.team.ITeamReward;
 import petrolpark.mc.library.core.data.reward.team.TeamRewardAndInfoType;
+import petrolpark.mc.library.core.data.reward.team.TeamRewardType;
 import petrolpark.mc.library.core.data.stringProvider.StringProvider;
 import petrolpark.mc.library.core.data.stringProvider.StringProviderType;
 import petrolpark.mc.library.core.registrate.builder.MobEffectBuilder;
@@ -135,8 +141,10 @@ import petrolpark.mc.library.core.scratch.symbol.expression.IScratchExpression;
 import petrolpark.mc.library.core.scratch.symbol.expression.ScratchExpressionType;
 import petrolpark.mc.library.core.scratch.symbol.expression.SimpleExpressionType;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
+import petrolpark.mc.library.core.world.entity.player.team.predicate.ITeamPredicate;
 import petrolpark.mc.library.core.world.item.decay.product.DecayProductType;
 import petrolpark.mc.library.core.world.item.decay.product.IDecayProduct;
+import petrolpark.mc.library.core.world.restaurant.customer.ICustomer;
 import petrolpark.mc.library.experimental.trade.ITradeListingReference;
 import petrolpark.mc.library.registry.PetrolparkRegistries;
 import petrolpark.mc.library.registry.scratch.PetrolparkScratchClasses;
@@ -213,6 +221,11 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
 
     // Simple registered objects
 
+    public <A extends ArgumentType<?>, T extends ArgumentTypeInfo.Template<A>, I extends ArgumentTypeInfo<A, T>> RegistryEntry<ArgumentTypeInfo<?, ?>, I> commandArgumentType(String name, Class<A> infoClass, I argumentTypeInfo) {
+        ArgumentTypeInfos.registerByClass(infoClass, argumentTypeInfo);
+        return simple(name, Registries.COMMAND_ARGUMENT_TYPE, () -> argumentTypeInfo);
+    };
+
     public <B extends BlockEntity, T extends BlockEntityType<B>> RegistryEntry<BlockEntityType<?>, T> blockEntityType(String name, NonNullSupplier<T> factory) {
         return simple(name, Registries.BLOCK_ENTITY_TYPE, factory);
     };
@@ -260,11 +273,12 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
     };
 
     public LootContextParamSet lootContextParamSet(String name, Consumer<LootContextParamSet.Builder> builderConsumer) {
-        LootContextParamSet.Builder builder = new LootContextParamSet.Builder();
+        final LootContextParamSet.Builder builder = new LootContextParamSet.Builder();
         builderConsumer.accept(builder);
-        LootContextParamSet paramSet = builder.build();
-        ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(getModid(), name);
-        return LootContextParamSets.REGISTRY.put(rl, paramSet);
+        final LootContextParamSet paramSet = builder.build();
+        final ResourceLocation rl = ResourceLocation.fromNamespaceAndPath(getModid(), name);
+        LootContextParamSets.REGISTRY.put(rl, paramSet);
+        return paramSet;
     };
 
     public RegistryEntry<LootItemConditionType, LootItemConditionType> lootConditionType(String name, MapCodec<? extends LootItemCondition> codec) {
@@ -311,6 +325,10 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
 
     public RegistryEntry<StringProviderType, StringProviderType> stringProviderType(String name, MapCodec<? extends StringProvider> codec) {
         return simple(name, PetrolparkRegistries.Keys.STRING_PROVIDER_TYPE, () -> new StringProviderType(codec));
+    };
+
+    public RegistryEntry<ITeamPredicate.Type, ITeamPredicate.Type> teamPredicateType(String name, MapCodec<? extends ITeamPredicate> codec) {
+        return simple(name, PetrolparkRegistries.Keys.TEAM_PREDICATE_TYPE, () -> new ITeamPredicate.Type(codec));
     };
 
     public RegistryEntry<SoundEvent, SoundEvent> soundEvent(String name, float range) {
@@ -411,6 +429,10 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
         return rewardType(name, () -> new StandardRewardType(codec));
     };
 
+    public RegistryEntry<IRewardInfo.Type, RewardInfoType> rewardInfoType(String name, MapCodec<? extends IRewardInfo> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends IRewardInfo> streamCodec) {
+        return rewardInfoType(name, () -> new RewardInfoType(name, codec, streamCodec));
+    };
+
     public <T extends IRewardInfo.Type> RegistryEntry<IRewardInfo.Type, T> rewardInfoType(String name, NonNullSupplier<T> factory) {
         return simple(name, PetrolparkRegistries.Keys.REWARD_INFO_TYPE, factory);
     };
@@ -427,6 +449,10 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
 
     public <I extends WrappedRewardInfo> RegistryEntry<IReward.Type, RewardAndInfoType> rewardAndWrappedInfoTypes(String name, MapCodec<? extends IReward> rewardCodec, NonNullFunction<IRewardInfo, I> infoFactory) {
         return rewardAndInfoTypes(name, rewardCodec, WrappedRewardInfo.codec(infoFactory), WrappedRewardInfo.streamCodec(infoFactory));
+    };
+
+    public RegistryEntry<IEntityReward.Type, EntityRewardType> entityRewardType(String name, MapCodec<? extends IEntityReward> codec) {
+        return entityRewardType(name, () -> new EntityRewardType(codec));
     };
 
     public <T extends IEntityReward.Type> RegistryEntry<IEntityReward.Type, T> entityRewardType(String name, NonNullSupplier<T> factory) {
@@ -447,6 +473,10 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
         return entityRewardAndInfoTypes(name, codec, codec, streamCodec);
     };
 
+    public RegistryEntry<ITeamReward.Type, TeamRewardType> teamRewardType(String name, MapCodec<? extends ITeamReward> codec) {
+        return teamRewardType(name, () -> new TeamRewardType(codec));
+    };
+
     public <T extends ITeamReward.Type> RegistryEntry<ITeamReward.Type, T> teamRewardType(String name, NonNullSupplier<T> factory) {
         return simple(name, PetrolparkRegistries.Keys.TEAM_REWARD_TYPE, factory);
     };
@@ -455,6 +485,10 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
         final TeamRewardAndInfoType type = new TeamRewardAndInfoType(ResourceLocation.fromNamespaceAndPath(getModid(), name).toLanguageKey("reward"), rewardCodec, infoCodec, infoStreamCodec);
         rewardInfoType(name, () -> type);
         return teamRewardType(name, () -> type);
+    };
+
+    public RegistryEntry<ICustomer.ProviderType, ICustomer.ProviderType> customerProviderType(String name, MapCodec<? extends ICustomer.Provider> codec, StreamCodec<? super RegistryFriendlyByteBuf, ? extends ICustomer.Provider> streamCodec) {
+        return simple(name, PetrolparkRegistries.Keys.CUSTOMER_PROVIDER_TYPE, () -> new ICustomer.ProviderType(codec, streamCodec));
     };
 
     public RegistryEntry<BogglePatternGeneratorType, BogglePatternGeneratorType> bogglePatternGeneratorType(String name, MapCodec<? extends IBogglePatternGenerator> codec, MapCodec<? extends IBogglePatternGenerator> directCodec) {

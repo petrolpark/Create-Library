@@ -24,7 +24,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RecipesUpdatedEvent;
 import net.neoforged.neoforge.event.AddReloadListenerEvent;
 import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.core.world.item.IDeletableItem;
+import petrolpark.mc.library.core.world.item.deletable.IDeletableItem;
 import petrolpark.mc.library.registry.PetrolparkRecipeTypes;
 
 @EventBusSubscriber

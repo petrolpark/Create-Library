@@ -1,6 +1,7 @@
 package petrolpark.mc.library.registry;
 
 import java.util.List;
+import java.util.Set;
 import java.util.function.UnaryOperator;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -12,6 +13,7 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponentType.Builder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
@@ -21,6 +23,7 @@ import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.badge.BadgeItem;
 import petrolpark.mc.library.core.badge.BadgeItem.BadgeAward;
 import petrolpark.mc.library.core.data.recipe.bogglePattern.BogglePatternHelper;
+import petrolpark.mc.library.core.data.reward.team.OneTimeTeamReward;
 import petrolpark.mc.library.core.flags.AbstractFlagPole;
 import petrolpark.mc.library.core.flags.Flag;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
@@ -29,6 +32,7 @@ import petrolpark.mc.library.core.world.item.decay.DecayTime;
 import petrolpark.mc.library.core.world.item.decay.product.IDecayProduct;
 import petrolpark.mc.library.core.world.restaurant.Restaurant;
 import petrolpark.mc.library.core.world.restaurant.RestaurantsData;
+import petrolpark.mc.library.core.world.restaurant.customer.ICustomer;
 import petrolpark.mc.library.core.world.restaurant.order.ClientRestaurantOrder;
 import petrolpark.mc.library.core.world.restaurant.order.IRestaurantOrder;
 import petrolpark.mc.library.util.WoodHelper;
@@ -87,6 +91,11 @@ public class PetrolparkDataComponentTypes {
         .networkSynchronized(ClientRestaurantOrder.STREAM_CODEC)
     );
 
+    public static final DataComponentType<ICustomer.Provider> CUSTOMER_PROVIDER = register("customer_provider", builder -> builder
+        .persistent(ICustomer.Provider.CODEC)
+        .networkSynchronized(ICustomer.Provider.STREAM_CODEC)
+    );
+
     // MISC
 
     public static final DataComponentType<Integer> BOGGLE_PATTERN = register("boggle_pattern", builder -> builder
@@ -105,8 +114,12 @@ public class PetrolparkDataComponentTypes {
 
     // TEAMS
 
-    public static final DataComponentType<RestaurantsData> RESTAURANTS_DATA = register("team_restaurants", builder -> builder
+    public static final DataComponentType<RestaurantsData> TEAM_RESTAURANTS = register("team_restaurants", builder -> builder
         .persistent(RestaurantsData.CODEC)
+    );
+
+    public static final DataComponentType<Set<ResourceLocation>> TEAM_ONE_TIME_REWARDS = register("team_one_time_rewards", builder -> builder
+        .persistent(OneTimeTeamReward.IDS_CODEC)
     );
 
     // Create //TODO move

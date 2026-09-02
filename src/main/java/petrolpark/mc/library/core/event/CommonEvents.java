@@ -3,19 +3,6 @@ package petrolpark.mc.library.core.event;
 import java.util.List;
 import java.util.stream.Stream;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
-import petrolpark.mc.library.core.client.effectShaders.packet.RemoveAllEffectShadersPacket;
-import petrolpark.mc.library.core.data.recipe.bogglePattern.BogglePatternCommand;
-import petrolpark.mc.library.core.flags.FlagHeldItemCommand;
-import petrolpark.mc.library.core.flags.ItemFlagPole;
-import petrolpark.mc.library.core.world.item.decay.ItemDecay;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
-import petrolpark.mc.library.shared.registry.SharedLootTables;
-import petrolpark.mc.library.util.mixininterfaces.IGameRendererMixin;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponents;
@@ -49,6 +36,19 @@ import net.neoforged.neoforge.event.entity.living.LivingDeathEvent;
 import net.neoforged.neoforge.event.entity.living.MobEffectEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.neoforged.neoforge.network.PacketDistributor;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.PetrolparkTags;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
+import petrolpark.mc.library.core.client.effectShaders.packet.RemoveAllEffectShadersPacket;
+import petrolpark.mc.library.core.data.recipe.bogglePattern.BogglePatternCommand;
+import petrolpark.mc.library.core.data.reward.RewardCommand;
+import petrolpark.mc.library.core.flags.FlagHeldItemCommand;
+import petrolpark.mc.library.core.flags.ItemFlagPole;
+import petrolpark.mc.library.core.world.item.decay.ItemDecay;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.shared.registry.SharedLootTables;
+import petrolpark.mc.library.util.mixininterfaces.IGameRendererMixin;
 
 @EventBusSubscriber
 public class CommonEvents {
@@ -59,6 +59,7 @@ public class CommonEvents {
     public static void registerCommands(RegisterCommandsEvent event) {
         FlagHeldItemCommand.register(event.getDispatcher(), event.getBuildContext());
         BogglePatternCommand.register(event.getDispatcher(), event.getBuildContext());
+        RewardCommand.register(event.getDispatcher(), event.getBuildContext());
     };
 
     public static final ResourceLocation PLAYER_JOINS_FUNCTION_TAG = Petrolpark.asResource("player_joins");

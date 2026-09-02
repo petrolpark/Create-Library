@@ -80,13 +80,13 @@ public record GrantRestaurantXPTeamReward(Holder<Restaurant> restaurant, NumberP
 
         @Override
         public TeamRewardAndInfoType getRewardInfoType() {
-            return PetrolparkRewardTypes.GRANT_RESTAURANT_XP.get();
+            return PetrolparkRewardTypes.TEAM_GRANT_RESTAURANT_XP.get();
         };
     };
 
     @Override
     public TeamRewardAndInfoType getType() {
-        return PetrolparkRewardTypes.GRANT_RESTAURANT_XP.get();
+        return PetrolparkRewardTypes.TEAM_GRANT_RESTAURANT_XP.get();
     };
 
     @Override

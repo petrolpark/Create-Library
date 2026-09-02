@@ -5,15 +5,15 @@ import org.spongepowered.asm.mixin.Shadow;
 
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import petrolpark.mc.library.core.world.item.decay.IApplyDecayRecipe;
-import petrolpark.mc.library.shared.registry.SharedRecipeTypes;
-import petrolpark.mc.library.shared.world.item.crafting.ageing.AgeingContainerWrapper;
-import petrolpark.mc.library.shared.world.item.crafting.ageing.AgeingRecipe;
 
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import petrolpark.mc.library.core.world.item.decay.IApplyDecayRecipe;
+import petrolpark.mc.library.shared.registry.SharedRecipeTypes;
+import petrolpark.mc.library.shared.world.item.crafting.ageing.AgeingContainerWrapper;
+import petrolpark.mc.library.shared.world.item.crafting.ageing.AgeingRecipe;
 
 /**
  * If an Item is removed from a Barrel, it should stop {@link AgeingRecipe ageing}. This mixin is to ensure that happens even when the Item is quick-swapped to a hotbar slot.

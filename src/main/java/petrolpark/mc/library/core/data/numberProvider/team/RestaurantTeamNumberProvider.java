@@ -53,7 +53,7 @@ public record RestaurantTeamNumberProvider(Optional<Holder<Restaurant>> restaura
     @Override
     public int getInt(ITeam team, LootContext lootContext) {
         final Holder<Restaurant> restaurant = restaurant().orElseGet(() -> lootContext.getParam(PetrolparkLootContextParams.RESTAURANT));
-        final RestaurantsData restaurants = team.get(PetrolparkDataComponentTypes.RESTAURANTS_DATA);
+        final RestaurantsData restaurants = team.get(PetrolparkDataComponentTypes.TEAM_RESTAURANTS);
         if (restaurants == null) return 0;
         final RestaurantData data = restaurants.data().get(restaurant);
         if (data == null) return 0;

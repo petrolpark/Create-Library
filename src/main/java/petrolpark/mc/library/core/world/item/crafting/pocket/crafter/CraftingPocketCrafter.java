@@ -13,6 +13,7 @@ import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.createmod.catnip.data.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -54,7 +55,7 @@ public class CraftingPocketCrafter implements IPocketCrafter<CraftingRecipe> {
     @Override
     @OnlyIn(Dist.CLIENT)
     public List<RecipeHolder<? extends CraftingRecipe>> getRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot<?>> interpretedSlots, PocketCrafting.SlotArrangement slotArrangement) {
-        final CraftingInput input = getCraftingInput(interpretedSlots, slotArrangement);
+        final CraftingInput input = getCraftingInput(interpretedSlots, context.menu(), slotArrangement);
         return Stream.concat(
             context.recipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream()
                 .filter(rh -> rh.value().matches(input, context.level())),
@@ -67,8 +68,8 @@ public class CraftingPocketCrafter implements IPocketCrafter<CraftingRecipe> {
         return ItemsPocketCraftingResult.success(recipeHolder.value().getResultItem(context.registries()));
     };
 
-    public CraftingInput getCraftingInput(List<IInterpretedSlot<?>> interpretedSlots, PocketCrafting.SlotArrangement slotArrangement) {
-        final Pair<Int2ObjectMap<Int2ObjectMap<Slot>>, Int2ObjectMap<SlotGrid>> slotsAndGrids = PocketCrafting.organiseSlots(interpretedSlots.stream().map(IInterpretedSlot::slot).toList(), slotArrangement);
+    public CraftingInput getCraftingInput(List<IInterpretedSlot<?>> interpretedSlots, AbstractContainerMenu menu, PocketCrafting.SlotArrangement slotArrangement) {
+        final Pair<Int2ObjectMap<Int2ObjectMap<Slot>>, Int2ObjectMap<SlotGrid>> slotsAndGrids = PocketCrafting.organiseSlots(menu, interpretedSlots.stream().map(IInterpretedSlot::slot).toList(), slotArrangement);
         final Set<SlotGrid> uniqueGrids = new HashSet<>(slotsAndGrids.getSecond().values());
 
         // Try shaped crafting

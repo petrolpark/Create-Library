@@ -72,6 +72,7 @@ public record Restaurant(
 
     public static final Optional<ServerRestaurantOrder> generateOrder(ServerPlayer player, Holder<Restaurant> restaurantHolder, ITeam team, @Nullable Entity customer) {
         if (restaurantHolder.value().orderGeneratorEntries().isEmpty()) return Optional.empty();
+        if (team.isNone()) return Optional.empty();
         
         final LootContext context = new LootContext.Builder(new LootParams.Builder(player.serverLevel())
                 .withParameter(PetrolparkLootContextParams.RESTAURANT, restaurantHolder)

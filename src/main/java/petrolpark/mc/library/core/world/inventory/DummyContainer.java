@@ -1,4 +1,4 @@
-package petrolpark.mc.library.core.world;
+package petrolpark.mc.library.core.world.inventory;
 
 import java.util.Set;
 import java.util.function.Consumer;

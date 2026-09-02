@@ -5,12 +5,14 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.include.com.google.common.base.Objects;
 
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.PatchedDataComponentMap;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
+import net.minecraft.resources.RegistryOps;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
 
 /**
@@ -34,8 +36,8 @@ public abstract class AbstractTeam implements ITeam {
     };
 
     @Nullable
-    public Tag writeDataComponentsTag() {
-        return DataComponentPatch.CODEC.encodeStart(NbtOps.INSTANCE, getDataComponentPatch()).getOrThrow();
+    public Tag writeDataComponentsTag(HolderLookup.Provider registries) {
+        return DataComponentPatch.CODEC.encodeStart(RegistryOps.create(NbtOps.INSTANCE, registries), getDataComponentPatch()).getOrThrow();
     };
 
     @Override

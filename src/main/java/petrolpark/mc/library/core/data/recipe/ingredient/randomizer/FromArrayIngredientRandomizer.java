@@ -29,7 +29,7 @@ public record FromArrayIngredientRandomizer(List<FromArrayIngredientRandomizer.E
     @Override
     public IAdvancedIngredient<? super ItemStack> generate(LootContext context) {
         if (entries().size() == 0) return ItemAdvancedIngredient.impossible();
-        if (entries().size() == 1) return entries().get(1).ingredient();
+        if (entries().size() == 1) return entries().get(0).ingredient();
 
         final List<FromArrayIngredientRandomizer.RolledEntry> weightedEntries = entries().stream().map(FromArrayIngredientRandomizer.roll(context)).toList();
         final double sum = weightedEntries.stream().mapToDouble(FromArrayIngredientRandomizer.RolledEntry::weight).sum();

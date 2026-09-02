@@ -15,12 +15,14 @@ import petrolpark.mc.library.core.client.ponder.PetrolparkPonderPlugin;
 import petrolpark.mc.library.core.client.texts.ClientTextsManager;
 import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventoryClientHandler;
 import petrolpark.mc.library.core.world.item.crafting.pocket.PocketCraftingClientHandler;
+import petrolpark.mc.library.core.world.item.deletable.DeletableItemClientHandler;
 import petrolpark.mc.library.util.WoodHelperClient;
 
 @Mod(value = Petrolpark.MOD_ID, dist = Dist.CLIENT)
 public class PetrolparkClient {
 
     public static final ExtendedInventoryClientHandler EXTENDED_INVENTORY_HANDLER = new ExtendedInventoryClientHandler();
+    public static final DeletableItemClientHandler DELETABLE_ITEM_CLIENT_HANDLER = new DeletableItemClientHandler();
     public static final PocketCraftingClientHandler POCKET_CRAFTING_HANDLER = new PocketCraftingClientHandler(Minecraft.getInstance());
     public static final ClientTextsManager TEXTS = new ClientTextsManager();
 
@@ -38,6 +40,7 @@ public class PetrolparkClient {
         modEventBus.addListener(PetrolparkClient::clientInit);
         modEventBus.addListener(TEXTS::registerListener);
         neoEventBus.register(EXTENDED_INVENTORY_HANDLER);
+        neoEventBus.register(DELETABLE_ITEM_CLIENT_HANDLER);
         neoEventBus.register(POCKET_CRAFTING_HANDLER);
     };
     

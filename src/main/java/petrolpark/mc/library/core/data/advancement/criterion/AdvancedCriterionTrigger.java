@@ -4,17 +4,21 @@ import java.util.IdentityHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.Sets;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.advancements.CriterionTrigger;
 import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.CriterionValidator;
+import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -83,6 +87,14 @@ public abstract class AdvancedCriterionTrigger<I extends AdvancedCriterionTrigge
                 ) listener.run(advancements);
             };
         };
+    };
+
+    public static <I extends AdvancedCriterionTrigger.AdvancedInstance> Codec<I> simpleCodec(Function<Optional<ContextAwarePredicate>, I> factory) {
+        return RecordCodecBuilder.create(instance ->
+            instance.group(
+                EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(AdvancedCriterionTrigger.AdvancedInstance::player)
+            ).apply(instance, factory)
+        );
     };
 
     public interface AdvancedInstance extends CriterionTriggerInstance {

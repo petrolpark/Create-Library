@@ -24,6 +24,7 @@ import petrolpark.mc.library.core.world.entity.player.team.packet.BindTeamItemPa
 import petrolpark.mc.library.core.world.entity.player.team.scoreboard.ScoreboardTeamComponentChangedPacket;
 import petrolpark.mc.library.core.world.entity.player.team.singleplayer.SinglePlayerTeamComponentChangedPacket;
 import petrolpark.mc.library.core.world.item.crafting.pocket.PocketCraftPacket;
+import petrolpark.mc.library.core.world.item.deletable.DeleteItemPacket;
 import petrolpark.mc.library.experimental.actionrecord.ActionRecordEntryResult;
 import petrolpark.mc.library.experimental.actionrecord.packet.entrant.ICustomPacketPayloadEntrant;
 import petrolpark.mc.library.experimental.actionrecord.packet.entrant.PacketEntrants;
@@ -34,10 +35,11 @@ public enum PetrolparkPackets implements BasePacketPayload.PacketTypeProvider, I
 	// Client -> server
     BIND_TEAM_ITEM(BindTeamItemPacket.class, BindTeamItemPacket.STREAM_CODEC),
     BIND_TEAM_BLOCK(BindTeamBlockPacket.class, BindTeamBlockPacket.STREAM_CODEC),
+	DELETE_ITEM(DeleteItemPacket.class, DeleteItemPacket.STREAM_CODEC, false),
+	POCKET_CRAFT(PocketCraftPacket.class, PocketCraftPacket.STREAM_CODEC, false),
 	REQUEST_INVENTORY_FULL_STATE(RequestInventoryFullStatePacket.class, RequestInventoryFullStatePacket.STREAM_CODEC, false),
 	REPLY_TEXT(ReplyTextPacket.class, ReplyTextPacket.STREAM_CODEC, false),
 	WATCH_PONDER(WatchedPonderPacket.class, WatchedPonderPacket.STREAM_CODEC, false),
-	POCKET_CRAFT(PocketCraftPacket.class, PocketCraftPacket.STREAM_CODEC, false),
 
 	// Server -> client
 	SINGLE_PLAYER_TEAM_COMPONENT_CHANGED(SinglePlayerTeamComponentChangedPacket.class, SinglePlayerTeamComponentChangedPacket.STREAM_CODEC, false),

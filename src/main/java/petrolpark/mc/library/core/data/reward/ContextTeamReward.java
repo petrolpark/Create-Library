@@ -4,6 +4,7 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.MapCodec;
 
+import net.minecraft.core.Holder;
 import net.minecraft.world.level.storage.loot.LootContext;
 import petrolpark.mc.library.core.data.reward.info.IRewardInfo;
 import petrolpark.mc.library.core.data.reward.info.WrappedRewardInfo;
@@ -14,14 +15,14 @@ import petrolpark.mc.library.registry.PetrolparkRewardTypes;
 import petrolpark.mc.library.util.codec.CodecHelper;
 
 @ParametersAreNonnullByDefault
-public record ContextTeamReward(ITeamReward reward) implements IWrappedReward<ITeamReward> {
+public record ContextTeamReward(Holder<ITeamReward> rewardHolder) implements IWrappedReward<ITeamReward> {
 
-    public static final MapCodec<ContextTeamReward> CODEC = CodecHelper.singleFieldMap(ITeamReward.CODEC, "reward", ContextTeamReward::reward, ContextTeamReward::new);
+    public static final MapCodec<ContextTeamReward> CODEC = CodecHelper.singleFieldMap(ITeamReward.CODEC, "reward", ContextTeamReward::rewardHolder, ContextTeamReward::new);
 
     @Override
     public boolean reward(LootContext context, float multiplier, boolean simulate) {
         final ITeam team = context.getParam(PetrolparkLootContextParams.TEAM);
-        return team == null ? false : reward().reward(team, context, multiplier, simulate);
+        return team == null ? false : rewardHolder().value().reward(team, context, multiplier, simulate);
     };
 
     @Override

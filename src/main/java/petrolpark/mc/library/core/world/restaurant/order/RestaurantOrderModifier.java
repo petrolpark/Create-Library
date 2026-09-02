@@ -43,8 +43,8 @@ public record RestaurantOrderModifier(
     ));
 
     public List<Component> description(Level level) {
-        List<Component> description = new ArrayList<>();
-        ingredient.addToDescription(new IndentedTooltipBuilder(description));
+        final List<Component> description = new ArrayList<>();
+        ingredient.addToDescription(new IndentedTooltipBuilder.Impl(description));
         return description;
     };
 
@@ -59,8 +59,8 @@ public record RestaurantOrderModifier(
     @Override
     public void validate(ValidationContext context) {
         LootContextUser.super.validate(context);
-        successMultiplier().validate(context.forChild(".success_multiplier"));
-        failureMultiplier().validate(context.forChild(".failure_multiplier"));
+        successMultiplier().validate(context.forChild(".successMultiplier"));
+        failureMultiplier().validate(context.forChild(".failureMultiplier"));
     };
 
     public record Info(IAdvancedIngredient<? super ItemStack> ingredient, NumberEstimate successMultiplier, NumberEstimate failureMultiplier) {

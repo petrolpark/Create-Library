@@ -61,7 +61,7 @@ public record UnlockTradeEntityReward(MerchantOffer trade) implements ISimpleEnt
 
     @Override
     public EntityRewardAndInfoType getType() {
-        return PetrolparkRewardTypes.UNLOCK_TRADE.get();
+        return PetrolparkRewardTypes.ENTITY_UNLOCK_TRADE.get();
     };
     
 };

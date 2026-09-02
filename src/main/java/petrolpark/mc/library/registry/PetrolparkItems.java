@@ -7,11 +7,15 @@ import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.tags.ItemTags;
 import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
 import petrolpark.mc.library.core.world.restaurant.RestaurantOrderBookItem;
+import petrolpark.mc.library.core.world.restaurant.RestaurantOrderItem;
 
 public class PetrolparkItems {
     
     public static final ItemEntry<RestaurantOrderBookItem> ORDER_BOOK = REGISTRATE.item("order_book", RestaurantOrderBookItem::new)
         .defaultModel()
+        .register();
+
+    public static final ItemEntry<RestaurantOrderItem> ORDER = REGISTRATE.item("order", RestaurantOrderItem::new)
         .register();
 
     public static final ItemEntry<RecipeBookItem> RECIPE_BOOK = REGISTRATE.item("recipe_book", RecipeBookItem::new)

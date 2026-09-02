@@ -48,9 +48,11 @@ import petrolpark.mc.library.core.scratch.symbol.block.IScratchBlock;
 import petrolpark.mc.library.core.scratch.symbol.expression.IScratchExpression;
 import petrolpark.mc.library.core.world.entity.animal.mood.AnimalMoodModifier;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
+import petrolpark.mc.library.core.world.entity.player.team.predicate.ITeamPredicate;
 import petrolpark.mc.library.core.world.item.crafting.pocket.crafter.IPocketCrafter;
 import petrolpark.mc.library.core.world.item.decay.product.DecayProductType;
 import petrolpark.mc.library.core.world.restaurant.Restaurant;
+import petrolpark.mc.library.core.world.restaurant.customer.ICustomer;
 import petrolpark.mc.library.core.world.restaurant.order.RestaurantOrderGenerator;
 import petrolpark.mc.library.experimental.trade.ITradeListingReference;
 
@@ -130,6 +132,7 @@ public class PetrolparkRegistries {
     public static final Registry<LootTableModifierType> LOOT_TABLE_MODIFIER_TYPES = simple(Keys.LOOT_TABLE_MODIFIER_TYPE);
     public static final Registry<LootPoolEntryModifierType> LOOT_POOL_ENTRY_MODIFIER_TYPES = simple(Keys.LOOT_POOL_ENTRY_MODIFIER_TYPE);
     public static final Registry<StringProviderType> STRING_PROVIDER_TYPES = simple(Keys.STRING_PROVIDER_TYPE);
+    public static final Registry<ITeamPredicate.Type> TEAM_PREDICATE_TYPES = simple(Keys.TEAM_PREDICATE_TYPE);
 
     // Generated Ingredients
     public static final Registry<IngredientRandomizerType> INGREDIENT_RANDOMIZER_TYPES = simple(Keys.INGREDIENT_RANDOMIZER_TYPE);
@@ -142,6 +145,9 @@ public class PetrolparkRegistries {
     public static final Registry<IRewardInfo.Type> REWARD_INFO_TYPES = simple(Keys.REWARD_INFO_TYPE);
     public static final Registry<IEntityReward.Type> ENTITY_REWARD_TYPES = simple(Keys.ENTITY_REWARD_TYPE);
     public static final Registry<ITeamReward.Type> TEAM_REWARD_TYPES = simple(Keys.TEAM_REWARD_TYPE);
+
+    // Restaurants
+    public static final Registry<ICustomer.ProviderType> CUSTOMER_PROVIDER_TYPES = simple(Keys.CUSTOMER_PROVIDER_TYPE);
 
     // Misc
     public static final Registry<BogglePatternGeneratorType> BOGGLE_PATTERN_GENERATOR_TYPES = simple(Keys.BOGGLE_PATTERN_GENERATOR_TYPE);
@@ -199,7 +205,9 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<LootTableModifierType>> LOOT_TABLE_MODIFIER_TYPE = key("loot_table_modifier_type");
         public static final ResourceKey<Registry<LootPoolEntryModifierType>> LOOT_POOL_ENTRY_MODIFIER_TYPE = key("loot_pool_entry_modifier_type");
         public static final ResourceKey<Registry<LootTableModification>> LOOT_TABLE_MODIFICATION = key("loot_table_modification");
-        public static final ResourceKey<Registry<StringProviderType>> STRING_PROVIDER_TYPE= key("string_provider_type");
+        public static final ResourceKey<Registry<StringProviderType>> STRING_PROVIDER_TYPE = key("string_provider_type");
+        public static final ResourceKey<Registry<ITeamPredicate.Type>> TEAM_PREDICATE_TYPE = key("team_predicate_type");
+        public static final ResourceKey<Registry<ITeamPredicate>> TEAM_PREDICATE = key("team_predicate");
 
         // Generated ingredients
         public static final ResourceKey<Registry<IngredientRandomizerType>> INGREDIENT_RANDOMIZER_TYPE = key("ingredient_randomizer_type");
@@ -214,10 +222,13 @@ public class PetrolparkRegistries {
         public static final ResourceKey<Registry<ITeamReward.Type>> TEAM_REWARD_TYPE = key("team_reward_type");
         public static final ResourceKey<Registry<IRewardGenerator>> REWARD_GENERATOR = key("reward_generator");
         public static final ResourceKey<Registry<IReward>> REWARD = key("reward");
+        public static final ResourceKey<Registry<IEntityReward>> ENTITY_REWARD = key("entity_reward");
+        public static final ResourceKey<Registry<ITeamReward>> TEAM_REWARD = key("team_reward");
 
         // Restaurants
-        public static final ResourceKey<Registry<Restaurant>> RESTAURANT = key("restaurant");
-        public static final ResourceKey<Registry<RestaurantOrderGenerator>> RESTAURANT_ORDER_GENERATOR = key("restaurant/offer_generator");
+        public static final ResourceKey<Registry<Restaurant>> RESTAURANT = key("restaurant/definition");
+        public static final ResourceKey<Registry<RestaurantOrderGenerator>> RESTAURANT_ORDER_GENERATOR = key("restaurant/order_generator");
+        public static final ResourceKey<Registry<ICustomer.ProviderType>> CUSTOMER_PROVIDER_TYPE = key("restaurant/customer_provider_type");
 
         // Misc
         public static final ResourceKey<Registry<AnimalMoodModifier>> ANIMAL_MOOD_MODIFIER = key("animal_mood_modifier");

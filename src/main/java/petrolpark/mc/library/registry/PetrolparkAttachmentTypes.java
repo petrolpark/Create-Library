@@ -12,6 +12,7 @@ import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.badge.PlayerBadges;
 import petrolpark.mc.library.core.data.loot.wish.PlayerWishList;
 import petrolpark.mc.library.core.world.entity.player.team.singleplayer.SinglePlayerTeam;
+import petrolpark.mc.library.core.world.restaurant.customer.ICustomer;
 import petrolpark.mc.library.core.world.restaurant.customer.MobCustomer;
 
 public class PetrolparkAttachmentTypes {
@@ -39,8 +40,11 @@ public class PetrolparkAttachmentTypes {
 			::build
 	);
 
-	public static final Supplier<AttachmentType<MobCustomer>> ENTITY_CUSTOMER = ATTACHMENT_TYPES.register(
-		"customer", AttachmentType.builder(MobCustomer::create).serialize(MobCustomer.ATTACHMENT_SERIALIZER)::build
+	public static final Supplier<AttachmentType<ICustomer>> ENTITY_CUSTOMER = ATTACHMENT_TYPES.register(
+		"customer", AttachmentType.<ICustomer>builder(ICustomer::none)
+			.serialize(MobCustomer.ATTACHMENT_SERIALIZER)
+			.sync(MobCustomer.ATTCHMENT_SYNC_HANDLER)
+			::build
 	);
 
 	@ApiStatus.Internal

@@ -105,13 +105,13 @@ public record VillagerGossipEntityReward(GossipType type, NumberProvider value, 
 
         @Override
         public EntityRewardAndInfoType getRewardInfoType() {
-            return PetrolparkRewardTypes.GOSSIP.get();
+            return PetrolparkRewardTypes.ENTITY_GOSSIP.get();
         };
     };
 
     @Override
     public EntityRewardAndInfoType getType() {
-        return PetrolparkRewardTypes.GOSSIP.get();
+        return PetrolparkRewardTypes.ENTITY_GOSSIP.get();
     };
     
 };

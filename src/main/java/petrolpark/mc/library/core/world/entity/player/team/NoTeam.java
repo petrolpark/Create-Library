@@ -7,18 +7,18 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.Nullable;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.registry.PetrolparkTeamProviderTypes;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponentPatch;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.registry.PetrolparkTeamProviderTypes;
 
 @ParametersAreNonnullByDefault
 public final class NoTeam implements ITeam, ITeam.Provider {
@@ -61,8 +61,7 @@ public final class NoTeam implements ITeam, ITeam.Provider {
     };
 
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    public Stream<Player> streamMembers() {
+    public Stream<ServerPlayer> streamOnlineMembers() {
         return Stream.empty();
     };
 
@@ -78,7 +77,7 @@ public final class NoTeam implements ITeam, ITeam.Provider {
 
     @Override
     public void renderIcon(GuiGraphics graphics) {
-        //TODO
+        graphics.renderFakeItem(new ItemStack(Items.BARRIER), 0, 0);
     };
 
     @Override

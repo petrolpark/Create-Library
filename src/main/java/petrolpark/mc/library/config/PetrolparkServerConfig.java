@@ -64,6 +64,11 @@ public class PetrolparkServerConfig extends ConfigBase {
             public final ConfigGroup redstoneProgrammer = group(2, "redstoneProgrammer");
                 public final ConfigInt redstoneProgrammerMaxChannels = i(20, 1, 256, "maxChannels", "Maximum number of channels in a single Redstone Programmer");
                 public final ConfigInt redstoneProgrammerMinTicksPerBeat = i(2, 1, 20, "minTicksPerBeat", "The shortest length (in ticks) a Redstone Programmer can change signal over.", "The lower this is, the greater the potential for players to cause lag.");
+        // Farmers' Delight
+        public final ConfigGroup farmersDelight = group(1, "farmersDelight");
+            public final ConfigGroup farmersDelightFlags = group(2, "flags");
+                public final ConfigBool farmersDelightCuttingRecipesPropagateFlags = b(true, "propagateCutting", "Cuttin Board recipes will propagate the Flags of the input to the output(s)");
+                public final ConfigBool farmersDelightCookingRecipesPropagateFlags = b(true, "propagateCooking", "Cooking Recipes will propagate the Flags of the inputs to the output");
 
     @Override
     public String getName() {

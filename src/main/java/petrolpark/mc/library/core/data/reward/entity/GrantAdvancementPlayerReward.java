@@ -90,14 +90,14 @@ public record GrantAdvancementPlayerReward(ResourceLocation advancementId, Strin
 
         @Override
         public EntityRewardAndInfoType getRewardInfoType() {
-            return PetrolparkRewardTypes.GRANT_ADVANCEMENT.get();
+            return PetrolparkRewardTypes.ENTITY_GRANT_ADVANCEMENT.get();
         };
 
     };
 
     @Override
     public EntityRewardAndInfoType getType() {
-        return PetrolparkRewardTypes.GRANT_ADVANCEMENT.get();
+        return PetrolparkRewardTypes.ENTITY_GRANT_ADVANCEMENT.get();
     };
     
     

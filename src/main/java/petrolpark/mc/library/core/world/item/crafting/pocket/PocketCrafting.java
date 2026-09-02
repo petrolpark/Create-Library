@@ -12,22 +12,22 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nullable;
 
-import it.unimi.dsi.fastutil.Hash;
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMaps;
 import net.createmod.catnip.data.Pair;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen;
 import net.minecraft.network.chat.Component;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
-import petrolpark.mc.library.core.world.DummySlot;
+import petrolpark.mc.library.core.world.inventory.DummySlot;
+import petrolpark.mc.library.util.ItemHelper;
 
 public class PocketCrafting {
     
-    public static Pair<Int2ObjectMap<Int2ObjectMap<Slot>>, Int2ObjectMap<SlotGrid>> organiseSlots(Collection<Slot> slots, SlotArrangement backgroundSlots) {
+    public static Pair<Int2ObjectMap<Int2ObjectMap<Slot>>, Int2ObjectMap<SlotGrid>> organiseSlots(AbstractContainerMenu menu, Collection<Slot> slots, SlotArrangement backgroundSlots) {
 
         final Int2ObjectMap<Int2ObjectMap<Slot>> positionedSlots = new Int2ObjectArrayMap<>();
         positionedSlots.defaultReturnValue(Int2ObjectMaps.emptyMap());
@@ -48,30 +48,30 @@ public class PocketCrafting {
             final SlotGrid grid = new SlotGrid();
             row.add(slot);
             grid.slots.add(slot);
-            grids.put(getIndex(slot), grid);
+            grids.put(ItemHelper.getActualIndex(menu, slot), grid);
 
             // Expand as far to the right as possible
-            Slot rightSlot = getOrBackground(slot.x + 18, slot.y, positionedSlots, backgroundSlots);
+            Slot rightSlot = getOrBackground(slot.x + 18, slot.y, menu, positionedSlots, backgroundSlots);
             while (rightSlot != null) {
                 unvisitedSlots.remove(rightSlot);
                 row.add(rightSlot);
                 grid.width++;
                 grid.slots.add(rightSlot);
-                grids.put(getIndex(rightSlot), grid);
-                rightSlot = getOrBackground(rightSlot.x + 18, slot.y, positionedSlots, backgroundSlots);
+                grids.put(ItemHelper.getActualIndex(menu, rightSlot), grid);
+                rightSlot = getOrBackground(rightSlot.x + 18, slot.y, menu, positionedSlots, backgroundSlots);
             };
 
             addNewRows: while (true) {
                 final List<Slot> nextRow = new ArrayList<>();
                 for (Slot slotInRow : row) {
-                    final Slot belowSlot = getOrBackground(slotInRow.x, slotInRow.y + 18, positionedSlots, backgroundSlots);
+                    final Slot belowSlot = getOrBackground(slotInRow.x, slotInRow.y + 18, menu, positionedSlots, backgroundSlots);
                     if (belowSlot == null) break addNewRows;
                     nextRow.add(belowSlot);
                 };
                 for (Slot belowSlot : nextRow) {
                     unvisitedSlots.remove(belowSlot);
                     grid.slots.add(belowSlot);
-                    grids.put(getIndex(belowSlot), grid);
+                    grids.put(ItemHelper.getActualIndex(menu, belowSlot), grid);
                 };
                 row = nextRow;
             };
@@ -81,37 +81,13 @@ public class PocketCrafting {
     };
 
     @Nullable
-    public static Slot getOrBackground(int x, int y, Int2ObjectMap<Int2ObjectMap<Slot>> slots, SlotArrangement backgroundSlots) {
+    public static Slot getOrBackground(int x, int y, AbstractContainerMenu menu, Int2ObjectMap<Int2ObjectMap<Slot>> slots, SlotArrangement backgroundSlots) {
         Slot slot = slots.get(y).get(x);
         if (slot != null) return slot;
         slot = backgroundSlots.get(x, y);
-        return slot == null ? null : new DummySlot(slot.container, getIndex(slot), slot.x, slot.y);
+        return slot == null ? null : new DummySlot(slot.container, ItemHelper.getActualIndex(menu, slot), slot.x, slot.y);
     };
-
-    public static int getIndex(Slot slot) {
-        if (slot instanceof CreativeModeInventoryScreen.SlotWrapper) {
-            //TODO
-        };
-        return slot.index;
-    };
-
-    public static final Hash.Strategy<Slot> SLOT_HASH_STRATEGY = new Hash.Strategy<>() {
-
-        @Override
-        public int hashCode(Slot o) {
-            return PocketCrafting.getIndex(o);
-        };
-
-        @Override
-        public boolean equals(Slot a, Slot b) {
-            if (a == null) return b == null;
-            if (b == null)
-                return false;
-            return PocketCrafting.getIndex(a) == PocketCrafting.getIndex(b);
-        };
-
-    };
-
+    
     public static final Comparator<Slot> SLOT_COMPARATOR = new Comparator<>(){
 
         @Override
