@@ -7,6 +7,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.fluids.FluidStack;
+import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
 import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 public interface FluidAdvancedIngredient extends IAdvancedIngredient<FluidStack> {
@@ -14,13 +15,13 @@ public interface FluidAdvancedIngredient extends IAdvancedIngredient<FluidStack>
     /**
      * Use {@link FluidAdvancedIngredient#CODEC instead}.
      */
-    static final Codec<IAdvancedIngredient<? super FluidStack>> TYPED_CODEC = PetrolparkRegistries.ADVANCED_FLUID_INGREDIENT_TYPES
+    static final Codec<IAdvancedIngredient<FluidStack>> TYPED_CODEC = PetrolparkRegistries.ADVANCED_FLUID_INGREDIENT_TYPES
         .byNameCodec()
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::codec);
 
-    public static final Codec<IAdvancedIngredient<? super FluidStack>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, Codec.unit(PassAdvancedIngredient.INSTANCE)));
+    public static final Codec<IAdvancedIngredient<FluidStack>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, PetrolparkAdvancedIngredientTypes.FLUID_PASS.get().inlineCodec()));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super FluidStack>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.ADVANCED_FLUID_INGREDIENT_TYPE)
+    public static final StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<FluidStack>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.ADVANCED_FLUID_INGREDIENT_TYPE)
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::streamCodec);
 
     default Component translate(Object... translationArgs) {

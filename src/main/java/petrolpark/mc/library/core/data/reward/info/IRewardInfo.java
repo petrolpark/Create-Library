@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.reward.info;
 
+import java.util.Optional;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import org.jetbrains.annotations.ApiStatus;
@@ -11,6 +13,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import petrolpark.mc.library.core.data.reward.IReward;
@@ -38,6 +41,10 @@ public interface IRewardInfo {
 
     @OnlyIn(Dist.CLIENT)
     public void addToDescription(IndentedTooltipBuilder builder);
+
+    public default Optional<ItemStack> getItemStack() {
+        return Optional.empty();
+    };
 
     public IRewardInfo.Type getRewardInfoType();
 

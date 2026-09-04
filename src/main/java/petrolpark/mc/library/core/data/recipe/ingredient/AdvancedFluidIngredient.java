@@ -4,15 +4,15 @@ import java.util.stream.Stream;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.FluidAdvancedIngredient;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
-import petrolpark.mc.library.registry.PetrolparkNeoForgeIngredientTypes;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredient;
 import net.neoforged.neoforge.fluids.crafting.FluidIngredientType;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.FluidAdvancedIngredient;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
+import petrolpark.mc.library.registry.PetrolparkNeoForgeIngredientTypes;
 
 public class AdvancedFluidIngredient extends FluidIngredient {
 
@@ -25,13 +25,13 @@ public class AdvancedFluidIngredient extends FluidIngredient {
         AdvancedFluidIngredient::new
     );
 
-    protected final IAdvancedIngredient<? super FluidStack> advancedIngredient;
+    protected final IAdvancedIngredient<FluidStack> advancedIngredient;
 
-    public AdvancedFluidIngredient(IAdvancedIngredient<? super FluidStack> ingredient) {
+    public AdvancedFluidIngredient(IAdvancedIngredient<FluidStack> ingredient) {
         this.advancedIngredient = ingredient;
     };
 
-    public IAdvancedIngredient<? super FluidStack> getAdvancedIngredient() {
+    public IAdvancedIngredient<FluidStack> getAdvancedIngredient() {
         return advancedIngredient;
     };
 

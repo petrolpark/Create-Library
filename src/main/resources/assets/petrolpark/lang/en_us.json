@@ -157,6 +157,7 @@
     "item.petrolpark.drying_item.remaining": "Dries in %1$s",
     "item.petrolpark.recipe_book": "Recipe Book",
     "item.petrolpark.order": "Order",
+    "item.petrolpark.order.customer": "For %1$s at (%2$s, %3$s, %4$s)",
     "item.petrolpark.order_book": "Order Book",
     "item.petrolpark.order_book.team_selection": "Select Team for %1$s",
     "item.petrolpark.shared.blood_bucket": "Blood Bucket",
@@ -300,6 +301,13 @@
     "petrolpark.gui.goggles.centrifuge": "Centrifuge Contents",
     "petrolpark.gui.goggles.centrifuge.inner": "Inner Chamber:",
     "petrolpark.gui.goggles.centrifuge.outer": "Outer Chamber:",
+
+    "petrolpark.gui.restaurant.order": "ORDER:",
+    "petrolpark.gui.restaurant.orderModifiers": "SPECIAL CONDITIONS:",
+    "petrolpark.gui.restaurant.successMultiplier": "If fulfilled: %1$sx payment",
+    "petrolpark.gui.restaurant.failureMultiplier": "Otherwise: %1$sx payment",
+    "petrolpark.gui.restaurant.rewards": "PAYMENT:",
+
     "petrolpark.gui.threshold_switch.stress_capacity_percentage": "%1$s%% Capacity",
 
     "petrolpark.key.deleteItem": "Delete deletable item",
@@ -485,8 +493,7 @@
     "restaurant.petrolpark.test": "Testaurant",
     "restaurant.petrolpark.unknown": "Unknown Restaurant",
 
-    "customer.petrolpark.mob": "%1$s at (%2$s, %3$s, %4$s)",
-    "customer.petrolpark.none": "Unknown customer",
+    "customer.petrolpark.none": "Unknown Customer",
 
     "team.petrolpark.none": "No Team",
 

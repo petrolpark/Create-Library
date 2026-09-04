@@ -78,7 +78,7 @@ public class RewardCommand {
         if (rewardHolder.value().reward(new LootContext.Builder(lootParamsBuilder.create(PetrolparkLootContextParamSets.REWARD_COMMAND)).create(Optional.empty()), multiplier, false)) {
             final IndentedTooltipBuilder.OneLine tooltipBuilder = new IndentedTooltipBuilder.OneLine();
             rewardHolder.value().info().addToDescription(tooltipBuilder);
-            source.sendSuccess(() -> Component.translatable("commands.petrolpark.reward.success", tooltipBuilder.build()), true);
+            source.sendSuccess(() -> Component.translatable("commands.petrolpark.reward.success", tooltipBuilder.buildSingle()), true);
             return 1;
         } else {
             source.sendFailure(Component.translatable("commands.petrolpark.reward.failed"));
@@ -100,7 +100,7 @@ public class RewardCommand {
             final IndentedTooltipBuilder.OneLine tooltipBuilder = new IndentedTooltipBuilder.OneLine();
             rewardHolder.value().info().addToDescription(tooltipBuilder);
             final int succesfullFinal = succesfull;
-            source.sendSuccess(() -> Component.translatable("commands.petrolpark.reward.entity.success", succesfullFinal, tooltipBuilder.build()), true);
+            source.sendSuccess(() -> Component.translatable("commands.petrolpark.reward.entity.success", succesfullFinal, tooltipBuilder.buildSingle()), true);
             return 1;
         } else {
             source.sendFailure(Component.translatable("commands.petrolpark.reward.failed"));

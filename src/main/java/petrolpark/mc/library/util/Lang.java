@@ -1,6 +1,9 @@
 package petrolpark.mc.library.util;
 
+import java.text.BreakIterator;
 import java.text.DecimalFormat;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -30,6 +33,8 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.ai.gossip.GossipType;
 import net.minecraft.world.inventory.ClickType;
 import net.minecraft.world.item.Rarity;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.Tags;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.flags.Flag;
@@ -76,7 +81,43 @@ public class Lang {
         return Component.literal(shorten(component.getString(), font, maxWidth)).withStyle(component.getStyle());
     };
 
-    public static final String prependPath(String prefix, String path) {
+    public static List<String> wrap(Font font, String text, int maxWidth) {
+        if (font.width(text) <= maxWidth) return Collections.singletonList(text);
+
+		final List<String> words = new LinkedList<>();
+		final BreakIterator iterator = BreakIterator.getLineInstance(Minecraft.getInstance().getLocale());
+		iterator.setText(text);
+		int start = iterator.first();
+		for (int end = iterator.next(); end != BreakIterator.DONE; start = end, end = iterator.next()) {
+			words.add(text.substring(start, end));
+		};
+
+		final List<String> lines = new LinkedList<>();
+		StringBuilder currentLine = new StringBuilder();
+		int width = 0;
+		for (String word : words) {
+			int newWidth = font.width(word.replaceAll("_", ""));
+			if (width + newWidth > maxWidth) {
+				if (width > 0) {
+					lines.add(currentLine.toString());
+					currentLine = new StringBuilder();
+					width = 0;
+				} else {
+					lines.add(word);
+					continue;
+				}
+			}
+			currentLine.append(word);
+			width += newWidth;
+		}
+		if (width > 0) {
+			lines.add(currentLine.toString());
+		};
+
+		return lines;
+    };
+
+    public static String prependPath(String prefix, String path) {
         final int index = path.lastIndexOf('/');
         if (index == -1) return prefix + path;
         return path.substring(0, index + 1) + prefix + path.substring(index + 1);
@@ -172,7 +213,7 @@ public class Lang {
         return Component.translatable("advancedIngredient." + Petrolpark.MOD_ID + "." + keyEnd, translationArgs);
     };
 
-    public static Component generic(String keyEnd, Object... translationArgs) {
+    public static MutableComponent generic(String keyEnd, Object... translationArgs) {
         return Component.translatable(genericTranslationKey(keyEnd), translationArgs);
     };
 
@@ -221,15 +262,15 @@ public class Lang {
         return Component.translatableWithFallback(Util.makeDescriptionId("loot_table", id), "" + id);
     };
 
-    public static final Component unknownRange() {
+    public static final MutableComponent unknownRange() {
         return generic("range.unknown");
     };
 
-    public static final Component range(float min, float max, DecimalFormat df) {
+    public static final MutableComponent range(float min, float max, DecimalFormat df) {
         return range(min, max, false, df);
     };
 
-    public static final Component range(float min, float max, boolean approximate, DecimalFormat df) {
+    public static final MutableComponent range(float min, float max, boolean approximate, DecimalFormat df) {
         String postfix;
         String[] args;
         if (min == Float.NaN) {
@@ -310,10 +351,12 @@ public class Lang {
         public IndentedTooltipBuilder add(Component component);
 
         public IndentedTooltipBuilder addAll(Stream<Component> components);
+
+        public List<Component> build();
     
         public static class Impl implements IndentedTooltipBuilder {
 
-            protected List<Component> components;
+            protected final List<Component> components;
             protected int indents = 0;
 
             public Impl(List<Component> components) {
@@ -344,12 +387,56 @@ public class Lang {
                 return this;
             };
 
-            protected Component withIndent(Component unindentedComponent) {
+            private Component withIndent(Component unindentedComponent) {
                 return Component.literal(Strings.repeat(" ", indents)).append(unindentedComponent);
+            };
+
+            @Override
+            public List<Component> build() {
+                return components;
             };
         
         };
         
+        @OnlyIn(Dist.CLIENT)
+        public static class Wrapping extends Impl {
+
+            protected final Font font;
+            protected final int maxIndents;
+            protected final int maxWidth;
+
+            public Wrapping(Font font, List<Component> components, int maxWidth) {
+                this(font, components, Integer.MAX_VALUE, maxWidth);
+            };
+
+            public Wrapping(Font font, List<Component> components, int maxIndents, int maxWidth) {
+                super(components);
+                this.font = font;
+                this.maxIndents = maxIndents;
+                this.maxWidth = maxWidth;
+            };
+
+            @Override
+            public IndentedTooltipBuilder.Wrapping add(Component component) {
+                final String indent = Strings.repeat(" ", Math.min(maxIndents, indents));
+                final int indentWidth = font.width(indent);
+                if (font.width(component) + indentWidth <= maxWidth) {
+                    components.add(Component.literal(indent).append(component));
+                    return this;
+                };
+                wrap(font, component.getString(), maxWidth - indentWidth)
+                    .forEach(string -> components.add(Component.literal(indent + string).withStyle(component.getStyle())));
+                return this;
+            };
+
+            @Override
+            public IndentedTooltipBuilder.Wrapping addAll(Stream<Component> components) {
+                components.forEach(this::add);
+                return this;
+            };
+
+        };
+
         public static class OneLine implements IndentedTooltipBuilder {
           
             protected MutableComponent component = Component.empty();
@@ -385,9 +472,14 @@ public class Lang {
                 return this;
             };
 
-            public Component build() {
+            public Component buildSingle() {
                 if (lastActionAddedComponent != null && lastActionAddedComponent && component.getSiblings().size() > 0) component.getSiblings().removeLast(); // Remove the last ", "
                 return component;
+            };
+
+            @Override
+            public List<Component> build() {
+                return Collections.singletonList(buildSingle());
             };
 
         };

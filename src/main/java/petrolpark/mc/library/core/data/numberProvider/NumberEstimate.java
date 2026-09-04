@@ -10,6 +10,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -113,12 +114,12 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
     };
 
     @OnlyIn(Dist.CLIENT)
-    public Component getIntComponent() {
+    public MutableComponent getIntComponent() {
         return getComponent(Lang.INT_DF);
     };
 
     @OnlyIn(Dist.CLIENT)
-    public abstract Component getComponent(DecimalFormat df);
+    public abstract MutableComponent getComponent(DecimalFormat df);
 
     public final boolean approximate() {
         return approximate;
@@ -189,7 +190,7 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         };
 
         @Override
-        public Component getComponent(DecimalFormat df) {
+        public MutableComponent getComponent(DecimalFormat df) {
             return Component.literal(df.format(value));
         };
 
@@ -297,7 +298,7 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         };
 
         @Override
-        public Component getComponent(DecimalFormat df) {
+        public MutableComponent getComponent(DecimalFormat df) {
             return Lang.range(min, max, approximate(), df);
         };
 
@@ -393,7 +394,7 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         };
 
         @Override
-        public Component getComponent(DecimalFormat df) {
+        public MutableComponent getComponent(DecimalFormat df) {
             return Lang.unknownRange();
         };
 

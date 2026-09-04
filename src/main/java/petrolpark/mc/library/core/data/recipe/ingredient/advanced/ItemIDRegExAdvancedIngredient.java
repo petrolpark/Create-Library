@@ -5,9 +5,6 @@ import java.util.stream.Stream;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -15,6 +12,9 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 public record ItemIDRegExAdvancedIngredient(String idRegEx) implements ItemAdvancedIngredient {
 
@@ -22,12 +22,12 @@ public record ItemIDRegExAdvancedIngredient(String idRegEx) implements ItemAdvan
     public static final StreamCodec<ByteBuf, ItemIDRegExAdvancedIngredient> STREAM_CODEC = StreamCodec.composite(ByteBufCodecs.STRING_UTF8, ItemIDRegExAdvancedIngredient::idRegEx, ItemIDRegExAdvancedIngredient::new);
 
     @Override
-    public Stream<? extends ItemStack> streamExamples() {
+    public Stream<ItemStack> streamExamples() {
         return BuiltInRegistries.ITEM.stream().filter(this::test).map(ItemStack::new); //TODO see if caching this is better
     };
 
     @Override
-    public Stream<? extends ItemStack> streamCounterExamples() {
+    public Stream<ItemStack> streamCounterExamples() {
         return BuiltInRegistries.ITEM.stream().dropWhile(this::test).map(ItemStack::new);
     };
 

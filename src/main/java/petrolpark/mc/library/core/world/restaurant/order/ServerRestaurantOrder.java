@@ -20,7 +20,7 @@ import petrolpark.mc.library.util.DataValidationHelper;
 @ParametersAreNonnullByDefault
 public record ServerRestaurantOrder(
     int id,
-    IAdvancedIngredient<? super ItemStack> ingredient,
+    IAdvancedIngredient<ItemStack> ingredient,
     List<RestaurantOrderModifier> modifiers,
     List<RewardEntry> rewardEntries
 ) implements IRestaurantOrder, LootContextUser {

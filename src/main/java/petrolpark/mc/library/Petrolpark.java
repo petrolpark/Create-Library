@@ -46,6 +46,7 @@ import petrolpark.mc.library.registry.PetrolparkItems;
 import petrolpark.mc.library.registry.PetrolparkLootConditionTypes;
 import petrolpark.mc.library.registry.PetrolparkLootItemFunctions;
 import petrolpark.mc.library.registry.PetrolparkLootModifierTypes;
+import petrolpark.mc.library.registry.PetrolparkMenuTypes;
 import petrolpark.mc.library.registry.PetrolparkNeoForgeIngredientTypes;
 import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 import petrolpark.mc.library.registry.PetrolparkPackets;
@@ -113,6 +114,7 @@ public class Petrolpark {
         PetrolparkLootConditionTypes.register();
         PetrolparkLootItemFunctions.register();
         PetrolparkLootModifierTypes.register();
+        PetrolparkMenuTypes.register();
         PetrolparkNumberProviderTypes.register();
         PetrolparkPackets.register();
         PetrolparkPocketCrafters.register();

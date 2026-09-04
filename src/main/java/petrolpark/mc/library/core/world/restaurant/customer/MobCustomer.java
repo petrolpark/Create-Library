@@ -11,7 +11,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
@@ -32,7 +32,6 @@ import net.minecraft.world.level.storage.loot.LootParams;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
-import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
 import petrolpark.mc.library.core.world.restaurant.Restaurant;
 import petrolpark.mc.library.core.world.restaurant.order.IRestaurantOrder;
@@ -56,29 +55,35 @@ public class MobCustomer extends AbstractCustomer {
     };
 
     @Override
-    public Component getDescription() {
-        return Component.translatable("customer." + Petrolpark.MOD_ID + ".mob", entity.getDisplayName(), entity.getBlockX(), entity.getBlockY(), entity.getBlockZ()).withStyle(ChatFormatting.GRAY);
+    public Component getName() {
+        return entity.getDisplayName();
     };
 
     @Override
-    public boolean canInteractWith(Player player) {
-        return player.distanceToSqr(entity) < 16f;
+    public BlockPos getPosition() {
+        return entity.blockPosition();
+    };
+
+    @Override
+    public void cancelOrder(ServerLevel level, Player player) {
+        super.cancelOrder(level, player);
+        entity.removeData(PetrolparkAttachmentTypes.ENTITY_CUSTOMER);
+    };
+
+    @Override
+    public void supplyLootParams(ServerLevel level, LootParams.Builder builder) {
+        super.supplyLootParams(level, builder);
+        builder.withOptionalParameter(PetrolparkLootContextParams.CUSTOMER_ENTITY, entity);
+    };
+
+    @Override
+    public void tickWhileOrderItemHeld(ItemStack stack, Level level, Player player, int slotId) {
+        entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 2, 0, true, false));
     };
 
     @Override
     public @Nonnull MobCustomer.Provider getProvider() {
         return new MobCustomer.Provider(entity.getId(), entity.getUUID(), order.id());
-    };
-
-    @Override
-    public void supplyLootParams(LootParams.Builder builder) {
-        super.supplyLootParams(builder);
-        builder.withParameter(PetrolparkLootContextParams.CUSTOMER_ENTITY, entity);
-    };
-
-    @Override
-    public void tickWhileOrderItemHeld(ItemStack stack, Level level, Player player, int slotId) {
-        entity.addEffect(new MobEffectInstance(MobEffects.GLOWING, 5, 0, true, false));
     };
 
     public record Factory(LivingEntity entity) implements AbstractCustomer.Factory<MobCustomer> {
@@ -112,12 +117,16 @@ public class MobCustomer extends AbstractCustomer {
 
         @Override
         public void write(RegistryFriendlyByteBuf buf, ICustomer attachment, boolean initialSync) {
-            if (attachment instanceof MobCustomer customer) customer.writeBuffer(buf);
+            if (attachment instanceof MobCustomer customer) {
+                buf.writeBoolean(true);
+                customer.writeBuffer(buf);
+            } else
+                buf.writeBoolean(false);
         };
 
         @Override
         public @Nullable ICustomer read(IAttachmentHolder holder, RegistryFriendlyByteBuf buf, @Nullable ICustomer previousValue) {
-            return AbstractCustomer.readBuffer(buf, factory(holder));
+            return buf.readBoolean() ? AbstractCustomer.readBuffer(buf, factory(holder)) : null;
         };
         
     };
@@ -142,7 +151,7 @@ public class MobCustomer extends AbstractCustomer {
             final Entity entity = level instanceof ServerLevel serverLevel ? serverLevel.getEntity(entityUuid()) : level.getEntity(entityId());
             if (!(entity instanceof LivingEntity && entity.getUUID().equals(entityUuid()))) return ICustomer.none();
             final ICustomer customer = entity.getData(PetrolparkAttachmentTypes.ENTITY_CUSTOMER);
-            return customer.getOrder().id() == orderId() ? customer : ICustomer.none();
+            return !customer.isNone() && customer.getOrder().id() == orderId() ? customer : ICustomer.none();
         };
 
         @Override

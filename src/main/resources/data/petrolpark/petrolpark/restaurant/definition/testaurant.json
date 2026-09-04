@@ -19,7 +19,15 @@
             }
         }
     ],
-    "global_order_modifiers": [],
+    "global_order_modifiers": [
+        {
+            "modifier": {
+                "type": "petrolpark:flagged",
+                "flag": "pquality:gold_quality"
+            },
+            "success": 2.0
+        }
+    ],
     "customers": {
         "type": "minecraft:villager"
     },

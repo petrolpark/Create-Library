@@ -24,30 +24,36 @@ public class PetrolparkAdvancedIngredientTypes {
 
 
     // Items
-    public static final RegistryEntry<IAdvancedIngredientType<? super ItemStack>, ? extends IAdvancedIngredientType<? super ItemStack>>
+    public static final RegistryEntry<IAdvancedIngredientType<ItemStack>, PassAdvancedIngredient<ItemStack>>
+
+    ITEM_PASS = REGISTRATE.itemAdvancedIngredientType("pass", PassAdvancedIngredient::new);
+
+    public static final RegistryEntry<IAdvancedIngredientType<ItemStack>, ? extends IAdvancedIngredientType<ItemStack>>
     
-    ITEM_PASS = REGISTRATE.itemAdvancedIngredientType("pass", PassAdvancedIngredient.TYPE),
-    ITEM_FLAGGED = REGISTRATE.itemAdvancedIngredientType("flagged", FlaggedAdvancedIngredient.TYPE);
+    ITEM_FLAGGED = REGISTRATE.itemAdvancedIngredientType("flagged", FlaggedAdvancedIngredient.Type::new);
     
-    public static final RegistryEntry<IAdvancedIngredientType<? super ItemStack>, ? extends INamedAdvancedIngredientType<ItemStack>> 
+    public static final RegistryEntry<IAdvancedIngredientType<ItemStack>, ? extends INamedAdvancedIngredientType<ItemStack>> 
     
-    ITEM = REGISTRATE.itemAdvancedIngredientType("item", ItemItemAdvancedIngredient.Type::new),
+    ITEM = REGISTRATE.namedItemAdvancedIngredientType("item", ItemItemAdvancedIngredient.Type::new),
     ITEM_ID_REGEX = REGISTRATE.itemAdvancedIngredientType("id_regex", ItemIDRegExAdvancedIngredient.CODEC, ItemIDRegExAdvancedIngredient.STREAM_CODEC),
     ITEM_HOLDER_SET = REGISTRATE.itemAdvancedIngredientType("set", HolderSetItemAdvancedIngredient.CODEC, HolderSetItemAdvancedIngredient.STREAM_CODEC),
-    ITEM_TAG = REGISTRATE.itemAdvancedIngredientType("tag", TagItemAdvancedIngredient.Type::new),
-    ITEM_ENCHANTMENTS = REGISTRATE.itemAdvancedIngredientType("enchantments", EnchantmentItemAdvancedIngredient.Type::new);
+    ITEM_TAG = REGISTRATE.namedItemAdvancedIngredientType("tag", TagItemAdvancedIngredient.Type::new),
+    ITEM_ENCHANTMENTS = REGISTRATE.namedItemAdvancedIngredientType("enchantments", EnchantmentItemAdvancedIngredient.Type::new);
     
-    public static final RegistryEntry<IAdvancedIngredientType<? super ItemStack>, GenericAdvancedIngredientType<ItemStack, NotAdvancedIngredient<ItemStack>>> ITEM_NOT = REGISTRATE.itemAdvancedIngredientType("not", NotAdvancedIngredient::codec, NotAdvancedIngredient::streamCodec);
-    public static final RegistryEntry<IAdvancedIngredientType<? super ItemStack>, GenericAdvancedIngredientType<ItemStack, CompoundAdvancedIngredient<ItemStack>>> ITEM_COMPOUND = REGISTRATE.itemAdvancedIngredientType("compound", CompoundAdvancedIngredient::codec, CompoundAdvancedIngredient::streamCodec);
+    public static final RegistryEntry<IAdvancedIngredientType<ItemStack>, GenericAdvancedIngredientType<ItemStack, NotAdvancedIngredient<ItemStack>>> ITEM_NOT = REGISTRATE.itemAdvancedIngredientType("not", NotAdvancedIngredient::codec, NotAdvancedIngredient::streamCodec);
+    public static final RegistryEntry<IAdvancedIngredientType<ItemStack>, GenericAdvancedIngredientType<ItemStack, CompoundAdvancedIngredient<ItemStack>>> ITEM_COMPOUND = REGISTRATE.itemAdvancedIngredientType("compound", CompoundAdvancedIngredient::codec, CompoundAdvancedIngredient::streamCodec);
 
     // Fluids
-    public static final RegistryEntry<IAdvancedIngredientType<? super FluidStack>, ? extends IAdvancedIngredientType<? super FluidStack>>
+    public static final RegistryEntry<IAdvancedIngredientType<FluidStack>, PassAdvancedIngredient<FluidStack>>
 
-    FLUID_PASS = REGISTRATE.fluidAdvancedIngredientType("pass", PassAdvancedIngredient.TYPE),
+    FLUID_PASS = REGISTRATE.fluidAdvancedIngredientType("pass", PassAdvancedIngredient::new);
+
+    public static final RegistryEntry<IAdvancedIngredientType<FluidStack>, ? extends IAdvancedIngredientType<FluidStack>>
+
     FLUID_NOT = REGISTRATE.fluidAdvancedIngredientType("not", NotAdvancedIngredient::codec, NotAdvancedIngredient::streamCodec),
-    FLUID_FLAGGED = REGISTRATE.fluidAdvancedIngredientType("flagged", FlaggedAdvancedIngredient.TYPE);
+    FLUID_FLAGGED = REGISTRATE.fluidAdvancedIngredientType("flagged", FlaggedAdvancedIngredient.Type::new);
 
-    public static final RegistryEntry<IAdvancedIngredientType<? super FluidStack>, ? extends INamedAdvancedIngredientType<FluidStack>> 
+    public static final RegistryEntry<IAdvancedIngredientType<FluidStack>, ? extends INamedAdvancedIngredientType<FluidStack>> 
 
     FLUID_HOLDER_SET = REGISTRATE.fluidAdvancedIngredientType("set", HolderSetFluidAdvancedIngredient.CODEC, HolderSetFluidAdvancedIngredient.STREAM_CODEC);
     

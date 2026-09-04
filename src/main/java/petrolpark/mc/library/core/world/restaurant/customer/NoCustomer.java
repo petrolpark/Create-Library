@@ -3,14 +3,18 @@ package petrolpark.mc.library.core.world.restaurant.customer;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import net.minecraft.client.gui.Font;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.storage.loot.LootParams.Builder;
+import net.minecraft.world.level.storage.loot.LootParams;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.world.entity.player.team.NoTeam;
 import petrolpark.mc.library.core.world.restaurant.Restaurant;
+import petrolpark.mc.library.core.world.restaurant.order.ClientRestaurantOrder;
 import petrolpark.mc.library.core.world.restaurant.order.IRestaurantOrder;
 import petrolpark.mc.library.registry.PetrolparkCustomerProviderTypes;
 
@@ -35,13 +39,13 @@ public class NoCustomer implements ICustomer, ICustomer.Provider {
     };
 
     @Override
-    public Component getDescription() {
+    public Component getName() {
         return Component.translatable("customer." + Petrolpark.MOD_ID + ".none");
     };
 
     @Override
-    public boolean canInteractWith(Player player) {
-        return false;
+    public BlockPos getPosition() {
+        return BlockPos.ZERO;
     };
 
     @Override
@@ -70,7 +74,15 @@ public class NoCustomer implements ICustomer, ICustomer.Provider {
     };
 
     @Override
-    public void supplyLootParams(Builder builder) {};
+    public void cancelOrder(ServerLevel level, Player player) {};
+
+    @Override
+    public void supplyLootParams(ServerLevel level, LootParams.Builder builder) {};
+
+    @Override
+    public ClientRestaurantOrder.Description getDescription(Level level, Font font, int maxWidth, int lineHeight) {
+        return ClientRestaurantOrder.Description.EMPTY;
+    };
 
     @Override
     public ICustomer provideCustomer(Level level) {

@@ -4,15 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.core.flags.Flaggable.GenericFlaggable;
-import petrolpark.mc.library.registry.PetrolparkDataMapTypes;
-
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
+import petrolpark.mc.library.PetrolparkTags;
+import petrolpark.mc.library.core.flags.Flaggable.GenericFlaggable;
+import petrolpark.mc.library.registry.PetrolparkDataMapTypes;
 
 public class Flaggables {
   
@@ -79,7 +78,7 @@ public class Flaggables {
 
     static {
         register(GENERIC);
-        register(NOT);
+        // Don't register not
         register(ITEM);
         register(FLUID);
     };

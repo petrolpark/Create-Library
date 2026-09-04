@@ -91,6 +91,8 @@ public class RestaurantOrderBookItem extends Item implements ITeamBoundItem {
 
         PetrolparkCriteriaTriggers.TAKE_ENTITY_RESTAURANT_ORDER.get().trigger(serverPlayer, restaurant, team, entity, customer);
 
+        serverPlayer.openMenu(new RestaurantOrderItem.MenuProvider(customer, true));
+
         return InteractionResult.SUCCESS;
     };
 

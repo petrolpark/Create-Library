@@ -22,12 +22,12 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import petrolpark.mc.library.core.data.numberProvider.NumberEstimate;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ItemAdvancedIngredient;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.PassAdvancedIngredient;
+import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
 @ParametersAreNonnullByDefault
 public record RestaurantOrderModifier(
-    IAdvancedIngredient<? super ItemStack> ingredient,
+    IAdvancedIngredient<ItemStack> ingredient,
     NumberProvider successMultiplier, NumberProvider failureMultiplier,
     IRestaurantOrder.Entry.Visibility visibility, boolean persistsToMenu
     //TODO comment
@@ -35,7 +35,7 @@ public record RestaurantOrderModifier(
 
     public static final Codec<RestaurantOrderModifier> CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance -> 
         instance.group(
-            ItemAdvancedIngredient.CODEC.optionalFieldOf("requirement", PassAdvancedIngredient.INSTANCE).forGetter(RestaurantOrderModifier::ingredient),
+            ItemAdvancedIngredient.CODEC.optionalFieldOf("requirement", PetrolparkAdvancedIngredientTypes.ITEM_PASS.get()).forGetter(RestaurantOrderModifier::ingredient),
             NumberProviders.CODEC.fieldOf("success").forGetter(RestaurantOrderModifier::successMultiplier),
             NumberProviders.CODEC.optionalFieldOf("failure", ConstantValue.exactly(0f)).forGetter(RestaurantOrderModifier::failureMultiplier)
         ).and(IRestaurantOrder.Entry.commonFields(instance))
@@ -63,7 +63,7 @@ public record RestaurantOrderModifier(
         failureMultiplier().validate(context.forChild(".failureMultiplier"));
     };
 
-    public record Info(IAdvancedIngredient<? super ItemStack> ingredient, NumberEstimate successMultiplier, NumberEstimate failureMultiplier) {
+    public record Info(IAdvancedIngredient<ItemStack> ingredient, NumberEstimate successMultiplier, NumberEstimate failureMultiplier) {
       
         public static final StreamCodec<RegistryFriendlyByteBuf, RestaurantOrderModifier.Info> STREAM_CODEC = StreamCodec.composite(
             ItemAdvancedIngredient.STREAM_CODEC, RestaurantOrderModifier.Info::ingredient,

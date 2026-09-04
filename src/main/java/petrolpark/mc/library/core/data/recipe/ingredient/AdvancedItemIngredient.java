@@ -6,17 +6,17 @@ import javax.annotation.Nonnull;
 
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ItemAdvancedIngredient;
-import petrolpark.mc.library.registry.PetrolparkNeoForgeIngredientTypes;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.common.crafting.ICustomIngredient;
 import net.neoforged.neoforge.common.crafting.IngredientType;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.ItemAdvancedIngredient;
+import petrolpark.mc.library.registry.PetrolparkNeoForgeIngredientTypes;
 
-public record AdvancedItemIngredient(IAdvancedIngredient<? super ItemStack> advacnedIngredient) implements ICustomIngredient {
+public record AdvancedItemIngredient(IAdvancedIngredient<ItemStack> advacnedIngredient) implements ICustomIngredient {
 
     public static final MapCodec<AdvancedItemIngredient> CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(
         ItemAdvancedIngredient.CODEC.fieldOf("ingredient").forGetter(AdvancedItemIngredient::advacnedIngredient)

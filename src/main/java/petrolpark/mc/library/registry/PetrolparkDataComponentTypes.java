@@ -14,6 +14,7 @@ import net.minecraft.core.component.DataComponentType.Builder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctions;
@@ -33,8 +34,6 @@ import petrolpark.mc.library.core.world.item.decay.product.IDecayProduct;
 import petrolpark.mc.library.core.world.restaurant.Restaurant;
 import petrolpark.mc.library.core.world.restaurant.RestaurantsData;
 import petrolpark.mc.library.core.world.restaurant.customer.ICustomer;
-import petrolpark.mc.library.core.world.restaurant.order.ClientRestaurantOrder;
-import petrolpark.mc.library.core.world.restaurant.order.IRestaurantOrder;
 import petrolpark.mc.library.util.WoodHelper;
 import petrolpark.mc.library.util.codec.CodecHelper;
 
@@ -86,9 +85,14 @@ public class PetrolparkDataComponentTypes {
         .networkSynchronized(Restaurant.STREAM_CODEC)
     );
 
-    public static final DataComponentType<IRestaurantOrder> RESTAURANT_ORDER = register("restaurant_order", builder -> builder
-        .persistent(IRestaurantOrder.SERVER_CODEC)
-        .networkSynchronized(ClientRestaurantOrder.STREAM_CODEC)
+    // public static final DataComponentType<IRestaurantOrder> RESTAURANT_ORDER = register("restaurant_order", builder -> builder
+    //     .persistent(IRestaurantOrder.SERVER_CODEC)
+    //     .networkSynchronized(ClientRestaurantOrder.STREAM_CODEC)
+    // );
+
+    public static final DataComponentType<List<ItemStack>> RESTAURANT_ORDER_EXAMPLES = register("restaurant_order_example_stacks", builder -> builder
+        .persistent(ItemStack.SINGLE_ITEM_CODEC.listOf())
+        .networkSynchronized(ItemStack.LIST_STREAM_CODEC)
     );
 
     public static final DataComponentType<ICustomer.Provider> CUSTOMER_PROVIDER = register("customer_provider", builder -> builder

@@ -26,7 +26,7 @@ public record FromItemSetIngredientRandomizer(HolderSet<Item> items) implements 
     public static final MapCodec<FromItemSetIngredientRandomizer> CODEC = CodecHelper.singleFieldMap(RegistryCodecs.homogeneousList(Registries.ITEM), "items", FromItemSetIngredientRandomizer::items, FromItemSetIngredientRandomizer::new);
 
     @Override
-    public IAdvancedIngredient<? super ItemStack> generate(LootContext context) {
+    public IAdvancedIngredient<ItemStack> generate(LootContext context) {
         return new ItemItemAdvancedIngredient(items().get(context.getRandom().nextInt(items().size())).value());
     };
 

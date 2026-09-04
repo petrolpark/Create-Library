@@ -22,7 +22,7 @@ public interface IngredientRandomizer extends LootContextUser {
 
     public static final Codec<IngredientRandomizer> DIRECT_CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, FromArrayIngredientRandomizer.INLINE_CODEC));
     
-    public IAdvancedIngredient<? super ItemStack> generate(LootContext context);
+    public IAdvancedIngredient<ItemStack> generate(LootContext context);
 
     public IngredientRandomizerType getType();
 };

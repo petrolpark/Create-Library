@@ -37,6 +37,8 @@ import petrolpark.mc.library.core.flags.Flaggables;
 import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventoryJeiGuiHandler;
 import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItemJEICategoryCache;
 import petrolpark.mc.library.core.world.item.wooden.WoodCraftingShapedRecipe;
+import petrolpark.mc.library.core.world.restaurant.gui.RestaurantOrderScreen;
+import petrolpark.mc.library.core.world.restaurant.gui.RestaurantScreenJEIHandler;
 import petrolpark.mc.library.registry.PetrolparkItems;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
 import petrolpark.mc.library.shared.registry.SharedBlocks;
@@ -112,6 +114,8 @@ public class PetrolparkJEI implements IModPlugin {
     @Override
 	public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addGlobalGuiHandler(new ExtendedInventoryJeiGuiHandler());
+
+        registration.addGuiScreenHandler(RestaurantOrderScreen.class, new RestaurantScreenJEIHandler<>(registration.getJeiHelpers().getIngredientManager()));
 	};
 
     @Override

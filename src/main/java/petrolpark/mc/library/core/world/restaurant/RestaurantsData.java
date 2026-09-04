@@ -29,11 +29,9 @@ public record RestaurantsData(
     Map<Holder<Restaurant>, RestaurantData> data
 ) {
 
-    public static final Codec<RestaurantsData> CODEC = Codec.unboundedMap(Restaurant.CODEC, RestaurantData.CODEC).xmap(RestaurantsData::new, RestaurantsData::data);
+    public static final RestaurantsData EMPTY = new RestaurantsData(Collections.emptyMap());
 
-    public RestaurantsData() {
-        this(Collections.emptyMap());
-    };
+    public static final Codec<RestaurantsData> CODEC = Codec.unboundedMap(Restaurant.CODEC, RestaurantData.CODEC).xmap(RestaurantsData::new, RestaurantsData::data);
 
     @OnlyIn(Dist.CLIENT)
     public Component getName(Holder<Restaurant> restaurant) {
@@ -41,7 +39,7 @@ public record RestaurantsData(
     };
 
     public static final void modify(MutableDataComponentHolder componentHolder, Consumer<RestaurantsData.Mutable> modification) {
-        final RestaurantsData originalData = componentHolder.getOrDefault(PetrolparkDataComponentTypes.TEAM_RESTAURANTS, new RestaurantsData());
+        final RestaurantsData originalData = componentHolder.getOrDefault(PetrolparkDataComponentTypes.TEAM_RESTAURANTS, RestaurantsData.EMPTY);
         final RestaurantsData.Mutable mutable = originalData.mutable();
         modification.accept(mutable);
         final RestaurantsData modifiedData = mutable.toImmutable();

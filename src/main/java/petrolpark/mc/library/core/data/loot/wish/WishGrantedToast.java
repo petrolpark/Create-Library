@@ -5,31 +5,30 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
-
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.toasts.Toast;
 import net.minecraft.client.gui.components.toasts.ToastComponent;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
 
 @OnlyIn(Dist.CLIENT)
 public class WishGrantedToast implements Toast {
 
-    private final IAdvancedIngredient<? super ItemStack> wish;
+    private final IAdvancedIngredient<ItemStack> wish;
     private final List<ItemStack> stacks = new ArrayList<>();
 
     private long lastChanged;
     private boolean changed;
 
-    public WishGrantedToast(IAdvancedIngredient<? super ItemStack> wish, ItemStack stack) {
+    public WishGrantedToast(IAdvancedIngredient<ItemStack> wish, ItemStack stack) {
         this.wish = wish;
         stacks.add(stack);
     };
     
     @Override
-    public IAdvancedIngredient<? super ItemStack> getToken() {
+    public IAdvancedIngredient<ItemStack> getToken() {
         return wish;
     };
 
@@ -61,7 +60,7 @@ public class WishGrantedToast implements Toast {
         changed = true;
     };
 
-    public static void addOrUpdate(ToastComponent toastComponent, IAdvancedIngredient<? super ItemStack> wish, ItemStack stack) {
+    public static void addOrUpdate(ToastComponent toastComponent, IAdvancedIngredient<ItemStack> wish, ItemStack stack) {
         WishGrantedToast toast = toastComponent.getToast(WishGrantedToast.class, wish);
         if (toast == null) {
             toastComponent.addToast(new WishGrantedToast(wish, stack));
