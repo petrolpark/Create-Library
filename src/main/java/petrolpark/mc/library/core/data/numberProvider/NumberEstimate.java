@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.StringUtil;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.providers.number.BinomialDistributionGenerator;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
@@ -121,6 +122,9 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
     @OnlyIn(Dist.CLIENT)
     public abstract MutableComponent getComponent(DecimalFormat df);
 
+    @OnlyIn(Dist.CLIENT)
+    public abstract MutableComponent getTimeComponent();
+
     public final boolean approximate() {
         return approximate;
     };
@@ -192,6 +196,11 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         @Override
         public MutableComponent getComponent(DecimalFormat df) {
             return Component.literal(df.format(value));
+        };
+
+        @Override
+        public MutableComponent getTimeComponent() {
+            return Component.literal(StringUtil.formatTickDuration((int)value, 20f));
         };
 
         @Override
@@ -269,6 +278,13 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
             return Neither.left(this);
         };
 
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof NumberEstimate.Exact ne
+                && approximate() == ne.approximate()
+                && value == ne.value;
+        };
+
     };
 
     public static final class Range extends NumberEstimate {
@@ -299,17 +315,22 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
 
         @Override
         public MutableComponent getComponent(DecimalFormat df) {
-            return Lang.range(min, max, approximate(), df);
+            return Lang.range(min(), max(), approximate(), df);
+        };
+
+        @Override
+        public MutableComponent getTimeComponent() {
+            return Lang.range(min(), max(), StringUtil.formatTickDuration((int)min, 20f), StringUtil.formatTickDuration((int)max, 20f), approximate());
         };
 
         @Override
         public float min() {
-            return min();
+            return min;
         };
 
         @Override
         public float max() {
-            return max();
+            return max;
         };
 
         @Override
@@ -385,6 +406,14 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
         protected Neither<Exact, Range> wrap() {
             return Neither.right(this);
         };
+
+        @Override
+        public boolean equals(Object obj) {
+            return obj instanceof NumberEstimate.Range ne
+                && approximate() == ne.approximate()
+                && min == ne.min
+                && max == ne.max;
+        };
     };
 
     public static final class Unknown extends NumberEstimate {
@@ -395,6 +424,11 @@ public sealed abstract class NumberEstimate permits NumberEstimate.Exact, Number
 
         @Override
         public MutableComponent getComponent(DecimalFormat df) {
+            return Lang.unknownRange();
+        };
+
+        @Override
+        public MutableComponent getTimeComponent() {
             return Lang.unknownRange();
         };
 

@@ -17,6 +17,7 @@ import petrolpark.mc.library.core.data.reward.entity.FlatEntityReward;
 import petrolpark.mc.library.core.data.reward.entity.GrantAdvancementPlayerReward;
 import petrolpark.mc.library.core.data.reward.entity.GrantExperiencePlayerReward;
 import petrolpark.mc.library.core.data.reward.entity.IEntityReward;
+import petrolpark.mc.library.core.data.reward.entity.MobEffectEntityReward;
 import petrolpark.mc.library.core.data.reward.entity.UnlockTradeEntityReward;
 import petrolpark.mc.library.core.data.reward.entity.VillagerGossipEntityReward;
 import petrolpark.mc.library.core.data.reward.info.ConditionalRewardInfo;
@@ -43,11 +44,13 @@ public class PetrolparkRewardTypes {
 
     public static final RegistryEntry<IEntityReward.Type, EntityRewardAndInfoType>
 
+    ENTITY_ALL_TEAMS = REGISTRATE.entityRewardAndWrappedInfoTypes("all_teams", AllTeamsPlayerReward.CODEC, AllTeamsPlayerReward.Info::new),
+    ENTITY_MOB_EFFECT = REGISTRATE.entityRewardAndInfoTypes("effect", MobEffectEntityReward.CODEC, MobEffectEntityReward.Info.CODEC, MobEffectEntityReward.Info.STREAM_CODEC),
+    ENTITY_GOSSIP = REGISTRATE.entityRewardAndInfoTypes("villager_gossip", VillagerGossipEntityReward.CODEC, VillagerGossipEntityReward.Info.CODEC, VillagerGossipEntityReward.Info.STREAM_CODEC),
     ENTITY_GRANT_ADVANCEMENT = REGISTRATE.entityRewardAndInfoTypes("grant_advancement", GrantAdvancementPlayerReward.CODEC, GrantAdvancementPlayerReward.Info.CODEC, GrantAdvancementPlayerReward.Info.STREAM_CODEC),
     ENTITY_GRANT_EXPERIENCE = REGISTRATE.entityRewardAndInfoTypes("grant_experience", GrantExperiencePlayerReward.CODEC, GrantExperiencePlayerReward.Info.CODEC, GrantExperiencePlayerReward.Info.STREAM_CODEC),
-    ENTITY_UNLOCK_TRADE = REGISTRATE.simpleEntityRewardType("unlock_trade", UnlockTradeEntityReward.CODEC, UnlockTradeEntityReward.STREAM_CODEC),
-    ENTITY_GOSSIP = REGISTRATE.entityRewardAndInfoTypes("villager_gossip", VillagerGossipEntityReward.CODEC, VillagerGossipEntityReward.Info.CODEC, VillagerGossipEntityReward.Info.STREAM_CODEC),
-    ENTITY_ALL_TEAMS = REGISTRATE.entityRewardAndWrappedInfoTypes("all_teams", AllTeamsPlayerReward.CODEC, AllTeamsPlayerReward.Info::new);
+    ENTITY_UNLOCK_TRADE = REGISTRATE.simpleEntityRewardType("unlock_trade", UnlockTradeEntityReward.CODEC, UnlockTradeEntityReward.STREAM_CODEC);
+    
 
     public static final RegistryEntry<IEntityReward.Type, EntityRewardType>
 

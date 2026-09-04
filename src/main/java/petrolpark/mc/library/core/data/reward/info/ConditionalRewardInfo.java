@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.reward.info;
 
+import petrolpark.mc.library.registry.PetrolparkRewardTypes;
+
 public final class ConditionalRewardInfo extends WrappedRewardInfo {
 
     public ConditionalRewardInfo(IRewardInfo wrapped) {
@@ -8,8 +10,7 @@ public final class ConditionalRewardInfo extends WrappedRewardInfo {
 
     @Override
     public RewardInfoType getRewardInfoType() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getRewardInfoType'");
+        return PetrolparkRewardTypes.INFO_CONDITIONAL.get();
     };
     
 };

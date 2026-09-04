@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.reward.entity;
 
+import java.util.Optional;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.MapCodec;
@@ -8,6 +10,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.Merchant;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
@@ -57,6 +60,11 @@ public record UnlockTradeEntityReward(MerchantOffer trade) implements ISimpleEnt
             .add(trade().getCostA().getHoverName());
         if (!trade().getCostB().isEmpty()) builder.add(trade().getCostB().getHoverName());
         builder.unindent();
+    };
+
+    @Override
+    public Optional<ItemStack> getItemStack() {
+        return Optional.of(trade().getResult());
     };
 
     @Override

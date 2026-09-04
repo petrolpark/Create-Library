@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
-import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
@@ -15,6 +14,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterClientTooltipComponentFactoriesEvent;
+import petrolpark.mc.library.util.RenderHelper;
 
 @EventBusSubscriber(Dist.CLIENT)
 @ParametersAreNonnullByDefault
@@ -38,8 +38,7 @@ public record CyclingItemsClientTooltipComponent(List<ItemStack> stacks) impleme
     @Override
     public void renderImage(Font font, int x, int y, GuiGraphics guiGraphics) {
         if (stacks().isEmpty()) return;
-        final int seconds = AnimationTickHolder.getTicks(true) / 20;
-        guiGraphics.renderFakeItem(stacks().get(seconds % stacks().size()), x, y);
+        guiGraphics.renderFakeItem(RenderHelper.cycle(stacks()), x, y);
     };
 
     @SubscribeEvent

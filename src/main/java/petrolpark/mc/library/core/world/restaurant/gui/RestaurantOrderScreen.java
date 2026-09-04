@@ -8,7 +8,6 @@ import javax.annotation.ParametersAreNonnullByDefault;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
@@ -20,6 +19,7 @@ import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngre
 import petrolpark.mc.library.core.data.reward.info.IRewardInfo;
 import petrolpark.mc.library.core.world.restaurant.order.ClientRestaurantOrder;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
+import petrolpark.mc.library.util.RenderHelper;
 
 @ParametersAreNonnullByDefault
 public class RestaurantOrderScreen extends RestaurantScreen<RestaurantOrderMenu> {
@@ -108,7 +108,7 @@ public class RestaurantOrderScreen extends RestaurantScreen<RestaurantOrderMenu>
 
     protected static ItemStack getShownStack(List<ItemStack> stacks) {
         if (stacks.isEmpty()) return ItemStack.EMPTY;
-        return stacks.get(AnimationTickHolder.getTicks(true) / 20 % stacks.size());
+        return RenderHelper.cycle(stacks);
     };
 
     @Override

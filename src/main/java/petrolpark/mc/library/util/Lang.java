@@ -266,23 +266,27 @@ public class Lang {
         return generic("range.unknown");
     };
 
-    public static final MutableComponent range(float min, float max, DecimalFormat df) {
+    public static MutableComponent range(float min, float max, DecimalFormat df) {
         return range(min, max, false, df);
     };
 
-    public static final MutableComponent range(float min, float max, boolean approximate, DecimalFormat df) {
+    public static MutableComponent range(float min, float max, boolean approximate, DecimalFormat df) {
+        return range(min, max, df.format(min), df.format(max), approximate);
+    };
+
+    public static final MutableComponent range(float min, float max, String minString, String maxString, boolean approximate) {
         String postfix;
         String[] args;
         if (min == Float.NaN) {
             if (max == Float.NaN) return unknownRange();
             postfix = "range.at_most";
-            args = new String[]{df.format(max)};
+            args = new String[]{maxString};
         } else if (max == Float.NaN) {
             postfix = "range.at_least";
-            args = new String[]{df.format(min)};
+            args = new String[]{minString};
         } else {
             postfix = "range";
-            args = new String[]{df.format(min), df.format(max)};
+            args = new String[]{minString, maxString};
         }
         if (approximate) postfix += ".approximate";
         return generic(postfix, (Object[])args);
