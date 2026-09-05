@@ -17,6 +17,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
+import mezz.jei.common.transfer.RecipeTransferService;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -121,6 +122,7 @@ public class PetrolparkJEI implements IModPlugin {
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         JEI_RUNTIME = jeiRuntime;
+        RECIPE_BOOK_ITEM_JEI_CATEGORY_CACHE.recipeTransferService = new RecipeTransferService(jeiRuntime.getRecipeTransferManager());
     };
     
 };

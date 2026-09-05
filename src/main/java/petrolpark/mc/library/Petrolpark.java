@@ -144,8 +144,8 @@ public class Petrolpark {
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
-        //return new SharedFeatureFlag[]{};
-        return new SharedFeatureFlag[]{SharedFeatureFlag.CENTRIFUGE, SharedFeatureFlag.INEBRIATION, SharedFeatureFlag.CRYING};
+        return new SharedFeatureFlag[]{};
+        //return new SharedFeatureFlag[]{SharedFeatureFlag.CENTRIFUGE, SharedFeatureFlag.INEBRIATION, SharedFeatureFlag.CRYING};
     };
 
     private void init(final FMLCommonSetupEvent event) {

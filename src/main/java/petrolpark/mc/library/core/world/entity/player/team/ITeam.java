@@ -57,7 +57,7 @@ public interface ITeam extends MutableDataComponentHolder {
     public ITeam.Provider getProvider();
 
     /**
-     * Whether this Team can <b>never</b> have {@link ITeam#streamMembers any members} or {@link MutableDataComponentHolder#get(java.util.function.Supplier) Data Components}.
+     * Whether this Team can <b>never</b> have {@link ITeam#streamOnlineMembers any members} or {@link MutableDataComponentHolder#get(java.util.function.Supplier) Data Components}.
      * @see NoTeam#INSTANCE The Instance that should be used for this purpose
      */
     public default boolean isNone() {
@@ -86,7 +86,6 @@ public interface ITeam extends MutableDataComponentHolder {
     /**
      * Every {@link ITeam#isMember(Player) member} of this Team, with no guarantee of order.
      * It is faster to use {@link ITeam#streamMemberUsernames()} unless having the Player itself is vital. On the client side, that is the only way to know the members of the Team.
-     * @see ITeam#streamServerMembers() ServerPlayer implementation
      */
     public Stream<ServerPlayer> streamOnlineMembers();
 

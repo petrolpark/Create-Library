@@ -46,7 +46,6 @@ import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
 import petrolpark.mc.library.core.world.item.crafting.pocket.PocketCrafting.SlotGrid;
 import petrolpark.mc.library.core.world.item.crafting.pocket.crafter.IPocketCrafter;
 import petrolpark.mc.library.core.world.item.crafting.pocket.interpretedSlot.IInterpretedSlot;
-import petrolpark.mc.library.registry.PetrolparkPocketCrafters;
 import petrolpark.mc.library.util.ItemHelper;
 
 public class PocketCraftingClientHandler {
@@ -285,10 +284,10 @@ public class PocketCraftingClientHandler {
     public void onKeyPressed(ScreenEvent.KeyPressed.Pre event) {
         if (!(event.getScreen() instanceof AbstractContainerScreen) || event.getScreen() instanceof CreativeModeInventoryScreen) return;
 
-        // TEMP
-        if (event.getKeyCode() == GLFW.GLFW_KEY_C) {
-            activeCrafter = new ActiveCrafter<>(PetrolparkPocketCrafters.SMELTING.get());
-        };
+        // // TEMP
+        // if (event.getKeyCode() == GLFW.GLFW_KEY_C) {
+        //     activeCrafter = new ActiveCrafter<>(PetrolparkPocketCrafters.SMELTING.get());
+        // };
 
         if (activeCrafter == null) return;
         if (event.getKeyCode() == GLFW.GLFW_KEY_ESCAPE) {
