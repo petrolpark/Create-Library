@@ -20,6 +20,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
 import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 public interface ItemAdvancedIngredient extends IAdvancedIngredient<ItemStack>, IForcingItemAdvancedIngredient {
@@ -28,17 +29,17 @@ public interface ItemAdvancedIngredient extends IAdvancedIngredient<ItemStack>, 
      * Use {@link ItemAdvancedIngredient#CODEC instead}.
      */
     @ApiStatus.Internal
-    static final Codec<IAdvancedIngredient<? super ItemStack>> TYPED_CODEC = PetrolparkRegistries.ADVANCED_ITEM_INGREDIENT_TYPES
+    static final Codec<IAdvancedIngredient<ItemStack>> TYPED_CODEC = PetrolparkRegistries.ADVANCED_ITEM_INGREDIENT_TYPES
         .byNameCodec()
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::codec);
 
-    public static final Codec<IAdvancedIngredient<? super ItemStack>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, Codec.unit(PassAdvancedIngredient.INSTANCE)));
+    public static final Codec<IAdvancedIngredient<ItemStack>> CODEC = Codec.lazyInitialized(() -> Codec.withAlternative(TYPED_CODEC, PetrolparkAdvancedIngredientTypes.ITEM_PASS.get().inlineCodec()));
 
-    public static final StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super ItemStack>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE)
+    public static final StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<ItemStack>> STREAM_CODEC = ByteBufCodecs.registry(PetrolparkRegistries.Keys.ADVANCED_ITEM_INGREDIENT_TYPE)
         .dispatch(IAdvancedIngredient::getType, IAdvancedIngredientType::streamCodec);
 
-    public static IAdvancedIngredient<? super ItemStack> impossible() {
-        return NotAdvancedIngredient.of(PassAdvancedIngredient.INSTANCE);
+    public static IAdvancedIngredient<ItemStack> impossible() {
+        return NotAdvancedIngredient.of(PetrolparkAdvancedIngredientTypes.ITEM_PASS.get());
     };
 
     @Override

@@ -1,6 +1,8 @@
 package petrolpark.mc.library.core.world.entity.player.team.scoreboard;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
@@ -9,12 +11,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.world.entity.player.team.AbstractTeam;
-import petrolpark.mc.library.core.world.entity.player.team.ITeam;
-import petrolpark.mc.library.core.world.entity.player.team.NoTeam;
-import petrolpark.mc.library.registry.PetrolparkTeamProviderTypes;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
@@ -28,11 +24,16 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.scores.PlayerTeam;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.world.entity.player.team.AbstractTeam;
+import petrolpark.mc.library.core.world.entity.player.team.ITeam;
+import petrolpark.mc.library.core.world.entity.player.team.NoTeam;
+import petrolpark.mc.library.registry.PetrolparkTeamProviderTypes;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 /**
  * {@link ITeam} wrapping vanilla's {@link PlayerTeam Scoreboard Teams}.
@@ -77,10 +78,10 @@ public class ScoreboardTeam extends AbstractTeam {
     };
 
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    public Stream<Player> streamMembers() {
-        MinecraftServer server = level.getServer();
-        if (server != null) return streamMemberUsernames().map(server.getPlayerList()::getPlayerByName);
+    public Stream<ServerPlayer> streamOnlineMembers() {
+        final MinecraftServer server = level.getServer();
+        if (server != null) return streamMemberUsernames().map(server.getPlayerList()::getPlayerByName)
+            .filter(Predicate.not(Objects::isNull));
         return Stream.empty();
     };
 

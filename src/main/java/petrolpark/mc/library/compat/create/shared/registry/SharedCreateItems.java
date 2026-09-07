@@ -20,8 +20,6 @@ import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.compat.create.core.world.dough.cookieCutter.SharedCookieCutterItem;
-import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.RollingPinItem;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistrateProviderTypes;
 import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
 import petrolpark.mc.library.core.world.item.FluidContainerItem;
@@ -32,15 +30,6 @@ import petrolpark.mc.library.shared.world.item.SharedDrinkableFluidContainerItem
 import petrolpark.mc.library.shared.world.item.SharedMilkCurativeBucketItem;
 
 public class SharedCreateItems {
-
-    public static final ItemEntry<RollingPinItem> ROLLING_PIN = REGISTRATE.sharedItem(SharedFeatureFlag.ROLLING_PIN, "rolling_pin", RollingPinItem::new)    
-        .properties(p -> p
-            .stacksTo(1)
-        ).register();
-
-    public static final ItemEntry<SharedCookieCutterItem> CIRCLE_COOKIE_CUTTER = REGISTRATE.sharedItem(SharedFeatureFlag.CIRCLE_COOKIE_CUTTER, "circle_cookie_cutter", SharedCookieCutterItem::new)
-        .defaultModel()
-        .register();
 
     public static final ItemEntry<SharedBucketItem>
     

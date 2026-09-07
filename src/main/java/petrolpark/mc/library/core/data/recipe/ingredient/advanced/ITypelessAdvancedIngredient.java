@@ -14,7 +14,7 @@ public interface ITypelessAdvancedIngredient<STACK> extends Predicate<STACK> {
      * This is <b>not</b> guaranteed to have every possible stack, and should never be used that way.
      * @return Non-{@code null}, potentially empty Stream
      */
-    public default Stream<? extends STACK> streamExamples() {
+    public default Stream<STACK> streamExamples() {
         return Stream.empty();
     };
 
@@ -23,7 +23,7 @@ public interface ITypelessAdvancedIngredient<STACK> extends Predicate<STACK> {
      * This is <b>not</b> guaranteed to have every possible stack (and in fact will usually be empty), and should never be used that way.
      * @return Non-{@code null}, potentially empty Stream
      */
-    public default Stream<? extends STACK> streamCounterExamples() {
+    public default Stream<STACK> streamCounterExamples() {
         return Stream.empty();
     };
 
@@ -54,7 +54,7 @@ public interface ITypelessAdvancedIngredient<STACK> extends Predicate<STACK> {
      * It is acceptable to mutate this Ingredient while calling this method, so careful caching the unsimplified version.
      * Usually this will just return {@code this}.
      */
-    public default ITypelessAdvancedIngredient<? super STACK> simplify() {
+    public default ITypelessAdvancedIngredient<STACK> simplify() {
         return this;
     };
 

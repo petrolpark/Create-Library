@@ -29,6 +29,7 @@ import net.minecraft.world.level.storage.loot.providers.number.NumberProvider;
 import net.minecraft.world.level.storage.loot.providers.number.NumberProviders;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
+import petrolpark.mc.library.core.data.reward.IReward;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
 import petrolpark.mc.library.core.world.restaurant.order.RestaurantOrderGenerator;
 import petrolpark.mc.library.core.world.restaurant.order.ServerRestaurantOrder;
@@ -43,7 +44,8 @@ public record Restaurant(
     List<OrderGeneratorEntry> orderGeneratorEntries,
     List<RestaurantOrderGenerator.ModifierEntry> globalOrderModifierEntries,
     EntityPredicate customers,
-    NumberProvider xpRequiredForLevel
+    NumberProvider xpRequiredForLevel,
+    List<Holder<IReward>> orderCancellationRewards
 ) {
 
     public static final Codec<Restaurant> DIRECT_CODEC = Codec.lazyInitialized(() -> RecordCodecBuilder.create(instance -> 
@@ -54,7 +56,8 @@ public record Restaurant(
             EntityPredicate.CODEC.optionalFieldOf("customers", EntityPredicate.Builder.entity().build()).forGetter(Restaurant::customers),
             NumberProviders.CODEC
                 .validate(DataValidationHelper.validateParamSet(PetrolparkLootContextParamSets.RESTAURANT_XP_CALCULATION, "XP calculator"))
-                .fieldOf("xp_required_for_level").forGetter(Restaurant::xpRequiredForLevel)
+                .fieldOf("xp_required_for_level").forGetter(Restaurant::xpRequiredForLevel),
+            IReward.CODEC.listOf().optionalFieldOf("order_cancellation_rewards", Collections.emptyList()).forGetter(Restaurant::orderCancellationRewards)
         ).apply(instance, Restaurant::new)
     ));  
 
@@ -72,6 +75,7 @@ public record Restaurant(
 
     public static final Optional<ServerRestaurantOrder> generateOrder(ServerPlayer player, Holder<Restaurant> restaurantHolder, ITeam team, @Nullable Entity customer) {
         if (restaurantHolder.value().orderGeneratorEntries().isEmpty()) return Optional.empty();
+        if (team.isNone()) return Optional.empty();
         
         final LootContext context = new LootContext.Builder(new LootParams.Builder(player.serverLevel())
                 .withParameter(PetrolparkLootContextParams.RESTAURANT, restaurantHolder)

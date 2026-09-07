@@ -2,6 +2,7 @@ package petrolpark.mc.library.core.data.reward;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -9,12 +10,15 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import petrolpark.mc.library.registry.PetrolparkRewardTypes;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
@@ -65,13 +69,21 @@ public class GiveItemReward extends AbstractGiveItemsReward implements ISimpleRe
     };
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void render(GuiGraphics graphics) {
-        graphics.renderItem(stack, 0, 0);
+        graphics.renderItem(stack(), 0, 0);
+        graphics.renderItemDecorations(Minecraft.getInstance().font, stack(), 0, 0);
     };
 
     @Override
+    @OnlyIn(Dist.CLIENT)
     public void addToDescription(IndentedTooltipBuilder builder) {
-        builder.add(translateSimple(stack.getDisplayName()));
+        builder.add(translateSimple(stack().getHoverName()));
+    };
+
+    @Override
+    public Optional<ItemStack> getItemStack() {
+        return Optional.of(stack());
     };
 
     @Override

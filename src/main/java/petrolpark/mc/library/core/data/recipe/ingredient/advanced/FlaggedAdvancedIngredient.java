@@ -6,10 +6,7 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import com.mojang.serialization.MapCodec;
-
 import net.minecraft.core.Holder;
-import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
@@ -25,11 +22,7 @@ import petrolpark.mc.library.core.flags.IFlagPole;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 import petrolpark.mc.library.util.codec.CodecHelper;
 
-public record FlaggedAdvancedIngredient(Holder<Flag> flag) implements IAdvancedIngredient<MutableDataComponentHolder>, IForcingItemAdvancedIngredient {
-
-    public static final MapCodec<FlaggedAdvancedIngredient> CODEC = CodecHelper.singleFieldMap(Flag.CODEC, "flag", FlaggedAdvancedIngredient::flag, FlaggedAdvancedIngredient::new);
-    public static final StreamCodec<RegistryFriendlyByteBuf, FlaggedAdvancedIngredient> STREAM_CODEC = StreamCodec.composite(Flag.STREAM_CODEC, FlaggedAdvancedIngredient::flag, FlaggedAdvancedIngredient::new);
-    public static final IAdvancedIngredientType<MutableDataComponentHolder> TYPE = new Type();
+public record FlaggedAdvancedIngredient<STACK extends MutableDataComponentHolder>(Holder<Flag> flag) implements ITypelessAdvancedIngredient<STACK>, IForcingItemAdvancedIngredient {
 
     @Override
     public boolean test(MutableDataComponentHolder stack) {
@@ -37,15 +30,15 @@ public record FlaggedAdvancedIngredient(Holder<Flag> flag) implements IAdvancedI
     };
 
     @Override
-    public Stream<MutableDataComponentHolder> modifyExamples(Stream<MutableDataComponentHolder> exampleStacks) {
+    public Stream<STACK> modifyExamples(Stream<STACK> exampleStacks) {
         return exampleStacks.map(stack -> {
-            IFlagPole.get(stack).ifPresent(c -> c.flag(flag));
+            IFlagPole.get(stack).ifPresent(c -> c.flag(flag()));
             return stack;
         });
     };
 
     @Override
-    public Stream<MutableDataComponentHolder> modifyCounterExamples(Stream<MutableDataComponentHolder> counterExampleStacks) {
+    public Stream<STACK> modifyCounterExamples(Stream<STACK> counterExampleStacks) {
         return counterExampleStacks.map(stack -> {
             IFlagPole.get(stack).ifPresent(c -> c.unflagOnly(flag));
             return stack;
@@ -86,25 +79,14 @@ public record FlaggedAdvancedIngredient(Holder<Flag> flag) implements IAdvancedI
         return null;
     };
 
-    @Override
-    public IAdvancedIngredientType<MutableDataComponentHolder> getType() {
-        return TYPE;
-    };
+    public static final class Type<STACK extends MutableDataComponentHolder> extends GenericAdvancedIngredientType<STACK, FlaggedAdvancedIngredient<STACK>> {
 
-    public static final class Type implements IAdvancedIngredientType<MutableDataComponentHolder> {
-
-        @Override
-        public MapCodec<FlaggedAdvancedIngredient> codec() {
-            return CODEC;
+        public Type() {
+            super(CodecHelper.singleFieldMap(Flag.CODEC, "flag", FlaggedAdvancedIngredient::flag, FlaggedAdvancedIngredient::new), StreamCodec.composite(Flag.STREAM_CODEC, FlaggedAdvancedIngredient::flag, FlaggedAdvancedIngredient::new));
         };
 
         @Override
-        public StreamCodec<RegistryFriendlyByteBuf, FlaggedAdvancedIngredient> streamCodec() {
-            return STREAM_CODEC;
-        };
-
-        @Override
-        public Stream<FlaggedAdvancedIngredient> streamApplicableIngredients(Level level, MutableDataComponentHolder stack) {
+        public Stream<FlaggedAdvancedIngredient<STACK>> streamApplicableTypelessIngredients(Level level, STACK stack) {
             return IFlagPole.get(stack).stream()
                 .flatMap(IFlagPole::streamAllFlags)
                 .map(FlaggedAdvancedIngredient::new);

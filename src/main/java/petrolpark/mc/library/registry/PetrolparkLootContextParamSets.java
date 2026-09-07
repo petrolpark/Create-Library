@@ -28,15 +28,30 @@ public class PetrolparkLootContextParamSets {
         .optional(PetrolparkLootContextParams.CUSTOMER_ENTITY) // Entity who made the order
     );
 
-    public static final LootContextParamSet ADVANCEMENT_RESTAURANT = REGISTRATE.lootContextParamSet("advancement_restaurant", builder -> builder
+    public static final LootContextParamSet RESTAURANT_ADVANCEMENT = REGISTRATE.lootContextParamSet("advancement_restaurant", builder -> builder
         .required(LootContextParams.THIS_ENTITY)
         .required(LootContextParams.ORIGIN)
         .required(PetrolparkLootContextParams.RESTAURANT)
         .required(PetrolparkLootContextParams.TEAM)
     );
 
+    public static final LootContextParamSet RESTAURANT_ENTITY_ADVANCEMENT = REGISTRATE.lootContextParamSet("advancement_restaurant", builder -> builder
+        .required(LootContextParams.THIS_ENTITY)
+        .required(LootContextParams.ORIGIN)
+        .required(PetrolparkLootContextParams.RESTAURANT)
+        .required(PetrolparkLootContextParams.TEAM)
+        .required(PetrolparkLootContextParams.CUSTOMER)
+        .required(PetrolparkLootContextParams.CUSTOMER_ENTITY)
+    );
+
     public static final LootContextParamSet RESTAURANT_XP_CALCULATION = REGISTRATE.lootContextParamSet("restaurant_xp_calculation", builder -> builder
         .required(PetrolparkLootContextParams.RESTAURANT_LEVEL)
+    );
+
+    public static final LootContextParamSet REWARD_COMMAND = REGISTRATE.lootContextParamSet("reward_command", builder -> builder
+        .required(LootContextParams.ORIGIN)
+        .optional(LootContextParams.THIS_ENTITY)
+        .optional(PetrolparkLootContextParams.ITEM_HANDLER)
     );
 
     public static final void register() {};

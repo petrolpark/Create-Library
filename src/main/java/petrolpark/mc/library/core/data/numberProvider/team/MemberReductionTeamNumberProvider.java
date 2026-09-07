@@ -20,7 +20,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 /**
  * <p>{@code petrolpark:member_reduction}</p>
  * 
- * Get values from every {@link ITeam#streamMembers() Team member} and combine them.
+ * Get values from every {@link ITeam#streamOnlineMembers() Team member} and combine them.
  * 
  * Arguments:
  * <ul>
@@ -40,7 +40,7 @@ public record MemberReductionTeamNumberProvider(EntityNumberProvider value, Loot
 
     @Override
     public float getFloat(ITeam team, LootContext context) {
-        return FunctionNumberProvider.get(function()).create(Collections.emptyList()).applyFloat(context, team.streamMembers().mapToDouble(player -> value.getFloat(player, context)));
+        return FunctionNumberProvider.get(function()).create(Collections.emptyList()).applyFloat(context, team.streamOnlineMembers().mapToDouble(player -> value.getFloat(player, context)));
     };
 
     @Override

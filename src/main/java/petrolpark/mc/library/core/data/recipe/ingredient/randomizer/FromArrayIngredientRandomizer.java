@@ -27,9 +27,9 @@ public record FromArrayIngredientRandomizer(List<FromArrayIngredientRandomizer.E
     public static final Codec<FromArrayIngredientRandomizer> INLINE_CODEC = FromArrayIngredientRandomizer.Entry.LIST_CODEC.xmap(FromArrayIngredientRandomizer::new, FromArrayIngredientRandomizer::entries);
 
     @Override
-    public IAdvancedIngredient<? super ItemStack> generate(LootContext context) {
+    public IAdvancedIngredient<ItemStack> generate(LootContext context) {
         if (entries().size() == 0) return ItemAdvancedIngredient.impossible();
-        if (entries().size() == 1) return entries().get(1).ingredient();
+        if (entries().size() == 1) return entries().get(0).ingredient();
 
         final List<FromArrayIngredientRandomizer.RolledEntry> weightedEntries = entries().stream().map(FromArrayIngredientRandomizer.roll(context)).toList();
         final double sum = weightedEntries.stream().mapToDouble(FromArrayIngredientRandomizer.RolledEntry::weight).sum();
@@ -51,7 +51,7 @@ public record FromArrayIngredientRandomizer(List<FromArrayIngredientRandomizer.E
         return entry -> new RolledEntry(entry.ingredient(), entry.weight().getFloat(context));
     };
 
-    public record Entry(IAdvancedIngredient<? super ItemStack> ingredient, NumberProvider weight) {
+    public record Entry(IAdvancedIngredient<ItemStack> ingredient, NumberProvider weight) {
 
         public static final Codec<List<FromArrayIngredientRandomizer.Entry>> LIST_CODEC = CodecHelper.listOrSingle(Codec.withAlternative(
             RecordCodecBuilder.create(instance ->
@@ -63,12 +63,12 @@ public record FromArrayIngredientRandomizer(List<FromArrayIngredientRandomizer.E
             ItemAdvancedIngredient.CODEC.xmap(FromArrayIngredientRandomizer.Entry::new, FromArrayIngredientRandomizer.Entry::ingredient)
         ));
 
-        public Entry(IAdvancedIngredient<? super ItemStack> ingredient) {
+        public Entry(IAdvancedIngredient<ItemStack> ingredient) {
             this(ingredient, ConstantValue.exactly(1f)); 
         };
     };
 
-    record RolledEntry(IAdvancedIngredient<? super ItemStack> ingredient, float weight) {
+    record RolledEntry(IAdvancedIngredient<ItemStack> ingredient, float weight) {
 
     };
 

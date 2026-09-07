@@ -2,10 +2,11 @@ package petrolpark.mc.library.core.world.item.crafting.pocket;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import net.createmod.catnip.data.Iterate;
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -17,7 +18,6 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
-import net.minecraft.world.item.crafting.RecipeType;
 import petrolpark.mc.library.core.world.item.crafting.pocket.crafter.IPocketCrafter;
 import petrolpark.mc.library.core.world.item.crafting.pocket.interpretedSlot.IInterpretedSlot;
 import petrolpark.mc.library.registry.PetrolparkPackets;
@@ -25,18 +25,16 @@ import petrolpark.mc.library.registry.PetrolparkRegistries;
 
 public record PocketCraftPacket(
     IPocketCrafter<?> crafter,
-    RecipeType<?> recipeType,
     ResourceLocation recipeId,
     List<SlotAndInterpretation> inputSlotsAndInterpretations,
-    int outputSlot
+    Optional<Integer> outputSlot
 ) implements ServerboundPacketPayload {
 
     public static final StreamCodec<RegistryFriendlyByteBuf, PocketCraftPacket> STREAM_CODEC = StreamCodec.composite(
         ByteBufCodecs.registry(PetrolparkRegistries.Keys.POCKET_CRAFTER), PocketCraftPacket::crafter,
-        ByteBufCodecs.registry(Registries.RECIPE_TYPE), PocketCraftPacket::recipeType,
         ResourceLocation.STREAM_CODEC, PocketCraftPacket::recipeId,
         SlotAndInterpretation.STREAM_CODEC.apply(ByteBufCodecs.list()), PocketCraftPacket::inputSlotsAndInterpretations,
-        ByteBufCodecs.INT, PocketCraftPacket::outputSlot,
+        ByteBufCodecs.optional(ByteBufCodecs.INT), PocketCraftPacket::outputSlot,
         PocketCraftPacket::new
     );
 
@@ -45,21 +43,15 @@ public record PocketCraftPacket(
         handleTyped(player, crafter());
     };
 
-    @SuppressWarnings({"unchecked", "unused"})
+    @SuppressWarnings("unchecked")
     public <R extends Recipe<?>> void handleTyped(ServerPlayer player, IPocketCrafter<R> crafter) {
-        try {
-            RecipeType<? extends R> typedRecipeType = (RecipeType<? extends R>)recipeType();
-        } catch (ClassCastException exception) {
-            return;
-        } finally {
-            player.level().getRecipeManager().byKey(recipeId())
-                .filter(rh -> rh.value().getType() == recipeType())
-                .map(rh -> new RecipeHolder<>(rh.id(), (R)rh.value()))
-                .ifPresent(rh -> handle(player, crafter, rh, inputSlotsAndInterpretations(), outputSlot()));
-        };
+        player.level().getRecipeManager().byKey(recipeId())
+            .filter(rh -> crafter().canCastRecipe(rh.value()))
+            .map(rh -> new RecipeHolder<>(rh.id(), (R)rh.value()))
+            .ifPresent(rh -> handle(player, crafter, rh, inputSlotsAndInterpretations(), outputSlot()));
     };
 
-    public static <R extends Recipe<?>> void handle(ServerPlayer player, IPocketCrafter<R> crafter, RecipeHolder<? extends R> recipeHolder, List<SlotAndInterpretation> inputSlotAndInterpretations, int outputSlotIndex) {
+    public static <R extends Recipe<?>> void handle(ServerPlayer player, IPocketCrafter<R> crafter, RecipeHolder<? extends R> recipeHolder, List<SlotAndInterpretation> inputSlotAndInterpretations, Optional<Integer> outputSlotIndex) {
         final AbstractContainerMenu menu = player.containerMenu;
         if (menu == null) return;
         final IPocketCraftingContext context = new IPocketCraftingContext.Impl(player.level(), player, menu, ItemStack.EMPTY); //TODO
@@ -75,15 +67,15 @@ public record PocketCraftPacket(
             if (inputSlotAndInterpretation.interpretation() < 0 || inputSlotAndInterpretation.interpretation() >= inputSlotAndInterpretations.size()) return;
             interpretedSlots.add(slotInterpretations.get(inputSlotAndInterpretation.interpretation()));
         };
-        final Slot outputSlot;
+        Optional<Slot> outputSlot;
         try {
-            outputSlot = menu.getSlot(outputSlotIndex);
-        } catch (IndexOutOfBoundsException e) {
-            return;
+            outputSlot = outputSlotIndex.map(menu::getSlot);
+        } catch (IndexOutOfBoundsException | NoSuchElementException e) {
+            outputSlot = Optional.empty();
         };
 
         for (boolean simulate : Iterate.trueAndFalse) {
-            if (!crafter.craft(context, simulate, recipeHolder, interpretedSlots, outputSlot).successful()) return;
+            if (!crafter.craft(context, simulate, recipeHolder, interpretedSlots, outputSlot.orElse(null)).successful()) return;
         };
     };
 

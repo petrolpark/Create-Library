@@ -16,7 +16,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeType;
 import petrolpark.mc.library.core.world.item.crafting.pocket.IPocketCraftingContext;
-import petrolpark.mc.library.core.world.item.crafting.pocket.ItemPocketCraftingResult;
+import petrolpark.mc.library.core.world.item.crafting.pocket.ItemsPocketCraftingResult;
 import petrolpark.mc.library.core.world.item.crafting.pocket.PocketCrafting;
 import petrolpark.mc.library.core.world.item.crafting.pocket.interpretedSlot.IInterpretedSlot;
 
@@ -29,7 +29,12 @@ public abstract class SimplePocketCrafter<I extends RecipeInput, R extends Recip
     public abstract I createRecipeInput(IPocketCraftingContext context, List<IInterpretedSlot<?>> slots);
 
     @Override
-    public List<RecipeHolder<? extends R>> getRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot<?>> slots) {
+    public boolean canCastRecipe(Recipe<?> recipe) {
+        return streamRecipeTypes().anyMatch(recipe.getType()::equals);
+    };
+
+    @Override
+    public List<RecipeHolder<? extends R>> getRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot<?>> slots, PocketCrafting.SlotArrangement slotArrangement) {
         final I input = createRecipeInput(context, slots);
         if (input == null) return Collections.emptyList();
         return streamRecipeTypes()
@@ -38,7 +43,7 @@ public abstract class SimplePocketCrafter<I extends RecipeInput, R extends Recip
     };
 
     @Override
-    public PocketCrafting.Result craft(IPocketCraftingContext context, boolean simulate, RecipeHolder<? extends R> recipeHolder, List<IInterpretedSlot<?>> inputSlots, Slot outputSlot) {
+    public PocketCrafting.Result craft(IPocketCraftingContext context, boolean simulate, RecipeHolder<? extends R> recipeHolder, List<IInterpretedSlot<?>> inputSlots, @Nullable Slot outputSlot) {
         final I input = createRecipeInput(context, inputSlots);
         if (input == null) return PocketCrafting.Result.FAIL;
         final ItemStack result = getResult(context.registries(), input, recipeHolder);
@@ -46,7 +51,7 @@ public abstract class SimplePocketCrafter<I extends RecipeInput, R extends Recip
         if (!simulate) {
             //TODO
         };
-        return ItemPocketCraftingResult.success(result);
+        return ItemsPocketCraftingResult.success(result);
     };
 
     protected final <R2 extends R> Stream<RecipeHolder<? extends R>> streamRecipesFor(IPocketCraftingContext context, RecipeType<R2> type, I input) {

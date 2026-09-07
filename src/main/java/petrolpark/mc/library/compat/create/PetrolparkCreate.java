@@ -1,30 +1,5 @@
 package petrolpark.mc.library.compat.create;
 
-import petrolpark.mc.library.compat.create.core.event.CreateEvents;
-import petrolpark.mc.library.compat.create.core.event.CreateModEvents;
-import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.AbstractRememberPlacerBehaviour;
-import petrolpark.mc.library.compat.create.registry.PetrolparkArmInteractionPointTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateAdvancedIngredientTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateAttachmentTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlocks;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateCompatRecipeDeserializers;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDoughTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateGlobalLootModifierSerializers;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreatePackets;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRecipeTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistrateProviderTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistries;
-import petrolpark.mc.library.compat.create.registry.PetrolparkDoughIngredientTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkDoughToppingTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkItemAttributeTypes;
-import petrolpark.mc.library.compat.create.registry.PetrolparkMovementChecks;
-import petrolpark.mc.library.compat.create.registry.PetrolparkOpenPipeEffectHandlers;
-import petrolpark.mc.library.compat.create.shared.SharedCreate;
-import petrolpark.mc.library.compat.create.shared.content.processing.extrusion.ExtrusionRecipe;
-import petrolpark.mc.library.compat.create.shared.registry.PetrolparkMandrelAnimationTypes;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 import com.simibubi.create.foundation.item.ItemDescription;
 import com.simibubi.create.foundation.item.KineticStats;
 import com.simibubi.create.foundation.item.TooltipModifier;
@@ -35,6 +10,28 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.RegisterEvent;
+import petrolpark.mc.library.compat.create.core.event.CreateEvents;
+import petrolpark.mc.library.compat.create.core.event.CreateModEvents;
+import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.AbstractRememberPlacerBehaviour;
+import petrolpark.mc.library.compat.create.registry.PetrolparkArmInteractionPointTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateAdvancedIngredientTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateAttachmentTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlockEntityTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateBlocks;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateCompatRecipeDeserializers;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateGlobalLootModifierSerializers;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreatePackets;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRecipeTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistrateProviderTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistries;
+import petrolpark.mc.library.compat.create.registry.PetrolparkItemAttributeTypes;
+import petrolpark.mc.library.compat.create.registry.PetrolparkMovementChecks;
+import petrolpark.mc.library.compat.create.registry.PetrolparkOpenPipeEffectHandlers;
+import petrolpark.mc.library.compat.create.shared.SharedCreate;
+import petrolpark.mc.library.compat.create.shared.content.processing.extrusion.ExtrusionRecipe;
+import petrolpark.mc.library.compat.create.shared.registry.PetrolparkMandrelAnimationTypes;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 
 @RequiresCreate
 public class PetrolparkCreate {
@@ -63,12 +60,9 @@ public class PetrolparkCreate {
         PetrolparkCreateBlocks.register();
         PetrolparkCreateCompatRecipeDeserializers.register();
         PetrolparkCreateDataComponentTypes.register(modEventBus);
-        PetrolparkCreateDoughTypes.register();
         PetrolparkCreateGlobalLootModifierSerializers.register();
         PetrolparkCreatePackets.register();
         PetrolparkCreateRegistrateProviderTypes.register();
-        PetrolparkDoughIngredientTypes.register();
-        PetrolparkDoughToppingTypes.register();
     
         PetrolparkArmInteractionPointTypes.register();
         PetrolparkMandrelAnimationTypes.register();

@@ -12,10 +12,6 @@ import net.minecraft.util.StringRepresentable;
 import petrolpark.mc.library.PetrolparkTags;
 import petrolpark.mc.library.compat.Mods;
 import petrolpark.mc.library.compat.create.core.world.block.chainConveyor.ChainConveyorArmInteractionPoint;
-import petrolpark.mc.library.compat.create.core.world.dough.DoughBlock;
-import petrolpark.mc.library.compat.create.core.world.dough.IDough;
-import petrolpark.mc.library.compat.create.core.world.dough.cookieCutter.CookieCutterItem;
-import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.RollingPinItem;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HarnessBlock;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HorseMillBearingBlock;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HorseMillProperties;
@@ -93,19 +89,9 @@ public enum SharedFeatureFlag implements StringRepresentable {
      */
     CENTRIFUGE,
     /**
-     * Registers the Circular Cookie Cutter item
-     * @see CookieCutterItem
-     */
-    CIRCLE_COOKIE_CUTTER,
-    /**
      * Registers the Crying mob effect, and obtaining it when cutting onions
      */
     CRYING,
-    /**
-     * Registers the Dough block and some Ponders
-     * @see DoughBlock
-     */
-    DOUGH,
     /**
      * Registers the Drying Rack block and default recipe.
      * @see DryingRackBlock
@@ -190,12 +176,6 @@ public enum SharedFeatureFlag implements StringRepresentable {
      * If Create is present, also registers the {@link SharedCreateItems#UNPROCESSED_MASHED_POTATO sequence assembly recipe} for Mashed Potato.
      */
     POTATO_PRODUCTS(MILK_PRODUCTS),
-        /**
-     * Registers the Rolling Pin item and its default recipes.
-     * Technically doesn't require Create, but as {@link IDough} does, it's rather useless without.
-     * @see RollingPinItem
-     */
-    ROLLING_PIN(DOUGH),
     /**
      * Register the {@link SharedCreateFluids#SUNFLOWER_OIL Sunflower Oil fluid} and the default recipe to obtain it.
      * Requires Create.

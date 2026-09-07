@@ -1,5 +1,7 @@
 package petrolpark.mc.library.core.data.reward.info;
 
+import java.util.Optional;
+
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.mojang.serialization.MapCodec;
@@ -8,6 +10,7 @@ import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ItemStack;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 import petrolpark.mc.library.util.codec.CodecHelper;
 
@@ -42,5 +45,10 @@ public abstract class WrappedRewardInfo implements INamedRewardInfo {
         builder.add(translateSimple()).indent();
         wrapped().addToDescription(builder);
         builder.unindent();
+    };
+
+    @Override
+    public Optional<ItemStack> getItemStack() {
+        return wrapped().getItemStack();
     };
 };

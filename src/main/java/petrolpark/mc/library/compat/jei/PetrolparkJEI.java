@@ -17,6 +17,7 @@ import mezz.jei.api.registration.IRecipeRegistration;
 import mezz.jei.api.registration.ISubtypeRegistration;
 import mezz.jei.api.registration.IVanillaCategoryExtensionRegistration;
 import mezz.jei.api.runtime.IJeiRuntime;
+import mezz.jei.common.transfer.RecipeTransferService;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
@@ -37,6 +38,8 @@ import petrolpark.mc.library.core.flags.Flaggables;
 import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventoryJeiGuiHandler;
 import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItemJEICategoryCache;
 import petrolpark.mc.library.core.world.item.wooden.WoodCraftingShapedRecipe;
+import petrolpark.mc.library.core.world.restaurant.gui.RestaurantOrderScreen;
+import petrolpark.mc.library.core.world.restaurant.gui.RestaurantScreenJEIHandler;
 import petrolpark.mc.library.registry.PetrolparkItems;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
 import petrolpark.mc.library.shared.registry.SharedBlocks;
@@ -112,11 +115,14 @@ public class PetrolparkJEI implements IModPlugin {
     @Override
 	public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addGlobalGuiHandler(new ExtendedInventoryJeiGuiHandler());
+
+        registration.addGuiScreenHandler(RestaurantOrderScreen.class, new RestaurantScreenJEIHandler<>(registration.getJeiHelpers().getIngredientManager()));
 	};
 
     @Override
     public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
         JEI_RUNTIME = jeiRuntime;
+        RECIPE_BOOK_ITEM_JEI_CATEGORY_CACHE.recipeTransferService = new RecipeTransferService(jeiRuntime.getRecipeTransferManager());
     };
     
 };

@@ -8,16 +8,9 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import petrolpark.mc.library.compat.create.RequiresCreate;
 import petrolpark.mc.library.compat.create.core.world.block.crushingWheel.EncasedCrushingWheelControllerBlockEntity;
 import petrolpark.mc.library.compat.create.core.world.block.tube.TubeStructuralBlockEntity;
-import petrolpark.mc.library.compat.create.core.world.dough.DoughBlockEntity;
-import petrolpark.mc.library.compat.create.core.world.dough.client.DoughBlockEntityRenderer;
 
 @RequiresCreate
 public class PetrolparkCreateBlockEntityTypes {
-
-    public static final BlockEntityEntry<DoughBlockEntity> DOUGH = REGISTRATE.<DoughBlockEntity>blockEntity("dough", DoughBlockEntity::new)
-        .validBlock(PetrolparkCreateBlocks.DOUGH)
-        .renderer(() -> DoughBlockEntityRenderer::new)
-        .register();
 
     public static final BlockEntityEntry<EncasedCrushingWheelControllerBlockEntity> ENCASED_CRUSHING_WHEEL_CONTROLLER = REGISTRATE.blockEntity("encased_crushing_wheel_controller", EncasedCrushingWheelControllerBlockEntity::new)
         .validBlock(PetrolparkCreateBlocks.ENCASED_CRUSHING_WHEEL_CONTROLLER)

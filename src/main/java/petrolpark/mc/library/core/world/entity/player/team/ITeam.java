@@ -57,7 +57,7 @@ public interface ITeam extends MutableDataComponentHolder {
     public ITeam.Provider getProvider();
 
     /**
-     * Whether this Team can <b>never</b> have {@link ITeam#streamMembers any members} or {@link MutableDataComponentHolder#get(java.util.function.Supplier) Data Components}.
+     * Whether this Team can <b>never</b> have {@link ITeam#streamOnlineMembers any members} or {@link MutableDataComponentHolder#get(java.util.function.Supplier) Data Components}.
      * @see NoTeam#INSTANCE The Instance that should be used for this purpose
      */
     public default boolean isNone() {
@@ -79,28 +79,15 @@ public interface ITeam extends MutableDataComponentHolder {
     
     /**
      * The unique {@link GameProfile#getName() username} of every {@link ITeam#isMember(Player) member} of this Team, in no particular order.
-     * For {@link ScoreboardTeam}s in particular, this method is faster than {@link ITeam#streamMembers()} and should be used in preference to calling that method and <em>then</em> getting the usernames.
+     * For {@link ScoreboardTeam}s in particular, this method is faster than {@link ITeam#streamOnlineMembers()} and should be used in preference to calling that method and <em>then</em> getting the usernames.
      */
     public Stream<String> streamMemberUsernames();
 
     /**
      * Every {@link ITeam#isMember(Player) member} of this Team, with no guarantee of order.
      * It is faster to use {@link ITeam#streamMemberUsernames()} unless having the Player itself is vital. On the client side, that is the only way to know the members of the Team.
-     * @see ITeam#streamServerMembers() ServerPlayer implementation
      */
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    public Stream<Player> streamMembers();
-
-    /**
-     * Every {@link ITeam#isMember(Player) member} of this Team as a {@link ServerPlayer} object, with no guarantee of order.
-     * It is faster to use {@link ITeam#streamMemberUsernames()} unless having the Player itself is vital.
-     * @see ITeam#streamMembers() Player (not necessarily ServerPlayer) but still server-side-only implementation
-     * @see ITeam#sendToAllMembers(ClientboundPacketPayload) Shortcut if you would be using this list to send packets
-     */
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    public default Stream<ServerPlayer> streamServerMembers() {
-        return streamMembers().map(p -> p instanceof ServerPlayer sp ? sp : null);
-    };
+    public Stream<ServerPlayer> streamOnlineMembers();
 
     /**
      * What this means will be different for every system that uses Teams. It could mean the ability to change the name of a {@link Restaurant}, for example.
@@ -142,7 +129,7 @@ public interface ITeam extends MutableDataComponentHolder {
      * @param packet
      */
     public default void sendToAllMembers(ClientboundPacketPayload packet) {
-        streamServerMembers().forEach(player -> CatnipServices.NETWORK.sendToClient(player, packet));
+        streamOnlineMembers().forEach(player -> CatnipServices.NETWORK.sendToClient(player, packet));
     };
 
     /**

@@ -10,10 +10,6 @@ import java.util.stream.Stream;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IForcingItemAdvancedIngredient;
-
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.util.Mth;
@@ -27,13 +23,16 @@ import net.minecraft.world.level.storage.loot.entries.LootPoolEntryContainer;
 import net.minecraft.world.level.storage.loot.entries.LootPoolSingletonContainer;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IForcingItemAdvancedIngredient;
 
 @ApiStatus.Experimental
 public abstract class AbstractWishList {
 
     public static final int DEFAULT_ATTEMPTS = 10;
     
-    public abstract Collection<IAdvancedIngredient<? super ItemStack>> getWishes();
+    public abstract Collection<IAdvancedIngredient<ItemStack>> getWishes();
 
     /**
      * 
@@ -41,13 +40,13 @@ public abstract class AbstractWishList {
      * @param maxFulfillments Maximum number of instances of that Wish to fulfill
      * @return Actual number of instances of that Wish that can be fulfilled (i.e. how many instances of that Wish are on the WishList)
      */
-    public abstract int getWishInstanceCount(IAdvancedIngredient<? super ItemStack> wish, int maxFulfillments);
+    public abstract int getWishInstanceCount(IAdvancedIngredient<ItemStack> wish, int maxFulfillments);
 
     /**
      * @param wish Should exist in {@link AbstractWishList#getWishes()}
      * @param stack
      */
-    public abstract void fulfillWish(IAdvancedIngredient<? super ItemStack> wish, ItemStack stack);
+    public abstract void fulfillWish(IAdvancedIngredient<ItemStack> wish, ItemStack stack);
 
     public int getAttempts() {
         return DEFAULT_ATTEMPTS;
@@ -67,7 +66,7 @@ public abstract class AbstractWishList {
      * @param context
      * @return Whether any Wishes in the list came true
      */
-    public boolean addLootTableWishedAndRandomItemsRaw(LootTable table, List<LootItemFunction> additionalFunctions, Collection<IAdvancedIngredient<? super ItemStack>> wishes, boolean fulfillWishes, Consumer<ItemStack> output, LootContext context) {
+    public boolean addLootTableWishedAndRandomItemsRaw(LootTable table, List<LootItemFunction> additionalFunctions, Collection<IAdvancedIngredient<ItemStack>> wishes, boolean fulfillWishes, Consumer<ItemStack> output, LootContext context) {
         final List<LootItemFunction> functions = Stream.concat(table.functions.stream(), additionalFunctions.stream()).toList();
         final LootContext.VisitedEntry<?> visitedTableEntry = LootContext.createVisitedEntry(table);
         if (context.pushVisitedElement(visitedTableEntry)) {
@@ -96,14 +95,14 @@ public abstract class AbstractWishList {
      * @param context
      * @return Whether any Wishes in the list came true
      */
-    public boolean addLootPoolWishedAndRandomItems(LootPool pool, List<LootItemFunction> additionalFunctions, Collection<IAdvancedIngredient<? super ItemStack>> wishes, boolean fulfillWishes, Consumer<ItemStack> output, LootContext context) {
+    public boolean addLootPoolWishedAndRandomItems(LootPool pool, List<LootItemFunction> additionalFunctions, Collection<IAdvancedIngredient<ItemStack>> wishes, boolean fulfillWishes, Consumer<ItemStack> output, LootContext context) {
         if (!pool.compositeCondition.test(context)) return false;
 
         final List<ItemStack> allStacks = new ArrayList<>();
         boolean successful = false;
         int rolls = pool.getRolls().getInt(context) + Mth.floor(pool.getBonusRolls().getFloat(context) * context.getLuck());
 
-        for (final IAdvancedIngredient<? super ItemStack> wish : wishes) {
+        for (final IAdvancedIngredient<ItemStack> wish : wishes) {
             if (rolls <= 0) break;
             final List<ItemStack> addedStacks = new ArrayList<>();
             if (addLootPoolWishedItem(pool, additionalFunctions, wish, addedStacks::add, context)) {
@@ -120,7 +119,7 @@ public abstract class AbstractWishList {
         }, context); // If there are any remaining rolls, use them up with random rolls as usual
 
         for (final ItemStack stack : allStacks) {
-            for (final IAdvancedIngredient<? super ItemStack> wish : wishes) {
+            for (final IAdvancedIngredient<ItemStack> wish : wishes) {
                 successful = true;
                 if (fulfillWishes && wish.test(stack)) fulfillWish(wish, stack); // Additional wish.test here in case any Wishes were fulfilled randomly
             };
@@ -138,7 +137,7 @@ public abstract class AbstractWishList {
      * @param context
      * @return Whether the wish was succesfully fulfilled at least once
      */
-    public boolean addLootPoolWishedItem(LootPool pool, List<LootItemFunction> additionalFunctions, IAdvancedIngredient<? super ItemStack> wish, Consumer<ItemStack> output, LootContext context) {
+    public boolean addLootPoolWishedItem(LootPool pool, List<LootItemFunction> additionalFunctions, IAdvancedIngredient<ItemStack> wish, Consumer<ItemStack> output, LootContext context) {
         final Stream<LootItemFunction> globalFunctions = Stream.concat(pool.functions.stream(), additionalFunctions.stream());
         for (LootPoolEntryContainer entryContainer : pool.entries) {
 
@@ -217,7 +216,7 @@ public abstract class AbstractWishList {
         return false;
     };
 
-    public ItemStack forceFunctions(ItemStack stack, IAdvancedIngredient<? super ItemStack> wish, List<LootItemFunction> functions, LootContext context) {
+    public ItemStack forceFunctions(ItemStack stack, IAdvancedIngredient<ItemStack> wish, List<LootItemFunction> functions, LootContext context) {
         if (wish instanceof IForcingItemAdvancedIngredient forcingWish) {
             for (LootItemFunction function : functions) {
                 stack = forcingWish.forceLootItemFunction(function, context, stack).orElse(function.apply(stack, context));

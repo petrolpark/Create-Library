@@ -1,0 +1,35 @@
+{
+    "name": "restaurant.petrolpark.test",
+    "order_generators": [
+        {
+            "weight": 1,
+            "generator": {
+                "order": {
+                    "type": "petrolpark:item",
+                    "id": "minecraft:mushroom_stew"
+                },
+                "rewards": [
+                    {
+                        "reward_type": "petrolpark:give_item",
+                        "item": {
+                            "id": "minecraft:diamond"
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "global_order_modifiers": [
+        {
+            "modifier": {
+                "type": "petrolpark:flagged",
+                "flag": "pquality:gold_quality"
+            },
+            "success": 2.0
+        }
+    ],
+    "customers": {
+        "type": "minecraft:villager"
+    },
+    "xp_required_for_level": 1
+}

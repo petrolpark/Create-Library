@@ -34,7 +34,7 @@ public record RestaurantOrderGenerator(
         instance.group(
             IngredientRandomizer.DIRECT_CODEC.fieldOf("order").forGetter(RestaurantOrderGenerator::order),
             Codec.list(RestaurantOrderGenerator.ModifierEntry.CODEC).optionalFieldOf("modifiers", Collections.emptyList()).forGetter(RestaurantOrderGenerator::modifiers),
-            Codec.list(RestaurantOrderGenerator.RewardsEntry.CODEC).fieldOf("reward").forGetter(RestaurantOrderGenerator::rewards)
+            Codec.list(RestaurantOrderGenerator.RewardsEntry.CODEC).fieldOf("rewards").forGetter(RestaurantOrderGenerator::rewards)
         ).apply(instance, RestaurantOrderGenerator::new)
     ));
 
@@ -79,13 +79,20 @@ public record RestaurantOrderGenerator(
 
     public record RewardsEntry(NumberProvider chance, Holder<IRewardGenerator> rewards, IRestaurantOrder.Entry.Visibility visibility, boolean persistsToMenu) implements IRestaurantOrder.Entry {
 
-        public static final Codec<RestaurantOrderGenerator.RewardsEntry> CODEC = RecordCodecBuilder.create(instance -> 
-            instance.group(
-                NumberProviders.CODEC.optionalFieldOf("chance", ConstantValue.exactly(1f)).forGetter(RestaurantOrderGenerator.RewardsEntry::chance),
-                IRewardGenerator.CODEC.fieldOf("rewards").forGetter(RestaurantOrderGenerator.RewardsEntry::rewards)
-            ).and(IRestaurantOrder.Entry.commonFields(instance))
-            .apply(instance, RestaurantOrderGenerator.RewardsEntry::new)
+        public static final Codec<RestaurantOrderGenerator.RewardsEntry> CODEC = Codec.withAlternative(
+            RecordCodecBuilder.create(instance -> 
+                instance.group(
+                    NumberProviders.CODEC.optionalFieldOf("chance", ConstantValue.exactly(1f)).forGetter(RestaurantOrderGenerator.RewardsEntry::chance),
+                    IRewardGenerator.CODEC.fieldOf("rewards").forGetter(RestaurantOrderGenerator.RewardsEntry::rewards)
+                ).and(IRestaurantOrder.Entry.commonFields(instance))
+                .apply(instance, RestaurantOrderGenerator.RewardsEntry::new)
+            ),
+            IRewardGenerator.CODEC.xmap(RestaurantOrderGenerator.RewardsEntry::new, RestaurantOrderGenerator.RewardsEntry::rewards)
         );
+
+        public RewardsEntry(Holder<IRewardGenerator> rewards) {
+            this(ConstantValue.exactly(1f), rewards, IRestaurantOrder.Entry.Visibility.ALWAYS, true);
+        };
     };
 
     @Override

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.server.level.ServerLevel;
@@ -21,8 +22,8 @@ import petrolpark.mc.library.core.world.item.crafting.pocket.interpretedSlot.IIn
 public abstract class AbstractCookingPocketCrafter<R extends AbstractCookingRecipe> extends SingleInputPocketCrafter<R> {
 
     @Override
-    public List<RecipeHolder<? extends R>> getRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot<?>> slots) {
-        final List<RecipeHolder<? extends R>> recipes = super.getRecipes(context, slots);
+    public List<RecipeHolder<? extends R>> getRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot<?>> slots, PocketCrafting.SlotArrangement slotArrangement) {
+        final List<RecipeHolder<? extends R>> recipes = super.getRecipes(context, slots, slotArrangement);
         if (recipes.size() <= 1) return recipes;
         return new ArrayList<>(recipes.stream()
             .collect(Collectors.toMap(
@@ -38,7 +39,7 @@ public abstract class AbstractCookingPocketCrafter<R extends AbstractCookingReci
     };
 
     @Override
-    public PocketCrafting.Result craft(IPocketCraftingContext context, boolean simulate, RecipeHolder<? extends R> recipe, List<IInterpretedSlot<?>> slots, Slot outputSlot) {
+    public PocketCrafting.Result craft(IPocketCraftingContext context, boolean simulate, RecipeHolder<? extends R> recipe, List<IInterpretedSlot<?>> slots, @Nullable Slot outputSlot) {
         final PocketCrafting.Result result = super.craft(context, simulate, recipe, slots, outputSlot);
 
         // Spawn XP

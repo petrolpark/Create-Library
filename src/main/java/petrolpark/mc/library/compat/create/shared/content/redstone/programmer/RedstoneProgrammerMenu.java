@@ -5,11 +5,6 @@ import java.util.WeakHashMap;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgram.Channel;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateMenuTypes;
-import petrolpark.mc.library.compat.jei.ghost.IConditionalGhostSlot;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.world.DummyContainer;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler.Frequency;
 import com.simibubi.create.foundation.gui.menu.GhostItemMenu;
 
@@ -30,6 +25,11 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import net.neoforged.neoforge.items.SlotItemHandler;
+import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgram.Channel;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateMenuTypes;
+import petrolpark.mc.library.compat.jei.ghost.IConditionalGhostSlot;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.world.inventory.DummyContainer;
 
 public class RedstoneProgrammerMenu extends GhostItemMenu<RedstoneProgram> {
 

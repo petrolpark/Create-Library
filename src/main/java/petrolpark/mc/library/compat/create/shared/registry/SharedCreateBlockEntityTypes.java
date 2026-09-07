@@ -2,14 +2,11 @@ package petrolpark.mc.library.compat.create.shared.registry;
 
 import static petrolpark.mc.library.compat.create.PetrolparkCreate.REGISTRATE;
 
-import com.simibubi.create.AllPartialModels;
 import com.simibubi.create.api.behaviour.spouting.BlockSpoutingBehaviour;
 import com.simibubi.create.content.kinetics.base.SingleAxisRotatingVisual;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 
 import petrolpark.mc.library.compat.create.RequiresCreate;
-import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.holder.RollingPinHolderBlockEntity;
-import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.holder.RollingPinHolderRenderer;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.VerticalBearingRenderer;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.VerticalBearingVisual;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HorseMillBearingBlockEntity;
@@ -84,12 +81,6 @@ public class SharedCreateBlockEntityTypes {
     public static final BlockEntityEntry<RedstoneProgrammerBlockEntity> REDSTONE_PROGRAMMER = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.REDSTONE_PROGRAMMER, "redstone_programmer", RedstoneProgrammerBlockEntity::new)
         .validBlock(SharedCreateBlocks.REDSTONE_PROGRAMMER)
         .renderer(() -> RedstoneProgrammerBlockEntityRenderer::new)
-        .register();
-
-    public static final BlockEntityEntry<RollingPinHolderBlockEntity> ROLLING_PIN_HOLDER = REGISTRATE.sharedCreateBlockEntity(SharedFeatureFlag.ROLLING_PIN, "rolling_pin_holder", RollingPinHolderBlockEntity::new)
-        .visual(() -> SingleAxisRotatingVisual.of(AllPartialModels.SHAFTLESS_COGWHEEL), true)
-        .validBlock(SharedCreateBlocks.ROLLING_PIN_HOLDER)
-        .renderer(() -> RollingPinHolderRenderer::new)
         .register();
 
     public static final void register() {};

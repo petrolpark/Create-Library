@@ -15,6 +15,5 @@ public class PetrolparkLootConditionTypes {
     PARAMETERS_SUPPLIED = REGISTRATE.lootConditionType("parameters_supplied", ParameterSuppliedLootCondition.CODEC),
     NUMBER_COMPARISON = REGISTRATE.lootConditionType("number_comparison", NumberComparisonLootCondition.CODEC);
 
-
     public static final void register() {};
 };

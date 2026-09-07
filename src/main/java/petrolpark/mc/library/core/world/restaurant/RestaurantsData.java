@@ -29,11 +29,9 @@ public record RestaurantsData(
     Map<Holder<Restaurant>, RestaurantData> data
 ) {
 
-    public static final Codec<RestaurantsData> CODEC = Codec.unboundedMap(Restaurant.CODEC, RestaurantData.CODEC).xmap(RestaurantsData::new, RestaurantsData::data);
+    public static final RestaurantsData EMPTY = new RestaurantsData(Collections.emptyMap());
 
-    public RestaurantsData() {
-        this(Collections.emptyMap());
-    };
+    public static final Codec<RestaurantsData> CODEC = Codec.unboundedMap(Restaurant.CODEC, RestaurantData.CODEC).xmap(RestaurantsData::new, RestaurantsData::data);
 
     @OnlyIn(Dist.CLIENT)
     public Component getName(Holder<Restaurant> restaurant) {
@@ -41,15 +39,15 @@ public record RestaurantsData(
     };
 
     public static final void modify(MutableDataComponentHolder componentHolder, Consumer<RestaurantsData.Mutable> modification) {
-        final RestaurantsData originalData = componentHolder.getOrDefault(PetrolparkDataComponentTypes.RESTAURANTS_DATA, new RestaurantsData());
+        final RestaurantsData originalData = componentHolder.getOrDefault(PetrolparkDataComponentTypes.TEAM_RESTAURANTS, RestaurantsData.EMPTY);
         final RestaurantsData.Mutable mutable = originalData.mutable();
         modification.accept(mutable);
         final RestaurantsData modifiedData = mutable.toImmutable();
-        componentHolder.set(PetrolparkDataComponentTypes.RESTAURANTS_DATA, modifiedData);
+        componentHolder.set(PetrolparkDataComponentTypes.TEAM_RESTAURANTS, modifiedData);
         if (componentHolder instanceof ITeam team) {
             // Iterate to find changed Restaurants (ignoring any which have now been removed)
             for (Map.Entry<Holder<Restaurant>, RestaurantData> entry : modifiedData.data().entrySet()) {
-                if (!entry.getValue().equals(originalData.data().get(entry.getKey()))) team.streamServerMembers().forEach(player -> PetrolparkCriteriaTriggers.RESTAURANT_CHANGED.get().trigger(player, entry.getKey(), team));
+                if (!entry.getValue().equals(originalData.data().get(entry.getKey()))) team.streamOnlineMembers().forEach(player -> PetrolparkCriteriaTriggers.RESTAURANT_CHANGED.get().trigger(player, entry.getKey(), team));
             };
         };
     };

@@ -6,8 +6,6 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
-
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.VillagerTrades.ItemListing;
@@ -15,8 +13,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
-public record TypeAttachedAdvancedIngredient<STACK, INGREDIENT extends ITypelessAdvancedIngredient<? super STACK>>(INGREDIENT untypedIngredient, IAdvancedIngredientType<STACK> type) implements IAdvancedIngredient<STACK>, IForcingItemAdvancedIngredient {
+public record TypeAttachedAdvancedIngredient<STACK, INGREDIENT extends ITypelessAdvancedIngredient<STACK>>(INGREDIENT untypedIngredient, IAdvancedIngredientType<STACK> type) implements IAdvancedIngredient<STACK>, IForcingItemAdvancedIngredient {
 
     @Override
     public boolean test(STACK stack) {
@@ -25,12 +24,12 @@ public record TypeAttachedAdvancedIngredient<STACK, INGREDIENT extends ITypeless
 
     @Override
     public Stream<STACK> modifyExamples(Stream<STACK> exampleStacks) {
-        return untypedIngredient().modifyExamples(exampleStacks.map(this::checkedCast)).map(this::checkedCast);
+        return untypedIngredient().modifyExamples(exampleStacks);
     };
 
     @Override
     public Stream<STACK> modifyCounterExamples(Stream<STACK> counterExampleStacks) {
-        return untypedIngredient().modifyCounterExamples(counterExampleStacks.map(this::checkedCast)).map(this::checkedCast);
+        return untypedIngredient().modifyCounterExamples(counterExampleStacks);
     };
 
     @Override
@@ -68,15 +67,15 @@ public record TypeAttachedAdvancedIngredient<STACK, INGREDIENT extends ITypeless
     };
 
     @Override
-    public IAdvancedIngredientType<? super STACK> getType() {
+    public IAdvancedIngredientType<STACK> getType() {
         return type();
     };
 
     @Override
-    public IAdvancedIngredient<? super STACK> simplify() {
-        ITypelessAdvancedIngredient<? super STACK> simplifiedUntypedIngredient = untypedIngredient().simplify();
+    public IAdvancedIngredient<STACK> simplify() {
+        final ITypelessAdvancedIngredient<STACK> simplifiedUntypedIngredient = untypedIngredient().simplify();
         if (simplifiedUntypedIngredient == untypedIngredient()) return this;
-        return new TypeAttachedAdvancedIngredient<STACK,ITypelessAdvancedIngredient<? super STACK>>(simplifiedUntypedIngredient, type());
+        return new TypeAttachedAdvancedIngredient<STACK,ITypelessAdvancedIngredient<STACK>>(simplifiedUntypedIngredient, type());
     };
     
 };

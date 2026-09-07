@@ -32,7 +32,9 @@ import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
 import petrolpark.mc.library.registry.PetrolparkAttachmentTypes;
 import petrolpark.mc.library.registry.PetrolparkAttributes;
 import petrolpark.mc.library.registry.PetrolparkBogglePatternGeneratorTypes;
+import petrolpark.mc.library.registry.PetrolparkCommandArgumentTypes;
 import petrolpark.mc.library.registry.PetrolparkCriteriaTriggers;
+import petrolpark.mc.library.registry.PetrolparkCustomerProviderTypes;
 import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
 import petrolpark.mc.library.registry.PetrolparkDataLoadingConditions;
 import petrolpark.mc.library.registry.PetrolparkDataSubPredicates;
@@ -44,6 +46,7 @@ import petrolpark.mc.library.registry.PetrolparkItems;
 import petrolpark.mc.library.registry.PetrolparkLootConditionTypes;
 import petrolpark.mc.library.registry.PetrolparkLootItemFunctions;
 import petrolpark.mc.library.registry.PetrolparkLootModifierTypes;
+import petrolpark.mc.library.registry.PetrolparkMenuTypes;
 import petrolpark.mc.library.registry.PetrolparkNeoForgeIngredientTypes;
 import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 import petrolpark.mc.library.registry.PetrolparkPackets;
@@ -96,7 +99,9 @@ public class Petrolpark {
         PetrolparkAttachmentTypes.register(modEventBus);
         PetrolparkAttributes.register();
         PetrolparkBogglePatternGeneratorTypes.register();
+        PetrolparkCommandArgumentTypes.register();
         PetrolparkCriteriaTriggers.register();
+        PetrolparkCustomerProviderTypes.register();
         PetrolparkDataComponentTypes.register(modEventBus);
         PetrolparkDataLoadingConditions.register();
         PetrolparkDataSubPredicates.register();
@@ -109,6 +114,7 @@ public class Petrolpark {
         PetrolparkLootConditionTypes.register();
         PetrolparkLootItemFunctions.register();
         PetrolparkLootModifierTypes.register();
+        PetrolparkMenuTypes.register();
         PetrolparkNumberProviderTypes.register();
         PetrolparkPackets.register();
         PetrolparkPocketCrafters.register();
@@ -138,8 +144,8 @@ public class Petrolpark {
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
-        //return new SharedFeatureFlag[]{};
-        return new SharedFeatureFlag[]{SharedFeatureFlag.CENTRIFUGE, SharedFeatureFlag.INEBRIATION, SharedFeatureFlag.CRYING};
+        return new SharedFeatureFlag[]{};
+        //return new SharedFeatureFlag[]{SharedFeatureFlag.CENTRIFUGE, SharedFeatureFlag.INEBRIATION, SharedFeatureFlag.CRYING};
     };
 
     private void init(final FMLCommonSetupEvent event) {

@@ -3,11 +3,10 @@ package petrolpark.mc.library.core.data.loot.wish;
 import java.util.List;
 import java.util.stream.Stream;
 
-import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
-
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
 
 public interface IWishableLootPoolEntryContainer {
     
@@ -18,5 +17,5 @@ public interface IWishableLootPoolEntryContainer {
      * @param context
      * @return Collection of ItemStacks matching the {@code wish}, or an empty List if no matching Stacks can be generated
      */
-    public List<ItemStack> getWishedItems(AbstractWishList wishList, IAdvancedIngredient<? super ItemStack> wish, Stream<LootItemFunction> lootItemFunctions, LootContext context);
+    public List<ItemStack> getWishedItems(AbstractWishList wishList, IAdvancedIngredient<ItemStack> wish, Stream<LootItemFunction> lootItemFunctions, LootContext context);
 };

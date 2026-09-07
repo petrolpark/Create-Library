@@ -23,9 +23,11 @@ import petrolpark.mc.library.core.client.effectShaders.ShaderEffectReloadHandler
 import petrolpark.mc.library.core.data.loot.modifier.LootTableModification;
 import petrolpark.mc.library.core.data.recipe.bogglePattern.BogglePattern;
 import petrolpark.mc.library.core.data.reward.IReward;
+import petrolpark.mc.library.core.data.reward.entity.IEntityReward;
 import petrolpark.mc.library.core.data.reward.generator.IRewardGenerator;
 import petrolpark.mc.library.core.flags.Flag;
 import petrolpark.mc.library.core.world.entity.animal.mood.AnimalMoodModifier;
+import petrolpark.mc.library.core.world.entity.player.team.predicate.ITeamPredicate;
 import petrolpark.mc.library.core.world.restaurant.Restaurant;
 import petrolpark.mc.library.core.world.restaurant.order.RestaurantOrderGenerator;
 import petrolpark.mc.library.registry.PetrolparkRegistries;
@@ -40,10 +42,12 @@ public class ModEvents {
         
         // Loot/Data
         event.dataPackRegistry(PetrolparkRegistries.Keys.LOOT_TABLE_MODIFICATION, LootTableModification.DIRECT_CODEC);
+        event.dataPackRegistry(PetrolparkRegistries.Keys.TEAM_PREDICATE, ITeamPredicate.DIRECT_CODEC);
         
         // Rewards
         event.dataPackRegistry(PetrolparkRegistries.Keys.REWARD_GENERATOR, IRewardGenerator.DIRECT_CODEC, IRewardGenerator.DIRECT_CODEC);
         event.dataPackRegistry(PetrolparkRegistries.Keys.REWARD, IReward.DIRECT_CODEC, IReward.DIRECT_CODEC);
+        event.dataPackRegistry(PetrolparkRegistries.Keys.ENTITY_REWARD, IEntityReward.DIRECT_CODEC, IEntityReward.DIRECT_CODEC);
         
         // Restaurants
         event.dataPackRegistry(PetrolparkRegistries.Keys.RESTAURANT, Restaurant.DIRECT_CODEC, Restaurant.DIRECT_CODEC);

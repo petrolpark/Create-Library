@@ -5,21 +5,22 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
 
-import petrolpark.mc.library.compat.jei.PetrolparkJEI;
-
 import mezz.jei.api.gui.IRecipeLayoutDrawable;
 import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.common.transfer.RecipeTransferService;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.client.event.ClientTickEvent;
+import petrolpark.mc.library.compat.jei.PetrolparkJEI;
 
 public class RecipeBookItemJEICategoryCache {
 
     protected static final int LIFETIME = 1200;
     
     private final Map<RecipeType<?>, Map<RecipeHolder<?>, Entry>> MAP = new HashMap<>();
+    public RecipeTransferService recipeTransferService;
 
     public Optional<IRecipeLayoutDrawable<?>> get(RecipeReferenceDataComponent recipeReference, RecipeManager recipeManager) {
         if (recipeReference.jeiRecipeTypeId().isEmpty()) return Optional.empty();

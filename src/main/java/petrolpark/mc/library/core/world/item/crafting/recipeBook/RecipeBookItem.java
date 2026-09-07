@@ -82,13 +82,13 @@ public class RecipeBookItem extends Item {
 
     public Optional<TooltipComponent> getJeiTooltipImage(@Nonnull ItemStack stack) {
         return Petrolpark.runForDist(() -> () -> {
-            Minecraft mc = Minecraft.getInstance();
-            ClientPacketListener connection = mc.getConnection();
-            RecipeReferenceDataComponent recipeReference = stack.get(PetrolparkDataComponentTypes.RECIPE_REFERENCE);
+            final Minecraft mc = Minecraft.getInstance();
+            final ClientPacketListener connection = mc.getConnection();
+            final RecipeReferenceDataComponent recipeReference = stack.get(PetrolparkDataComponentTypes.RECIPE_REFERENCE);
             if (connection == null || recipeReference == null || PetrolparkJEI.JEI_RUNTIME == null) return Optional.empty();
 
             return PetrolparkJEI.RECIPE_BOOK_ITEM_JEI_CATEGORY_CACHE.get(recipeReference, connection.getRecipeManager())
-                .map(layout -> new PreviewTooltipComponent<>(layout));
+                .map(layout -> new PreviewTooltipComponent<>(layout, PetrolparkJEI.RECIPE_BOOK_ITEM_JEI_CATEGORY_CACHE.recipeTransferService));
         }, () -> Optional::empty);
     };
 

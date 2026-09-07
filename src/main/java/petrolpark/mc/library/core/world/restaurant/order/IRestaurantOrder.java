@@ -23,7 +23,7 @@ public interface IRestaurantOrder {
     
     public int id();
 
-    public IAdvancedIngredient<? super ItemStack> ingredient();
+    public IAdvancedIngredient<ItemStack> ingredient();
 
     public List<RestaurantOrderModifier.Info> modifiersInfo();
 

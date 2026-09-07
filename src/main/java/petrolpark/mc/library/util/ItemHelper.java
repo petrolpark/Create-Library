@@ -8,7 +8,10 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentType;
@@ -23,7 +26,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.npc.InventoryCarrier;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -31,9 +37,11 @@ import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.items.IItemHandler;
 import net.neoforged.neoforge.items.ItemHandlerHelper;
 import net.neoforged.neoforge.items.wrapper.InvWrapper;
+import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
 import petrolpark.mc.library.core.world.item.decay.ItemDecay;
 
 public class ItemHelper {
@@ -95,6 +103,14 @@ public class ItemHelper {
         return ItemStack.EMPTY;
     };
 
+    public static @Nullable IItemHandler wrap(@Nullable Entity entity) {
+        if (entity != null) {
+            final IItemHandler handler = entity.getCapability(Capabilities.ItemHandler.ENTITY);
+            if (handler != null) return handler;
+        };
+        return null; //TODO probably can improve this (such as wrapper to drop stuff on ground)
+    };
+
     public static final void give(Entity entity, Stream<ItemStack> stacks) {
         if (entity instanceof InventoryCarrier hasInv) {
             stacks.forEach(stack -> entity.spawnAtLocation(ItemHandlerHelper.insertItemStacked(new InvWrapper(hasInv.getInventory()), stack, false)));
@@ -103,6 +119,17 @@ public class ItemHelper {
         } else {
             stacks.forEach(entity::spawnAtLocation);
         };
+    };
+
+    public static Stream<ItemStack> stream(RecipeWrapper recipeWrapper) {
+        return IntStream.range(0, recipeWrapper.size()).mapToObj(recipeWrapper::getItem);
+    };
+
+    public static int getActualIndex(AbstractContainerMenu menu, Slot slot) {
+        // if (slot instanceof CreativeModeInventoryScreen.SlotWrapper || menu instanceof CreativeModeInventoryScreen.ItemPickerMenu) {
+        //     return ((ISlotDuck)slot).getActualIndex(menu);
+        // };
+        return slot.index;
     };
 
     public static final void modifyItems(LivingEntity livingEntity, UnaryOperator<ItemStack> function) {
@@ -131,6 +158,18 @@ public class ItemHelper {
             if (entry instanceof NestedLootTable nestedTable) return nestedTable.contents.right().stream().flatMap(ItemHelper::streamPossibleItems);
             return Stream.empty();
         });
+    };
+    
+    public static void insertStartingWithSlot(Inventory inventory, ItemStack stack, int startingSlot) {
+        int slot = startingSlot;
+        while (true) {
+            if (slot >= inventory.items.size()) slot = 0;
+            if (slot == startingSlot) {
+                inventory.player.drop(stack, false);
+                return;
+            };
+            if (inventory.add(slot, stack)) return;
+        }
     };
 
     @Deprecated

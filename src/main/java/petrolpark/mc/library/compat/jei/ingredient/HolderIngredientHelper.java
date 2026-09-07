@@ -16,7 +16,7 @@ import mezz.jei.api.ingredients.subtypes.UidContext;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.library.ingredients.TypedIngredient;
+import mezz.jei.common.ingredients.TypedIngredient;
 import mezz.jei.library.plugins.jei.tags.ITagInfoRecipe;
 import mezz.jei.library.plugins.jei.tags.TagInfoRecipe;
 import mezz.jei.library.plugins.jei.tags.TagInfoRecipeCategory;

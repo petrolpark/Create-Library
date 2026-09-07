@@ -10,11 +10,11 @@ import net.minecraft.world.level.Level;
 
 public interface IAdvancedIngredientType<STACK> {
     
-    public MapCodec<? extends IAdvancedIngredient<? super STACK>> codec();
+    public MapCodec<? extends IAdvancedIngredient<STACK>> codec();
     
-    public StreamCodec<? super RegistryFriendlyByteBuf, ? extends IAdvancedIngredient<? super STACK>> streamCodec();
+    public StreamCodec<? super RegistryFriendlyByteBuf, ? extends IAdvancedIngredient<STACK>> streamCodec();
 
-    public default Stream<? extends IAdvancedIngredient<? super STACK>> streamApplicableIngredients(Level level, STACK stack) {
+    public default Stream<? extends IAdvancedIngredient<STACK>> streamApplicableIngredients(Level level, STACK stack) {
         return Stream.empty();
     };
 };

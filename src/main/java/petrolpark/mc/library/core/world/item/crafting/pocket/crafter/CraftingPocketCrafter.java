@@ -6,16 +6,19 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Stream;
 
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.createmod.catnip.data.Pair;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.api.distmarker.Dist;
@@ -23,6 +26,7 @@ import net.neoforged.api.distmarker.OnlyIn;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.core.world.item.crafting.BookRequiredCraftingRecipe;
 import petrolpark.mc.library.core.world.item.crafting.pocket.IPocketCraftingContext;
+import petrolpark.mc.library.core.world.item.crafting.pocket.ItemsPocketCraftingResult;
 import petrolpark.mc.library.core.world.item.crafting.pocket.PocketCrafting;
 import petrolpark.mc.library.core.world.item.crafting.pocket.PocketCrafting.SlotGrid;
 import petrolpark.mc.library.core.world.item.crafting.pocket.interpretedSlot.IInterpretedSlot;
@@ -44,9 +48,14 @@ public class CraftingPocketCrafter implements IPocketCrafter<CraftingRecipe> {
     };
 
     @Override
+    public boolean canCastRecipe(Recipe<?> recipe) {
+        return recipe instanceof CraftingRecipe;
+    };
+
+    @Override
     @OnlyIn(Dist.CLIENT)
-    public List<RecipeHolder<? extends CraftingRecipe>> getRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot<?>> interpretedSlots) {
-        final CraftingInput input = getCraftingInput(interpretedSlots);
+    public List<RecipeHolder<? extends CraftingRecipe>> getRecipes(IPocketCraftingContext.Client context, List<IInterpretedSlot<?>> interpretedSlots, PocketCrafting.SlotArrangement slotArrangement) {
+        final CraftingInput input = getCraftingInput(interpretedSlots, context.menu(), slotArrangement);
         return Stream.concat(
             context.recipeManager().getAllRecipesFor(RecipeType.CRAFTING).stream()
                 .filter(rh -> rh.value().matches(input, context.level())),
@@ -55,13 +64,12 @@ public class CraftingPocketCrafter implements IPocketCrafter<CraftingRecipe> {
     };
 
     @Override
-    public PocketCrafting.Result craft(IPocketCraftingContext context, boolean simulate, RecipeHolder<? extends CraftingRecipe> recipeHolder, List<IInterpretedSlot<?>> inputSlots, Slot outputSlot) {
-        // TODO Auto-generated method stub
-        return null;
+    public PocketCrafting.Result craft(IPocketCraftingContext context, boolean simulate, RecipeHolder<? extends CraftingRecipe> recipeHolder, List<IInterpretedSlot<?>> inputSlots, @Nullable Slot outputSlot) {
+        return ItemsPocketCraftingResult.success(recipeHolder.value().getResultItem(context.registries()));
     };
 
-    public CraftingInput getCraftingInput(List<IInterpretedSlot<?>> interpretedSlots) {
-        final Pair<Int2ObjectMap<Int2ObjectMap<Slot>>, Int2ObjectMap<SlotGrid>> slotsAndGrids = PocketCrafting.organiseSlots(interpretedSlots.stream().map(IInterpretedSlot::slot).toList());
+    public CraftingInput getCraftingInput(List<IInterpretedSlot<?>> interpretedSlots, AbstractContainerMenu menu, PocketCrafting.SlotArrangement slotArrangement) {
+        final Pair<Int2ObjectMap<Int2ObjectMap<Slot>>, Int2ObjectMap<SlotGrid>> slotsAndGrids = PocketCrafting.organiseSlots(menu, interpretedSlots.stream().map(IInterpretedSlot::slot).toList(), slotArrangement);
         final Set<SlotGrid> uniqueGrids = new HashSet<>(slotsAndGrids.getSecond().values());
 
         // Try shaped crafting

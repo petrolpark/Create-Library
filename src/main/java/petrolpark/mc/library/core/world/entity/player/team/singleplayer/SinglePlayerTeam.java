@@ -8,12 +8,6 @@ import javax.annotation.Nonnull;
 import org.jetbrains.annotations.Nullable;
 
 import com.mojang.serialization.MapCodec;
-import petrolpark.mc.library.core.world.entity.player.team.AbstractTeam;
-import petrolpark.mc.library.core.world.entity.player.team.ITeam;
-import petrolpark.mc.library.core.world.entity.player.team.NoTeam;
-import petrolpark.mc.library.registry.PetrolparkAttachmentTypes;
-import petrolpark.mc.library.registry.PetrolparkTeamProviderTypes;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.Minecraft;
@@ -27,13 +21,18 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.RegistryOps;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
 import net.neoforged.neoforge.attachment.IAttachmentSerializer;
+import petrolpark.mc.library.core.world.entity.player.team.AbstractTeam;
+import petrolpark.mc.library.core.world.entity.player.team.ITeam;
+import petrolpark.mc.library.core.world.entity.player.team.NoTeam;
+import petrolpark.mc.library.registry.PetrolparkAttachmentTypes;
+import petrolpark.mc.library.registry.PetrolparkTeamProviderTypes;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 /**
  * The {@link ITeam} consisting of a single Player.
@@ -83,9 +82,8 @@ public class SinglePlayerTeam extends AbstractTeam {
     };
 
     @Override
-    @OnlyIn(Dist.DEDICATED_SERVER)
-    public Stream<Player> streamMembers() {
-        return Stream.of(player);
+    public Stream<ServerPlayer> streamOnlineMembers() {
+        return player instanceof ServerPlayer sp ? Stream.of(sp) : Stream.empty();
     };
 
     @Override
@@ -139,12 +137,12 @@ public class SinglePlayerTeam extends AbstractTeam {
         @Override
         public SinglePlayerTeam read(@Nonnull IAttachmentHolder holder, @Nonnull Tag tag, @Nonnull HolderLookup.Provider provider) {
             if (!(holder instanceof Player player)) throw new IllegalArgumentException(holder.toString() + " is not a Player");
-            return new SinglePlayerTeam(player, DataComponentPatch.CODEC.parse(NbtOps.INSTANCE, tag).getOrThrow());
+            return new SinglePlayerTeam(player, DataComponentPatch.CODEC.parse(RegistryOps.create(NbtOps.INSTANCE, provider), tag).getOrThrow());
         };
 
         @Override
         public @Nullable Tag write(@Nonnull SinglePlayerTeam attachment, @Nonnull HolderLookup.Provider provider) {
-            return attachment.writeDataComponentsTag();
+            return attachment.writeDataComponentsTag(provider);
         };
 
     };

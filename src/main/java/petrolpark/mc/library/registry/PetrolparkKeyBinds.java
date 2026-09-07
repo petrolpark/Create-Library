@@ -2,6 +2,7 @@ package petrolpark.mc.library.registry;
 
 import org.lwjgl.glfw.GLFW;
 
+import net.createmod.catnip.platform.CatnipClientServices;
 import net.minecraft.client.KeyMapping;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -14,6 +15,8 @@ public enum PetrolparkKeyBinds {
 
 	//TEMP
 	POCKET_CRAFTING("qEFFWE", GLFW.GLFW_KEY_C),
+
+	DELETE_ITEM("deleteItem", GLFW.GLFW_KEY_X),
     
 	// Tubes
     TUBE_BUILD("tube.build", GLFW.GLFW_KEY_ENTER),
@@ -42,11 +45,15 @@ public enum PetrolparkKeyBinds {
 		this.defaultKey = defaultKey;
 	};
 
+	public boolean isDown() {
+		return CatnipClientServices.CLIENT_HOOKS.isKeyPressed(keybind);
+	};
+
     @SubscribeEvent
 	public static void register(RegisterKeyMappingsEvent event) {
 		for (PetrolparkKeyBinds key : values()) {
 			key.keybind = new KeyMapping(key.description, key.defaultKey, "Petrolpark's Library");
 			event.register(key.keybind);
 		};
-	}
+	};
 };

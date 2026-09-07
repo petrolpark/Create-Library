@@ -12,9 +12,6 @@ import javax.annotation.Nullable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
-import petrolpark.mc.library.util.Lang;
-import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.chat.Component;
@@ -27,10 +24,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunction;
+import petrolpark.mc.library.registry.PetrolparkAdvancedIngredientTypes;
+import petrolpark.mc.library.util.Lang;
+import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
-public record CompoundAdvancedIngredient<STACK>(List<IAdvancedIngredient<? super STACK>> ingredients, int required) implements ITypelessAdvancedIngredient<STACK>, IForcingItemAdvancedIngredient {
+public record CompoundAdvancedIngredient<STACK>(List<IAdvancedIngredient<STACK>> ingredients, int required) implements ITypelessAdvancedIngredient<STACK>, IForcingItemAdvancedIngredient {
 
-    public static final <STACK> MapCodec<CompoundAdvancedIngredient<STACK>> codec(Codec<IAdvancedIngredient<? super STACK>> typeCodec) {
+    public static final <STACK> MapCodec<CompoundAdvancedIngredient<STACK>> codec(Codec<IAdvancedIngredient<STACK>> typeCodec) {
         return RecordCodecBuilder.mapCodec(instance -> instance.group(
             typeCodec.listOf().fieldOf("ingredients").forGetter(CompoundAdvancedIngredient::ingredients),
             Codec.intRange(1, Integer.MAX_VALUE).optionalFieldOf("proportion", 1).forGetter(CompoundAdvancedIngredient::required)
@@ -39,7 +39,7 @@ public record CompoundAdvancedIngredient<STACK>(List<IAdvancedIngredient<? super
         ;
     };
 
-    public static final <STACK> StreamCodec<RegistryFriendlyByteBuf, CompoundAdvancedIngredient<STACK>> streamCodec(StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<? super STACK>> typeStreamCodec) {
+    public static final <STACK> StreamCodec<RegistryFriendlyByteBuf, CompoundAdvancedIngredient<STACK>> streamCodec(StreamCodec<RegistryFriendlyByteBuf, IAdvancedIngredient<STACK>> typeStreamCodec) {
         return StreamCodec.composite(
             typeStreamCodec.apply(ByteBufCodecs.list()), CompoundAdvancedIngredient::ingredients,
             ByteBufCodecs.INT, CompoundAdvancedIngredient::required,
@@ -47,19 +47,19 @@ public record CompoundAdvancedIngredient<STACK>(List<IAdvancedIngredient<? super
         );
     };
 
-    protected static final <STACK> CompoundAdvancedIngredient<STACK> typelessAnd(List<IAdvancedIngredient<? super STACK>> ingredients) {
+    protected static final <STACK> CompoundAdvancedIngredient<STACK> typelessAnd(List<IAdvancedIngredient<STACK>> ingredients) {
         return new CompoundAdvancedIngredient<>(ingredients, ingredients.size());
     };
 
-    protected static final <STACK> CompoundAdvancedIngredient<STACK> typelessOr(List<IAdvancedIngredient<? super STACK>> ingredients) {
+    protected static final <STACK> CompoundAdvancedIngredient<STACK> typelessOr(List<IAdvancedIngredient<STACK>> ingredients) {
         return new CompoundAdvancedIngredient<>(ingredients, 1);
     };
 
-    public static final IAdvancedIngredient<ItemStack> and(List<IAdvancedIngredient<? super ItemStack>> ingredients) {
+    public static final IAdvancedIngredient<ItemStack> and(List<IAdvancedIngredient<ItemStack>> ingredients) {
         return PetrolparkAdvancedIngredientTypes.ITEM_COMPOUND.get().create(typelessAnd(ingredients));
     };
 
-    public static final IAdvancedIngredient<ItemStack> or(List<IAdvancedIngredient<? super ItemStack>> ingredients) {
+    public static final IAdvancedIngredient<ItemStack> or(List<IAdvancedIngredient<ItemStack>> ingredients) {
         return PetrolparkAdvancedIngredientTypes.ITEM_COMPOUND.get().create(typelessOr(ingredients));
     };
 
@@ -77,7 +77,7 @@ public record CompoundAdvancedIngredient<STACK>(List<IAdvancedIngredient<? super
     };
 
     @Override
-    public Stream<? extends STACK> streamExamples() {
+    public Stream<STACK> streamExamples() {
         if (isImpossible()) return Stream.empty();
         Stream<STACK> stream = ingredients().stream()
             .flatMap(IAdvancedIngredient::streamExamples)
@@ -89,7 +89,7 @@ public record CompoundAdvancedIngredient<STACK>(List<IAdvancedIngredient<? super
     };
 
     @Override
-    public Stream<? extends STACK> streamCounterExamples() {
+    public Stream<STACK> streamCounterExamples() {
         if (isImpossible()) return Stream.empty();
         Stream<STACK> stream = ingredients().stream()
             .flatMap(IAdvancedIngredient::streamCounterExamples)
@@ -200,11 +200,11 @@ public record CompoundAdvancedIngredient<STACK>(List<IAdvancedIngredient<? super
     };
 
     @Override
-    public ITypelessAdvancedIngredient<? super STACK> simplify() {
+    public ITypelessAdvancedIngredient<STACK> simplify() {
         if (ingredients().size() == 1) return ingredients().get(0).simplify();
         ingredients().replaceAll(IAdvancedIngredient::simplify);
         if (isAnd() || isOr()) {
-            Iterator<IAdvancedIngredient<? super STACK>> iterator = ingredients().iterator();
+            Iterator<IAdvancedIngredient<STACK>> iterator = ingredients().iterator();
             while (iterator.hasNext()) {
                 cast(iterator.next()).ifPresent(compoundIngredient -> {
                     if (compoundIngredient.isAnd() == isAnd() || compoundIngredient.isOr() == isOr()) {
@@ -230,8 +230,8 @@ public record CompoundAdvancedIngredient<STACK>(List<IAdvancedIngredient<? super
     };
 
     @SuppressWarnings("unchecked")
-    protected Optional<CompoundAdvancedIngredient<? super STACK>> cast(IAdvancedIngredient<? super STACK> ingredient) {
-        if (ingredient instanceof TypeAttachedAdvancedIngredient typedIngredient && typedIngredient.untypedIngredient() instanceof CompoundAdvancedIngredient compoundIngredient) return Optional.of((CompoundAdvancedIngredient<? super STACK>)compoundIngredient);
+    protected Optional<CompoundAdvancedIngredient<STACK>> cast(IAdvancedIngredient<STACK> ingredient) {
+        if (ingredient instanceof TypeAttachedAdvancedIngredient typedIngredient && typedIngredient.untypedIngredient() instanceof CompoundAdvancedIngredient compoundIngredient) return Optional.of((CompoundAdvancedIngredient<STACK>)compoundIngredient);
         return Optional.empty();
     };
 

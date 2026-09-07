@@ -1,16 +1,15 @@
 package petrolpark.mc.library.core.data.recipe.bogglePattern;
 
+import net.minecraft.world.item.ItemStack;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredient;
 import petrolpark.mc.library.core.data.recipe.ingredient.advanced.IAdvancedIngredientType;
 import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
 import petrolpark.mc.library.util.Lang.IndentedTooltipBuilder;
 
-import net.neoforged.neoforge.common.MutableDataComponentHolder;
-
-public record BogglePatternAdvancedIngredient(BogglePattern pattern) implements IAdvancedIngredient<MutableDataComponentHolder> {
+public record BogglePatternAdvancedIngredient(BogglePattern pattern) implements IAdvancedIngredient<ItemStack> {
 
     @Override
-    public boolean test(MutableDataComponentHolder stack) {
+    public boolean test(ItemStack stack) {
         Integer pattern = stack.get(PetrolparkDataComponentTypes.BOGGLE_PATTERN);
         if (pattern == null) return false;
         return (int)pattern == pattern().getPattern();
@@ -29,7 +28,7 @@ public record BogglePatternAdvancedIngredient(BogglePattern pattern) implements 
     };
 
     @Override
-    public IAdvancedIngredientType<? super MutableDataComponentHolder> getType() {
+    public IAdvancedIngredientType<ItemStack> getType() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'getType'");
     };

@@ -22,7 +22,7 @@ public record NumberComparisonLootCondition(NumberProvider first, NumberProvider
         instance.group(
             NumberProviders.CODEC.fieldOf("first").forGetter(NumberComparisonLootCondition::first),
             NumberProviders.CODEC.fieldOf("second").forGetter(NumberComparisonLootCondition::second),
-            StringRepresentable.fromEnum(Comparison::values).fieldOf("operation").forGetter(NumberComparisonLootCondition::comparison),
+            Comparison.CODEC.fieldOf("operation").forGetter(NumberComparisonLootCondition::comparison),
             Codec.BOOL.optionalFieldOf("compare_integers", false).forGetter(NumberComparisonLootCondition::useInts)
         ).apply(instance, NumberComparisonLootCondition::new)
     );
@@ -100,6 +100,8 @@ public record NumberComparisonLootCondition(NumberProvider first, NumberProvider
                 return float1 <= float2;
             }
         };
+
+        public static final Codec<Comparison> CODEC = StringRepresentable.fromEnum(Comparison::values);
 
         private final String name;
 

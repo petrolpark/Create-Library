@@ -6,9 +6,6 @@ import java.util.Optional;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.world.entity.player.team.ITeam;
-
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentPatch;
@@ -26,6 +23,8 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedInEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerLoggedOutEvent;
 import net.neoforged.neoforge.event.level.LevelEvent;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.world.entity.player.team.ITeam;
 
 public class ScoreboardTeamManager {
 
@@ -89,7 +88,7 @@ public class ScoreboardTeamManager {
         @Override
         public CompoundTag save(@Nonnull CompoundTag tag, @Nonnull HolderLookup.Provider registries) {
             for (ScoreboardTeam team : teams.values()) {
-                tag.put(team.team.getName(), team.writeDataComponentsTag());
+                tag.put(team.team.getName(), team.writeDataComponentsTag(registries));
             };
             return tag;
         };

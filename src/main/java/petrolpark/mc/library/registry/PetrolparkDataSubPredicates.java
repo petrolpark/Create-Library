@@ -21,6 +21,8 @@ import petrolpark.mc.library.core.data.predicate.entity.TamedEntitySubPredicate;
 import petrolpark.mc.library.core.data.predicate.entity.VillagerProfessionEntitySubPredicate;
 import petrolpark.mc.library.core.data.predicate.item.AdvancedIngredientItemSubPredicate;
 import petrolpark.mc.library.core.data.predicate.item.HasFlagItemSubPredicate;
+import petrolpark.mc.library.core.world.entity.player.team.predicate.ITeamPredicate;
+import petrolpark.mc.library.core.world.entity.player.team.predicate.NumberComparisonTeamPredicate;
 
 public class PetrolparkDataSubPredicates {
 
@@ -41,6 +43,10 @@ public class PetrolparkDataSubPredicates {
     ENTITY_PERMISSIONS = REGISTRATE.entitySubPredicateType("permissions", PermissionsEntitySubPredicate.CODEC),
     ENTITY_TAMED = REGISTRATE.entitySubPredicateType("tamed", MapCodec.unit(TamedEntitySubPredicate::new)),
     ENTITY_VILLAGER_PROFESSION = REGISTRATE.entitySubPredicateType("villager_profession", VillagerProfessionEntitySubPredicate.CODEC);
+
+    public static final RegistryEntry<ITeamPredicate.Type, ITeamPredicate.Type>
+
+    TEAM_NUMBER_COMPARISON = REGISTRATE.teamPredicateType("number_comparison", NumberComparisonTeamPredicate.CODEC);
 
     public static final void register() {};
 };

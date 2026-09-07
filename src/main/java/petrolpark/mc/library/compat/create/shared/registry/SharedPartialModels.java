@@ -15,9 +15,6 @@ public class SharedPartialModels {
     DEPLOYER_HAND_SCISSORS = block("deployer/hand_scissors"),
     DEPLOYER_HAND_SWEARING = block("deployer/hand_swearing"),
 
-    // Rolling Pin Holder
-    ROLLING_PIN_HOLDER_ARMS = block("rolling_pin_holder/arms"),
-
     // Redstone Programmer
     REDSTONE_PROGRAMMER_CYLINDER = block("redstone_programmer/cylinder"),
     REDSTONE_PROGRAMMER_NEEDLE = block("redstone_programmer/needle"),

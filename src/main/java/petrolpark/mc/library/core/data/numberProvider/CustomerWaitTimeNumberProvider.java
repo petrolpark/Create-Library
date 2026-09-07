@@ -15,7 +15,7 @@ import petrolpark.mc.library.registry.PetrolparkNumberProviderTypes;
 /**
  * <p>{@code petrolpark:customer_wait_time}</p>
  * 
- * Get the proportion of time the {@link ICustomer} {@link PetrolparkLootContextParams#CUSTOMER provided in} the {@link LootContext} has been waiting for their order, or {@code 1} if they are not a waiting {@link ICustomer}. No arguments.
+ * Get the length of time the {@link ICustomer} {@link PetrolparkLootContextParams#CUSTOMER provided in} the {@link LootContext} has been waiting for their order, or {@code 0} if they are not a waiting {@link ICustomer}. No arguments.
  * 
  * @author petrolpark
  */
@@ -24,16 +24,20 @@ public class CustomerWaitTimeNumberProvider implements IEstimableNumberProvider 
 
     @Override
     public float getFloat(LootContext context) {
-        ICustomer customer = context.getParam(PetrolparkLootContextParams.CUSTOMER);
-        if (customer == null) return 1f;
-        //if (customer.getOrderTime() == ICustomer.INFINITE_ORDER_TIME) return 1f;
-        //return 1f - ((float)customer.getElapsedOrderTime() / (float)customer.getOrderTime());
-        return 0f; //TODO
+        return getInt(context);
+    };
+
+    @Override
+    public int getInt(LootContext lootContext) {
+        if (!lootContext.hasParam(PetrolparkLootContextParams.CUSTOMER)) return 0;
+        final ICustomer customer = lootContext.getParam(PetrolparkLootContextParams.CUSTOMER);
+        if (customer.isNone()) return 0;
+        return (int)(lootContext.getLevel().getGameTime() - customer.getOrderTime());
     };
 
     @Override
     public NumberEstimate getEstimate() {
-        return NumberEstimate.UNKNOWN;
+        return NumberEstimate.POSITIVE;
     };
 
     @Override

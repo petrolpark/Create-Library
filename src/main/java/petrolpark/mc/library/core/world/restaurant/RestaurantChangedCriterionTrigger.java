@@ -3,10 +3,8 @@ package petrolpark.mc.library.core.world.restaurant;
 import java.util.Optional;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
-import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.core.Holder;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSet;
@@ -32,18 +30,14 @@ public class RestaurantChangedCriterionTrigger extends AdvancedCriterionTrigger<
 
     @Override
     public LootContextParamSet paramSet() {
-        return PetrolparkLootContextParamSets.ADVANCEMENT_RESTAURANT;
+        return PetrolparkLootContextParamSets.RESTAURANT_ADVANCEMENT;
     };
 
     public record Instance(
         Optional<ContextAwarePredicate> player
     ) implements AdvancedCriterionTrigger.AdvancedInstance {
 
-        public static final Codec<RestaurantChangedCriterionTrigger.Instance> CODEC = RecordCodecBuilder.create(instance ->
-            instance.group(
-                EntityPredicate.ADVANCEMENT_CODEC.optionalFieldOf("player").forGetter(RestaurantChangedCriterionTrigger.Instance::player)
-            ).apply(instance, RestaurantChangedCriterionTrigger.Instance::new)
-        );
+        public static final Codec<RestaurantChangedCriterionTrigger.Instance> CODEC = simpleCodec(RestaurantChangedCriterionTrigger.Instance::new);
 
         @Override
         public AdvancedCriterionTrigger<?> trigger() {

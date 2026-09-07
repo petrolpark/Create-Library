@@ -24,8 +24,6 @@ import net.minecraft.world.level.storage.loot.functions.CopyComponentsFunction;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import petrolpark.mc.library.PetrolparkTags;
 import petrolpark.mc.library.compat.create.PetrolparkCreate;
-import petrolpark.mc.library.compat.create.core.world.dough.rollingPin.holder.RollingPinHolderBlock;
-import petrolpark.mc.library.compat.create.core.world.item.SharedAssemblyOperatorBlockItem;
 import petrolpark.mc.library.compat.create.registry.PetrolparkCreateDataComponentTypes;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HarnessBlock;
 import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HarnessMovementBehaviour;
@@ -143,19 +141,6 @@ public class SharedCreateBlocks {
         ).transform(axeOrPickaxe())
         .item(RedstoneProgrammerBlockItem::new)
         .build()
-        .register();
-
-    public static final BlockEntry<RollingPinHolderBlock> ROLLING_PIN_HOLDER = REGISTRATE.sharedBlock(SharedFeatureFlag.ROLLING_PIN, "rolling_pin_holder", RollingPinHolderBlock::new)
-        .sharedItem(SharedAssemblyOperatorBlockItem::new)
-        .tag(PetrolparkTags.Items.FLAGGABLE.tag)
-        .transform(ModelGen.customItemModel())
-        .initialProperties(AllBlocks.MECHANICAL_PRESS)
-        .properties(p -> p
-            .noOcclusion()
-            .mapColor(MapColor.PODZOL)
-        ).blockstate(BlockStateGen.horizontalAxisBlockProvider(true))
-        .transform(axeOrPickaxe())
-        .transform(PetrolparkStressConfig.setImpact(2.0d))
         .register();
 
     public static final void register() {};
