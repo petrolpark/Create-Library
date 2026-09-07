@@ -40,8 +40,8 @@
     "block.petrolpark.shared.centrifuge": "离心机",
     "block.petrolpark.shared.drying_rack": "Drying Rack",
     "block.petrolpark.shared.extrusion_die": "Extrusion Die",
-    "block.petrolpark.shared.harness": "Harness",
-    "block.petrolpark.shared.horse_mill_bearing": "Horse Mill Bearing",
+    "block.petrolpark.shared.harness": "畜力挽具",
+    "block.petrolpark.shared.horse_mill_bearing": "畜力轴承",
     "block.petrolpark.shared.mandrel": "Mandrel",
     "block.petrolpark.shared.mashed_potato_block": "土豆泥块",
     "block.petrolpark.shared.mesh_basin": "Mesh Basin",
@@ -82,7 +82,7 @@
 
     "config.jade.plugin_petrolpark.flags": "Flags",
     "config.jade.plugin_petrolpark.drying_rack": "Drying Rack",
-    "config.jade.plugin_petrolpark.horse_mill_stress_capacity": "Horse Mill Stress Capacity: %1$s",
+    "config.jade.plugin_petrolpark.horse_mill_stress_capacity": "牵引能力: %1$s",
 
     "flag.petrolpark.example_child": "示例（子）",
     "flag.petrolpark.example_child.absent": "无示例（子）",
@@ -91,11 +91,19 @@
 
     "curios.identifier.petrolpark_badge": "徽章",
 
-    "death.attack.petrolpark.blender": "%1$s被制成了奶昔",
-    "death.attack.petrolpark.extrusion_die": "%1$s extrusion died",
+    "death.attack.petrolpark.shared.alcohol_poisoning": "%1$s died of alcohol poisoning",
+    "death.attack.petrolpark.shared.blender": "%1$s被制成了奶昔",
+    "death.attack.petrolpark.shared.extrusion_die": "%1$s extrusion died",
+    "death.attack.petrolpark.shared.headache": "%1$s died of a splitting migraine",
 
     "dough.petrolpark.pasta_dough": "测试面团",
 
+    "effect.petrolpark.shared.crying": "Crying",
+    "effect.petrolpark.shared.crying.description": "Release tears, with Ghasts releasing Ghast Tears",
+    "effect.petrolpark.shared.hangover": "Hangover",
+    "effect.petrolpark.shared.hangover.description": "Loud noises cause damage",
+    "effect.petrolpark.shared.inebriation": "Inebriation",
+    "effect.petrolpark.shared.inebriation.description": "Boosts strength and knockback, causes slipping (of the feet and mouse), can cause nausea, blindness and poison at higher levels, and leads to a hangover if slept with",
     "effect.petrolpark.shared.midas_touch": "点石成金",
     "effect.petrolpark.shared.midas_touch.description": "接触到的一切都会变成黄金",
     "effect.petrolpark.miners_luck": "矿工好运",
@@ -105,8 +113,8 @@
     "effect.petrolpark.shared.slipping": "光滑",
     "effect.petrolpark.shared.slipping.description": "像在冰上一样四处滑行",
 
-    "entity.petrolpark.shared.harness": "Harness",
-    "entity.petrolpark.shared.horse_mill_contraption": "Horse Mill Contraption",
+    "entity.petrolpark.shared.harness": "畜力挽具",
+    "entity.petrolpark.shared.horse_mill_contraption": "畜力动态结构",
 
     "fluid.petrolpark.shared.blood": "血",
     "fluid.petrolpark.shared.cream": "奶油",
@@ -319,8 +327,17 @@
     "petrolpark.packet.unsupported": "Unknown Action",
     "petrolpark.packet.unsupported.advanced": "Unknown Packet Type: %1$s",
     "petrolpark.packet_payload.build_tube": "Connect tubes between %1$s and %2$s",
-    "petrolpark.packet_payload.bind_team_item": "Bind Team %1$s to main hand item", 
+    "petrolpark.packet_payload.bind_team_item": "Bind Team %1$s to main hand item",
     "petrolpark.packet_payload.bind_team_block": "Bind Team %1$s to block at %2$s",
+
+    "petrolpark.pocketCrafting.control.cancel": "[esc] Cancel",
+    "petrolpark.pocketCrafting.control.selectInput": "[Right-click] Select input",
+    "petrolpark.pocketCrafting.control.deselectInput": "[Right-click] Deselect input",
+    "petrolpark.pocketCrafting.control.craft": "[Left-click] Craft",
+    "petrolpark.pocketCrafting.crafter.crafting": "Crafting",
+    "petrolpark.pocketCrafting.slotInterpretation.item": "Item",
+    "petrolpark.pocketCrafting.slotInterpretation.fluid": "Extracted Fluid",
+    "petrolpark.pocketCrafting.tooltip.noRecipe": "No recipe found for selection",
 
     "petrolpark.ponder.basin_lid.header": "Processing items with a lidded Basin",
     "petrolpark.ponder.basin_lid.text_1": "With a Basin and Basin Lid, some recipes can be automated",
