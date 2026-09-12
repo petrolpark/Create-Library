@@ -15,11 +15,6 @@ import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
-import petrolpark.mc.library.util.WoodHelper;
-import petrolpark.mc.library.util.WoodHelper.Wood;
-import petrolpark.mc.library.util.WoodHelperClient;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -43,9 +38,17 @@ import net.neoforged.neoforge.client.event.ModelEvent;
 import net.neoforged.neoforge.client.model.BakedModelWrapper;
 import net.neoforged.neoforge.client.model.data.ModelData;
 import net.neoforged.neoforge.client.model.data.ModelProperty;
+import net.neoforged.neoforge.client.model.generators.CustomLoaderBuilder;
+import net.neoforged.neoforge.client.model.generators.ModelBuilder;
 import net.neoforged.neoforge.client.model.geometry.IGeometryBakingContext;
 import net.neoforged.neoforge.client.model.geometry.IGeometryLoader;
 import net.neoforged.neoforge.client.model.geometry.IUnbakedGeometry;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
+import petrolpark.mc.library.util.WoodHelper;
+import petrolpark.mc.library.util.WoodHelper.Wood;
+import petrolpark.mc.library.util.WoodHelperClient;
 
 @EventBusSubscriber(Dist.CLIENT)
 public class WoodenModel extends BakedModelWrapper<BakedModel> {
@@ -98,6 +101,21 @@ public class WoodenModel extends BakedModelWrapper<BakedModel> {
         public WoodenModel.Unbaked read(@Nonnull JsonObject jsonObject, @Nonnull JsonDeserializationContext deserializationContext) throws JsonParseException {
             if (!jsonObject.has("template")) throw new JsonParseException("Must specify a template");
             return new WoodenModel.Unbaked(deserializationContext.deserialize(jsonObject.get("template"), BlockModel.class));
+        };
+
+    };
+
+    public static class LoaderBuilder<B extends ModelBuilder<B>> extends CustomLoaderBuilder<B> {
+
+        public LoaderBuilder(B parent, ExistingFileHelper existingFileHelper) {
+            super(WoodenModel.Loader.ID, parent, existingFileHelper, false);
+        };
+
+        @Override
+        public JsonObject toJson(@Nonnull JsonObject json) {
+            final JsonObject obj = new JsonObject();
+            obj.add("template", json);
+            return super.toJson(obj);
         };
 
     };

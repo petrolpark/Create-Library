@@ -15,6 +15,7 @@ import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
 import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.builders.BuilderCallback;
+import com.tterrag.registrate.builders.NoConfigBuilder;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiFunction;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
@@ -42,6 +43,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType.EntityFactory;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.vehicle.Boat;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Item.Properties;
@@ -228,6 +230,14 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
 
     public <B extends BlockEntity, T extends BlockEntityType<B>> RegistryEntry<BlockEntityType<?>, T> blockEntityType(String name, NonNullSupplier<T> factory) {
         return simple(name, Registries.BLOCK_ENTITY_TYPE, factory);
+    };
+
+    public <T> RegistryEntry<MemoryModuleType<?>, MemoryModuleType<T>> memoryModuleType(String name, Codec<T> codec) {
+        return simple(name, Registries.MEMORY_MODULE_TYPE, () -> new MemoryModuleType<>(Optional.of(codec)));
+    };
+
+    public <T> RegistryEntry<MemoryModuleType<?>, MemoryModuleType<T>> sharedMemoryModuleType(SharedFeatureFlag featureFlag, String name, Codec<T> codec) {
+        return sharedSimple(featureFlag, name, Registries.MEMORY_MODULE_TYPE, () -> new MemoryModuleType<>(Optional.of(codec)));
     };
 
     public <C extends ICondition> RegistryEntry<MapCodec<? extends ICondition>, MapCodec<C>> dataLoadingCondition(String name, MapCodec<C> codec) {
@@ -570,6 +580,14 @@ public abstract class AbstractPetrolparkRegistrate<R extends AbstractPetrolparkR
 
     public <R2, T extends R2, P, BUILDER extends AbstractBuilder<R2, T, P, BUILDER>> BUILDER sharedEntry(SharedFeatureFlag featureFlag, NonNullFunction<BuilderCallback, BUILDER> factory) {
         return factory.apply(new SharedFeatureBuilderCallback(featureFlag)).asOptional();
+    };
+
+    public <R2, T extends R2> RegistryEntry<R2, T> sharedSimple(SharedFeatureFlag featureFlag, String name, ResourceKey<Registry<R2>> registryType, NonNullSupplier<T> factory) {
+        return sharedGeneric(featureFlag, self(), name, registryType, factory).register();
+    };
+
+    public <R2, T extends R2, P> NoConfigBuilder<R2, T, P> sharedGeneric(SharedFeatureFlag featureFlag, P parent, String name, ResourceKey<Registry<R2>> registryType, NonNullSupplier<T> factory) {
+        return sharedEntry(featureFlag, callback -> new NoConfigBuilder<>(self(), parent, name, callback, registryType, factory));
     };
 
     public <T extends BlockEntity> SharedBlockEntityBuilder<T, R> sharedBlockEntity(SharedFeatureFlag featureFlag, String name, BlockEntityFactory<T> factory) {

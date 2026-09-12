@@ -2,6 +2,7 @@ package petrolpark.mc.library.shared.world.effect;
 
 import javax.annotation.Nonnull;
 
+import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.util.Mth;
@@ -17,6 +18,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import petrolpark.mc.library.core.world.effect.SyncedMobEffect;
 import petrolpark.mc.library.shared.ISharedFeature;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
@@ -65,10 +68,7 @@ public class CryingMobEffect extends SyncedMobEffect implements ISharedFeature {
         };
 
         if (particle) {
-            final Minecraft minecraft = Minecraft.getInstance();
-            final Player player = minecraft.player;
-            final boolean isFirstPerson = player != null && minecraft.options.getCameraType().isFirstPerson() && player.is(livingEntity);
-            livingEntity.level().addParticle(SharedParticleTypes.TEAR.get(), eyePos.x(), isFirstPerson ? eyePos.y() - 0.15d : eyePos.y(), eyePos.z(), motion.x(), motion.y(), motion.z());
+            CatnipServices.PLATFORM.executeOnClientOnly(() -> () -> CryingMobEffect.addParticlesClient(livingEntity, eyePos, motion));
         };
 
         return super.applyEffectTick(livingEntity, amplifier);
@@ -82,6 +82,14 @@ public class CryingMobEffect extends SyncedMobEffect implements ISharedFeature {
     @Override
     public SharedFeatureFlag getSharedFeatureFlag() {
         return SharedFeatureFlag.CRYING;
+    };
+
+    @OnlyIn(Dist.CLIENT)
+    public static void addParticlesClient(LivingEntity livingEntity, Vec3 eyePos, Vec3 motion) {
+        final Minecraft minecraft = Minecraft.getInstance();
+        final Player player = minecraft.player;
+        final boolean isFirstPerson = player != null && minecraft.options.getCameraType().isFirstPerson() && player.is(livingEntity);
+        livingEntity.level().addParticle(SharedParticleTypes.TEAR.get(), eyePos.x(), isFirstPerson ? eyePos.y() - 0.15d : eyePos.y(), eyePos.z(), motion.x(), motion.y(), motion.z());
     };
     
 };

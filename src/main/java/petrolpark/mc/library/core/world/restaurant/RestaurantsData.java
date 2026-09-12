@@ -16,6 +16,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
+import net.minecraft.util.ExtraCodecs;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.common.MutableDataComponentHolder;
@@ -23,7 +24,6 @@ import petrolpark.mc.library.core.world.entity.player.team.ITeam;
 import petrolpark.mc.library.core.world.restaurant.order.IRestaurantOrder;
 import petrolpark.mc.library.registry.PetrolparkCriteriaTriggers;
 import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
-import petrolpark.mc.library.util.codec.CodecHelper;
 
 public record RestaurantsData(
     Map<Holder<Restaurant>, RestaurantData> data
@@ -85,8 +85,8 @@ public record RestaurantsData(
     ) {
 
         public static final Codec<RestaurantData> CODEC = RecordCodecBuilder.create(instance -> instance.group(
-            CodecHelper.POS_INT.fieldOf("orders_taken").forGetter(RestaurantData::ordersTaken),
-            CodecHelper.POS_INT.fieldOf("orders_fulfilled").forGetter(RestaurantData::ordersFulfilled),
+            ExtraCodecs.NON_NEGATIVE_INT.fieldOf("orders_taken").forGetter(RestaurantData::ordersTaken),
+            ExtraCodecs.NON_NEGATIVE_INT.fieldOf("orders_fulfilled").forGetter(RestaurantData::ordersFulfilled),
             Codec.INT.fieldOf("xp").forGetter(RestaurantData::xp),
             Codec.STRING.optionalFieldOf("custom_name").forGetter(RestaurantData::customName),
             IRestaurantOrder.SERVER_CODEC.listOf().fieldOf("menu").forGetter(RestaurantData::menu)

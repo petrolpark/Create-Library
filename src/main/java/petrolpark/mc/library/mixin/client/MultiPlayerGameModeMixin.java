@@ -1,16 +1,16 @@
-package petrolpark.mc.library.mixin;
+package petrolpark.mc.library.mixin.client;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import petrolpark.mc.library.core.world.block.IPickUpPutDownBlock;
 
 import net.minecraft.client.multiplayer.MultiPlayerGameMode;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.phys.BlockHitResult;
+import petrolpark.mc.library.core.world.block.IPickUpPutDownBlock;
 
 @Mixin(MultiPlayerGameMode.class)
 public class MultiPlayerGameModeMixin {

@@ -7,10 +7,6 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedBasinRecipe;
-import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipeParams;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeParams;
@@ -20,6 +16,10 @@ import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.crafting.RecipeSerializer;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedBasinRecipe;
+import petrolpark.mc.library.compat.create.core.data.recipe.AdvancedProcessingRecipeParams;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 
 public class LiddedBasinRecipe extends AdvancedBasinRecipe {
 
@@ -28,8 +28,12 @@ public class LiddedBasinRecipe extends AdvancedBasinRecipe {
 
     public final boolean bubbles;
 
-    public static final LiddedBasinRecipe.Builder builder() {
-        return new LiddedBasinRecipe.Builder(Petrolpark.asResource("dont_register_me"));
+    public static LiddedBasinRecipe.Builder builder() {
+        return builder(Petrolpark.asResource("dont_register_me"));
+    };
+
+    public static final LiddedBasinRecipe.Builder builder(ResourceLocation id) {
+        return new LiddedBasinRecipe.Builder(id);
     };
 
     protected static final LiddedBasinRecipe create(LiddedBasinRecipe.Params params) {

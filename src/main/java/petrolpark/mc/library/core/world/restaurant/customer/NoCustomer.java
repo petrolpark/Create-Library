@@ -1,6 +1,7 @@
 package petrolpark.mc.library.core.world.restaurant.customer;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.client.gui.Font;
@@ -92,6 +93,16 @@ public class NoCustomer implements ICustomer, ICustomer.Provider {
     @Override
     public ProviderType getProviderType() {
         return PetrolparkCustomerProviderTypes.NONE.get();
+    };
+    
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        return obj == this;
+    };
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     };
     
 };

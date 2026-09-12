@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.mojang.serialization.Decoder;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
@@ -14,7 +15,6 @@ import petrolpark.mc.library.compat.Mods;
 import petrolpark.mc.library.compat.create.RequiresCreate;
 import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
 import petrolpark.mc.library.core.data.recipe.compat.CompatRecipeDeserializer;
-import petrolpark.mc.library.util.codec.CodecHelper;
 import petrolpark.mc.library.util.codec.RecordDecoderBuilder;
 
 @RequiresCreate
@@ -27,7 +27,7 @@ public class YoukaisHomecomingSimpleFermentationRecipeDeserializer implements Co
         RecordDecoderBuilder.of(FluidStack.CODEC.fieldOf("inputFluid")),
         RecordDecoderBuilder.of(FluidStack.CODEC.fieldOf("outputFluid")),
         RecordDecoderBuilder.of(ItemStack.CODEC.listOf().fieldOf("results")),
-        RecordDecoderBuilder.of(CodecHelper.POS_INT.fieldOf("time"))
+        RecordDecoderBuilder.of(ExtraCodecs.NON_NEGATIVE_INT.fieldOf("time"))
     ).apply(instance, (ingredients, inputFluid, outputFluid, results, time) -> {
         final LiddedBasinRecipe.Builder builder = LiddedBasinRecipe.builder()
             .duration(time);

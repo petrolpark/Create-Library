@@ -28,6 +28,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.neoforged.api.distmarker.Dist;
@@ -41,6 +42,7 @@ import petrolpark.mc.library.core.world.restaurant.RestaurantsData;
 import petrolpark.mc.library.core.world.restaurant.order.ClientRestaurantOrder;
 import petrolpark.mc.library.core.world.restaurant.order.IRestaurantOrder;
 import petrolpark.mc.library.core.world.restaurant.order.RestaurantOrderModifier;
+import petrolpark.mc.library.core.world.restaurant.serving.IServingBlockEntity;
 import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
 import petrolpark.mc.library.registry.PetrolparkLootContextParamSets;
 import petrolpark.mc.library.registry.PetrolparkLootContextParams;
@@ -70,6 +72,10 @@ public interface ICustomer {
     public @Nonnull IRestaurantOrder getOrder();
 
     public long getOrderTime();
+
+    public default <BE extends BlockEntity & IServingBlockEntity> void notifyOfServing(BE be) {
+
+    };
 
     public default void cancelOrder(ServerLevel level, Player player) {
         if (getRestaurant().value().orderCancellationRewards().isEmpty()) return;

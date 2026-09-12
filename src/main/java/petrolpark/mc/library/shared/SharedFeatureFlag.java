@@ -33,6 +33,7 @@ import petrolpark.mc.library.compat.create.shared.registry.SharedCreateDataMapTy
 import petrolpark.mc.library.compat.create.shared.registry.SharedCreateFluids;
 import petrolpark.mc.library.compat.create.shared.registry.SharedCreateItems;
 import petrolpark.mc.library.core.event.CommonEvents;
+import petrolpark.mc.library.core.world.restaurant.Restaurant;
 import petrolpark.mc.library.registry.PetrolparkAttributes;
 import petrolpark.mc.library.shared.registry.SharedBlocks;
 import petrolpark.mc.library.shared.registry.SharedItems;
@@ -136,6 +137,11 @@ public enum SharedFeatureFlag implements StringRepresentable {
      * @see RedstoneProgrammerBlock
      */
     REDSTONE_PROGRAMMER,
+    /**
+     * Registers the memory modules and behaviors to make mobs pathfind to places where they can eat from Restaurants
+     * @see Restaurant
+     */
+    RESTAURANT_SEATING,
     /**
      * Registers the {@link SharedMobEffects#SLIPPING Slipping effect and potions}.
      * The {@link PetrolparkAttributes#SLIPPERINESS corresponding attribute} is always registered, even if this flag is not enabled.

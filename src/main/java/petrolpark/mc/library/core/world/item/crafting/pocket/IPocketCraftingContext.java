@@ -38,6 +38,7 @@ public interface IPocketCraftingContext {
 
         public LocalPlayer player();
 
+        @OnlyIn(Dist.CLIENT)
         public record Impl(ClientLevel level, LocalPlayer player, AbstractContainerMenu menu, ItemStack toolStack) implements IPocketCraftingContext.Client {};
     };
 };

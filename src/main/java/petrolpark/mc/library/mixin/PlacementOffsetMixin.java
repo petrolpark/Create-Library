@@ -26,6 +26,9 @@ import petrolpark.mc.library.compat.create.core.world.block.IReplaceableBlock;
 public abstract class PlacementOffsetMixin {
 
     @Shadow
+    private boolean success;
+
+    @Shadow
     private Vec3i pos;
 
     @Shadow
@@ -40,6 +43,7 @@ public abstract class PlacementOffsetMixin {
         )
     )
     public boolean petrolpark$allowReplaceableBlocks(boolean replaceable, Level world, BlockItem blockItem, Player player, InteractionHand hand, BlockHitResult ray) {
+        if (!success) return replaceable;
         final BlockPos pos = new BlockPos(this.pos);
         final BlockState existingState = world.getBlockState(pos);
         final BlockState stateToPlace = stateTransform.apply(blockItem.getBlock().defaultBlockState());

@@ -3,6 +3,7 @@ package petrolpark.mc.library.core.world.item.recycling;
 import java.util.Optional;
 
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Recipe;
@@ -13,6 +14,7 @@ import net.minecraft.world.level.Level;
  * It is recommended you implement this on Recipes where finding the Ingredients used to craft an Item is more complicated than 
  * the naive inversal of {@link Recipe#getIngredients()} done in {@link RecyclingManager#getInverse(net.minecraft.world.item.crafting.Ingredient)}.
  */
+@ParametersAreNonnullByDefault
 public interface IRecyclableRecipe {
     
     /**

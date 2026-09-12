@@ -45,7 +45,7 @@ file="META-INF/accesstransformer.cfg"
 [[dependencies.${mod_id}]]
     modId = "jei"
     type = "optional"
-    versionRange = "[19.52.0.424,19.53.0.0)"
+    versionRange = "[19.53.0.426,19.54.0.0)"
     reason = "This library modifies JEI using mixins, whose targets may change in newer updates"
     ordering = "AFTER"
     side = "CLIENT"

@@ -16,6 +16,7 @@ import petrolpark.mc.library.shared.registry.SharedAttachmentTypes;
 import petrolpark.mc.library.shared.registry.SharedBlockEntityTypes;
 import petrolpark.mc.library.shared.registry.SharedBlocks;
 import petrolpark.mc.library.shared.registry.SharedItems;
+import petrolpark.mc.library.shared.registry.SharedMemoryModuleTypes;
 import petrolpark.mc.library.shared.registry.SharedMobEffects;
 import petrolpark.mc.library.shared.registry.SharedParticleTypes;
 import petrolpark.mc.library.shared.registry.SharedRecipeSerializers;
@@ -35,6 +36,7 @@ public class Shared {
         SharedBlockEntityTypes.register();
         SharedBlocks.register();
         SharedItems.register();
+        SharedMemoryModuleTypes.register();
         SharedMobEffects.register();
         SharedParticleTypes.register();
         SharedRecipeSerializers.register();

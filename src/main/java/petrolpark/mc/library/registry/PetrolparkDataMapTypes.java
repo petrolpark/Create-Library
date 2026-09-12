@@ -7,11 +7,14 @@ import com.mojang.serialization.Codec;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryCodecs;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.HolderSetCodec;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.memory.MemoryModuleType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
@@ -48,6 +51,15 @@ public class PetrolparkDataMapTypes {
         .merger(DataMapValueMerger.listMerger())
         .build();
 
+    public static final AdvancedDataMapType<MemoryModuleType<?>, HolderSet<PoiType>, DataMapValueRemover.Default<HolderSet<PoiType>, MemoryModuleType<?>>> MEMORY_POI_RELEASERS = AdvancedDataMapType
+        .builder(
+            Petrolpark.asResource("erasing_releases_pois"),
+            Registries.MEMORY_MODULE_TYPE,
+            RegistryCodecs.homogeneousList(Registries.POINT_OF_INTEREST_TYPE)
+        ).remover(DataMapValueRemover.Default.codec())
+        .merger(HolderSetDataMapValueMerger.create())
+        .build();
+
     public static final AdvancedDataMapType<EntityType<?>, HolderSet<AnimalMoodModifier>, DataMapValueRemover.Default<HolderSet<AnimalMoodModifier>, EntityType<?>>> ANIMAL_MOOD_MODIFIERS = AdvancedDataMapType
         .builder(
             Petrolpark.asResource("mood_modifiers"),
@@ -65,6 +77,7 @@ public class PetrolparkDataMapTypes {
         event.register(FLUID_SHOWN_IF_ABSENT_FLAGS);
 
         event.register(BLOCK_ENTITY_ADVANCEMENTS);
+        event.register(MEMORY_POI_RELEASERS);
         event.register(ANIMAL_MOOD_MODIFIERS);
     };
 

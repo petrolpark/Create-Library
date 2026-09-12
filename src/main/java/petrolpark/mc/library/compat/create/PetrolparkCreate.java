@@ -31,6 +31,7 @@ import petrolpark.mc.library.compat.create.registry.PetrolparkOpenPipeEffectHand
 import petrolpark.mc.library.compat.create.shared.SharedCreate;
 import petrolpark.mc.library.compat.create.shared.content.processing.extrusion.ExtrusionRecipe;
 import petrolpark.mc.library.compat.create.shared.registry.PetrolparkMandrelAnimationTypes;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreatePoiTypes;
 import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
 
 @RequiresCreate
@@ -62,6 +63,7 @@ public class PetrolparkCreate {
         PetrolparkCreateDataComponentTypes.register(modEventBus);
         PetrolparkCreateGlobalLootModifierSerializers.register();
         PetrolparkCreatePackets.register();
+        SharedCreatePoiTypes.register();
         PetrolparkCreateRegistrateProviderTypes.register();
     
         PetrolparkArmInteractionPointTypes.register();

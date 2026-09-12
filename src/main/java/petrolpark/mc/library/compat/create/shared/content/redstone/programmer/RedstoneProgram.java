@@ -14,12 +14,6 @@ import javax.annotation.Nonnull;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.compat.create.registry.PetrolparkIcon;
-import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerMenu.DummyRedstoneProgram;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.util.Lang;
-import petrolpark.mc.library.util.codec.CodecHelper;
 import com.simibubi.create.Create;
 import com.simibubi.create.content.redstone.link.IRedstoneLinkable;
 import com.simibubi.create.content.redstone.link.RedstoneLinkNetworkHandler;
@@ -37,26 +31,33 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.codec.StreamEncoder;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.LevelAccessor;
+import petrolpark.mc.library.compat.create.registry.PetrolparkIcon;
+import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerMenu.DummyRedstoneProgram;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.util.Lang;
+import petrolpark.mc.library.util.codec.CodecHelper;
 
 public abstract class RedstoneProgram {
 
     public static final <PROGRAM extends RedstoneProgram> Codec<PROGRAM> codec(Factory<PROGRAM> factory) {
         return RecordCodecBuilder.create(instance -> instance.group(
             PlayMode.CODEC.optionalFieldOf("mode", PlayMode.MANUAL).forGetter(RedstoneProgram::getMode),
-            CodecHelper.POS_INT.optionalFieldOf("length", 20).forGetter(RedstoneProgram::getLength),
-            CodecHelper.POS_INT.optionalFieldOf("playtime", 0).forGetter(RedstoneProgram::getPlaytime),
-            CodecHelper.POS_INT.optionalFieldOf("ticks_to_next_beat", 2).forGetter(RedstoneProgram::getTicksToNextBeat),
+            ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("length", 20).forGetter(RedstoneProgram::getLength),
+            ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("playtime", 0).forGetter(RedstoneProgram::getPlaytime),
+            ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("ticks_to_next_beat", 2).forGetter(RedstoneProgram::getTicksToNextBeat),
             Codec.BOOL.optionalFieldOf("paused", true).forGetter(RedstoneProgram::isPaused),
             Codec.BOOL.optionalFieldOf("was_paused", false).forGetter(RedstoneProgram::wasPausedLastTick),
             Codec.BOOL.optionalFieldOf("was_powered", false).forGetter(RedstoneProgram::wasPoweredLastTick),
             Codec.list(ChannelData.CODEC).optionalFieldOf("channels",Collections.emptyList()).forGetter(RedstoneProgram::getChannelData),
-            CodecHelper.POS_INT.optionalFieldOf("ticks_per_beat", 2).forGetter(RedstoneProgram::getTicksPerBeat),
-            CodecHelper.POS_INT.optionalFieldOf("beats_per_line", 2).forGetter(RedstoneProgram::getBeatsPerLine),
-            CodecHelper.POS_INT.optionalFieldOf("lines_per_bar", 4).forGetter(RedstoneProgram::getLinesPerBar)
+            ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("ticks_per_beat", 2).forGetter(RedstoneProgram::getTicksPerBeat),
+            ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("beats_per_line", 2).forGetter(RedstoneProgram::getBeatsPerLine),
+            ExtraCodecs.NON_NEGATIVE_INT.optionalFieldOf("lines_per_bar", 4).forGetter(RedstoneProgram::getLinesPerBar)
         ).apply(instance, factory::create));
     };
 

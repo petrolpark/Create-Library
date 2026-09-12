@@ -12,6 +12,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.GlobalPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.UUIDUtil;
@@ -25,9 +26,11 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.storage.loot.LootParams;
 import net.neoforged.neoforge.attachment.AttachmentSyncHandler;
 import net.neoforged.neoforge.attachment.IAttachmentHolder;
@@ -35,9 +38,13 @@ import net.neoforged.neoforge.attachment.IAttachmentSerializer;
 import petrolpark.mc.library.core.world.entity.player.team.ITeam;
 import petrolpark.mc.library.core.world.restaurant.Restaurant;
 import petrolpark.mc.library.core.world.restaurant.order.IRestaurantOrder;
+import petrolpark.mc.library.core.world.restaurant.serving.IServingBlockEntity;
 import petrolpark.mc.library.registry.PetrolparkAttachmentTypes;
 import petrolpark.mc.library.registry.PetrolparkCustomerProviderTypes;
 import petrolpark.mc.library.registry.PetrolparkLootContextParams;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.shared.registry.SharedMemoryModuleTypes;
+import petrolpark.mc.library.util.AiHelper;
 
 @ParametersAreNonnullByDefault
 public class MobCustomer extends AbstractCustomer {
@@ -65,8 +72,23 @@ public class MobCustomer extends AbstractCustomer {
     };
 
     @Override
+    public <BE extends BlockEntity & IServingBlockEntity> void notifyOfServing(BE be) {
+        final Level level = be.getLevel();
+        if (SharedFeatureFlag.RESTAURANT_SEATING.enabled() && level != null && entity.getBrain().checkMemory(SharedMemoryModuleTypes.RESTAURANT_SERVING_POS.get(), MemoryStatus.VALUE_ABSENT))
+            entity.getBrain().setMemory(SharedMemoryModuleTypes.RESTAURANT_SERVING_POS.get(), GlobalPos.of(level.dimension(), be.getBlockPos()));
+    };
+
+    @Override
     public void cancelOrder(ServerLevel level, Player player) {
         super.cancelOrder(level, player);
+        if (SharedFeatureFlag.RESTAURANT_SEATING.enabled()) {
+            if (entity.getBrain().checkMemory(SharedMemoryModuleTypes.RESTAURANT_SERVING_POS.get(), MemoryStatus.VALUE_PRESENT))
+                entity.getBrain().eraseMemory(SharedMemoryModuleTypes.RESTAURANT_SERVING_POS.get());
+            if (entity.getBrain().checkMemory(SharedMemoryModuleTypes.SEAT_POS.get(), MemoryStatus.VALUE_PRESENT)) {
+                AiHelper.releasePoi(level, entity, SharedMemoryModuleTypes.SEAT_POS.get());
+                entity.getBrain().eraseMemory(SharedMemoryModuleTypes.SEAT_POS.get());
+            };
+        };
         entity.removeData(PetrolparkAttachmentTypes.ENTITY_CUSTOMER);
     };
 
@@ -166,7 +188,7 @@ public class MobCustomer extends AbstractCustomer {
         public ICustomer.ProviderType getProviderType() {
             return PetrolparkCustomerProviderTypes.MOB.get();
         };
-
+    
     };
     
 };

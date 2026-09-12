@@ -61,6 +61,7 @@ import petrolpark.mc.library.registry.PetrolparkTradeListingReferenceTypes;
 import petrolpark.mc.library.shared.GetPetrolparkSharedFeatures;
 import petrolpark.mc.library.shared.Shared;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.shared.registry.SharedMemoryModuleTypes;
 
 @Mod(Petrolpark.MOD_ID)
 public class Petrolpark {
@@ -114,6 +115,7 @@ public class Petrolpark {
         PetrolparkLootConditionTypes.register();
         PetrolparkLootItemFunctions.register();
         PetrolparkLootModifierTypes.register();
+        SharedMemoryModuleTypes.register();
         PetrolparkMenuTypes.register();
         PetrolparkNumberProviderTypes.register();
         PetrolparkPackets.register();
@@ -144,7 +146,7 @@ public class Petrolpark {
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
-        return new SharedFeatureFlag[]{};
+        return new SharedFeatureFlag[]{SharedFeatureFlag.RESTAURANT_SEATING};
         //return new SharedFeatureFlag[]{SharedFeatureFlag.CENTRIFUGE, SharedFeatureFlag.INEBRIATION, SharedFeatureFlag.CRYING};
     };
 

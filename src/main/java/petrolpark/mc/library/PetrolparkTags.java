@@ -4,12 +4,14 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.Item;
@@ -256,6 +258,18 @@ public class PetrolparkTags {
 
     };
 
+    public static class PoiTypes {
+
+        public static final TagKey<PoiType>
+
+        SEATS = create("seats");
+
+        private static TagKey<PoiType> create(String name) {
+            return PetrolparkTags.create(Registries.POINT_OF_INTEREST_TYPE, name);
+        };
+
+    };
+
     public enum RecipeTypes {
 
         RECYCLABLE,
@@ -278,6 +292,10 @@ public class PetrolparkTags {
         public boolean matches(Recipe<?> recipe) {
             return matches(recipe.getType());
         };
+    };
+
+    private static <T> TagKey<T> create(ResourceKey<Registry<T>> registry, String path) {
+        return TagKey.create(registry, Petrolpark.asResource(path));
     };
 
 };

@@ -32,6 +32,7 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.VarInt;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.util.ExtraCodecs;
 import net.minecraft.world.entity.ai.gossip.GossipType;
 import net.minecraft.world.entity.animal.horse.Markings;
 import net.minecraft.world.item.Item;
@@ -43,7 +44,7 @@ import petrolpark.mc.library.util.Lang;
 
 public class CodecHelper {
 
-    public static final Codec<Integer> POS_INT = Codec.intRange(0, Integer.MAX_VALUE);
+    public static final @Deprecated Codec<Integer> POS_INT = ExtraCodecs.NON_NEGATIVE_INT;
     public static final Codec<Float> POS_FLOAT = Codec.floatRange(0f, Float.MAX_VALUE);
     public static final Codec<Double> POS_DOUBLE = Codec.doubleRange(0f, Double.MAX_VALUE);
     public static final Codec<Float> UNIT_INTERVAL_FLOAT = Codec.floatRange(0f, 1f);

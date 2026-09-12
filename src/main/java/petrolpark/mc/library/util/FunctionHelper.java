@@ -1,5 +1,6 @@
 package petrolpark.mc.library.util;
 
+import java.util.function.BiPredicate;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -41,5 +42,9 @@ public class FunctionHelper {
             final R result = primary.apply(x);
             return result == null ? fallback.apply(x) : result;
         };
+    };
+
+    public static final <S, T> BiPredicate<S, T> not(BiPredicate<S, T> predicate) {
+        return predicate.negate();
     };
 };

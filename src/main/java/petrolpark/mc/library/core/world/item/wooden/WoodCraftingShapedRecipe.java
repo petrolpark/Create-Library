@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -11,6 +12,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableMap;
 import com.mojang.serialization.Codec;
@@ -18,9 +20,18 @@ import com.mojang.serialization.DataResult;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 
+import net.minecraft.advancements.Advancement;
+import net.minecraft.advancements.AdvancementRequirements;
+import net.minecraft.advancements.AdvancementRewards;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.data.recipes.RecipeBuilder;
+import net.minecraft.data.recipes.RecipeCategory;
+import net.minecraft.data.recipes.RecipeOutput;
+import net.minecraft.data.recipes.ShapedRecipeBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingBookCategory;
@@ -39,6 +50,7 @@ import petrolpark.mc.library.registry.PetrolparkRecipeSerializers;
 import petrolpark.mc.library.util.WoodHelper;
 import petrolpark.mc.library.util.WoodHelper.Wood;
 
+@ParametersAreNonnullByDefault
 public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclableRecipe {
 
     //TODO move to WoodHelper
@@ -178,7 +190,7 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
         return result;
     };
 
-    public ItemStack assemble(@Nonnull CraftingInput input, boolean mirrored) {
+    public ItemStack assemble(CraftingInput input, boolean mirrored) {
         Wood wood = null;
         for (int y = 0; y < getPattern().height(); y++) {
             for (int x = 0; x < getPattern().width(); x++) {
@@ -289,6 +301,34 @@ public class WoodCraftingShapedRecipe extends ShapedRecipe implements IRecyclabl
             ItemStack.STREAM_CODEC.encode(buffer, recipe.result);
             buffer.writeBoolean(recipe.showNotification());
         };
+    };
+
+    public static class Builder extends ShapedRecipeBuilder {
+
+        public Builder(RecipeCategory category, ItemStack result) {
+            super(category, result);
+        };
+
+        @Override
+        public void save(RecipeOutput recipeOutput, ResourceLocation id) {
+            final Advancement.Builder advancementBuilder = recipeOutput.advancement()
+                .addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(id))
+                .rewards(AdvancementRewards.Builder.recipe(id))
+                .requirements(AdvancementRequirements.Strategy.OR);
+            criteria.forEach(advancementBuilder::addCriterion);
+            recipeOutput.accept(
+                id,
+                new WoodCraftingShapedRecipe(
+                    Objects.requireNonNullElse(group, ""),
+                    RecipeBuilder.determineBookCategory(category),
+                    unpackPatternData(new ShapedRecipePattern.Data(key, rows)).getOrThrow(),
+                    resultStack,
+                    showNotification
+                ),
+                advancementBuilder.build(id.withPrefix("recipes/" + category.getFolderName() + "/"))
+            );
+        };
+
     };
     
 };

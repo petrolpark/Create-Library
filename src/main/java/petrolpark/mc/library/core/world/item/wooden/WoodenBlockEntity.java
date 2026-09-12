@@ -2,11 +2,6 @@ package petrolpark.mc.library.core.world.item.wooden;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.core.world.block.entity.BlockEntityBase;
-import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
-import petrolpark.mc.library.util.WoodHelper;
-import petrolpark.mc.library.util.WoodHelper.Wood;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup.Provider;
 import net.minecraft.core.component.DataComponentMap;
@@ -15,6 +10,10 @@ import net.minecraft.nbt.NbtOps;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.client.model.data.ModelData;
+import petrolpark.mc.library.core.world.block.entity.BlockEntityBase;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
+import petrolpark.mc.library.util.WoodHelper;
+import petrolpark.mc.library.util.WoodHelper.Wood;
 
 public class WoodenBlockEntity extends BlockEntityBase {
 
@@ -27,13 +26,13 @@ public class WoodenBlockEntity extends BlockEntityBase {
     @Override
     protected void read(CompoundTag tag, Provider registries, boolean clientPacket) {
         super.read(tag, registries, clientPacket);
-        wood = Wood.CODEC.parse(NbtOps.INSTANCE, tag.get("Wood")).result().orElse(WoodHelper.OAK);
+        wood = Wood.CODEC.parse(NbtOps.INSTANCE, tag.get("wood")).result().orElse(WoodHelper.OAK);
     };
 
     @Override
     protected void write(CompoundTag tag, Provider registries, boolean clientPacket) {
         super.write(tag, registries, clientPacket);
-        tag.put("Wood", Wood.CODEC.encodeStart(NbtOps.INSTANCE, wood).getOrThrow());
+        tag.put("wood", Wood.CODEC.encodeStart(NbtOps.INSTANCE, wood).getOrThrow());
     };
 
     @Override

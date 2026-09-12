@@ -17,9 +17,6 @@ import javax.annotation.Nullable;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import petrolpark.mc.library.compat.Mods;
-import petrolpark.mc.library.core.world.item.creativeModeTab.CustomTab.ITabEntry;
-import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
 import com.simibubi.create.content.kinetics.waterwheel.WaterWheelRenderer;
 
 import io.netty.buffer.ByteBuf;
@@ -41,6 +38,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import petrolpark.mc.library.compat.Mods;
+import petrolpark.mc.library.core.world.item.creativeModeTab.CustomTab.ITabEntry;
+import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
 
 /**
  * Largely copied from {@link WaterWheelRenderer}.
@@ -78,6 +78,7 @@ public class WoodHelper {
 
     public static final Component getName(@Nullable Wood wood) {
         if (wood == null) return Lang.generic("wood.unknown");
+        //TODO cache
         return getPlanksBlock(wood)
             .map(Block::getName)
             .map(MutableComponent::getString)

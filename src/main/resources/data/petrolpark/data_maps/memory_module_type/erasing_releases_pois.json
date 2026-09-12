@@ -1,0 +1,13 @@
+{
+    "values": {
+        "petrolpark:seat": {
+            "neoforge:conditions": [
+                {
+                    "type": "petrolpark:feature_enabled",
+                    "feature": "restaurant_seating"
+                }
+            ],
+            "value": "petrolpark:seat"
+        }
+    }
+}
