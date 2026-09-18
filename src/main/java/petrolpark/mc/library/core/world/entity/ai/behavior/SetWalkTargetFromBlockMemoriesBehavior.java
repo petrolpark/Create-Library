@@ -38,12 +38,15 @@ public class SetWalkTargetFromBlockMemoriesBehavior {
                 AiHelper.releasePoi(level, entity, targetMemory);
                 targetAccessor.erase();
 
-                final GlobalPos fallbackPos = instance.tryGet(fallbackTargetAccessor).orElse(null);
-                if (fallbackPos != null && !timedOut && setTargetTowards(level, entity, walkTargetAccessor, fallbackPos, speedModifier, tooFarDistance, closeEnoughDist))
-                    return true;
+                if (targetMemory != fallbackTargetMemory) {
+                    final GlobalPos fallbackPos = instance.tryGet(fallbackTargetAccessor).orElse(null);
+                    if (fallbackPos != null && !timedOut && setTargetTowards(level, entity, walkTargetAccessor, fallbackPos, speedModifier, tooFarDistance, closeEnoughDist))
+                        return true;
 
-                AiHelper.releasePoi(level, entity, fallbackTargetMemory);
-                fallbackTargetAccessor.erase();
+                    AiHelper.releasePoi(level, entity, fallbackTargetMemory);
+                    fallbackTargetAccessor.erase();
+                };
+        
                 cantReachSinceAccessor.set(gameTime);
 
                 return true;
@@ -59,9 +62,8 @@ public class SetWalkTargetFromBlockMemoriesBehavior {
 
             while (randomPos == null || BlockPos.containing(randomPos).distManhattan(entity.blockPosition()) > tooFarDistance) {
                 randomPos = DefaultRandomPos.getPosTowards(entity, 15, 7, Vec3.atBottomCenterOf(targetPos.pos()), Math.PI / 2f);
-                if (++i == 1000) {
+                if (++i == 1000)
                     return false;
-                };
             };
             
             walkTargetAccessor.set(new WalkTarget(randomPos, speedModifier, closeEnoughDist));

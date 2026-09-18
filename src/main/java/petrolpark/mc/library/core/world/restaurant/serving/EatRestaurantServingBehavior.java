@@ -1,12 +1,12 @@
 package petrolpark.mc.library.core.world.restaurant.serving;
 
-import java.util.Collections;
 import java.util.function.Predicate;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.mojang.datafixers.util.Pair;
@@ -23,7 +23,9 @@ import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.behavior.BehaviorControl;
 import net.minecraft.world.entity.ai.behavior.BlockPosTracker;
 import net.minecraft.world.entity.ai.behavior.GateBehavior;
+import net.minecraft.world.entity.ai.behavior.OneShot;
 import net.minecraft.world.entity.ai.behavior.ValidateNearbyPoi;
+import net.minecraft.world.entity.ai.behavior.declarative.BehaviorBuilder;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
@@ -59,9 +61,10 @@ public class EatRestaurantServingBehavior extends Behavior<LivingEntity> {
     public static final Predicate<Holder<PoiType>> SEAT_POI_PREDICATE = holder -> holder.is(PetrolparkTags.PoiTypes.SEATS);
 
     public static <E extends PathfinderMob> GateBehavior<E> createCompoundBehavior() {
-
+        //TODO tweak weights
         final ImmutableList.Builder<Pair<? extends BehaviorControl<? super E>, Integer>> behaviorBuilder = ImmutableList.<Pair<? extends BehaviorControl<? super E>, Integer>>builder()
-            .add(Pair.of(new EatRestaurantServingBehavior(100), 7));
+            .add(Pair.of(new EatRestaurantServingBehavior(100), 7))
+            .add(Pair.of(createValidateNearbyRestaurantServingPosBehavior(), 3));
 
         if (Mods.CREATE.isLoaded())
             behaviorBuilder.add(Pair.of(
@@ -93,7 +96,7 @@ public class EatRestaurantServingBehavior extends Behavior<LivingEntity> {
         
         return new GateBehavior<>(
             ImmutableMap.of(SharedMemoryModuleTypes.RESTAURANT_SERVING_POS.get(), MemoryStatus.VALUE_PRESENT),
-            Collections.emptySet(),
+            ImmutableSet.of(),
             GateBehavior.OrderPolicy.ORDERED,
             GateBehavior.RunningPolicy.TRY_ALL,
             behaviorBuilder.build()
@@ -177,6 +180,23 @@ public class EatRestaurantServingBehavior extends Behavior<LivingEntity> {
         serving = null;
     };
 
-
+    public static OneShot<LivingEntity> createValidateNearbyRestaurantServingPosBehavior() {
+        return BehaviorBuilder.create(instance -> instance.group(
+            instance.present(SharedMemoryModuleTypes.RESTAURANT_SERVING_POS.get())
+        ).apply(instance, memoryAccessor -> (level, entity, gameTime) -> {
+            final GlobalPos globalPos = instance.get(memoryAccessor);
+            final BlockPos pos = globalPos.pos();
+            if (globalPos.dimension() == level.dimension() && pos.closerToCenterThan(entity.position(), 16d)) {
+                final ServerLevel servingLevel = level.getServer().getLevel(globalPos.dimension());
+                final ICustomer customer = entity.getExistingData(PetrolparkAttachmentTypes.ENTITY_CUSTOMER).orElseGet(ICustomer::none);
+                if (customer.isNone() || servingLevel == null || !(servingLevel.getBlockEntity(pos) instanceof IServingBlockEntity be) || be.streamServings().map(IServingBlockEntity.Serving::customer).noneMatch(customer::equals)) {
+                    memoryAccessor.erase();
+                };
+                return true;
+            } else {
+                return false;
+            }
+        }));
+    };
     
 };

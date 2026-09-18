@@ -146,7 +146,7 @@ public class Petrolpark {
 
     @GetPetrolparkSharedFeatures
     public static final SharedFeatureFlag[] getEnabledSharedFeatureFlags() {
-        return new SharedFeatureFlag[]{SharedFeatureFlag.RESTAURANT_SEATING};
+        return new SharedFeatureFlag[]{};
         //return new SharedFeatureFlag[]{SharedFeatureFlag.CENTRIFUGE, SharedFeatureFlag.INEBRIATION, SharedFeatureFlag.CRYING};
     };
 

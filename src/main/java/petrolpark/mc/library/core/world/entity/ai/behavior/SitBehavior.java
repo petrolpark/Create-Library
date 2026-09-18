@@ -14,6 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.behavior.Behavior;
 import net.minecraft.world.entity.ai.memory.MemoryStatus;
+import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import petrolpark.mc.library.compat.Mods;
@@ -51,7 +52,10 @@ public class SitBehavior extends Behavior<LivingEntity> {
     @Override
     protected boolean canStillUse(ServerLevel level, LivingEntity entity, long gameTime) {
         if (!entity.isPassenger()) return false;
-        return isSatIfNeeded(level, entity).orElse(false);
+        return isSatIfNeeded(level, entity).orElse(false)
+            && !entity.getBrain().isActive(Activity.PANIC)
+            && !entity.getBrain().isActive(Activity.PRE_RAID)
+            && !entity.getBrain().isActive(Activity.RAID);
     };
 
     @Override
