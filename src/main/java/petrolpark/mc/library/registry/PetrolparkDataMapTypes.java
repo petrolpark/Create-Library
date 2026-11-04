@@ -16,15 +16,18 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.memory.MemoryModuleType;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.registries.datamaps.AdvancedDataMapType;
+import net.neoforged.neoforge.registries.datamaps.DataMapType;
 import net.neoforged.neoforge.registries.datamaps.DataMapValueMerger;
 import net.neoforged.neoforge.registries.datamaps.DataMapValueRemover;
 import net.neoforged.neoforge.registries.datamaps.RegisterDataMapTypesEvent;
 import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.jei.BiomeIconLayer;
 import petrolpark.mc.library.core.data.map.HolderSetDataMapValueMerger;
 import petrolpark.mc.library.core.flags.Flag;
 import petrolpark.mc.library.core.world.entity.animal.mood.AnimalMoodModifier;
@@ -41,6 +44,13 @@ public class PetrolparkDataMapTypes {
     
     FLUID_INTRINSIC_FLAGS = flagListDataMapType(Petrolpark.asResource("intrinsic_flags"), Registries.FLUID),
     FLUID_SHOWN_IF_ABSENT_FLAGS = flagListDataMapType(Petrolpark.asResource("shown_if_absent_flags"), Registries.FLUID);
+
+    public static final DataMapType<Biome, List<BiomeIconLayer>> BIOME_ICON = DataMapType
+        .builder(
+            Petrolpark.asResource("icon"),
+            Registries.BIOME,
+            BiomeIconLayer.CODEC.listOf()
+        ).build();
 
     public static final AdvancedDataMapType<BlockEntityType<?>, List<ResourceLocation>, DataMapValueRemover.Default<List<ResourceLocation>, BlockEntityType<?>>> BLOCK_ENTITY_ADVANCEMENTS = AdvancedDataMapType
         .builder(
@@ -76,6 +86,7 @@ public class PetrolparkDataMapTypes {
         event.register(FLUID_INTRINSIC_FLAGS);
         event.register(FLUID_SHOWN_IF_ABSENT_FLAGS);
 
+        // event.register(BIOME_ICON);
         event.register(BLOCK_ENTITY_ADVANCEMENTS);
         event.register(MEMORY_POI_RELEASERS);
         event.register(ANIMAL_MOOD_MODIFIERS);

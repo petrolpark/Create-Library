@@ -13,9 +13,11 @@ import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.food.FoodProperties;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import petrolpark.mc.library.compat.create.RequiresCreate;
 import petrolpark.mc.library.core.world.restaurant.customer.ICustomer;
 import petrolpark.mc.library.registry.PetrolparkDataComponentTypes;
 
+@RequiresCreate
 public record TableClothServing(TableClothBlockEntity tableCloth, ICustomer customer, int orderStackIndex, ItemStack expectedOrderStack, int servingStackIndex, ItemStack expectedServingStack) implements IServingBlockEntity.Serving.Satisfied {
 
     public static Stream<? extends IServingBlockEntity.Serving> stream(TableClothBlockEntity tableCloth) {

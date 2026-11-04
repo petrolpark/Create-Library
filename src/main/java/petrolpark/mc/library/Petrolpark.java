@@ -89,10 +89,10 @@ public class Petrolpark {
         
         if (DatagenModLoader.isRunningDataGen()) PetrolparkDatagen.prepareDatagen();
 
-        Shared.ctor(modEventBus, modContainer);
-
         REGISTRATE.registerEventListeners(modEventBus);
         DESTROY_REGISTRATE.registerEventListeners(modEventBus);
+
+        Shared.ctor(modEventBus, modContainer);
 
         // Registration
         Badges.register();

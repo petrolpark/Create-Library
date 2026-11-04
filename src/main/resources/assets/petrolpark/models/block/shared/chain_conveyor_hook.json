@@ -2,9 +2,9 @@
 	"format_version": "1.9.0",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"0": "petrolpark:block/drying_rack_hook",
+		"0": "petrolpark:block/shared/drying_rack_hook",
 		"1": "create:item/package/cardboard",
-		"particle": "petrolpark:block/drying_rack_hook"
+		"particle": "petrolpark:block/shared/drying_rack_hook"
 	},
 	"elements": [
 		{

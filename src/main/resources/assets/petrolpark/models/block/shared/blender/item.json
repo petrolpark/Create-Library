@@ -9,7 +9,7 @@
 		"particle": "create:block/axis",
 		"shaft": "create:block/axis",
 		"shaft_end": "create:block/axis_top",
-		"blender": "petrolpark:block/blender",
+		"blender": "petrolpark:block/shared/blender",
 		"blades": "create:block/fan_blades"
 	},
 	"elements": [

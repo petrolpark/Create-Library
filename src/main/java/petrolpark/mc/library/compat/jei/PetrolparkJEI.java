@@ -86,7 +86,7 @@ public class PetrolparkJEI implements IModPlugin {
     @Override
     public void registerIngredients(IModIngredientRegistration registration) {
         registration.register(BiomeIngredientType.TYPE,
-            //BiomeIngredientType.HELPER.streamAll()t.toList(),
+            //BiomeIngredientType.HELPER.streamAll().toList(),
             Collections.emptySet(),
             BiomeIngredientType.HELPER, BiomeIngredientType.RENDERER, BiomeIngredientType.HELPER.codec()
         );
