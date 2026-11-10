@@ -1,22 +1,6 @@
 package petrolpark.mc.library.mixin;
 
-import org.spongepowered.asm.mixin.Final;
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
-
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import petrolpark.mc.library.core.client.effectShaders.ClientEffectHandler;
-import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
-import petrolpark.mc.library.core.client.effectShaders.packet.InitEffectShaderPacket;
-import petrolpark.mc.library.core.client.effectShaders.packet.SyncMobEffectTotalDurationPacket;
-import petrolpark.mc.library.util.mixininterfaces.IMobEffectInstanceMixin;
-
 import net.minecraft.core.Holder;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -27,6 +11,20 @@ import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import net.neoforged.neoforge.network.PacketDistributor;
+import org.spongepowered.asm.mixin.Final;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
+import petrolpark.mc.library.core.client.effectShaders.ClientEffectHandler;
+import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
+import petrolpark.mc.library.core.client.effectShaders.packet.InitEffectShaderPacket;
+import petrolpark.mc.library.core.client.effectShaders.packet.SyncMobEffectTotalDurationPacket;
+import petrolpark.mc.library.util.mixininterfaces.IMobEffectInstanceMixin;
 
 @Mixin(MobEffectInstance.class)
 public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin, Comparable<MobEffectInstance> {
@@ -43,6 +41,8 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
     @Shadow
     public abstract boolean isInfiniteDuration();
 
+    @Shadow
+    private int amplifier;
     @Unique
     private int petrolpark$totalDuration;
 
@@ -109,8 +109,8 @@ public abstract class MobEffectInstanceMixin implements IMobEffectInstanceMixin,
     @Override
     @OnlyIn(Dist.CLIENT)
     public void petrolpark$updateUniforms() {
-        float value = duration >= 0 && petrolpark$totalDuration > 0 ? (float) duration / petrolpark$totalDuration : 0.5f;
-        ClientEffectHandler.updateUniforms(value);
+        float factor = duration >= 0 && petrolpark$totalDuration > 0 ? (float) duration / petrolpark$totalDuration : 0.5f;
+        ClientEffectHandler.updateUniforms(this.amplifier, factor);
     };
 
     @Override

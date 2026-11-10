@@ -15,10 +15,29 @@ public class PetrolparkPostUniforms {
         UNIFORMS.put(name, uniform);
     }
 
+    public static void set(Defaults uniformName, Consumer<AbstractUniform> uniform) {
+        set(uniformName.getId(), uniform);
+    }
+
     public static void apply(@NotNull EffectInstance effectInstance) {
         for (Map.Entry<String, Consumer<AbstractUniform>> uniform : UNIFORMS.entrySet()){
             AbstractUniform shaderUniform = effectInstance.safeGetUniform(uniform.getKey());
             uniform.getValue().accept(shaderUniform);
         }
     }
+
+    public enum Defaults {
+
+        AMPLIFIER("Amplifier"),
+        EFFECT_FACTOR("EffectFactor");
+
+        private final String uniformId;
+        Defaults(String id) {
+            this.uniformId = id;
+        }
+
+        public String getId() {
+            return uniformId;
+        }
+    };
 }
