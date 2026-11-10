@@ -1,0 +1,123 @@
+{
+  "targets": [
+    "$entity_cutout_no_cull",
+    "$entity_translucent",
+    "$default",
+    "swap",
+    "final",
+    "temp0",
+    "temp1"
+  ],
+  "passes": [
+    {
+      "name": "petrolpark:bits_a",
+      "intarget": "entity_cutout_no_cull",
+      "outtarget": "temp0",
+      "uniforms": [
+        {
+          "name": "Resolution",
+          "values": [ 8.0 ]
+        },
+        {
+          "name": "MosaicSize",
+          "values": [ 16.0 ]
+        }
+      ]
+    },
+    {
+      "name": "petrolpark:bits_a",
+      "intarget": "entity_translucent",
+      "outtarget": "temp1",
+      "uniforms": [
+        {
+          "name": "Resolution",
+          "values": [ 8.0 ]
+        },
+        {
+          "name": "MosaicSize",
+          "values": [ 16.0 ]
+        }
+      ]
+    },
+    {
+      "name": "petrolpark:ts_recombine_buffers",
+      "intarget": "minecraft:main",
+      "outtarget": "final",
+      "use_linear_filter" : true,
+      "auxtargets" : [
+        {
+          "name" : "EntityCutoutNoCullSampler",
+          "id": "entity_cutout_no_cull"
+        },
+        {
+          "name": "EntityCutoutNoCullDepthSampler",
+          "id": "entity_cutout_no_cull:depth"
+        },
+        {
+          "name" : "EntityTranslucentSampler",
+          "id": "entity_translucent"
+        },
+        {
+          "name": "EntityTranslucentDepthSampler",
+          "id": "entity_translucent:depth"
+        },
+        {
+          "name": "DiffuseDepthSampler",
+          "id": "default:depth"
+        },
+        {
+          "name": "HandDepthSampler",
+          "id": "minecraft:main:depth"
+        }
+      ]
+    },
+    {
+      "name": "petrolpark:test_shader",
+      "intarget": "final",
+      "outtarget": "swap",
+      "use_linear_filter": true,
+      "auxtargets": [
+        {
+          "name" : "EntityCutoutNoCullSampler",
+          "id": "temp0"
+        },
+        {
+          "name": "EntityCutoutNoCullDepthSampler",
+          "id": "entity_cutout_no_cull:depth"
+        },
+        {
+          "name" : "EntityTranslucentSampler",
+          "id": "temp1"
+        },
+        {
+          "name": "EntityTranslucentDepthSampler",
+          "id": "entity_translucent:depth"
+        },
+        {
+          "name": "DiffuseDepthSampler",
+          "id": "default:depth"
+        },
+        {
+          "name": "HandDepthSampler",
+          "id": "minecraft:main:depth"
+        },
+        {
+          "name": "MainSampler",
+          "id": "minecraft:main"
+        },
+        {
+          "name": "TransitionSampler",
+          "id": "petrolpark:test",
+          "width": 32,
+          "height": 19,
+          "bilinear": false
+        }
+      ]
+    },
+    {
+      "name": "blit",
+      "intarget": "swap",
+      "outtarget": "minecraft:main"
+    }
+  ]
+}
