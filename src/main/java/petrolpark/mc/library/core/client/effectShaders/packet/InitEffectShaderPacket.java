@@ -1,6 +1,7 @@
 package petrolpark.mc.library.core.client.effectShaders.packet;
 
 import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
+import petrolpark.mc.library.core.client.effectShaders.ShaderEffectReloadHandler;
 import petrolpark.mc.library.registry.PetrolparkPackets;
 import petrolpark.mc.library.util.mixininterfaces.IGameRendererMixin;
 
@@ -36,7 +37,7 @@ public record InitEffectShaderPacket(Holder<MobEffect> mobEffect) implements Cli
         if (instance == null) return;
 
         MobEffect mobEffect = instance.getEffect().value();
-        if (mobEffect instanceof IShaderEffect shaderEffect) {
+        if (mobEffect instanceof IShaderEffect shaderEffect && ShaderEffectReloadHandler.isReady()) {
             IGameRendererMixin gameRenderer = (IGameRendererMixin) Minecraft.getInstance().gameRenderer;
             gameRenderer.petrolpark$addMobEffectInstanceShader(shaderEffect.getShader(), instance);
         };

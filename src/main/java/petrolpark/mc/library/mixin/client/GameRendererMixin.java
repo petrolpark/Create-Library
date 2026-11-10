@@ -1,24 +1,7 @@
 package petrolpark.mc.library.mixin.client;
 
-import java.util.ArrayList;
-import java.util.IdentityHashMap;
-import java.util.Map;
-
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
-import petrolpark.mc.library.core.client.effectShaders.ShaderEffectReloadHandler;
-import petrolpark.mc.library.shared.registry.SharedMobEffects;
-import petrolpark.mc.library.util.mixininterfaces.IGameRendererMixin;
-import petrolpark.mc.library.util.mixininterfaces.IMobEffectInstanceMixin;
-
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -29,6 +12,22 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
+import petrolpark.mc.library.core.client.effectShaders.ShaderEffectReloadHandler;
+import petrolpark.mc.library.core.client.effectShaders.SharedTargetsHandler;
+import petrolpark.mc.library.shared.registry.SharedMobEffects;
+import petrolpark.mc.library.util.mixininterfaces.IGameRendererMixin;
+import petrolpark.mc.library.util.mixininterfaces.IMobEffectInstanceMixin;
+
+import java.util.ArrayList;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 @Mixin(GameRenderer.class)
 public abstract class GameRendererMixin implements IGameRendererMixin {
@@ -57,6 +56,7 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
         )
     )
     public void petrolpark$updateUniforms(DeltaTracker deltaTracker, boolean renderLevel, CallbackInfo ci) {
+        if (! ShaderEffectReloadHandler.isReady() ) return;
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 
@@ -76,9 +76,18 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
         };
     };
 
+    @Inject(
+            method = "resize",
+            at = @At("TAIL")
+    )
+    public void petrolpark$resizeLoadedEffects(int width, int height, CallbackInfo ci) {
+        petrolpark$loadedEffects.values().forEach((postChain) -> postChain.resize(width, height) );
+    }
+
     @Override
     public void petrolpark$addMobEffectInstanceShader(ResourceLocation location, MobEffectInstance effect) {
-        PostChain postChain = ShaderEffectReloadHandler.getShader((( IShaderEffect ) effect.getEffect().value()));
+        IShaderEffect shaderEffect = (( IShaderEffect ) effect.getEffect().value());
+        PostChain postChain = ShaderEffectReloadHandler.getShader(shaderEffect);
 
         if (postChain == null) {
             Petrolpark.LOGGER.error("Shader wasn't preloaded as intended: {}", location);
@@ -86,11 +95,13 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
         };
 
         petrolpark$loadedEffects.put(effect.getEffect(), postChain);
+        SharedTargetsHandler.incrementLoadedTargetsCounter(shaderEffect.getShader().toString());
     };
 
     @Override
     public void petrolpark$removeMobEffectInstanceShader(MobEffectInstance effect) {
         petrolpark$loadedEffects.remove(effect.getEffect());
+        SharedTargetsHandler.decrementLoadedTargetsCounter((( IShaderEffect ) effect.getEffect().value()).getShader().toString());
     };
 
     @Override
@@ -105,4 +116,9 @@ public abstract class GameRendererMixin implements IGameRendererMixin {
             petrolpark$removeMobEffectInstanceShader(instance);
         };
     };
+
+    @Override
+    public IdentityHashMap<Holder<MobEffect>, PostChain> petrolpark$getLoadedEffects() {
+        return petrolpark$loadedEffects;
+    }
 };

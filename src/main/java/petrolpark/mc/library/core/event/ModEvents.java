@@ -1,24 +1,14 @@
 package petrolpark.mc.library.core.event;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Executor;
-
-import javax.annotation.Nonnull;
-import javax.annotation.ParametersAreNonnullByDefault;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.PreparableReloadListener;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.util.profiling.ProfilerFiller;
-import net.minecraft.world.effect.MobEffect;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.RegisterClientReloadListenersEvent;
 import net.neoforged.neoforge.registries.DataPackRegistryEvent;
 import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.core.client.effectShaders.IShaderEffect;
+import petrolpark.mc.library.config.PetrolparkConfigs;
 import petrolpark.mc.library.core.client.effectShaders.ShaderEffectReloadHandler;
 import petrolpark.mc.library.core.data.loot.modifier.LootTableModification;
 import petrolpark.mc.library.core.data.recipe.bogglePattern.BogglePattern;
@@ -31,6 +21,11 @@ import petrolpark.mc.library.core.world.entity.player.team.predicate.ITeamPredic
 import petrolpark.mc.library.core.world.restaurant.Restaurant;
 import petrolpark.mc.library.core.world.restaurant.order.RestaurantOrderGenerator;
 import petrolpark.mc.library.registry.PetrolparkRegistries;
+
+import javax.annotation.Nonnull;
+import javax.annotation.ParametersAreNonnullByDefault;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
 
 @EventBusSubscriber(modid = Petrolpark.MOD_ID)
 public class ModEvents {
@@ -69,20 +64,13 @@ public class ModEvents {
             @ParametersAreNonnullByDefault
             public @Nonnull CompletableFuture<Void> reload(PreparationBarrier pPreparationBarrier, ResourceManager pResourceManager, ProfilerFiller pPreparationsProfiler, ProfilerFiller pReloadProfiler, Executor pBackgroundExecutor, Executor pGameExecutor) {
                 return CompletableFuture.runAsync(() -> {
-                    ShaderEffectReloadHandler.clearCache();
-
-                    Minecraft mc = Minecraft.getInstance();
-
-                    for (MobEffect effect : BuiltInRegistries.MOB_EFFECT) {
-                        if (effect instanceof IShaderEffect shaderEffect ) {
-                            ResourceLocation location = shaderEffect.getShader();
-                            if (location != null && !ShaderEffectReloadHandler.hasShader(shaderEffect)) {
-                                ShaderEffectReloadHandler.createShader(shaderEffect, mc, pResourceManager);
-                            };
-                        };
-                    };
-
-                    Petrolpark.LOGGER.info("All shader effects preloaded.");
+                    boolean shouldPrepareShaders = PetrolparkConfigs.client().enableShaderEffects.get();
+                    boolean shadersReady = ShaderEffectReloadHandler.isReady();
+                    if (shouldPrepareShaders && !shadersReady) {
+                        ShaderEffectReloadHandler.prepareShaders(pResourceManager);
+                    } else if (!shouldPrepareShaders && shadersReady){
+                        ShaderEffectReloadHandler.clearCache();
+                    }
                 }, pGameExecutor).thenCompose(pPreparationBarrier::wait);
             }
         });
