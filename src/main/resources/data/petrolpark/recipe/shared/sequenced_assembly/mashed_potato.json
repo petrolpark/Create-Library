@@ -13,7 +13,7 @@
   "ingredient": {
     "item": "minecraft:baked_potato"
   },
-  "transitional_item": {
+  "transitionalItem": {
     "id": "petrolpark:shared/unprocessed_mashed_potato"
   },
   "sequence": [
