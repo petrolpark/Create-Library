@@ -4,11 +4,6 @@ import javax.annotation.Nonnull;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
-import petrolpark.mc.library.compat.create.shared.registry.SharedPartialModels;
-import petrolpark.mc.library.compat.jei.category.PetrolparkRecipeCategory;
-import petrolpark.mc.library.shared.ISharedFeature;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.BasinCategory;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
@@ -21,6 +16,11 @@ import mezz.jei.api.helpers.IJeiHelpers;
 import mezz.jei.api.recipe.IFocusGroup;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateBlocks;
+import petrolpark.mc.library.compat.create.shared.registry.SharedPartialModels;
+import petrolpark.mc.library.compat.jei.category.PetrolparkRecipeCategory;
+import petrolpark.mc.library.shared.ISharedFeature;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
 
 public class BlendingCategory extends BasinCategory implements ISharedFeature {
 
@@ -56,7 +56,7 @@ public class BlendingCategory extends BasinCategory implements ISharedFeature {
             final int scale = 23;
 
             blockElement(SharedPartialModels.BLENDER_COG)
-                .rotateBlock(0, getCurrentAngle() * 2, 0)
+                .rotateBlock(0, getCurrentAngle() * 6, 0)
                 .atLocal(0, 0, 0)
                 .scale(scale)
                 .render(graphics);

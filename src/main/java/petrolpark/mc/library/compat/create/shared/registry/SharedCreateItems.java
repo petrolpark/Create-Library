@@ -5,22 +5,15 @@ import static petrolpark.mc.library.PetrolparkTags.commonItemTag;
 
 import java.util.function.Supplier;
 
-import com.simibubi.create.api.equipment.potatoCannon.PotatoCannonProjectileType;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
 import com.tterrag.registrate.builders.ItemBuilder;
-import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.util.entry.FluidEntry;
 import com.tterrag.registrate.util.entry.ItemEntry;
-import com.tterrag.registrate.util.nullness.NonNullBiFunction;
-import com.tterrag.registrate.util.nullness.NonNullUnaryOperator;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.fluids.capability.wrappers.FluidBucketWrapper;
 import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.compat.create.registry.PetrolparkCreateRegistrateProviderTypes;
 import petrolpark.mc.library.core.registrate.AbstractPetrolparkRegistrate;
 import petrolpark.mc.library.core.world.item.FluidContainerItem;
 import petrolpark.mc.library.shared.SharedFeatureFlag;
@@ -74,22 +67,11 @@ public class SharedCreateItems {
 
     public static final void register() {};
 
-    public static final <T extends Item, P> NonNullUnaryOperator<ItemBuilder<T, P>> potatoCannonProjectile(NonNullBiFunction<DataGenContext<Item, T>, PotatoCannonProjectileType.Builder, PotatoCannonProjectileType.Builder> builderTransformer) {
-        return potatoCannonProjectile(null, builderTransformer);
-    };
-
-    public static final <T extends Item, P> NonNullUnaryOperator<ItemBuilder<T, P>> potatoCannonProjectile(String name, NonNullBiFunction<DataGenContext<Item, T>, PotatoCannonProjectileType.Builder, PotatoCannonProjectileType.Builder> builderTransformer) {
-        return b -> b.setData(PetrolparkCreateRegistrateProviderTypes.POTATO_CANNON_PROJECTILE, (ctx, prov) -> prov.register(
-            name == null ? ctx.getId() : ResourceLocation.fromNamespaceAndPath(b.getOwner().getModid(), name),
-            builderTransformer.apply(ctx, new PotatoCannonProjectileType.Builder().addItems(ctx.getEntry())).build()
-        ));
-    };
-
     //TODO deal with Flags in fluid handler
-    public static final <R extends AbstractPetrolparkRegistrate<R>> ItemBuilder<SharedBucketItem, R> sharedBucketItem(R registrate, SharedFeatureFlag featureFlag, String name, Supplier<FluidEntry<? extends Fluid>> fluid) {
+    private static final <R extends AbstractPetrolparkRegistrate<R>> ItemBuilder<SharedBucketItem, R> sharedBucketItem(R registrate, SharedFeatureFlag featureFlag, String name, Supplier<FluidEntry<? extends Fluid>> fluid) {
         return registrate.sharedItem(featureFlag, name + "_bucket", (p, f) -> new SharedBucketItem(f, fluid.get().get(), p))
             .fluidCapability((stack, v) -> new FluidBucketWrapper(stack))
             .defaultModel()
-            .tag(Tags.Items.BUCKETS, commonItemTag("buckets/" + name));
+            .tag(Tags.Items.BUCKETS, PetrolparkTags.commonItemTag("buckets/" + name));
     };
 };
