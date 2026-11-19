@@ -13,12 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
-import petrolpark.mc.library.compat.create.core.data.recipe.firstTimeLucky.FTLRecipesBehaviour;
-import petrolpark.mc.library.compat.create.core.data.recipe.firstTimeLucky.IFTLProcessingRecipe;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.flags.IFlagPole;
-import petrolpark.mc.library.core.flags.ItemFlagPole;
-import petrolpark.mc.library.core.world.item.decay.ItemDecay;
 import com.simibubi.create.content.kinetics.crusher.AbstractCrushingRecipe;
 import com.simibubi.create.content.kinetics.crusher.CrushingWheelControllerBlockEntity;
 import com.simibubi.create.content.processing.recipe.ProcessingInventory;
@@ -34,6 +28,12 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.wrapper.RecipeWrapper;
+import petrolpark.mc.library.compat.create.core.data.recipe.firstTimeLucky.FTLRecipesBehaviour;
+import petrolpark.mc.library.compat.create.core.data.recipe.firstTimeLucky.IFTLProcessingRecipe;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.flags.IFlagPole;
+import petrolpark.mc.library.core.flags.ItemFlagPole;
+import petrolpark.mc.library.core.world.item.decay.ItemDecay;
 
 @Mixin(value = CrushingWheelControllerBlockEntity.class, remap = false)
 public abstract class CrushingWheelControllerBlockEntityMixin extends SmartBlockEntity {

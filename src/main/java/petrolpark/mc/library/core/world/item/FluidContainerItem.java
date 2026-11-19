@@ -2,8 +2,6 @@ package petrolpark.mc.library.core.world.item;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.world.fluid.VirtualFluidWithContainer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.minecraft.world.item.Item;
@@ -18,6 +16,8 @@ import net.neoforged.neoforge.capabilities.ICapabilityProvider;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.world.fluid.VirtualFluidWithContainer;
 
 @EventBusSubscriber
 public class FluidContainerItem extends Item {

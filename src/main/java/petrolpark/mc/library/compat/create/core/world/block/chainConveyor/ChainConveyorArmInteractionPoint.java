@@ -6,11 +6,6 @@ import java.util.Objects;
 
 import org.jetbrains.annotations.Nullable;
 
-import petrolpark.mc.library.compat.create.registry.PetrolparkArmInteractionPointTypes;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.mixin.compat.create.accessor.client.ChainConveyorOBBAccessor;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
-import petrolpark.mc.library.util.Pair;
 import com.simibubi.create.AllBlockEntityTypes;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity;
 import com.simibubi.create.content.kinetics.chainConveyor.ChainConveyorBlockEntity.ConnectedPort;
@@ -33,6 +28,11 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.IItemHandler;
+import petrolpark.mc.library.compat.create.registry.PetrolparkArmInteractionPointTypes;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.mixin.compat.create.accessor.client.ChainConveyorOBBAccessor;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.util.Pair;
 
 public class ChainConveyorArmInteractionPoint extends ArmInteractionPoint {
 

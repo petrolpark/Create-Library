@@ -4,13 +4,6 @@ import java.util.Optional;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.Decoder;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.Mods;
-import petrolpark.mc.library.compat.create.RequiresCreate;
-import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.data.recipe.compat.CompatRecipeDeserializer;
-import petrolpark.mc.library.util.codec.RecordDecoderBuilder;
 import com.simibubi.create.content.processing.recipe.HeatCondition;
 
 import net.minecraft.resources.ResourceLocation;
@@ -18,6 +11,13 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.Mods;
+import petrolpark.mc.library.compat.create.RequiresCreate;
+import petrolpark.mc.library.compat.create.shared.content.processing.basinLid.LiddedBasinRecipe;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.data.recipe.compat.CompatRecipeDeserializer;
+import petrolpark.mc.library.util.codec.RecordDecoderBuilder;
 
 @RequiresCreate
 public class BnCFermentingRecipeDeserializer implements CompatRecipeDeserializer<LiddedBasinRecipe> {

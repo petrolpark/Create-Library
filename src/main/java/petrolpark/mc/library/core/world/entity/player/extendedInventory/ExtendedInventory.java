@@ -9,13 +9,6 @@ import javax.annotation.Nonnull;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.registry.PetrolparkAttributes;
-import petrolpark.mc.library.registry.PetrolparkExperimentalFeatureFlags;
-import petrolpark.mc.library.util.EntityHelper;
-
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.CrashReport;
 import net.minecraft.CrashReportCategory;
@@ -46,6 +39,12 @@ import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.event.entity.player.PlayerContainerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.PetrolparkTags;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.registry.PetrolparkAttributes;
+import petrolpark.mc.library.registry.PetrolparkExperimentalFeatureFlags;
+import petrolpark.mc.library.util.EntityHelper;
 
 @ApiStatus.Experimental
 @EventBusSubscriber(modid = Petrolpark.MOD_ID)

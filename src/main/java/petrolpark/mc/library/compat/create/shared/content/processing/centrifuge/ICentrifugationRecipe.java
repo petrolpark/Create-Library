@@ -6,10 +6,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.AdvancementBehaviour;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.flags.IFlagPole;
-import petrolpark.mc.library.registry.PetrolparkCriteriaTriggers;
 import com.simibubi.create.content.processing.basin.BasinRecipe;
 import com.simibubi.create.content.processing.recipe.ProcessingOutput;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
@@ -30,6 +26,10 @@ import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 import net.neoforged.neoforge.items.IItemHandler;
+import petrolpark.mc.library.compat.create.core.world.block.entity.behaviour.AdvancementBehaviour;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.flags.IFlagPole;
+import petrolpark.mc.library.registry.PetrolparkCriteriaTriggers;
 
 public interface ICentrifugationRecipe {
 

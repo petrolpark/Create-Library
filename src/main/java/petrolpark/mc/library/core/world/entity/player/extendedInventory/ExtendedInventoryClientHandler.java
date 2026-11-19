@@ -10,14 +10,6 @@ import org.jetbrains.annotations.ApiStatus;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.config.PetrolparkClientConfig;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
-import petrolpark.mc.library.core.client.rendering.PetrolparkNineSlices;
-import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventory.DelayedSlotPopulation;
-import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventory.SlotFactory;
-import petrolpark.mc.library.registry.PetrolparkKeyBinds;
 import com.simibubi.create.foundation.gui.menu.AbstractSimiContainerScreen;
 
 import net.createmod.catnip.data.Iterate;
@@ -46,6 +38,14 @@ import net.neoforged.neoforge.client.event.ClientTickEvent;
 import net.neoforged.neoforge.client.event.RegisterGuiLayersEvent;
 import net.neoforged.neoforge.client.event.ScreenEvent;
 import net.neoforged.neoforge.client.gui.VanillaGuiLayers;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.config.PetrolparkClientConfig;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.client.rendering.PetrolparkGuiTexture;
+import petrolpark.mc.library.core.client.rendering.PetrolparkNineSlices;
+import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventory.DelayedSlotPopulation;
+import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventory.SlotFactory;
+import petrolpark.mc.library.registry.PetrolparkKeyBinds;
 
 @OnlyIn(Dist.CLIENT)
 @ApiStatus.Experimental

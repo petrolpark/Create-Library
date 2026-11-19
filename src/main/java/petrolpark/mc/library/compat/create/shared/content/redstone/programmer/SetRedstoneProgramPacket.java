@@ -1,11 +1,5 @@
 package petrolpark.mc.library.compat.create.shared.content.redstone.programmer;
 
-import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerMenu.DummyRedstoneProgram;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreatePackets;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.experimental.actionrecord.ActionRecordEntryResult;
-import petrolpark.mc.library.experimental.actionrecord.packet.recordable.RecordablePacketPayload;
-
 import net.createmod.catnip.net.base.ServerboundPacketPayload;
 import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.network.RegistryFriendlyByteBuf;
@@ -13,6 +7,11 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import petrolpark.mc.library.compat.create.shared.content.redstone.programmer.RedstoneProgrammerMenu.DummyRedstoneProgram;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreatePackets;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.experimental.actionrecord.ActionRecordEntryResult;
+import petrolpark.mc.library.experimental.actionrecord.packet.recordable.RecordablePacketPayload;
 
 public record SetRedstoneProgramPacket(RedstoneProgram program) implements ServerboundPacketPayload, RecordablePacketPayload {
 

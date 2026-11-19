@@ -6,9 +6,6 @@ import java.util.Optional;
 import java.util.OptionalInt;
 import java.util.stream.Stream;
 
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.registry.PetrolparkAttributes;
-
 import net.createmod.catnip.data.IntAttached;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
@@ -29,6 +26,9 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.common.Tags;
 import net.neoforged.neoforge.event.TagsUpdatedEvent;
 import net.neoforged.neoforge.event.level.BlockEvent;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.mixin.accessor.ChunkMapAccessor;
+import petrolpark.mc.library.registry.PetrolparkAttributes;
 
 @EventBusSubscriber
 public class OreHelper {
@@ -88,7 +88,7 @@ public class OreHelper {
                 final ChunkPos chunkPos = new ChunkPos(pos);
                 for (int x = -1; x <= 1; x++) {
                     for (int z = -1; z <= 1; z++) {
-                        level.getChunkSource().chunkMap.onChunkReadyToSend(level.getChunk(chunkPos.x + x, chunkPos.z + z));
+                        ((ChunkMapAccessor)level.getChunkSource().chunkMap).invokeOnChunkReadyToSend(level.getChunk(chunkPos.x + x, chunkPos.z + z));
                     };
                 }
                 return;

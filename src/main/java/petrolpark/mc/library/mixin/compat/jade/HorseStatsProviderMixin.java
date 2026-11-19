@@ -6,12 +6,11 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import petrolpark.mc.library.Petrolpark;
 import petrolpark.mc.library.config.PetrolparkConfigs;
 import petrolpark.mc.library.registry.PetrolparkAttributes;
-
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import snownee.jade.addon.vanilla.HorseStatsProvider;
 import snownee.jade.api.EntityAccessor;
 import snownee.jade.api.ITooltip;

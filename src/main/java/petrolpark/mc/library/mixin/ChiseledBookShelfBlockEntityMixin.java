@@ -4,8 +4,6 @@ import javax.annotation.Nonnull;
 
 import org.spongepowered.asm.mixin.Mixin;
 
-import petrolpark.mc.library.config.PetrolparkConfigs;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -16,6 +14,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import petrolpark.mc.library.config.PetrolparkConfigs;
 
 @Mixin(ChiseledBookShelfBlockEntity.class)
 public class ChiseledBookShelfBlockEntityMixin extends BlockEntity {

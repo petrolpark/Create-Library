@@ -28,13 +28,13 @@ public abstract class ShapedRecipeMixin implements IHandleFlagsMyselfRecipe<Craf
     )
     public ItemStack petrolpark$propagateFlagsAndStartDecay(ItemStack output, CraftingInput input, HolderLookup.Provider registries) {
         ItemDecay.startDecay(output);
-        if (PetrolparkConfigs.server().shapedCraftingPropagatesFlags.get()) ItemFlagPole.perpetuateSingle(input.items().stream(), output);
+        if (PetrolparkConfigs.areServerConfigsAvailable() && PetrolparkConfigs.server().shapedCraftingPropagatesFlags.get()) ItemFlagPole.perpetuateSingle(input.items().stream(), output);
         return output;
     };
 
     @Override
     public boolean areFlagsHandled(@Nonnull CraftingInput container, @Nonnull HolderLookup.Provider registries) {
-        return PetrolparkConfigs.server().shapedCraftingPropagatesFlags.get();
+        return PetrolparkConfigs.areServerConfigsAvailable() && PetrolparkConfigs.server().shapedCraftingPropagatesFlags.get();
     };
     
 

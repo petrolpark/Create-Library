@@ -4,13 +4,13 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.flags.FluidFlagPole;
-import petrolpark.mc.library.util.Lang;
 import com.simibubi.create.foundation.utility.CreateLang;
 
 import net.createmod.catnip.lang.LangBuilder;
 import net.neoforged.neoforge.fluids.FluidStack;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.flags.FluidFlagPole;
+import petrolpark.mc.library.util.Lang;
 
 @Mixin(CreateLang.class)
 public class CreateLangMixin {

@@ -7,10 +7,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
-import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HarnessEntity;
-import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HorseMillContraptionEntity;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.registry.PetrolparkAttributes;
 
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.AgeableMob;
@@ -19,6 +15,10 @@ import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.level.Level;
+import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HarnessEntity;
+import petrolpark.mc.library.compat.create.shared.content.kinetics.horseMill.HorseMillContraptionEntity;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.registry.PetrolparkAttributes;
 
 @Mixin(AbstractHorse.class)
 public abstract class AbstractHorseMixin extends Animal {

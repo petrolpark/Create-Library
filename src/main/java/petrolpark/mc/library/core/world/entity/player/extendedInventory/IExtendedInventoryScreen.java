@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.jetbrains.annotations.ApiStatus;
 
-import petrolpark.mc.library.config.PetrolparkConfigs;
-
 import net.minecraft.client.renderer.Rect2i;
 
 /**
@@ -31,7 +29,7 @@ public interface IExtendedInventoryScreen {
      * This should match the specifications of {@link ExtendedInventoryClientHandler#getLeftHotbarLocation(ExtendedInventory, Rect2i, int) this method}.
      * This method gets called when the Screen opens, or whenever {@link ExtendedInventoryClientHandler#refreshClientInventoryMenu(ExtendedInventory)} gets called, so call that if the location of the Extended Inventory Slots should change (you may also have to change the locations of the Slots in the Menu attached to this Screen).
      * @param extendedInventory
-     * @param leftHotbarSlots The number of hotbar Slots to render to the left of the vanilla hotbar, according to the {@link PetrolparkConfigs Player's configurations}.
+     * @param leftHotbarSlots The number of hotbar Slots to render to the left of the vanilla hotbar, according to the {@link areServerConfigsAvailable Player's configurations}.
      * @param renderMainInventoryLeft Whether to render the Inventory Slots not in the hotbar to the left of the vanilla Inventory
      * @return An area in which to render the background of this section of the Extended Inventory, or {@code null} if it should not be rendered
      */
@@ -43,7 +41,7 @@ public interface IExtendedInventoryScreen {
      * This should match the specifications of {@link ExtendedInventoryClientHandler#getRightHotbarLocation(ExtendedInventory, Rect2i, int) this method}.
      * This method gets called when the Screen opens, or whenever {@link ExtendedInventoryClientHandler#refreshClientInventoryMenu(ExtendedInventory)} gets called, so call that if the location of the Extended Inventory Slots should change (you may also have to change the locations of the Slots in the Menu attached to this Screen).
      * @param extendedInventory
-     * @param leftHotbarSlots The number of hotbar Slots to render to the left of the vanilla hotbar, according to the {@link PetrolparkConfigs Player's configurations}.
+     * @param leftHotbarSlots The number of hotbar Slots to render to the left of the vanilla hotbar, according to the {@link areServerConfigsAvailable Player's configurations}.
      * @param renderMainInventoryLeft Whether to render the Inventory Slots not in the hotbar to the left of the vanilla Inventory
      * @return An area in which to render the background of this section of the Extended Inventory, or {@code null} if it should not be rendered
      */
@@ -55,7 +53,7 @@ public interface IExtendedInventoryScreen {
      * This should match the specifications of {@link ExtendedInventoryClientHandler#getInventoryLocation(ExtendedInventory, Rect2i, int) this method}.
      * This method gets called when the Screen opens, or whenever {@link ExtendedInventoryClientHandler#refreshClientInventoryMenu(ExtendedInventory)} gets called, so call that if the location of the Extended Inventory Slots should change (you may also have to change the locations of the Slots in the Menu attached to this Screen).
      * @param extendedInventory
-     * @param leftHotbarSlots The number of hotbar Slots to render to the left of the vanilla hotbar, according to the {@link PetrolparkConfigs Player's configurations}.
+     * @param leftHotbarSlots The number of hotbar Slots to render to the left of the vanilla hotbar, according to the {@link areServerConfigsAvailable Player's configurations}.
      * @param renderMainInventoryLeft Whether to render the Inventory Slots not in the hotbar to the left of the vanilla Inventory
      * @return An area in which to render the background of this section of the Extended Inventory, or {@code null} if it should not be rendered
      */

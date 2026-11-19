@@ -28,13 +28,13 @@ public abstract class ShapelessRecipeMixin implements IHandleFlagsMyselfRecipe<C
     )
     public ItemStack petrolpark$propagateFlagsAndStartDecay(ItemStack original, CraftingInput input, HolderLookup.Provider registries) {
         ItemDecay.startDecay(original);
-        if (PetrolparkConfigs.server().shapelessCraftingPropagatesFlags.get()) ItemFlagPole.perpetuateSingle(input.items().stream(), original);
+        if (PetrolparkConfigs.areServerConfigsAvailable() && PetrolparkConfigs.server().shapelessCraftingPropagatesFlags.get()) ItemFlagPole.perpetuateSingle(input.items().stream(), original);
         return original;
     };
 
     @Override
     public boolean areFlagsHandled(@Nonnull CraftingInput input, @Nonnull HolderLookup.Provider registrie) {
-        return PetrolparkConfigs.server().shapelessCraftingPropagatesFlags.get();
+        return PetrolparkConfigs.areServerConfigsAvailable() && PetrolparkConfigs.server().shapelessCraftingPropagatesFlags.get();
     };
     
 

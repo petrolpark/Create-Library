@@ -12,12 +12,6 @@ import java.util.stream.Stream;
 import javax.annotation.Nonnull;
 
 import com.mojang.datafixers.util.Either;
-import petrolpark.mc.library.Petrolpark;
-import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
-import petrolpark.mc.library.compat.create.util.CreateRecyclingHelper;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.world.item.recycling.RecyclingManager;
-import petrolpark.mc.library.core.world.item.recycling.RecyclingOutputs;
 import com.simibubi.create.AllDataComponents;
 import com.simibubi.create.AllFluids;
 import com.simibubi.create.content.fluids.potion.PotionFluid.BottleType;
@@ -47,6 +41,12 @@ import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.DataComponentFluidIngredient;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.compat.create.shared.registry.SharedCreateRecipeTypes;
+import petrolpark.mc.library.compat.create.util.CreateRecyclingHelper;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.world.item.recycling.RecyclingManager;
+import petrolpark.mc.library.core.world.item.recycling.RecyclingOutputs;
 
 public class PotionCentrifugation {
 

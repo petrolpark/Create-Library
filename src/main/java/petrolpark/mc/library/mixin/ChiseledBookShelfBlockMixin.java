@@ -8,10 +8,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.IRecipeBookProviderBlock;
-import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -22,6 +18,9 @@ import net.minecraft.world.level.block.ChiseledBookShelfBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.entity.ChiseledBookShelfBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.IRecipeBookProviderBlock;
+import petrolpark.mc.library.core.world.item.crafting.recipeBook.RecipeBookItem;
 
 @Mixin(ChiseledBookShelfBlock.class)
 public abstract class ChiseledBookShelfBlockMixin extends BaseEntityBlock implements IRecipeBookProviderBlock {

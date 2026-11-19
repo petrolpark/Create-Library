@@ -4,12 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import petrolpark.mc.library.compat.jei.category.SimpleConversionCategory;
-import petrolpark.mc.library.config.PetrolparkConfigs;
-import petrolpark.mc.library.shared.ISharedFeature;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
-import petrolpark.mc.library.shared.registry.SharedBlocks;
-import petrolpark.mc.library.shared.world.item.crafting.drying.DryingRecipe;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.compat.jei.category.CreateRecipeCategory;
 
@@ -19,6 +13,12 @@ import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Blocks;
+import petrolpark.mc.library.compat.jei.category.SimpleConversionCategory;
+import petrolpark.mc.library.config.PetrolparkConfigs;
+import petrolpark.mc.library.shared.ISharedFeature;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
+import petrolpark.mc.library.shared.registry.SharedBlocks;
+import petrolpark.mc.library.shared.world.item.crafting.drying.DryingRecipe;
 
 public class DryingCategory extends SimpleConversionCategory<DryingRecipe> implements ISharedFeature {
 

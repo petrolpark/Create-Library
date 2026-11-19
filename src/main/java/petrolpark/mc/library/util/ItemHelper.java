@@ -183,8 +183,13 @@ public class ItemHelper {
     public static final Set<Item> getKnownAnimalFoods(Level level) {
         if (KNOWN_ANIMAL_FOODS == null) {
             final List<Animal> animals = BuiltInRegistries.ENTITY_TYPE.stream()
-                .<Animal>mapMulti((type, consumer) -> { if (type.create(level) instanceof Animal animal) consumer.accept(animal); })
-                .toList();
+                .<Animal>mapMulti((type, consumer) -> {
+                    try {
+                        if (type.create(level) instanceof Animal animal) consumer.accept(animal);
+                    } catch (Exception e) {
+                        // Some mods do not implement the empty constructor for their entities. Maybe they should maybe they shouldn't
+                    };
+                }).toList();
             KNOWN_ANIMAL_FOODS = BuiltInRegistries.ITEM.stream()
                 .map(ItemStack::new)
                 .filter(stack -> animals.stream().anyMatch(animal -> animal.isFood(stack)))

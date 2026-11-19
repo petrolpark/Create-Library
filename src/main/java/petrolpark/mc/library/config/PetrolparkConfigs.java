@@ -37,6 +37,10 @@ public class PetrolparkConfigs {
 		return server;
 	};
 
+	public static boolean areServerConfigsAvailable() {
+		return server != null && server.specification != null && server.specification.isLoaded();
+	};
+
 	public static ConfigBase byType(ModConfig.Type type) {
 		return CONFIGS.get(type);
 	};
