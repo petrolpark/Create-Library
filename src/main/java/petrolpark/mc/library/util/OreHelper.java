@@ -117,7 +117,7 @@ public class OreHelper {
 
     public static final BlockPos getCenterPos(Level level, Vec3 origin, Vec3 direction, ConfiguredFeature<?, ?> oreFeature) {
         final float size = oreFeature.config() instanceof OreConfiguration oreConfig ? oreConfig.size : 1f;
-        final float radius = 0.2952f * (float)Math.pow(size, 2 / 3d);
+        final float radius = 0.2952f * (float)Math.pow(size, 2 / 3d); // approximate formula based off wiki
         return BlockPos.containing(origin.add(direction.scale(2f + radius)).add(0f, radius, 0f));
     };
 };

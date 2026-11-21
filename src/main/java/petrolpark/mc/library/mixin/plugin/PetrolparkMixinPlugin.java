@@ -15,7 +15,7 @@ import net.neoforged.fml.loading.FMLLoader;
 
 public class PetrolparkMixinPlugin implements IMixinConfigPlugin {
 
-    private int mixinPackagePathLength = 1;
+    private int mixinPackagePathLength = -1;
 
     private final Map<String, Supplier<Boolean>> shouldLoad = new HashMap<>();
 
@@ -24,7 +24,7 @@ public class PetrolparkMixinPlugin implements IMixinConfigPlugin {
     };
 
     private int getMixinPackagePathLength() {
-        if (mixinPackagePathLength == -1) mixinPackagePathLength = getMixinPackage().split(".").length;
+        if (mixinPackagePathLength == -1) mixinPackagePathLength = getMixinPackage().split("\\.").length;
         return mixinPackagePathLength;
     };
 
@@ -52,7 +52,7 @@ public class PetrolparkMixinPlugin implements IMixinConfigPlugin {
     @Override
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         // Compat mixins
-        String[] mixinPath = mixinClassName.split(".");
+        String[] mixinPath = mixinClassName.split("\\.");
         if (mixinPath.length >= getMixinPackagePathLength() && mixinPath[getMixinPackagePathLength()].equals("compat")) return FMLLoader.getLoadingModList().getModFileById(mixinPath[getMixinPackagePathLength() + 1]) != null;
 
         // Custom predicates

@@ -8,6 +8,8 @@ import java.util.stream.Stream;
 
 import javax.annotation.Nonnull;
 
+import com.simibubi.create.api.contraption.transformable.TransformableBlockEntity;
+import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.kinetics.KineticNetwork;
 import com.simibubi.create.content.kinetics.RotationPropagator;
 import com.simibubi.create.content.kinetics.base.GeneratingKineticBlockEntity;
@@ -39,7 +41,7 @@ import petrolpark.mc.library.compat.create.core.world.block.entity.IKineticBlock
 import petrolpark.mc.library.compat.create.core.world.block.entity.IOverridableKineticBlockEntity;
 import petrolpark.mc.library.util.NBTHelper;
 
-public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
+public abstract class CompositeKineticBlockEntity extends SmartBlockEntity implements TransformableBlockEntity {
 
     public CompositeKineticBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -94,7 +96,7 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
     @Override
     public void remove() {
         super.remove();
-        getParts().forEach(CompositeKineticBlockEntityPart::remove);
+        getParts().forEach(CompositeKineticBlockEntityPart::setRemoved);
     };
 
     @Override
@@ -145,6 +147,19 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
         }));
     };
 
+    @Override
+    public ItemRequirement getRequiredItems(BlockState state) {
+        return new ItemRequirement(getParts().stream().map(be -> be.getRequiredItems(state))
+            .map(ItemRequirement::getRequiredItems)
+            .flatMap(List::stream)
+            .toList());
+    };
+
+    @Override
+    public void transform(BlockEntity blockEntity, StructureTransform transform) {
+        getParts().forEach(transform::apply);
+    };
+
     public abstract class CompositeKineticBlockEntityPart extends KineticBlockEntity {
 
         public CompositeKineticBlockEntityPart(BlockEntityType<?> typeIn) {
@@ -170,6 +185,12 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
         };
 
         @Override
+        @Deprecated
+        protected final void invalidateRenderBoundingBox() {
+            CompositeKineticBlockEntity.super.invalidateRenderBoundingBox();
+        };
+
+        @Override
         public void read(CompoundTag compound, Provider registries, boolean clientPacket) {
             super.read(compound, registries, clientPacket);
         };
@@ -180,44 +201,37 @@ public abstract class CompositeKineticBlockEntity extends SmartBlockEntity {
         };
 
         @Override
-        @Deprecated
-        public final void addBehaviours(List<BlockEntityBehaviour> behaviours) {
+        public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
             //NOOP
         };
 
         @Override
-        @Deprecated
-        public final void addBehavioursDeferred(List<BlockEntityBehaviour> behaviours) {
-            //NOOP
+        public <T extends BlockEntityBehaviour> T getBehaviour(BehaviourType<T> type) {
+            final T specificBehaviour = getPartSpecificBehaviour(type);
+            return specificBehaviour == null ? CompositeKineticBlockEntity.this.getBehaviour(type) : specificBehaviour;
+        };
+
+        protected <T extends BlockEntityBehaviour> T getPartSpecificBehaviour(BehaviourType<T> type) {
+            return super.getBehaviour(type);
+        };
+
+        @Override
+        public Collection<BlockEntityBehaviour> getAllBehaviours() {
+            return Stream.concat(CompositeKineticBlockEntity.this.getAllBehaviours().stream(), streamAllPartSpecificBehaviours()).toList();
+        };
+
+        protected Stream<BlockEntityBehaviour> streamAllPartSpecificBehaviours() {
+            return super.getAllBehaviours().stream();
+        };
+
+        @Override
+        public void forEachBehaviour(Consumer<BlockEntityBehaviour> action) {
+            streamAllPartSpecificBehaviours().forEach(action);
         };
 
         @Override
         @Deprecated
-        public final <T extends BlockEntityBehaviour> T getBehaviour(BehaviourType<T> type) {
-            return CompositeKineticBlockEntity.this.getBehaviour(type);
-        };
-
-        @Override
-        @Deprecated
-        public final Collection<BlockEntityBehaviour> getAllBehaviours() {
-            return CompositeKineticBlockEntity.this.getAllBehaviours();
-        };
-
-        @Override
-        @Deprecated
-        public final void attachBehaviourLate(BlockEntityBehaviour behaviour) {
-            CompositeKineticBlockEntity.this.attachBehaviourLate(behaviour);
-        };
-
-        @Override
-        @Deprecated
-        public final ItemRequirement getRequiredItems(BlockState state) {
-            return ItemRequirement.NONE;
-        };
-
-        @Override
-        @Deprecated
-        public final void removeBehaviour(BehaviourType<?> type) {
+        public void removeBehaviour(BehaviourType<?> type) {
             //NOOP
         };
 

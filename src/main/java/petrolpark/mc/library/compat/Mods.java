@@ -31,6 +31,7 @@ public enum Mods implements StringRepresentable {
     // Others
     ARS_NOUVEAU("ars_nouveau"),
     BIG_CANNONS("createbigcannons"),
+    BITS_N_BOBS,
     BREWIN_AND_CHEWIN("brewinandchewin"),
     CHIPPED,
     CREATE_BITTERBALLEN("create_bic_bit"),
