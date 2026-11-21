@@ -1,17 +1,9 @@
 package petrolpark.mc.library.mixin;
 
-import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.At;
-
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapmethod.WrapMethod;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
-import petrolpark.mc.library.PetrolparkTags;
-import petrolpark.mc.library.registry.PetrolparkAttributes;
-import petrolpark.mc.library.shared.SharedFeatureFlag;
-
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
@@ -22,6 +14,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.goal.PanicGoal;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.common.extensions.ILivingEntityExtension;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import petrolpark.mc.library.PetrolparkTags;
+import petrolpark.mc.library.registry.PetrolparkAttributes;
+import petrolpark.mc.library.shared.SharedFeatureFlag;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity implements ILivingEntityExtension {

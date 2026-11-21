@@ -1,8 +1,10 @@
 package petrolpark.mc.library.config;
 
-import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventoryClientHandler.ExtraHotbarSlotLocations;
-
 import net.createmod.catnip.config.ConfigBase;
+import net.minecraft.client.Minecraft;
+import petrolpark.mc.library.Petrolpark;
+import petrolpark.mc.library.core.client.effectShaders.ShaderEffectReloadHandler;
+import petrolpark.mc.library.core.world.entity.player.extendedInventory.ExtendedInventoryClientHandler.ExtraHotbarSlotLocations;
 
 public class PetrolparkClientConfig extends ConfigBase {
 
@@ -11,6 +13,9 @@ public class PetrolparkClientConfig extends ConfigBase {
         public final ConfigInt extraInventoryWidth = i(3, 1, Integer.MAX_VALUE, "extraInventoryWidth", "Maximum width of extra inventory space");
         public final ConfigEnum<ExtraHotbarSlotLocations> extraHotbarSlotLocations = e(ExtraHotbarSlotLocations.ALL_LEFT, "extraHotbarSlotLocation", "Where the additional hotbar slots go", "ALL_X - All slots on X", "START_X - Alternate sides, starting on X", "PRIORITIZE_X - Up to extraHotbarPrioritySlotCount on X, the rest on the other side");
         public final ConfigInt extraHotbarPrioritySlotCount = i(3, 0, Integer.MAX_VALUE, "extraHotbarPrioritySlotCount");
+
+    public final ConfigGroup visualEffects = group(0, "visualEffects");
+        public final ConfigBool enableShaderEffects = b(true, "enableVisualEffects", "Whether mob effects apply custom shaders. Changing this config will reload resource packs");
 
     // Compat
     public final ConfigGroup compatibility = group(0, "compatibiity");
@@ -22,5 +27,14 @@ public class PetrolparkClientConfig extends ConfigBase {
     public String getName() {
         return "client";
     };
-    
+
+    @Override
+    public void onReload() {
+        super.onReload();
+        if (enableShaderEffects.get() != ShaderEffectReloadHandler.isReady()) {
+            Petrolpark.LOGGER.info("Reloading resource packs to {} shader effects.", enableShaderEffects.get() ? "compile" : "unload");
+            System.out.println(Minecraft.getInstance().getConnection().getLevel().isClientSide);
+            Minecraft.getInstance().reloadResourcePacks();
+        }
+    }
 };

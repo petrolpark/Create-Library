@@ -5,12 +5,16 @@
     "dstrgb": "1-srcalpha"
   },
   "vertex": "blit",
-  "fragment": "factor_mix",
+  "fragment": "petrolpark:ts_recombine_buffers",
   "attributes": [ "Position" ],
   "samplers": [
     { "name": "DiffuseSampler" },
-    { "name": "ToMix" },
-    { "name":  "Factor" }
+    { "name": "DiffuseDepthSampler" },
+    { "name": "EntityCutoutNoCullSampler" },
+    { "name": "EntityCutoutNoCullDepthSampler" },
+    { "name": "EntityTranslucentSampler" },
+    { "name": "EntityTranslucentDepthSampler" },
+    { "name": "HandDepthSampler" }
   ],
   "uniforms": [
     { "name": "ProjMat",       "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },

@@ -1,0 +1,6 @@
+{
+  "test_shader": [
+    "entity_cutout_no_cull",
+    "entity_translucent"
+  ]
+}

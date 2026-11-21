@@ -4,7 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
+import petrolpark.mc.library.core.client.effectShaders.ShaderEffectReloadHandler;
+import petrolpark.mc.library.core.client.effectShaders.SharedTargetsHandler;
 import petrolpark.mc.library.core.flags.ItemFlagPole;
 import petrolpark.mc.library.core.world.item.decay.ItemDecay;
 import petrolpark.mc.library.util.Lang;
@@ -27,4 +30,15 @@ public class ClientEvents {
         Minecraft mc = Minecraft.getInstance();
 		return !(mc.level == null || mc.player == null);
 	};
+
+    @SubscribeEvent
+    public static void onLevelRendered(RenderLevelStageEvent event) {
+        boolean shaderUsed = ShaderEffectReloadHandler.isReady();
+
+        if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_SKY) {
+            if (shaderUsed) SharedTargetsHandler.beginFrame();
+        } else if (event.getStage() == RenderLevelStageEvent.Stage.AFTER_LEVEL){
+            if (shaderUsed) SharedTargetsHandler.copyDepthFromMain();
+        }
+    }
 };

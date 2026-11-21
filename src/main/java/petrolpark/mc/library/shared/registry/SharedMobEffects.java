@@ -1,7 +1,5 @@
 package petrolpark.mc.library.shared.registry;
 
-import static petrolpark.mc.library.Petrolpark.REGISTRATE;
-
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -17,8 +15,16 @@ import petrolpark.mc.library.shared.SharedFeatureFlag;
 import petrolpark.mc.library.shared.world.effect.CryingMobEffect;
 import petrolpark.mc.library.shared.world.effect.HangoverMobEffect;
 import petrolpark.mc.library.shared.world.effect.InebriationMobEffect;
+import petrolpark.mc.library.shared.world.effect.TestMobEffect;
+
+import static petrolpark.mc.library.Petrolpark.REGISTRATE;
 
 public class SharedMobEffects {
+
+    public static final MobEffectEntry<TestMobEffect> TEST = REGISTRATE.mobEffect("test", TestMobEffect::new)
+            .category(MobEffectCategory.HARMFUL)
+            .color(0x59390B)
+            .register();
 
     public static final MobEffectEntry<CryingMobEffect> CRYING = REGISTRATE.sharedMobEffect(SharedFeatureFlag.CRYING, "crying", CryingMobEffect::new)
         .category(MobEffectCategory.NEUTRAL)
